@@ -2026,6 +2026,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var self = this;
 
         this.$["container"]["body"].on("click", '[data-ax5grid-column-attr]', function (e) {
+        	
+        	// 클릭 이벤트 발생한 타겟
+        	var eventTarget = $(this);
+        	
+        	
             var panelName = void 0,
                 attr = void 0,
                 row = void 0,
@@ -2052,16 +2057,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     };
                     
                     
-                    /**
-                     * 2018.08.13 배용진, ax5Grid onclick 추가 
-                     * 
-                     * gird에 적용된 inline-editor가 select일 경우 
-                     * 기본상태는 더블클릭 해야만 select box 선택가능
-                     * → 클릭 시 select 선택 가능하도록 추가
-                     * 
-                     */
-					if(column.editor && column.editor.type === "select"){
-						GRID.body.inlineEdit.active.call(self, self.focusedColumn, e, value);
+                    if(column.editor && column.editor.type === "select"){ 
+						// 클릭 이벤트 중지
+						e.cancelable = true;
+						e.stopPropagation();
+						e.preventDefault();
+						eventTarget.dblclick();
 					}
 					// 추가 끝
 
