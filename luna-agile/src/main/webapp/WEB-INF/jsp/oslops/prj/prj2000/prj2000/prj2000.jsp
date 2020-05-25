@@ -185,7 +185,7 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     		trObj.append("<td class='right_con wd_2_2'>" + data.upMenuNm + " &#62; " + data.menuNm + "</td>");
     		
     		//배열로 체크박스 컬럼명 저장하여 반복 루프 처리함.
-    		var strArrYn = ["accessYn", "selectYn", "regYn", "modifyYn", "delYn", "excelYn", "printYn"];
+    		var strArrYn = ["accessYn", "selectYn", "regYn", "modifyYn", "delYn", "excelYn","printYn"];
     		
 			//해당 로우 상태 담기
 			trObj.append("<input type='hidden' name='" + "status" + data.menuId + "' id='" + "status" + data.menuId + "' value='" + data.status + "' />");
@@ -213,7 +213,7 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     		});
     		
     		// 가로로 전체 체크가능한 체크박스 
-    		trObj.append("<td class='right_con wd_2_11 prj_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  style='left:calc(50% - 7px);' name='"+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' value /><label for='"+data.menuId+"_authHorizon'></label></td>");
+    		trObj.append("<td class='right_con wd_2_11 prj_chk' style='text-align: center;' ><input type='checkbox' title='체크박스' name='"+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' value /><label for='"+data.menuId+"_prjAuthHorizon'></label></td>");
     		
     		//밸류값 확인하여 체크 상태 변경
     		$.each(strArrYn, function(idx, val){
