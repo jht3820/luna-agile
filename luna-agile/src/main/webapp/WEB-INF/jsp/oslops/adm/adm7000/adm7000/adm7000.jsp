@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/oslits/top/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/oslops/top/header.jsp"%>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>
-<link rel='stylesheet' href='<c:url value='/css/oslits/dept.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/dept.css'/>' type='text/css'>
 <link rel='stylesheet' href='<c:url value='/css/ztree/zTreeStyle/zTreeStyle.css'/>' type='text/css'>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.all.min.js"></script>
 

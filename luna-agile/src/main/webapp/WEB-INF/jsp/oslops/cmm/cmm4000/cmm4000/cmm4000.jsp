@@ -14,14 +14,14 @@
 	
 	<link rel="stylesheet" href="<c:url value='/css/common/common.css' />" type="text/css" />
 	
-	<link rel="stylesheet" href="<c:url value='/css/oslits/login.css' />" type="text/css" />
-	<link rel="stylesheet" href="<c:url value='/css/oslits/cmm.css'/>" type="text/css" />
+	<link rel="stylesheet" href="<c:url value='/css/oslops/login.css' />" type="text/css" />
+	<link rel="stylesheet" href="<c:url value='/css/oslops/cmm.css'/>" type="text/css" />
 	
 	<script src="<c:url value='/js/jquery/jquery-1.11.2.min.js'/>"></script>
 
 	<script src="<c:url value='/js/common/common.js'/>"></script>
 	<script src="<c:url value='/js/common/layerPopup.js'/>"></script>
-	<script src="<c:url value='/js/common/comOslits.js'/>"></script>
+	<script src="<c:url value='/js/common/comOslops.js'/>"></script>
 	
 	<script>
 		$(function(){
