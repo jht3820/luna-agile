@@ -169,6 +169,21 @@
 			btnAuthExcelYn 	== 'Y' ? $("[id*=btn_excel]").show() : $("[id*=btn_excel]").hide();
 			btnAuthPrintYn 	== 'Y' ? $("[id^=btn_print]").show() : $("[id^=btn_print]").hide();
 			
+			//자식 메뉴 없는 2 depth 메뉴 제거
+			$.each($("div.two_menu"), function(idx, map){
+				//2 depth 메뉴 id
+				var twoMenuId = $(map).data("menu-id");
+				
+				//자식 메뉴 수
+				var threeMenuCnt = $("div.three_menu[data-up-menu-id="+twoMenuId+"]").length;
+				
+				//자식 메뉴 없는 경우
+				if(threeMenuCnt == 0){
+					//현재 메뉴 제거
+					$(map).remove();
+				}
+				
+			});
 		});
 		/** 
 		*	공통 버튼 권한 확인
@@ -177,6 +192,7 @@
 		*	- 검색 상자 타겟 DIV의 이름은 'AX'로 시작된다. (추후 변경 가능)
 		**/
 		function fnBtnAuthCheck(mySearch){
+			
 			if(gfnIsNull(mySearch)){
 				return false;
 			}
@@ -215,6 +231,7 @@
 				// 프린트버튼의 부모중 class=searchItem 를 찾아 hide 시킴
 				// 부모를 찾으면 class=searchItem을 가진 div 한개만 나옴
 				$("[id^=AX][id*='btn_print']").parents(".searchItem").hide();
+				$("[id*=btn_print]").hide();
 			//}
 		}
 	</script>
@@ -327,7 +344,7 @@
 		<div class="gnb">			
 			<!-- 상단부분과 GNB -->
 			<div class="gnb_top">
-				<a href="javascript:fnGoMenu('/cmm/cmm9000/cmm9000/selectCmm9000MainMove.do', '000', '${sessionScope.firstMenuNm }','01')" title="메인으로 가기"><div class="logo_box"><img class="logo" src="/images/header/logo/logo_S_osl.png" alt="로고"></div></a>
+				<a href="javascript:fnGoMenu('/cmm/cmm9000/cmm9000/selectCmm9000MainMove.do', '000', '${sessionScope.firstMenuNm }','01')" title="메인으로 가기"><div class="logo_box"><img class="logo" src="/images/header/logo/logo_S.png" alt="로고"></div></a>
 				
 				<div style="cursor:pointer;" class="osl_btn popup_osl"><img src="/images/header/topMenu/osl_btn_b.png" alt="osl"></div>
 				<c:if test="${!empty sessionScope.menuList }">
@@ -429,7 +446,7 @@
 									<c:forEach items="${sessionScope.menuList }" var="map2">
 										<c:if test="${map2.lvl == '2' && map2.accessYn == 'Y' && map2.menuId < '000700000000' }">
 											<c:if test="${map2.lvl == '2' && map2.upperMenuId == map1.menuId}">
-												<div class="two_menu">${map2.menuNm }</div>
+												<div class="two_menu" data-menu-id="${map2.menuId}">${map2.menuNm }</div>
 												<!-- 소메뉴 반복 -->
 												<c:forEach items="${sessionScope.menuList }" var="map3">
 													<c:if test="${map3.lvl == '3' && map3.accessYn == 'Y' && map3.upperMenuId == map2.menuId}">
@@ -437,11 +454,11 @@
 														<c:choose>
 															<c:when test="${map3.menuTypeCd == '04'}">
 																<c:if test="${sessionScope.pairCnt > 0}">
-																	<a href="javascript:fnGoMenu('${map3.menuUrl}', '${map3.menuId}', '${map3.menuNm}','${map3.menuTypeCd}')"><div class="three_menu">${map3.menuNm }</div></a>
+																	<a href="javascript:fnGoMenu('${map3.menuUrl}', '${map3.menuId}', '${map3.menuNm}','${map3.menuTypeCd}')"><div class="three_menu" data-up-menu-id="${map2.menuId}">${map3.menuNm }</div></a>
 																</c:if>
 															</c:when>
 															<c:otherwise>
-																<a href="javascript:fnGoMenu('${map3.menuUrl}', '${map3.menuId}', '${map3.menuNm}','${map3.menuTypeCd}')"><div class="three_menu">${map3.menuNm }</div></a>	
+																<a href="javascript:fnGoMenu('${map3.menuUrl}', '${map3.menuId}', '${map3.menuNm}','${map3.menuTypeCd}')"><div class="three_menu" data-up-menu-id="${map2.menuId}">${map3.menuNm }</div></a>	
 															</c:otherwise>
 														</c:choose>
 														
