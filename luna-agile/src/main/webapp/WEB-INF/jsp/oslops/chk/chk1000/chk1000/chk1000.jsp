@@ -92,15 +92,15 @@ function fnAxGrid5View(){
             header: {align:"center"},
            
             columns: [
-              		{key: "signCdNm", label: "결재 상태", width: '9%', align: "center"},
-              		{key: "signFlowNm", label: "작업흐름", width: '12%', align: "center"},
-              		{key: "signUsrNm", label: "결재자", width: '9%', align: "center"},
-              		{key: "signDtm", label: "결재 요청 일자", width: '9%', align: "center",formatter:function(){
+              			{key: "signCdNm", label: "결재 상태", width: 130, align: "center"},
+              		{key: "signFlowNm", label: "작업흐름", width: 173, align: "center"},
+              		{key: "signUsrNm", label: "결재자", width: 130, align: "center"},
+              		{key: "signDtm", label: "결재 요청 일자", width: 130, align: "center",formatter:function(){
               			return new Date(this.item.signDtm).format("yyyy-MM-dd");
               		}},
-              		{key: "reqNm", label: "요구사항 명", width: '27%', align: "left"},
-              		{key: "regUsrNm", label: "요청자", width: '9%', align: "center"},
-              		{key: "signRejectCmnt", label: "반려내용", width: '27%', align: "left"},
+              		{key: "reqNm", label: "요구사항 명", width: 390, align: "left"},
+              		{key: "regUsrNm", label: "요청자", width: 130, align: "center"},
+              		{key: "signRejectCmnt", label: "반려내용", width: 371, align: "left"}
               		],
             body: {
                 align: "center",
