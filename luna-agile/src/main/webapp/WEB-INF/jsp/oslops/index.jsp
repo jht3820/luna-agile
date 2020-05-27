@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel="stylesheet" href="<c:url value='/css/oslits/index.css'/>">
+<link rel="stylesheet" href="<c:url value='/css/oslops/index.css'/>">
 <script src='/js/common/layerPopup.js'></script>
 
 <script>

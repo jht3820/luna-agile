@@ -41,7 +41,7 @@
 	    <isNotEmpty property="viewType">
 	   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
 			<isEqual property="viewType" compareValue="popup" >
-				AND T.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
+				AND T.USE_CD = '01'
 			</isEqual>
 		</isNotEmpty>	
 	   	<isNotEmpty property="searchTxt">
