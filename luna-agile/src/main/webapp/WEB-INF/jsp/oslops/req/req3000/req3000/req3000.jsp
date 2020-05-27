@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/req.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/req.css'/>' type='text/css'>
 
 <style>
 	.req_right_contents{padding:19px;}

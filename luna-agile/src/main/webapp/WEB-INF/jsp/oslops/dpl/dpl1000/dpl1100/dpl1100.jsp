@@ -2,8 +2,8 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/dpl.css'/>' type='text/css'>
-<link rel='stylesheet' href='<c:url value='/css/oslits/req.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/dpl.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/req.css'/>' type='text/css'>
 
 <style type="text/css">
 /* 모바일 @media 제거 */

@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/req.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/req.css'/>' type='text/css'>
 <link rel="stylesheet" href="/css/chart/gantt/jsgantt.css" type="text/css">
 <script src="/js/chart/gantt/jsgantt.js" type="text/javascript" charset="utf-8"></script>
 
