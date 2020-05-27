@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/oslits/top/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/oslops/top/header.jsp"%>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>
-<link rel='stylesheet' href='<c:url value='/css/oslits/dept.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/dept.css'/>' type='text/css'>
 <link rel='stylesheet' href='<c:url value='/css/ztree/zTreeStyle/zTreeStyle.css'/>' type='text/css'>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.all.min.js"></script>
 
@@ -15,6 +15,21 @@
 #useCd { width: 60%; min-width: 150px; height: 100%; }
 /* 필수 입력값 */
 .required_info{color:red; font-weight: bold; }
+
+div#adm7000_mask_frmae {
+    position: absolute;
+    width: 999px;
+    height: 580px;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    font-size: 10pt;
+    color: #fff;
+    font-weight: bold;
+    padding-top: 249px;
+    text-align: center;
+ 
+}
+
 </style>
 
 <script>
@@ -197,18 +212,20 @@ $(document).ready(function() {
  *	@param deptId 조직ID
  */
 function fnGetDeptInfoAjax(deptId){
-
+	
+	
 	
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
-			{"url":"<c:url value='/adm/adm7000/adm7000/selectAdm7000DeptInfoAjax.do'/>","loadingShow":false}
+			{"url":"<c:url value='/adm/adm7000/adm7000/selectAdm7000DeptInfoAjax.do'/>","loadingShow": false}
 			,{ "deptId":deptId});
 	//AJAX 전송 성공 함수
 	ajaxObj.setFnSuccess(function(data){
 		data = JSON.parse(data);
 		
 		// 오류없을경우 Mask 제거
-		ax5Mask.close();
+		//ax5Mask.close();
+		$("div#adm7000_mask_frmae").hide();
 		
 		$("#deptEtc").val("");
 		
@@ -229,92 +246,84 @@ function fnGetDeptInfoAjax(deptId){
 /**
  * 조회버튼 클릭시 조직 리스트 조회 AJAX
  */
-function fnSearchDeptList(){
-
-	//AJAX 설정
-	var ajaxObj = new gfnAjaxRequestAction(
-			{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>","loadingShow":true});
-	//AJAX 전송 성공 함수
-	ajaxObj.setFnSuccess(function(data){
-		data = JSON.parse(data);
+ function fnSearchDeptList(){
 		
-		var listSize = data.deptList.length;
-    	
-		$('#deptInfoFrm')[0].reset();
-		
-    	toast.push(data.message);
-    	// zTree 설정 
-	    var setting = {
-	        data: {
-	        	key: {
-					name: "deptName"
-				},
-	            simpleData: {
-	                enable: true,
-	                idKey: "deptId",
-					pIdKey: "upperDeptId",
-	            }
-	        },
-			callback: {
-				onClick: function(event, treeId, treeNode){
-					//우측 조직 정보
-					fnGetDeptInfoAjax(treeNode.deptId);
-				},
-				/* onRightClick : function(event, treeId, treeNode){
-					//조직명 변경 상자 나타내기
-					zTree.editName(treeNode);
-				},
-				onRename : function(event, treeId, treeNode){
-					//조직명 변경 이벤트 일어 날 경우, 조직 수정 이벤트 
-					fnUpdateDeptInfoAjax(treeNode,"editRename",false);
-				}, */
-				onDblClick : function(event, treeId, treeNode){
-					//노드 더블 클릭시 발생
-				}
-			},
-			view : {
-				fontCss: function(treeId, treeNode){
-					return (treeNode.useCd == "02")? {color:"#ddd"} :{};
-				},
-				showIcon : function(treeId, treeNode) {
-					
-					if(typeof zTree != "undefined" && !treeNode.isParent){
-						if(listSize>1){
-							treeNode.isParent = true;
-							zTree.updateNode(treeNode);
-							zTree.refresh();	
-						}
+		//AJAX 설정
+		var ajaxObj = new gfnAjaxRequestAction(
+				{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>","loadingShow":true});
+		//AJAX 전송 성공 함수
+		ajaxObj.async = true;
+		ajaxObj.setFnSuccess(function(data){
+			data = JSON.parse(data);
+			
+			var listSize = data.deptList.length;
+	    	
+			$('#deptInfoFrm')[0].reset();
+			
+	    	toast.push(data.message);
+	    	// zTree 설정 
+		    var setting = {
+		        data: {
+		        	key: {
+						name: "deptName"
+					},
+		            simpleData: {
+		                enable: true,
+		                idKey: "deptId",
+						pIdKey: "upperDeptId",
+		            }
+		        },
+				callback: {
+					onClick: function(event, treeId, treeNode){
+						//우측 조직 정보
+						fnGetDeptInfoAjax(treeNode.deptId);
 					}
-					return true;
+				},
+				view : {
+					fontCss: function(treeId, treeNode){
+						return (treeNode.useCd == "02")? {color:"#ddd"} :{};
+					},
+					showIcon : function(treeId, treeNode) {
+						
+						if(typeof zTree != "undefined" && !treeNode.isParent){
+							if(listSize>1){
+								treeNode.isParent = true;
+								zTree.updateNode(treeNode);
+								zTree.refresh();	
+							}
+						}
+						return true;
+					}
 				}
-			}
-	    };
+		    };
 
-	    // zTree 초기화
-	    zTree = $.fn.zTree.init($("#deptJson"), setting, data.deptList);
-	    
-	    // expandAll(false)를 추가해야 트리의 폴더를 한번 클릭 시 하위 메뉴가 보여진다.
-	    // 추가하지 않을 경우 두번 클릭을 해야 폴더가 펼쳐진다.
-	    zTree.expandAll(false);
-	    
-		//목록 조회시 우측 정보 창 mask
-		ax5Mask.open({
-			zIndex:90,
-			target: $("#selDeptInfoDiv"),
-			content: "조직을 선택해주세요."
+		    // zTree 초기화
+		    zTree = $.fn.zTree.init($("#deptJson"), setting, data.deptList);
+		    
+		    // expandAll(false)를 추가해야 트리의 폴더를 한번 클릭 시 하위 메뉴가 보여진다.
+		    // 추가하지 않을 경우 두번 클릭을 해야 폴더가 펼쳐진다.
+		    zTree.expandAll(false);
+		    $("div#adm7000_mask_frmae").show();
+		    $("div#adm7000_mask_frmae").html("조직을 선택해주세요.");
+			//목록 조회시 우측 정보 창 mask
+		   /* ax5Mask.open({
+				zIndex:90,
+				target: $("#selDeptInfoDiv"),
+				content: "조직을 선택해주세요."
+			});*/
 		});
-	  	
-	});
-	
-	//AJAX 전송 오류 함수
-	ajaxObj.setFnError(function(xhr, status, err){
-		data = JSON.parse(data);
-		jAlert(data.message,"알림창");
-	});
-	
-	//AJAX 전송
-	ajaxObj.send();
-}
+		
+
+		
+		//AJAX 전송 오류 함수
+		ajaxObj.setFnError(function(xhr, status, err){
+			data = JSON.parse(data);
+			jAlert(data.message,"알림창");
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
 
 /**
  * 	신규 조직 등록오픈 오픈
@@ -461,7 +470,7 @@ function fnDeleteDeptInfoAjax(strDeptId){
 		data = JSON.parse(data);
     	
     	//삭제가 실패하면 실패 메시지 후 리턴
-    	if(data.saveYN == 'N'){
+    	if(data.errorYn == 'Y'){
     		jAlert(data.message,"경고");
     		return false;
     	} 
@@ -565,7 +574,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 		data = JSON.parse(data);
     	
     	//수정이 실패하면 실패 메시지 후 리턴
-    	if(data.saveYN == 'N'){
+    	if(data.errorYn == 'Y'){
     		toast.push(data.message);
     		return false;
     	} 
@@ -590,6 +599,16 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
     		//폼으로 정보 수정인 경우
     		}else if(updateType == "normal"){
     			//조직명이 변경된 경우
+    			var deptId = $('#deptId').val();
+    			
+    			fnSearchDeptList();
+		        
+		        var treeNodes = zTree.getNodesByParam("deptId", deptId);
+	    		var pNode = treeNodes[0].getParentNode();
+	    		zTree.expandNode(pNode, true, true, null, false);   		
+	    		zTree.selectNode(treeNodes[0]);
+	    		fnGetDeptInfoAjax(treeNodes[0].deptId);
+    			/*
     			if(zTree.getSelectedNodes()[0].deptName != $("#deptName").val()){
     				//폼값 수정이기 때문에 조직값 수정 필요
     				zTree.getSelectedNodes()[0].deptName = $("#deptName").val();
@@ -615,6 +634,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 		    			});
     				}
     			}
+    			*/
     		//하위 조직 사용유무 수정인경우 CSS 변경
     		}else if(updateType == "editSubUseCd"){
     			//사용유무에 따른 폰트 색상 수정
@@ -664,19 +684,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 	<form id="searchFrm" ></form>
 	<div class="tab_contents menu">
 		<div class="top_control_wrap">
-			<span style="float:left;margin-right: 20px;">*조직을 설정할 수 있습니다.</span>
-			<span class="menu_tree_help"><i class="fa fa-question"></i>
-					<div class="menu_tree_helpBox">
-						<span>
-							[좌측 트리 메뉴 기능 안내]<br/>
-							<br/>
-							&nbsp;-메뉴 클릭: 메뉴 상세 정보 보기<br/>
-							&nbsp;-더블 클릭: 폴더형 메뉴의 경우 하위 메뉴 보기<br/>
-							&nbsp;<span style="margin-left: 71px;"></span>하위 메뉴의 경우 사용여부 변경<br/>
-							&nbsp;-우측 클릭: 메뉴명 변경
-						</span>
-					</div>
-				</span>
+			<span style="font-weight:bold;float:left;margin-right: 20px;">*조직을 설정할 수 있습니다.</span>
 				<span class="button_normal2 btn_inquery" id="btn_search_deptInfo"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;조회</span>
 				<span class="button_normal2 btn_save" id="btn_update_DeptInfo"><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;정보수정</span>
 				<span class="button_normal2 btn_excel" id="btn_excel_menuInfo"><i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;엑셀</span>
@@ -699,6 +707,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 			</div>
 
 			<div class="menu_info_wrap" id="selDeptInfoDiv">
+				<div class="adm7000_mask_frmae" id="adm7000_mask_frmae"></div>
 				<form id="deptInfoFrm" name="deptInfoFrm" method="post">
  					<input type="hidden" id="licGrpId" name="licGrpId"/>
  					<input type="hidden" id="lvl" name="lvl"/>

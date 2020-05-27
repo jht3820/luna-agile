@@ -5,7 +5,7 @@
 <html lang="ko">
 <title>OpenSoftLab</title>
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>
 <link rel='stylesheet' href='<c:url value='/css/ztree/zTreeStyle/zTreeStyle.css'/>' type='text/css'>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.all.min.js"></script>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.core.js"></script>

@@ -10,8 +10,8 @@
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 	<title>Open Soft Lab</title>
 	
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>   
-<link rel="stylesheet" href="<c:url value='/css/oslits/cmm.css'/>">
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>   
+<link rel="stylesheet" href="<c:url value='/css/oslops/cmm.css'/>">
 <link rel="stylesheet" href="<c:url value='/css/common/common.css'/>">
 
 	<script src="<c:url value='/js/jquery/jquery-1.11.2.min.js'/>"></script>
