@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 <link rel='stylesheet' href='<c:url value='/css/common/fileUpload.css'/>' type='text/css'>
-<link rel='stylesheet' href='<c:url value='/css/oslits/prs.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/prs.css'/>' type='text/css'>
 <script src="<c:url value='/js/common/oslFile.js'/>"></script>
 <script src="<c:url value='/js/common/EgovMultiFile.js'/>"></script>
 <script src="<c:url value='/js/common/spectrum.js'/>" ></script>

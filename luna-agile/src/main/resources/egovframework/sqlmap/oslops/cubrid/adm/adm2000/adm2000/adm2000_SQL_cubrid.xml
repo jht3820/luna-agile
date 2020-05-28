@@ -367,13 +367,6 @@
 			AND	LIC_GRP_ID 	= #licGrpId#
 			AND	USR_ID IN ($usrId$)
 			]]>
-			
-			<!-- iterate가 안먹어서 임시로 $ $표시 로 삭제함 -->
-			<!-- 
-			<iterate property="usrIdList" open="(" close=")" conjunction=",">	
-				#usrIdList[]# 
-				</iterate>  
-			-->		
 	</update>
 	
 	<!-- 사용자 엑셀 목록을 조회한다. -->

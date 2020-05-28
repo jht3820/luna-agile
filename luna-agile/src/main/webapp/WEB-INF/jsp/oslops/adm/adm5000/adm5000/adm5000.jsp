@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel="stylesheet" href="<c:url value='/css/oslits/adm.css'/>" >
+<link rel="stylesheet" href="<c:url value='/css/oslops/adm.css'/>" >
 <script src="<c:url value='/js/common/layerPopup.js'/>" ></script>
 <style>
 img.ui-datepicker-trigger {margin-bottom: 7px; }
@@ -23,14 +23,14 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 			}
 		   , columnOption : {
 				 adm5000View :  [
-		            {key: "rn", label: "번호", width: 100, align: "center"}
+		            {key: "rn", label: "번호", width: 70, align: "center"}
 		            ,{key: "loginUsrId",label: "사용자 ID", width: 200, align: "center"}
 		            ,{key: "licGrpId",label: "라이선스 그룹 ID", width: 200, align: "center"}
 		            ,{key: "usrNm", label: "사용자 명", width: 200, align: "center"}
 		            ,{key: "loginIp", label: "IP", width: 200, align: "center"}
 		            ,{key: "loginTime", label: "로그인 일시", width: 200, align: "center"}
 		            ,{key: "logoutTime", label: "로그아웃 일시", width: 200, align: "center"}
-		            ,{key: "loginStatus", label: "로그인 성공여부", width: 200, align: "center"}
+		            ,{key: "loginStatus", label: "로그인 성공여부", width: 169, align: "center"}
 				]
 				,adm5000Search : [
                      {optionValue:"rn", 		optionText:"전체 보기", 	optionAll:true }
@@ -67,8 +67,6 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 		                }
 		            }
 		        });
-	        //그리드 데이터 불러오기
-	 		fnInGridListSet();
 
 	}
 	//그리드 데이터 넣는 함수
@@ -125,8 +123,9 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 	function fnSearchBoxControl(){
 		var pageID = "AXSearch";
 		mySearch = new AXSearch();
-		var defaultEndDt = new Date().format('yyyy-MM-dd');
+		// 현재일과 현재일 기준 한달전 날짜 기본세팅
 		var defaultStDt = new Date().format('yyyy-MM-dd');
+		var defaultEndDt = new Date().format('yyyy-MM-dd');
 		
 		var fnObjSearch = {
 			pageStart: function(){
@@ -168,16 +167,10 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 							{label:"", labelWidth:"", type:"selectBox", width:"100", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
 								options:[]
 							},
-							{label:"기간", labelWidth:"70", type:"inputText", width:"90", key:"srchFromDt", addClass:"secondItem readonly", valueBoxStyle:"", value:defaultStDt,
-								onChange: function(){}
-								},
-							{label:"", labelWidth:"", type:"inputText", width:"90", key:"srchToDt", addClass:"secondItem readonly", valueBoxStyle:"padding-left:0px;", value:defaultEndDt,
-									AXBind:{
-										type:"twinDate", config:{
-											align:"right", valign:"top", startTargetID:"srchFromDt"
-										}
-									}
-								},
+							{label : "시작일",labelWidth : "70",type : "inputText",width : "150",key : "srchFromDt",addClass : "secondItem sendBtn",valueBoxStyle : "",value : defaultStDt,
+							},
+							{label : "종료일",labelWidth : "70",type : "inputText",width : "150",key : "srchToDt",addClass : "secondItem sendBtn",valueBoxStyle : "",value : defaultEndDt,
+							},
 							{label:"&nbsp;<i class='fas fa-list-ol'></i>&nbsp;목록 수&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"pageSize", addClass:"", valueBoxStyle:"padding-left:7px;", value:"30",
 									options:[
 												{optionValue:15, optionText:"15"},
@@ -191,7 +184,8 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 												{optionValue:10000, optionText:"10000"}
 				                                
 				                            ],onChange: function(selectedObject, value){
-				                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&pageSize="+value);
+				                            	// 목록 수 변경 시 검색 파라미터를 같이 넘겨준다.
+				                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
 				    						}
 							},
 							{label:"<i class='fas fa-arrows-alt-v'></i>&nbsp;목록 높이&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"gridHeight", addClass:"", valueBoxStyle:"", value:"600",
@@ -208,7 +202,7 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 							},
 	       					{label:"", labelWidth:"", type:"button", width:"70", key:"btn_print_newReqDemand",style:"float:right;",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
            						onclick:function(){
-           							$(firstGrid.exportExcel()).printThis();
+           							$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
            						}},
 							{label:"", labelWidth:"", type:"button", width:"55", key:"btn_excel_newReqDemand",style:"float:right;",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
 	       						onclick:function(){
@@ -246,69 +240,19 @@ img.ui-datepicker-trigger {margin-bottom: 7px; }
 			
 			//버튼 권한 확인
 			fnBtnAuthCheck(mySearch);
-			
-		    //좌측메뉴 작업흐름으로 조회인 경우 (전체요구사항, 담당 요구사항)
-		    if(!gfnIsNull("${flowId}")){
-		    	//option 초기화
-		    	axdom("#" + mySearch.getItemId("searchCd")).html('');
 
-		    	//목록 불러오기
-		    	axdom("#"+mySearch.getItemId("searchCd")).append('<option value="ALL">전체</option>');
-				$.each(JSON.parse(flowList),function(){
-					axdom("#"+mySearch.getItemId("searchCd")).append('<option value="'+this.flowId+'">'+this.flowNm+'</option>');	
-				});
-				axdom("#"+mySearch.getItemId("searchCd")).append('<option value="FLW">미분류</option>');
-		    	
-				//파라미터 세팅
-	    		axdom("#" + mySearch.getItemId("searchSelect")).val('flowId');
-	    		axdom("#" + mySearch.getItemId("searchCd")).val("${flowId}");
-		    	axdom("#" + mySearch.getItemId("searchTxt")).hide();
-				axdom("#" + mySearch.getItemId("searchCd")).show();
+			//기간 검색 달기
+			gfnCalRangeSet(mySearch.getItemId("srchFromDt"), mySearch.getItemId("srchToDt"));
 
-				
-				//그리드 검색 호출
-				var pars = mySearch.getParam();
-				fnAxGrid5View(pars);
-		    }
-		  	//좌측메뉴 개발주기로 조회인 경우
-		    if(!gfnIsNull("${sprintId}")){
-		    	//option 초기화
-		    	axdom("#" + mySearch.getItemId("searchCd")).html('');
-		    	
-		    	//목록 불러오기
-				$.each(JSON.parse(sprintList),function(){
-					axdom("#"+mySearch.getItemId("searchCd")).append('<option value="'+this.sprintId+'">'+this.sprintNm+'</option>');	
-				});
-		    	
-				//파라미터 세팅
-		    	axdom("#" + mySearch.getItemId("searchSelect")).val('sprintId');
-		    	axdom("#" + mySearch.getItemId("searchCd")).val("${sprintId}");
-		    	axdom("#" + mySearch.getItemId("searchTxt")).hide();
-				axdom("#" + mySearch.getItemId("searchCd")).show();
-				
-				//그리드 검색 호출
-				var pars = mySearch.getParam();
-				fnAxGrid5View(pars);
-		    }
+			//그리드 검색 호출
+			var pars = mySearch.getParam();
+			fnInGridListSet(0,pars);
 		});
 		
 	}
 	
 	$(document).ready(function() {
 		Grid.init(); // AXISJ Grid 초기화 실행 부분들
-	});
-	
-	$(window).load(function(){
-		//twinDate 초기화 버튼 이벤트 동작 + 화면
-		$("a.AXanchorDateHandle").click(function(e) {
-			$(".AXbindTwinDateExpandBox .AXButton").closest('div').append($("<div/>", { "id":"init", class: "AXButton Classic W70", value:"초기화", text:"초기화"} ) );
-		});
-		$("#"+ mySearch.getItemId("srchFromDt") + ", #"+ mySearch.getItemId("srchToDt")).val("").text("");
-		$(document).on('click', "#init", function(){
-			$("#"+ mySearch.getItemId("srchFromDt") + ", #"+ mySearch.getItemId("srchToDt")).val("").text("");
-			$(".AXbindTwinDateExpandBox .AXButton").click();
-		});
-		//twinDate 초기화 버튼 이벤트 동작 + 화면
 	});
 	
 </script>

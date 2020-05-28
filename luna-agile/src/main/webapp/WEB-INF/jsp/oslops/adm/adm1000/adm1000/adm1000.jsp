@@ -420,6 +420,7 @@ function fnSearchMenuList(){
     
 	    // zTree 초기화
 	    zTree = $.fn.zTree.init($("#admMenuJson"), setting, data.baseMenuList);
+	    zTree.expandAll(true);
 	});
 	
 	//AJAX 전송 오류 함수
@@ -723,7 +724,7 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     		});
     		
     		// 가로로 전체 체크가능한 체크박스 
-    		trObj.append("<td class='right_con wd10 adm_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  name="+data.menuId+"'_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' /><label for=''></label></td>");
+    		trObj.append("<td class='right_con wd10 adm_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  name="+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' /><label for='"+data.menuId+"_prjAuthHorizon'></label></td>");
     		
     		//밸류값 확인하여 체크 상태 변경
     		$.each(strArrYn, function(idx, val){
