@@ -173,7 +173,7 @@
 		<isNotEmpty property="searchSelect">
 			<isNotEmpty property="searchCd">
 				<isEqual property="searchSelect" compareValue="signStsCd" prepend="AND">
-					SUBT1.DPL_STS_CD = #searchCd#
+					SUBT1.SIGN_STS_CD = #searchCd#
 				</isEqual>
 				<isEqual property="searchSelect" compareValue="dplStsCd" prepend="AND">
 					SUBT1.DPL_STS_CD = #searchCd#
