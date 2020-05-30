@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>
 
 <script>
 

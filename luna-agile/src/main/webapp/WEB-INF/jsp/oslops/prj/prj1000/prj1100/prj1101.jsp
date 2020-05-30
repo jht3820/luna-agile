@@ -232,7 +232,7 @@ function fnPopupFlwAxGrid5View(){
 				}
 				return rtnStr;
 				}},
-			{key: "itemNm", label: "추가 항목 명", width: 290, align: "center"},
+			{key: "itemNm", label: "추가 항목 명", width: 266, align: "center"},
 			{key: "itemTypeStr", label: "추가 항목 타입", width: 150, align: "center"
 				,formatter:function(){
 					//02 '공통코드'인경우 해당 공통코드로 공통코드명 가져오기

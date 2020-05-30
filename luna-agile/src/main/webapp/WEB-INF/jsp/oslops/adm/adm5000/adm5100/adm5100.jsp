@@ -4,7 +4,7 @@
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
 <!-- css는 adm5000(로그인 이력 log)과 공유 -->
-<link rel="stylesheet" href="<c:url value='/css/oslits/adm.css'/>">
+<link rel="stylesheet" href="<c:url value='/css/oslops/adm.css'/>">
 
 <style>
 img.ui-datepicker-trigger {margin-bottom: 7px; }

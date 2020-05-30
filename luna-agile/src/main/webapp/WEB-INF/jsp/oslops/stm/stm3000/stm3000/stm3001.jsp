@@ -4,7 +4,7 @@
 <html lang="ko">
 <title>OpenSoftLab</title>
 <script src="<c:url value='/js/common/oslFile.js'/>"></script>
-<script src="<c:url value='/js/common/comOslits.js'/>"></script>
+<script src="<c:url value='/js/common/comOslops.js'/>"></script>
 <link rel='stylesheet' href='<c:url value='/css/common/fileUpload.css'/>' type='text/css'>
 <style>
 .layer_popup_box .close_btn{top:12px; width:18px; height:18px; background:url(/images/login/x_white.png) no-repeat}

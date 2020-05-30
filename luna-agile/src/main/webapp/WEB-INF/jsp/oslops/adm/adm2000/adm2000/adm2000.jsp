@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
 
-<link rel='stylesheet' href='<c:url value='/css/oslits/adm.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/adm.css'/>' type='text/css'>
 
 <script src="<c:url value='/js/common/spectrum.js'/>" ></script>
 <link rel='stylesheet' href='<c:url value='/css/common/spectrum.css'/>' type='text/css'>
@@ -158,8 +158,9 @@
         		toast.push(data.message);
         		return;
         	}
-    		//그리드 새로고침
-			fnAxGrid5View();
+        	
+    		// 차단유무 수정시 검색어 정보 넘겨서 사용자 그리드 데이터 재조회
+        	fnInGridListSet(firstGrid.page.currentPage, $('form#searchFrm').serialize()+"&"+mySearch.getParam());
 			toast.push(data.message);
 		});
 		
@@ -315,7 +316,7 @@
 	function fnInGridListSet(_pageNo,ajaxParam){
 	     	/* 그리드 데이터 가져오기 */
 	     	//파라미터 세팅
-			if(gfnIsNull(ajaxParam)){  
+			if(gfnIsNull(ajaxParam)){
 				ajaxParam = $('form#searchFrm').serialize();
 			}
 	     	//페이지 세팅
@@ -473,7 +474,7 @@
 									},
 									{label : "",labelWidth : "",type : "button",width : "70",key : "btn_print_usr",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
 										onclick : function() {
-											$(firstGrid.exportExcel()).printThis();
+											$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
 										}
 									},
 									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_excel_usr",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
@@ -496,9 +497,16 @@
 													toast.push('수정할 사용자를 선택해주세요');
 													return;
 												}
+												var popHeight = "770";
+												// 라이센스 그룹 아이디를 가져온다.
+												var usrIdGrp = "${fn:replace(sessionScope.licVO.licGrpId,'_GRP','')}";
+	 											// 선택한 사용자가 최초 라이센스 등록자라면 수정 팝업 사이즈 변경
+												if(item.usrId == usrIdGrp){
+													popHeight = "790";
+												}
 	 											
 												var data = {"proStatus" : "U" ,"usrId" : item.usrId};
-												gfnLayerPopupOpen('/adm/adm2000/adm2000/selectAdm2001View.do',data, "820", "770",'auto');
+												gfnLayerPopupOpen('/adm/adm2000/adm2000/selectAdm2001View.do',data, "820", popHeight,'auto');
 											}
 									},
 									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_insert_usr",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-save' aria-hidden='true'></i>&nbsp;<span>등록</span>",
@@ -609,8 +617,25 @@
 
 	$(document).ready(function() {
 		Grid.init(); // AXISJ Grid 초기화 실행 부분들
+		
+		//가이드 상자 호출
+		gfnGuideStack("add",fnAdm2000GuideShow);
 
 	});
+	
+	
+	//가이드 상자
+	function fnAdm2000GuideShow(){
+		var mainObj = $(".main_contents");
+		
+		//mainObj가 없는경우 false return
+		if(mainObj.length == 0){
+			return false;
+		}
+		//guide box setting
+		var guideBoxInfo = globals_guideContents["adm2000"];
+		gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
+	}
 </script>
 
 <div class="main_contents" style="height: auto;">
@@ -622,7 +647,7 @@
                         <input path="searchCd" type="hidden" id="searchCd" name="searchCd"/>
                         <input path="searchSelect" type="hidden" id="searchSelect" name="searchSelect"/>
                 </form:form>
-		<div id="AXSearchTarget" style="border-top: 1px solid #ccc;"></div>
+		<div id="AXSearchTarget" style="border-top: 1px solid #ccc;" guide="adm2000button"  ></div>
 		<br />
 		<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 600px;"></div>
 	</div>
