@@ -2551,10 +2551,10 @@ function fnPrjLayoutSetting(data){
 					+'</div>'
 					+'<div class="dshChartDiv foldDiv" folding="grp'+idx+'">'
 					+'	<div class="dsh_top_sub_box dsh_top_left_box">'
-					+'		<canvas id="reqTotalCntChart_'+map.prjId+'" width="350" height="278"></canvas>'
+					+'		<canvas id="reqTotalCntChart_'+map.prjId+'" width="453" height="278"></canvas>'
 					+'	</div>'
 					+'	<div class="dsh_top_sub_box dsh_top_middle_box">'
-					+'		<canvas id="reqMonthCntChart_'+map.prjId+'" width="625" height="278"></canvas>'
+					+'		<canvas id="reqMonthCntChart_'+map.prjId+'" width="597" height="278"></canvas>'
 					+'	</div>'
 					+'	<div class="dsh_top_sub_box dsh_top_right_box">'
 					+'		<canvas id="reqQuarterCntChart_'+map.prjId+'" width="400" height="278"></canvas>'
@@ -2638,10 +2638,10 @@ function fnPrjGrpLayoutSetting(data){
 					+'</div>'
 					+'<div class="dshChartDiv foldDiv" folding="grpAll'+idx+'">'
 					+'	<div class="dsh_top_sub_box dsh_top_left_box">'
-					+'		<canvas id="reqPrjTotalCntChart_'+map.prjId+'" width="350" height="278"></canvas>'
+					+'		<canvas id="reqPrjTotalCntChart_'+map.prjId+'" width="453" height="278"></canvas>'
 					+'	</div>'
 					+'	<div class="dsh_top_sub_box dsh_top_middle_box">'
-					+'		<canvas id="reqPrjMonthCntChart_'+map.prjId+'" width="625" height="278"></canvas>'
+					+'		<canvas id="reqPrjMonthCntChart_'+map.prjId+'" width="597" height="278"></canvas>'
 					+'	</div>'
 					+'	<div class="dsh_top_sub_box dsh_top_right_box">'
 					+'		<canvas id="reqPrjQuarterCntChart_'+map.prjId+'" width="400" height="278"></canvas>'
@@ -2761,10 +2761,10 @@ function fnDsh3000PrjReqPopupOpen(projectId, processId, overType, popTitleMsg){
 					</div>
 					<div class="dshChartDiv foldDiv" folding="prj">
 						<div class="dsh_top_sub_box dsh_top_left_box">
-							<canvas id="reqTotalCntChart" width="350" height="278"></canvas>
+							<canvas id="reqTotalCntChart" width="453" height="278"></canvas>
 						</div>
 						<div class="dsh_top_sub_box dsh_top_middle_box">
-							<canvas id="reqMonthCntChart" width="625" height="278"></canvas>
+							<canvas id="reqMonthCntChart" width="597" height="278"></canvas>
 						</div>
 						<div class="dsh_top_sub_box dsh_top_right_box">
 							<canvas id="reqQuarterCntChart" width="400" height="278"></canvas>
@@ -2808,10 +2808,10 @@ function fnDsh3000PrjReqPopupOpen(projectId, processId, overType, popTitleMsg){
 					</div>
 					<div class="dshChartDiv foldDiv" folding="prjGrp">
 						<div class="dsh_top_sub_box dsh_top_left_box">
-							<canvas id="reqPrjTotalCntChart" width="350" height="278"></canvas>
+							<canvas id="reqPrjTotalCntChart" width="453" height="278"></canvas>
 						</div>
 						<div class="dsh_prjGrp_top_sub_box dsh_top_middle_box">
-							<canvas id="reqPrjMonthCntChart" width="625" height="278"></canvas>
+							<canvas id="reqPrjMonthCntChart" width="597" height="278"></canvas>
 						</div>
 						<div class="dsh_prjGrp_top_sub_box dsh_top_right_box">
 							<canvas id="reqPrjQuarterCntChart" width="400" height="278"></canvas>
@@ -2845,10 +2845,10 @@ function fnDsh3000PrjReqPopupOpen(projectId, processId, overType, popTitleMsg){
 					</div>
 					<div class="dshChartDiv foldDiv" folding="prjGrpAll">
 						<div class="dsh_top_sub_box dsh_top_left_box">
-							<canvas id="reqPrjGrpTotalCntChart" width="350" height="278"></canvas>
+							<canvas id="reqPrjGrpTotalCntChart" width="453" height="278"></canvas>
 						</div>
 						<div class="dsh_prjGrp_top_sub_box dsh_top_middle_box">
-							<canvas id="reqPrjGrpMonthCntChart" width="625" height="278"></canvas>
+							<canvas id="reqPrjGrpMonthCntChart" width="597" height="278"></canvas>
 						</div>
 						<div class="dsh_prjGrp_top_sub_box dsh_top_right_box">
 							<canvas id="reqPrjGrpQuarterCntChart" width="400" height="278"></canvas>
