@@ -375,7 +375,7 @@
 	      						AND LIC_GRP_ID = #licGrpId# 
 	      						AND PRJ_ID = #prjId#  ) AS ACCEPT_USE_CD
 				FROM ADM1000 A
-				LEFT JOIN
+				INNER JOIN
 				(
 					SELECT  LIC_GRP_ID
 					 , MENU_ID
