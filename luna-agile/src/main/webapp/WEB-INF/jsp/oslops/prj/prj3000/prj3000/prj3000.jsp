@@ -45,6 +45,7 @@
 
 /* 필수 입력값 */
 .required_info{color:red; font-weight: bold; }
+#btn_update_menuInfo {margin-left: 0;}
 </style>
 <script>
 //파일 Sn 변수 불러오기
@@ -560,7 +561,7 @@ function fnSearchMenuList(){
 	    // zTree 초기화
 	    zTree = $.fn.zTree.init($("#prjDocJson"), setting, data.baseDocList);
 	  //폴더의 계층구조가 3단계가 아니면  tree전체 펼침 시에 일회적 동작 안함(좋은방법같진않고 임시방편 추후개선)
-		zTree.expandAll(false);
+		zTree.expandAll(true);
 	});
 	
 	//AJAX 전송 오류 함수
@@ -1113,7 +1114,7 @@ function fnPrj3000GuideShow(){
 				 -->
 				<div class="button_normal2" id="btn_download_formFileZip" onclick="fnOslDocFormZipDownload()" guide="formFileZip" ><i class='fa fa-file-zip-o' aria-hidden='true'></i>&nbsp;확정 개발문서 양식 전체 다운로드</div>
 				<span class="button_normal2 btn_inquery" id="btn_search_menuInfo"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;조회</span>
-				<span class="button_normal2 btn_save" id="btn_update_menuInfo" tabindex=5><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;정보 수정</span>
+				<span class="button_normal2 btn_save" id="btn_update_menuInfo" tabindex=5><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;수정</span>
 				<div class="button_normal2" onclick="fnOslDocUploadClick()" id="btn_insert_fileSelect" guide="docFileUpload">
 					<input type="file" style="display: none" id="oslDocFileUpload" name="oslDocFileUpload" /><i class='fa fa-upload' aria-hidden='true'></i>&nbsp;개발문서 양식 업로드
 				</div>

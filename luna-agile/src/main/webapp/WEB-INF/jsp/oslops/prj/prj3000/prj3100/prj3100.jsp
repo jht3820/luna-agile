@@ -47,6 +47,7 @@
 .confirm_document_desc{ clear: both; width: 100%; height: 80px; margin-top: 10px; display: inline-block; padding-top: 5px; }
 /* 오른쪽만 선이 들어가도록 */
 .menu_row .menu_col1_right {border-left: 1px solid #ddd; }
+#btn_update_menuInfo {margin-left: 0;}
 </style>
 <script>
 	//파일 Sn 변수 불러오기
@@ -390,7 +391,7 @@
 			// zTree 초기화
 			zTree = $.fn.zTree.init($("#prjDocJson"), setting, data.baseDocList);
 			//폴더의 계층구조가 3단계가 아니면  tree전체 펼침 시에 일회적 동작 안함
-			zTree.expandAll(false);
+			zTree.expandAll(true);
 		});
 
 		//AJAX 전송 오류 함수
@@ -795,7 +796,7 @@
 			 -->
 			<div class="button_normal2" id="btn_download_fileZip" onclick="fnOslDocZipDownload()" guide="confirmFileZip" ><i class='fa fa-file-zip-o'aria-hidden='true'></i>&nbsp;확정 개발문서 전체 다운로드</div> 
 			<span class="button_normal2 btn_inquery" id="btn_search_menuInfo"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;조회</span> 
-			<span class="button_normal2 btn_save" id="btn_update_menuInfo" tabindex=5><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;정보 수정</span>
+			<span class="button_normal2 btn_save" id="btn_update_menuInfo" tabindex=5><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;수정</span>
 			<div class="button_normal2" id="btn_download_formFile" onclick='gfnFileDownload(this,true)' atchId="" fileSn="" guide="formFileDownload">
 				<i class='fa fa-download' aria-hidden='true'></i>&nbsp;양식 다운로드
 			</div> 
