@@ -29,15 +29,14 @@
         	}
 		}
 		else if(intCnt == 2){
-			document.hidAsidePrjFrm.menuUrl.value = '/req/req2000/req2000/selectReq2000View.do';
-			document.hidAsidePrjFrm.menuId.value = '000300020001';
-			document.hidAsidePrjFrm.flowId.value = val; 
+			document.hidAsidePrjFrm.menuUrl.value = '/req/req4000/req4100/selectReq4100View.do';
+			document.hidAsidePrjFrm.menuId.value = '000300040001';
 			
 		}
 		else if(intCnt == 3){
 			document.hidAsidePrjFrm.menuUrl.value = '/req/req4000/req4100/selectReq4100View.do';
 			document.hidAsidePrjFrm.menuId.value = '000300040001';
-			document.hidAsidePrjFrm.reqChargerNm.value =  "<c:out value='${sessionScope.loginUsrInfo.usrNm}'/>"; 
+			document.hidAsidePrjFrm.reqChargerNm.value = "${sessionScope.loginVO.usrNm}"; 
 			
 		}
 		else if(intCnt == 4){ //전체 쪽지 목록
@@ -228,8 +227,8 @@
 			<span>[접속자 정보]</span>
 			<span class="usrInfo_txt">&nbsp;&nbsp;> 아이디 : <c:out value="${sessionScope.loginUsrInfo.usrId}"/></span>
 			<span class="usrInfo_txt">&nbsp;&nbsp;> 성&nbsp;&nbsp;&nbsp;명 : <c:out value="${sessionScope.loginUsrInfo.usrNm}"/></span>
-			<span class="usrInfo_txt">&nbsp;&nbsp;> 소&nbsp;&nbsp;&nbsp;속 : <c:out value="${sessionScope.loginUsrInfo.usrDeptNm}"/></span>
-			<span class="usrInfo_txt">&nbsp;&nbsp;> 사&nbsp;&nbsp;&nbsp;업 : <c:out value="${sessionScope.selPrjTaskTypeNm}"/></span>
+			<span class="usrInfo_txt" title="<c:out value="${sessionScope.loginUsrInfo.usrDeptNm}"/>">&nbsp;&nbsp;> 소&nbsp;&nbsp;&nbsp;속 : <c:out value="${sessionScope.loginUsrInfo.usrDeptNm}"/></span>
+			<span class="usrInfo_txt" title="<c:out value="${sessionScope.selPrjTaskTypeNm}"/>">&nbsp;&nbsp;> 사&nbsp;&nbsp;&nbsp;업 : <c:out value="${sessionScope.selPrjTaskTypeNm}"/></span>
 		</dt>
 		
 		<dt class="logintime">

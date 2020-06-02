@@ -14,14 +14,14 @@
 	
 	<link rel="stylesheet" href="<c:url value='/css/common/common.css' />" type="text/css" />
 	
-	<link rel="stylesheet" href="<c:url value='/css/oslits/login.css' />" type="text/css" />
-	<link rel="stylesheet" href="<c:url value='/css/oslits/cmm.css'/>" type="text/css" />
+	<link rel="stylesheet" href="<c:url value='/css/oslops/login.css' />" type="text/css" />
+	<link rel="stylesheet" href="<c:url value='/css/oslops/cmm.css'/>" type="text/css" />
 	
 	<script src="<c:url value='/js/jquery/jquery-1.11.2.min.js'/>"></script>
 
 	<script src="<c:url value='/js/common/common.js'/>"></script>
 	<script src="<c:url value='/js/common/layerPopup.js'/>"></script>
-	<script src="<c:url value='/js/common/comOslits.js'/>"></script>
+	<script src="<c:url value='/js/common/comOslops.js'/>"></script>
 	
 	<script>
 		$(function(){
@@ -68,13 +68,25 @@
 			var message = '${requestScope.message}';
 			var sessionYn = '${requestScope.sessionYn}';
 			var iniYn  = '${requestScope.iniYn}';  
+			var exprYn  = '${requestScope.exprYn}'; 	// 비밀번호 만료여부
 			var loginSessionYn = '${requestScope.loginSessionYn}';
 
 			if(iniYn == 'Y'){
 				
 				var data = { "usrId" : '${requestScope.usrId}'  };
-				gfnLayerPopupOpen('/cmm/cmm4000/cmm4002/selectCmm4002View.do', data , '550', '180','scroll');
-			}			
+				gfnLayerPopupOpen('/cmm/cmm4000/cmm4002/selectCmm4002View.do', data , '550', '250','scroll');
+			}
+			
+			// 비빌번호 만료가 되었을 경우 팝업 띄워서 비밀번호 변경하도록
+			if(exprYn == "Y"){
+				jAlert('비밀번호 사용기간이 만료되었습니다. \n비밀번호를 변경해 주세요', '알림창', function(result) {
+					if (result) {
+						var data = { "usrId" : '${requestScope.usrId}' , "exprYn" : exprYn , "licGrpId" : '${requestScope.licGrpId}'};
+						gfnLayerPopupOpen('/cmm/cmm4000/cmm4002/selectCmm4002View.do', data , '550', '290','scroll');
+					}
+				});
+				return false;
+			}	
 			
 			//세션이 만료된 경우 세션 만료 메시지 띄움.
 			if(sessionYn == 'N'){
@@ -105,6 +117,13 @@
 		
 		//로그인 처리
 		function fnLoginAction(){
+			var strFormId = "loginFrm";
+			var strCheckObjArr = [ "usrId", "usrPw"];
+			var sCheckObjNmArr = [ "아이디", "비밀번호"];
+			if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
+				return;	
+			}
+			
 			document.loginFrm.action = "<c:url value='/cmm/cmm4000/cmm4000/selectCmm4000LoginAction.do'/>";
 			document.loginFrm.submit();
 		}
@@ -120,8 +139,7 @@
 			<input type="hidden" name="initPassYn" id="initPassYn" value="">
 			<input type="hidden" name="licGrpId" id="licGrpId" value="${requestScope.licGrpId}">
 			
-			<img class="logo" src="/images/login/login_logo_osl.png"/> <!--  alt="국방전산정보원 로고" -->
-			<!-- <div class="div_title_txt">SW형상관리시범체계</div> -->
+			<img class="logo" src="/images/login/login_logo.png"/>
 			<input type="text" name="usrId" id="usrId" placeholder="Username" title="로그인" 
 			onkeyup="this.value=this.value.replace(/[^a-zA-Z-_0-9]/g,'');" maxlength="20"
 			>

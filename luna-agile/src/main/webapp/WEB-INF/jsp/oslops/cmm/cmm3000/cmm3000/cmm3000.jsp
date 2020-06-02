@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="<c:url value='/css/common/reset.css'/>">
 		<link rel="stylesheet" href="<c:url value='/css/font/font.css'/>">
 		<link rel="stylesheet" href="<c:url value='/css/common/common.css'/>">
-		<link rel="stylesheet" href="<c:url value='/css/oslits/cmm.css'/>">
+		<link rel="stylesheet" href="<c:url value='/css/oslops/cmm.css'/>">
 		
 		<script src="<c:url value='/js/jquery/jquery-1.11.2.min.js'/>"></script>
 

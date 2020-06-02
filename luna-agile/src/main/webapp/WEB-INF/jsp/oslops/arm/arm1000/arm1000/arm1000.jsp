@@ -73,7 +73,13 @@ function fnAxGrid5View_alarm(){
 						}
 						return "<i class='fa fa-lg "+armIcon+"'></i>"
 					}},
-	            {key: "title", label: "제목", width: 640, align: "center"},
+	            {key: "title", label: "제목", width: 621, align: "center",
+					formatter:function(){
+						// 그리드의 태그를 제거한다.
+		           		var armTitle = this.item.title.replace(/</gi,'&lt;').replace(/>/gi,'&gt;');
+						
+		        		return armTitle;
+     			}}, 
 	            {key: "regDtm", label: "보낸 일자", width: 150, align: "center"
 	            	,formatter:function(){return new Date(this.item.regDtm).format('yyyy-MM-dd hh:mm:ss')}},
             ],
@@ -466,16 +472,26 @@ function fnArmViewOnOff(data,onOff){
 				$("#alarm_viewNumSpan").html(viewNum);
 			}
 			var armInfo = data.armInfo;
+			// 쪽지 제목 태그 치환
+			var armTitle = armInfo.title.replace(/</gi,'&lt;').replace(/>/gi,'&gt;');
+			
+			var reqTags = "";
+			
+			// 요구사항 태그가 있을 경우
+			if(!gfnIsNull(armInfo.reqIds)){
+				// <script> 치환
+				reqTags = armInfo.reqIds.replace(/<script>/gi,'&lt;script&gt;').replace(/<\/script>/gi,'&lt;\/script&gt;');
+			}
 			
 			//데이터 세팅
 			$("span#sendUsrNm").html(armInfo.sendUsrNm);
 			$("span#regDtm").html(new Date(armInfo.regDtm).format("yyyy-MM-dd HH:mm:ss"));
-			$("div#title").html(armInfo.title);
-			$("span#content").html(armInfo.content);
+			$("div#title").html(armTitle);
+			$("textarea#viewContent").val(armInfo.content.replace(/(<br>|<br\/>|<br \/>|<\/br>)/g, '\r\n'));
 			$("div#armOpenDelBtn").attr("del-arm-id",armInfo.armId);
 			$("div#armOpenReplyBtn").attr("reply-usr-id",armInfo.sendUsrId);
 			$("div#armOpenReplyBtn").attr("reply-usr-nm",armInfo.sendUsrNm);
-			$("div.armViewHeaderRight").html(armInfo.reqIds);
+			$("div.armViewHeaderRight").html(reqTags);
 			
 			//요구사항 프로젝트 다른지 확인
 			var tagList = $("span[name=tagReqId]");
@@ -539,10 +555,10 @@ function fnArmWriteOnOff(data, onOff){
 	}else{
 		$("#headerTitle").text("쪽지 작성");
 		
-		//사용자 지정
-		var arm_reqId = "${arm_reqId}";
-		var arm_reqNm = "${arm_reqNm}";
-		var reqPrjId = "${reqPrjId}";
+		// 요구사항 태그 지정
+		var arm_reqId = "<c:out value='${arm_reqId}'/>";
+		var arm_reqNm = "<c:out value='${arm_reqNm}'/>";
+		var reqPrjId = "<c:out value='${reqPrjId}'/>";
 		
 		//요구사항 링크
 		if(!gfnIsNull(arm_reqId)){
@@ -572,10 +588,13 @@ function fnArmWriteOnOff(data, onOff){
 			        response( $.map( autoData, function( item ) {
 			        	var reqIdStr = $("input#searchReqIds").val();
 			        	var subStr = reqIdStr.substring(reqIdStr.lastIndexOf(',')+1,reqIdStr.length).trim();
-			            if (item.reqNm.toLowerCase().indexOf(subStr.toLowerCase()) >= 0){
+			            // <script> 치환
+			        	var reqNm = item.reqNm.replace(/<script>/gi,'&lt;script&gt;').replace(/<\/script>/gi,'&lt;\/script&gt;')
+			        	
+			            if (reqNm.toLowerCase().indexOf(subStr.toLowerCase()) >= 0){
 			                return {
 			                    label: "["+item.reqId+"]"+item.reqNm.toLowerCase().replace(subStr.toLowerCase(),"<span style='font-weight:bold;color:Blue;'>" + subStr.toLowerCase() + "</span>"),
-			                    value: item.reqNm,
+			                    value: reqNm,
 			                    reqId: item.reqId,
 			                    prjId: item.prjId
 			                }
@@ -598,10 +617,12 @@ function fnArmWriteOnOff(data, onOff){
 		        error: function(xhr, ajaxOptions, thrownError){ alert(thrownError);  alert(xhr.responseText); }
 		    })
 		    .data('uiAutocomplete')._renderItem = function( ul, item ) {
+				// <script> 치환
+				var itemLable = item.label.replace(/<script>/gi,'&lt;script&gt;').replace(/<\/script>/gi,'&lt;\/script&gt;');
 				
 		        return $( "<li style='cursor:hand; cursor:pointer;'></li>" )
 		            .data( "item.autocomplete", item )
-		            .append("<a>"  + unescape(item.label) + "</a>")
+		            .append("<a>"  + unescape(itemLable) + "</a>")
 		        .appendTo( ul );
 		    };
 		}
@@ -618,23 +639,23 @@ function fnArmWriteOnOff(data, onOff){
 function fnArmWriteAction(){
 	var sendUsrId = $("#writeSendUsrId").val();
 	var title = $("input#title").val();
-	var content = $("textarea#content").val().replace(/\n/gi,"</br>");
+	var content = $("textarea#content").val(); //.replace(/\n/gi,"</br>");
 	var reqIds = $("#reqIdSpan").html();
 	
 	if(gfnIsNull(sendUsrId)){
-		jAlert("프로젝트에 배정된 사용자가 존재하지 않습니다.");
+		jAlert("프로젝트에 배정된 사용자가 존재하지 않습니다.", "알림창");
 		return false;
 	}
 	else if(gfnIsNull(title)){
-		jAlert("쪽지 제목을 입력해주세요.");
+		jAlert("쪽지 제목을 입력해주세요.", "알림창");
 		return false;
 	}
 	else if(gfnIsNull(content)){
-		jAlert("쪽지 내용을 입력해주세요.");
+		jAlert("쪽지 내용을 입력해주세요.", "알림창");
 		return false;
 	}
 	else if(reqIds.length > 4000){
-		jAlert("요구사항 태그가 너무 많습니다.");
+		jAlert("요구사항 태그가 너무 많습니다.", "알림창");
 		return false;
 	}
 	//요구사항 태그 함수명 변경
@@ -783,7 +804,7 @@ function fnSpanDplDetailOpen(obj){
 		
 	</div>
 	<div class="armViewBody">
-		<span id="content"></span>
+		<textarea class="viewContentText" id="viewContent" readonly="readonly"></textarea>
 	</div>
 	<div class="armViewFooter">
 		<div class="arm_close_btn" onclick="fnArmViewOnOff(null,false)">쪽지 목록</div>
