@@ -63,6 +63,7 @@ var arrChkObj = {"reqNm":{"type":"length","msg":"요청제목 500byte까지 입�
 // 연락처, 이메일  유효성 체크
 var saveObjectValid = {
 			"reqUsrNum":{"type":"regExp","pattern":/^([0-9]{3,13}).*$/ ,"msg":"연락처 형식이 아닙니다. (3~13자리) (예) 01012341234", "required":true}
+			 ,"reqUsrNm":{"type":"regExp","pattern":/^[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_-]{1,200}$/ ,"msg":"이름은 한글, 영문, 숫자, 특수문자( _ -) 만 입력가능합니다.", "required":true}
 			 ,"reqUsrEmail":{"type":"regExp","pattern":/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i ,"msg":"이메일 형식이 아닙니다. <br>(예) mymail@naver.com","required":true}
 }				
 
@@ -291,7 +292,10 @@ $(document).ready(function() {
 			}
 		}
 
-
+		// 이메일 공백제거
+		var reqUsrEmali = $("#reqUsrEmail").val();
+		$("#reqUsrEmail").val(reqUsrEmali.trim());
+		
 		// 연락처, 이메일 유효성 검사
 		if(!gfnInputValChk(saveObjectValid)){
 			return false;	
