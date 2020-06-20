@@ -71,7 +71,7 @@ aside dl dd > div span:nth-child(2){ margin-left:15px; font-size:0.75em; color:#
 }
 */
 
-
+/* 
 .newAlarm {
     -webkit-animation: newAlarm 1s linear infinite;
     -moz-animation: newAlarm 1s linear infinite;
@@ -104,7 +104,7 @@ aside dl dd > div span:nth-child(2){ margin-left:15px; font-size:0.75em; color:#
     0% { background-color: #fff;color:#000; }
     100% { background-color: #414352;color:#fff; }
 }
-
+ */
 aside .info_wrap{ width:100%; height:40px; display:table; background:#3c3e4b; color:white; }
 aside .info_wrap .info_menu{ 
 	display:table-cell; 
@@ -126,9 +126,14 @@ aside dl dt.logintime{
     border-bottom: 1px solid #2f3035; 
 }
 
+/* 조직명이 길 경우 좌측 사용자정보 깨짐현상 발생 2019.11.17
+	min-height: 130px; 추가
+	height: 130px; 에서 auto;로 변경
+*/
 aside dl dt.usrInfo{
 	line-height: inherit;
-    height: 130px;
+	min-height: 130px;
+    height: auto;
     padding: 6px 16px;
     border-top: 1px solid #5b5d69;
     background: #414352;
@@ -152,6 +157,10 @@ aside dl dt.usrInfo span {
     display: inline-block;
     vertical-align: middle;
     font-size: 0.875em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height:25px;
 }
 
 aside dl dt.usrInfo .usrInfo_txt{
