@@ -56,15 +56,15 @@
 			adm2000View : [ 
 					 	btnAuthOption,
 						{key : "pwFailCnt",label : "비밀번호 실패 횟수",width : 150,align : "center"},
-						{key : "useCd",label : "사용유무",width : 150,align : "center" ,
+						{key : "useCd",label : "사용유무",width : 90,align : "center" ,
 							formatter : function(){return this.item.useCd == "01"?"사용":"미사용";}
 						},
-						{key : "usrId",label : "아이디",width : 200,align : "center"},
-						{key : "usrNm",label : "이름",width : 200,align : "center"},
-						{key : "telno",label : "연락처",width : 200,align : "center"},
-						{key : "email",label : "이메일",width : 300,align : "center"},
-						{key : "deptName",label : "소속",width : 300,align : "center"},
-						{key : "etc",label : "비고",width : 300,align : "center"} 
+						{key : "usrId",label : "아이디",width : 130,align : "center"},
+						{key : "usrNm",label : "이름",width : 130,align : "center"},
+						{key : "telno",label : "연락처",width : 150,align : "center"},
+						{key : "email",label : "이메일",width : 207,align : "center"},
+						{key : "deptName",label : "소속",width : 497,align : "left"},
+						{key : "etc",label : "비고",width : 300,align : "left"} 
 					],
 			adm2000Search : [ 
 	                  	{optionValue : "rn",optionText : "전체 보기",optionAll : true}, 
@@ -159,7 +159,7 @@
         		return;
         	}
         	
-    		// 차단유무 수정시 검색어 정보 넘겨서 사용자 그리드 데이터 재조회
+        	// 차단유무 수정시 검색어 정보 넘겨서 사용자 그리드 데이터 재조회
         	fnInGridListSet(firstGrid.page.currentPage, $('form#searchFrm').serialize()+"&"+mySearch.getParam());
 			toast.push(data.message);
 		});
@@ -387,7 +387,8 @@
 						        }},                                           
 								{label:"", labelWidth:"", type:"button", width:"100",style:"float:right;", key:"btn_excel_newReqDemand",valueBoxStyle:"float:right; padding:5px;", value:"<i class='fa fa-download' aria-hidden='true'></i>&nbsp;<span>양식 다운로드</span>",
 									onclick:function(){
-										$.download('/etc/uploadUserForm.xlsx','tmp','post');
+										//$.download('/etc/uploadUserForm.xlsx','tmp','post');
+										document.location.href = "/etc/uploadUserForm.xlsx";
 								}},
 					       ]},
 					     
