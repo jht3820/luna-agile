@@ -66,7 +66,7 @@ function fnAxGrid5View(){
 				
 				{key: "apiNm", label: "서비스명", width: 150, align: "left"},
 				{key: "apiUrl", label: "URL", width: 250, align: "center"},
-				{key: "apiTok", label: "API KEY", width: 250, align: "center"},
+				{key: "apiTok", label: "API KEY", width: 243, align: "center"},
 				{key: "useNm", label: "사용여부", width: 100, align: "center"},
 				{key: "regUsrId", label: "요청자", width: 100, align: "center"},
 				{key: "regDtm", label: "등록일자", width: 100, align: "center"}
