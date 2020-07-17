@@ -13,8 +13,8 @@
 .popup_title_box { width: 100%; height: 44px; padding: 15px;font-weight: bold; color: #fff; background-color: #4b73eb;}
 
 /* 항목 레이아웃 */
-.req4105_req_leftBox {display: inline-block;float: left;width: 80%;height: calc(100% - 44px);border: 1px solid #8f95b3;}
-.req4105_req_rightBox {display: inline-block;float: left;width: 20%;height: calc(100% - 44px);min-height: 846px;border: 1px solid #8f95b3;overflow-y: auto;border-left: none;position: relative;}
+.req4105_req_leftBox {display: inline-block;float: left;width: 80%;height: calc(100% - 44px);min-height: 856px;border: 1px solid #8f95b3;}
+.req4105_req_rightBox {display: inline-block;float: left;width: 20%;height: calc(100% - 44px);min-height: 856px;border: 1px solid #8f95b3;overflow-y: auto;border-left: none;position: relative;}
 .req4105_nextFlowList {width: 100%;height: 100%;display: inline-block;float:left;}
 .req4105_req_topBox {width: 100%;height: 130px;border-bottom: 1px solid #8f95b3;overflow-x: auto;overflow-y: hidden;white-space:nowrap;text-align:right;padding-top: 10px;padding-right: 10px;position:relative;}
 .req4105_req_bottomBox {width: 100%;height: calc(100% - 130px);min-height: 714px;}
@@ -38,7 +38,7 @@ div#req4105_reqOptDataList .req4105_default_option {
     background-color: #fff;
     color: #414352;
     border: 1px solid #ccc;
-    border-radius: 5px 5px 0 0;
+    border-radius: .1875rem .1875rem 0 0;
     padding-left: 10px;
     line-height: 40px;
     font-weight: bold;
@@ -53,8 +53,8 @@ div#req4105_reqOptDataList .req4105_default_option {
 input.req4105_input_text {min-width: 190px;height: 100%;border: 1px solid #ccc;display: block;padding-left: 15px;border-radius: 1px;}
 textarea.req4105_textarea {width: 100%;height: 100%;resize: none;padding: 5px;border: 1px solid #ccc;border-radius: 1px;}
 input.req4105_input_date {width: 100%;float: left;display: block;border-radius: 1px;height: 100% !important;background-color: #fff !important;border: 1px solid #ccc;text-align: center;}
-input.req4105_charger,input.req4105_optCharger,input.req4105_cls,input.req4105_deploy {width: 195px !important;min-width: 100px;display: inline-block;float: left;margin-right: 5px;}
-span.req4105_charger,span.req4105_optCharger,span.req4105_cls,span.req4105_deploy{height: 34px;line-height: 30px;width:30px;min-width: 30px;}
+input.req4105_charger,input.req4105_optCharger,input.req4105_cls,input.req4105_dept,input.req4105_deploy {width: 195px !important;min-width: 100px;display: inline-block;float: left;margin-right: 5px;}
+span.req4105_charger,span.req4105_optCharger,span.req4105_cls,span.req4105_dept,span.req4105_deploy{height: 34px;line-height: 30px;width:30px;min-width: 30px;}
 input.req4105_input_check {width: 100%;height: 80%;}
 textarea.req4105_processBox_bottom[disabled] {background-color: #fff;white-space:normal;}
 select.req4105_select {width: 100%;height: 100%;border-radius: 1px;border: 1px solid #ccc;text-align: center;font-size:10pt !important;}
@@ -65,6 +65,9 @@ img.ui-datepicker-trigger{float: left;margin-top: 2px;}
 , .req4105_option_half textarea.req4105_textarea
 , .req4105_option_half select.req4105_select {width:100%;height:100%;}
 .req4105_option_all input.req4105_input_text, .req4105_option_all textarea.req4105_textarea, .req4105_option_all select.req4105_select{width: 100% !important;height:100% !important;}
+.req4105_option_all input.req4105_cls,
+.req4105_option_all input.req4105_dept,
+.req4105_option_all input.req4105_optCharger {width: 695px !important;}
 .req4105_desc {height: 100px;}
 .req4105_file {height: 150px;}
 .req4105_clear{clear:both;}
@@ -76,7 +79,7 @@ input.req4105_charger[readonly] ,input.req4105_optCharger[readonly] {width: 100%
 .endPrevStr{display:none;}
 
 /* 프로세스 또는 이전 작업흐름 이력 목록 */
-.req4105_processBox {width: 150px;display: inline-block;margin: 10px;margin-bottom: 0;border: 1px solid #ccc;border-radius: 5px;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);height: 100px;padding: 5px;cursor: pointer;}
+.req4105_processBox {width: 150px;display: inline-block;margin: 10px;margin-bottom: 0;border: 1px solid #ccc;border-radius: .1875rem;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);height: 100px;padding: 5px;cursor: pointer;}
 .req4105_processBox_top {width: 100%;height: 20px;line-height: 20px;text-align: center;font-weight: bold;border-bottom: 1px solid #ccc;font-size: 10pt;}
 .req4105_processBox_bottom {height: 70px;padding: 2px 5px;font-size: 9pt;width: 138px;resize: none;border: none;overflow: hidden;cursor: pointer;}
 .req4105_processBox:hover, .req4105_processBox.active {border: 1px solid #ff5643;}
@@ -85,7 +88,7 @@ input.req4105_charger[readonly] ,input.req4105_optCharger[readonly] {width: 100%
 .req4105_flowBox {position: relative;width: 185px;height: 65px;text-align: center;border-radius: 0 0 10px 10px;border: 3px solid transparent;margin: 30px 10px 0 10px;display:inline-block;background-color: #F0F0F0;color: #000000;}
 .req4105_flowOptionDiv {position: absolute;top: -24px;height: 24px;left: -3px;background-color: inherit;padding: 2px;border: 3px solid transparent;border-radius: 5px 5px 0 0;font-size: 10pt;border-bottom: 1px dashed #fff;width: 185px;text-align: left;}
 .req4105_flowBox_title {width: 100%;height: 30px;line-height: 20px;font-weight: bold; padding-top: 5px;border-bottom: none;float:left;}
-.req4105_flowBox_contents {width: 100%;height: 30px;border-radius: 0 0 8px 8px;line-height: 33px;background-color:#fff;color:#000;float:left;}
+.req4105_flowBox_contents {width: 100%;height: 30px;border-radius: 0 0 8px 8px;line-height: 33px;background-color:#fff;color:#000;float:left;font-size:10pt;}
 .req4105_flowBox.topFlowBox:hover, .req4105_flowBox.topFlowBox.flowActive{cursor:pointer;border: 3px solid #4b73eb;}
 .req4105_flowBox.topFlowBox:hover .req4105_flowOptionDiv, .req4105_flowBox.topFlowBox.flowActive .req4105_flowOptionDiv{cursor:pointer;border: 3px solid #4b73eb;border-bottom: 1px dashed #fff;}
 
@@ -117,10 +120,10 @@ input.req4105_charger[readonly] ,input.req4105_optCharger[readonly] {width: 100%
 .uploadOverFlow.widthAll{width:100% !important;}
 
 /* 버튼 */
-.req4105_close{width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;background-color: #fff;color: #000;}
-.req4105_signBtn, .req4105_complete {width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin-right:20px;background-color: #fff;color: #000;}
-.req4105_chargerChgBtn {display:none;width: 140px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin-right:20px;background-color: #fff;color: #000;}
-.req4105_nextFlowBtn {width: 100px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin:0 10px;background-color: #fff;color: #000;}
+.req4105_close{width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: .1875rem;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;background-color: #fff;color: #000;}
+.req4105_signBtn, .req4105_complete {width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: .1875rem;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin-right:20px;background-color: #fff;color: #000;}
+.req4105_chargerChgBtn {display:none;width: 140px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;border-radius: .1875rem;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin-right:20px;background-color: #fff;color: #000;}
+.req4105_nextFlowBtn {width: 100px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: .1875rem;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin:0 10px;background-color: #fff;color: #000;}
 .req4105_signBtn{width: 200px;display:none;}
 .req4105_btnDiv {width: 100%;height: 100px;line-height: 100px;text-align: center;padding-left: 100px;}
 
@@ -135,13 +138,13 @@ span#signUsrHtml > img {display: inline-block;padding-left: 75px;width: 135px;he
 #req4105_work{display:none;border-right: none;border-bottom: 1px solid #ccc;}
 .req4105_work_btnBox {height: 45px;line-height: 45px;border: 1px solid #ccc;border-bottom: none;border-top: none;background-color: #f9f9f9;font-weight: bold;padding-left: 10px;}
 .req4105_work_frame {width: 100%;height: 210px;padding: 5px;border: 1px solid #ccc;border-bottom: none;}
-div.req4105_work_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b8;width: 100px;height: 35px;line-height: 35px;text-align: center;box-shadow: 1px 1px 1px #ccd4eb;background-color: #fff;border-radius: 5px;cursor:pointer;}
+div.req4105_work_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b8;width: 100px;height: 35px;line-height: 35px;text-align: center;box-shadow: 1px 1px 1px #ccd4eb;background-color: #fff;border-radius: .1875rem;cursor:pointer;}
 
 /* 리비전 */
 #req4105_revision{display:none;border-right: none;}
 .req4105_revision_btnBox {height: 45px;line-height: 45px;border: 1px solid #ccc;border-bottom: none;border-top: none;background-color: #f9f9f9;font-weight: bold;padding-left: 10px;}
 .req4105_revision_frame {width: 100%;height: 210px;padding: 5px;border: 1px solid #ccc;}
-div.req4105_revision_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b8;width: 100px;height: 35px;line-height: 35px;text-align: center;box-shadow: 1px 1px 1px #ccd4eb;background-color: #fff;border-radius: 5px;cursor:pointer;}
+div.req4105_revision_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b8;width: 100px;height: 35px;line-height: 35px;text-align: center;box-shadow: 1px 1px 1px #ccd4eb;background-color: #fff;border-radius: .1875rem;cursor:pointer;}
 
 /* 배포계획 */
 .req4105_dplBox {float:left;width: 100%;border-right: 1px solid #ccc;display: none;}
@@ -185,13 +188,13 @@ div.req4105_revision_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b
 .req_box_main{height: 20px;line-height: 15px;text-align: center;padding: 2px 0;position: relative;}
 .req_box_main.signRejectDiv{height: 80px;text-align: left;white-space: normal;width: 138px;resize:none;overflow-y: auto;font-size: 10pt;}
 .req_box_main.signRejectDiv:hover {cursor: pointer;border: 1px solid #4b73eb;}
-.req_box_main.signRejectUsrDiv{height: 30px;line-height: 25px;border: 1px solid #ccc;border-radius: 5px;}
+.req_box_main.signRejectUsrDiv{height: 30px;line-height: 25px;border: 1px solid #ccc;border-radius: .1875rem;}
 .req_box_main.prev{box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);color:#fff;margin-top: 20px;}
 .req_box_main.regUsrImg {width: 100%;height: 54px;display: block;text-align: left;clear: both;}
 .req_box_main.regUsrImg > img {width: 50px;height: 50px;float: left;}
 .req_box_main.regUsrImg > div {float: left;height: 25px;width: calc(100% - 50px);text-align: center;line-height: 25px;}
 .req_box_main.signAcceptDiv {height: calc(100% - 20px);padding-top: 10px;}
-.req_box_main.signAcceptDiv > div {height: 30px;line-height: 25px;border: 1px solid #ccc;margin-top: 10px;border-radius: 5px;}
+.req_box_main.signAcceptDiv > div {height: 30px;line-height: 25px;border: 1px solid #ccc;margin-top: 10px;border-radius: .1875rem;}
 .req_box_main.signAcceptDiv > img {width: 60px;height: 60px;}
 .req_box_main.bottom:nth-child(1){margin-top:5px;}
 .req_box_main.bottom{border: 1px solid #ccc;margin-bottom: 1px;}
@@ -229,11 +232,13 @@ div.req4105_revision_btn {float: right;margin: 5px 10px;border: 1px solid #b8b8b
 }
 /* 체크박스 */
 .req4105_chk { position: relative;text-align: center;}
-.req4105_chk input[type="checkbox"] {margin:0; opacity: 0; position: absolute; z-index: 2; width: 100%;height: 40px;left: 0;}
+.req4105_chk input[type="checkbox"] {margin:0; opacity: 0; position: absolute; z-index: 2; width: 100%;height: 100%;left: 0;}
 .req4105_chk input[type="checkbox"]+label { display: inline-block; width: 18px; height: 18px; background: url(/images/contents/normal_check.png) no-repeat; font-size: 1em; line-height: 24px; vertical-align: middle; cursor: pointer; z-index: 1; border-radius: 3px; margin-top: 10px;}
 .req4105_chk input[type="checkbox"]:checked+label { display: inline-block; width: 18px; height: 18px; background: url('/images/contents/normal_check_on.png') no-repeat; line-height: 24px; vertical-align: middle; cursor: pointer; }
 /* 체크박스 */
 .req4105_end_maskBox {display: none;position: absolute;right: 0;width: 100%;height: 100%;min-height: 745px;background-color: rgba(0, 0, 0, 0.6);z-index: 2;color: #fff;padding-top: 300px;padding-left: 20px;text-align: left;line-height: 30px;}
+
+.prjTaskTypeDiv{display:none;}
 </style>
 <script>
 //요구사항 Id, 로그인 사용자 Id
@@ -304,7 +309,9 @@ var FILE_SUM_MAX_SIZE = "${fileSumMaxSize}";
 var arrChkObj = {"reqCompleteRatio":{"type":"number"}
 				,"reqFp":{"type":"number"}
 				,"reqExFp":{"type":"number"}};
-					
+
+//팝업 guide 제어
+globals_guideChkFn = fnReq4105GuideShow;
 $(document).ready(function() {
 	//파일 목록 초기화
 	dndCancel();
@@ -317,6 +324,14 @@ $(document).ready(function() {
 //이전으로 돌아갈수있는 작업흐름 목록
 var prevFlowList = [];
 
+// 제거할 이벤트 목록 배열
+var removeEventArr = ["dragenter", "dragover", "drop"];
+
+//프로젝트 사업 구분
+var prjTaskTypeCd = "${sessionScope.selPrjTaskTypeCd}";
+
+//프로세스 구분
+var processTypeCd;
 /**
  * [데이터 불러오기]
  * - 프로세스
@@ -339,9 +354,10 @@ function fnReq4105DataLoad(){
     	} 
     	else{
     		
-    		var default_mstCdStrArr = 'REQ00012|CMM00001|REQ00011';
-			var default_arrComboType = ["OS","OS","OS"];
-			var default_arrObj = [$("#reqTypeCd"),$("#piaCd"),$("#sclCd")];
+    		//공통코드 불러오기 - (관리정보화과는 우선 전부 불러오기)
+    		var default_mstCdStrArr = 'REQ00012|CMM00001|REQ00011|REQ00014|REQ00015|REQ00016|REQ00017|REQ00018';
+			var default_arrComboType = ["OS","OS","OS","OS"];
+			var default_arrObj = [$("#reqTypeCd"),$("#piaCd"),$("#sclCd"),$("#reqTaskTypeCd"),$("#reqWorkTypeCd"),$("#reqMngTypeCd"),$("#reqMngDetailCd"),$("#reqMngTaskTypeCd")];
 		
     		//기본항목 SELECT 우선 생성
 			var strUseYn = 'Y';
@@ -350,6 +366,25 @@ function fnReq4105DataLoad(){
     		//프로세스아이디
     		processId = data.processId;
 
+    		//프로세스 구분
+    		processTypeCd = data.processTypeCd;
+    		
+    		//사업 구분 항목 보이기 
+    		$(".prjTaskTypeDiv[data-prj-task-cd="+prjTaskTypeCd+"]").show();
+    		
+    		//사업 구분이 행정인경우 프로세스 유형에따라 항목 제거
+    		if(prjTaskTypeCd == "01"){
+    			$("#reqTaskTypeCd > option[data-subcd!='"+processTypeCd+"']").remove();
+    			
+    			//업무분류 세팅
+    			fnReqTaskTypeChg();
+    		}
+    		//사업 구분이 관리
+    		else if(prjTaskTypeCd == "02"){
+    			//관리 항목 세팅
+    			fnReqMngTypeChg();
+    		}
+    		
     		//기본 항목 값 세팅
     		gfnSetData2ParentObj(data.reqInfoMap,"req4105InfoForm");
 
@@ -363,24 +398,6 @@ function fnReq4105DataLoad(){
     		//작업흐름 데이터로 우측 세팅 데이터 구하기
     		fnRightFlowDivSetData(data.reqInfoMap.flowId,data.flowList);
     		
-    		var tmp_prevFlowId = null;
-    		//최종완료 이전 작업흐름 Id 구하기
-    		$.each(data.flowList,function(idx, map){
-    			//최종완료 체크
-    			if(gfnIsNull(map.flowNextId)){
-    				//현재 작업흐름 Id가 이전 Id인경우
-    				if(flowInfo.flowId == tmp_prevFlowId){
-	    				//시작, 종료일자 필수
-						strCheckObjArr.push("reqStDtm","reqEdDtm");
-						sCheckObjNmArr.push("작업 시작 일시","작업 종료 일시");
-						
-						//필수 문자열 보이기
-						$(".endPrevStr").show();
-						return false;
-    				}
-    			}
-    			tmp_prevFlowId = map.flowId;
-    		});
     		//이전으로 돌아갈수있는 작업흐름 목록 구하기
     		var flowPushChk = false;
     		$.each((data.flowList).reverse() ,function(idx, map){
@@ -411,9 +428,6 @@ function fnReq4105DataLoad(){
     		
     		//'01' 접수가 아닌경우 현재 요구사항의 이전 작업흐름 이력 세팅
     		var reqTopData = fnTopReqChgDivSetData(data.reqChgList);
-
-    		//성능 개선활동 여부 체크
-    		fnPiaCdChg($("#piaCd")[0]);
     		
     		//상단 내용 채우기
     		$("#req4105_reqTopDataList").html(reqTopData);
@@ -443,9 +457,13 @@ function fnReq4105DataLoad(){
     			
     			//drop&drop 문구 가리기
     			$(".file_dragDrop_info").hide();
-    			
-    			//파일 드래그 이벤트 제거
-				$("#dragandrophandler").off("dragenter, dragover, drop");
+
+   				// 파일 드래그 이벤트 제거
+				$.each(removeEventArr,function(idx, map){
+					$("#dragandrophandler").off(map);
+				});
+
+    			// 파일선택 버튼 hide
 				$("#btn_insert_fileSelect").hide();
 				
 				//배포 계획 버튼
@@ -469,6 +487,15 @@ function fnReq4105DataLoad(){
     		
     		//결재 작업흐름인경우 결재 분기
     		if(flowInfo.flowSignCd == "01"){
+    			//결재 반려시 최종완료 체크 인경우
+    			if(flowInfo.flowSignStopCd == "01"){
+    				//시작, 종료일자 필수
+					strCheckObjArr.push("reqStDtm","reqEdDtm");
+					sCheckObjNmArr.push("작업 시작 일시(결과)","작업 종료 일시(결과)");
+					
+					//필수 문자열 보이기
+					$(".endPrevStr").show();
+    			}
     			//결재 영역 스위치
     			var signBoxShow = true;
     			
@@ -618,11 +645,11 @@ function fnReq4105DataLoad(){
     		if(flowInfo.flowWorkCd == "01"){
     			//작업 관리 영역 보이기
     			$("#req4105_work").show();
-    			
     			//작업 그리드 세팅
-    			fnWorkGridSetting();
-    			
-				work_grid.setData(data.workList);
+    			fnWorkGridSetting(flowInfo.flowId);
+    			// 작업 그리드 데이터 세팅
+    			// 페이지 번호, flowID, URL
+				fnWorkRefresh(0, flowInfo.flowId);
     		}
     		
     		//작업흐름에 리비전이 있는 경우 리비전 관리 열기
@@ -631,9 +658,9 @@ function fnReq4105DataLoad(){
     			$("#req4105_revision").show();
     			
     			//리비전 그리드 세팅
-    			fnRevisionGridSetting();
-    			
-				revision_grid.setData(data.reqRevisionList);
+    			fnRevisionGridSetting(flowInfo.flowId);
+				// 리비전 목록 조회
+    			fnRevisionRefresh(0, flowInfo.flowId);
     		}
     		
     		//작업흐름에 배포계획 배정 확인
@@ -680,11 +707,25 @@ function fnReq4105DataLoad(){
     		
     		//결재 대기,최종 완료 상태가 아닌경우 날짜, 담당자,파일 첨부 세팅
     		if(!signWaitChk && !gfnIsNull(flowInfo.flowNextId)){
+				//요청일자가 시작일자
+    			var rangeStartDt = data.reqInfoMap.reqDtm;
+    			if(gfnIsNull(rangeStartDt)){
+    				rangeStartDt = prjStartDt;
+    			}
+    			
 				//작업 기간 설정
-				gfnCalRangeSet("reqStDtm", "reqEdDtm", prjStartDt, prjEndDt,true);
+				gfnCalRangeSet("reqStDtm", "reqEdDtm", rangeStartDt, null,true);
+				
+				// 실제 작업종료일
+    			var reqEndDtm = $("#reqEdDtm").val();
+    			// 작업종료일이 존재할 경우 (작업종료일 지정 후 임시저장했거나 작업종료일만 지정 후 다음단계로 넘겼을 경우)
+    			if(!gfnIsNull(reqEndDtm)){
+    				// 시작일자는 종료일자를 넘어서 선택할 수 없도록 제한
+    				$("#reqStDtm").data('daterangepicker').setMaxDate(new Date(reqEndDtm).format("yyyy-MM-dd"));
+    			}
 				
 				//작업 예정 일자
-				gfnCalRangeSet("reqStDuDtm", "reqEdDuDtm", prjStartDt, prjEndDt);
+				gfnCalRangeSet("reqStDuDtm", "reqEdDuDtm", prjStartDt);
 				
 				//담당자 검색 걸기
 				$("#btn_user_select").click(function() {
@@ -777,15 +818,34 @@ function fnReq4105DataLoad(){
 			   				//파일 삭제 버튼 숨기기
 			   				$(".file_btn.file_delete").hide();
 			   				
-			   				//파일 드래그 이벤트 제거
-							$("#dragandrophandler").off("dragenter, dragover, drop, click");
+			   				var eventArr = removeEventArr.slice();
+			   				// 제거할 이벤트 추가
+			   				eventArr.push("click");
+			   				// 파일 드래그 이벤트 제거
+							$.each(eventArr,function(idx, map){
+								$("#dragandrophandler").off(map);
+								$(".opt_drop_file").off(map);
+							});
+
 							$("#btn_insert_fileSelect").hide();
 						}
 					}
+				}else{
+					// 파일삭제 버튼 hide
+					$(".file_btn.file_delete").hide()
+					// 담당자 다를경우 이벤트제거
+					$.each(removeEventArr,function(idx, map){
+						$("#dragandrophandler").off(map);
+						$(".opt_drop_file").off(map);
+					});
 				}
 			}else{
-				//파일 드래그 이벤트 제거
-				$("#dragandrophandler").off("dragenter, dragover, drop");
+				// 파일 드래그 이벤트 제거
+				$.each(removeEventArr,function(idx, map){
+					$("#dragandrophandler").off(map);
+					$(".opt_drop_file").off(map);
+				});
+				
 				$("#btn_insert_fileSelect").hide();
 			}
     		
@@ -837,9 +897,9 @@ function fnTopReqChgDivSetData(reqChgList){
 		//각 옵션 체크
 		var flowOptionStr = "";
  		//flowNextId 없는경우
-		if(gfnIsNull(map.chgFlowNextId) || map.chgFlowNextId == "null"){
+	/* 	if(gfnIsNull(map.chgFlowNextId) || map.chgFlowNextId == "null"){
 			flowOptionStr += "<li class='far fa-stop-circle' title='[종료]최종 완료'></li>";
-		} 
+		}  */
 		//필수 체크
 		if(map.chgFlowEssentialCd == "01"){
 			flowOptionStr += '<li class="fa fa-key" title="필수"></li>';
@@ -847,6 +907,10 @@ function fnTopReqChgDivSetData(reqChgList){
 		//결재 체크
 		if(map.chgFlowSignCd == "01"){
 			flowOptionStr += '<li class="fa fa-file-signature" title="결재"></li>';
+		}
+		//결재 반려종료 체크
+		if(map.chgFlowSignStopCd == "01"){
+			flowOptionStr += '<li class="far fa-stop-circle" title="결재 반려 종료"></li>';
 		}
 		//종료분기 체크
 		if(map.chgFlowEndCd == "01"){
@@ -1038,10 +1102,9 @@ function fnSelectTopFlow(thisObj){
 			}
 			
 			//작업 그리드 세팅
-			fnWorkGridSetting();
-			
+			fnWorkGridSetting(flowId);
 			//작업 갱신
-			fnWorkRefresh(flowId);
+			fnWorkRefresh(0, flowId);
 		});
 	}else{
 		$("#req4105_work").hide();
@@ -1057,16 +1120,20 @@ function fnSelectTopFlow(thisObj){
 				//결제 대기인경우 버튼 감추기
 				if(signWaitChk){
 					$(".req4105_revision_btn").hide();
-				}else{
+				}
+				//담당자 아닌경우 감추기
+				else if(reqUsrId != usrId){
+					$(".req4105_revision_btn").hide();
+	    		}else{
 		    		$(".req4105_revision_btn").show();	
 				}
 			}
 			
 			//리비전 그리드 세팅
-			fnRevisionGridSetting();
+			fnRevisionGridSetting(flowId);
 			
 			//리비전 갱신
-			fnRevisionRefresh(flowId);
+			fnRevisionRefresh(0, flowId);
 		});
 	}else{
 		$("#req4105_revision").hide();
@@ -1083,7 +1150,7 @@ function fnSelectTopFlow(thisObj){
 }
 
 //작업 그리드 세팅
-function fnWorkGridSetting(){
+function fnWorkGridSetting(flowId){
 	work_grid = new ax5.ui.grid();
 				
 	//그리드 프레임 호출
@@ -1110,7 +1177,19 @@ function fnWorkGridSetting(){
 		body: {
 			align: "center",
 			columnHeight: 30
-		}
+		},
+		page: {
+            navigationItemCount: 9,
+            height: 30,
+            display: true,
+            firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+            prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
+            nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+            lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+            onChange: function () {
+            	fnWorkRefresh(this.page.selectPage, flowId);
+            }
+        }
 	});
 }
 
@@ -1161,7 +1240,6 @@ function fnRightFlowDivSetData(nowFlowId, flowList){
 	 				return false;
 				}
  			}
- 			
  			//작업흐름 화살표
  			var flowTopArrowBox = '';
  			
@@ -1170,6 +1248,22 @@ function fnRightFlowDivSetData(nowFlowId, flowList){
  				flowTopArrowBox = '<div class="req4105_flowTopArrowBox"></div>';
  			}
  			
+ 			//kanban에서 넘어온 경우 처리
+ 			var moveType = "${param.moveType}";
+ 			if(!gfnIsNull(moveType) && moveType == "kanban"){
+ 				var endProcessId = "${param.endProcessId}";
+ 				var endFlowId = "${param.endFlowId}";
+ 				
+ 				//넘어온 작업흐름 Id아닌경우 skip
+ 				if(endProcessId != map.processId || endFlowId != map.flowId){
+ 					return true;
+ 				}
+ 				//작업흐름인경우 화살표 없애기
+ 				else if(endProcessId == map.processId && endFlowId == map.flowId){
+ 					flowTopArrowBox = '';
+ 				}
+ 				
+ 			}
 	 		//각 옵션 체크
 			var flowOptionStr = "";
  			//flowNextId 없는경우
@@ -1259,6 +1353,7 @@ function fnFlowOptDivSetData(optList){
 		//공통 팝업 세팅 값
 		var commonPopup_charger = [];	//담당자
 		var commonPopup_cls = [];	//분류
+		var commonPopup_dept = [];	//조직
 		
 		//half 갯수 체크
 		var halfCnt = 0;
@@ -1266,11 +1361,16 @@ function fnFlowOptDivSetData(optList){
 		var halfDivDesc = false;
 		//hlaf 마지막 flowId
 		var hlafFlowId = "";
+		//row 갯수 체크
+		var rowCnt = 0;
 		
 		//마지막 작업흐름 Id
 		var lastFlowId = null;
 		
 		var authGrpMissChk = false;
+
+		// 추가항목 첨부파일 유무
+		var optAtchFileChk = false;
 		
 		//허용 권한 있는경우 권한으로 검색
 		if(!gfnIsNull(authGrpList)){
@@ -1287,39 +1387,39 @@ function fnFlowOptDivSetData(optList){
 		
 		//항목 세팅
 		$.each(optList,function(idx, map){
+			
 			//열 넓이
 			var optionWidthSize = '';
 			//전체인경우 title에 clear:both
 			var optionTitleClass = '';
+			var optionDefaultWidthSize = '';
 			
 			//열 넓이에 따른 class 세팅
 			if(map.itemRowNum == "01"){ //부분
-				optionWidthSize = "req4105_option_half";
-				//현재 항목이 textarea이고 이전 항목이 부분인경우 빈항목 추가
-				if(map.itemType == "02" && halfCnt%2 == 1){
-					flowOptData += '<div class="req4105_option_title" optflowid="'+hlafFlowId+'"></div>'
-							+'<div class="req4105_option_half" optflowid="'+hlafFlowId+'"></div>';
-					halfCnt++;
-				}
+				optionDefaultWidthSize = "req4105_option_half";
 				
+				rowCnt++;
 				halfCnt++;
 				hlafFlowId = map.flowId;
+				
 			}else if(map.itemRowNum == "02"){ //전체
-				//전체 추가 전에 hlaf가 홀수라면 강제 영역 추가
-				if(halfCnt%2 == 1){
-					//이전 항목이 desc인경우 desc추가
-					if(halfDivDesc){
-						optionWidthSize += " req4105_desc";
-						optionTitleClass += " req4105_desc";
-					}
-					
-					flowOptData += '<div class="req4105_option_title'+optionTitleClass+'" optflowid="'+hlafFlowId+'"></div>'
-								+'<div class="req4105_option_half'+optionWidthSize+'" optflowid="'+hlafFlowId+'"></div>';
-					
-					halfCnt++;
-				}
-				optionWidthSize = "req4105_option_all";
+				optionDefaultWidthSize = "req4105_option_all";
 				optionTitleClass = " req4105_clear";
+				rowCnt++;
+				halfCnt+=2;
+			}
+			
+			if(map.itemCode == "01"){
+				if(map.itemType == "02"){ //textarea
+					//textarea height높게
+					optionWidthSize = " req4105_desc";
+					optionTitleClass = " req4105_desc";
+				}
+			}
+			else if(map.itemCode == "03"){ //첨부파일
+				//첨부파일 height높게
+				optionWidthSize = " req4105_file";
+				optionTitleClass = " req4105_file";
 			}
 			
 			//데이터 내용
@@ -1395,8 +1495,8 @@ function fnFlowOptDivSetData(optList){
 					flowOptContentData = '<textarea class="req4105_textarea'+optAddClass+'" title="'+map.itemNm+'" id="'+map.itemId+'" name="'+map.itemId+'" optflowid="'+map.flowId+'" opttarget="'+optTarget+'" '+optReadOnly+'>'+itemValue+'</textarea>';
 					
 					//textarea height높게
-					optionWidthSize += " req4105_desc";
-					optionTitleClass += " req4105_desc";
+					optionWidthSize = " req4105_desc";
+					optionTitleClass = " req4105_desc";
 					
 					halfDivDesc = true;
 				}else if(map.itemType == "03"){ //checkbox
@@ -1439,7 +1539,7 @@ function fnFlowOptDivSetData(optList){
 						optReadOnly = 'disabled="disabled"';
 						optAddClass += ' req4105_readonly';
 				}
-				flowOptContentData = '<select type="text" class="req4105_select'+optAddClass+'" title="'+map.itemNm+'" id="'+map.itemId+'" name="'+map.itemId+'" optflowid="'+map.flowId+'" opttype="02" cmmcode="'+map.itemCommonCode+'" opttarget="'+optTarget+'" OS="'+itemValue+'" '+optReadOnly+'></select>';
+				flowOptContentData = '<select  class="req4105_select'+optAddClass+'" title="'+map.itemNm+'" id="'+map.itemId+'" name="'+map.itemId+'" optflowid="'+map.flowId+'" opttype="02" cmmcode="'+map.itemCommonCode+'" opttarget="'+optTarget+'" OS="'+itemValue+'" '+optReadOnly+'></select>';
 				
 				//이미 추가된 공통코드가 있는 경우 '|' 붙임
 				if(mstCdStrArr.length > 0){
@@ -1451,6 +1551,10 @@ function fnFlowOptDivSetData(optList){
 				selectObjList.push(map.itemId);
 				arrComboType.push("OS");
 			}else if(map.itemCode == "03"){ //첨부파일
+				
+				// 추가항목 첨부파일일 경우 첨부파일 유무 true
+				optAtchFileChk = true;
+				
 				//첨부파일 height높게
 				optionWidthSize += " req4105_file";
 				optionTitleClass += " req4105_file";
@@ -1480,7 +1584,7 @@ function fnFlowOptDivSetData(optList){
 					essentialCdFileIdList.push(map.itemValue);
 				}
 					
-				flowOptContentData = '<div class="uploadOverFlow optFileDiv'+fileUploadWidth+'" id="fileDiv_'+map.itemValue+'" fileid="'+map.itemValue+'" onclick="fnOptFileUpload(this)">'
+				flowOptContentData = '<div class="uploadOverFlow optFileDiv'+fileUploadWidth+' opt_drop_file" id="fileDiv_'+map.itemValue+'" fileid="'+map.itemValue+'" onclick="fnOptFileUpload(this)">'
 										+fileUploadDesc+'</div>'
 										+fileUploadBtnStr;
 				
@@ -1512,12 +1616,23 @@ function fnFlowOptDivSetData(optList){
 				flowOptContentData = '<input type="text" name="'+map.itemId+'" id="'+map.itemId+'" title="'+map.itemNm+'" opttype="04" optflowid="'+map.flowId+'" opttarget="'+optTarget+'" value="'+itemValue+'" style="display:none;"/>'
 									+'<input type="text" class="req4105_input_text req4105_cls'+optAddClass+'" title="'+map.itemNm+'" name="'+map.itemId+'Nm" id="'+map.itemId+'Nm" modifyset="02" value="'+$.trim(map.itemValueNm)+'" readonly="readonly"/>'
 									+popupBtnStr;
-									
-				
+			}else if(map.itemCode == "06"){ //조직
+				var popupBtnStr = '';
+				if(optReadOnlyChk){
+					optReadOnly = 'readonly="readonly"';
+					optAddClass += ' req4105_readonly';
+				}else{
+					//분류 공통팝업 추가
+					commonPopup_dept.push(map.itemId);
+					popupBtnStr = '<span class="button_normal2 fl req4105_dept" id="btn_dept_select_'+map.itemId+'"><li class="fa fa-search"></li></span>';
+				}
+				flowOptContentData = '<input type="text" name="'+map.itemId+'" id="'+map.itemId+'" title="'+map.itemNm+'" opttype="06" optflowid="'+map.flowId+'" opttarget="'+optTarget+'" value="'+itemValue+'" style="display:none;"/>'
+									+'<input type="text" class="req4105_input_text req4105_dept'+optAddClass+'" title="'+map.itemNm+'" name="'+map.itemId+'Nm" id="'+map.itemId+'Nm" modifyset="02" value="'+$.trim(map.itemValueNm)+'" readonly="readonly"/>'
+									+popupBtnStr;
 			}
 			
 			//담당자, 분류 팝업은 Nm이 필수
-			if(map.itemEssentialCd == "01" && (map.itemCode == "04" || map.itemCode == "05")){
+			if(map.itemEssentialCd == "01" && (map.itemCode == "04" || map.itemCode == "05" || map.itemCode == "06")){
 				strCheckObjArr.push(map.itemId+'Nm');
 				sCheckObjNmArr.push(map.itemNm);
 			}
@@ -1539,7 +1654,7 @@ function fnFlowOptDivSetData(optList){
 			flowOptData += '<div class="req4105_option_title'+optionTitleClass+'" optflowid="'+map.flowId+'">'
 								+optNm
 								+'</div>'
-								+'<div class="'+optionWidthSize+'" optflowid="'+map.flowId+'">'
+								+'<div class="'+optionDefaultWidthSize + optionWidthSize+'" optflowid="'+map.flowId+'">'
 								+flowOptContentData
 								+'</div>';
 								
@@ -1550,32 +1665,151 @@ function fnFlowOptDivSetData(optList){
 
 	//추가 항목 내용 채우기
 	$("#req4105_add_option").html(flowOptData);
+
+
+	// 추가항목
+	var targetElem = $("#req4105_add_option > div.req4105_option_title");
+	// 작업흐름별 추가항목을 담을 변수
+	var flowOptItemArr = {};
+	
+	// 각 작업흐름별 추가항목을 나누어서 배열에 담는다.
+	$.each(targetElem,function(idx, map){
+
+		// 빈 항목 추가를 위한 현재 추가항목의 작업흐름 ID
+		var curtFlowId = $(map).attr("optflowid");
+		// 작업흐름의 추가항목 List
+		var currentFlowOptElem = $("#req4105_add_option > div.req4105_option_title[optflowid="+curtFlowId+"]");
+		// 배열 없을 시 생성
+		if(gfnIsNull(flowOptItemArr[curtFlowId])){
+			flowOptItemArr[curtFlowId] = [];
+		}
+		// 추가항목 List를 배열에 담는다.
+		flowOptItemArr[curtFlowId].push(map);
+	});
+	
+	// 작업흐름별 추가항목을 담은 배열 loop
+	$.each(flowOptItemArr,function(optFlowId, map){
+		
+		// half 항목 수
+		var halfCnt = 0;
+		// 작업흐름의 추가항목 수
+		var optItemCnt = map.length;
+		
+		// 작업흐름의 추가항목 loop 해서 빈항목 채우기
+		$.each(map, function(idx, optMap){
+			
+			// 현재  입력 영역
+			var $nextDiv = $(optMap).next("div[optflowid="+ optFlowId +"]");
+			// 다음  입력 영역
+			var $nextNextDiv  = $nextDiv.next("div[optflowid="+ optFlowId +"]").next("div[optflowid="+ optFlowId +"]");
+			
+			// 현재 각 분기 옵션
+			// 현재 항목이 전체인지 여부
+			var optionAll = $nextDiv.hasClass("req4105_option_all");
+			// 현재 항목이 영역인지 여부
+			var optionDesc = $(optMap).hasClass("req4105_desc");
+			
+			// 다음 항목 전체여부 체크
+			var nextOptionAll = $nextNextDiv.hasClass("req4105_option_all");
+			// 입력 영역 다음이 영역인지 체크한다.
+			var nextDesc = $nextDiv.next("div[optflowid="+ optFlowId +"]").hasClass("req4105_desc");
+			
+			// 현재가 부분일 경우	
+			if(!optionAll){
+				// 현재가 부분이므로 halfCnt + 1
+				halfCnt += 1;
+				
+				// desc일 경우
+				if(optionDesc){
+					// halfCnt 홀수일 경우
+					if(halfCnt%2 == 1){
+						// 다음이 전체일 경우 또는 다음이 부분이고 박스일 경우
+						if( nextOptionAll || (!nextOptionAll && !nextDesc) ){
+							// 부분이고, 영역인 빈 항목을 추가한다.
+							$nextDiv.after('<div class="req4105_option_title req4105_desc" optflowid="'+optFlowId+'"></div>'
+										+'<div class="req4105_option_half req4105_desc" optflowid="'+optFlowId+'"></div>');
+							
+							// 빈 부분, 영역에 대해 halfCnt + 1
+							halfCnt += 1;
+						}
+					}
+					
+				// half일 경우	
+				}else{
+					// halfCnt 홀수일 경우
+					if(halfCnt%2 == 1){
+						// 다음이 전체일 경우 또는 다음이 부분이고 영역일 경우
+						if( nextOptionAll || (!nextOptionAll && nextDesc) ){
+							// 부분인 빈 박스를 추가한다.
+							$nextDiv.after('<div class="req4105_option_title" optflowid="'+optFlowId+'"></div>'
+										+'<div class="req4105_option_half" optflowid="'+optFlowId+'"></div>');
+							
+							// 빈 부분, 박스에 대해 halfCnt + 1
+							halfCnt += 1;
+						}
+					}
+				}
+			}
+			
+			// 작업흐름의 전체 추가항목 마지막 체크
+			if( optItemCnt == (idx+1)){
+				// 전체 추가항목에서 부분의 수가 홀수(halfCnt%2 == 1)일 경우
+				if(halfCnt%2 == 1){	
+					// 마지막이 부분 영역일 경우
+					if(optionDesc){
+						// 빈 부분 영역을 추가한다. 
+						$nextDiv.after('<div class="req4105_option_title req4105_desc" optflowid="'+optFlowId+'"></div>'
+									+'<div class="req4105_option_half req4105_desc" optflowid="'+optFlowId+'"></div>');
+						halfCnt += 1;
+					
+					// 마지막이 부분 박스일 경우
+					}else{
+						// 빈 부분 박스를 추가한다.
+						$nextDiv.after('<div class="req4105_option_title" optflowid="'+optFlowId+'"></div>'
+									+'<div class="req4105_option_half" optflowid="'+optFlowId+'"></div>');
+						halfCnt += 1;
+					}
+				}
+				return false;
+			}
+		});
+	});
+
+
+	// 추가항목에 첨부파일이 있을 경우
+	if(optAtchFileChk){
+		// 추가항목 첨부파일 영역 drag&drop 이벤트 추가	
+		var dragAndDropList =[{auth:"opt", obj:$(".opt_drop_file"), rtnFunc:fnReq4105OptFileUploadList}];
+		fnDragAndDropEventSet(dragAndDropList);	
+	}
+	
+	// 제거할 이벤트 배열 복사
+	var removeArr = removeEventArr.slice();
+	// 제거할 이벤트 목록에 click 이벤트 추가
+	removeArr.push("click");
+	// 추가항목 세팅이후 추가항목의 수정불가 첨부파일 List loop
+	$.each(readonlyFileIdList,function(idx, fileId){
+		// 제거할 이벤트 배열 loop
+		$.each(removeArr,function(arrIdx, delEvent){
+			// 추가항목의 첨부파일에서 이벤트 제거
+			$(".opt_drop_file[fileid="+fileId+"]").off(delEvent);
+		});
+	});
+	
+	//date 캘린더 세팅
+	// 캘린더 세팅이후 현재 작업흐름과 작업흐름 ID가 다른 추가항목을 가려준다. 
+	// → 먼저 hide 시키고 캘린더 세팅을 하면 req4105_input_date의 width 값이 비정상적으로 된다.
+	if(!gfnIsNull(optDateDataArr)){
+		$.each(optDateDataArr,function(idx, map){
+			gfnCalendarSet(map.format,[map.id],map.options);
+		});
+	}
 	
 	//현재 작업흐름과 작업흐름 Id가 다른 항목 가리기
 	var flowId = flowInfo.flowId; 
 	$("#req4105_add_option .req4105_option_title[optflowid!="+flowId+"]").hide();
 	$("#req4105_add_option .req4105_option_half[optflowid!="+flowId+"]").hide();
 	$("#req4105_add_option .req4105_option_all[optflowid!="+flowId+"]").hide();
-	
-	
-	//마지막 항목이 hlaf이고 홀수인경우 항목 채우기_마지막 작업흐름 Id
-	if($("#req4105_add_option > div").eq($("#req4105_add_option > div").length-1).hasClass("req4105_option_half")){
-		if($("#req4105_add_option > div.req4105_option_half[optflowid="+flowId+"]").length%2 == 1){
-			var descClass = '';
-			//desc인경우 class 추가
-			if($("#req4105_add_option > div.req4105_option_half[optflowid="+flowId+"]").hasClass("req4105_desc")){
-				descClass = " req4105_desc";
-			}
-			$("#req4105_add_option").append('<div class="req4105_option_title'+descClass+'" optflowid="'+lastFlowId+'"></div><div class="req4105_option_half'+descClass+'" optflowid="'+lastFlowId+'"></div>');
-		}
-	}
-	
-	//date 캘린더 세팅
-	if(!gfnIsNull(optDateDataArr)){
-		$.each(optDateDataArr,function(idx, map){
-			gfnCalendarSet(map.format,[map.id],map.options);
-		});
-	}
 	
 	/* 	
 	*	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
@@ -1638,6 +1872,20 @@ function fnFlowOptDivSetData(optList){
 			});
 		});
 	}
+	
+	if(!gfnIsNull(commonPopup_dept)){
+		//조직
+		$.each(commonPopup_dept,function(idx, map){
+			var inputDeptName = $('#'+map+'Nm').val();
+			
+			$("#btn_dept_select_"+map).click(function() {
+				gfnCommonDeptPopup(inputDeptName, function(deptId,deptNm){
+					$('#'+map).val(deptId);
+					$('#'+map+'Nm').val(deptNm);
+				});
+			});
+		});
+	}
 }
 
 //작업 추가&수정 화면 오픈
@@ -1678,7 +1926,7 @@ function fnWorkDelete(){
 	}
 	var item = work_grid.list[work_grid.focusedColumn[Object.keys(work_grid.focusedColumn)].doindex];
 	var workId = item.workId;
-	
+
 	//종료처리된 작업은 삭제 불가능
 	if(item.workStatusCd == "02"){
 		jAlert("종료된 작업은 삭제가 불가능합니다.","알림");
@@ -1699,7 +1947,8 @@ function fnWorkDelete(){
 				
 				//에러 없는경우
 				if(data.errorYN != "Y"){
-					work_grid.setData(data.workList);
+					// 작업그리드 데이터 재조회
+					fnWorkRefresh(work_grid.page.currentPage, flowInfo.flowId);
 				}
 			});
 			
@@ -1715,23 +1964,48 @@ function fnWorkDelete(){
 }
 
 //작업 그리드 조회
-function fnWorkRefresh(flowId){
+function fnWorkRefresh(_pageNo, flowId){
 	//flowId 없는경우 현재 flowId넣기
 	if(gfnIsNull(flowId)){
 		flowId = flowInfo.flowId;
 	}
 	
+	var ajaxParam ="";
+	
+	// 페이지 세팅
+ 	if(!gfnIsNull(_pageNo)){
+ 		ajaxParam += "&pageNo="+_pageNo;
+ 	}else if(typeof work_grid.currentPage != "undefined"){
+ 		ajaxParam += "&pageNo="+work_grid.page.currentPage;
+ 	}
+	
+ 	ajaxParam += "&reqId="+reqId+"&processId="+processId+"&flowId="+flowId;
+	
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
 			{"url":"<c:url value='/req/req4000/req4400/selectReq4400ReqWorkListAjax.do'/>","loadingShow":false},
-			{reqId: reqId,processId: processId, flowId: flowId});
+			ajaxParam);
 	//AJAX 전송 성공 함수
 	ajaxObj.setFnSuccess(function(data){
 		data = JSON.parse(data);
 		
 		//에러 없는경우
 		if(data.errorYN != "Y"){
-			work_grid.setData(data.workList);
+			// 작업 목록
+			var list = data.list;
+			// 페이지 정보
+			var page = data.page;
+			// 작업 그리드에 작업 목록 및 페이지 정보 세팅
+			work_grid.setData({
+	             	list:list,
+	             	page: {
+	                  currentPage: _pageNo || 0,
+	                  pageSize: page.pageSize,
+	                  totalElements: page.totalElements,
+	                  totalPages: page.totalPages
+	              }
+    		});
+			
 		}else{
 			toast.push(data.message);
 		}
@@ -1966,7 +2240,6 @@ function fnEndFlowCheck(selFlowNextId){
 	}
 	return true;
 }
-
 //다음 작업흐름 선택창 닫기
 function fnReqFlowChgCancle(){
 	$(".req4105_flowSelectBox_top > .req4105_flowFrameBox").off("click");
@@ -1983,11 +2256,11 @@ function fnReqFlowChgSucc(){
 		jAlert("다음 작업흐름 목록에서<br>작업흐름을 선택해주세요.", "알림");
 		return false;
 	}
+	
 	if(fnEndFlowCheck(selFlowNextId)){
 		//실제 저장 처리
 		fnReqFlowChgSuccAction();
 	}
-	
 }
 
 //항목 조회 및 실제 저장 처리
@@ -2124,7 +2397,7 @@ function fnReqSignAction(type){
 	//반려
 	else if(type == "reject"){
 		//팝업 화면 오픈
-		var data = {"type":"reject"};
+		var data = {"type":"reject","flowSignStopCd":flowInfo.flowSignStopCd,"preFlowId":flowInfo.flowId};
 		gfnLayerPopupOpen("/req/req4000/req4100/selectReq4108View.do", data, '500', '290','scroll');
 	}
 }
@@ -2289,53 +2562,70 @@ function fnOptFileUpload(thisObj){
 function fnOslDocUpload(ele,atchFileId){
 	ele.onchange = function() {
 		var files = ele.files;
+
+		// 실제 업로드 되는 파일 목록 구하기
+		fnReq4105OptFileUploadList(files, atchFileId);
+	};
+}
+
+
+
+/**
+ * 추가항목의 첨부파일에서 실제 업로드 되는 파일 목록 구하기
+ * @param files 업로드 파일 목록
+ * @param atchFileId 첨부파일 ID
+ */
+function fnReq4105OptFileUploadList(files, atchFileId){
+	
+	//파일크기 총 합
+	var sumFileSize = 0;
+	
+	//파일 목록
+	var fileUploadList = "";
+	
+	//업로드 가능한 파일
+	var fileUploadChk = false;
+	
+	//실제 업로드되는 파일 목록 구하기
+	$.each(files,function(idx, map){
+		// 파일 확장자 추출( 소문자 )
+		var ext = map.name.split(".").pop().toLowerCase();
+		var fileName = gfnCutStrLen(map.name,45);
 		
-		//파일크기 총 합
-		var sumFileSize = 0;
-		
-		//파일 목록
-		var fileUploadList = "";
-		
-		//업로드 가능한 파일
-		var fileUploadChk = false;
-		
-		//실제 업로드되는 파일 목록 구하기
-		$.each(files,function(idx, map){
-			// 파일 확장자 추출( 소문자 )
-			var ext = map.name.split(".").pop().toLowerCase();
-			var fileName = gfnCutStrLen(map.name,45);
-			
-			if(map.size > FILE_INFO_MAX_SIZE){
-				var fileInfoMaxSizeStr = gfnByteCalculation(FILE_INFO_MAX_SIZE);
-				fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ('+fileInfoMaxSizeStr+' 용량 초과)</br>';
-			}else if(sumFileSize > FILE_SUM_MAX_SIZE){
-				var fileSumMaxSizeStr = gfnByteCalculation(FILE_SUM_MAX_SIZE);
-				fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ('+fileSumMaxSizeStr+' 전체 용량 초과)</br>';
-			}else if(!gfnFileCheck(ext)){
-				fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ([ ' +ext + ' ] 확장자 불가)</br>';
-			}else if(!gfnIsNull(fileChk.getObj(map.name+":"+map.size).index) && fileChk.getObj(map.name+":"+map.size).index != idx){
-				fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> (중복 파일)</br>';
-			}else if(map.size <= 0){
-				fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> (0 Byte인 파일)</br>';
-			}else{
-				fileUploadList += '<i class="far fa-file"></i>&nbsp;'+gfnCutStrLen(map.name,90)+"</br>";
-				sumFileSize += map.size;
-				fileUploadChk = true;
-			}
-		});
-		if(!fileUploadChk){
-			jAlert("업로드 할 수 있는 파일이 없습니다.</br></br>[업로드 파일 목록] <div id='popup_fileList'>"+fileUploadList+"</div>","경고");
-			return false;
+		if(map.size > FILE_INFO_MAX_SIZE){
+			var fileInfoMaxSizeStr = gfnByteCalculation(FILE_INFO_MAX_SIZE);
+			fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ('+fileInfoMaxSizeStr+' 용량 초과)</br>';
+		}else if(sumFileSize > FILE_SUM_MAX_SIZE){
+			var fileSumMaxSizeStr = gfnByteCalculation(FILE_SUM_MAX_SIZE);
+			fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ('+fileSumMaxSizeStr+' 전체 용량 초과)</br>';
+		}else if(!gfnFileCheck(ext)){
+			fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> ([ ' +ext + ' ] 확장자 불가)</br>';
+		}else if(!gfnIsNull(fileChk.getObj(map.name+":"+map.size).index) && fileChk.getObj(map.name+":"+map.size).index != idx){
+			fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> (중복 파일)</br>';
+		}else if(map.size <= 0){
+			fileUploadList += '<i class="fa fa-file"></i>&nbsp;<s>'+fileName+'</s> (0 Byte인 파일)</br>';
 		}else{
-			jConfirm("추가 항목의 파일 첨부는 서버에 즉시 업로드됩니다.</br>계속 진행하시겠습니까?</br></br>[업로드 파일 목록] <div id='popup_fileList'>"+fileUploadList+"</div>", "경고", function( result ) {
+			fileUploadList += '<i class="far fa-file"></i>&nbsp;'+gfnCutStrLen(map.name,90)+"</br>";
+			sumFileSize += map.size;
+			fileUploadChk = true;
+		}
+	});
+	
+	// 파일의 업로드 가능여부를 체크한다.
+	if(!fileUploadChk){
+		jAlert("업로드 할 수 있는 파일이 없습니다.</br></br>[업로드 파일 목록] <div id='popup_fileList'>"+fileUploadList+"</div>","경고");
+		return false;
+	}else{
+		jConfirm("추가 항목의 파일 첨부는 서버에 즉시 업로드됩니다.</br>계속 진행하시겠습니까?</br></br>[업로드 파일 목록] <div id='popup_fileList'>"+fileUploadList+"</div>", "경고", function( result ) {
 			if( result ){
 				//다중건 즉시 업로드 처리
 				fnReq4105FileAjaxUpload(files,atchFileId);
 			}
 		});
-		}
-	};
+	}
+	
 }
+
 
 //파일 업로드 AJAX 처리
 function fnReq4105FileAjaxUpload(files,atchFileId) {
@@ -2465,20 +2755,6 @@ function fnReq4105FileAjaxUpload(files,atchFileId) {
 	}
 }
 
-//성능 개선활동 콤보박스 변경
-function fnPiaCdChg(thisObj){
-	//예인경우 투입인력 활성화
-	if(thisObj.value == "01"){
-		$("#labInp").removeClass("req4105_readonly");
-		$("#labInp").removeAttr("readonly");
-	}else{
-		//비활성화
-		$("#labInp").addClass("req4105_readonly");
-		$("#labInp").attr("readonly","readonly");
-		$("#labInp").val(0);
-	}
-}
-
 //추가항목 파일첨부 필수 체크
 function fnFileRequireCheck(){
 	var checkVal = true;
@@ -2505,7 +2781,7 @@ function fnFileRequireCheck(){
  */
 //리비전 등록
 function fnRevisionInsert(){
-	gfnSvnRevisionPopup('${sessionScope.selPrjId}',true,function(data){
+	gfnSvnRevisionPopup('${sessionScope.selPrjId}',"", true,function(data){
 		var selRepNumFd = new FormData();
 		//기본 정보 대입
 		selRepNumFd.append("reqId",reqId);
@@ -2535,7 +2811,7 @@ function fnRevisionInsert(){
 			//에러 없는경우
 			if(data.errorYN != "Y"){
 				//리비전 정보 갱신
-				fnRevisionRefresh();
+				fnRevisionRefresh(0, flowInfo.flowId);
 			}
 			jAlert(data.message,"알림");
 		});
@@ -2551,7 +2827,7 @@ function fnRevisionInsert(){
 }
 
 //리비전 그리드 세팅
-function fnRevisionGridSetting(){
+function fnRevisionGridSetting(flowId){
 	revision_grid = new ax5.ui.grid();
 				
 	//그리드 프레임 호출
@@ -2571,28 +2847,67 @@ function fnRevisionGridSetting(){
 		body: {
 			align: "center",
 			columnHeight: 30
-		}
+		},
+		page: {
+            navigationItemCount: 9,
+            height: 30,
+            display: true,
+            firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+            prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
+            nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+            lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+            onChange: function () {
+            	fnRevisionRefresh(this.page.selectPage, flowId);
+            }
+        }
 	});
 }
 
 //리비전 정보 조회
-function fnRevisionRefresh(flowId){
+function fnRevisionRefresh(_pageNo, flowId){
+	
 	//flowId 없는경우 현재 flowId넣기
 	if(gfnIsNull(flowId)){
 		flowId = flowInfo.flowId;
 	}
 	
+	var ajaxParam ="";
+	
+	// 페이지 세팅
+ 	if(!gfnIsNull(_pageNo)){
+ 		ajaxParam += "&pageNo="+_pageNo;
+ 	}else if(typeof revision_grid.currentPage != "undefined"){
+ 		ajaxParam += "&pageNo="+revision_grid.page.currentPage;
+ 	}
+	
+ 	ajaxParam += "&reqId="+reqId+"&processId="+processId+"&flowId="+flowId;
+	
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
 			{"url":"<c:url value='/prj/prj1000/prj1100/selectPrj1100ReqRepRevisionListAjax.do'/>","loadingShow":false},
-			{reqId: reqId,processId: processId, flowId: flowId});
+			ajaxParam);
 	//AJAX 전송 성공 함수
 	ajaxObj.setFnSuccess(function(data){
 		data = JSON.parse(data);
 		
 		//에러 없는경우
 		if(data.errorYN != "Y"){
-			revision_grid.setData(data.reqRevisionList);
+
+			// 요구사항 별 리비전 목록
+			var list = data.reqRevisionList;
+			// 페이지 정보
+			var page = data.page;
+			// 그리드에 리비전 목록 및 페이지 정보 세팅
+			revision_grid.setData({
+	             	list:list,
+	             	page: {
+	                  currentPage: _pageNo || 0,
+	                  pageSize: page.pageSize,
+	                  totalElements: page.totalElements,
+	                  totalPages: page.totalPages
+	              }
+    		});
+			
 		}else{
 			toast.push(data.message);
 		}
@@ -2644,8 +2959,8 @@ function fnRevisionDelete(){
 		
 		//에러 없는경우
 		if(data.errorYN != "Y"){
-			//리비전 정보 갱신
-			fnRevisionRefresh();
+			// 리비전 삭제 후 리비전 정보 재조회
+			fnRevisionRefresh(revision_grid.page.currentPage, flowInfo.flowId);
 		}
 		jAlert(data.message,"알림");
 	});
@@ -2733,6 +3048,41 @@ function fnReqChargerChg(){
 		}
 	});
 }
+//가이드 상자
+function fnReq4105GuideShow(){
+	var mainObj = $(".popup");
+	
+	//mainObj가 없는경우 false return
+	if(mainObj.length == 0){
+		return false;
+	}
+	//guide box setting
+	var guideBoxInfo = globals_guideContents["req4105"];
+	gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
+}
+
+//과업분류 변경된경우 업무분류 세팅하기
+function fnReqTaskTypeChg(){
+	//과업분류 값
+	var reqTaskTypeCd = $("#reqTaskTypeCd").val();
+	
+	//업무분류 세팅
+	$("#reqWorkTypeCd > option").show();
+	$("#reqWorkTypeCd > option[data-subcd!="+reqTaskTypeCd+"]").hide();
+	$("#reqWorkTypeCd").val($("#reqWorkTypeCd > option[data-subcd="+reqTaskTypeCd+"]:eq(0)").val());
+}
+
+//관리항목 변경된경우 관리 세부 항목 세팅하기
+function fnReqMngTypeChg(){
+	//관리항목 값
+	var reqMngTypeCd = $("#reqMngTypeCd").val();
+	
+	//관리 세부 항목 세팅
+	$("#reqMngDetailCd > option").show();
+	$("#reqMngDetailCd > option[data-subcd!="+reqMngTypeCd+"]").hide();
+	$("#reqMngDetailCd").val($("#reqMngDetailCd > option[data-subcd="+reqMngTypeCd+"]:eq(0)").val());
+	
+}
 </script>
 </head>
 <body>
@@ -2749,7 +3099,7 @@ function fnReqChargerChg(){
 		</div>
 	</div>
 	<div class="req4105_req_leftBox">
-		<div class="req4105_req_topBox" id="req4105_reqTopDataList" title="작업흐름 변경이력">
+		<div class="req4105_req_topBox" id="req4105_reqTopDataList" title="작업흐름 변경이력" guide="req4105TopFlowList">
 
 		</div>
 		<div class="req4105_req_bottomBox">
@@ -2761,15 +3111,22 @@ function fnReqChargerChg(){
 				<div class="req4105_optionDiv req4105_default_option req4105_foldDiv" folding="0">
 					<div class="req4105_default_mask"></div>
 					<div class="req4105_option_title req4105_top_line">
+						체계 명
+					</div>
+					<div class="req4105_option_all req4105_top_line req4105_right_line">
+						<input type="text" class="req4105_input_text req4105_readonly" title="체계 명" id="prjNm" name="prjNm" readonly="readonly" modifyset="02"/>
+					</div>
+					<div class="req4105_option_title">
 						프로세스
 					</div>
-					<div class="req4105_option_half req4105_top_line">
+					<div class="req4105_option_half">
 						<input type="text" class="req4105_input_text req4105_readonly" title="프로세스" id="processNm" name="processNm" readonly="readonly" modifyset="02"/>
 					</div>
-					<div class="req4105_option_title req4105_top_line">
-						
+					<div class="req4105_option_title">
+						처리 상태
 					</div>
-					<div class="req4105_option_half req4105_top_line req4105_right_line">
+					<div class="req4105_option_half req4105_right_line">
+						<input type="text" class="req4105_input_text req4105_readonly" title="처리 상태" id="reqProTypeNm" name="reqProTypeNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4105_option_title">
 						현재 작업흐름
@@ -2814,60 +3171,60 @@ function fnReqChargerChg(){
 						<input type="text" class="req4105_input_text req4105_readonly" title="이메일" id="reqUsrEmail" name="reqUsrEmail" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4105_option_title">
+						요청자 직책
+					</div>
+					<div class="req4105_option_half">
+						<input type="text" class="req4105_input_text req4105_readonly" title="요청자 직책" id="reqUsrDutyNm" name="reqUsrDutyNm" readonly="readonly" modifyset="02"/>
+					</div>
+					<div class="req4105_option_title">
+						요청자 직급
+					</div>
+					<div class="req4105_option_half req4105_right_line">
+						<input type="text" class="req4105_input_text req4105_readonly" title="요청자 직급" id="reqUsrPositionNm" name="reqUsrPositionNm" readonly="readonly" modifyset="02"/>
+					</div>
+					<div class="req4105_option_title">
 						요청자 소속
 					</div>
 					<div class="req4105_option_all req4105_right_line">
 						<input type="text" class="req4105_input_text req4105_readonly" title="요청자 소속" id="reqUsrDeptNm" name="reqUsrDeptNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4105_option_title">
-						작업 시작일시<span class="endPrevStr">(*)</span>
+						작업 시작일시(결과) <span class="endPrevStr">(*)</span>
 					</div>
 					<div class="req4105_option_half">
 						<input type="text" class="req4105_input_date req4105_readonly" title="시작일자" id="reqStDtm" name="reqStDtm" readonly="readonly" value=""/>
 					</div>
 					<div class="req4105_option_title">
-						작업 시작 예정 일자(*)
+						작업 시작 예정 일자(계획) (*)
 					</div>
 					<div class="req4105_option_half req4105_right_line">
 						<input type="text" class="req4105_input_date req4105_readonly" title="작업 시작 예정 일자" id="reqStDuDtm" name="reqStDuDtm" readonly="readonly" value=""/>
 					</div>
 					<div class="req4105_option_title">
-						작업 종료일시<span class="endPrevStr">(*)</span>
+						작업 종료일시(결과) <span class="endPrevStr">(*)</span>
 					</div>
 					<div class="req4105_option_half">
 						<input type="text" class="req4105_input_date req4105_readonly" title="종료일자" id="reqEdDtm" name="reqEdDtm" readonly="readonly" value=""/>
 					</div>
 					<div class="req4105_option_title">
-						작업 종료 예정 일자(*)
+						작업 종료 예정 일자(계획) (*)
 					</div>
 					<div class="req4105_option_half req4105_right_line">
 						<input type="text" class="req4105_input_date req4105_readonly" title="작업 종료 예정 일자" id="reqEdDuDtm" name="reqEdDuDtm" readonly="readonly" value=""/>
 					</div>
 					<div class="req4105_option_title">
-						진척률(%)
-					</div>
-					<div class="req4105_option_half">
-						<input type="number" class="req4105_input_text" title="진척률" id="reqCompleteRatio" name="reqCompleteRatio" value="0" min="0" max="100"/>
-					</div>
-					<div class="req4105_option_title">
 						담당자
 					</div>
-					<div class="req4105_option_half req4105_right_line">
+					<div class="req4105_option_half">
 						<input type="hidden" name="reqChargerId" id="reqChargerId" title="담당자" opttype="03"/>
 						<input type="text" title="담당자" class="req4105_input_text req4105_charger" name="reqChargerNm" id="reqChargerNm" modifyset="02"/>
 						<span class="button_normal2 fl req4105_charger" id="btn_user_select"><li class="fa fa-search"></li></span>
 					</div>
 					<div class="req4105_option_title">
-						예상 FP
-					</div>
-					<div class="req4105_option_half">
-						<input type="number" class="req4105_input_text" title="예상 FP" id="reqExFp" name="reqExFp" value="0" min="0"/>
-					</div>
-					<div class="req4105_option_title">
-						최종 FP
+						투입 M/M
 					</div>
 					<div class="req4105_option_half req4105_right_line">
-						<input type="number" class="req4105_input_text" title="최종 FP" id="reqFp" name="reqFp" value="0" min="0"/>
+						<input type="number" class="req4105_input_text" title="투입 M/M" id="labInp" name="labInp" value="0" min="0"/>
 					</div>
 					<div class="req4105_option_title">
 						요구사항 분류
@@ -2878,34 +3235,18 @@ function fnReqChargerChg(){
 						<span class="button_normal2 fl req4105_cls" id="btn_cls_select"><li class="fa fa-search"></li></span>
 					</div>
 					<div class="req4105_option_title">
-						요구사항 유형
+						투입 M/M 결과
 					</div>
 					<div class="req4105_option_half req4105_right_line">
-						<select type="text" class="req4105_select" title="요구사항 유형" id="reqTypeCd" name="reqTypeCd" opttype="02" cmmcode="REQ00012"></select>
+						<input type="text" class="req4105_input_text" title="투입 M/M 결과" id="labInpResult" name="labInpResult" modifyset="02"/>
 					</div>
 					<div class="req4105_option_title">
-						성능 개선활동 여부
 					</div>
 					<div class="req4105_option_half">
-						<select type="text" class="req4105_select" title="성능 개선활동 여부" id="piaCd" name="piaCd" OS="02" opttype="02" cmmcode="CMM00001" onchange="fnPiaCdChg(this)"></select>
 					</div>
 					<div class="req4105_option_title">
-						투입인력
 					</div>
 					<div class="req4105_option_half req4105_right_line">
-						<input type="number" class="req4105_input_text req4105_readonly" title="투입인력" id="labInp" name="labInp" value="0" min="0" readonly="readonly"/>
-					</div>
-					<div class="req4105_option_title">
-						시스템 구분
-					</div>
-					<div class="req4105_option_half">
-						<select type="text" class="req4105_select" title="시스템 구분" id="sclCd" name="sclCd" opttype="02" cmmcode="REQ00011"></select>
-					</div>
-					<div class="req4105_option_title">
-						
-					</div>
-					<div class="req4105_option_half req4105_right_line">
-						
 					</div>
 					<div class="req4105_desc_file">
 						<div class="req4105_option_title req4105_desc">
@@ -2919,6 +3260,12 @@ function fnReqChargerChg(){
 						</div>
 						<div class="req4105_option_all req4105_desc req4105_right_line">
 							<textarea class="req4105_textarea req4105_readonly" title="설명" id="reqDesc" name="reqDesc" readonly="readonly" modifyset="02"></textarea>
+						</div>
+						<div class="req4105_option_title req4105_desc">
+							관련 근거
+						</div>
+						<div class="req4105_option_all req4105_desc req4105_right_line">
+							<textarea class="req4105_textarea" title="관련 근거" id="reqGrundTxt" name="reqGrundTxt" modifyset="02"></textarea>
 						</div>
 						<div class="req4105_option_title req4105_file">
 							<input type="hidden" id="atchFileId" name="atchFileId"/>
@@ -2937,12 +3284,58 @@ function fnReqChargerChg(){
 						</div>
 					</div>
 				</div>
-				
 				<div class="req4105_frameTitleDiv">
-					추가 항목 정보
+					사업 항목 정보
 					<div class="req4105_titleFoldingBtn"><span class="req4105_titleFoldingContent up" folding="1"></span></div>
 				</div>
-				<div class="req4105_addOptionFrame req4105_foldDiv" folding="1">
+				<div class="req4105_addOptionFrame req4105_foldDiv" id="prjTaskTypeFrame" folding="1">
+					<div class="prjTaskTypeDiv" data-prj-task-cd="01">
+						<div class="req4105_addOption_TitleBox"></div>
+						<div class="req4105_option_title">
+							과업 분류
+						</div>
+						<div class="req4105_option_half">
+							<select class="req4105_select" title="과업 분류" id="reqTaskTypeCd" name="reqTaskTypeCd" modifyset="02" os="" onchange="fnReqTaskTypeChg()"></select>
+						</div>
+						<div class="req4105_option_title">
+							업무 분류
+						</div>
+						<div class="req4105_option_half req4105_right_line">
+							<select class="req4105_select" title="업무 분류" id="reqWorkTypeCd" name="reqWorkTypeCd" modifyset="02" os=""></select>
+						</div>
+					</div>
+					<div class="prjTaskTypeDiv" data-prj-task-cd="02">
+						<div class="req4105_addOption_TitleBox"></div>
+						<div class="req4105_option_title">
+							관리 항목
+						</div>
+						<div class="req4105_option_half">
+							<select  class="req4105_select" title="관리 항목" id="reqMngTypeCd" name="reqMngTypeCd" modifyset="02" os="" onchange="fnReqMngTypeChg()"></select>
+						</div>
+						<div class="req4105_option_title">
+							관리 세부 항목
+						</div>
+						<div class="req4105_option_half req4105_right_line">
+							<select  class="req4105_select" title="관리 세부 항목" id="reqMngDetailCd" name="reqMngDetailCd" modifyset="02" os=""></select>
+						</div>
+						<div class="req4105_option_title">
+							유지보수 구분
+						</div>
+						<div class="req4105_option_half">
+							<select  class="req4105_select" title="유지보수 구분" id="reqMngTaskTypeCd" name="reqMngTaskTypeCd" modifyset="02" os=""></select>
+						</div>
+						<div class="req4105_option_title">
+						</div>
+						<div class="req4105_option_half req4105_right_line">
+						</div>
+					</div>
+					
+				</div>
+				<div class="req4105_frameTitleDiv">
+					추가 항목 정보
+					<div class="req4105_titleFoldingBtn"><span class="req4105_titleFoldingContent up" folding="2"></span></div>
+				</div>
+				<div class="req4105_addOptionFrame req4105_foldDiv" folding="2">
 					<div class="req4105_addOption_TitleBox"></div>
 					<div id="req4105_dplDivFrame"></div>
 					<div class="req4105_signBox" id="signIdSelBox">
@@ -2991,12 +3384,12 @@ function fnReqChargerChg(){
 			</div>
 			<div class="req4105_reqBottom_bottomBox" id="req4105_reqBtnSign">
 				<div class="req4105_btnDiv">
-					<div class="button_complete req4105_signBtn" onclick="fnReqSignAction('accept')"><i class="fa fa-check-double"></i>&nbsp;결재 승인</div>
-					<div class="button_complete req4105_signBtn" onclick="fnReqSignAction('reject')"><i class="fa fa-undo-alt"></i>&nbsp;결재 반려</div>
-					<div class="button_complete req4105_chargerChgBtn" onclick="fnReqChargerChg()"><i class="fa fa-user-tag"></i>&nbsp;담당자 이관</div>
-					<div class="button_complete req4105_complete" onclick="fnReqHalfSave()"><i class="fa fa-clock"></i>&nbsp;임시 저장</div>
-					<div class="button_complete req4105_complete" onclick="fnReqFlowChgBeforeSucc()"><i class="fa fa-check"></i>&nbsp;다음</div>
-					<div class="button_complete req4105_close" onclick="gfnLayerPopupClose()"><i class="fa fa-times"></i>&nbsp;닫기</div>
+					<div class="button_complete req4105_signBtn" onclick="fnReqSignAction('accept')" guide="req4105SignAccept"><i class="fa fa-check-double"></i>&nbsp;결재 승인</div>
+					<div class="button_complete req4105_signBtn" onclick="fnReqSignAction('reject')" guide="req4105SignReject"><i class="fa fa-undo-alt"></i>&nbsp;결재 반려</div>
+					<div class="button_complete req4105_chargerChgBtn" onclick="fnReqChargerChg()" guide="req4105AuthUserChg"><i class="fa fa-user-tag"></i>&nbsp;담당자 이관</div>
+					<div class="button_complete req4105_complete" onclick="fnReqHalfSave()" guide="req4105HlafSave"><i class="fa fa-clock"></i>&nbsp;임시 저장</div>
+					<div class="button_complete req4105_complete" onclick="fnReqFlowChgBeforeSucc()" guide="req4105FlowNext"><i class="fa fa-check"></i>&nbsp;다음</div>
+					<div class="button_complete req4105_close" onclick="gfnLayerPopupClose()" guide="req4105Close"><i class="fa fa-times"></i>&nbsp;닫기</div>
 				</div>
 			</div>
 		</div>
@@ -3004,7 +3397,7 @@ function fnReqChargerChg(){
 	<div class="req4105_req_rightBox">
 		<div class="req4105_sign_maskBox"><li class="fa fa-file-signature" title="결재"></li>&nbsp;결재 대기중입니다.<span id="signUsrHtml"></span></div>
 		<div class="req4105_end_maskBox"><li class="far fa-stop-circle" title="최종 완료"></li>&nbsp;최종 완료된 요구사항입니다.</div>
-		<div class="req4105_nextFlowList" id="req4105_reqRightDataList">
+		<div class="req4105_nextFlowList" id="req4105_reqRightDataList" guide="req4105RightFlowList">
 		
 		</div>
 	</div>
