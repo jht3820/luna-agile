@@ -50,9 +50,9 @@
 		*	5. 동기 비동기모드 선택 (true:비동기 통신, false:동기 통신)
 		*	마스터 코드 = REQ00001:요구사항 타입, REQ00002:중요도 , CMM00001:
 		*/
- 		var mstCdStrArr = "DPL00001|DPL00003|DPL00004|DPL00005";
+ 		var mstCdStrArr = "DPL00001|DPL00003|DPL00005";
 		var strUseYn = 'Y';
-		var arrObj = [ $("#dplStsCd"), $("#dplTypeCd"), $("#dplAutoAfterCd"), $("#dplRestoreCd")];
+		var arrObj = [ $("#dplStsCd"), $("#dplTypeCd"), $("#dplRestoreCd")];
 		var arrComboType = ["OS","OS","OS","OS"];
 		gfnGetMultiCommonCodeDataForm(mstCdStrArr, strUseYn, arrObj, arrComboType , false);
 		
@@ -200,21 +200,10 @@
 					var jobId = $(map).attr("jobid");
 					
 					//선택 JOB index
-					//var findItem = ADD_JOB_LIST.findIndex(function(item, idx){return (item.jenId == jenId && item.jobId == jobId)});
+					var findItem = ADD_JOB_LIST.findIndex(function(item, idx){return (item.jenId == jenId && item.jobId == jobId)});
 					
-					var findItem = -1;
-					
-					$.each(ADD_JOB_LIST, function(idx2, map2){
-						if(map.jenId == map2.jenId && map.jobId == map2.jobId){
-							findItem = idx2;
-							return false;
-						}
-					});
-					
-					if(findItem != -1){
-						//ADD_JOB_LIST 목록에서 제거
-						ADD_JOB_LIST.splice(findItem,1);
-					}
+					//ADD_JOB_LIST 목록에서 제거
+					ADD_JOB_LIST.splice(findItem,1);
 				});
 				
 				//JOB 전체 ORD 다시 세팅 (0부터)
@@ -257,12 +246,12 @@
 		$('#btn_update_popup').click(function() {
 			var strCheckObjArr = ["dplNm","dplDt","dplUsrId","dplUsrNm","signUsrId","signUsrNm"];
 			var sCheckObjNmArr = ["배포명","배포 일자","배포자","배포자","결재자","결재자"];
-			
+			/* 
 			//배포 방법이 자동인경우 추가 항목 필수
 			if($("#dplTypeCd").val() == "01"){
 				strCheckObjArr.push("dplAutoAfterCd","dplAutoTm","dplRestoreCd");
 				sCheckObjNmArr.push("실패 후 처리","자동 실행 일시","원복 타입");
-			}
+			} */
 			
 			if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
 				return;	
@@ -538,6 +527,7 @@ function fnDpl1001GuideShow(){
 <div class="popup">
 	<form id="dpl1001PopupFrm" name="dpl1001PopupFrm" method="post" onsubmit="return false;">
 			<input type="hidden" name="popupGb" id="popupGb" value="${param.popupGb}"/>
+			<input type="hidden" name="dplTypeCd" id="dplTypeCd" value="02"/>
 			<c:if test="${param.popupGb eq 'update'}">
 				<input type="hidden" name="dplId" id="dplId" value="${param.dplId}"/>
 			</c:if>
@@ -601,38 +591,6 @@ function fnDpl1001GuideShow(){
 							<span class="button_normal2 dpl1001_charger" id="btn_signUser_select"><li class="fa fa-search"></li></span>
 						</div>
 					</div>
-					<div class="pop_menu_row pop_menu_oneRow">
-						<div class="pop_menu_col1 pop_oneRow_col1"><label for="dplTypeCd">배포 방법</label><span class="required_info">&nbsp;*</span></div>
-						<div class="pop_menu_col2 pop_oneRow_col2">
-							<span class="search_select">
-								<select class="select_useCd" name="dplTypeCd" id="dplTypeCd" title="배포 방법" value="${dpl1000DplInfo.dplTypeCd}" OS="${dpl1000DplInfo.dplTypeCd}" style="height:100%; width:100%;" onchange="fnDplTypeCdChg(this)" opttype="02" cmmcode="DPL00003"></select>
-							</span>
-						</div>
-					</div>
-					<div class="pop_menu_row pop_menu_oneRow dplTypeCdMask">
-						<div class="pop_menu_col1 pop_oneRow_col1"><label for="dplAutoAfterCd">실패 후 처리</label><span class="required_info">&nbsp;*</span></div>
-						<div class="pop_menu_col2 pop_oneRow_col2">
-							<span class="search_select">
-								<select class="select_useCd" name="dplAutoAfterCd" id="dplAutoAfterCd" title="실패 후 처리" value="${dpl1000DplInfo.dplAutoAfterCd}" OS="${dpl1000DplInfo.dplAutoAfterCd}" style="height:100%; width:100%;" opttype="02" cmmcode="DPL00004">
-								</select>
-							</span>
-						</div>
-					</div>
-					<div class="pop_menu_row pop_menu_oneRow dplTypeCdMask">
-						<div class="pop_menu_col1 pop_oneRow_col1"><label for="dplAutotm">자동 실행 시간</label><span class="required_info">&nbsp;*</span></div>
-						<div class="pop_menu_col2 pop_oneRow_col2">
-							<input type="text" title="자동 실행 시간" class="input_txt" name="dplAutoTm" id="dplAutoTm" value="<fmt:formatDate value="${dpl1000DplInfo.dplAutoDtm}" pattern="HH:mm:ss"/>"   />
-						</div>
-					</div>
-					<div class="pop_menu_row pop_menu_oneRow dplTypeCdMask">
-						<div class="pop_menu_col1 pop_oneRow_col1"><label for="dplRestoreCd">원복 타입</label><span class="required_info">&nbsp;*</span></div>
-						<div class="pop_menu_col2 pop_oneRow_col2">
-							<span class="search_select">
-								<select class="select_useCd" name="dplRestoreCd" id="dplRestoreCd" title="원복 타입" value="${dpl1000DplInfo.dplRestoreCd}" OS="${dpl1000DplInfo.dplRestoreCd}" style="height:100%; width:100%;" opttype="02" cmmcode="DPL00005">
-								</select>
-							</span>
-						</div>
-					</div>
 					<div class="pop_note" style="margin-bottom:0px;">
 						<div class="note_title">결재 요청 의견</div>
 						<textarea class="input_note dpl_note" title="결재 요청 의견" name="dplSignTxt" id="dplSignTxt" rows="7" value="" maxlength="2000"> ${dpl1000DplInfo.dplSignTxt}</textarea>
@@ -660,7 +618,6 @@ function fnDpl1001GuideShow(){
 						<div class="dpl_middle_cell">JENKINS</br>URL</div>
 						<div class="dpl_middle_cell">JOB</br>TYPE</div>
 						<div class="dpl_middle_cell">JOB</br>ID</div>
-						<div class="dpl_middle_cell">원복</br>JOB ID</div>
 					</div>
 					<div class="dpl_bottom_job_content" id="dpl_bottom_job_content" guide="dpl1001dplJobInfo">
 						<c:if test="${not empty dpl1000DplJobList}">
@@ -676,7 +633,6 @@ function fnDpl1001GuideShow(){
 								<div class="dpl_middle_cell" title="${map.jenUrl}">${map.jenUrl}</div>
 								<div class="dpl_middle_cell">${map.jobTypeNm}</div>
 								<div class="dpl_middle_cell">${map.jobId}</div>
-								<div class="dpl_middle_cell">${map.jobRestoreId}</div>
 							</div>
 							</c:forEach>
 						</c:if>
