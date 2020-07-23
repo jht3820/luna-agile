@@ -71,7 +71,7 @@ function fnAxGrid5View(){
 				
 				{key: "svnRepNm", label: "REPOSITORY 명", width: 150, align: "left"},
 				{key: "svnTxt", label: "REPOSITORY 설명", width: 200, align: "left"},
-				{key: "svnRepUrl", label: "URL", width: 250, align: "left"},
+				{key: "svnRepUrl", label: "URL", width: 243, align: "left"},
 				{key: "useNm", label: "사용여부", width: 100, align: "center"},
 				{key: "regUsrId", label: "요청자", width: 100, align: "center"},
 				{key: "regDtm", label: "등록일자", width: 150, align: "center"}

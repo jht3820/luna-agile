@@ -291,7 +291,8 @@ function fnSelectPrjList(){
     	
 		// zTree 초기화
 	    zTree = $.fn.zTree.init($("#prjListJson"), setting, data.list);
-		
+	    zTree.expandAll(true);
+	    
 		//폴더형 아이콘 세팅을 위해 zTree 갱신
 		zTree.refresh();
 		

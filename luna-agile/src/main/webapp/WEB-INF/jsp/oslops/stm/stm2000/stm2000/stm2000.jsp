@@ -47,7 +47,7 @@ function fnAxGrid5View(){
             columns: [
 				
 				{key: "svnRepNm", label: "Reposityory 명", width: 250, align: "center"},
-				{key: "svnTxt", label: "Reposityory 설명", width: 450, align: "left"},
+				{key: "svnTxt", label: "Reposityory 설명", width: 433, align: "left"},
 				{key: "svnRepUrl", label: "URL", width: 450, align: "center"},
 				{key: "useNm", label: "사용여부", width: 100, align: "center"} ,
 				

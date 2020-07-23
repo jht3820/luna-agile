@@ -52,7 +52,7 @@ var FILE_SUM_MAX_SIZE = "${fileSumMaxSize}";
 //유효성 체크
 var arrChkObj = {"reqNm":{"type":"length","msg":"요청제목 500byte까지 입력이 가능합니다.","max":500}
 				,"reqNo":{"type":"length","msg":"공문번호는 100byte까지 입력이 가능합니다.", "max":100}
-				,"reqUsrNm":{"type":"length","msg":"요청자 명은 100byte까지 입력이 가능합니다.", "max":100}
+				,"reqUsrNm":{"type":"length","msg":"요청자 명은 200byte까지 입력이 가능합니다.", "max":200}
 				,"reqUsrDeptNm":{"type":"length","msg":"소속은 500byte까지 입력이 가능합니다.", "max":500}
 				,"reqUsrEmail":{"type":"length","msg":"이메일은 100byte까지 입력이 가능합니다.", "max":100}
 				,"reqUsrNum":{"type":"number"}
@@ -62,7 +62,8 @@ var arrChkObj = {"reqNm":{"type":"length","msg":"요청제목 500byte까지 입�
 
 // 연락처, 이메일  유효성 체크
 var saveObjectValid = {
-			"reqUsrNum":{"type":"regExp","pattern":/^([0-9]{9,11}).*$/ ,"msg":"연락처 형식이 아닙니다. (예) 01012341234", "required":true}
+			"reqUsrNum":{"type":"regExp","pattern":/^([0-9]{3,13}).*$/ ,"msg":"연락처 형식이 아닙니다. (3~13자리) (예) 01012341234", "required":true}
+			 ,"reqUsrNm":{"type":"regExp","pattern":/^[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_-]{1,200}$/ ,"msg":"이름은 한글, 영문, 숫자, 특수문자( _ -) 만 입력가능합니다.", "required":true}
 			 ,"reqUsrEmail":{"type":"regExp","pattern":/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i ,"msg":"이메일 형식이 아닙니다. <br>(예) mymail@naver.com","required":true}
 }				
 
@@ -111,6 +112,13 @@ $(document).ready(function() {
 			if(objs.length>0){
 				$('#reqUsrId').val(objs[0].usrId);
 				$('#reqUsrNm').val(objs[0].usrNm);
+				$('#reqUsrDutyNm').val(objs[0].usrDutyNm);
+				$('#reqUsrPositionNm').val(objs[0].usrPositionNm);
+				
+				// 사용자 이름, ID값 세팅되면 inputError해제
+				if($("#reqUsrNm").hasClass("inputError")){
+                	$("#reqUsrNm").removeClass("inputError");
+                }
 				
 				// 저장시 input에 입력된 값과 비교하기 위한 사용자 이름세팅
 				beforeUsrNm = objs[0].usrNm;
@@ -284,7 +292,10 @@ $(document).ready(function() {
 			}
 		}
 
-
+		// 이메일 공백제거
+		var reqUsrEmali = $("#reqUsrEmail").val();
+		$("#reqUsrEmail").val(reqUsrEmali.trim());
+		
 		// 연락처, 이메일 유효성 검사
 		if(!gfnInputValChk(saveObjectValid)){
 			return false;	
@@ -445,10 +456,16 @@ $(document).ready(function() {
 	function fnChangeReqPopupInput(reqNewType){
 		
 		$("#reqInputType_div").hide();
+		$(".reqNo_required").hide();
 		
 		// 유선, 공문, 자체식별일 경우 입력유형 활성화
 		if(reqNewType == "02" || reqNewType == "03" || reqNewType == "04"){
 			$("#reqInputType_div").show();
+			// 입력유형 활성화 시 팝업 높이 변경
+			$(".layer_popup_box").height(915);
+		}else{
+			// 입력유형 비 활성화시 원래 높이로 변경
+			$(".layer_popup_box").height(880);	
 		}
 		
 		// 접수유형 공문 선택 시 공문번호 input 활성화
@@ -458,6 +475,8 @@ $(document).ready(function() {
 			if( !gfnIsNull(beforeReqNo) ){
 				$("#reqNo").val(beforeReqNo);
 			} 
+			// 공문번호 앞에 필수표시 show
+			$(".reqNo_required").show();
 			$("#reqNo").removeClass("readonly");
 			$("#reqNo").attr("readonly", false); 
 			
@@ -481,7 +500,13 @@ $(document).ready(function() {
 			
 			// 소속 입력 가능하도록 변경
 			$("#reqUsrDeptNm").removeClass("readonly");
-			$("#reqUsrDeptNm").attr("readonly", false); 
+			$("#reqUsrDeptNm").attr("readonly", false);
+			
+			//직책 직급 입력가능하도록 변경
+			$("#reqUsrPositionNm").removeClass("readonly");
+			$("#reqUsrDutyNm").removeClass("readonly");
+			$("#reqUsrPositionNm").attr("readonly", false);
+			$("#reqUsrDutyNm").attr("readonly", false);
 			
 		}else{
 			// 게시판이 아닐경우 원래 화면으로 변경
@@ -489,6 +514,10 @@ $(document).ready(function() {
 			$("#reqUsrNm").css("width", "81%"); 
 			$("#reqUsrDeptNm").attr("class","readonly");
 			$("#reqUsrDeptNm").attr("readonly",true);
+			$("#reqUsrPositionNm").attr("class","readonly");
+			$("#reqUsrPositionNm").attr("readonly",true);
+			$("#reqUsrDutyNm").attr("class","readonly");
+			$("#reqUsrDutyNm").attr("readonly",true);
 		}
 	}
 	
@@ -497,6 +526,7 @@ $(document).ready(function() {
 		
 		// 입력유형이 직접입력일 경우
 		if(inputType == "Y"){
+			// 요청자 정보 직접입력일 경우 hidden에 세팅된 ID값 제거
 			$("#reqUsrId").val("");
 
 			// 사용자 검색버튼 숨김, input width 조절
@@ -507,12 +537,23 @@ $(document).ready(function() {
 			$("#reqUsrDeptNm").removeClass("readonly");
 			$("#reqUsrDeptNm").attr("readonly", false); 
 			
+
+			//직책 직급 입력가능하도록 변경
+			$("#reqUsrPositionNm").removeClass("readonly");
+			$("#reqUsrDutyNm").removeClass("readonly");
+			$("#reqUsrPositionNm").attr("readonly", false);
+			$("#reqUsrDutyNm").attr("readonly", false);
+			
 		}else{
 			// 직접입력이 아닐경우 원래 화면으로
 			$("#btn_user_select").css("display", "block"); 
 			$("#reqUsrNm").css("width", "81%"); 
 			$("#reqUsrDeptNm").attr("class","readonly");
 			$("#reqUsrDeptNm").attr("readonly",true);
+			$("#reqUsrPositionNm").attr("class","readonly");
+			$("#reqUsrPositionNm").attr("readonly",true);
+			$("#reqUsrDutyNm").attr("class","readonly");
+			$("#reqUsrDutyNm").attr("readonly",true);
 		}
 	}
 
@@ -560,8 +601,8 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<div class="pop_menu_row pop_menu_oneRow">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="prjNm">체계명</label></div>
-			<div class="pop_menu_col2 pop_oneRow_col2"><input id="prjNm" type="text" name="prjNm" title="체계명" modifyset="false" class="readonly" readonly="readonly" value="${currPrjInfo.prjNm}" /></div>
+			<div class="pop_menu_col1 pop_oneRow_col1"><label for="prjNm">프로젝트명</label></div>
+			<div class="pop_menu_col2 pop_oneRow_col2"><input id="prjNm" type="text" name="prjNm" title="프로젝트명" modifyset="false" class="readonly" readonly="readonly" value="${currPrjInfo.prjNm}" /></div>
 		</div>
 		
 		<div class="pop_menu_row pop_menu_oneRow">
@@ -570,7 +611,7 @@ $(document).ready(function() {
 		</div>
 
 		<div class="pop_menu_row">
-			<div class="pop_menu_col1"><label for="reqNo">공문번호</label></div>
+			<div class="pop_menu_col1"><label for="reqNo">공문번호</label><span class="required_info reqNo_required" style="display:none;">&nbsp;*</span></div>
 			<div class="pop_menu_col2 pop_col2_input"><input id="reqNo" type="text" name="reqNo" title="공문번호" class="readonly" readonly="readonly" value=""/></div>
 		</div>
 
@@ -597,14 +638,31 @@ $(document).ready(function() {
 		</div>
 		<div class="pop_menu_row">
 			<div class="pop_menu_col1" ><label for="reqUsrNum">연락처</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_col2_input"><input id="reqUsrNum" type="text" name="reqUsrNum" title="연락처" maxlength="11" value="" /></div>
+			<div class="pop_menu_col2 pop_col2_input"><input id="reqUsrNum" type="text" name="reqUsrNum" title="연락처" maxlength="11" value="" max="99999999999"/></div>
 		</div>
 		
-		<div class="pop_menu_row pop_menu_oneRow">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="regDtmDay">등록일</label></div>
-			<div class="pop_menu_col2 pop_oneRow_col2"><input id="regDtmDay" type="text" name="regDtmDay" class="readonly" title="등록일" readonly="readonly" value=""/></div>
+		<div class="pop_menu_row">
+			<div class="pop_menu_col1"><label for="regDtmDay">등록일</label></div>
+			<div class="pop_menu_col2"><input id="regDtmDay" type="text" name="regDtmDay" class="readonly" title="등록일" readonly="readonly" value=""/></div>
 		</div>
-
+		<div class="pop_menu_row">
+			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqUsrPositionCd">직급</label></div>
+			<div class="pop_menu_col2">
+				<input type="hidden" name="reqUsrPositionCd" id="reqUsrPositionCd" value="" />
+				<input id="reqUsrPositionNm" type="text" name="reqUsrPositionNm" title="직급" class="readonly" readonly="readonly" value="" />
+			</div>
+		</div>
+		<div class="pop_menu_row">
+			<div class="pop_menu_col1"></div>
+			<div class="pop_menu_col2"></div>
+		</div>
+		<div class="pop_menu_row">
+			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqUsrEmail">직책</label></div>
+			<div class="pop_menu_col2">
+				<input type="hidden" name="reqUsrDutyCd" id="reqUsrDutyCd" value="" />
+				<input id="reqUsrDutyNm" type="text" name="reqUsrDutyNm" title="직책" class="readonly" readonly="readonly" value="" />
+			</div>
+		</div>
 		<div class="pop_note" style="margin-bottom:10px;">
 			<div class="note_title">요구사항 내용<span class="required_info">&nbsp;*</span></div>
 			<textarea id="reqDesc" name="reqDesc" class="input_note" title="요구사항 내용" rows="7" value=""></textarea>
