@@ -578,6 +578,16 @@
 			<isNotEmpty property="srchToDt">
 					AND T1.REQ_DTM &lt;=   TO_DATE(#srchToDt#, 'YYYY-MM-DD')
 			</isNotEmpty>
+			<!-- 대시보드 - 프로세스 - 작업흐름에서 담당 또는 작업흐름의 전체 요구사항 클릭 시 해당하는 요구사항 목록 조회조건 -->
+			<isNotEmpty property="type">
+				AND T1.PROCESS_ID = #processId#
+				AND T1.FLOW_ID = #flowId#
+				<isNotEmpty property="type">
+					<isEqual property="type" compareValue="charge">
+						AND T1.REQ_CHARGER_ID = #usrId#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
 		) T2
 		ORDER BY T2.REQ_PRO_TYPE ASC, T2.REQ_ORD_NUMBER DESC, T2.REQ_DTM DESC, T2.REG_DTM DESC
     </sql>
@@ -648,34 +658,18 @@
 	    (
 			<include refid="req4100DAO.selectReq4100List"/>
 		) T2
-		WHERE 1=1
-		AND T2.PROCESS_ID = #processId#
-		AND T2.FLOW_ID = #flowId#
-		<isNotEmpty property="type">
-			<isEqual property="type" compareValue="charge">
-				AND T2.REQ_CHARGER_ID = #usrId#
-			</isEqual>
-		</isNotEmpty>
     </select>
     
     <!-- 프로세스, 작업흐름 별 요구사항 조회 -->
     <select id="req4100DAO.selectReq4100ProcessFlowReqList" parameterClass="java.util.Map"  resultClass="egovMap" >
 	    /*req4100DAO.selectReq4100ProcessFlowReqList 프로세스, 작업흐름 별 요구사항 조회*/
 	    SELECT
-	    	 	T2.*
+	    	 	X.*
 	    FROM
 	    (
 			<include refid="req4100DAO.selectReq4100List"/>
-		) T2
+		) X
 		WHERE 1=1
-		AND T2.PROCESS_ID = #processId#
-		AND T2.FLOW_ID = #flowId#
-		
-		<isNotEmpty property="type">
-			<isEqual property="type" compareValue="charge">
-				AND T2.REQ_CHARGER_ID = #usrId#
-			</isEqual>
-		</isNotEmpty>
 		AND RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
