@@ -47,7 +47,7 @@ div.flw_main_leftBox {
     min-width: 226px;
 }
 div.flw_main_rightBox {
-    width: 1054px;
+    width: 1231px;
 	min-width: 1054px;
     height: 450px;
     border-left: none;
@@ -95,11 +95,23 @@ div.flw_left_bottomBox {
 div.process_box {
     width: 100%;
     height: 50px;
-    text-align: center;
-    line-height: 50px;
+    text-align: left;
+    line-height: 18px;
     border-bottom: 1px solid #ccc;
 	cursor: pointer;
     font-size: 10pt;
+    padding-left:20px;
+    padding-top:5px;
+}
+.prj1100ProcessDtm {
+    float: right;
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    height: 20px;
+    font-weight: normal;
+    padding-right: 5px;
+    font-size: 9pt;
 }
 div.process_box:hover ,div.process_box.active {
     background-color: #4b73eb;
@@ -271,7 +283,7 @@ div#flow_position {
 }
 .flw_mainBox {
     float: left;
-    width: 1280px;
+    width: 1457px;
 }
 
 .flw_content_mask {

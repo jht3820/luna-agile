@@ -65,10 +65,10 @@ function fnAxGrid5View(){
             sortable:false,
             header: {align:"center"},
             columns: [				
-				{key: "apiNm", label: "서비스명", width: '25%', align: "left"},
-				{key: "apiUrl", label: "URL", width: '45%', align: "center"},
-				{key: "regDtm", label: "등록일자", width: '20%', align: "center"},
-				{key: "useNm", label: "사용여부", width: '12%', align: "center"}
+				{key: "apiNm", label: "서비스명", width: 345, align: "left"},
+				{key: "apiUrl", label: "URL", width: 648, align: "center"},
+				{key: "regDtm", label: "등록일자", width: 288, align: "center"},
+				{key: "useNm", label: "사용여부", width: 173, align: "center"}
             ],
             body: {
                 align: "center",
