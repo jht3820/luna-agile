@@ -310,7 +310,7 @@ var newReqGrid_config = {
 		{key: "reqDtm", label: "요청일자", width: 100, align: "center"},
 		{key: "reqUsrNm", label: "요청자", width: 100, align: "center"},
 		{key: "reqUsrPositionNm", label: "직급", width: 100, align: "center"},
-		{key: "reqNm", label: "요청 명", width: 410, align: "left"},
+		{key: "reqNm", label: "요청 명", width: 425, align: "left"},
 		{key: "reqDesc", label: "요청 내용", width: 600, align: "left"},
 		],
 	body: {
@@ -401,19 +401,19 @@ var flowGrid_config = {
 	    {key: "rn", label: " ", width: '4%', align: "center"},	
 	    {key: "reqOrd", label: "순번", width: '8%', align: "center"},	
 	    {key: "reqProTypeNm", label: "처리 상태", width: 100, align: "center"},
-	    {key: "signCdNm", label: "결재 상태", width: 100, align: "center"},
-	    {key: "signUsrNm", label: "결재자", width: 140, align: "center"},
-	    {key: "reqDtm", label: "요청일자", width: 140, align: "center"},
-		{key: "reqUsrNm", label: "요청자", width: 80, align: "center"},
-		{key: "reqUsrEmail", label: "이메일", width: 140, align: "center"},
-		{key: "reqUsrNum", label: "연락처", width: 100, align: "center"},
-		{key: "reqChargerNm", label: "담당자", width: 80, align: "center"},
+	    {key: "signCdNm", label: "결재 상태", width: 87, align: "center"},
+	    {key: "signUsrNm", label: "결재자", width: 95, align: "center"},
+		{key: "reqChargerNm", label: "담당자", width: 95, align: "center"},
 		{key: "reqNm", label: "요청 제목", width: 421, align: "left"},
-		{key: "reqDesc", label: "요청 내용", width: 250, align: "left"},
+		{key: "reqDesc", label: "요청 내용", width: 504, align: "left"},
 		{key: "reqStDtm", label: "작업 시작일자", width: 140, align: "center"},
 		{key: "reqEdDtm", label: "작업 종료일자", width: 140, align: "center"},
 		{key: "reqStDuDtm", label: "작업 시작 예정일자", width: 140, align: "center"},
 		{key: "reqEdDuDtm", label: "작업 종료 예정일자", width: 140, align: "center"},
+		{key: "reqDtm", label: "요청일자", width: 140, align: "center"},
+		{key: "reqUsrNm", label: "요청자", width: 80, align: "center"},
+		{key: "reqUsrEmail", label: "이메일", width: 140, align: "center"},
+		{key: "reqUsrNum", label: "연락처", width: 100, align: "center"}
 	],
 	body: {
 		align: "center",
@@ -1475,7 +1475,7 @@ function fnFlowListSetting(flowList){
 		$("div.process_info_box[processid="+map.processId+"] .process_flow_box").append(
 				'<div class="dsh_flow_box" flowid="'+map.flowId+'" totalcnt="'+map.reqTotalCnt+'" style="background-color: '+map.flowTitleBgColor+';color: '+map.flowTitleColor+';">'
 				+flowOptionStrDiv
-				/* 2019.11.21 수정 - title="'+map.flowNm+'" <-- 추가  */
+				/* 2019.11.21 김정환 수정 - title="'+map.flowNm+'" <-- 추가  */
 				+'	<div class="flow_box_title" title="'+map.flowNm+'">'+map.flowNm+'</div>'
 				+'	<div class="flow_box_contents" flowid="'+map.flowId+'" style="background-color: '+map.flowContentBgColor+';color: '+map.flowContentColor+';">'
 				+'<span onclick="fnFlowReqList(\''+map.processId+'\',\''+map.flowId+'\',\'charge\')">'+map.reqChargeCnt+'</span>'

@@ -2,7 +2,7 @@
 /* dsh1000 - 대시보드 [운영] */
 .dataAutoRefreshDiv {
     float: right;
-    margin-right: 110px;
+    margin-right: 10px;
     font-size: 11pt;
     width: 460px;
     height: 35px;
@@ -39,7 +39,7 @@ i.autoRefresh_timeIcon {
     border-radius: 10px;
     font-size: 10pt;
 }
-.osl_main_wrap {width: 1400px;}
+.osl_main_wrap {width: 1500px;}
 div.dataLoad_btn:hover {color: #0f73d0;}
 .dsh_top_box {
     width: 100%;
@@ -65,15 +65,28 @@ div.dataLoad_btn:hover {color: #0f73d0;}
 .dsh_middle_box.dsh_middle_half{width: 49%;}
 
 .dsh_prjGrp_top_sub_box, .dsh_top_sub_box {float: left;display: inline-block;height: 100%;border: 1px solid #ccc;}
-.dsh_prjGrp_top_sub_box:nth-child(1),.dsh_top_sub_box:nth-child(1){width:346px;}
-.dsh_prjGrp_top_sub_box:nth-child(2),.dsh_top_sub_box:nth-child(2){width:620px;}
-.dsh_prjGrp_top_sub_box:nth-child(3),.dsh_top_sub_box:nth-child(3){width:400px;}
+.dsh_prjGrp_top_sub_box:nth-child(1),.dsh_top_sub_box:nth-child(1){width:455px;}
+.dsh_prjGrp_top_sub_box:nth-child(2),.dsh_top_sub_box:nth-child(2){width:600px;}
+.dsh_prjGrp_top_sub_box:nth-child(3),.dsh_top_sub_box:nth-child(3){width:410px;}
 .dsh_prjGrp_top_sub_box.dsh_top_left_box,.dsh_top_sub_box.dsh_top_left_box {margin-right: 5px;}
 .dsh_prjGrp_top_sub_box.dsh_top_middle_box,.dsh_top_sub_box.dsh_top_middle_box {margin-right: 5px;}
 .dsh_flow_box {position: relative;width: 195px;height: 65px;text-align: center;border-radius: 0 0 10px 10px;border: 3px solid transparent;margin: 30px 10px 0 10px;display:inline-block;background-color: #F0F0F0;color: #000000;font-size: 11pt;}
 .flow_box_contents span:hover{cursor:pointer; color: red;}
 .flowOptionDiv {position: absolute;top: -24px;height: 24px;left: -3px;background-color: inherit;padding: 2px;border: 3px solid transparent;border-radius: 5px 5px 0 0;font-size: 10pt;border-bottom: 1px dashed #fff;width: 195px;text-align: left;}
-.flow_box_title {width: 100%;height: 30px;line-height: 20px;font-weight: bold; padding-top: 5px;border-bottom: none;float:left;}
+
+/* 2019.11.21 김정환 수정 - 글자 자르기 추가 */
+.flow_box_title {
+		width: 100%;
+		height: 30px;
+		line-height: 20px;
+		font-weight: bold; 
+		padding-top: 5px;
+		border-bottom: none;
+		float:left;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+}
 .flow_box_contents {width: 100%;height: 30px;border-radius: 0 0 8px 8px;line-height: 33px;background-color:#fff;color:#000;float:left;}
 .dsh_flow_arrow_box {background: url(/images/right_arrow2.png);background-size: 44px 44px;display:inline-block;width: 44px;height: 44px;margin-top: 40px;margin-right: 10px;background-repeat: no-repeat;}
 .dsh_flow_box.active{border: 3px solid #4b73eb;}
