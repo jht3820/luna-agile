@@ -420,7 +420,6 @@ function fnSearchMenuList(){
     
 	    // zTree 초기화
 	    zTree = $.fn.zTree.init($("#admMenuJson"), setting, data.baseMenuList);
-	    zTree.expandAll(true);
 	});
 	
 	//AJAX 전송 오류 함수
@@ -724,7 +723,7 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     		});
     		
     		// 가로로 전체 체크가능한 체크박스 
-    		trObj.append("<td class='right_con wd10 adm_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  name="+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' /><label for='"+data.menuId+"_prjAuthHorizon'></label></td>");
+    		trObj.append("<td class='right_con wd10 adm_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  name="+data.menuId+"'_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' /><label for=''></label></td>");
     		
     		//밸류값 확인하여 체크 상태 변경
     		$.each(strArrYn, function(idx, val){
@@ -745,9 +744,6 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     	});
     	
     	toast.push(data.message);
-
-    	//출력 감추기
-    	$("input[name$=printYn]").parent().hide();
 	});
 	
 	//AJAX 전송
@@ -955,7 +951,7 @@ function fnSelectAdm1000PrjAuthGrpList(){
     		html += '	<td class="left_con">'+data.authGrpNm+'</td>';
     		html += '	<td class="left_con" title="'+data.authGrpDesc+'">'+gfnCutStrLen(data.authGrpDesc, 60)+'</td>';
     		html += '	<td class="left_con">'+data.usrTypNm+'</td>';
-    		/* html += '	<td class="left_con">'+fnNvl(data.acceptUseNm)+'</td>'; */
+    		html += '	<td class="left_con">'+fnNvl(data.acceptUseNm)+'</td>';
     		html += '</tr>';
     		
 			$("#prjAuthGrpList").append(html);
@@ -1073,7 +1069,7 @@ function fnAdm1000AuthGuideShow(){
 								<th class="right_sub_title wd6 adm_chk"><input type="checkbox" title="체크박스" name="modifyYn" id="all_ch4"/><label for="all_ch4"></label><span class="title_align">수정</span></th>
 								<th class="right_sub_title wd7 adm_chk"><input type="checkbox" title="체크박스" name="delYn" id="all_ch5"/><label for="all_ch5"></label><span class="title_align">삭제</span></th>
 								<th class="right_sub_title wd8 adm_chk"><input type="checkbox" title="체크박스" name="excelYn" id="all_ch6"/><label for="all_ch6"></label><span class="title_align">엑셀</span></th>
-								<!-- <th class="right_sub_title wd9 adm_chk"><input type="checkbox" title="체크박스" name="printYn" id="all_ch7"/><label for="all_ch7"></label><span class="title_align">출력</span></th> -->
+								<th class="right_sub_title wd9 adm_chk"><input type="checkbox" title="체크박스" name="printYn" id="all_ch7"/><label for="all_ch7"></label><span class="title_align">출력</span></th>
 								<th class="right_sub_title wd10 non_right_line"><label for="chk8"></label><span class="title_align">전체체크</span></th>
 							</tr>
 						</thead>
