@@ -55,7 +55,9 @@ public class EgovComIndexController implements ApplicationContextAware, Initiali
 
 	private Map<Integer, IncludedCompInfoVO> map;
 
-	public void afterPropertiesSet() throws Exception {}
+	public void afterPropertiesSet() throws Exception {
+			//Egov
+	}
 
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
