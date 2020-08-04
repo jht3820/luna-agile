@@ -275,10 +275,14 @@ function fnReDrawUsrAddList(data, status){
 	$("#allUsrTblBody").children().remove();
 	
 	$.each(data.prjUsrAddListMap, function(idx, map){
+		var usrNm = map.usrNm;
+		if(!gfnIsNull(usrNm)){
+			usrNm = usrNm.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+		}
 		$("#addUsrTblBody").append(	"<tr id='tr" + map.usrId + "'>" 
 								+		"<td class='middle_cn prj_chk m_td1'><input type='checkbox' title='체크박스' id='prj_chk_m_"+map.usrId+"' name='prj_chk_m_"+map.usrId+"' value='" + map.usrId + "'/><label for='prj_chk_m_"+map.usrId+"'></label></td>"
 								+		"<td class='middle_cn m_td2'>" + map.usrId + "</td>"
-								+		"<td class='middle_cn m_td3' title="+map.usrNm+">" + gfnCutStrLen(map.usrNm, 20) + "</td>"
+								+		"<td class='middle_cn m_td3' title="+usrNm+">" + gfnCutStrLen(usrNm, 20) + "</td>"
 								+		"<td class='middle_cn hidden_td'></td>"
 								+		"<td class='middle_cn hidden_td'></td>"
 								+		"<td class='middle_cn hidden_td'></td>"
@@ -291,11 +295,15 @@ function fnReDrawUsrAddList(data, status){
 		var email = gfnReplace(map.email, null, "");
 		var telno = gfnReplace(map.telno, null, "");
 		var etc = gfnCutStrLen(map.etc, "14");
+		var usrNm = map.usrNm;
+		if(!gfnIsNull(usrNm)){
+			usrNm = usrNm.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+		}
 		
 		$("#allUsrTblBody").append(	"<tr id='tr" + map.usrId + "'>" 
 								+		"<td class='right_cn prj_chk block_td'><input type='checkbox' title='체크박스' id='prj_chk_r_"+map.usrId+"' name='prj_chk_r_"+map.usrId+"' value='" + map.usrId + "'/><label for='prj_chk_r_"+map.usrId+"'></label></td>"
 								+		"<td class='right_cn m_td2'>" + map.usrId + "</td>"
-								+		"<td class='right_cn m_td3' title="+map.usrNm+">" + gfnCutStrLen(map.usrNm, 20) + "</td>"
+								+		"<td class='right_cn m_td3' title="+usrNm+">" + gfnCutStrLen(usrNm, 20) + "</td>"
 								+		"<td class='right_cn hidden_td'>" + email + "</td>"
 								+		"<td class='right_cn hidden_td'>" + telno + "</td>"
 								+		"<td class='right_cn hidden_td'>" + etc.replace(/</gi,'&lt;').replace(/>/gi,'&gt;') + "</td>"
@@ -315,10 +323,15 @@ function fnReDrawUsrAddList(data, status){
 			var telno = gfnReplace(map.telno, null, "");
 			var etc = gfnCutStrLen(map.etc, "14");
 				
+			var usrNm = map.usrNm;
+			if(!gfnIsNull(usrNm)){
+				usrNm = usrNm.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+			}
+			
 			$("#allUsrTblBody").append(	"<tr id='tr" + map.usrId + "'>" 
 										+		"<td class='right_cn prj_chk block_td'><input type='checkbox' title='체크박스' id='prj_chk_r_"+map.usrId+"' name='prj_chk_r_"+map.usrId+"' value='" + map.usrId + "'/><label for='prj_chk_r_"+map.usrId+"'></label></td>"
 										+		"<td class='right_cn m_td2'>" + map.usrId + "</td>"
-										+		"<td class='right_cn m_td3' title="+map.usrNm+">" + gfnCutStrLen(map.usrNm, 20) + "</td>"
+										+		"<td class='right_cn m_td3' title="+usrNm+">" + gfnCutStrLen(usrNm, 20) + "</td>"
 										+		"<td class='right_cn hidden_td'>" + email + "</td>"
 										+		"<td class='right_cn hidden_td'>" + telno + "</td>"
 										+		"<td class='right_cn hidden_td'>" + etc + "</td>"

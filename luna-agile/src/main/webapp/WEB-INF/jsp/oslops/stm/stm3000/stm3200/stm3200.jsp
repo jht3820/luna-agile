@@ -11,6 +11,8 @@
 	.defaultFont{color:#000 !important;}
 </style>
 <script>
+
+
 var mySearch;
 
 
@@ -22,34 +24,23 @@ $(function(){
 	fnSearchBoxControl();
 });
 
-
-//검색조건 변경되었을때 이벤트
-function fnSelectChg(){
-	var selVal = $("#searchSelect option:selected").val();
-	if(selVal == '0'){
-		$("#searchTxt").val("");
-		$("#searchTxt").attr("readonly", true);
-	}else{
-		$("#searchTxt").attr("readonly", false);
-	}
-}
-
-//axisj5 그리드
+// axisj5 그리드를 그린다.
 function fnAxGrid5View(){
 	firstGrid = new ax5.ui.grid();
  
         firstGrid.setConfig({
             target: $('[data-ax5grid="first-grid"]'),
-            showLineNumber :true,
+           	showLineNumber :true,
             sortable:false,
             header: {align:"center"},
-           
-            columns: [
-				{key: "prjNm", label: "프로젝트", width: '15%', align: "center"},
-				{key: "jenNm", label: "JOB 명", width: '15%', align: "center"},
-				{key: "jenTxt", label: "JOB 설명", width: '35%', align: "left"},
-				{key: "jenUrl", label: "URl", width: '27%', align: "center"},
-				{key: "useNm", label: "사용여부", width: '10%', align: "center"}
+            columns: [   
+				{key: "prjNm", label: "프로젝트 명", width: 212, align: "center"},
+				{key: "jenNm", label: "JENKINS 명", width: 212, align: "center"},
+				{key: "jenUrl", label: "JENKINS URL", width: 308, align: "left"},
+				{key: "jobTypeNm", label: "JOB 타입", width: 113, align: "center"},
+				{key: "jobId", label: "JOB ID", width: 184, align: "center"},
+				{key: "jobDesc", label: "JOB 설명", width: 282, align: "left"},
+				{key: "useNm", label: "JOB 사용유무", width: 113, align: "center"}
             ],
             body: {
                 align: "center",
@@ -64,7 +55,8 @@ function fnAxGrid5View(){
                 nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
                 lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
                 onChange: function () {
-                   fnInGridListSet(this.page.selectPage,mySearch.getParam());
+                	// 페이지 이동 시 그리드 데이터 조회
+                   fnInGridListSet(this.page.selectPage, mySearch.getParam());
                 }
             } 
         });
@@ -72,9 +64,16 @@ function fnAxGrid5View(){
  		fnInGridListSet();
 
 }
-//그리드 데이터 넣는 함수
-function fnInGridListSet(_pageNo,ajaxParam){
-     	/* 그리드 데이터 가져오기 */
+
+ 
+/*
+ * 그리드 데이터 조회
+ * 프로젝트별 배정된 JENKINS JOB 목록을 조회한다.
+ * @param _pageNo 그리드 페이지 번호
+ * @param ajaxParam 그리드 검색정보 파라미터
+ */
+function fnInGridListSet(_pageNo, ajaxParam){
+	
      	//파라미터 세팅
      	if(gfnIsNull(ajaxParam)){
    			ajaxParam = $('form#searchFrm').serialize();
@@ -89,14 +88,26 @@ function fnInGridListSet(_pageNo,ajaxParam){
      	
      	//AJAX 설정
 		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/stm/stm3000/stm3200/selectStm3200JobProjectListAjax.do'/>","loadingShow":true}
+				{"url":"<c:url value='/stm/stm3000/stm3200/selectStm3200ProjectJenkinsJobAllListAjax.do'/>","loadingShow":true}
 				,ajaxParam);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
 			data = JSON.parse(data);
+			
+			// 데이터 조회 실패했을 경우
+			if(data.errorYn == "Y"){
+				toast.push(data.message);
+				return false;
+			}
+			// 프로젝트 별 JOB 목록
 			var list = data.list;
+			// 페이지 정보
 			var page = data.page;
 			
+			// 조회성공 메시지 출력
+			toast.push(data.message);
+			
+			// 그리드에 데이터 및 페이지 정보 세팅
 		   	firstGrid.setData({
 		             	list:list,
 		             	page: {
@@ -106,6 +117,8 @@ function fnInGridListSet(_pageNo,ajaxParam){
 		                  totalPages: page.totalPages
 		              }
 		             });
+			
+		   	
 		});
 		
 		//AJAX 전송 오류 함수
@@ -136,11 +149,13 @@ function fnSearchBoxControl(){
 					{display:true, addClass:"", style:"", list:[
 						{label:"<i class='fa fa-search'></i>&nbsp;", labelWidth:"50", type:"selectBox", width:"", key:"searchSelect", addClass:"", valueBoxStyle:"", value:"all",
 							options:[
-                                {optionValue:"0", optionText:"전체 보기",optionAll:true},
-                                {optionValue:'jenNm', optionText:'JOB 명'},
-                                {optionValue:'jenTxt', optionText:'JOB 설명'},
-                                {optionValue:'useCd', optionText:'사용 여부' , optionCommonCode:"CMM00001" }                                
-                                
+                                {optionValue:"0", 				optionText:"전체 보기",optionAll:true},
+                                {optionValue:'prjId', 			optionText:'프로젝트'},
+                                {optionValue:'jenNm', 			optionText:'JENKINS 명'},
+                                {optionValue:"jobTypeCd", 		optionText:"JOB 타입", optionCommonCode:"DPL00002"},
+                                {optionValue:'jobId', 			optionText:'JOB ID'},
+                                {optionValue:'jobDesc', 		optionText:'JOB 설명'}, 
+                                {optionValue:'useCd', 			optionText:'JOB 사용 유무' , optionCommonCode:"CMM00001" } 
                             ],onChange: function(selectedObject, value){
                             	//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
     							if(!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true){
@@ -153,7 +168,17 @@ function fnSearchBoxControl(){
 								//공통코드 처리 후 select box 세팅이 필요한 경우 사용
 								if(!gfnIsNull(selectedObject.optionCommonCode)){
 									gfnCommonSetting(mySearch,selectedObject.optionCommonCode,"searchCd","searchTxt");
-								}else{
+								}
+								// 프로젝트 선택 시 처리
+								else if(selectedObject.optionValue == "prjId"){
+									
+									// 프로젝트 선택 시 프로젝트 목록을 보여준다.
+									gfnLicGrpAllProjectSetting(mySearch, "searchCd","searchTxt");
+									
+									axdom("#" + mySearch.getItemId("searchTxt")).val('');
+									axdom("#" + mySearch.getItemId("searchTxt")).hide();
+									axdom("#" + mySearch.getItemId("searchCd")).show();
+                            	}else{
 									//공통코드 처리(추가 selectbox 작업이 아닌 경우 type=text를 나타낸다.)
 									axdom("#" + mySearch.getItemId("searchTxt")).show();
 									axdom("#" + mySearch.getItemId("searchCd")).hide();
@@ -168,14 +193,12 @@ function fnSearchBoxControl(){
 								}
 							} 
 						},
-						{label:"", labelWidth:"", type:"selectBox", width:"100", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
+						{label:"", labelWidth:"", type:"selectBox", width:"100%", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
 							options:[]
 						},
-						
-						
 						{label:"<i class='fas fa-list-ol'></i>&nbsp;목록 수&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"pageSize", addClass:"", valueBoxStyle:"", value:"30",
 							options:[
-							         	{optionValue:15, optionText:"15"},
+							         	{optionValue:5, optionText:"5"},
 		                                {optionValue:30, optionText:"30"},
 		                                {optionValue:50, optionText:"50"},
 		                                {optionValue:100, optionText:"100"},
@@ -204,7 +227,7 @@ function fnSearchBoxControl(){
 						
 						{label:"", labelWidth:"", type:"button", width:"60",style:"float:right;", key:"btn_print_jenkins",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
 							onclick:function(){
-								$(firstGrid.exportExcel()).printThis();
+								$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
 						}},
 						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_excel_jenkins",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
 							onclick:function(){
@@ -212,7 +235,15 @@ function fnSearchBoxControl(){
 						}},
 						{label:"", labelWidth:"", type:"button", width:"55", key:"btn_search_jenkins",style:"float:right;", valueBoxStyle:"padding:5px;", value:"<i class='fa fa-list' aria-hidden='true'></i>&nbsp;<span>조회</span>",
 							onclick:function(){
-								/* 검색 조건 설정 후 reload */
+								
+								// 검색 조건 Select
+								var searchSelect = axdom("#" + mySearch.getItemId("searchSelect"));
+								// 검색 콤보박스 
+								var searchCd = axdom("#" + mySearch.getItemId("searchCd"));
+								// 검색어
+								var searchTxt = axdom("#" + mySearch.getItemId("searchTxt")); 
+								
+								// 검색 조건 설정 후 reload
 	 							var pars = mySearch.getParam();
 							    var ajaxParam = $('form#searchFrm').serialize();
 
@@ -220,24 +251,18 @@ function fnSearchBoxControl(){
 							    	ajaxParam += "&"+pars;
 							    }
 								
+							    // 그리드 데이터를 조회한다.
 					            fnInGridListSet(0,ajaxParam);
 					            
 					            //폼 데이터 변경
-								$('#searchSelect').val(axdom("#" + mySearch.getItemId("searchSelect")).val());
-								$('#searchCd').val(axdom("#" + mySearch.getItemId("searchCd")).val());
-								$('#searchTxt').val(axdom("#" + mySearch.getItemId("searchTxt")).val());
-					            
+								$('#searchSelect').val(searchSelect.val());
+								$('#searchCd').val(searchCd.val());
+								$('#searchTxt').val(searchTxt.val());
 						}}
 					]}
 				]
 			});
 		}
-		/*,
-		search1: function(){
-			var pars = mySearch.getParam();
-			fnAxGridView(pars);
-		}
-		*/
 	};
 	
 	jQuery(document.body).ready(function(){
@@ -257,7 +282,7 @@ function fnSearchBoxControl(){
 
 
 <div class="main_contents" style="height: auto;">
-	<form:form commandName="jen1000VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false;">
+	<form:form commandName="stm3200VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false;">
 	</form:form>
 	<div class="req_title">${sessionScope.selMenuNm }</div>
 	<div class="tab_contents menu">

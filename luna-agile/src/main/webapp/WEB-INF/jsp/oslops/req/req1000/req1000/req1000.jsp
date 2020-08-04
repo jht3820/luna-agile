@@ -118,13 +118,13 @@ function fnAxGrid5View(){
             header: {align:"center"},
             frozenColumnIndex: 3,
             columns: [
-				{key: "prjNm", label: "프로젝트명", width: '10%', align: "center"},
-				{key: "reqOrd", label: "순번", width: '7%', align: "center"},
-				{key: "reqProTypeNm", label: "처리유형", width: '9%', align: "center"},
-				{key: "reqNm", label: "요청 제목", width: '25%', align: "left"},
+				{key: "prjNm", label: "프로젝트명", width: '12%', align: "center"},
+				{key: "reqOrd", label: "순번", width: '9%', align: "center"},
+				{key: "reqProTypeNm", label: "처리유형", width: '7%', align: "center"},
+				{key: "reqNm", label: "요청 제목", width: '28%', align: "left"},
 				{key: "reqDesc", label: "요청 내용", width: '38%', align: "left"},
-				{key: "reqDtm", label: "요청일", width: '10%', align: "center"},
-				{key: "reqUsrNm", label: "요청자", width: '10%', align: "center"},
+				{key: "reqDtm", label: "요청일", width: '9%', align: "center"},
+				{key: "reqUsrNm", label: "요청자", width: '9%', align: "center"},
 				{key: "regDtmDay", label: "등록일", width: '10%', align: "center"}
             ],
             body: {

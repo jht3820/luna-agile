@@ -586,16 +586,6 @@ function fnGetReqClsList(selectClsOjb){
 	<div class="tab_contents menu">
 		<div class="top_control_wrap">
 			<span style="float:left;margin-right: 20px;">*요구사항 분류를 설정할 수 있습니다.</span>
-			<span class="menu_tree_help"><i class="fa fa-question"></i>
-					<div class="menu_tree_helpBox">
-						<span>
-							[좌측 트리 메뉴 기능 안내]<br/>
-							<br/>
-							&nbsp;-메뉴 클릭: 메뉴 상세 정보 보기<br/>
-							&nbsp;-더블 클릭: 폴더형 메뉴의 경우 하위 메뉴 보기<br/>
-						</span>
-					</div>
-				</span>
 				<span class="button_normal2 btn_inquery" id="btn_search_menuInfo"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;조회</span>
 				<span class="button_normal2 btn_save" id="btn_update_menuInfo"><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;저장</span>
 				<span class="button_normal2 btn_excel" id="btn_excel_menuInfo"><i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;엑셀</span>
