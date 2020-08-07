@@ -11,6 +11,15 @@
 div.pop_sub .pop_left {width:28%;} /* common.css pop_left width값 오버라이딩 */
 div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이딩 */
 .input_txt {padding-left: 5px;}
+.tab_contents.grid_contents {
+    display: inline-block;
+    width: 1500px;
+    height: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
 </style>
 <script type="text/javascript">
 
@@ -25,6 +34,8 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 	};
 
 	var authParams = "${param.authParams}";
+
+	var acceptUseCd = "${param.acceptUseCd}";
 
 	$(document).ready(function() {
 		//달력 세팅 (배포일)
@@ -46,6 +57,12 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 		var pageID = "AXSearchPop";
 		popSearch = new AXSearch();
 
+		//전달받은 사용자명
+		var paramUsrNm = "${param.usrNm}";
+		if(!gfnIsNull(paramUsrNm)){
+			paramUsrNm = decodeURI(paramUsrNm);
+		}
+		
 		var fnPopObjSearch = {
 			pageStart: function(){
 				//검색도구 설정 01 ---------------------------------------------------------
@@ -55,7 +72,7 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 					rows:[
 						{display:true, addClass:"", style:"", list:[
 														
-							{label:"", labelWidth:"", type:"inputText", width:"120", key:"searchPopTxt", addClass:"secondItem sendBtn", valueBoxStyle:"padding-left:0px;", value:"${param.usrNm}",
+							{label:"", labelWidth:"", type:"inputText", width:"120", key:"searchPopTxt", addClass:"secondItem sendBtn", valueBoxStyle:"padding-left:0px;", value:paramUsrNm,
 								onkeyup:function(e){
 									if(e.keyCode == '13' ){
 										axdom("#" + popSearch.getItemId("btn_searchPop")).click();
@@ -112,7 +129,9 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 				{key: "authGrpNm", label: "사용자 그룹명", width: 200, align: "left"},                      
 				{key: "usrId", label: "사용자ID", width: 100, align: "left"},                      
 				{key: "usrNm", label: "사용자 명", width: 100, align: "left"},
-				{key: "deptName", label: "조직 명", width: 180, align: "left"}
+				{key: "deptName", label: "조직 명", width: 180, align: "left"},
+				{key: "usrPositionNm", label: "직책", width: 100, align: "left"},
+				{key: "usrDutyNm", label: "직급", width: 100, align: "left"}
 				
             ],
             body: {
@@ -159,7 +178,11 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 				ajaxParam += "&authGrpId="+auths[i];
 			}
      	}
-		
+
+     	if(acceptUseCd!=""){
+     		ajaxParam += "&acceptUseCd="+acceptUseCd;
+     	}
+	
      	//페이지 세팅
     	if(!gfnIsNull(_pageNo)){
     		ajaxParam += "&pageNo="+_pageNo;
@@ -207,7 +230,7 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 		
 	<div class="pop_title">사용자 조회</div>
 	<div class="pop_sub">
-		<div class="tab_contents menu" style="max-width:600px;">
+		<div class="tab_contents menu grid_contents" style="max-width:600px;">
 			<form:form commandName="adm2000VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false"></form:form>
 			<div id="AXSearchPopTarget" style="border-top:1px solid #ccc;"></div>
 			<br />
