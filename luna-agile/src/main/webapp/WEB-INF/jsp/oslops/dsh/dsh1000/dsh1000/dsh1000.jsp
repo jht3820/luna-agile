@@ -35,12 +35,13 @@ var boardNoticeGrid_config = {
       header: {align:"center"},
       columns: [
     	  	{key: "rn", label: " ", width: '4%', align: "center"},
-    	 	{key: "noticeNm", label: "공지", width: '8%', align: "center"},
-			{key: "badTitle", label: "글제목", width: 335, align: "left"},
-			{key: "usrPositionCdNm", label: "직급", width: 60, align: "center"},
+    	 	{key: "noticeNm", label: "공지", width: '6%', align: "center"},
+			{key: "badTitle", label: "글제목", width: 180, align: "left"},
 			{key: "usrNm", label: "작성자명", width: 80, align: "center"},
-			{key: "regDtm", label: "작성일", width: 152, align: "center"
-				,formatter:function(){return new Date(this.item.regDtm).format('yyyy-MM-dd')}},
+			{key: "usrPositionCdNm", label: "직급", width: 60, align: "center"},
+			{key: "badCnt", label: "조회", width: 50, align: "center"},
+			{key: "regDtm", label: "작성일", width: 150, align: "center"},
+			{key: "modifyDtm", label: "수정일", width: 150, align: "center"},
           		],
       body: {
           align: "center",
@@ -99,13 +100,13 @@ var dplSignGrid_config = {
       header: {align:"center"},
       columns: [
                 {key: "rn", label: " ", width: '4%', align: "center"},	
-          		{key: "signStsNm", label: "결재 상태", width: 100, align: "center"},
-         		{key: "signRegUsrNm", label: "요청자", width: 100, align: "center"},
-         		{key: "signUsrNm", label: "결재자", width: 100, align: "center"},
-         		{key: "signDtm", label: "결재 요청 일자", width: 130, align: "center",formatter:function(){
+          		{key: "signStsNm", label: "결재 상태", width: 150, align: "center"},
+         		{key: "signRegUsrNm", label: "요청자", width: 150, align: "center"},
+         		{key: "signUsrNm", label: "결재자", width: 150, align: "center"},
+         		{key: "signDtm", label: "결재 요청 일자", width: 150, align: "center",formatter:function(){
          			return new Date(this.item.signDtm).format("yyyy-MM-dd");
          		}},
-         		{key: "dplNm", label: "배포계획명", width: 252, align: "center"},
+         		{key: "dplNm", label: "배포계획명", width: 220, align: "center"},
          		{key: "signTxt", label: "결재 의견", width: 320, align: "left"},
          		{key: "signRejectTxt", label: "반려내용", width: 320, align: "left"},
           		],
@@ -168,13 +169,13 @@ var signGrid_config = {
 	columns: [
 	    {key: "rn", label: " ", width: '4%', align: "center"},	
 		{key: "signCdNm", label: "결재 상태", width: 80, align: "center"},
-		{key: "signFlowNm", label: "작업흐름", width: 115, align: "center"},
+		{key: "signFlowNm", label: "작업흐름", width: 80, align: "center"},
 		{key: "signUsrNm", label: "결재자", width: 80, align: "center"},
 		{key: "signDtm", label: "결재 요청 일자", width: 100, align: "center",formatter:function(){
 			return new Date(this.item.signDtm).format("yyyy-MM-dd");
 		}},
 		{key: "regUsrNm", label: "요청자", width: 80, align: "center"},
-		{key: "signRejectCmnt", label: "반려내용", width: 228, align: "center"},
+		{key: "signRejectCmnt", label: "반려내용", width: 180, align: "center"},
 		],
 	body: {
 		align: "center",
@@ -240,7 +241,7 @@ var workGrid_config = {
 		{key: "workStatusNm", label: "작업상태", width: 80, align: "center"},
 		{key: "flowNm", label: "작업흐름", width: 80, align: "center"},
 		{key: "workChargerNm", label: "담당자", width: 80, align: "center"},
-		{key: "workAdmContent", label: "작업 지시내용", width: 439, align: "left"},
+		{key: "workAdmContent", label: "작업 지시내용", width: 370, align: "left"},
 		{key: "workAdmStDtm", label: "작업 시작예정일자", width: 140, align: "center"},
 		{key: "workAdmEdDtm", label: "작업 종료예정일자", width: 140, align: "center"},
 		{key: "workContent", label: "작업 내용", width: 390, align: "left"},
@@ -305,13 +306,16 @@ var newReqGrid_config = {
 	sortable:true,
 	header: {align:"center"},
 	columns: [
-		{key: "rn", label: " ", width: 50, align: "center"},	          
-		{key: "reqOrd", label: "순번", width: 100, align: "center"},	          
-		{key: "reqDtm", label: "요청일자", width: 100, align: "center"},
-		{key: "reqUsrNm", label: "요청자", width: 100, align: "center"},
-		{key: "reqUsrPositionNm", label: "직급", width: 100, align: "center"},
-		{key: "reqNm", label: "요청 명", width: 425, align: "left"},
-		{key: "reqDesc", label: "요청 내용", width: 600, align: "left"},
+		{key: "rn", label: " ", width: '4%', align: "center"},	          
+		{key: "reqOrd", label: "순번", width: '8%', align: "center"},	          
+		{key: "reqDtm", label: "요청일자", width: '8%', align: "center"},
+		{key: "reqUsrNm", label: "요청자", width: '8%', align: "center"},
+		{key: "reqUsrPositionNm", label: "직급", width: '8%', align: "center"},
+		{key: "reqUsrDutyNm", label: "직책", width: '8%', align: "center"},
+		{key: "reqUsrEmail", label: "이메일", width: '11%', align: "center"},
+		{key: "reqUsrNum", label: "연락처", width: '10%', align: "center"},
+		{key: "reqNm", label: "요청 명", width: '30%', align: "left"},
+		{key: "reqDesc", label: "요청 내용", width: '30%', align: "left"},
 		],
 	body: {
 		align: "center",
@@ -401,19 +405,19 @@ var flowGrid_config = {
 	    {key: "rn", label: " ", width: '4%', align: "center"},	
 	    {key: "reqOrd", label: "순번", width: '8%', align: "center"},	
 	    {key: "reqProTypeNm", label: "처리 상태", width: 100, align: "center"},
-	    {key: "signCdNm", label: "결재 상태", width: 87, align: "center"},
-	    {key: "signUsrNm", label: "결재자", width: 95, align: "center"},
-		{key: "reqChargerNm", label: "담당자", width: 95, align: "center"},
-		{key: "reqNm", label: "요청 제목", width: 421, align: "left"},
-		{key: "reqDesc", label: "요청 내용", width: 504, align: "left"},
+	    {key: "signCdNm", label: "결재 상태", width: 100, align: "center"},
+	    {key: "signUsrNm", label: "결재자", width: 140, align: "center"},
+	    {key: "reqDtm", label: "요청일자", width: 140, align: "center"},
+		{key: "reqUsrNm", label: "요청자", width: 80, align: "center"},
+		{key: "reqUsrEmail", label: "이메일", width: 140, align: "center"},
+		{key: "reqUsrNum", label: "연락처", width: 100, align: "center"},
+		{key: "reqChargerNm", label: "담당자", width: 80, align: "center"},
+		{key: "reqNm", label: "요청 제목", width: 400, align: "left"},
+		{key: "reqDesc", label: "요청 내용", width: 250, align: "left"},
 		{key: "reqStDtm", label: "작업 시작일자", width: 140, align: "center"},
 		{key: "reqEdDtm", label: "작업 종료일자", width: 140, align: "center"},
 		{key: "reqStDuDtm", label: "작업 시작 예정일자", width: 140, align: "center"},
 		{key: "reqEdDuDtm", label: "작업 종료 예정일자", width: 140, align: "center"},
-		{key: "reqDtm", label: "요청일자", width: 140, align: "center"},
-		{key: "reqUsrNm", label: "요청자", width: 80, align: "center"},
-		{key: "reqUsrEmail", label: "이메일", width: 140, align: "center"},
-		{key: "reqUsrNum", label: "연락처", width: 100, align: "center"}
 	],
 	body: {
 		align: "center",
@@ -599,9 +603,10 @@ function fnChartSetting(data){
 		            data: chart_reqEndCnt,
 		            backgroundColor:'rgb(255, 125, 110)',
 		            borderColor: 'rgb(255, 86, 67, 1)',
+		            borderWidth: 2,
 		            pointStyle: 'rectRot',
 		            fill: false,
-		            pointRadius: 2,
+		            pointRadius: 4,
 		            valueShow: false
 		        },{
 		        	type:'line',
@@ -609,9 +614,10 @@ function fnChartSetting(data){
 		            data: chart_reqChargerCnt,
 		            backgroundColor: 'rgb(255, 217, 123)',
 		            borderColor: 'rgba(255, 206, 86, 1)',
+		            borderWidth: 2,
 		            pointStyle: 'circle',
 		            fill: false,
-		            pointRadius: 2,
+		            pointRadius: 4,
 		            valueShow: false
 		        },{
 		        	type:'bar',
@@ -628,7 +634,7 @@ function fnChartSetting(data){
 					responsive: true,
 					title: {display: true,text:'프로세스별 요구사항 수'},
 					tooltips: {mode: 'index',intersect: false},
-					legend: {labels: {usePointStyle: true}}
+					legend: false//{labels: {usePointStyle: true}}
 					,scales: {
 			            xAxes: [{
 			                display:false
@@ -891,7 +897,7 @@ function fnChartSetting(data){
 						type:'bar',
 			            label: "처리율",
 			            data: chart3_quarter,
-			            backgroundColor: chart2_bgColor[0],
+			            backgroundColor: chart2_bgColor,
 			            borderWidth: 0,
 			            pointStyle: 'rect',
 			            fill: false,
@@ -948,7 +954,7 @@ function fnChartSetting(data){
 							},
 						}
 					},
-					legend: {labels: {usePointStyle: true}}
+					legend: false
 				}
 		});
 		
@@ -1475,8 +1481,7 @@ function fnFlowListSetting(flowList){
 		$("div.process_info_box[processid="+map.processId+"] .process_flow_box").append(
 				'<div class="dsh_flow_box" flowid="'+map.flowId+'" totalcnt="'+map.reqTotalCnt+'" style="background-color: '+map.flowTitleBgColor+';color: '+map.flowTitleColor+';">'
 				+flowOptionStrDiv
-				/* 2019.11.21 김정환 수정 - title="'+map.flowNm+'" <-- 추가  */
-				+'	<div class="flow_box_title" title="'+map.flowNm+'">'+map.flowNm+'</div>'
+				+'	<div class="flow_box_title">'+map.flowNm+'</div>'
 				+'	<div class="flow_box_contents" flowid="'+map.flowId+'" style="background-color: '+map.flowContentBgColor+';color: '+map.flowContentColor+';">'
 				+'<span onclick="fnFlowReqList(\''+map.processId+'\',\''+map.flowId+'\',\'charge\')">'+map.reqChargeCnt+'</span>'
 				+' / '
@@ -2287,10 +2292,10 @@ function fnReqDetailPopupOpen(reqId,type){
 				</div>
 				<div class="dshChartDiv foldDiv" folding="0">
 					<div class="dsh_top_sub_box dsh_top_left_box">
-						<canvas id="reqTotalCntChart" width="453" height="278"></canvas>
+						<canvas id="reqTotalCntChart" width="350" height="278"></canvas>
 					</div>
 					<div class="dsh_top_sub_box dsh_top_middle_box">
-						<canvas id="reqMonthCntChart" width="597" height="278"></canvas>
+						<canvas id="reqMonthCntChart" width="625" height="278"></canvas>
 					</div>
 					<div class="dsh_top_sub_box dsh_top_right_box">
 						<canvas id="reqQuarterCntChart" width="400" height="278"></canvas>
