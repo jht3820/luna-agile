@@ -1,16 +1,16 @@
 /* 데이터베이스 생성  - command*/
-cubrid createdb --db-volume-size=2G --db-volume-size=1G --db-volume-size=200M LUNAAGILE ko_KR.utf8
+cubrid createdb --db-volume-size=2G --db-volume-size=1G --db-volume-size=200M LUNAAGILEDB ko_KR.utf8
 
 /* 데이터베이스 시작  - command*/
-cubrid server start LUNAAGILE
+cubrid server start LUNAAGILEDB
 
 /* 데이터베이스 cubrid.conf 수정*/
 설치 드라이브\CUBRID\conf\cubrid.conf
 
-/* 주석 풀고 LUNAAGILE 입력 */
+/* 주석 풀고 LUNAAGILEDB 입력 */
 #server=foo,bar
 -> 
-server=LUNAAGILE
+server=LUNAAGILEDB
 
 /* 자바 함수 사용하기위해 추가 */
 java_stored_procedure=yes 
@@ -22,11 +22,11 @@ access_ip_control_file=C:/CUBRID/conf/db_acl.access
 /* 빈문자열 null처리 위해 추가 */
 oracle_style_empty_string=yes
 
-/* ip 허용 적용 (cubrid server acl status LUNAAGILE - ip허용 확인) */
-cubrid server acl reload LUNAAGILE
+/* ip 허용 적용 (cubrid server acl status LUNAAGILEDB - ip허용 확인) */
+cubrid server acl reload LUNAAGILEDB
 
 
-[@LUNAAGILE]
+[@LUNAAGILEDB]
 *
 -> 설치 드라이브/CUBRID/conf/db_acl.access  파일 생성 ( 추후 * 부분에 IP 등록)
 
@@ -34,9 +34,9 @@ cubrid server acl reload LUNAAGILE
 cubrid service restart
 
 /* 데이터베이스 접속  - command*/
-csql -C -u dba LUNAAGILE
+csql -C -u dba LUNAAGILEDB
 
 /* 데이터베이스 사용자 계정 생성 - command*/
-create user LUNAAGILE GROUPS dba;
+create user LUNAAGILEDB GROUPS dba;
 
-alter user LUNAAGILE password 'LUNAAGILE';
+alter user LUNAAGILEDB password 'LUNAAGILEDB';
