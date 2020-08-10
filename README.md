@@ -22,6 +22,14 @@
  
  -  It operates in accordance with the eGovFramework standard.
  
+ 
+ # 5. Contributing
+
+Join the project, ask questions about the project, discuss the  [Google Group](https://groups.google.com/forum/#!forum/opensoftlab-github-group)
+
+  -Go to the group site and log in with your Google account and apply for membership.
+  -After approval of membership, you can join the group.
+
 
 # 6. License Information
 
