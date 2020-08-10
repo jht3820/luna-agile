@@ -34,8 +34,8 @@ var boardNoticeGrid_config = {
       sortable:true,
       header: {align:"center"},
       columns: [
-    	  	{key: "rn", label: " ", width: '4%', align: "center"},
-    	 	{key: "noticeNm", label: "공지", width: '6%', align: "center"},
+    	  {key: "noticeNm", label: "공지", width: '6%', align: "center"},
+			{key: "badNum", label: "No.", width: 50, align: "center"},
 			{key: "badTitle", label: "글제목", width: 180, align: "left"},
 			{key: "usrNm", label: "작성자명", width: 80, align: "center"},
 			{key: "usrPositionCdNm", label: "직급", width: 60, align: "center"},
