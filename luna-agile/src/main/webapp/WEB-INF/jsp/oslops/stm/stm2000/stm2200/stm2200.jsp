@@ -66,11 +66,11 @@ function fnAxGrid5View(){
             header: {align:"center"},
             
             columns: [
-				{key: "prjNm", label: "프토젝트", width: '15%', align: "center"},
-				{key: "svnRepNm", label: "Reposityory 명", width: '15%', align: "center"},
-				{key: "svnTxt", label: "Reposityory 설명", width: '32%', align: "left"},
-				{key: "svnRepUrl", label: "URl", width: '30%', align: "center"},
-				{key: "useNm", label: "사용여부", width: '10%', align: "center"}
+				{key: "prjNm", label: "프토젝트", width: 210, align: "center"},
+				{key: "svnRepNm", label: "Reposityory 명", width: 210, align: "center"},
+				{key: "svnTxt", label: "Reposityory 설명", width: 438, align: "left"},
+				{key: "svnRepUrl", label: "URl", width: 425, align: "center"},
+				{key: "useNm", label: "사용여부", width: 140, align: "center"}
             ],
             body: {
                 align: "center",

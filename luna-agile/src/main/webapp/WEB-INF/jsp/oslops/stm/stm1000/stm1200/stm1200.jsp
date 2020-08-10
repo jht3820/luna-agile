@@ -66,11 +66,11 @@ function fnAxGrid5View(){
             header: {align:"center"},
             showLineNumber :true,
             columns: [
-				{key: "prjNm", label: "프로젝트명", width: '18%', align: "left"},
-				{key: "apiNm", label: "서비스명", width: '18%', align: "left"},
-				{key: "apiUrl", label: "URL", width: '46%', align: "center"},
-				{key: "regDtm", label: "등록일자", width: '10%', align: "center"},
-				{key: "useNm", label: "사용여부", width: '10%', align: "center"}
+				{key: "prjNm", label: "프로젝트명", width: 255, align: "left"},
+				{key: "apiNm", label: "서비스명", width: 255, align: "left"},
+				{key: "apiUrl", label: "URL", width: 634, align: "center"},
+				{key: "regDtm", label: "등록일자", width: 140, align: "center"},
+				{key: "useNm", label: "사용여부", width: 140, align: "center"}
             ],
             body: {
                 align: "center",

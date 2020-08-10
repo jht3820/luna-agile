@@ -269,6 +269,9 @@ public class Cmm9000Controller {
     		
     		List<Map> menuList = (List) cmm4000Service.selectCmm4000MenuList(paramMap);
     		
+    		//모듈 사용 체크
+    		menuList = moduleUseCheck.moduleUseMenuList(menuList,request);
+    		
     		//선택한 프로젝트의 권한롤 및 메뉴정보 세션 저장
     		ss.setAttribute("menuList", menuList);
     		

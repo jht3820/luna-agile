@@ -306,7 +306,7 @@ function fnReDrawUsrAddList(data, status){
 								+		"<td class='right_cn m_td3' title="+usrNm+">" + gfnCutStrLen(usrNm, 20) + "</td>"
 								+		"<td class='right_cn hidden_td'>" + email + "</td>"
 								+		"<td class='right_cn hidden_td'>" + telno + "</td>"
-								+		"<td class='right_cn hidden_td'>" + etc + "</td>"
+								+		"<td class='right_cn hidden_td'>" + etc.replace(/</gi,'&lt;').replace(/>/gi,'&gt;') + "</td>"
 								+	"</tr>"
 								);
 		

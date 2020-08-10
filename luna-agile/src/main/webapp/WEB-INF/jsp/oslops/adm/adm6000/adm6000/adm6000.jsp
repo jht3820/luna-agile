@@ -66,12 +66,12 @@ function fnAxGrid5View(){
             header: {align:"center"},
             columns: [
 				
-				{key: "apiNm", label: "서비스명", width: 150, align: "left"},
-				{key: "apiUrl", label: "URL", width: 500, align: "center"},
-				{key: "apiTok", label: "API KEY", width: 450, align: "center"},
-				{key: "useNm", label: "사용여부", width: 100, align: "center"},
-				{key: "regUsrId", label: "요청자", width: 120, align: "center"},
-				{key: "regDtm", label: "등록일자", width: 180, align: "center"}
+            	{key: "apiNm", label: "서비스명", width: 150, align: "left"},
+				{key: "apiUrl", label: "URL", width: 450, align: "center"},
+				{key: "apiTok", label: "API KEY", width: 500, align: "center"},
+				{key: "useNm", label: "사용여부", width: 85, align: "center"},
+				{key: "regUsrId", label: "요청자", width: 115, align: "center"},
+				{key: "regDtm", label: "등록일자", width: 156, align: "center"}
             ],
             body: {
                 align: "center",
@@ -229,7 +229,7 @@ function fnSearchBoxControl(){
 						
 						{label:"", labelWidth:"", type:"button", width:"60",style:"float:right;", key:"btn_print_api",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
 							onclick:function(){
-								$(firstGrid.exportExcel()).printThis();
+								$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
 						}},
 						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_excel_api",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
 							onclick:function(){
