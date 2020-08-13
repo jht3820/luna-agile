@@ -420,6 +420,7 @@ function fnSearchMenuList(){
     
 	    // zTree 초기화
 	    zTree = $.fn.zTree.init($("#admMenuJson"), setting, data.baseMenuList);
+	    zTree.expandAll(true);
 	});
 	
 	//AJAX 전송 오류 함수
@@ -744,6 +745,9 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     	});
     	
     	toast.push(data.message);
+
+    	//출력 감추기
+    	$("input[name$=printYn]").parent().hide();
 	});
 	
 	//AJAX 전송
@@ -951,7 +955,7 @@ function fnSelectAdm1000PrjAuthGrpList(){
     		html += '	<td class="left_con">'+data.authGrpNm+'</td>';
     		html += '	<td class="left_con" title="'+data.authGrpDesc+'">'+gfnCutStrLen(data.authGrpDesc, 60)+'</td>';
     		html += '	<td class="left_con">'+data.usrTypNm+'</td>';
-    		html += '	<td class="left_con">'+fnNvl(data.acceptUseNm)+'</td>';
+    		/* html += '	<td class="left_con">'+fnNvl(data.acceptUseNm)+'</td>'; */
     		html += '</tr>';
     		
 			$("#prjAuthGrpList").append(html);
@@ -1069,7 +1073,7 @@ function fnAdm1000AuthGuideShow(){
 								<th class="right_sub_title wd6 adm_chk"><input type="checkbox" title="체크박스" name="modifyYn" id="all_ch4"/><label for="all_ch4"></label><span class="title_align">수정</span></th>
 								<th class="right_sub_title wd7 adm_chk"><input type="checkbox" title="체크박스" name="delYn" id="all_ch5"/><label for="all_ch5"></label><span class="title_align">삭제</span></th>
 								<th class="right_sub_title wd8 adm_chk"><input type="checkbox" title="체크박스" name="excelYn" id="all_ch6"/><label for="all_ch6"></label><span class="title_align">엑셀</span></th>
-								<th class="right_sub_title wd9 adm_chk"><input type="checkbox" title="체크박스" name="printYn" id="all_ch7"/><label for="all_ch7"></label><span class="title_align">출력</span></th>
+								<!-- <th class="right_sub_title wd9 adm_chk"><input type="checkbox" title="체크박스" name="printYn" id="all_ch7"/><label for="all_ch7"></label><span class="title_align">출력</span></th> -->
 								<th class="right_sub_title wd10 non_right_line"><label for="chk8"></label><span class="title_align">전체체크</span></th>
 							</tr>
 						</thead>
