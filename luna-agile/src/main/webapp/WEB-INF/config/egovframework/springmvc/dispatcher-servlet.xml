@@ -8,13 +8,15 @@
                 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
                 			http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+	
 	<!-- 패키지 내 Controller, Service, Repository 클래스의 auto detect를 위한 mvc 설정 -->
-    <context:component-scan base-package="egovframework,kr.opensoftlab">
+	<context:component-scan base-package="egovframework,kr.opensoftlab">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-
+    
+    
 	<!-- mvc인터셉터 추가 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -23,11 +25,33 @@
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**/*.do" />
-			<bean class="kr.opensoftlab.sdf.interceptor.RequestParamCheckInterceptor" />
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**/*.do" />
-			<bean class="kr.opensoftlab.sdf.interceptor.AuthenticInterceptor" />
+			<bean class="kr.opensoftlab.sdf.interceptor.AuthenticInterceptor">
+				<property name="permitURLs">
+					<list>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000View.do</value>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000LoginAction.do</value>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000LoginAfter.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001MailSend.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001ChkAction.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001View.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001PwMailSend.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001PwChkAction.do</value>
+						<value>/cmm/cmm4000/cmm4001/selectCmm4001PwNewAction.do</value>
+						<value>/cmm/cmm3000/cmm3000/selectCmm3000View.do</value>
+						<value>/cmm/cmm3000/cmm3100/selectCmm3100View.do</value>
+						<value>/cmm/cmm3000/cmm3200/selectCmm3200View.do</value>
+						<value>/cmm/cmm3000/cmm3200/selectCmm3200IdCheck.do</value>
+						<value>/cmm/cmm3000/cmm3200/selectCmm3200MailSend.do</value>
+						<value>/cmm/cmm3000/cmm3200/selectCmm3200SendValCheck.do</value>
+						<value>/cmm/cmm3000/cmm3200/insertCmm3200JoinIng.do</value>
+						<value>/cmm/cmm4000/cmm4002/selectCmm4002View.do</value>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000ExprPwReset.do</value>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000BeforeUsedPwChkAjax.do</value>
+						<value>/cmm/fms/getImage.do</value>
+						<value>/rpt/rpt2000/rpt2000/selectRpt2001View.do</value>
+					</list>
+				</property>
+			</bean>
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**/select*.do" />
@@ -54,7 +78,7 @@
     <!-- 화면처리용 JSP 파일명의  prefix, suffix 처리에 대한 mvc 설정  -->
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="2"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
-	    p:prefix="/WEB-INF/jsp/oslits" p:suffix=".jsp"/>
+	    p:prefix="/WEB-INF/jsp/oslops" p:suffix=".jsp"/>
     
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="webBindingInitializer">
@@ -66,8 +90,10 @@
 
 	<!-- For Pagination Tag -->
     <bean id="imageRenderer" class="kr.opensoftlab.sdf.paging.OslImgPaginationRenderer"/>
+    
     <!-- 요구사항 수정이력 처리 -->
     <bean id="historyMng" class="kr.opensoftlab.sdf.util.ReqHistoryMngUtil"/>
+    
 
     <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
         <property name="rendererType">
