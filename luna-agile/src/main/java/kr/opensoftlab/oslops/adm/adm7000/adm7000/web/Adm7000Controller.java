@@ -8,15 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import kr.opensoftlab.oslops.adm.adm7000.adm7000.service.Adm7000Service;
-import kr.opensoftlab.oslops.com.vo.LoginVO;
-import kr.opensoftlab.sdf.excel.BigDataSheetWriter;
-import kr.opensoftlab.sdf.excel.ExcelDataListResultHandler;
-import kr.opensoftlab.sdf.excel.Metadata;
-import kr.opensoftlab.sdf.excel.SheetHeader;
-import kr.opensoftlab.sdf.util.RequestConvertor;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.utl.fcc.service.EgovStringUtil;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import kr.opensoftlab.oslops.adm.adm7000.adm7000.service.Adm7000Service;
+import kr.opensoftlab.sdf.excel.BigDataSheetWriter;
+import kr.opensoftlab.sdf.excel.ExcelDataListResultHandler;
+import kr.opensoftlab.sdf.excel.Metadata;
+import kr.opensoftlab.sdf.excel.SheetHeader;
+import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
 /**
@@ -38,6 +34,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
  *   수정일      수정자          수정내용
  *  -------    --------    ---------------------------
  *  2018.08.01  배용진          최초 생성
+ *  2020.01.15  배용진          동적 zTree 적용
  *  
  * </pre>
  *  @author 배용진
@@ -78,32 +75,9 @@ public class Adm7000Controller {
 	 * @return 
 	 * @exception Exception
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value="/adm/adm7000/adm7000/selectAdm7000View.do")
     public String selectAdm7000View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		
-		try{
-			//리퀘스트에서 넘어온 파라미터를 맵으로 세팅
-			Map paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-
-			//로그인VO 가져오기
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-    		
-    		paramMap.put("licGrpId", loginVO.getLicGrpId());
-    		paramMap.put("deptName", egovMessageSource.getMessage("adm7000.success.deptTitle"));
-    		
-    		// 등록된 조직 목록 조회
-    		List<Map> deptList = (List)adm7000Service.selectAdm7000DeptList(paramMap);
-        	
-        	model.addAttribute("deptList", deptList);
-			
-			return "/adm/adm7000/adm7000/adm7000";
-		}
-		catch(Exception ex){
-			Log.error("selectAdm7000View()", ex);
-			throw new Exception(ex.getMessage());
-		}
+		return "/adm/adm7000/adm7000/adm7000";
     }
 	
     /**
@@ -146,6 +120,40 @@ public class Adm7000Controller {
 			
 		}catch(Exception ex){
 			Log.error("selectAdm7000DeptListAjax()", ex);
+
+			//조회실패 메시지 세팅
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	/**
+	 * ADM7000 선택한 조직의 하위 조직 목록을 가져온다. (동적 zTree)
+	 * @param 
+	 * @return 
+	 * @exception Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/adm/amd7000/adm7000/selectAdm7000SubDeptListAjax.do")
+	public ModelAndView selectAdm7000SubDeptListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{			
+			//리퀘스트에서 넘어온 파라미터를 맵으로 세팅
+			Map paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			// 선택한 조직의 하위 조직 목록
+    		List<Map> deptList = (List)adm7000Service.selectAdm7000SubDeptList(paramMap);
+			
+    		//조회 성공메시지 세팅
+			model.addAttribute("deptList", deptList);
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+    		
+			return new ModelAndView("jsonView");
+			
+		}catch(Exception ex){
+			Log.error("selectAdm7000SubDeptListAjax()", ex);
 
 			//조회실패 메시지 세팅
 			model.addAttribute("errorYn", "Y");
@@ -228,7 +236,7 @@ public class Adm7000Controller {
 	 * @return 
 	 * @exception Exception
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/adm/adm7000/adm7000/updateAdm7000DpteInfoAjax.do")
 	public ModelAndView updateAdm7000DpteInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		
@@ -298,7 +306,7 @@ public class Adm7000Controller {
 	 * @return 
 	 * @exception Exception
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/adm/amd7000/adm7000/selectAdm7000UpperDeptListAjax.do")
 	public ModelAndView selectAdm7000UpperDeptListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		
@@ -323,11 +331,7 @@ public class Adm7000Controller {
 			return new ModelAndView("jsonView");
 		}
 	}
-
-	// end
 	
-	
-	// TODO
 	/**
 	 * 요구사항 엑셀 업로드시 요청자 ID가 존재하는지 체크
 	 * @param request
@@ -431,6 +435,50 @@ public class Adm7000Controller {
 		}
 
 		return writer.getModelAndView();
+	}
+	
+	/**
+	 * ADM7000 조직 목록을 조회한다.
+	 * - 조직 공통팝업 호출 전 조직목록 조회시 사용한다.
+	 * @param 
+	 * @return 
+	 * @exception Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/adm/amd7000/adm7000/selectAdm7000NormalDeptListAjax.do")
+	public ModelAndView selectAdm7000NormalDeptListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{			
+			//리퀘스트에서 넘어온 파라미터를 맵으로 세팅
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			// 검색할 조직 명
+			String searchDeptNm = paramMap.get("searchDeptNm");
+			
+			// 조직 목록
+			List<Map> deptList = null;
+			
+			// 검색어가 있을경우에만 데이터 조회
+			if(searchDeptNm != null && !"".equals(searchDeptNm)){
+				// 조직 목록 조회
+				deptList = (List)adm7000Service.selectAdm7000NormalDeptList(paramMap);
+			}
+			
+    		//조회 성공메시지 세팅
+			model.addAttribute("deptList", deptList);
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+    		
+			return new ModelAndView("jsonView");
+			
+		}catch(Exception ex){
+			Log.error("selectAdm7000NormalDeptListAjax()", ex);
+
+			//조회실패 메시지 세팅
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
 	}
 	
 }
