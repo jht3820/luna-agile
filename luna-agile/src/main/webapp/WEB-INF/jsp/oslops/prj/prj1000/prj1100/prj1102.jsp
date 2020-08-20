@@ -416,6 +416,7 @@ function fnFlowSaveAjax(type,flowInfo){
   			jAlert("url 오류가 발생했습니다.","알림");
   		}
   		
+  		//debugger;
   		//return false;
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
@@ -849,18 +850,6 @@ function fnChangeFlowPopUp(isAuthChk){
 			<div class="flw_sub_box flw_sub1">
 				<input type="text" name="flowTitleColor" id="flowTitleColor" value="#FFFFFF"/>
 			</div>
-			<div class="flw_sub_box flw_sub_title flw_sub1">
-			
-			</div>
-			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
-			
-			</div>
-			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
-				내용 배경 색상
-			</div>
-			<div class="flw_sub_box flw_sub1">
-				<input type="text" name="flowContentBgColor" id="flowContentBgColor" value="#FFFFFF"/>
-			</div>
 			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right" title="다음 작업흐름 변경시 바로 최종완료 작업흐름으로 변경이 가능하도록 합니다.">
 				종료 분기
 			</div>
@@ -870,10 +859,10 @@ function fnChangeFlowPopUp(isAuthChk){
 				</div>
 			</div>
 			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
-				내용 글씨 색상
+				내용 배경 색상
 			</div>
 			<div class="flw_sub_box flw_sub1">
-				<input type="text" name="flowContentColor" id="flowContentColor" value="#515769"/>
+				<input type="text" name="flowContentBgColor" id="flowContentBgColor" value="#FFFFFF"/>
 			</div>
 			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right" title="현재 작업흐름에서 담당자 허용 역할그룹을 제한합니다.">
 				허용 역할 제한
@@ -883,6 +872,31 @@ function fnChangeFlowPopUp(isAuthChk){
 					<input type="checkbox" title="체크박스" name="flowAuth" id="flowAuth" class="optPreviewCdChg" opt="optAuth" onchange="fnAuthGridOnOff()"/><label></label>
 				</div>
 			</div>
+			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
+				내용 글씨 색상
+			</div>
+			<div class="flw_sub_box flw_sub1">
+				<input type="text" name="flowContentColor" id="flowContentColor" value="#515769"/>
+			</div>
+			<c:choose>
+				<c:when test="${empty jenkinsModuleUseChk or jenkinsModuleUseChk == true }">
+					<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right" title="현재 작업흐름에서 베포계획을 배정합니다.">
+						배포 계획 저장
+					</div>
+					<div class="flw_sub_box flw_sub1 flw_line_right">
+						<div class="flw_chk"> 
+							<input type="checkbox" title="체크박스" name="flowDpl" id="flowDpl" class="optPreviewCdChg" opt="optDpl"/><label></label>
+						</div>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
+					</div>
+					<div class="flw_sub_box flw_sub1 flw_line_right">
+							<input type="hidden" title="체크박스" name="flowDpl" id="flowDpl" class="optPreviewCdChg" opt="optDpl"/>
+					</div>
+				</c:otherwise>
+			</c:choose>
 			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right" title="현재 작업흐름에서 작업을 추가 할 수 있도록 지정합니다.">
 				작업
 			</div>
@@ -898,7 +912,7 @@ function fnChangeFlowPopUp(isAuthChk){
 					</div>
 					<div class="flw_sub_box flw_sub1 flw_line_right">
 						<div class="flw_chk"> 
-							<input type="checkbox" title="체크박스" name="flowRevision" id="flowRevision"/><label></label>
+							<input type="checkbox" title="체크박스" name="flowRevision" id="flowRevision" class="optPreviewCdChg" opt="optRevision"/><label></label>
 						</div>
 					</div>
 				</c:when>
@@ -910,25 +924,10 @@ function fnChangeFlowPopUp(isAuthChk){
 					</div>
 				</c:otherwise>
 			</c:choose>
-			<c:choose>
-				<c:when test="${empty jenkinsModuleUseChk or jenkinsModuleUseChk == true }">
-					<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right" title="현재 작업흐름에서 베포계획을 배정합니다.">
-						배포 계획 저장
-					</div>
-					<div class="flw_sub_box flw_sub1">
-						<div class="flw_chk"> 
-							<input type="checkbox" title="체크박스" name="flowDpl" id="flowDpl" class="optPreviewCdChg" opt="optDpl"/><label></label>
-						</div>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
-					</div>
-					<div class="flw_sub_box flw_sub1">
-							<input type="hidden" title="체크박스" name="flowDpl" id="flowDpl" class="optPreviewCdChg" opt="optDpl"/>
-					</div>
-				</c:otherwise>
-			</c:choose>
+			<div class="flw_sub_box flw_sub_title flw_sub1 flw_line_right">
+			</div>
+			<div class="flw_sub_box flw_sub1">
+			</div>
 			<div class="flow_auth_gridFrame">
 				<div class="flw_sub_box flw_sub_desc flw_sub_title flw_sub1">
 					담당자 허용 역할 목록
