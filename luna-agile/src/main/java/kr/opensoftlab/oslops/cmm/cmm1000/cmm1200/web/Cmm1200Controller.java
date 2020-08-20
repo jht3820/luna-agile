@@ -1,14 +1,8 @@
 package kr.opensoftlab.oslops.cmm.cmm1000.cmm1200.web;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import kr.opensoftlab.oslops.adm.adm7000.adm7000.service.Adm7000Service;
-import kr.opensoftlab.sdf.util.RequestConvertor;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -27,6 +21,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
  *   수정일      수정자          수정내용
  *  -------    --------    ---------------------------
  *  2018.08.01  배용진          최초 생성
+ *  2020.01.15  배용진          동적 zTree 적용
  *  
  * </pre>
  *  @author 배용진
@@ -52,37 +47,15 @@ public class Cmm1200Controller {
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
 	
-	/** Adm7000Service DI */
-	@Resource(name = "adm7000Service")
-	private Adm7000Service adm7000Service;
-	
 	/**
 	 * Cmm1200 조직도 선택 팝업 오픈
 	 * @param 
 	 * @return 
 	 * @exception Exception
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value="/cmm/cmm1000/cmm1200/selectCmm1200View.do")
     public String selectCmm1200View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		
-		try{
-			//리퀘스트에서 넘어온 파라미터를 맵으로 세팅
-			Map paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			// 등록된 조직 목록 조회
-    		List<Map> deptList = (List)adm7000Service.selectAdm7000DeptList(paramMap);
-			
-    		//조회 성공메시지 세팅
-			model.addAttribute("deptList", deptList);
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
-			
-			return "/cmm/cmm1000/cmm1200/cmm1200";
-			
-		}catch(Exception ex){
-			Log.error("selectCmm1200View()", ex);
-			throw new Exception(ex.getMessage());
-		}	
+		return "/cmm/cmm1000/cmm1200/cmm1200";
 	}
 	
 
