@@ -435,7 +435,7 @@
 
 			<!-- 2depth 시작 -->
 			<div class="gnb_bottom">
-				<div class="menu_img"><img src="/images/header/topMenu/osl_Defense.png" alt="Oslits_Defense"></div>
+				<div class="menu_img"><img src="/images/header/topMenu/Oslits_Defense.png" alt="Oslits_Defense"></div>
 				<nav>
 					<c:if test="${!empty sessionScope.menuList }">
 						<!-- 대메뉴 반복 -->
@@ -478,26 +478,4 @@
 				</nav>
 			</div>
 		</div>
-		
-		<!-- 모바일 메뉴 이미지 관리 객체 
-		<jsp:useBean id="mobileImgUrl" class="java.util.HashMap" >
-			<c:set target="${mobileImgUrl}" property="imgList" 
-			value="${fn:split('
-			 /images/header/GNB/GNB-icon_01.png
-			,/images/header/GNB/m_GNB_con_03.png
-			,/images/header/GNB/GNB-icon_04.png
-			,/images/header/GNB/GNB-icon_08.png
-			,/images/header/GNB/m_GNB_con_02.png
-			,/images/header/GNB/m_GNB_con_01.png		', ',')}"/>
-			
-			<c:set target="${mobileImgUrl}" property="imgList2" 
-			value="${fn:split('
-			 /images/header/GNB/GNB-icon_01.png
-			,/images/header/GNB/m_GNB_con_03.png
-			,/images/header/GNB/GNB-icon_04.png
-			,/images/header/GNB/GNB-icon_08.png
-			,/images/header/GNB/m_GNB_con_02.png
-			,/images/header/GNB/m_GNB_con_01.png		', ',')}"/>
-		</jsp:useBean>	
-		-->
 	</header>

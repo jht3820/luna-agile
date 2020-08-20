@@ -12,7 +12,14 @@
 	<!-- <bean id="globalDplListVO" class="kr.opensoftlab.sdf.jenkins.vo.GlobalDplListVO"></bean> -->
 	
 	<!-- 모듈 체크 기능 -->
-	<bean id="moduleUseCheck" class="kr.opensoftlab.sdf.util.ModuleUseCheck" init-method="check"></bean>
+	<bean id="moduleUseCheck" class="kr.opensoftlab.sdf.util.ModuleUseCheck" init-method="check">
+		<property name="systemMenuIds">
+			<list>
+				<value>000900000000</value>
+				<value>000800000000</value>
+			</list>
+		</property>
+	</bean>
 	
 	<!-- JENKINS SERVICE BEAN -->
 	<bean id="jenkinsClient" class="kr.opensoftlab.sdf.jenkins.JenkinsClient"></bean>

@@ -32,7 +32,7 @@ var saveObjectValid = {
 
 	$(document).ready(function() {
 		
-
+		// 입력값 유효성 체크
 		gfnInputValChk(arrChkObj);
 	
 		// 등록버튼 클릭
@@ -64,16 +64,19 @@ var saveObjectValid = {
 				return false;	
 			}
 			
+			// 조직 등록
 			sendToServer();
 		});
 		
-		/* 취소 */
+		// 취소 버튼 클릭
 		$('.exit_btn').click(function() {
+			// 팝업을 닫는다.
 			gfnLayerPopupClose();
 		});
 				
-
 		var fd = new FormData();
+		
+		// 조직을 등록한다.
 		function sendToServer(){
 			
 			//FormData에 input값 넣기
@@ -93,10 +96,23 @@ var saveObjectValid = {
 		        	toast.push(data.message);
 		        	return;
 		        }
-	        	// adm7000.jsp 기존 트리에 새로 추가된 데이터(조직)를 추가한다.
-		        fnInsertDeptInfoAjax(data)
-	        		
-				jAlert(data.message, '알림창', function( result ) {
+		        
+		        // 새로운 조직 추가 시 상위 조직의 트리 노드를 가져온다.
+		        var parentNode = zTree.getSelectedNodes()[0];
+				
+		        // 선택한 노의 자식 노드 reload
+		        zTree.reAsyncChildNodes(parentNode, "refresh", false, function(){
+		        	// 재 조회 후 추가된 조직의 id로 트리에서 노드를 찾는다.
+		        	var newTreeNodes = zTree.getNodesByParam("deptId", data.deptId);
+		        	// 추가된 조직 노드를 선택한다.
+		        	zTree.selectNode(newTreeNodes[0]);
+		        	// 선택한 조직의 상세정보를 조회하여 우측 화면에 출력한다.
+		        	fnGetDeptInfoAjax(newTreeNodes[0].deptId);
+		        });
+		        
+		        // 결과 메시지 출력
+				jAlert(data.message, '알림', function( result ) {
+					// 확인 버튼 클릭 시 팝업을 닫는다.
 					if( result ){
 				        gfnLayerPopupClose();
 					}

@@ -2,7 +2,7 @@
 .mb10 { margin-bottom: 10px; }
 .mb20 { margin-bottom: 20px; }
 
-#divMenu{max-height: 1500px;overflow-y: auto;}
+#divMenu{max-height: 600px;overflow-y: auto;}
 /* 
  * .tab_contents.menu
  *   - max-width: 1500px; width:100%제거

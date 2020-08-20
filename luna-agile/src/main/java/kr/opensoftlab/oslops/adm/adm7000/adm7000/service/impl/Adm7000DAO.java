@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
  *   수정일      수정자          수정내용
  *  -------    --------    ---------------------------
  *  2018.08.01  배용진          최초 생성
+ *  2020.01.15  배용진          동적 zTree 적용
  *  
  * </pre>
  *  @author 배용진
@@ -39,6 +40,16 @@ public class Adm7000DAO extends ComOslitsAbstractDAO {
 		 return (List) list("adm7000DAO.selectAdm7000DeptList", paramMap);
     }
 	
+	/**
+	 * Adm7000 선택한 조직의 하위 조직 목록을 조회한다. (동적 zTree)
+	 * @param param - Map
+	 * @return List - 조직 목록
+	 * @exception Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public List selectAdm7000SubDeptList(Map paramMap) throws Exception {
+		 return (List) list("adm7000DAO.selectAdm7000SubDeptList", paramMap);
+    }
 	
 	/**
 	 * Adm7000 조직 정보 조회 (단건)
@@ -138,6 +149,19 @@ public class Adm7000DAO extends ComOslitsAbstractDAO {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void selectAdm7000ExcelList(Map paramMap, ExcelDataListResultHandler resultHandler) throws Exception {
-		listExcelDownSql("adm7000DAO.selectAdm7000DeptList", paramMap, resultHandler);
+		listExcelDownSql("adm7000DAO.selectAdm7000NormalDeptList", paramMap, resultHandler);
+	}
+	
+	/**
+	 * Adm7000 조직 목록 조회
+	 * - 조직 공통팝업 호출 전 조직 목록을 검색한다.
+	 *   검색된 조직 목록을 반환하여 1개일 경우 조직공통 팝업을 열지 않고 화면에 데이터를 세팅시 사용한다.
+	 * @param param - Map
+	 * @return 
+	 * @exception Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public List selectAdm7000NormalDeptList(Map paramMap) throws Exception {
+		return (List) list("adm7000DAO.selectAdm7000NormalDeptList", paramMap);
 	}
 }

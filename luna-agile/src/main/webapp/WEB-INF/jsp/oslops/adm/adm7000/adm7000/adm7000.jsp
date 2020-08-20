@@ -40,7 +40,10 @@ var ax5Mask = new ax5.ui.mask();
 var chkDeptIdArr = [];
 //선택된 조직 및 하위조직 노드가 담긴 배열, 조직 삭제시 사용
 var chkDeptNodeArr = [];
-
+// axSearch
+var deptSearch;
+// 검색된 조직 목록
+var deptNodeList = [];
 
 //유효성 체크
 var arrChkObjAdm7000 = {"deptName":{"type":"length","msg":"조직명은 200byte까지 입력이 가능합니다.",max:200}
@@ -49,20 +52,10 @@ var arrChkObjAdm7000 = {"deptName":{"type":"length","msg":"조직명은 200byte�
 				};
 
 $(document).ready(function() {
-	//트리메뉴 도움말 클릭
-	$(".menu_tree_help").click(function(){
-		if($(".menu_tree_helpBox").hasClass("boxOn")){
-			$(".menu_tree_helpBox").hide();
-			$(".menu_tree_helpBox").removeClass("boxOn");
-		}else{
-			$(".menu_tree_helpBox").show();
-			$(".menu_tree_helpBox").addClass("boxOn");
-		}
-	});
-	
-	
+
+
 	/********************************************************************
-	 *	메뉴 관리 기능 부분 정의 시작												*
+	 *	조직관리 기능 부분 정의 시작												*
 	 *********************************************************************/
 	/* 	
 	*	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
@@ -81,122 +74,77 @@ $(document).ready(function() {
 	
 	gfnInputValChk(arrChkObjAdm7000);
 	
-	//초기 메뉴 세팅
-	fnSearchDeptList();
-
-	// 메뉴 관리 전체 열기
-	$(".menu .menu_expand_all").click(function(){
-		zTree.expandAll(true);
-	});
-
-	// 메뉴 관리 전체 닫기
-	$(".menu .menu_collapse_all").click(function(){
-		zTree.expandAll(false);
-	});
-
-	// 조직 관리 조회 버튼 클릭 - 조회
-	$("#btn_search_deptInfo").click(function(){
-		fnSearchDeptList();
-	});
-
-	//	조직 수정 버튼 클릭 이벤트
-	$("#btn_update_DeptInfo").click(function(){
-		//선택된 메뉴 엘레먼트 객체 저장
+	// 조직 검색상자 추가
+	fnDeptSearchBox();
+	
+	// 최초 화면진입시 검색조건 : 해당조건으로 지정 시 ROOT와 1뎁스만 조회한다.
+	var searchParam = "&searchSelect=all";
+	
+	// 최초 화면 진입시 초기 조직목록  조회
+	fnSearchDeptList(searchParam);
+	
+	//  조직 추가 버튼 클릭 이벤트
+	//	조직 추가시 DB 인서트 처리를 실행하며 등록이 성공되면 등록된 기본정보를 이용하여 조직 트리에 추가한다.
+	$("#btn_insert_deptAddInfo").click(function(){
+		//선택된 트리 엘레먼트 객체 저장
 		var selZtree = zTree.getSelectedNodes()[0];
-		
+	
+		// 선택된 노드가 없을 경우
 		if(selZtree == null || selZtree == ""){
-			jAlert("선택된 조직이 없습니다.", "알림창");
+			jAlert("선택된 조직이 없습니다.", "알림");
 			return false;
 		}
+		// 조직은 요구사항 분류와 달리 무한뎁스로 생성 가능 
+		var deptId = selZtree.deptId;
 		
-		/* 필수입력값 체크 공통 호출 */
-		var strFormId = "deptInfoFrm";
-		var strCheckObjArr = ["deptName","ord"];
-		var sCheckObjNmArr = ["조직명","순번"];
-		if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-			return;	
-		}
-		if(gfnIsNumeric("ord")){
-			
-			// 저장 전 유효성 체크
-			if(!gfnSaveInputValChk(arrChkObjAdm7000)){
-				return false;	
-			}
-			
-			//메뉴정보 수정
-			fnUpdateDeptInfoAjax($("#deptInfoFrm").serializeArray(),"normal", false);
-		}
+		//인서트 로직 정상적으로 동작했을때 선택되어 있던 폴더 선택해제하고 DB 인서트된 정보를 이용하여 하위엘레먼트로 추가한다.
+		//선택한 로우의 메뉴ID를 인자로 보냄
+		fnInsertDeptPopupOpenAjax(selZtree);	
 	});
 
-		//  조직 추가 버튼 클릭 이벤트
-		//	조직 추가시 DB 인서트 처리를 실행하며 등록이 성공되면 등록된 기본정보를 이용하여 조직 트리에 추가한다.
-		$("#btn_insert_deptAddInfo").click(function(){
-			//선택된 트리 엘레먼트 객체 저장
-			var selZtree = zTree.getSelectedNodes()[0];
+	//	조직 삭제 버튼 
+	$("#btn_delete_deptDeleteInfo").click(function(){
+		//선택 조직 가져오기
+		var menu = zTree.getSelectedNodes()[0];
 		
-			if(selZtree == null || selZtree == ""){
-				jAlert("선택된 조직이 없습니다.", "알림창");
-				return false;
+		//선택 조직 없는경우 경고
+		if(gfnIsNull(menu)){
+			jAlert("삭제할 조직을 선택해주세요.", "알림");
+			return;
+		}
+
+		if(menu.level == 0){
+			jAlert("루트 디렉터리는 삭제 할 수 없습니다.","알림");
+		} else {
+			//선택한 div의 부모영역이 가진 자식 노드의 갯수로 하위메뉴 존재 여부를 판단한다.
+			if(menu.length == 0){
+				toast.push("조직을 선택하지 않았습니다. 조직을 선택해 주세요.");
 			}
-			// 조직은 요구사항 분류와 달리 무한뎁스로 생성 가능 
-			var deptId = selZtree.deptId;
-			
-			//인서트 로직 정상적으로 동작했을때 선택되어 있던 폴더 선택해제하고 DB 인서트된 정보를 이용하여 하위엘레먼트로 추가한다.
-			//선택한 로우의 메뉴ID를 인자로 보냄
-			fnInsertDeptPopupOpenAjax(selZtree);	
-		});
+			else{
+				// 사용자가 소속된 조직을 체크
+				var result = fnDeptInUserChk(menu);
+				var resultArr = result.split("&");
+				
+				// 삭제할 조직ID 문자열
+				var strDeptId = resultArr[0];
+				// 삭제 flag
+				var delChk = resultArr[1];
 
-		//	조직 삭제 버튼 
-		$("#btn_delete_deptDeleteInfo").click(function(){
-			//선택 조직 가져오기
-			var menu = zTree.getSelectedNodes()[0];
-			
-			//선택 조직 없는경우 경고
-			if(gfnIsNull(menu)){
-				jAlert("선택된 분류가 없습니다.");
-				return;
-			}
-
-			if(menu.level == 0){
-				jAlert("루트 디렉터리는 삭제 할 수 없습니다.","알림창");
-			} else {
-				//선택한 div의 부모영역이 가진 자식 노드의 갯수로 하위메뉴 존재 여부를 판단한다.
-				if(menu.length == 0){
-					toast.push("조직을 선택하지 않았습니다. 조직을 선택해 주세요.");
-				}
-				else{
-					// 사용자가 소속된 조직을 체크
-					var result = fnDeptInUserChk(menu);
-					var resultArr = result.split("&");
-					
-					// 삭제할 조직ID 문자열
-					var strDeptId = resultArr[0];
-					// 삭제 flag
-					var delChk = resultArr[1];
-
-					if(delChk == "Y"){
-						jConfirm("선택된 조직에는 소속된 사용자가 없습니다. \n\n 해당 조직및 하위조직을 삭제하시겠습니까? \n", "알림창", function( result ) {
-			   				if( result ){
-			   					jConfirm("선택된 조직 및 하위조직까지 삭제되며 삭제 시 되돌릴 수 없습니다. \n그래도 삭제 하시겠습니까?", "알림창", function( result ) {
-			   	   					if( result ){
-			   	   						fnDeleteDeptInfoAjax(strDeptId);
-			   	   					}
-			   	   				});
-			   				}
-			   			});
-					}
+				if(delChk == "Y"){
+					jConfirm("선택된 조직에는 소속된 사용자가 없습니다. \n\n 해당 조직및 하위조직을 삭제하시겠습니까? \n", "알림", function( result ) {
+		   				if( result ){
+		   					jConfirm("선택된 조직 및 하위조직까지 삭제되며 삭제 시 되돌릴 수 없습니다. \n그래도 삭제 하시겠습니까?", "알림", function( result ) {
+		   	   					if( result ){
+		   	   						fnDeleteDeptInfoAjax(strDeptId);
+		   	   					}
+		   	   				});
+		   				}
+		   			});
 				}
 			}
-		});	
-
-		
-	/* 엑셀 조회 버튼 클릭 이벤트 */
-	$("#btn_excel_menuInfo").click(function(){
-		document.getElementById("searchFrm").action = "<c:url value='/adm/amd7000/adm7000/selectAdm7000ExcelList.do'/>";
-		document.getElementById("searchFrm").submit();
-		return false;
+		}
 	});	
-		
+
 	/********************************************************************
 	 *	조직 관리 기능 부분 정의 종료												*
  	*********************************************************************/
@@ -213,118 +161,286 @@ $(document).ready(function() {
  */
 function fnGetDeptInfoAjax(deptId){
 	
-	
-	
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
-			{"url":"<c:url value='/adm/adm7000/adm7000/selectAdm7000DeptInfoAjax.do'/>","loadingShow": false}
+			{"url":"<c:url value='/adm/adm7000/adm7000/selectAdm7000DeptInfoAjax.do'/>","loadingShow":false}
 			,{ "deptId":deptId});
 	//AJAX 전송 성공 함수
 	ajaxObj.setFnSuccess(function(data){
 		data = JSON.parse(data);
 		
+		// 조회 실패
+    	if(data.errorYn == 'Y'){ 
+    		toast.push(data.message);
+    		return;
+    	}
+		
 		// 오류없을경우 Mask 제거
 		//ax5Mask.close();
 		$("div#adm7000_mask_frmae").hide();
-		
+		// 비고 초기화
 		$("#deptEtc").val("");
 		
     	//디테일폼 세팅
     	gfnSetData2Form(data, "deptInfoFrm");
+    	
+    	// 조직레벨
+    	var deptLevel = data.lvl;
+    	
+    	// 사용유무 수정 불가처리
+		$("#useCd").attr("disabled","disabled");
+    	
+    	// ROOT 노드가 아닐경우
+    	if(deptLevel > 0){
+    		// 사용유무 변경가능하도록
+    		$("#useCd").removeAttr("disabled");
+    	}
 	});
 	
 	//AJAX 전송 오류 함수
 	ajaxObj.setFnError(function(xhr, status, err){
 		data = JSON.parse(data);
-		jAlert(data.message,"알림창");
+		jAlert(data.message,"알림");
 	});
 	
 	//AJAX 전송
 	ajaxObj.send();
 }
 
+
+
 /**
- * 조회버튼 클릭시 조직 리스트 조회 AJAX
+ * 조회버튼 클릭시 조직 리스트 조회한다.
+ * 
+ * 조직 트리 표시 검색 조건
+ * 1. 조직관리 화면 진입 또는 전체보기로 검색시 ROOT와 1뎁스만 조회하여 보여준다. 
+ *
+ * 2. 조직 검색시 검색어에 해당하는 조직을 기준으로 계층으로 보여준다.
+ *	    예를 들어 다음과 같이 조직이 등록되어 있을 경우
+ *
+ * (ROOT) 서울시 
+ *			ㄴ 행정과
+ *				ㄴ행정관리과
+ *				ㄴ민원처리과
+ *			ㄴ 도시환경과
+ *				ㄴ 도시정비과
+ *				ㄴ 도시환경관리과
+ * 
+ *	 조직명으로 '도시'를 검색 시 
+ * 
+ * (ROOT) 서울시 
+ *			ㄴ 도시환경과
+ *				ㄴ 도시정비과
+ *				ㄴ 도시환경관리과
+ *  
+ *  위와 같이 검색결과에 해당하는 조직만 계층으로 표시한다.
+ * 
+ * 3. 검색결과가 없을경우  ROOT 노드만 조회된다.
+ * 
+ * @param ajaxParam : 검색 파라미터 (검색타입 : deptName, deptEtc)
  */
- function fnSearchDeptList(){
+function fnSearchDeptList(ajaxParam){
+	
+	// 검색 파라미터 세팅
+ 	if(gfnIsNull(ajaxParam)){
+		ajaxParam = $('form#searchFrm').serialize();
+	} 
+	 
+	//AJAX 설정
+	var ajaxObj = new gfnAjaxRequestAction(
+			{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>"}
+			,ajaxParam);
+	//AJAX 전송 성공 함수
+	ajaxObj.async = false;
+	ajaxObj.setFnSuccess(function(data){
 		
-		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>","loadingShow":true});
-		//AJAX 전송 성공 함수
-		ajaxObj.async = true;
-		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-			
-			var listSize = data.deptList.length;
-	    	
-			$('#deptInfoFrm')[0].reset();
-			
-	    	toast.push(data.message);
-	    	// zTree 설정 
-		    var setting = {
-		        data: {
-		        	key: {
-						name: "deptName"
-					},
-		            simpleData: {
-		                enable: true,
-		                idKey: "deptId",
-						pIdKey: "upperDeptId",
-		            }
-		        },
-				callback: {
-					onClick: function(event, treeId, treeNode){
-						//우측 조직 정보
-						fnGetDeptInfoAjax(treeNode.deptId);
-					}
+		data = JSON.parse(data);
+    	
+		// 조회 실패
+    	if(data.errorYn == 'Y'){ 
+    		toast.push(data.message);
+    		return;
+    	}
+		
+    	// 우측 상세보기 화면을 초기화한다.
+		$('#deptInfoFrm')[0].reset();
+
+    	// 조회 성공 메시지 출력
+    	toast.push(data.message);
+    	
+    	// zTree 설정
+	    var setting = {
+    		// zTree binding data key 설정
+	        data: {
+	        	key: {
+					name: "deptName"
 				},
-				view : {
-					fontCss: function(treeId, treeNode){
-						return (treeNode.useCd == "02")? {color:"#ddd"} :{};
-					},
-					showIcon : function(treeId, treeNode) {
-						
-						if(typeof zTree != "undefined" && !treeNode.isParent){
-							if(listSize>1){
-								treeNode.isParent = true;
-								zTree.updateNode(treeNode);
-								zTree.refresh();	
-							}
-						}
-						return true;
+	            simpleData: {
+	                enable: true,
+	                idKey: "deptId",
+					pIdKey: "upperDeptId",
+	            }
+	        },
+	        // 동적 트리 설정
+	        async: {
+				enable: true, // async 사용여부 (true:사용, false:미사용)
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				url:"<c:url value='/adm/amd7000/adm7000/selectAdm7000SubDeptListAjax.do'/>",
+				autoParam:["deptId"],	// 노드의 값을 서버로 보낼경우 배열형식으로 autoParam에 세팅
+				otherParam:{"deptSelType" : "async"},  // 노드의 값을 제외한 다른 값을 서버로 보낼 경우 otherParam에 세팅
+				dataType: "json",
+				dataFilter: fnTreeFilter	// 데이터 조회 후 처리할 필터 function, async 사용시 dataFilter는 반드시 지정해야 한다.
+			},
+			callback: {
+				onClick: function(event, treeId, treeNode){
+					//우측 조직 정보
+					fnGetDeptInfoAjax(treeNode.deptId);
+				},
+				onAsyncError: fnAsyncError
+			},
+			view : {
+				fontCss: getFontCss,
+				showIcon : function(treeId, treeNode) {
+					// 트리 노드가 부모형이 아닐 경우
+					if(typeof zTree != "undefined" &&  !treeNode.isParent){
+						// 모두 부모형(폴더 아이콘)으로 변경한다.
+						treeNode.isParent = true;
+						zTree.updateNode(treeNode);
+						zTree.refresh();	
 					}
+					return true;
 				}
-		    };
+			}
+	    };
+		
+		
+	    // zTree 초기화
+	    zTree = $.fn.zTree.init($("#deptTree"), setting, data.deptList);
+	    zTree.refresh();
+	    
+	    // expandAll(false)를 추가해야 트리의 폴더를 한번 클릭 시 하위 메뉴가 보여진다.
+	    // 추가하지 않을 경우 두번 클릭을 해야 폴더가 펼쳐진다.
+	    zTree.expandAll(false);
+	    
+	    // 최상위 노드를 가져온다.
+	    var treeNodes = zTree.getNodes();
+	    if(!gfnIsNull(treeNodes)){
+	    	// 최상위 노드의 자식 노드 수
+		    var rootNodeChild = treeNodes[0].children;
+		    // 자식 노드가 있을 경우
+		    if(!gfnIsNull(rootNodeChild) && rootNodeChild.length > 0){
+		    	// 최상위 노드만 펼친다
+		    	zTree.expandNode(treeNodes[0], true, false, false, false);
+		    }
+	    }
+	    
+	    // 우측 상세보기 화면 mask open
+	    $("div#adm7000_mask_frmae").show();
+	    $("div#adm7000_mask_frmae").html("조직을 선택해주세요.");
+		
+	});
+	
+	//AJAX 전송 오류 함수
+	ajaxObj.setFnError(function(xhr, status, err){
+		data = JSON.parse(data);
+		jAlert(data.message,"알림");
+	});
+	
+	//AJAX 전송
+	ajaxObj.send();
+}
+	
 
-		    // zTree 초기화
-		    zTree = $.fn.zTree.init($("#deptJson"), setting, data.deptList);
-		    
-		    // expandAll(false)를 추가해야 트리의 폴더를 한번 클릭 시 하위 메뉴가 보여진다.
-		    // 추가하지 않을 경우 두번 클릭을 해야 폴더가 펼쳐진다.
-		    zTree.expandAll(false);
-		    $("div#adm7000_mask_frmae").show();
-		    $("div#adm7000_mask_frmae").html("조직을 선택해주세요.");
-			//목록 조회시 우측 정보 창 mask
-		   /* ax5Mask.open({
-				zIndex:90,
-				target: $("#selDeptInfoDiv"),
-				content: "조직을 선택해주세요."
-			});*/
-		});
-		
+/*
+ * 동적트리 조회 실패시 처리
+ */
+function fnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+	// 조회 실패 메시지 출력
+   	toast.push("하위 조직 조회에 실패하였습니다.");
+}
+	
+/*
+ * [+] 아이콘 클릭 또는 더블클릭하여 트리 확장시 조회된 결과에 대한 처리를 한다.
+ *
+ * @param treeId : 트리 ID
+ * @param parentNode : 트리에서 [+]아이콘 클릭 또는 더블클릭한 노드
+ * @param result : 동적조회 결과값
+ */
+function fnTreeFilter(treeId, parentNode, result) {
+ 	
+	// 조회된 하위 조직 목록
+ 	var childNodes = result.deptList;
+	
+	// filter에서 모든 자식 노드를 부모형(폴더 아이콛)으로 변경한다.
+	// 해당 옵션 추가해야  트리의  [+] 아이콘 클릭 시 한번에 트리가 펼쳐진다. 
+	$.each(childNodes, function(idx, node){
+		node.isParent = true;
+		zTree.updateNode(node);
+	});
+	
+	// 선택한 노드의 자식 노드를 리턴하면 자동으로 트리에 자식 노드가 추가된다. ( zTree.addNodes()를 사용할 필요 없음)
+	return childNodes;
+}
 
-		
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err){
-			data = JSON.parse(data);
-			jAlert(data.message,"알림창");
-		});
-		
-		//AJAX 전송
-		ajaxObj.send();
+/*
+ * 검색된 조직에대한 처리를 한다.
+ * 검색조직 확장 및 하이라이트 처리를 한다.
+ * @param searchSelectVal : 검색 select (전체보기, 조직명, 비고)
+ * @param searchTxtVal : 검색어
+ */
+function fnSearchDeptResultProcess(searchSelectVal, searchTxtVal){
+	
+	// 트리의 하이라이트 초기화
+	//fnTreeHighlightUpdate(false);
+	
+	// 전체검색이 아닐 경우
+    if(searchSelectVal != 'all'){
+    	
+    	// 트리에서 조직 검색
+    	deptNodeList = zTree.getNodesByParamFuzzy(searchSelectVal, searchTxtVal);
+ 	   	
+ 		// 검색결과가 없을경우
+ 		if(deptNodeList.length == 0){
+ 			toast.push("검색된 조직이 없습니다.");
+ 			return false;
+ 		}
+ 		
+ 		// 트리의 하이라이트 활성화
+		fnTreeHighlightUpdate(true);
+ 		
+ 		// 검색된 조직이 있을경우  노드 loop
+ 		$.each(deptNodeList, function(idx, deptNode){
+ 			// 검색된 조직 노드의 부모를 찾는다.
+ 			var parentNode = deptNode.getParentNode();
+ 			// 해당 부모를 확장한다. 자식까지 확장옵션(3번째 인자)은 false로 둔다. 
+ 			// ture일 경우 expand 이벤트 발생시 자동으로 하위 노드를 동적 조회한다.
+ 			// 노드 확장시 무조건 부모노드를 확장하고, 자식까지 확장 옵션은 flase로 둬야한다.
+ 			zTree.expandNode(parentNode, true, false, false, false);
+ 		});
+ 		
+ 		// 검색된 조직이 1건있을 경우
+ 		if(deptNodeList.length == 1){
+ 			// 조직 노드를 선택한다.
+        	zTree.selectNode(deptNodeList[0]);
+        	// 선택한 조직의 상세정보를 조회하여 우측 화면에 출력한다.
+        	fnGetDeptInfoAjax(deptNodeList[0].deptId);
+ 		}
 	}
+}
+ 
+/**
+ * 	검색된 조직 highlight 처리 
+ *	@param highlight 하이라이트 설정 값(true, false)
+ */
+function fnTreeHighlightUpdate(highlight) {
+	var zTreeObj = $.fn.zTree.getZTreeObj("deptTree");
 
+	for(var i = 0; i < deptNodeList.length; i++) {
+		deptNodeList[i].highlight = highlight;
+		zTreeObj.updateNode(deptNodeList[i]);
+	}
+}
+	
 /**
  * 	신규 조직 등록오픈 오픈
  *	해당 함수 호출시 새로운 조직을 등록할 수 있는 팝업을 오픈한다.
@@ -412,7 +528,7 @@ function fnDeptInUserChk(selectDeptOjb){
    			// 조직ID 문자열에 결과값 붙임
    			strDeptId += "&N";
    			
-   			jAlert( "\n"+msg+"\n\n조직에는 사용자가 소속되어 있어 삭제할 수 없습니다. ","알림창");
+   			jAlert( "\n"+msg+"\n\n조직에는 사용자가 소속되어 있어 삭제할 수 없습니다. ","알림");
    		}
    		else{
    			// 조직ID 문자열에 결과값 붙임
@@ -422,7 +538,7 @@ function fnDeptInUserChk(selectDeptOjb){
 	
 	ajaxObj.setFnError(function(xhr, status, err){
     	data = JSON.parse(data);
-    	jAlert(data.message,"알림창");
+    	jAlert(data.message,"알림");
  	});
 	
 	//AJAX 전송
@@ -502,6 +618,7 @@ function fnDeleteDeptInfoAjax(strDeptId){
 	//AJAX 전송
 	ajaxObj.send();
 }
+
 
 /**
 *	조직 정보 수정 함수
@@ -598,17 +715,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
     			
     		//폼으로 정보 수정인 경우
     		}else if(updateType == "normal"){
-    			//조직명이 변경된 경우
-    			var deptId = $('#deptId').val();
-    			
-    			fnSearchDeptList();
-		        
-		        var treeNodes = zTree.getNodesByParam("deptId", deptId);
-	    		var pNode = treeNodes[0].getParentNode();
-	    		zTree.expandNode(pNode, true, true, null, false);   		
-	    		zTree.selectNode(treeNodes[0]);
-	    		fnGetDeptInfoAjax(treeNodes[0].deptId);
-    			/*
+    			// 조직명이 변경된 경우
     			if(zTree.getSelectedNodes()[0].deptName != $("#deptName").val()){
     				//폼값 수정이기 때문에 조직값 수정 필요
     				zTree.getSelectedNodes()[0].deptName = $("#deptName").val();
@@ -634,7 +741,7 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 		    			});
     				}
     			}
-    			*/
+    			
     		//하위 조직 사용유무 수정인경우 CSS 변경
     		}else if(updateType == "editSubUseCd"){
     			//사용유무에 따른 폰트 색상 수정
@@ -674,35 +781,241 @@ function fnUpdateDeptInfoAjax(deptObj, updateType, updateAsync){
 
 }
 
+//검색 상자
+function fnDeptSearchBox(){
+	var pageID = "AXSearch";
+	deptSearch = new AXSearch();
+
+	var fnObjSearch = {
+		pageStart: function(){
+			//검색도구 설정 01 ---------------------------------------------------------
+			deptSearch.setConfig({
+				targetID:"AXSearchTarget",
+				theme : "AXSearch",
+				rows:[
+					{display:true, addClass:"", style:"", list:[
+						{label:"<i class='fa fa-search'></i>&nbsp;", labelWidth:"50", type:"selectBox", width:"", key:"searchSelect", addClass:"", valueBoxStyle:"", value:"all",
+							options:[
+                                {optionValue:"all", 			optionText:"전체 보기",optionAll:true},
+                                {optionValue:'deptName', 		optionText:'조직명'},
+                                {optionValue:'deptEtc', 		optionText:'비고'}
+                            ],onChange: function(selectedObject, value){
+                            	//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
+    							if(!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true){
+									axdom("#" + deptSearch.getItemId("searchTxt")).attr("readonly", "readonly");	
+									axdom("#" + deptSearch.getItemId("searchTxt")).val('');	
+								}else{
+									axdom("#" + deptSearch.getItemId("searchTxt")).removeAttr("readonly");
+								}
+								
+								//공통코드 처리 후 select box 세팅이 필요한 경우 사용
+								if(!gfnIsNull(selectedObject.optionCommonCode)){
+									axdom("#" + deptSearch.getItemId("searchTxt")).val('');	
+									gfnCommonSetting(deptSearch,selectedObject.optionCommonCode,"searchCd","searchTxt");
+                            	}else{
+									//공통코드 처리(추가 selectbox 작업이 아닌 경우 type=text를 나타낸다.)
+									axdom("#" + deptSearch.getItemId("searchTxt")).show();
+									axdom("#" + deptSearch.getItemId("searchCd")).hide();
+									axdom("#" + deptSearch.getItemId("searchTxt")).val('');	
+								}
+    						},
+
+						},
+						{label:"", labelWidth:"", type:"inputText", width:"225", key:"searchTxt", addClass:"secondItem sendBtn", valueBoxStyle:"padding-left:0px;", value:"",
+							onkeyup:function(e){
+								if(e.keyCode == '13' ){
+									axdom("#" + deptSearch.getItemId("btn_search_deptInfo")).click();
+								}
+							} 
+						},
+						{label:"", labelWidth:"", type:"selectBox", width:"100%", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
+							options:[]
+						},
+						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_excel_deptInfo",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
+							onclick:function(){
+								
+								var excelForm = document.getElementById("adm7000_excel_down_Form");
+								excelForm.action = "<c:url value='/adm/amd7000/adm7000/selectAdm7000ExcelList.do'/>";
+								excelForm.submit();
+								return false;
+						}},
+						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_delete_deptDeleteInfo",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-trash-alt' aria-hidden='true'></i>&nbsp;<span>삭제</span>",
+							onclick:function(){
+								
+								//선택 조직 가져오기
+								var menu = zTree.getSelectedNodes()[0];
+								
+								//선택 조직 없는경우 경고
+								if(gfnIsNull(menu)){
+									jAlert("선택된 분류가 없습니다.");
+									return;
+								}
+								
+								// ROOT 노드 체크
+								if(menu.level == 0){
+									jAlert("루트 디렉터리는 삭제 할 수 없습니다.","알림");
+								} else {
+									//선택한 div의 부모영역이 가진 자식 노드의 갯수로 하위조작 존재 여부를 판단한다.
+									if(menu.length == 0){
+										toast.push("조직을 선택하지 않았습니다. 조직을 선택해 주세요.");
+									// 하위조직이 존재할 경우
+									}else{
+										// 사용자가 소속된 조직을 체크
+										var result = fnDeptInUserChk(menu);
+										var resultArr = result.split("&");
+										
+										// 삭제할 조직ID 문자열
+										var strDeptId = resultArr[0];
+										// 삭제 flag
+										var delChk = resultArr[1];
+
+										if(delChk == "Y"){
+											jConfirm("선택된 조직에는 소속된 사용자가 없습니다. \n\n 해당 조직및 하위조직을 삭제하시겠습니까? \n", "알림", function( result ) {
+								   				if( result ){
+								   					jConfirm("선택된 조직 및 하위조직까지 삭제되며 삭제 시 되돌릴 수 없습니다. \n그래도 삭제 하시겠습니까?", "알림", function( result ) {
+								   	   					if( result ){
+								   	   						fnDeleteDeptInfoAjax(strDeptId);
+								   	   					}
+								   	   				});
+								   				}
+								   			});
+										}
+									}
+								}
+						}},
+						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_update_DeptInfo",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-edit' aria-hidden='true'></i>&nbsp;<span>수정</span>",
+							onclick:function(){
+								
+								// 트리에서 선택한 조직 노드를 가져온다
+								var selTreeNode = zTree.getSelectedNodes()[0];
+								
+								// 선택된 조직이 없을 경우 알림
+								if(gfnIsNull(selTreeNode)){
+									jAlert("수정할 조직을 선택해주세요.", "알림");
+									return false;
+								}
+								
+								// 필수입력값 체크 공통 호출 
+								var strFormId = "deptInfoFrm";
+								var strCheckObjArr = ["deptName","ord"];
+								var sCheckObjNmArr = ["조직명","순번"];
+								if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
+									return;	
+								}
+								
+								// 수정 전 순번 유효성 체크
+								if(gfnIsNumeric("ord")){
+									// 저장 전 유효성 체크
+									if(!gfnSaveInputValChk(arrChkObjAdm7000)){
+										return false;	
+									}
+									// 조직 정보 수정
+									fnUpdateDeptInfoAjax($("#deptInfoFrm").serializeArray(),"normal", false);
+								}
+
+						}},
+						{label:"", labelWidth:"", type:"button", width:"55", key:"btn_insert_deptAddInfo",style:"float:right;", valueBoxStyle:"padding:5px;", value:"<i class='fa fa-save' aria-hidden='true'></i>&nbsp;<span>등록</span>",
+							onclick:function(){
+								
+								// 조직 추가시 DB 인서트 처리를 실행하며 등록이 성공되면 등록된 기본정보를 이용하여 조직 트리에 추가한다.
+								// 선택된 조직 노드를 가져온다.
+								var selZtree = zTree.getSelectedNodes()[0];
+							
+								// 선택된 노드가 없을 경우
+								if(gfnIsNull(selZtree)){
+									jAlert("선택된 조직이 없습니다.", "알림");
+									return false;
+								}
+								// 조직은 요구사항 분류와 달리 무한뎁스로 생성 가능 
+								var deptId = selZtree.deptId;
+								
+								// 조직 등록 팝업 호출시 선택한 트리 노드를 전달한다. 전달된 노드에서 등록시 필요한 정보 추출
+								fnInsertDeptPopupOpenAjax(selZtree);	
+						}},
+						{label:"", labelWidth:"", type:"button", width:"55", key:"btn_search_deptInfo",style:"float:right;", valueBoxStyle:"padding:5px;", value:"<i class='fa fa-list' aria-hidden='true'></i>&nbsp;<span>조회</span>",
+							onclick:function(){
+								
+								// 검색조건 (전체, 조직명, 비고)
+								var searchSelectVal = axdom("#" + deptSearch.getItemId("searchSelect") ).val();
+								// 검색어
+								var searchTxtVal = axdom("#" + deptSearch.getItemId("searchTxt")).val();
+								
+								// 검색 파라미터
+								var pars = deptSearch.getParam();
+							    var ajaxParam = $('form#searchFrm').serialize();
+								
+							    // 검색 파라미터가 있을경우
+							    if(!gfnIsNull(pars)){
+							    	ajaxParam += "&"+pars;
+							    }
+								
+							    // 조직 조회
+					            fnSearchDeptList(ajaxParam);
+					            
+							    // 조직 조회 후 검색된 조직 확장 및 하이라이트 처리, 검색결과가 1건일 경우에는 검색된 조직을 선택한다.
+					            fnSearchDeptResultProcess(searchSelectVal, searchTxtVal);
+							    
+					            //폼 데이터 변경
+								$('#searchSelect').val(searchSelectVal);
+								$('#searchTxt').val(searchTxtVal);
+						}}
+					]}
+				]
+			});
+		}
+	};
+	
+	jQuery(document.body).ready(function(){
+		
+		fnObjSearch.pageStart();
+		//검색 상자 로드 후 텍스트 입력 폼 readonly 처리
+		axdom("#" + deptSearch.getItemId("searchTxt")).attr("readonly", "readonly");
+		
+		//공통코드 selectBox hide 처리
+		axdom("#" + deptSearch.getItemId("searchCd")).hide();
+
+		//버튼 권한 확인
+		fnBtnAuthCheck(deptSearch);
+	});
+}
+
+/*
+ * zTree View Font 설정 함수
+ * @param treeId : 트리 노드의 ID
+ * @treeNode : 트리 노드
+ */
+function getFontCss(treeId, treeNode) {
+	
+	// 검색된 결과가 있을 경우
+	if(treeNode.highlight){
+		return {color:"#F40404", "font-weight":"bold"};
+	// 검색된 결과가 없고, 사용유무가 미사용일 경우	
+	}else if( !treeNode.highlight && treeNode.useCd == "02"){
+		return {color:"#ddd", "font-weight":"normal"};
+	// 검색된 결과가 없고, 사용유무가 사용일 경우	
+	}else if( !treeNode.highlight && treeNode.useCd == "01" ){
+		return {color:"#333", "font-weight":"normal"};
+	}
+}
+
 /********************************************************************
 * 조직 관리 기능 부분 정의 종료												*
 *********************************************************************/
 </script>
 
 <div class="main_contents">
-	<div class="dept_title">${sessionScope.selMenuNm }</div>
-	<form id="searchFrm" ></form>
+	<div class="dept_title"><c:out value="${sessionScope.selMenuNm }" /></div>
+	<form id="adm7000_excel_down_Form" method="post">
+	</form>
 	<div class="tab_contents menu">
 		<div class="top_control_wrap">
-			<span style="font-weight:bold;float:left;margin-right: 20px;">*조직을 설정할 수 있습니다.</span>
-				<span class="button_normal2 btn_inquery" id="btn_search_deptInfo"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;조회</span>
-				<span class="button_normal2 btn_save" id="btn_update_DeptInfo"><i class='fa fa-edit' aria-hidden='true'></i>&nbsp;정보수정</span>
-				<span class="button_normal2 btn_excel" id="btn_excel_menuInfo"><i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;엑셀</span>
+			<div id="AXSearchTarget" style="border-top:1px solid #ccc;"></div>
 		</div>
 
 		<div class="menu_wrap">
 			<div class="menu_ctrl_wrap">
-				<div class="menu_ctrl_btn_wrap">
-					<span class="button_normal2 btn_menu_add" id="btn_insert_deptAddInfo"><i class='fa fa-save' aria-hidden='true'></i>&nbsp;추가</span>
-					<span class="button_normal2 btn_menu_del" id="btn_delete_deptDeleteInfo"><i class='fa fa-trash-alt' aria-hidden='true'></i>&nbsp;삭제</span>
-					<div class="menu_all_wrap">
-						<span class="menu_expand_all" title="전체 열기"></span>
-						<span class="menu_collapse_all" title="전체 닫기"></span>
-					</div>
-				</div>
-
 				<div class="menu_lists_wrap" id="divMenu">
-					<ul id="deptJson" class="ztree"></ul>
+					<ul id="deptTree" class="ztree"></ul>
 				</div>
 			</div>
 
