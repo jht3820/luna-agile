@@ -416,6 +416,7 @@ function fnFlowSaveAjax(type,flowInfo){
   			jAlert("url 오류가 발생했습니다.","알림");
   		}
   		
+  		//debugger;
   		//return false;
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(

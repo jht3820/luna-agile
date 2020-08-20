@@ -288,4 +288,4 @@ import egovframework.com.utl.fcc.service.EgovStringUtil;
 		this.searchCd = searchCd;
 	}
 	
-}
+} 

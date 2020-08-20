@@ -46,13 +46,13 @@
 		   prjId = "<c:out value='${etcInfo.prjId}'/>";
 		
 		// 프로젝트 명 메인프로젝트 input에 세팅
-		//$("#popPrjNm").val(popPrjNm);   
+		$("#popPrjNm").val(popPrjNm);   
 		   
 		// 수정 전의 프로젝트 ID를 hidden에 세팅
-		//$("#beforePrjId").val(prjId);
+		$("#beforePrjId").val(prjId);
 		
 		// 수정 전의 프로젝트 명을 hidden에 세팅
-		//$("#beforePrjNm").val(popPrjNm);
+		$("#beforePrjNm").val(popPrjNm);
 		
 		// 기타 정보 수정
 		$("#btn_update_etcPopup").click(function() {

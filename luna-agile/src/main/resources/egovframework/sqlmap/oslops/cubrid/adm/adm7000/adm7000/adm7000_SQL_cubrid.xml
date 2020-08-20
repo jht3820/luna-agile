@@ -41,12 +41,12 @@
 	    <isNotEmpty property="viewType">
 	   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
 			<isEqual property="viewType" compareValue="popup" >
-				AND T.USE_CD = '01'
+				AND T.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
 			</isEqual>
 		</isNotEmpty>	
 	   	<isNotEmpty property="searchTxt">
 			AND T.DEPT_NAME LIKE '%'||#searchTxt#||'%'
-		</isNotEmpty>	
+		</isNotEmpty>
 		<![CDATA[
 	        START WITH T.DEPT_ID = (SELECT C.DEPT_ID FROM ADM7000 C WHERE C.UPPER_DEPT_ID IS NULL AND C.LVL = '0' AND C.LIC_GRP_ID = #licGrpId#)
 			CONNECT BY PRIOR T.DEPT_ID = T.UPPER_DEPT_ID
