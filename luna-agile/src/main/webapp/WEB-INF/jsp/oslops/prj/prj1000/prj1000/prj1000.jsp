@@ -287,11 +287,12 @@ function fnSelectPrjList(){
 	    };
     	
     	var prjList = data.list;
-    	prjList.unshift({prjId:null,prjGrpId:null,prjNm:"LUNA-OPS",useCd:"01",open:"true"});
+    	prjList.unshift({prjId:null,prjGrpId:null,prjNm:"SW형상관리시범프로젝트",useCd:"01",open:"true"});
     	
 		// zTree 초기화
 	    zTree = $.fn.zTree.init($("#prjListJson"), setting, data.list);
-		
+	    zTree.expandAll(true);
+	    
 		//폴더형 아이콘 세팅을 위해 zTree 갱신
 		zTree.refresh();
 		
