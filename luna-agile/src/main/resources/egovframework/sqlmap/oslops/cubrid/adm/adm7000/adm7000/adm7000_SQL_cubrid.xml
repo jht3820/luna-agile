@@ -8,50 +8,94 @@
 
 	
 	<sql id="selectAdm7000DeptList">
-		<![CDATA[ 
-			SELECT 	
-					ROWNUM RN
-				, 	T.*
-	    	FROM
-	    		(
-					SELECT	
-							LPAD('ㄴ', LVL*4, ' ') || DEPT_NAME AS DEPT_LVL
-						, 	LIC_GRP_ID
-						,	DEPT_ID
-						,	UPPER_DEPT_ID
-						,	DEPT_NAME
-						,	DEPT_ADMIN_USR_ID
-						,	ORD
-						,	USE_CD
-						,	DEPT_ETC
-						,	LVL
-						,	TO_CHAR(REG_DTM, 'YYYY-MM-DD') AS REG_DTM
-						,	REG_USR_ID
-						,	REG_USR_IP
-						,	TO_CHAR(MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
-						,	MODIFY_USR_ID
-						,	MODIFY_USR_IP
-					FROM ADM7000 A 
-					WHERE 1=1
-					AND	A.LIC_GRP_ID = #licGrpId#
-		    	) T
-	    ]]> 	
-	    	WHERE	1=1
-	     <!-- 조직검색 공통팝업에서 조직목록 조회시 -->
-	    <isNotEmpty property="viewType">
-	   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
-			<isEqual property="viewType" compareValue="popup" >
-				AND T.USE_CD = '01'
-			</isEqual>
-		</isNotEmpty>	
-	   	<isNotEmpty property="searchTxt">
-			AND T.DEPT_NAME LIKE '%'||#searchTxt#||'%'
-		</isNotEmpty>	
-		<![CDATA[
-	        START WITH T.DEPT_ID = (SELECT C.DEPT_ID FROM ADM7000 C WHERE C.UPPER_DEPT_ID IS NULL AND C.LVL = '0' AND C.LIC_GRP_ID = #licGrpId#)
-			CONNECT BY PRIOR T.DEPT_ID = T.UPPER_DEPT_ID
-			ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
-		]]>
+		SELECT 		
+				T.* 
+		FROM
+		(
+			<!-- 최상위 및 1뎁스 이하의 조직을 조회한다. -->
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM ADM7000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+	        <isNotEmpty property="searchSelect">
+	        	<!-- 전체검색일 경우  ROOT 및 1뎁스 조회 -->
+	        	<isEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 2
+			        ]]>
+	        	</isEqual>
+	        	<!-- 전체검색이 아닐 경우 ROOT만 조회 : 검색결과가 없을 경우 ROOT만 표시하기 위해 -->
+	        	<isNotEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 1
+			        ]]>
+	        	</isNotEqual>
+	        </isNotEmpty>
+	        <!-- 검색 조건이 있을경우 검색 조건에 해당하는 조직을 계층으로 조회한다. -->
+	        <isNotEmpty property="searchSelect">
+	        	<isNotEmpty property="searchTxt">
+		        	<isNotEqual property="searchSelect" compareValue="all">
+			        	UNION
+			        	SELECT C.*
+			        	FROM
+			        	(
+				       		SELECT
+									B.LIC_GRP_ID
+								,	B.DEPT_ID
+								,	B.UPPER_DEPT_ID
+								,	B.DEPT_NAME
+								,	B.DEPT_ADMIN_USR_ID
+								,	B.ORD
+								,	B.USE_CD
+								,	B.DEPT_ETC
+								,	B.LVL
+								,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+								,	B.REG_USR_ID
+								,	B.REG_USR_IP
+								,	TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+								,	B.MODIFY_USR_ID
+								,	B.MODIFY_USR_IP
+							FROM ADM7000 B 
+							WHERE 1=1
+							AND	B.LIC_GRP_ID = #licGrpId#
+							<!-- 조직검색 공통팝업에서 조직 검색시 -->
+						    <isNotEmpty property="viewType">
+						   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
+								<isEqual property="viewType" compareValue="cmm1200" >
+									AND B.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
+								</isEqual>
+							</isNotEmpty> 
+						) C
+						<!-- 조직명으로 검색 -->
+						<isEqual property="searchSelect" compareValue="deptName">
+							START WITH C.DEPT_NAME LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+						<!-- 비고로 검색 -->
+						<isEqual property="searchSelect" compareValue="deptEtc">
+							START WITH C.DEPT_ETC LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+				        CONNECT BY PRIOR  C.UPPER_DEPT_ID = C.DEPT_ID 
+		        	</isNotEqual>
+	        	</isNotEmpty>
+			</isNotEmpty>
+		) T
+      	WHERE 1=1
+      	ORDER BY T.ORD ASC, T.REG_DTM ASC
 	</sql>
 
 	<!--  조직 목록 가져오기(List) -->
@@ -63,7 +107,41 @@
 				<include refid="selectAdm7000DeptList"/>
 	    	)
     </select>
-	
+
+    
+    <!-- 조직 목록 가져오기(동적 zTree) : 선택한 조직의 하위 조직 목록을 조회한다. -->
+    <select id="adm7000DAO.selectAdm7000SubDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+	    /* adm7000DAO.selectAdm7000SubDeptList -  조직 목록 가져오기(동적 zTree) : 선택한 조직의 하위 조직 목록을 조회한다. */
+		SELECT
+				A.LIC_GRP_ID
+			,	A.DEPT_ID
+			,	A.UPPER_DEPT_ID
+			,	A.DEPT_NAME
+			,	A.DEPT_ADMIN_USR_ID
+			,	A.ORD
+			,	A.USE_CD
+			,	A.DEPT_ETC
+			,	A.LVL
+			,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+			,	A.REG_USR_ID
+			,	A.REG_USR_IP
+			,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+			,	A.MODIFY_USR_ID
+			,	A.MODIFY_USR_IP
+		FROM ADM7000 A 
+		WHERE 1=1
+		AND A.LIC_GRP_ID =  #licGrpId#
+		AND A.UPPER_DEPT_ID = #deptId#
+		 <!-- 조직검색 공통팝업에서 조직목록 조회시 -->
+	    <isNotEmpty property="viewType">
+	   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
+			</isEqual>
+		</isNotEmpty>
+ 		ORDER BY A.ORD ASC, A.DEPT_NAME ASC
+    </select>
+    
 	<!-- 조직 정보 가져오기(단건)-->
 	<select id="adm7000DAO.selectAdm7000DeptInfo" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
@@ -241,5 +319,47 @@
 			AND		A.DEPT_ID 		= #deptId#
  		]]> 
 	</select>
+	
+	<!-- 조직 목록 조회 : 조직 엑셀 다운로드, 사용다 등록&수정 화면, 업무처리 화면에서 사용 -->
+    <select id="adm7000DAO.selectAdm7000NormalDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+	    /*  adm7000DAO.selectAdm7000NormalDeptList - 조직 목록 조회   */
+		SELECT T.* FROM
+		(
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM ADM7000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+			<!-- 조직 공통팝업 호출 전 조직 검색 -->
+			<isNotEmpty property="viewType">
+				<isEqual property="viewType" compareValue="cmm1200" >
+					AND A.USE_CD = '01' /* 사용유무가 사용인 조직만 조회 */
+					<isNotEmpty property="searchDeptNm">
+						AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		) T
+		<!-- 조직 엑셀 다운로드시 계층 조회 -->
+		<isEmpty property="viewType">
+			START WITH T.UPPER_DEPT_ID IS NULL
+			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  
+    		ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
+		</isEmpty>
+    </select>
 	
 </sqlMap>
