@@ -213,7 +213,7 @@ function fnAuthGrpSmallMenuList(authGrpId, selPrjId){
     		});
     		
     		// 가로로 전체 체크가능한 체크박스 
-    		trObj.append("<td class='right_con wd_2_11 prj_chk' style='text-align: center;' ><input type='checkbox' title='체크박스' name='"+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' value /><label for='"+data.menuId+"_prjAuthHorizon'></label></td>");
+    		trObj.append("<td class='right_con wd_2_11 prj_chk' style='text-align: center;' ><input type='checkbox' title='체크박스'  style='left:calc(50% - 7px);' name='"+data.menuId+"_prjAuthHorizon' id='"+data.menuId+"_prjAuthHorizon' onclick='fnHorizonChk(this);' value /><label for='"+data.menuId+"_authHorizon'></label></td>");
     		
     		//밸류값 확인하여 체크 상태 변경
     		$.each(strArrYn, function(idx, val){
