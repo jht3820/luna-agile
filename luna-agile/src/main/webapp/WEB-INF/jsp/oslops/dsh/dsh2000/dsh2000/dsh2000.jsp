@@ -67,6 +67,7 @@ var dplSignGrid_config = {
 		gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1003View.do',data, "415", "690",'scroll');
         }
     },
+    /* 
     contextMenu: {
         iconWidth: 20,
         acceleratorWidth: 100,
@@ -92,6 +93,7 @@ var dplSignGrid_config = {
             dplSignGrid.contextMenu.close();
         }
     },
+     */
     page: {
         navigationItemCount: 9,
         height: 30,
@@ -292,7 +294,7 @@ var newReqGrid_config = {
 		icons: {'arrow': '<i class="fa fa-caret-right"></i>'},
 		items: [
 			{type: "detailPopup", label: "상세 정보", icon:"<i class='fa fa-info-circle' aria-hidden='true'></i>"},
-			{type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"},
+			/* {type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"}, */
 		],
 		popupFilter: function (item, param) {
 			//선택 개체 없는 경우 중지
@@ -302,12 +304,13 @@ var newReqGrid_config = {
 			return true;
 		},
 		onClick: function (item, param) {
-			//쪽지 전송
+			/* //쪽지 전송
 			if(item.type == "reply"){
 				gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm);
 			}
 			//상세 정보
-			else if(item.type == "detailPopup"){
+			else  */
+				if(item.type == "detailPopup"){
 				/*
              	 * reqPageType 추가
              	 * 요구사항 상세보기(req1002.jsp)에서 항목명 구분을 위해 사용
@@ -389,7 +392,7 @@ var reqDtmOverGrid_config = {
 		icons: {'arrow': '<i class="fa fa-caret-right"></i>'},
 		items: [
 			{type: "detailPopup", label: "상세 정보", icon:"<i class='fa fa-info-circle' aria-hidden='true'></i>"},
-			{type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"},
+			/* {type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"}, */
 		],
 		popupFilter: function (item, param) {
 			var selItem = param.item;
@@ -401,13 +404,14 @@ var reqDtmOverGrid_config = {
 			},
 		onClick: function (item, param) {
 			var selItem = param.item;
-
+/* 
 			//쪽지 전송
 			if(item.type == "reply"){
 				gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm);
 			}
 			//상세 정보
-			else if(item.type == "detailPopup"){
+			else  */
+				if(item.type == "detailPopup"){
 				var data = {"mode":"newReq","reqId": param.item.reqId, "reqProType":param.item.reqProType}; 
 				gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
 			}
@@ -481,7 +485,6 @@ var flowGrid_config = {
 		icons: {'arrow': '<i class="fa fa-caret-right"></i>'},
 		items: [
 			{type: "detailPopup", label: "상세 정보", icon:"<i class='fa fa-info-circle' aria-hidden='true'></i>"},
-			{type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"},
 		],
 		popupFilter: function (item, param) {
 			var selItem = param.item;
@@ -494,12 +497,8 @@ var flowGrid_config = {
 		onClick: function (item, param) {
 			var selItem = param.item;
 
-			//쪽지 전송
-			if(item.type == "reply"){
-				gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm);
-			}
 			//상세 정보
-			else if(item.type == "detailPopup"){
+			if(item.type == "detailPopup"){
 				var data = {"mode":"newReq","reqId": param.item.reqId, "reqProType":param.item.reqProType}; 
 				gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
 			}
