@@ -14,23 +14,23 @@
 
 /* 항목 레이아웃 */
 .req4106_req_mainBox {display: inline-block;float: left;width: 100%;height: calc(100% - 44px);border: 1px solid #8f95b3;}
-.req4106_req_topBox {width: 100%;height: 130px;border-bottom: 1px solid #8f95b3;overflow-x: auto;overflow-y: hidden;white-space:nowrap;}
-.req4106_req_bottomBox {width: 100%;height: calc(100% - 130px);min-height: 714px;}
-.req4106_reqBottom_topBox {display: block;width: 100%;height: calc(100% - 100px);min-height: 614px;overflow-y: auto;border-bottom:1px solid #8f95b3;font-size: 10pt;padding: 10px;}
-.req4106_reqBottom_bottomBox {display: block;width: 100%;height: 100px;}
-.req4106_optionDiv {width: 100%;display: block;float: left;}
-.req4106_option_title {width: 25%;float: left;height: 45px;padding-left: 10px;line-height: 40px;background-color: #f9f9f9;border: 1px solid #ccc;border-top: none;font-weight: bold;}
+.req4106_req_topBox {width: 100%;height: 150px;border-bottom: 1px solid #8f95b3;overflow-x: auto;overflow-y: hidden;white-space:nowrap;}
+.req4106_req_bottomBox {width: 100%;height: calc(100% - 220px);min-height: 664px;}
+.req4106_reqBottom_topBox {display: block;width: 100%;height: 100%;min-height: 614px;overflow-y: auto;border-bottom:1px solid #8f95b3;font-size: 10pt;padding: 10px;}
+.req4106_reqBottom_bottomBox {display: block;width: 100%;height: 70px;}
+.req4106_optionDiv {width: 100%;display: block;float: left;border-top: 1px solid #ccc;border-right: 1px solid #ccc;}
+.req4106_option_title {width: 25%;float: left;height: 45px;padding-left: 10px;line-height: 40px;background-color: #f9f9f9;border: 1px solid #ccc;border-top: none;font-weight: bold;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 .req4106_option_all {float: left;height: 45px;line-height: 30px;width: 75%;border-bottom: 1px solid #ccc;padding: 5px;}
 .req4106_option_half {float: left;height: 45px;line-height: 30px;width: 25%;border-bottom: 1px solid #ccc;padding: 5px;}
-.req4106_default_option{border-top: 1px solid #ccc;border-right: 1px solid #ccc;}
+.req4106_default_option{border-right: 1px solid #ccc;}
 .req4106_desc_file{border-right: 1px solid #ccc;}
-input.req4106_input_text {min-width: 190px;height: 100%;border: 1px solid #ccc;display: block;padding-left: 15px;border-radius: 1px;}
-textarea.req4106_textarea {width: 619px;height: 100%;resize: none;padding: 5px;border: 1px solid #ccc;border-radius: 1px;}
-input.req4106_input_date {width: 157px;float: left;display: block;border-radius: 1px;height: 100%;border: 1px solid #ccc;text-align: center;margin-right: 5px;}
+input.req4106_input_text {min-width: 190px;height: 100%;border: 1px solid #ccc;display: block;padding-left: 15px;border-radius: 1px;border: 1px solid #c6c9d0;border-radius: .1875rem;}
+textarea.req4106_textarea {width: 619px;height: 100%;resize: none;padding: 5px;border: 1px solid #ccc;border-radius: 1px;border: 1px solid #c6c9d0;border-radius: .1875rem;}
+input.req4106_input_date {width: 157px;float: left;display: block;border-radius: 1px;height: 100%;border: 1px solid #ccc;text-align: center;margin-right: 5px;border: 1px solid #c6c9d0;border-radius: .1875rem;}
 input.req4106_input_check {width: 100%;height: 80%;}
 textarea.req4106_processBox_bottom[disabled] {background-color: transparent;white-space: normal;}
-select.rerq4105_select {width: 100%;height: 100%;border-radius: 1px;border: 1px solid #ccc;text-align: center;}
-input.req4106_charger {width: 170px !important;min-width: 100px;display: inline-block;float: left;margin-right: 5px;}
+select.rerq4105_select {width: 100%;height: 100%;border-radius: 1px;border: 1px solid #ccc;text-align: center;border: 1px solid #c6c9d0;border-radius: .1875rem;}
+input.req4106_charger {width: 171px !important;min-width: 100px;display: inline-block;float: left;margin-right: 5px;}
 span.req4106_charger{height: 34px;line-height: 30px;width: 28px;min-width: 28px;}
 .req4106_option_half input.req4106_input_text, .req4106_option_half textarea.req4106_textarea
 , .req4106_option_half select.rerq4105_select {width:100%;}
@@ -44,9 +44,21 @@ img.ui-datepicker-trigger {float: left;margin-top: 2px;margin-left: 0;margin-rig
 .req4106_clear{clear:both;}
 .req4106_date_span{float:left;margin: 0 12px;}
 /* 프로세스 목록 */
-.req4106_processBox {width: 150px;display: inline-block;margin: 10px;margin-bottom: 0;border: 3px solid #e8e8e8;border-radius: 5px;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);height: 110px;padding: 5px;}
+.infoMsgDiv {font-size: 10pt;display: inline-block;width: 100%;height: 100%;text-align: center;line-height: 10;}
+.req4106_processBox {
+    width: 150px;
+    display: inline-block;
+    margin: 10px;
+    margin-bottom: 0;
+    border: 1px solid #e8e8e8;
+    height: 115px;
+    padding: 2px;
+    border-radius: .1875rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
+}
 .req4106_processBox_top {width: 100%;height: 20px;line-height: 20px;text-align: center;font-weight: bold;border-bottom: 1px solid #ccc;font-size: 10pt;}
-.req4106_processBox_bottom {height: 70px;padding: 2px 5px;font-size: 9pt;width: 138px;resize: none;border: none;overflow: hidden;}
+.req4106_processBox_bottom {height: 70px;padding: 2px 5px;font-size: 9pt;width: 100%;resize: none;border: none;overflow: auto;white-space: normal;}
+.req4106_processRegDtm {font-size: 9pt;text-align: center;width: 100%;height: 15px;line-height: 15px;color: #545454;border-top: 1px solid #ccc;}
 
 /* 파일 리스트 */
 #fileListDiv{height:100%;overflow-y: auto;}
@@ -55,20 +67,36 @@ img.ui-datepicker-trigger {float: left;margin-top: 2px;margin-left: 0;margin-rig
 /* 버튼 */
 .req4106_close{width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;background-color: #fff;color: #000;}
 .req4106_complete {width: 120px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin-right:20px;background-color: #fff;color: #000;}
-.req4106_btnDiv {width: 100%;height: 100px;line-height: 100px;text-align: center;}
-.req4106_nextProcessBtn {width: 100px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin:0 10px;background-color: #fff;color: #000;}
+.req4106_btnDiv {width: 100%;height: 70px;line-height: 70px;text-align: center;}
+.req4106_rejectCmntBtn,.req4106_nextProcessBtn {width: 100px;height: 40px;line-height: 36px;text-align: center;font-weight: bold;display: inline-block;border-radius: 5px;box-shadow: 1px 1px 1px #ccd4eb;border: 1px solid #b8b8b8;cursor: pointer;margin:0 10px;background-color: #fff;color: #000;}
 
 /* 작업흐름 선택 */
-.req4106_processSelect_maskBox {display:none;width: 100%;height: 846px;position: absolute;left: 0;background-color: rgba(0, 0, 0, 0.6);z-index: 9;}
+.req4106_processSelect_maskBox {display:none;width: 100%;height: 893px;position: absolute;left: 0;background-color: rgba(0, 0, 0, 0.6);z-index: 9;}
 .req4106_processSelectBox {display:none;position: absolute;z-index: 10;top: 200px;left: 2.5%;width: 95%;height: 244px;border-bottom: 1px solid #8f95b3;overflow-x: auto;overflow-y: hidden;white-space: nowrap;background-color: #fff;}
 .req4106_processSelectBox_title {width: 100%;height: 44px;padding: 15px;font-weight: bold;color: #fff;background-color: #4b73eb;}
 .req4106_processSelectBox_top {height: 150px;overflow-y: hidden;padding-top: 1px;overflow-x: scroll;}
 .req4106_processSelectBox_bottom {height: 50px;text-align: center;border-top: 1px solid #8f95b3;padding: 4px 0;}
-.req4106_processSelectBox_top > .req4106_processBox{cursor:pointer;}
-.req4106_processSelectBox_top > .req4106_processBox:hover{border: 3px solid #4b73eb;background-color: rgba(75, 115, 235, 0.1);}
-.req4106_processSelectBox_top > .req4106_processBox.active{border: 3px solid #4b73eb;background-color: rgba(75, 115, 235, 0.1);}
-.req4106_processSelectBox_top .req4106_processBox_bottom{cursor:pointer;}
+.req4106_processBox{cursor:pointer;}
+.req4106_processBox:hover{border: 1px solid #4b73eb;background-color: rgba(75, 115, 235, 0.1);}
+.req4106_processBox.active{border: 1px solid #4b73eb;background-color: rgba(75, 115, 235, 0.1);}
+.req4106_processBox_bottom{cursor:pointer;}
 
+/* 반려사유 입력창 */
+.req4106_rejectCmntBox{display:none;position: absolute;z-index: 10;top: 200px;left: 2.5%;width: 95%;height: 244px;border-bottom: 1px solid #8f95b3;overflow-x: auto;overflow-y: hidden;white-space: nowrap;background-color: #fff;}
+.req4106_rejectCmntBox_top {height: 140px;padding-top: 1px;font-size:10pt;}
+.req4106_rejectCmntBox_top > .req4106_desc{height:130px;}
+.req4106_rejectCmntBox_bottom{height: 50px;text-align: center;padding: 4px 0;}
+
+.req4106_frameTitleDiv {width: 100%;height: 45px;background-color: #fff;color: #414352;border: 1px solid #ccc;border-radius: .1875rem .1875rem 0 0;padding-left: 10px;line-height: 40px;font-weight: bold;float: left;display: block;margin-top: 10px;font-size: 13pt;}
+/* 폴딩 */
+.req4106_titleFoldingBtn {float: right;height: 35px;line-height: 32px;width: 45px;border: 2px solid #fff;background-color: rgba(255, 255, 255, 0.1);padding: 0 10px;cursor: pointer;margin: 5px 10px 2px 2px;border-radius: 3px;text-align: center;}
+.req4106_titleFoldingBtn:hover{background-color: #414352;color: #fff;border-radius: 10px;}
+.req4106_titleFoldingContent {font-family: "Font Awesome 5 Free";font-size: 15pt;}
+.req4106_titleFoldingContent.down::before{content: "\f107";}
+.req4106_titleFoldingContent.up::before{content: "\f106"; }
+.req4106_titleFolded{border-radius:5px;border-bottom: 1px solid #ccc;}
+.req4106_frameTitleDiv:not(.req4106_titleFolded){border-bottom: none;}
+#prjReqOptListTitleDiv, #prjReqOptListContentsDiv{display:none;}
 </style>
 <script>
 //요구사항 Id
@@ -83,6 +111,8 @@ var processId;
 //프로젝트 기간
 var prjStartDt = '${selPrjInfo.startDt}';
 var prjEndDt = '${selPrjInfo.endDt}'; */
+
+globals_guideChkFn = fnReq4106GuideShow;
 
 $(document).ready(function() {
 	//데이터 불러오기
@@ -100,7 +130,8 @@ $(document).ready(function() {
 	
 	//담당자 검색 걸기
 	$("#btn_user_select").click(function() {
-		gfnCommonUserPopup( $('#reqChargerNm').val() ,false,function(objs){
+		var param = { "usrNm" : $('#reqChargerNm').val()  , "acceptUseCd" : '01' };
+		gfnCommonUserPopup( param ,false,function(objs){
 			if(objs.length>0){
 				$('#reqChargerId').val(objs[0].usrId);
 				$('#reqChargerNm').val(objs[0].usrNm);
@@ -155,7 +186,12 @@ function fnreq4106DataLoad(){
     	else{
     		//기본 항목 값 세팅
     		gfnSetData2ParentObj(data.reqInfoMap,"req4106InfoForm");
-    		$('#popTitle').html(data.reqInfoMap.reqNm);
+    		
+    		var reqNm = data.reqInfoMap.reqNm;
+    		// 요구사항 명의 < , > 태그 치환
+    		reqNm = reqNm.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    		$('#popTitle').html(reqNm);
+    		
     		//요청자Id 대입
     		reqUsrId = data.reqInfoMap.reqUsrId;
     		
@@ -238,21 +274,18 @@ function fnProcessSelected(thisObj){
 	$(thisObj).addClass("active");
 	
 	//processId
-	processId = thisObj.id;
+	processId = $(thisObj).attr("id");
+
+	//최상위 동작인 경우 메인화면의 프로세스도 함께 선택
+	if($(thisObj).parent(".req4106_processSelectBox_top").length > 0){
+		$("#req4106_reqTopDataList .req4106_processBox[id="+processId+"]").addClass("active");
+	}
 }
 
-//다음 프로세스 선택창 닫기
-function fnReqProcessChgCancle(){
-	$(".req4106_processSelectBox_top > .req4106_processFrameBox").off("click");
-	$(".req4106_processSelect_maskBox").hide();
-	$(".req4106_processSelectBox").hide();
-	processId = null;
-}
-
-//프로세스 선택창 열기
-function fnRequestBeforeAccept(){
-	var checkObjArr = ["reqChargerId"];
-	var checkObjNmArr = ["담당자"];
+//반려사유 입력창 동작
+function fnReqRejectCmnt(){
+	var checkObjArr = ["reqChargerNm","reqChargerId"];
+	var checkObjNmArr = ["담당자","담당자"];
 	
 	//유효성 체크
 	var chkRtn = gfnRequireCheck("req4106InfoForm", checkObjArr, checkObjNmArr);
@@ -269,30 +302,66 @@ function fnRequestBeforeAccept(){
 		return false;
 	}
 	
-	//다음 프로세스가 하나라면 바로 세팅 후 넘기기
-	if($("#req4106_reqTopDataList .req4106_processBox").length == 1){
-		processId = $("#req4106_reqTopDataList .req4106_processBox").attr("id");
-		
-		fnRequestAccept();
+	//팝업창 mask 처리하고 반려사유 창 불러오기
+	$(".req4106_processSelect_maskBox").show();
+	$(".req4106_rejectCmntBox").show();
+	
+	//유효성 체크
+	var arrChkObj = {"popupReqAcceptTxt":{"type":"length","msg":"반려 사유는 4000byte까지 입력이 가능합니다.",max:4000}};
+	gfnInputValChk(arrChkObj);
+}
+
+//반려사유 입력창 닫기
+function fnReqRejectCmntCancle(){
+	$(".req4106_processSelect_maskBox").hide();
+	$(".req4106_rejectCmntBox").hide();
+}
+
+//프로세스 선택창 열기
+function fnRequestBeforeAccept(){
+	var checkObjArr = ["reqChargerNm","reqChargerId"];
+	var checkObjNmArr = ["담당자","담당자"];
+	
+	//유효성 체크
+	var chkRtn = gfnRequireCheck("req4106InfoForm", checkObjArr, checkObjNmArr);
+	
+	//유효성 오류있는 경우
+	if(chkRtn){
 		return false;
 	}
 	
-	//팝업창 mask 처리하고 작업흐름 변경 창 불러오기
-	$(".req4106_processSelect_maskBox").show();
-	$(".req4106_processSelectBox").show();
-	$(".req4106_processSelectBox_top").html($("#req4106_reqTopDataList").html());
+	//error있는경우 오류
+	if($(".inputError").length > 0){
+		jAlert("유효하지 않은 값이 입력된 항목이 존재합니다.<br>항목을 확인해주세요.","알림");
+		$(".inputError")[0].focus();
+		return false;
+	}
 	
-	$(".req4106_processSelectBox_top > .req4106_processBox").click(function(){
-		$(".req4106_processSelectBox_top > .req4106_processBox.active").removeClass("active");
-		$(this).addClass("active");
-		
+	//다음 프로세스가 하나라면 바로 세팅 후 넘기기
+	if($("#req4106_reqTopDataList .req4106_processBox").length == 1){
+		processId = $("#req4106_reqTopDataList .req4106_processBox").attr("id");
+	}else{
 		//작업흐름 Id넣기
-		processId = $(".req4106_processSelectBox_top > .req4106_processBox.active").attr("id");
-	});
+		processId = $(".req4106_req_topBox > .req4106_processBox.active").attr("id");
+	}
+	
+	fnRequestAccept();
 }
 
 //요청사항 접수 반려
 function fnRequestReject(){
+	if(gfnIsNull($("#popupReqAcceptTxt").val())){
+		jAlert("반려 사유를 입력해주세요.","알림");
+		return false;
+	}
+	//유효성 체크
+	var arrChkObj = {"popupReqAcceptTxt":{"type":"length","msg":"반려 사유는 4000byte까지 입력이 가능합니다.",max:4000}};
+	
+	// 저장 전 유효성 체크
+	if(!gfnSaveInputValChk(arrChkObj)){
+		return false;
+	}
+	
 	processId = "reject";
 	
 	fnRequestAccept();
@@ -307,6 +376,9 @@ function fnRequestAccept(){
 	if(processId == "reject"){
 		jConfirm("요청 접수를 반려하시겠습니까?", "알림", function( result ) {
 			if( result ){
+				$("#reqAcceptTxt").val($("#popupReqAcceptTxt").val());
+				formArray = $("#req4106InfoForm").serializeArray();
+				
 				//Ajax 전송
 				innerFnReqAccept();
 			}
@@ -317,8 +389,13 @@ function fnRequestAccept(){
 			jAlert("프로세스를 선택해주세요.","알림");
 			return false;
 		}else{
-			//Ajax 전송
-			innerFnReqAccept();
+			jConfirm("접수 승인 하시겠습니까?", "알림", function( result ) {
+				if( result ){
+					//Ajax 전송
+					innerFnReqAccept();
+				}
+			});
+			
 		}
 	}
 	
@@ -374,33 +451,54 @@ function fnRequestAccept(){
 		ajaxObj.send();
 	}
 }
+
+
+function fnReq4106GuideShow(){
+	var mainObj = $(".popup");
+	
+	//mainObj가 없는경우 false return
+	if(mainObj.length == 0){
+		return false;
+	}
+	//guide box setting
+	var guideBoxInfo = globals_guideContents["req4106"];
+	gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
+}
+
 </script>
 </head>
 <body>
 <div class="popup">
 	<div class="popup_title_box"><span>[${targetprjGrpNm} > ${targetPrjNm}]</span> : <span id="popTitle"></span></div>
 	<div class="req4106_processSelect_maskBox"></div>
-	<div class="req4106_processSelectBox">
-		<div class="req4106_processSelectBox_title">접수 완료 프로세스 선택</div>
-		<div class="req4106_processSelectBox_top"></div>
-		<div class="req4106_processSelectBox_bottom">
-			<div class="button_complete req4106_nextProcessBtn" onclick="fnRequestAccept()"><i class="fa fa-check"></i>&nbsp;완료</div>
-			<div class="button_complete req4106_nextProcessBtn" onclick="fnReqProcessChgCancle()"><i class="fa fa-times"></i>&nbsp;취소</div>
+	<div class="req4106_rejectCmntBox">
+		<div class="req4106_processSelectBox_title">반려 사유 작성</div>
+		<div class="req4106_rejectCmntBox_top">
+			<div class="req4106_option_title req4106_desc">
+				반려 사유(*)
+			</div>
+			<div class="req4106_option_all req4106_desc">
+				<textarea class="req4106_textarea" id="popupReqAcceptTxt" name="popupReqAcceptTxt"></textarea>
+			</div>
+		</div>
+		<div class="req4106_rejectCmntBox_bottom">
+			<div class="button_complete req4106_rejectCmntBtn" onclick="fnRequestReject()"><i class="fa fa-check"></i>&nbsp;완료</div>
+			<div class="button_complete req4106_rejectCmntBtn" onclick="fnReqRejectCmntCancle()"><i class="fa fa-times"></i>&nbsp;취소</div>
 		</div>
 	</div>
 	<div class="req4106_req_mainBox">
-		<div class="req4106_req_topBox" id="req4106_reqTopDataList">
-
-		</div>
 		<div class="req4106_req_bottomBox">
 			<div class="req4106_reqBottom_topBox" id="req4106_reqOptDataList">
 				<form id="req4106InfoForm" name="req4106InfoForm" onsubmit="return false;">
-				<div class="req4106_optionDiv req4106_default_option">
+				<div class="req4106_frameTitleDiv">
+					기본 항목 정보
+				</div>
+				<div class="req4106_optionDiv req4106_foldDiv">
 					<div class="req4106_option_title">
 						접수 유형
 					</div>
 					<div class="req4106_option_half">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqNewTypeNm" name="reqNewTypeNm" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqNewTypeNm" name="reqNewTypeNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 					</div>
@@ -410,44 +508,44 @@ function fnRequestAccept(){
 						요청 명
 					</div>
 					<div class="req4106_option_all">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqNm" name="reqNm" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqNm" name="reqNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						요청자 소속
 					</div>
 					<div class="req4106_option_all">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrDeptNm" name="reqUsrDeptNm" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrDeptNm" name="reqUsrDeptNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						요청자
 					</div>
 					<div class="req4106_option_half">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrNm" name="reqUsrNm" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrNm" name="reqUsrNm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						연락처
 					</div>
 					<div class="req4106_option_half">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrNum" name="reqUsrNum" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrNum" name="reqUsrNum" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						요청일자
 					</div>
 					<div class="req4106_option_half">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqDtm" name="reqDtm" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqDtm" name="reqDtm" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						이메일
 					</div>
 					<div class="req4106_option_half">
-						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrEmail" name="reqUsrEmail" readonly="readonly"/>
+						<input type="text" class="req4106_input_text req4106_readonly" id="reqUsrEmail" name="reqUsrEmail" readonly="readonly" modifyset="02"/>
 					</div>
 					<div class="req4106_option_title">
 						담당자<span class="required_info">&nbsp;*</span>
 					</div>
 					<div class="req4106_option_half">
 						<input type="hidden" name="reqChargerId" id="reqChargerId"/>
-						<input type="text" title="담당자" class="req4106_input_text req4106_charger" name="reqChargerNm" id="reqChargerNm"/>
+						<input type="text" title="담당자" class="req4106_input_text req4106_charger" name="reqChargerNm" id="reqChargerNm" modifyset="02"/>
 						<span class="button_normal2 fl req4106_charger" id="btn_user_select"><li class="fa fa-search"></li></span>
 					</div>
 					<div class="req4106_option_title">
@@ -455,22 +553,20 @@ function fnRequestAccept(){
 					</div>
 					<div class="req4106_option_half">
 						<input type="hidden" name="reqClsId" id="reqClsId"/>
-						<input type="text" title="요구사항 분류" class="req4106_input_text req4106_charger" name="reqClsNm" id="reqClsNm" style="width: 80%!important;" readonly="readonly" />
+						<input type="text" title="요구사항 분류" class="req4106_input_text req4106_charger" name="reqClsNm" id="reqClsNm" style="width: 80%!important;" readonly="readonly"/>
 						<span class="button_normal2 fl req4106_charger" id="btn_cls_select"><li class="fa fa-search"></li></span>
 					</div>
-				</div>
-				<div class="req4106_optionDiv req4106_desc_file">
 					<div class="req4106_option_title req4106_desc">
 						요청 내용
 					</div>
 					<div class="req4106_option_all req4106_desc">
-						<textarea class="req4106_textarea req4106_readonly" id="reqDesc" name="reqDesc" readonly="readonly"></textarea>
+						<textarea class="req4106_textarea req4106_readonly" id="reqDesc" name="reqDesc" readonly="readonly" modifyset="02"></textarea>
 					</div>
 					<div class="req4106_option_title req4106_desc">
 						접수 의견
 					</div>
 					<div class="req4106_option_all req4106_desc">
-						<textarea class="req4106_textarea" id="reqAcceptTxt" name="reqAcceptTxt"></textarea>
+						<textarea class="req4106_textarea" id="reqAcceptTxt" name="reqAcceptTxt" modifyset="02"></textarea>
 					</div>
 					<div class="req4106_option_title req4106_file">
 						첨부파일
@@ -482,12 +578,15 @@ function fnRequestAccept(){
 				</div>
 				</form>
 			</div>
-			<div class="req4106_reqBottom_bottomBox" id="req4106_reqBtnSign">
-				<div class="req4106_btnDiv">
-					<div class="button_complete req4106_complete" onclick="fnRequestReject()"><i class="fa fa-check"></i>&nbsp;접수 반려</div>
-					<div class="button_complete req4106_complete" onclick="fnRequestBeforeAccept()"><i class="fa fa-check"></i>&nbsp;다음</div>
-					<div class="button_complete req4106_close" onclick="gfnLayerPopupClose()"><i class="fa fa-times"></i>&nbsp;닫기</div>
-				</div>
+		</div>
+		<div class="req4106_req_topBox" id="req4106_reqTopDataList">
+
+		</div>
+		<div class="req4106_reqBottom_bottomBox" id="req4106_reqBtnSign">
+			<div class="req4106_btnDiv">
+				<div class="button_complete req4106_complete" guide="reject"  onclick="fnReqRejectCmnt()"><i class="fa fa-check"></i>&nbsp;접수 반려</div>
+				<div class="button_complete req4106_complete" onclick="fnRequestBeforeAccept()"><i class="fa fa-check"></i>&nbsp;접수</div>
+				<div class="button_complete req4106_close" onclick="gfnLayerPopupClose()"><i class="fa fa-times"></i>&nbsp;닫기</div>
 			</div>
 		</div>
 	</div>
