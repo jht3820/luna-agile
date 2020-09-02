@@ -36,7 +36,7 @@
 		else if(intCnt == 3){
 			document.hidAsidePrjFrm.menuUrl.value = '/req/req4000/req4100/selectReq4100View.do';
 			document.hidAsidePrjFrm.menuId.value = '000300040001';
-			document.hidAsidePrjFrm.reqChargerNm.value = "${sessionScope.loginVO.usrNm}"; 
+			document.hidAsidePrjFrm.reqChargerNm.value = "<c:out value='${sessionScope.loginUsrInfo.usrNm}'/>"; 
 			
 		}
 		else if(intCnt == 4){ //전체 쪽지 목록
@@ -85,6 +85,7 @@
 			/*******************************************************************
         	*	쪽지영역 세팅 시작
         	*******************************************************************/
+        	/* 
 			var viewNum = parseInt(alarmCnt.viewCnt);
 			
 			//읽지 않은 쪽지 존재시 Class추가
@@ -101,7 +102,7 @@
 			$("#ddAlarmMsg").append(strAllArmCnt);
 			$("#ddAlarmMsg").append(strNewArmCnt);
 			$("#ddAlarmMsg").append(strSendArmCnt);
-        	
+        	 */
         	/*******************************************************************
         	*	알림영역 세팅 시작
         	*******************************************************************/
@@ -251,10 +252,10 @@
 			<span style="line-height: 0px;"><img src="/images/quickmenu/quick_logout.png" alt="로그아웃" class="logoutImg"></span>
 			<span>로그아웃</span>
 		</dt>
-		
+		<!-- 
 		<dt class="menu" id="dtAlarmMsg"><span><i class="fa fa-envelope-o"></i></span><span>쪽지</span><span id="spanAlarmMsg"></span></dt>
 			<dd id="ddAlarmMsg"/>	
-		
+		 -->
 		<!-- 권한의 사용자 유형이 관리자일 경우만 알림, 담당 요구사항, 전체 요구사항을 보여줌 -->
 		<c:if test="${sessionScope.usrTyp eq '02'}" >	
 		<dt class="menu" id="dtAlarm"><span><img src="/images/header/LNB/LNB-icon_02.png" alt="알림"></span><span>알림</span><span id="spanAlarm"></span></dt>
