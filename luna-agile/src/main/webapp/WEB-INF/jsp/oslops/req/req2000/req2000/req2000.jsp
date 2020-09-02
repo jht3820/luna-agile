@@ -112,8 +112,9 @@ function fnAxGrid5View(){
                 onChange: function () {
                    fnInGridListSet(this.page.selectPage,mySearch.getParam());
                 }
-            },
-            contextMenu: {
+            }
+            /* 
+            ,contextMenu: {
                 iconWidth: 20,
                 acceleratorWidth: 100,
                 itemClickAndClose: false,
@@ -158,6 +159,7 @@ function fnAxGrid5View(){
                     firstGrid.contextMenu.close();
                 }
             }
+             */
         });
         //그리드 데이터 불러오기
  		//fnInGridListSet();
