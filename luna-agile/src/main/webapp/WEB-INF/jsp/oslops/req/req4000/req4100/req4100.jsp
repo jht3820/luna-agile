@@ -186,7 +186,7 @@
 	                },
 	                items: [
 	                    {type: "detailPopup", label: "상세 정보", icon:"<i class='fa fa-info-circle' aria-hidden='true'></i>"},
-	                    {type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"},
+	                    /* {type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"}, */
                     	{divide: true},
 	                    {type: "rowFrozen", label: "열 고정", icon:"<i class='fa fa-lock' aria-hidden='true'></i>"}
 	                ],
@@ -222,9 +222,9 @@
 	                    		firstGrid.setConfig({frozenColumnIndex:param.colIndex+1});
 	                    		fnInGridListSet(firstGrid.page.currentPage);
 	                    	}
-	                    //쪽지 전송
+	                 /*    //쪽지 전송
 	                    }else if(item.type == "reply"){
-	                    	gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm);
+	                    	gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm); */
 	                    }
 	                    //상세 정보
 						else if(item.type == "detailPopup"){
@@ -380,7 +380,7 @@
 		var pageID = "AXSearch";
 		mySearch = new AXSearch();
 		// 현재일과 현재일 기준 한달전 날짜 기본세팅
-		var defaultStDt = new Date(new Date().setMonth(new Date().getMonth()-1)).format('yyyy-MM-dd');
+		var defaultStDt = new Date(new Date().setYear(new Date().getFullYear()-1)).format('yyyy-MM-dd');
 		var defaultEndDt = new Date().format('yyyy-MM-dd');
 
 		var fnObjSearch = {
@@ -397,7 +397,8 @@
 							}},
 							{label:"", labelWidth:"", type:"button", width:"100",style:"float:right;", key:"btn_excel_newReqDemand",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-download' aria-hidden='true'></i>&nbsp;<span>양식 다운로드</span>",
 							onclick:function(){
-								$.download('/etc/uploadRequestForm.xlsx','tmp','post');
+								//$.download('/etc/uploadRequestForm.xlsx','tmp','post');
+								document.location.href = "/etc/uploadRequestForm.xlsx";
 							}},
 							{label:"", labelWidth:"", type:"button", width:"70",style:"float:right;", key:"btn_print_newReqDemand",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
 								onclick:function(){
