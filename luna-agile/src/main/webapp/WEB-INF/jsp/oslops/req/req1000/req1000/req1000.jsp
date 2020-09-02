@@ -133,34 +133,28 @@ function fnAxGrid5View(){
                 onClick: function () {
                 	// 클릭 이벤트 처리
                 },onDBLClick:function(){
-
-                	var prjId = this.item.prjId;
-                	var reqId = this.item.reqId;
-                	var reqProType = this.item.reqProType;
+                	var selItem = this.item;
+                	var reqProType = selItem.reqProType;
                 	
-                	/*
-                	 * reqPageType 추가
-                	 * 요구사항 상세보기(req1002.jsp)에서 항목명 구분을 위해 사용
-                	 * usrReqPage - 요구사항 요청(사용자) 
-                	 * admReqPage - 전체 요구사항 목록, 요구사항 생성관리(관리자)
-                	 */
-                	var data = {
-                			"mode": "req", 
-                			"popupPrjId":prjId,
-             				"reqId":reqId,
-                			"reqPageType" : "usrReqPage"
-                	}; 
-  
-                	var popHeight = "890";
-                	
+	           		var data = {
+	    						"mode": "req", 
+	    						"reqId": selItem.reqId,
+	    						"prjId": selItem.prjId
+	    					}; 
                 	// 처리유형이 반려일 경우
-                	if(reqProType == "03"){
-                		popHeight = "930";
+                	if(reqProType == "01" || reqProType == "03"){
+    	           		var data = {
+                    			"mode": "req", 
+                    			"popupPrjId":selItem.prjId,
+                 				"reqId":selItem.reqId,
+                    			"reqPageType" : "usrReqPage"
+                    	}; 
+                		
+                		gfnLayerPopupOpen("/req/req1000/req1000/selectReq1002View.do", data, '640', '930','scroll');
                 	}
-                	
-                	gfnLayerPopupOpen("/req/req1000/req1000/selectReq1002View.do", data, '640', popHeight,'scroll');
-                	
-                	
+                	else{
+	           			gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
+                	}
                 }
             },
             contextMenu: {
@@ -187,14 +181,32 @@ function fnAxGrid5View(){
                 	
                 	// 상세보기시 req4104 화면 호출
                 	if(item.type == "reqDetail"){
-                		 
-                		 var data = {
-         						"mode": "req", 
-         						"reqId": selItem.reqId,
-         						"prjId": selItem.prjId
-         					}; 
-                		 
-                		gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
+
+    	           		var prjId = selItem.prjId;
+                    	var reqId = selItem.reqId;
+                    	var reqProType = selItem.reqProType;
+                    	
+                    	/*
+                    	 * reqPageType 추가
+                    	 * 요구사항 상세보기(req1002.jsp)에서 항목명 구분을 위해 사용
+                    	 * usrReqPage - 요구사항 요청(사용자) 
+                    	 * admReqPage - 전체 요구사항 목록, 요구사항 생성관리(관리자)
+                    	 */
+                    	var data = {
+                    			"mode": "req", 
+                    			"popupPrjId":prjId,
+                 				"reqId":reqId,
+                    			"reqPageType" : "usrReqPage"
+                    	}; 
+      
+                    	var popHeight = "890";
+                    	
+                    	// 처리유형이 반려일 경우
+                    	if(reqProType == "03"){
+                    		popHeight = "930";
+                    	}
+                    	
+                    	gfnLayerPopupOpen("/req/req1000/req1000/selectReq1002View.do", data, '640', popHeight,'scroll');
 
                     //열 고정
                 	}else if(item.type == "rowFrozen"){
