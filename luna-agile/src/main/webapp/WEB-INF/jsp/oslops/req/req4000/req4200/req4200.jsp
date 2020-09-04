@@ -416,6 +416,7 @@ function fnAxGrid5View_first(reqClsId){
 					gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
                 }
             },
+            /* 
             contextMenu: {
                 iconWidth: 20,
                 acceleratorWidth: 100,
@@ -451,6 +452,7 @@ function fnAxGrid5View_first(reqClsId){
                     firstGrid.contextMenu.close();
                 }
             },
+             */
             page: {
                 navigationItemCount: 9,
                 height: 30,
@@ -518,6 +520,7 @@ function fnAxGrid5View_second(reqClsId){
 					gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
                 }
             },
+            /* 
             contextMenu: {
                 iconWidth: 20,
                 acceleratorWidth: 100,
@@ -531,7 +534,7 @@ function fnAxGrid5View_second(reqClsId){
                     {type: "rowFrozen", label: "열 고정", icon:"<i class='fa fa-lock' aria-hidden='true'></i>"}
                 ],
                 popupFilter: function (item, param) {
-                	var selItem = secondGrid.list[param.doindex];
+                	var selItem = firstGrid.list[param.doindex];
                 	//선택 개체 없는 경우 중지
                 	if(typeof selItem == "undefined"){
                 		return false;
@@ -553,6 +556,7 @@ function fnAxGrid5View_second(reqClsId){
                     secondGrid.contextMenu.close();
                 }
             }, 
+             */
             page: {
                 navigationItemCount: 9,
                 height: 30,
