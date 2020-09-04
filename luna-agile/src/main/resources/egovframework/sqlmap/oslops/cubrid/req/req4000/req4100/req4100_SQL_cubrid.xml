@@ -78,7 +78,7 @@
 				  ON (A.PRJ_ID = #prjId# AND A.REQ_ID = #reqId# AND A.SVN_REP_ID = B.SVN_REP_ID AND B.LIC_GRP_ID = #licGrpId#)
 				WHERE 1=1
 			) T1
-			ORDER BY T1.REG_DTM DESC
+			ORDER BY T1.SVN_REP_NM ASC, T1.REVISION_NUM DESC  /* 저장소명, 리비전 번호로 정렬 */
 		]]>	
 	</sql>
 

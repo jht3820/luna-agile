@@ -36,7 +36,7 @@ label[for='header_select']{ display:none; }
 		.gnb .one_menu:hover{ border-bottom:3px solid #4b73eb; cursor:pointer; }
 		
 		/* 프로젝트 선택 */
-		.gnb_top .prj_select_box { border-left: 1px solid #ccc; max-width: 355px; float: right;padding: 0 10px;height: 100%;line-height: 60px;border-right: 1px solid #ccc;}
+		.gnb_top .prj_select_box { border-left: 1px solid #ccc; max-width: 355px; float: right;padding: 0 10px;height: 100%;line-height: 60px;}
 		.gnb_top .prj_select_box .sod_select{ vertical-align:middle; margin-top:-3px; padding:7px; border:1px solid #ccc; height:25px; }
 		.gnb_top .prj_select_box .sod_select:after{ top:5px; }
 		

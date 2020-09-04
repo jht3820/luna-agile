@@ -156,7 +156,7 @@
 				               	gfnLayerPopupOpen("/req/req1000/req1000/selectReq1002View.do", data, '640', '890','scroll');
 							}else{
 								var data = {"reqId": this.item.reqId}; 
-								gfnLayerPopupOpen("/req/req4000/req4100/selectReq4106View.do", data, '900', '950','auto');
+								gfnLayerPopupOpen("/req/req4000/req4100/selectReq4106View.do", data, '880', '950','scroll');
 							}
 						}
 	                	// 반려(03)일 경우 req1002.jsp 상세보기 화면으로
@@ -222,7 +222,7 @@
 	                    		firstGrid.setConfig({frozenColumnIndex:param.colIndex+1});
 	                    		fnInGridListSet(firstGrid.page.currentPage);
 	                    	}
-	                 /*    //쪽지 전송
+	                    /* //쪽지 전송
 	                    }else if(item.type == "reply"){
 	                    	gfnAlarmOpen(param.item.reqChargerId,param.item.reqId,param.item.reqNm); */
 	                    }
@@ -296,7 +296,7 @@
      		ajaxParam += "&pageNo="+firstGrid.page.currentPage;
      	}
 
-     	//AJAX 설정
+     	/* //AJAX 설정
 		var ajaxObj = new gfnAjaxRequestAction(
 				{"url":"<c:url value='/req/req4000/req4100/selectReq4100ListAjaxView.do'/>","loadingShow":true}
 				,ajaxParam);
@@ -338,7 +338,7 @@
 		});
 		
 		//AJAX 전송
-		ajaxObj.send();
+		ajaxObj.send(); */
 	}
 	
 	//공통코드가 아닌 목록이 필요할 때 가져오는 함수
@@ -380,7 +380,7 @@
 		var pageID = "AXSearch";
 		mySearch = new AXSearch();
 		// 현재일과 현재일 기준 한달전 날짜 기본세팅
-		var defaultStDt = new Date(new Date().setYear(new Date().getFullYear()-1)).format('yyyy-MM-dd');
+		var defaultStDt = new Date(new Date().setMonth(new Date().getMonth()-1)).format('yyyy-MM-dd');
 		var defaultEndDt = new Date().format('yyyy-MM-dd');
 
 		var fnObjSearch = {
@@ -391,15 +391,96 @@
 					theme : "AXSearch",
 					rows:[
 						{display:true, addClass:"top_searchGroup", style:"", list:[
-							{label:"", labelWidth:"", type:"button", width:"70",style:"float:right;", key:"btn_insert_excelPopup",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-upload' aria-hidden='true'></i>&nbsp;<span>업로드</span>",
+							{label:"", labelWidth:"", type:"button", width:"70",style:"float:right;", key:"btn_insert_req4800ExcelPopup",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-upload' aria-hidden='true'></i>&nbsp;<span>업로드</span>",
 							onclick:function(){
-								gfnLayerPopupOpen('/req/req4000/req4100/selectReq4103View.do',{},"1000","891",'scroll');
+								gfnLayerPopupOpen('/req/req4000/req4800/selectReq4801View.do',{},"1000","891",'scroll');
 							}},
-							{label:"", labelWidth:"", type:"button", width:"100",style:"float:right;", key:"btn_excel_newReqDemand",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-download' aria-hidden='true'></i>&nbsp;<span>양식 다운로드</span>",
+							{label:"", labelWidth:"", type:"button", width:"100",style:"float:right;", key:"btn_excel_req4800",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-download' aria-hidden='true'></i>&nbsp;<span>양식 다운로드</span>",
 							onclick:function(){
-								//$.download('/etc/uploadRequestForm.xlsx','tmp','post');
-								document.location.href = "/etc/uploadRequestForm.xlsx";
+								$.download('/etc/uploadRequestForm.xlsx','tmp','post');
 							}},
+						]},{display:true, addClass:"bottom_searchGroup", style:"", list:[
+						    {label:"<i class='fa fa-search'></i>&nbsp;", labelWidth:"30", type:"selectBox", width:"", key:"searchSelect", addClass:"", valueBoxStyle:"", value:"all",
+								options:[
+		                                {optionValue:"0", optionText:"전체 보기",optionAll:true},
+		                                {optionValue:'reqNm', optionText:'요구사항 명'},
+		                                {optionValue:'reqDesc', optionText:'요구사항 설명'},
+		                                {optionValue:'reqUsrNm', optionText:'요청자'},
+		                                {optionValue:'reqChargerNm', optionText:'담당자'},
+		                                {optionValue:'processNm', optionText:'프로세스 명'},
+		                                {optionValue:'reqNo', optionText:'공문번호'},
+		                                {optionValue:'reqId', optionText:'요구사항 ID'},
+		                                {optionValue:"reqProType", optionText:"처리유형", optionCommonCode:"REQ00008"},
+		                                {optionValue:"reqNewType", optionText:"접수유형", optionCommonCode:"REQ00009"},
+		                                {optionValue:"reqTypeCd", optionText:"요구사항 유형", optionCommonCode:"REQ00012"},
+		                                {optionValue:'reqOrd', optionText:'순번'}
+		                                
+		                            ],onChange: function(selectedObject, value) {
+		                            	//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
+		    							if(!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true){
+											axdom("#" + mySearch.getItemId("searchTxt")).attr("readonly", "readonly");	
+											axdom("#" + mySearch.getItemId("searchTxt")).val('');	
+										}else{
+											axdom("#" + mySearch.getItemId("searchTxt")).removeAttr("readonly");
+										}
+		                            	
+		    							//공통코드 처리 후 select box 세팅이 필요한 경우 사용
+										if( !gfnIsNull(selectedObject.optionCommonCode) ){
+											gfnCommonSetting(mySearch,selectedObject.optionCommonCode,"searchCd","searchTxt");
+										} else {
+											//공통코드 처리(추가 selectbox 작업이 아닌 경우 type=text를 나타낸다.)
+											axdom("#" + mySearch.getItemId("searchTxt")).show();
+											axdom("#" + mySearch.getItemId("searchCd")).hide();
+										}
+		    						}
+							},
+							{label:"", labelWidth:"", type:"inputText", width:"150", key:"searchTxt", addClass:"secondItem sendBtn", valueBoxStyle:"padding-left:0px;", value:"",
+								onkeyup:function(e){
+									if(e.keyCode == '13' ){
+										axdom("#" + mySearch.getItemId("btn_search_req")).click();
+									}
+								}
+							},
+							{label:"", labelWidth:"", type:"selectBox", width:"100", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
+								options:[]
+							},
+							{label:"기간", labelWidth:"70", type:"inputText", width:"90", key:"srchFromDt", addClass:"secondItem readonly", valueBoxStyle:"", value:defaultStDt,
+								onChange: function(){}
+								},
+							{label:"", labelWidth:"", type:"inputText", width:"90", key:"srchToDt", addClass:"secondItem readonly", valueBoxStyle:"padding-left:0px;", value:defaultEndDt,
+									AXBind:{
+										type:"twinDate", config:{
+											align:"right", valign:"top", startTargetID:"srchFromDt"
+										}
+									}
+								},
+							{label:"<i class='fas fa-list-ol'></i>&nbsp;목록 수&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"pageSize", addClass:"", valueBoxStyle:"", value:"30",
+								options:[
+								         	{optionValue:15, optionText:"15"},
+			                                {optionValue:30, optionText:"30"},
+			                                {optionValue:50, optionText:"50"},
+			                                {optionValue:100, optionText:"100"},
+			                                {optionValue:300, optionText:"300"},
+			                                {optionValue:600, optionText:"600"},
+			                                {optionValue:1000, optionText:"1000"},
+			                                {optionValue:5000, optionText:"5000"},
+			                                {optionValue:10000, optionText:"10000"},
+			                                
+			                            ],onChange: function(selectedObject, value){
+			                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
+			    						}
+							},
+							{label:"<i class='fas fa-arrows-alt-v'></i>&nbsp;목록 높이&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"gridHeight", addClass:"", valueBoxStyle:"", value:"600",
+								options:[
+								         	 {optionValue:300, optionText:"300px"}
+			                                ,{optionValue:600, optionText:"600px"}
+			                                ,{optionValue:1000, optionText:"1000px"}
+			                                ,{optionValue:1200, optionText:"1200px"}
+			                                ,{optionValue:2000, optionText:"2000px"}
+			                            ],onChange: function(selectedObject, value){
+			                            	firstGrid.setHeight(value);
+			    						}
+							},
 							{label:"", labelWidth:"", type:"button", width:"70",style:"float:right;", key:"btn_print_newReqDemand",valueBoxStyle:"padding:5px;", value:"<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
 								onclick:function(){
 									$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
@@ -465,82 +546,6 @@
 								$('#searchCd').val(axdom("#" + mySearch.getItemId("searchCd")).val() );
 								$('#searchTxt').val(axdom("#" + mySearch.getItemId("searchTxt")).val() );
 							}}
-						]},{display:true, addClass:"bottom_searchGroup", style:"", list:[
-						    {label:"<i class='fa fa-search'></i>&nbsp;", labelWidth:"30", type:"selectBox", width:"", key:"searchSelect", addClass:"", valueBoxStyle:"", value:"all",
-								options:[
-		                                {optionValue:"0", optionText:"전체 보기",optionAll:true},
-		                                {optionValue:'reqNm', optionText:'요구사항 명'},
-		                                {optionValue:'reqDesc', optionText:'요구사항 설명'},
-		                                {optionValue:'reqUsrNm', optionText:'요청자'},
-		                                {optionValue:'reqChargerNm', optionText:'담당자'},
-		                                {optionValue:'processNm', optionText:'프로세스 명'},
-		                                {optionValue:'reqNo', optionText:'공문번호'},
-		                                {optionValue:'reqId', optionText:'요구사항 ID'},
-		                                {optionValue:"reqProType", optionText:"처리유형", optionCommonCode:"REQ00008"},
-		                                {optionValue:"reqNewType", optionText:"접수유형", optionCommonCode:"REQ00009"},
-		                                {optionValue:"reqTypeCd", optionText:"요구사항 유형", optionCommonCode:"REQ00012"},
-		                                {optionValue:'reqOrd', optionText:'순번'}
-		                                
-		                            ],onChange: function(selectedObject, value) {
-		                            	//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
-		    							if(!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true){
-											axdom("#" + mySearch.getItemId("searchTxt")).attr("readonly", "readonly");	
-											axdom("#" + mySearch.getItemId("searchTxt")).val('');	
-										}else{
-											axdom("#" + mySearch.getItemId("searchTxt")).removeAttr("readonly");
-										}
-		                            	
-		    							//공통코드 처리 후 select box 세팅이 필요한 경우 사용
-										if( !gfnIsNull(selectedObject.optionCommonCode) ){
-											gfnCommonSetting(mySearch,selectedObject.optionCommonCode,"searchCd","searchTxt");
-										} else {
-											//공통코드 처리(추가 selectbox 작업이 아닌 경우 type=text를 나타낸다.)
-											axdom("#" + mySearch.getItemId("searchTxt")).show();
-											axdom("#" + mySearch.getItemId("searchCd")).hide();
-										}
-		    						}
-							},
-							{label:"", labelWidth:"", type:"inputText", width:"150", key:"searchTxt", addClass:"secondItem sendBtn", valueBoxStyle:"padding-left:0px;", value:"",
-								onkeyup:function(e){
-									if(e.keyCode == '13' ){
-										axdom("#" + mySearch.getItemId("btn_search_req")).click();
-									}
-								}
-							},
-							{label:"", labelWidth:"", type:"selectBox", width:"100", key:"searchCd", addClass:"selectBox", valueBoxStyle:"padding-left:0px;", value:"01",
-								options:[]
-							},
-							{label : "시작일",labelWidth : "70",type : "inputText",width : "150",key : "srchFromDt",addClass : "secondItem sendBtn",valueBoxStyle : "",value : defaultStDt,
-							},
-							{label : "종료일",labelWidth : "70",type : "inputText",width : "150",key : "srchToDt",addClass : "secondItem sendBtn",valueBoxStyle : "",value : defaultEndDt,
-							},
-							{label:"<i class='fas fa-list-ol'></i>&nbsp;목록 수&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"pageSize", addClass:"", valueBoxStyle:"", value:"30",
-								options:[
-								         	{optionValue:15, optionText:"15"},
-			                                {optionValue:30, optionText:"30"},
-			                                {optionValue:50, optionText:"50"},
-			                                {optionValue:100, optionText:"100"},
-			                                {optionValue:300, optionText:"300"},
-			                                {optionValue:600, optionText:"600"},
-			                                {optionValue:1000, optionText:"1000"},
-			                                {optionValue:5000, optionText:"5000"},
-			                                {optionValue:10000, optionText:"10000"},
-			                                
-			                            ],onChange: function(selectedObject, value){
-			                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-			    						}
-							},
-							{label:"<i class='fas fa-arrows-alt-v'></i>&nbsp;목록 높이&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"gridHeight", addClass:"", valueBoxStyle:"", value:"600",
-								options:[
-								         	 {optionValue:300, optionText:"300px"}
-			                                ,{optionValue:600, optionText:"600px"}
-			                                ,{optionValue:1000, optionText:"1000px"}
-			                                ,{optionValue:1200, optionText:"1200px"}
-			                                ,{optionValue:2000, optionText:"2000px"}
-			                            ],onChange: function(selectedObject, value){
-			                            	firstGrid.setHeight(value);
-			    						}
-							}
 						  ]}
 					]
 				});
@@ -558,9 +563,6 @@
 			//버튼 권한 확인
 			fnBtnAuthCheck(mySearch);
 
-			//기간 검색 달기
-			gfnCalRangeSet(mySearch.getItemId("srchFromDt"), mySearch.getItemId("srchToDt"));
-			
 			// 상단 엑셀업로드, 양식다운로드 버튼이 권한이 없어서 hide일 경우
 			// 해당 버튼이 있는 div도 hide 처리해야함 
 			// $(".top_searchGroup") div의 하위에 있는 버튼 목록을 가져온다.
@@ -680,9 +682,7 @@ input[type="text"].search_txt { float: none; width: 250px; height: 28px; line-he
 			<div class="req_title">${sessionScope.selMenuNm }</div>
 			<div class="tab_contents menu">
 				<input type="hidden" id="pageIndex" name="pageIndex"  value="1"/>
-				<form:form commandName="req4100VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false;">
-					 <form:hidden path="pageIndex" id="pageIndex" name="pageIndex"  /> 
-				</form:form>
+				
 				<div id="AXSearchTarget" style="border-top:1px solid #ccc;"></div>
 				<br />
 				<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 600px;"></div>

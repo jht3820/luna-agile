@@ -14,64 +14,49 @@
 <style type="text/css">
 .layer_popup_box .pop_left, .layer_popup_box .pop_right { height: 54px; }
 .button_normal { width: 39px; height: 22px; line-height: 22px; text-align: center; font-weight: bold; font-size: 1em; border-radius: 5px; box-shadow: 1px 1px 1px #ccd4eb; margin: 0 auto; border: 1px solid #b8b8b8; cursor: pointer; }
+div.pop_sub {padding: 5px 10px 0 10px !important;}
 div.pop_sub .pop_left {width:28%;} /* common.css pop_left width값 오버라이딩 */
 div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이딩 */
 .input_txt {padding-left: 5px;}
 
-.pop_menu_ctrl_wrap { float: left; width: 100%; height: 100%; min-height: 475px; font-size: 0.875em; box-sizing: border-box; border-right: 1px solid #ccc; }
+.pop_menu_ctrl_wrap { float: left; width: 100%; height: 100%; min-height: 497px; font-size: 0.875em; box-sizing: border-box; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;}
 #pop_sub_wrap{ height: 600px; padding: 0; max-hight:600px; }
-#pop_left_wrap{ padding: 0; border-right: none; width: 33%; }
-#pop_right_wrap{ width: 67%; padding-top: 16px;}
+#pop_left_wrap{ padding: 0; border-right: none; width: 33%; background:#fff;}
+#pop_right_wrap{ width: 67%; padding-top: 15px; height: 100%; min-height: 493px; border-bottom: 1px solid #ccc;}
 .pop_top_wrap{ height: 35px; margin-top: 15px; text-align: right; margin-right: 10px; }
 #pop_menu_btn { height: 54px; line-height: 55px; }
 .searchItem{ float: right; padding-right: 10px; } 
 #ord, #regDtm{ width: 100%; }
 #pop_radio { padding: 20px 15px 12px 3px; }
 #deptEtc{ height: 123px; background: #eee; }
-#selUseCd{ display: none; width: 100px; }
 #searchSelect{ box-sizing: border-box; width:100px; margin: 0px; }
 #searchTxt{float: left; width: 150px; height: 28px; border: 1px solid #ccc; margin-right: 1%; font-size: 12px; box-shadow: inset 0px 1px 2px #dddddd; padding-left: 6px; }
 .span_text_search{ color: #616161; border-right: 1px solid #d8d8d8; min-height: 20px; line-height: 20px; padding: 10px 0px; box-sizing: content-box; font-size : 13px; font-family: "NanumBarunGothic"; font-weight: bold; }
 .span_searchSelect{ padding-left: 10px; }
-#divMenu { padding-top: 10px; border-bottom: 1px solid #ccc; }
+#divMenu { padding-top: 10px; min-height: 497px;}
 .layer_popup_box input[type="text"].input_txt { max-width: 100%; }
 
 </style>
 
 
 <script type="text/javascript">
+
+	
+	// 사용자 등록&수정 팝업에서 넘겨받은 검색어
+	var sendSearchDetpNm = "<c:out value='${param.searchDeptNm}' />";
+	// 검색된 조직 노드
+	var deptNodeList = [];
+	// 선택된 조직 및 상위 조직명을 담을 배열
+	var parentDeptNames = [];
+	
 	$(document).ready(function() {
 		
-		/* 	
-		*	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
-		* 	1. 공통 대분류 코드를 순서대로 배열 담기(문자열)
-		*	2. 사용구분 저장(Y: 사용중인 코드만, N: 비사용중인 코드만, 그 외: 전체)
-		*	3. 공통코드 적용할 select 객체 직접 배열로 저장
-		* 	4. 공통코드 가져와 적용할 콤보타입 객체 배열 ( S:선택, A:전체(코드값 A 세팅한 조회조건용), N:전체, E:공백추가, 그 외:없음 )
-		*	5. 동기 비동기모드 선택 (true:비동기 통신, false:동기 통신)
-		*	마스터 코드 = CMM00001:사용여부 
-		*/
-		var mstCdStrArr = "CMM00001";
-		var strUseYn = 'Y';
-		var arrObj = [$("#selUseCd")];
-		var arrComboType = ["S"];
-		gfnGetMultiCommonCodeDataForm(mstCdStrArr, strUseYn, arrObj, arrComboType , true);
-		
 		// 조직 검색 및 ztree 추가
-		fnGetDeptList();
-
-		// ztree 전체 열기
-		$(".menu_expand_all").click(function(){
-			zTree.expandAll(true);
-		});
-
-		// ztree 전체 닫기
-		$(".menu_collapse_all").click(function(){
-			zTree.expandAll(false);
-		});
+		fnSearchDeptList(sendSearchDetpNm);
 		
 		// 조회 버튼 클릭 - 조직 조회
 		$("#btn_search_dept_pop").click(function(){
+			// 조직 목록 검색
 			fnSearchDeptList();
 		});
 		
@@ -83,7 +68,7 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 		});
 		
 		// 선택 버튼 클릭 - 조직 선택
-		$("#btn_select_dept").click(function(){
+		$("#btn_sel_dept").click(function(){
 			fnSelectDept();
 		});
 		
@@ -94,7 +79,7 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 		
 		// 검색옵션 선택 (select)
 		$("#searchSelect").change(function() {
-			fnChangeElement();
+			fnChangeElement($(this).val());
 		});
 
 	});
@@ -105,34 +90,47 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 /************************************************************
 * 조직검색 함수 정의 시작			 								*
 *************************************************************/
-
-	// 검색된 조직 목록
-	var deptNodeList = [];
-	// 선택된 조직 및 상위 조직명을 담을 배열
-	var parentDeptNames = [];	
 	
 	/**
 	 * 팝업 오픈 또는 조회버튼 클릭시 조직목록 조회 AJAX
 	 */
-	function fnGetDeptList(){
-
-		// 검색 select를 조직명으로 세팅
-		$("#searchSelect").val("deptName");
-		$("#searchTxt").removeAttr("readonly");
+	function fnSearchDeptList(sendSearchDeptNm){
 		
-		// 조직 목록은 모두 가져오고, 화면에서 검색에 대해 필터링 한다.
+		// 넘겨받은 검색어가 있을 경우
+		if(!gfnIsNull(sendSearchDeptNm)){
+			$("#searchSelect").val("deptName");
+			$("#searchTxt").removeAttr("readonly");
+			$("#searchTxt").val(sendSearchDeptNm);
+		}
+		
+		// 조직 조회 검색 파라미터
+		var ajaxParam = $("#searchDeptFrm").serialize() + "&viewType=cmm1200";
+		
 		//AJAX 설정
 		var ajaxObj = new gfnAjaxRequestAction(
-							{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>"
-							,"loadingShow":true});
-		
+				{"url":"<c:url value='/adm/amd7000/adm7000/selectAdm7000DeptListAjax.do'/>","loadingShow":true}
+				,ajaxParam);
 		//AJAX 전송 성공 함수
+		ajaxObj.async = false;
 		ajaxObj.setFnSuccess(function(data){
+			
 			data = JSON.parse(data);
 	    	
-	    	//toast.push(data.message);
-	    	// zTree 설정 
+			// 조회 실패
+	    	if(data.errorYn == 'Y'){ 
+	    		toast.push(data.message);
+	    		return;
+	    	}
+	    	
+	    	// 우측 상세보기 화면을 초기화한다.
+			$('#deptInfoForm')[0].reset();
+			
+	    	// 조회 성공 메시지 출력
+	    	toast.push(data.message);
+	    	
+	    	// zTree 설정
 		    var setting = {
+	    		// zTree binding data key 설정
 		        data: {
 		        	key: {
 						name: "deptName"
@@ -143,55 +141,109 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 						pIdKey: "upperDeptId",
 		            }
 		        },
+		        // 동적 트리 설정
+		        async: {
+					enable: true, // async 사용여부 (true:사용, false:미사용)
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					url:"<c:url value='/adm/amd7000/adm7000/selectAdm7000SubDeptListAjax.do'/>",
+					autoParam:["deptId"],	// 노드의 값을 서버로 보낼경우 배열형식으로 autoParam에 세팅
+					otherParam:{"deptSelType" : "async", "viewType" : "cmm1200"},  // 노드의 값을 제외한 다른 값을 서버로 보낼 경우 otherParam에 세팅
+					dataType: "json",
+					dataFilter: fnTreeFilter	// 데이터 조회 후 처리할 필터 function, async 사용시 dataFilter는 반드시 지정해야 한다.
+				},
 				callback: {
 					onClick: function(event, treeId, treeNode){
-						// 상위조직명을 담는 배열 초기화
-						parentDeptNames.length = 0;
-						//우측 메뉴 정보
+						//우측 조직 정보
 						fnGetDeptInfoAjax(treeNode.deptId);
-					}
+					},
+					onAsyncError: fnAsyncError
 				},
 				view : {
-					fontCss : getFontCss,	// 폰트 설정
-					expandSpeed: "fast",
+					fontCss: getFontCss,
 					showIcon : function(treeId, treeNode) {
-						if(typeof zTree != "undefined" && !treeNode.isParent){
+						
+						// 트리 노드가 부모형이 아닐 경우
+						if(typeof zTree != "undefined" &&  !treeNode.isParent){
+							// 모두 부모형(폴더 아이콘)으로 변경한다.
 							treeNode.isParent = true;
 							zTree.updateNode(treeNode);
-							zTree.refresh();
+							zTree.refresh();	
 						}
 						return true;
 					}
 				}
 		    };
-
+			
+			
 		    // zTree 초기화
-		    zTree = $.fn.zTree.init($("#deptJson"), setting, data.deptList);
+		    zTree = $.fn.zTree.init($("#deptTree"), setting, data.deptList);
+		    zTree.refresh();
+			
+		    // expandAll(false)를 추가해야 트리의 폴더를 한번 클릭 시 하위 메뉴가 보여진다.
+		    // 추가하지 않을 경우 두번 클릭을 해야 폴더가 펼쳐진다.
+		    zTree.expandAll(false);
 		    
-		  	// 조직 선택 팝업이 열릴 때 등록된 조직 목록(zTree)을 모두 펼쳐서 보여준다.
-			zTree.expandAll(true);	
-
-		  	// 검색창에 입력된 값을 가져온다.
-		  	var searchDeptName = $("#searchTxt").val();
-		  	
-			// 사용자 등록에서 검색한 조직명 값이 null이 아닐경우
-		  	if( !gfnIsNull(searchDeptName) ){
-				// 조직 목록 트리에서 검색
-		  		fnSearchDeptList();
-		  	}
-		  	
+		    // 최상위 노드를 가져온다.
+		    var treeNodes = zTree.getNodes();
+		    if(!gfnIsNull(treeNodes)){
+		    	// 최상위 노드의 자식 노드 수
+			    var rootNodeChild = treeNodes[0].children;
+			    // 자식 노드가 있을 경우
+			    if(!gfnIsNull(rootNodeChild) && rootNodeChild.length > 0){
+			    	// 최상위 노드만 펼친다
+			    	zTree.expandNode(treeNodes[0], true, false, false, false);
+			    }
+		    }
+		    
+		 	// 검색 select
+			var searchSelectVal = $("#searchSelect").val();
+			// 검색어
+			var searchTxtVal = $("#searchTxt").val();
+			// 검색된 결과에 대한 처리 (노드 확장, 하이라이트 처리)
+			fnSearchDeptResultProcess(searchSelectVal, searchTxtVal);
 		});
 		
 		//AJAX 전송 오류 함수
 		ajaxObj.setFnError(function(xhr, status, err){
 			data = JSON.parse(data);
-			jAlert(data.message,"알림창");
+			jAlert(data.message,"알림");
 		});
 		
 		//AJAX 전송
 		ajaxObj.send();
 	}	
 
+	
+	/*
+	 * [+] 아이콘 클릭 또는 더블클릭하여 트리 확장시 조회된 결과에 대한 처리를 한다.
+	 *
+	 * @param treeId : 트리 ID
+	 * @param parentNode : 트리에서 [+]아이콘 클릭 또는 더블클릭한 노드
+	 * @param result : 동적조회 결과값
+	 */
+	function fnTreeFilter(treeId, parentNode, result) {
+	 	
+		// 조회된 하위 조직 목록
+	 	var childNodes = result.deptList;
+		
+		// filter에서 모든 자식 노드를 부모형(폴더 아이콛)으로 변경한다.
+		// 해당 옵션 추가해야  트리의  [+] 아이콘 클릭 시 한번에 트리가 펼쳐진다. 
+		$.each(childNodes, function(idx, node){
+			node.isParent = true;
+			zTree.updateNode(node);
+		});
+		
+		// 선택한 노드의 자식 노드를 리턴하면 자동으로 트리에 자식 노드가 추가된다. ( zTree.addNodes()를 사용할 필요 없음)
+		return childNodes;
+	}
+	 
+	 /*
+	  * 동적트리 조회 실패시 처리
+	  */
+	function fnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown){
+	 	// 조회 실패 메시지 출력
+		toast.push("하위 조직 조회에 실패하였습니다.");
+	}
 
 	/**
 	 * 	좌측 조직명을 선택 시 우측에 상세정보 보여줌
@@ -208,8 +260,14 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 		ajaxObj.setFnSuccess(function(data){
 			data = JSON.parse(data);
 			
+			// 상세정보 조회 실패시
+	    	if(data.errorYn == 'Y'){ 
+	    		toast.push(data.message);
+	    		return;
+	    	}
+			
 	    	// 디테일폼 세팅
-	    	gfnSetData2Form(data, "searchDeptFrm");
+	    	gfnSetData2Form(data, "deptInfoForm");
 	    	// 사용여부 세팅
 	    	data.useCd == "01" ? $("#useCd").val("사용") : $("#useCd").val("미사용")
 		});
@@ -225,73 +283,13 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 	}
 
 	
-	/**
-	 * 	조직 목록에서 조직을 검색한다. 검색된 조직은 좌측 zTree에 표시된다.
-	 */
-	function fnSearchDeptList(){
-
-		var zTreeObj = $.fn.zTree.getZTreeObj("deptJson");	
 	
-		// 검색옵션과 검색어를 가져온다
-		var selectType = $("#searchSelect option:selected").val();
-		var searchVal = $("#searchTxt").val();
-
-		// 검색옵션이 전체보기일 경우
-		if(selectType == "rn"){	
-			// 트리확장, 하이라이트 초기화, 트리 및 오른쪽 초기화
-			zTreeObj.expandAll(true);
-			fnSearchDeptUpdate(false);
-			fnDataReset();
-			toast.push("조직 전체가 조회되었습니다.");
-			
-		}else if(selectType == "useCd"){	// 검색옵션이 사용유무일 경우	
-			searchVal =  $("#selUseCd option:selected").val();
-		}
-
-		// 전체검색이 아니고 검색어가 없을경우
-		if( selectType != "rn" && gfnIsNull(searchVal) ){
-			toast.push("검색어를 입력하세요.");
-			return;
-		}
-
-		// 하이라이트 초기화
-		fnSearchDeptUpdate(false);
-
-		// 검색된 노드
-		deptNodeList = zTreeObj.getNodesByParamFuzzy(selectType, searchVal);
-
-		// 전체검색이 아니고 검색결과가 없을경우
-		if(selectType != "rn" && deptNodeList.length == 0){
-			toast.push("검색된 조직이 없습니다.");
-		}
-
-		// 검색된 트리를 확장 및 포커스
-		for(var i = 0; i < deptNodeList.length; i++){
-			zTree.expandNode(deptNodeList[i], true, true, null, false);
-		}
-
-		// 하이라이트 활성화
-		fnSearchDeptUpdate(true);
-
-		// 검색결과가 하나라면 자동선택
-		if(deptNodeList.length == 1){
-			// 검색된 조직명 Node를 선택한다.
-			zTreeObj.selectNode(deptNodeList[0], false, false);
-			// 우측에 상세정보 표시
-			fnGetDeptInfoAjax(deptNodeList[0].deptId);
-		}else{
-			// 여러개일 경우 트리 및 우측 상세정보 표시부분 초기화
-			fnDataReset();
-		}
-	}
-	
-
 	/**
 	 * 	 검색된 조직 highlight 처리 
 	 *	@param highlight 하이라이트 설정 값(true, false)
 	 */
-	function fnSearchDeptUpdate(highlight) {
-		var zTreeObj = $.fn.zTree.getZTreeObj("deptJson");
+	function fnTreeHighlightUpdate(highlight) {
+		var zTreeObj = $.fn.zTree.getZTreeObj("deptTree");
 
 		for(var i = 0; i < deptNodeList.length; i++) {
 			deptNodeList[i].highlight = highlight;
@@ -321,7 +319,7 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 	 */
 	function fnSelectDept(){
 		
-		var zTreeObj = $.fn.zTree.getZTreeObj("deptJson");
+		var zTreeObj = $.fn.zTree.getZTreeObj("deptTree");
 		
 		// zTree에서 현재 선택된 조직을 가져온다.
 		var selectedNode = zTreeObj.getSelectedNodes()[0];
@@ -355,54 +353,78 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 
 		gfnSelectDeptTree(selectedNode.deptId, deptNames);
 	}
-	
 
-
-	
-	/**
-	 * 	데이터 초기화, 트리 및 우측 상세정보 표시부분을 초기화
+	/*
+	 * 검색된 조직에대한 처리를 한다.
+	 * 검색조직 확장 및 하이라이트 처리를 한다.
+	 * @param searchSelectVal : 검색 select (전체보기, 조직명, 비고)
+	 * @param searchTxtVal : 검색어
 	 */
-	function fnDataReset(){
-		$("#deptId").val("");
-		$("#upperDeptId").val("");
-		$("#deptName").val("");
-		$("#ord").val("");
-		$("#input:radio[name=useCd]").removeAttr("checked");
-		$("#regDtm").val("");
-		$("#deptEtc").val("");
-		zTree.refresh();
+	function fnSearchDeptResultProcess(searchSelectVal, searchTxtVal){
+		
+		// 트리의 하이라이트 초기화
+		//fnTreeHighlightUpdate(false);
+		
+		// 전체검색이 아닐 경우
+	    if(searchSelectVal != 'all'){
+	    	
+	    	// 검색 타입(조직명 또는 비고)과 검색어를 가지고 트리에서 조직 검색
+	    	deptNodeList = zTree.getNodesByParamFuzzy(searchSelectVal, searchTxtVal);
+     	   	
+     		// 검색결과가 없을경우
+     		if(deptNodeList.length == 0){
+     			toast.push("검색된 조직이 없습니다.");
+     			return false;
+     		}
+     		
+     		// 트리의 하이라이트 활성화
+    		fnTreeHighlightUpdate(true);
+     		
+     		// 검색된 조직이 있을경우  노드 loop
+     		$.each(deptNodeList, function(idx, deptNode){
+     			// 검색된 조직 노드의 부모를 찾는다.
+     			var parentNode = deptNode.getParentNode();
+     			// 해당 부모를 확장한다. 자식까지 확장옵션(3번째 인자)은 false로 둔다. 
+     			// ture일 경우 expand 이벤트 발생시 자동으로 하위 노드를 동적 조회한다.
+     			// 노드 확장시 무조건 부모노드를 확장하고, 자식까지 확장 옵션은 flase로 둬야한다.
+     			zTree.expandNode(parentNode, true, false, false, false);
+     		});
+     		
+     		// 검색된 조직이 1건있을 경우
+     		if(deptNodeList.length == 1){
+     			// 조직 노드를 선택한다.
+	        	zTree.selectNode(deptNodeList[0]);
+	        	// 선택한 조직의 상세정보를 조회하여 우측 화면에 출력한다.
+	        	fnGetDeptInfoAjax(deptNodeList[0].deptId);
+     		}
+	    }
+		
 	}
 	
 	/**
 	 * 	검색옵션(select) 변경시 이벤트 처리함수
 	 */
-	function fnChangeElement(){
-		
-		var txtElmt = $("#searchTxt");
-		var useElmt = $("#selUseCd");
-		var searchOpt = $("#searchSelect").val();
-		
-		if(searchOpt == "rn"){
-			useElmt.css("display","none");
-			txtElmt.css("display","block");
-			txtElmt.attr("readonly","readonly");
-			txtElmt.val("");
-		}else if(searchOpt == "useCd"){
-			useElmt.css("display","block");
-			txtElmt.css("display","none");
+	function fnChangeElement(searchSelectVal){
+		// 전체검색일 경우
+		if(searchSelectVal == "all"){
+			// 검색 input readonly 처리
+			$("#searchTxt").attr("readonly","readonly");
+			$("#searchTxt").val("");
+		// 조직명 또는 비고 검색일 경우	
 		}else{
-			useElmt.css("display","none");
-			txtElmt.css("display","block");
-			txtElmt.removeAttr("readonly");
-			txtElmt.val("");
+			// 검색 input readonly 제거 
+			$("#searchTxt").removeAttr("readonly");
+			$("#searchTxt").val("");
 		}
 	}
 	
-	/**
-	 * 	 zTree View Font 설정 함수
+	/*
+	 * zTree View Font 설정 함수
+	 * @param treeId : 트리 노드의 ID
+	 * @treeNode : 트리 노드
 	 */
 	function getFontCss(treeId, treeNode) {
-
+		
 		// 검색된 결과가 있을 경우
 		if(treeNode.highlight){
 			return {color:"#F40404", "font-weight":"bold"};
@@ -419,93 +441,84 @@ div.pop_sub .pop_right {width:72%;} /* common.css pop_left width값 오버라이
 </script>
 
 <div class="popup">
-	<form id="searchDeptFrm"  onsubmit="return false;">
+	
 	<div class="pop_title">조직 검색</div>
-	
 	<div class="pop_sub" id="pop_sub_wrap">
-	
-		<div class="pop_top_wrap">
-			<div class="searchItem">
-				<span class="button_normal2 btn_inquery" id="btn_search_dept_pop"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;검색</span>
+		<form id="searchDeptFrm"  onsubmit="return false;">
+			<div class="pop_top_wrap">
+				<div class="searchItem">
+					<span class="button_normal2 btn_inquery" id="btn_search_dept_pop"><i class='fa fa-list' aria-hidden='true'></i>&nbsp;검색</span>
+				</div>
+				<div class="searchItem">
+					<input type="text" name="searchTxt" id="searchTxt" title="검색어" value="" readonly="readonly" class="searchInputTextItem">
+				</div>
+				<div class="searchItem">
+					<span class="span_searchSelect">
+						<select id="searchSelect" name="searchSelect" style="float: right;">
+							<option value="all">전체 보기</option>
+							<option value="deptName">조직명</option>
+							<option value="deptEtc">비고</option>	
+						</select>
+					</span>
+				</div>
 			</div>
-			<div class="searchItem">
-				<input type="text" name="searchTxt" id="searchTxt" title="" value="${param.searchDeptNm}" readonly="readonly" class="searchInputTextItem">
-				<select name="selUseCd" id="selUseCd"></select>
-			</div>
-			<div class="searchItem">
-				<span class="span_searchSelect">
-					<select id="searchSelect" name="searchSelect" style="float: right;">
-						<option value="rn">전체 보기</option>
-						<option value="deptName">조직명</option>
-						<option value="useCd">사용유무</option>
-						<option value="deptEtc">비고</option>	
-					</select>
-				</span>
-			</div>
-		</div>
-		<div class="pop_sub" style="padding: 10px 20px 0 20px;">
+		</form>
+		<div class="pop_sub">
 			<div class="pop_left" id="pop_left_wrap">
 	 			<div class="pop_menu_ctrl_wrap">
-					<div class="menu_ctrl_btn_wrap" id="pop_menu_btn">
-						 <div class="menu_all_wrap">
-							<span class="menu_expand_all" title="전체 열기"></span>
-							<span class="menu_collapse_all" title="전체 닫기"></span>
-						</div>
-					</div>
-	
 					<div class="menu_lists_wrap" id="divMenu">
-						<ul id="deptJson" class="ztree"></ul>
+						<ul id="deptTree" class="ztree"></ul>
 					</div>
 				</div>
 			</div>
-			
-			<div class="pop_right" id="pop_right_wrap">
-				<div class="pop_left">조직 ID</div>
-				<div class="pop_right">
-					<input type="text" id="deptId" name="deptId" title="조직 ID" class="input_txt readonly" readonly="readonly">
+			<form id="deptInfoForm"  onsubmit="return false;">
+				<div class="pop_right" id="pop_right_wrap">
+					<div class="pop_left">조직 ID</div>
+					<div class="pop_right">
+						<input type="text" id="deptId" name="deptId" title="조직 ID" class="input_txt readonly" readonly="readonly">
+					</div>
+					
+					<div class="pop_left">상위 조직 ID</div>
+					<div class="pop_right">
+						<input type="text" id="upperDeptId" name="upperDeptId" title="상위 조직 ID" class="input_txt readonly" readonly="readonly">
+					</div>
+					
+					<div class="pop_left">조직명</div>
+					<div class="pop_right">
+						<input type="text" id="deptName" name="deptName" title="조직명" class="input_txt readonly" readonly="readonly" maxlenth="100" >
+					</div>
+					
+					<div class="pop_left">순번</div>
+					<div class="pop_right">
+						<input type="number" id="ord"  name="ord" min="1"  value="" class="readonly" readonly="readonly">	
+					</div>
+					
+					<div class="pop_left">사용유무</div>
+					<div class="pop_right">
+						<!-- 
+						<input id="available" type="radio" name="useCd"  value="01" disabled="disabled"/><label for="available">사용</label>
+						<input id="notAvailable" type="radio" name="useCd" value="02" disabled="disabled"/><label for="notAvailable">미사용</label> 
+						-->
+						<input type="text" id="useCd" name="useCd" title="사용유무" class="input_txt readonly" readonly="readonly" maxlenth="10" >
+					</div>
+					
+					<div class="pop_left">등록일</div>
+					<div class="pop_right">
+						<input type="text" id="regDtm"  name="regDtm" value="" class="input_txt readonly" readonly="readonly">	
+					</div>
+					
+					<div class="pop_left textarea_height bottom_line" style="height: 140px; margin-bottom:10px;">비고</div>
+					<div class="pop_right bottom_line" style="height: 140px; margin-bottom:10px;">
+						<textarea class="input_note readonly" title="비고" id="deptEtc" name="deptEtc" maxlenth="4000" disabled="disabled"></textarea>
+					</div>
 				</div>
-			
-				<div class="pop_left">상위 조직 ID</div>
-				<div class="pop_right">
-					<input type="text" id="upperDeptId" name="upperDeptId" title="상위 조직 ID" class="input_txt readonly" readonly="readonly">
-				</div>
-				
-				<div class="pop_left">조직명</div>
-				<div class="pop_right">
-					<input type="text" id="deptName" name="deptName" title="조직명" class="input_txt readonly" readonly="readonly" maxlenth="100" >
-				</div>
-		
-				<div class="pop_left">순번</div>
-				<div class="pop_right">
-					<input type="number" id="ord"  name="ord" min="1"  value="" class="readonly" readonly="readonly">	
-				</div>
-				
-				<div class="pop_left">사용유무</div>
-				<div class="pop_right">
-					<!-- 
-					<input id="available" type="radio" name="useCd"  value="01" disabled="disabled"/><label for="available">사용</label>
-					<input id="notAvailable" type="radio" name="useCd" value="02" disabled="disabled"/><label for="notAvailable">미사용</label> 
-					-->
-					<input type="text" id="useCd" name="useCd" title="사용유무" class="input_txt readonly" readonly="readonly" maxlenth="10" >
-				</div>
-		
-				<div class="pop_left">생성일</div>
-				<div class="pop_right">
-					<input type="text" id="regDtm"  name="regDtm" value="" class="input_txt readonly" readonly="readonly">	
-				</div>
-		
-				<div class="pop_left textarea_height bottom_line" style="height: 140px; margin-bottom:10px;">비고</div>
-				<div class="pop_right bottom_line" style="height: 140px; margin-bottom:10px;">
-					<textarea class="input_note readonly" title="비고" id="deptEtc" name="deptEtc" maxlenth="4000" disabled="disabled"></textarea>
-				</div>
-			</div>
+			</form>
 		</div>
 		
-		<div class="btn_div" style="padding-top:10px">
-			<div class="button_normal save_btn" id="btn_select_dept" >선택</div>
+		<div class="btn_div">
+			<div class="button_normal save_btn" id="btn_sel_dept" >선택</div>
 			<div class="button_normal exit_btn">취소</div>
 		</div>
-	</form>	
 	</div>
 </div>	
 </html>
