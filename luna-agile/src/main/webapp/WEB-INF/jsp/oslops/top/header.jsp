@@ -16,7 +16,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<!-- <meta http-equiv="X-UA-Compatible" content="IE=11"> -->
 	<!-- <meta http-equiv="x-ua-compatible" content="IE=EmulateIE10"> -->
-	<title>Open Soft Lab</title>
+	<title>SW형상관리시범체계</title>
 	
 	<!-- 파비콘 -->
 	<link rel="apple-touch-icon" sizes="180x180" href="<c:url value='/images/favicon/apple-touch-icon.png'/>">
@@ -478,4 +478,26 @@
 				</nav>
 			</div>
 		</div>
+		
+		<!-- 모바일 메뉴 이미지 관리 객체 
+		<jsp:useBean id="mobileImgUrl" class="java.util.HashMap" >
+			<c:set target="${mobileImgUrl}" property="imgList" 
+			value="${fn:split('
+			 /images/header/GNB/GNB-icon_01.png
+			,/images/header/GNB/m_GNB_con_03.png
+			,/images/header/GNB/GNB-icon_04.png
+			,/images/header/GNB/GNB-icon_08.png
+			,/images/header/GNB/m_GNB_con_02.png
+			,/images/header/GNB/m_GNB_con_01.png		', ',')}"/>
+			
+			<c:set target="${mobileImgUrl}" property="imgList2" 
+			value="${fn:split('
+			 /images/header/GNB/GNB-icon_01.png
+			,/images/header/GNB/m_GNB_con_03.png
+			,/images/header/GNB/GNB-icon_04.png
+			,/images/header/GNB/GNB-icon_08.png
+			,/images/header/GNB/m_GNB_con_02.png
+			,/images/header/GNB/m_GNB_con_01.png		', ',')}"/>
+		</jsp:useBean>	
+		-->
 	</header>
