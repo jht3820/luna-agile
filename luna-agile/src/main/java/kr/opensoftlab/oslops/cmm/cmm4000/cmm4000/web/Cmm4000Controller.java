@@ -115,6 +115,17 @@ public class Cmm4000Controller {
     	return "/cmm/cmm4000/cmm4000/cmm4000";
     }
     
+    /**
+     * Cmm4000 메인 팝업 화면
+     * @param 
+     * @return 
+     * @exception Exception
+     */
+    @RequestMapping(value="/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do")
+    public String selectCmm4000MainPopupView(Model model) throws Exception {
+    	return "/mainPopup";
+    }
+    
    
     	
 	/**
@@ -1497,4 +1508,4 @@ public class Cmm4000Controller {
     		throw new Exception(ex.getMessage());
     	}
     }
-} 
+}
