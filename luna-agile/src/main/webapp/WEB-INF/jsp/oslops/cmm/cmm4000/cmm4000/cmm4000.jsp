@@ -40,8 +40,11 @@
 				
 			});
 			
-			//최초 팝업 띄우기
-			window.open("/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do", "mainPopup", "width=500,height=600,left=0,top=0,location=no,menubar=no,status=noe,titlebar=no,toolbar=no", true);
+			// 메인팝업 보기 쿠키가 없을 경우에만 팝업을 띄운다.
+			if(isCookie("mainPopViewCookie") == false){
+				// 로그인 화면 메인팝업 오픈
+				window.open("/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do", "mainPopup", "width=800,height=453,left=0,top=0,location=no,menubar=no,status=noe,titlebar=no,toolbar=no", true);
+			}
 		});
 
 		
@@ -138,6 +141,23 @@
 			
 			document.loginFrm.action = "<c:url value='/cmm/cmm4000/cmm4000/selectCmm4000LoginAction.do'/>";
 			document.loginFrm.submit();
+		}
+		
+		/*
+		 * 쿠키의 유무 체크
+		 * @param cookieName 쿠키이름
+		 */
+		function isCookie(cookieName) {
+			cookieName = cookieName + '=';
+			var cookieData = document.cookie;
+			var cIdx = cookieData.indexOf(cookieName);
+			var exist = false;	
+			
+			if(cIdx != -1 ){
+				exist = true;	
+			}
+			
+			return exist;
 		}
 		
 		
