@@ -25,11 +25,23 @@
 	
 	<script>
 		$(function(){
+			//http:// -> https:// redirect
+			var currentUrl = window.location.href;
+			if(currentUrl.indexOf("http://") != -1){
+				var redirectUrl = currentUrl.substring(7, currentUrl.length);
+				//window.location.href = "https://"+redirectUrl;
+			}
+			
+			
 			/* 레이어 팝업 띄우기 */
 			$('.find').click(function() {
 				//레이어팝업 공통함수 이용 호출할 것.
 				layer_popup('/cmm/cmm4000/cmm4001/selectCmm4001View.do', 'idPwFind');
+				
 			});
+			
+			//최초 팝업 띄우기
+			window.open("/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do", "mainPopup", "width=500,height=600,left=0,top=0,location=no,menubar=no,status=noe,titlebar=no,toolbar=no", true);
 		});
 
 		
@@ -139,11 +151,11 @@
 			<input type="hidden" name="initPassYn" id="initPassYn" value="">
 			<input type="hidden" name="licGrpId" id="licGrpId" value="${requestScope.licGrpId}">
 			
-			<img class="logo" src="/images/login/login_logo.png"/>
+			<img class="logo" src="/images/login/login_logo_osl.png"/>
 			<input type="text" name="usrId" id="usrId" placeholder="Username" title="로그인" 
 			onkeyup="this.value=this.value.replace(/[^a-zA-Z-_0-9]/g,'');" maxlength="20"
 			>
-			<input type="password" name="usrPw" id="usrPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" style="margin-bottom:20px;" title="패스워드" 
+			<input type="password" name="usrPw" id="usrPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" style="margin-bottom:20px;" title="패스워드"
 			maxlength="200"
 			>
 			<a href="javascript:fnLoginAction();"><span class="login_button">Log In</span></a>	
