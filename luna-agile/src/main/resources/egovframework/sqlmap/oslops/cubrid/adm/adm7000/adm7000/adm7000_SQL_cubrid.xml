@@ -6,13 +6,37 @@
 	<!--  in / out class define  -->
 	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 
+	<!-- 
+	         조직목록 조회
+	   : UNION을 기준으로 위쪽은 최상위 및 1뎁스 이하의 조직을 조회하고, 아래쪽은 검색 조건이 있을경우 검색 조건에 해당하는 조직을 계층으로 조회한다.
+	 
+	   1. 전체검색일 경우 ROOT 및 1뎁스 조회
+	   <isEqual property="searchSelect" compareValue="all">
+       		<![CDATA[
+	        	AND lvl < 2
+	        ]]>
+       	</isEqual>
+       	
+       2. 전체검색이 아닐 경우 ROOT만 조회 : 검색결과가 없을 경우 ROOT만 표시하기 위해
+       	<isNotEqual property="searchSelect" compareValue="all">
+       		<![CDATA[
+	        	AND lvl < 1
+	        ]]>
+       	</isNotEqual>	
+       	
+       	3. 조직검색 공통팝업에서 조직 검색시 사용유무가 사용인 조직목록만 조회한다.
+       	<isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND B.USE_CD = '01'
+			</isEqual>
+		</isNotEmpty> 
 	
+	 -->
 	<sql id="selectAdm7000DeptList">
 		SELECT 		
 				T.* 
 		FROM
 		(
-			<!-- 최상위 및 1뎁스 이하의 조직을 조회한다. -->
         	SELECT
 				 	A.LIC_GRP_ID
 				,	A.DEPT_ID
@@ -33,20 +57,17 @@
 			WHERE 1=1
 			AND	A.LIC_GRP_ID = #licGrpId#
 	        <isNotEmpty property="searchSelect">
-	        	<!-- 전체검색일 경우  ROOT 및 1뎁스 조회 -->
 	        	<isEqual property="searchSelect" compareValue="all">
 	        		<![CDATA[
 			        	AND lvl < 2
 			        ]]>
 	        	</isEqual>
-	        	<!-- 전체검색이 아닐 경우 ROOT만 조회 : 검색결과가 없을 경우 ROOT만 표시하기 위해 -->
 	        	<isNotEqual property="searchSelect" compareValue="all">
 	        		<![CDATA[
 			        	AND lvl < 1
 			        ]]>
 	        	</isNotEqual>
 	        </isNotEmpty>
-	        <!-- 검색 조건이 있을경우 검색 조건에 해당하는 조직을 계층으로 조회한다. -->
 	        <isNotEmpty property="searchSelect">
 	        	<isNotEmpty property="searchTxt">
 		        	<isNotEqual property="searchSelect" compareValue="all">
@@ -73,19 +94,15 @@
 							FROM ADM7000 B 
 							WHERE 1=1
 							AND	B.LIC_GRP_ID = #licGrpId#
-							<!-- 조직검색 공통팝업에서 조직 검색시 -->
 						    <isNotEmpty property="viewType">
-						   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
 								<isEqual property="viewType" compareValue="cmm1200" >
-									AND B.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
+									AND B.USE_CD = '01'
 								</isEqual>
 							</isNotEmpty> 
 						) C
-						<!-- 조직명으로 검색 -->
 						<isEqual property="searchSelect" compareValue="deptName">
 							START WITH C.DEPT_NAME LIKE '%'||#searchTxt#||'%'
 						</isEqual>
-						<!-- 비고로 검색 -->
 						<isEqual property="searchSelect" compareValue="deptEtc">
 							START WITH C.DEPT_ETC LIKE '%'||#searchTxt#||'%'
 						</isEqual>
@@ -109,7 +126,17 @@
     </select>
 
     
-    <!-- 조직 목록 가져오기(동적 zTree) : 선택한 조직의 하위 조직 목록을 조회한다. -->
+    <!--
+                 조직 목록 가져오기(동적 zTree) : 선택한 조직의 하위 조직 목록을 조회한다.
+    
+        1. 조직 공통팝업에서 하위 조직목록을 조회할 때 해당 부분이 실행된다.
+           - 사용유무가 사용(01)인 조직만 조회한다. 
+        <isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01'
+			</isEqual>
+		</isNotEmpty>
+     -->
     <select id="adm7000DAO.selectAdm7000SubDeptList" parameterClass="java.util.Map" resultClass="egovMap">
 	    /* adm7000DAO.selectAdm7000SubDeptList -  조직 목록 가져오기(동적 zTree) : 선택한 조직의 하위 조직 목록을 조회한다. */
 		SELECT
@@ -132,11 +159,9 @@
 		WHERE 1=1
 		AND A.LIC_GRP_ID =  #licGrpId#
 		AND A.UPPER_DEPT_ID = #deptId#
-		 <!-- 조직검색 공통팝업에서 조직목록 조회시 -->
 	    <isNotEmpty property="viewType">
-	   		<!-- 사용유무가 사용인 조직목록만 가져온다. -->
 			<isEqual property="viewType" compareValue="cmm1200" >
-				AND A.USE_CD = '01' /* 사용유무가 사용인 조직목록만 조회*/
+				AND A.USE_CD = '01'
 			</isEqual>
 		</isNotEmpty>
  		ORDER BY A.ORD ASC, A.DEPT_NAME ASC
@@ -320,7 +345,31 @@
  		]]> 
 	</select>
 	
-	<!-- 조직 목록 조회 : 조직 엑셀 다운로드, 사용다 등록&수정 화면, 업무처리 화면에서 사용 -->
+	<!-- 
+	       조직 목록 조회 : 조직 엑셀 다운로드, 사용자 등록&수정 화면, 업무처리 화면에서 사용 
+	
+	   1. 조직 공통팝업 호출 전 조직 검색
+	      - 검색결과가 1개일 경우 조직 공통팝업 오픈하지 않고 바로 검색된 조직을 세팅한다.
+	      - 검색결과가 2개이상이라면 조직 공통팝업을 오픈한다.
+	      
+	   <isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01'
+				<isNotEmpty property="searchDeptNm">
+					AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		
+		
+		2. 조직 엑셀 다운로드시 해당 부분 실행되며 계층으로 전체 조직을 조회한다.
+		<isEmpty property="viewType">
+			START WITH T.UPPER_DEPT_ID IS NULL
+			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  
+    		ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
+		</isEmpty>
+	
+	-->
     <select id="adm7000DAO.selectAdm7000NormalDeptList" parameterClass="java.util.Map" resultClass="egovMap">
 	    /*  adm7000DAO.selectAdm7000NormalDeptList - 조직 목록 조회   */
 		SELECT T.* FROM
@@ -344,17 +393,15 @@
 			FROM ADM7000 A 
 			WHERE 1=1
 			AND	A.LIC_GRP_ID = #licGrpId#
-			<!-- 조직 공통팝업 호출 전 조직 검색 -->
 			<isNotEmpty property="viewType">
 				<isEqual property="viewType" compareValue="cmm1200" >
-					AND A.USE_CD = '01' /* 사용유무가 사용인 조직만 조회 */
+					AND A.USE_CD = '01'
 					<isNotEmpty property="searchDeptNm">
 						AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
 					</isNotEmpty>
 				</isEqual>
 			</isNotEmpty>
 		) T
-		<!-- 조직 엑셀 다운로드시 계층 조회 -->
 		<isEmpty property="viewType">
 			START WITH T.UPPER_DEPT_ID IS NULL
 			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  

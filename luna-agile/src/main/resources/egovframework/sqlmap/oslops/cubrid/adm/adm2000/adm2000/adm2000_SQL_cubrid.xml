@@ -255,7 +255,17 @@
 		
     </insert>
     
-    <!-- 사용자 정보를 수정한다. -->
+    <!-- 
+                 사용자 수정
+    
+       1. 3개월 이상 로그인하지 않은 사용자의 차단여부를 정상으로 수정 시 로그인 일시를 현재일로 변경한다.
+       <isNotEmpty property="loginExprChange">
+			<isEqual property="loginExprChange" compareValue="Y">
+				REC_LOGIN_DTM = sysdate,
+			</isEqual>
+		</isNotEmpty>
+    
+     -->
 	<update id="adm2000DAO.updateAdm2000UsrInfo" parameterClass="java.util.Map">
 		/* adm2000DAO.updateAdm2000UsrInfo 사용자 수정 */
 		<![CDATA[
@@ -279,7 +289,6 @@
 			REQ_FONT_COLOR		= #reqFontColor#,
 			DSH_DISPLAY_CD		= #dshDisplayCd#,
 		]]>
-		<!-- 3개월 이상 로그인하지 않은 사용자의 차단여부를 정상으로 수정 시 로그인 일시를 현재일로 변경한다. -->
 		<isNotEmpty property="loginExprChange">
 			<isEqual property="loginExprChange" compareValue="Y">
 				REC_LOGIN_DTM = sysdate,
@@ -367,13 +376,6 @@
 			AND	LIC_GRP_ID 	= #licGrpId#
 			AND	USR_ID IN ($usrId$)
 			]]>
-			
-			<!-- iterate가 안먹어서 임시로 $ $표시 로 삭제함 -->
-			<!-- 
-			<iterate property="usrIdList" open="(" close=")" conjunction=",">	
-				#usrIdList[]# 
-				</iterate>  
-			-->		
 	</update>
 	
 	<!-- 사용자 엑셀 목록을 조회한다. -->
