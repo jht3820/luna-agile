@@ -63,6 +63,7 @@ function fnAxGrid5View(){
 					gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1003View.do',data, "415", "690",'scroll');
                 }
             },
+            /* 
             contextMenu: {
                 iconWidth: 20,
                 acceleratorWidth: 100,
@@ -99,6 +100,7 @@ function fnAxGrid5View(){
                     firstGrid.contextMenu.close();
                 }
             },
+             */
             page: {
                 navigationItemCount: 9,
                 height: 30,

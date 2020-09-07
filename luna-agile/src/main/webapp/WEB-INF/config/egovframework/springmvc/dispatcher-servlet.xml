@@ -49,6 +49,7 @@
 						<value>/cmm/cmm4000/cmm4000/selectCmm4000BeforeUsedPwChkAjax.do</value>
 						<value>/cmm/fms/getImage.do</value>
 						<value>/rpt/rpt2000/rpt2000/selectRpt2001View.do</value>
+						<value>/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do</value>
 					</list>
 				</property>
 			</bean>
