@@ -184,47 +184,47 @@
     	/* req4600DAO.selectReq4600ReqWbsListAjax - 요구사항 WBS차트 */ 
     	<![CDATA[
     	SELECT 
-    		T1.PRJ_ID	/* 프로젝트 ID */
-   			,	T1.REQ_ID	/* 요구사항 ID */
-   			,	T1.REQ_NM	/* 요구사항 명 */
-    		, 	SF_REPLACE_ALL(T1.REQ_DESC ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '' ) AS REQ_DESC /* 요구사항 설명 */    	
-   			, 	T1.REQ_ST_DU_DTM	/* 작업시작 예정일자 */
-			, 	T1.REQ_ED_DU_DTM /* 작업 종료 예정일자 */
-   			, 	T1.REQ_ST_DTM	/* 작업 시작일자 */
-   		   	, 	T1.REQ_ED_DTM	/* 작업 종료일자 */
-   			,	T1.REQ_COMPLETE_RATIO	/* 진척률 */
-   			,	T1.REQ_CHARGER_NM	/* 담당자 */
-   			,	T1.REQ_PRO_TYPE	/* 요구사항 처리유형 코드*/
-   			,	SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00008', T1.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM	/* 요구사항 처리유형 명 */  
-   			,	T1.REQ_STATUS /* 간트차트의 요구사항 상태 - 신호등 */
+    		T1.PRJ_ID
+   			,	T1.REQ_ID
+   			,	T1.REQ_NM
+    		, 	SF_REPLACE_ALL(T1.REQ_DESC ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '' ) AS REQ_DESC	
+   			, 	T1.REQ_ST_DU_DTM
+			, 	T1.REQ_ED_DU_DTM
+   			, 	T1.REQ_ST_DTM
+   		   	, 	T1.REQ_ED_DTM
+   			,	T1.REQ_COMPLETE_RATIO
+   			,	T1.REQ_CHARGER_NM
+   			,	T1.REQ_PRO_TYPE
+   			,	SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00008', T1.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+   			,	T1.REQ_STATUS
     	FROM
     	(
 	    	SELECT 
-						A.PRJ_ID	/* 프로젝트 ID */
-	    			,	A.REQ_ID	/* 요구사항 ID */
-	    			,	A.REQ_NM	/* 요구사항 명 */
-		    		, 	A.REQ_DESC /* 요구사항 설명 */    	
-	    			, 	TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD') AS REQ_ST_DU_DTM	/* 작업시작 예정일자 */
-					, 	TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD') AS REQ_ED_DU_DTM /* 작업 종료 예정일자 */
-	    			, 	IFNULL(TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM	/* 작업 시작일자 */
-	    		   	, 	IFNULL(TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM	/* 작업 종료일자 */
-	    			,	A.REQ_COMPLETE_RATIO	/* 진척률 */
-	    			,	B.USR_NM AS REQ_CHARGER_NM	/* 담당자 */
-	    			,	A.REQ_PRO_TYPE	/* 요구사항 처리유형 코드*/
+						A.PRJ_ID
+	    			,	A.REQ_ID
+	    			,	A.REQ_NM
+		    		, 	A.REQ_DESC
+	    			, 	TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD') AS REQ_ST_DU_DTM
+					, 	TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD') AS REQ_ED_DU_DTM
+	    			, 	IFNULL(TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
+	    		   	, 	IFNULL(TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+	    			,	IFNULL(A.REQ_COMPLETE_RATIO, '0') AS REQ_COMPLETE_RATIO
+	    			,	B.USR_NM AS REQ_CHARGER_NM
+	    			,	A.REQ_PRO_TYPE
 	    			,	(CASE A.REQ_PRO_TYPE WHEN '04' THEN
-	                		CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_FAILED' /* 실패 */
-			                ELSE 'STATUS_DONE' END /* 적기 */
+	                		CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_FAILED'
+			                ELSE 'STATUS_DONE' END
 			            ELSE
-			            	CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_SUSPENDED' /* 초과 */
-	                        	WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_WAITING' /* 임박 */
-	                        ELSE 'STATUS_ACTIVE' END /* 여유 */
-			            END)	AS REQ_STATUS /* 간트차트의 요구사항 상태 - 신호등 */
+			            	CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_SUSPENDED'
+	                        	WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(COALESCE(A.REQ_ED_DTM,CURRENT_TIMESTAMP),'YYYY-MM-DD'),'YYYY-MM-DD') THEN 'STATUS_WAITING'
+	                        ELSE 'STATUS_ACTIVE' END
+			            END)	AS REQ_STATUS
 	    	FROM REQ4100 A
 	    	INNER JOIN ADM2000 B
 	    	ON (A.REQ_CHARGER_ID = B.USR_ID)
 			WHERE   	1 = 1
 	    	AND   		A.PRJ_ID = #prjId#
-	    	AND 		A.REQ_PRO_TYPE != '01' /* 접수대기가 아닌 요구사항만 조회 */
+	    	AND 		A.REQ_PRO_TYPE != '01'
 	    	AND 		A.REQ_ST_DU_DTM IS NOT NULL
 	    	AND 		A.REQ_ED_DU_DTM IS NOT NULL
 	    	]]>
