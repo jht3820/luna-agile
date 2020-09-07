@@ -59,14 +59,14 @@ var newReqGrid_config = {
 	sortable:true,
 	header: {align:"center"},
 	columns: [
-			{key: "rn", label: " ", width: '4%', align: "center"},	
-			{key: "reqOrd", label: "순번", width: '8%', align: "center"},	          
-			{key: "reqDtm", label: "요청일자", width: '8%', align: "center"},
-			{key: "reqUsrNm", label: "요청자", width: '8%', align: "center"},
-			{key: "reqUsrEmail", label: "이메일", width: '11%', align: "center"},
-			{key: "reqUsrNum", label: "연락처", width: '10%', align: "center"},
-			{key: "reqNm", label: "요청 명", width: '30%', align: "left"},
-			{key: "reqDesc", label: "요청 내용", width: '35%', align: "left"},
+		{key: "rn", label: " ", width: 60, align: "center"},	
+		{key: "reqOrd", label: "순번", width: 90, align: "center"},	          
+		{key: "reqDtm", label: "요청일자", width: 115, align: "center"},
+		{key: "reqUsrNm", label: "요청자", width: 115, align: "center"},
+		{key: "reqUsrEmail", label: "이메일", width: 160, align: "center"},
+		{key: "reqUsrNum", label: "연락처", width: 145, align: "center"},
+		{key: "reqNm", label: "요청 명", width: 390, align: "left"},
+		{key: "reqDesc", label: "요청 내용", width: 400, align: "left"},
 		],
 	body: {
 		align: "center",
@@ -105,8 +105,8 @@ var flowGrid_config = {
 	sortable:true,
 	header: {align:"center"},
 	columns: [
-		{key: "rn", label: " ", width: '4%', align: "center"},	
-		{key: "reqOrd", label: "순번", width: '8%', align: "center"},	
+		{key: "rn", label: " ", width: 50, align: "center"},	
+		{key: "reqOrd", label: "순번", width: 115, align: "center"},	
 		{key: "reqProTypeNm", label: "처리 상태", width: 100, align: "center"},
 		{key: "signCdNm", label: "결재 상태", width: 100, align: "center"},
 		{key: "signUsrNm", label: "결재자", width: 140, align: "center"},
@@ -115,7 +115,7 @@ var flowGrid_config = {
 		{key: "reqUsrEmail", label: "이메일", width: 140, align: "center"},
 		{key: "reqUsrNum", label: "연락처", width: 100, align: "center"},
 		{key: "reqChargerNm", label: "담당자", width: 80, align: "center"},
-		{key: "reqNm", label: "요청 제목", width: 400, align: "left"},
+		{key: "reqNm", label: "요청 제목", width: 430, align: "left"},
 		{key: "reqDesc", label: "요청 내용", width: 250, align: "left"},
 		{key: "reqStDtm", label: "작업 시작일자", width: 140, align: "center"},
 		{key: "reqEdDtm", label: "작업 종료일자", width: 140, align: "center"},
@@ -2709,9 +2709,9 @@ function fnDsh3000PrjReqPopupOpen(projectId, processId, overType, popTitleMsg){
 </script>
 <div class="main_contents" style="width: 100%;padding: 30px;">
 	<div class="contents_wrap">
-		<div class="contents_title" style="width: 1750px;">
+		<div class="contents_title" style="width: 1760px;">
 			통합 대시 보드
-			<div class="dataAutoRefreshDiv dsh3000_autoRefreshDiv" style="margin-right: 90px;">
+			<div class="dataAutoRefreshDiv dsh3000_autoRefreshDiv">
 				<i class="fa fa-clock"></i>&nbsp;
 				<span id="autoRefreshSpan">30분 00초</span> 후 다음 정보&nbsp;-
 				<i class="fa fa-cogs autoRefresh_timeIcon"></i>&nbsp;

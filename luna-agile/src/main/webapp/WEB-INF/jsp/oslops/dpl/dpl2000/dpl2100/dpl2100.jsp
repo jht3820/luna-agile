@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
 <jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
-<link rel='stylesheet' href='<c:url value='/css/oslops/req.css'/>' type='text/css'>
+<link rel='stylesheet' href='<c:url value='/css/oslops/dpl.css'/>' type='text/css'>
+
 <style type="text/css">
 	.accptFont{color:#4b73eb !important;text-shadow: none !important;}
 	.rejectFont{color:#eb4b6a !important;text-shadow: none !important;}
@@ -28,6 +29,9 @@ $(document).ready(function(){
 
 	});	
 	
+	// 배포 계획 결제 승인관리 가이드 상자 호출
+	gfnGuideStack("add",fnDpl2100GuideShow);
+	
 	//그리드 및 검색 상자 호출
 	fnAxGrid5View();
 	fnSearchBoxControl();
@@ -39,13 +43,13 @@ function fnRequestEvent(type){
 	
 	//선택 데이터 없는경우
 	if(gfnIsNull(item)){
-		jAlert("결재 대기 요구사항을 선택해주세요.","알림창");
+		jAlert("결재 대기 배포계획을 선택해주세요.","알림창");
 		return false;
 	}
 	
-	var reqStatusCd = item.signCd;
-	if(reqStatusCd != "01"){
-		jAlert("승인상태가 대기 상태인 요구사항만 승인/반려가 가능합니다.","알림창");
+	var dplStatusCd = item.signStsCd;
+	if(dplStatusCd != "01"){
+		jAlert("승인상태가 대기 상태인 배포계획만 승인/반려가 가능합니다.","알림창");
 		return false;
 	}
 	
@@ -53,57 +57,38 @@ function fnRequestEvent(type){
 		jAlert("결재자가 본인일 경우에만 결재 승인/반려가 가능합니다.","알림창");
 		return false;
 	}
-	// 작업흐름 정보 필요
-	var nextFlowInfo = fnGetFlowNextNextId(item);
-	//var nextFlowInfo = firstGrid.list[firstGrid.selectedDataIndexs[0]].flowNextId;
 
+	//결재 승인
 	if(type == "accept"){
-		jConfirm("결재 승인하시겠습니까?", "알림", function( result ) {
-			if( result ){
-				//다음 작업흐름Id의 다음 작업흐름 Id(최종 종료 분기)
-				
-				var flowNextNextId = nextFlowInfo.flowNextId;
-				if(gfnIsNull(flowNextNextId)){
-					flowNextNextId = "null";
-				}
-				
-				var rtnData = item;
-				rtnData.signCd ="02";
-				rtnData.preFlowId  = item.flowId;
-				rtnData.flowNextNextId = flowNextNextId; // 현재 요구사항읜 다음, 다음 작업흐름 ID
-				rtnData.signRegUsrId = item.regUsrId;
-				fnReqSignComplete(rtnData);
-			}
-		});
+		var rtnData = {	
+						view: 'dpl2100',
+						type: 'accept',
+						dplId: item.dplId,
+						signId: item.signId
+					};
+		//팝업 화면 오픈
+		gfnLayerPopupOpen("/dpl/dpl2000/dpl2100/selectDpl2101View.do", rtnData, '550', '290','scroll');
 	}
 	//반려
 	else if(type == "reject"){
-		
 		var rtnData = {	
-						view: 'chk1100',
-						reqId: item.reqId, 
-						reqNm: item.reqNm, 
-						processId: item.processId, 
-						signFlowId: item.signFlowId, 
-						signUsrId: item.signUsrId, 
-						preFlowId: item.flowId, 
-						flowNextNextId: nextFlowInfo.flowNextId, 
-						signRegUsrId: item.regUsrId,
-						flowSignStopCd: item.flowSignStopCd, 
-						type: 'reject'
+						view: 'dpl2100',
+						type: 'reject',
+						dplId: item.dplId,
+						signId: item.signId
 					};
 		//팝업 화면 오픈
-		gfnLayerPopupOpen("/req/req4000/req4100/selectReq4108View.do", rtnData, '500', '290','scroll');
+		gfnLayerPopupOpen("/dpl/dpl2000/dpl2100/selectDpl2102View.do", rtnData, '500', '290','scroll');
 	}
 
 }
 
 
 //결재 승인&반려 데이터 세팅후 Ajax 전송
-function fnReqSignComplete(rtnData){
+function fnDplSignComplete(rtnData){
 	//AJAX 설정
 	var ajaxObj = new gfnAjaxRequestAction(
-			{"url":"<c:url value='/req/req4000/req4900/insertReq4900SignActionAjax.do'/>"},
+			{"url":"<c:url value='/dpl/dpl2000/dpl2100/insertDpl2100SignActionAjax.do'/>"},
 			rtnData);
 	//AJAX 전송 성공 함수
 	ajaxObj.setFnSuccess(function(data){
@@ -112,7 +97,9 @@ function fnReqSignComplete(rtnData){
 		//에러 없는경우
 		if(data.errorYn != "Y"){
 			jAlert(data.message,"알림");
-			axdom("#" + mySearch.getItemId("btn_search_sign")).click();
+			
+			//그리드 새로고침
+			fnInGridListSet(firstGrid.page.currentPage,mySearch.getParam());
 		}
 		else{
 			toast.push(data.message);
@@ -127,45 +114,6 @@ function fnReqSignComplete(rtnData){
 	//AJAX 전송
 	ajaxObj.send();
 	
-}
-
-
-// 결재 승인 시 필요한 작업흐름ID 조회
-function fnGetFlowNextNextId(selReqInfo){
-	
-	var nextFlowInfo;
-	
-	var data = {"prjId" : selReqInfo.prjId, "processId" : selReqInfo.processId, "signFlowId" : selReqInfo.signFlowId};
-	
-	//AJAX 설정
-	var ajaxObj = new gfnAjaxRequestAction(
-			{"url":"<c:url value='/chk/chk1000/chk1100/selectChk1100FlowNextNextIdInfoAjax.do'/>"},
-			data);
-	
-	ajaxObj.setProperty({"async":false});
-	
-	//AJAX 전송 성공 함수
-	ajaxObj.setFnSuccess(function(data){
-		data = JSON.parse(data);
-		
-		//에러 없는경우
-		if(data.errorYN != "Y"){
-			nextFlowInfo = data.nextFlowInfo;
-		}
-		else{
-			toast.push(data.message);
-		}
-	});
-	
-	//AJAX 전송 오류 함수
-	ajaxObj.setFnError(function(xhr, status, err){
-		data = JSON.parse(data);
-		jAlert(data.message, "알림");
- 	});
-	//AJAX 전송
-	ajaxObj.send();
-	
-	return nextFlowInfo;
 }
 
 
@@ -179,15 +127,15 @@ function fnAxGrid5View(){
             header: {align:"center"},
           
             columns: [
-	            	{key: "signCdNm", label: "결재 상태", width: 130, align: "center"},
-	          		{key: "signFlowNm", label: "작업흐름", width: 173, align: "center"},
-	          		{key: "signUsrNm", label: "결재자", width: 130, align: "center"},
-	          		{key: "signDtm", label: "결재 요청 일자", width: 130, align: "center",formatter:function(){
-	          			return new Date(this.item.signDtm).format("yyyy-MM-dd");
-	          		}},
-	          		{key: "reqNm", label: "요구사항 명", width: 390, align: "left"},
-	          		{key: "regUsrNm", label: "요청자", width: 130, align: "center"},
-	          		{key: "signRejectCmnt", label: "반려내용", width: 371, align: "left"},
+                		{key: "signStsNm", label: "결재 상태", width: 150, align: "center"},
+	              		{key: "signRegUsrNm", label: "요청자", width: 150, align: "center"},
+	              		{key: "signUsrNm", label: "결재자", width: 150, align: "center"},
+	              		{key: "signDtm", label: "결재 요청 일자", width: 150, align: "center",formatter:function(){
+	              			return new Date(this.item.signDtm).format("yyyy-MM-dd");
+	              		}},
+	              		{key: "dplNm", label: "배포계획명", width: 220, align: "center"},
+	              		{key: "signTxt", label: "결재 의견", width: 320, align: "left"},
+	              		{key: "signRejectTxt", label: "반려내용", width: 314, align: "left"},
                 		],
             body: {
                 align: "center",
@@ -199,11 +147,11 @@ function fnAxGrid5View(){
                 	//현재 선택 row 전체 선택
                     this.self.select(this.doindex);
                 	
-                	var reqId = this.item.reqId;
-                	
                 },onDBLClick:function(){
-                	var data = {"mode": "req", "reqId": firstGrid.list[this.doindex].reqId}; 
-					gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
+                	// 더블클릭 시 상세보기
+                	var item = this.item;
+                	var data = {"dplId" : item.dplId, "prjId" : item.prjId};
+					gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1003View.do',data, "415", "690",'scroll');
                 }
             },
             /* 
@@ -278,7 +226,7 @@ function fnInGridListSet(_pageNo,ajaxParam){
      	
      	//AJAX 설정
 		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/chk/chk1000/chk1100/selectChk1100AjaxView.do'/>","loadingShow":true}
+				{"url":"<c:url value='/dpl/dpl2000/dpl2100/selectDpl2100AjaxView.do'/>","loadingShow":true}
 				,ajaxParam);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
@@ -345,11 +293,16 @@ function fnSearchBoxControl(){
 						{label:"<i class='fa fa-search'></i>&nbsp;", labelWidth:"30", type:"selectBox", width:"", key:"searchSelect", addClass:"", valueBoxStyle:"", value:"all",
 							options:[
 								{optionValue:"0", optionText:"전체 보기",optionAll:true},
-								{optionValue:'reqNm', optionText:'요구사항 명'},
-								{optionValue:"regUsrNm", optionText:"담당자 명"},
-								{optionValue:'reqId', optionText:'요구사항 ID'},
-								
-								{optionValue:"signCd", optionText:"결재 상태", optionCommonCode:"REQ00004"}
+                                {optionValue:"signStsCd", optionText:"결재 상태", optionCommonCode:"REQ00004"},
+                                {optionValue:'signUsrNm', optionText:'결재자'},
+                                {optionValue:'signTxt', optionText:'결재 의견'},
+                                {optionValue:'signRejectTxt', optionText:'반려 내용'},
+                                {optionValue:"dplStsCd", optionText:"배포 상태", optionCommonCode:"DPL00001"},
+                                {optionValue:"dplTypeCd", optionText:"배포 방법", optionCommonCode:"DPL00003"},
+                                {optionValue:'dplNm', optionText:'배포계획명'},
+                                {optionValue:"dplVer", optionText:"배포 버전"},
+                                {optionValue:'dplUsrNm', optionText:'배포자'},
+                                {optionValue:'dplDesc', optionText:'배포 설명'},
                             ],onChange: function(selectedObject, value){
 								//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
     							if(!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true){
@@ -391,7 +344,7 @@ function fnSearchBoxControl(){
 		                               {optionValue:10000, optionText:"10000"},
 		                                
 		                            ],onChange: function(selectedObject, value){
-		                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
+		                            	fnInGridListSet(0,mySearch.getParam());
 		    						}
 						},
 						{label:"<i class='fas fa-arrows-v'></i>&nbsp;목록 높이&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"gridHeight", addClass:"", valueBoxStyle:"", value:"600",
@@ -419,19 +372,7 @@ function fnSearchBoxControl(){
 						{label:"", labelWidth:"", type:"button", width:"55",style:"float:right;", key:"btn_search_sign",valueBoxStyle:"padding-left:0px;padding-right:5px;", value:"<i class='fa fa-list' aria-hidden='true'></i>&nbsp;<span>조회</span>",
 						onclick:function(){
 							/* 검색 조건 설정 후 reload */
- 							var pars = mySearch.getParam();
-						    var ajaxParam = $('form#searchFrm').serialize();
-
-						    if(!gfnIsNull(pars)){
-						    	ajaxParam += "&"+pars;
-						    }
-							
-				            fnInGridListSet(0,ajaxParam);
-				            
-				            //폼 데이터 변경
-							$('#searchSelect').val(axdom("#" + mySearch.getItemId("searchSelect")).val());
-							$('#searchCd').val(axdom("#" + mySearch.getItemId("searchCd")).val());
-							$('#searchTxt').val(axdom("#" + mySearch.getItemId("searchTxt")).val());
+				            fnInGridListSet(0,mySearch.getParam());
 						}}
 					]}
 				]
@@ -476,29 +417,32 @@ function fnSearchBoxControl(){
 		
 	});
 }
+
+
+//배포 계획 결제 승인관리 가이드 상자
+function fnDpl2100GuideShow(){
+	var mainObj = $(".main_contents");
+	
+	// mainObj가 없는경우 false return
+	if(mainObj.length == 0){
+		return false;
+	}
+	// guide box setting
+	var guideBoxInfo = globals_guideContents["dpl2100"];
+	gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
+}
+
 </script>
 
 <div class="main_contents" style="height: auto;">
-	<form:form commandName="chk1100VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false;"></form:form>
-	<div class="req_title">${sessionScope.selMenuNm}</div>
+	<form:form commandName="dpl2100VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false;"></form:form>
+	<div class="dpl_title">${sessionScope.selMenuNm }</div>
 	<div class="tab_contents menu">
 		<input type="hidden" name="strInSql" id="strInSql" />
-		<div id="AXSearchTarget" style="border-top:1px solid #ccc;"></div>
+		<div id="AXSearchTarget" style="border-top:1px solid #ccc;" guide="ddplSignApprovalGridBtn"></div>
 		<br/>
-		<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 600px;"></div>	
+		<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 600px;" guide="dplSignApprovalGrid"></div>	
 	</div>
 </div>
-
-<!-- 
-<div class="approval_box">
-	<div class="reject_bg">
-		<div class='popup'>
-			<textarea id='chkCmntPop'></textarea>
-			<span class="button_normal2" id="btn_insert_reject">거부 메시지 전달</span>
-			<span class="button_normal2" id="btn_cancel_chk1100">취소</span>
-		</div>
-	</div>
-</div>
- -->
 
 <jsp:include page="/WEB-INF/jsp/oslops/bottom/footer.jsp" />
