@@ -1,48 +1,137 @@
-package kr.opensoftlab.oslops.stm.stm4000.stm4000.service.impl;
+package kr.opensoftlab.lunaops.stm.stm4000.stm4000.service.impl;
 
 import java.util.List;
 import java.util.Map;
 
+import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
+import kr.opensoftlab.sdf.excel.ExcelDataListResultHandler;
+
 import org.springframework.stereotype.Repository;
 
-import kr.opensoftlab.oslops.com.dao.ComOslitsAbstractDAO;
 
-
-/**
- * @Class Name : Stm4000DAO.java
- * @Description : Stm4000DAO DAO Class
- * @Modification Information
- *
- * @author 배용진
- * @since 2019.05.08.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp. All right reserved.
- */
 @Repository("stm4000DAO")
 public class Stm4000DAO extends ComOslitsAbstractDAO {
 	
-	/**
-	 * Stm4000 라이선스 그룹에 있는 모든 프로젝트 목록을 조회한다.
-	 * @param paramMap - Map
-	 * @return list - 라이선스 그룹의 프로젝트 목록
-	 * @exception Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public List selectStm4000LicGrpPrjList(Map paramMap) throws Exception {
-		 return (List) list("stm4000DAO.selectPrj1000LicGrpPrjList", paramMap);
-    }
 	
-	/**
-	 * Stm4000  관리 권한 있는 라이선스 그룹 내 모든 프로젝트 목록 검색
-	 * @param param - Map
-	 * @return 
-	 * @exception Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public List selectStm4000LicGrpAdminPrjList(Map paramMap) throws Exception {
-		return (List) list("stm4000DAO.selectPrj1000LicGrpAdminPrjList", paramMap);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm4000CommonCodeMasterList(Map paramMap)  throws Exception{
+		return (List<Map>) list("stm4000DAO.selectStm4000CommonCodeMasterList", paramMap);
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000CommonCodeMasterListCnt(Map paramMap) throws Exception {
+		return  (Integer)select("stm4000DAO.selectStm4000CommonCodeMasterListCnt", paramMap);
+	}
+	
+	
+    @SuppressWarnings("rawtypes")
+	public Map selectStm4000CommonCodeMasterInfo(Map paramMap) throws Exception {
+        return (Map) select("stm4000DAO.selectStm4000CommonCodeMasterInfo", paramMap);    
+    }
+	
+	
+	@SuppressWarnings({"unchecked", "rawtypes" })
+	public List<Map> selectStm4000CommonCodeDetailList(Map paramMap) throws Exception{
+		return (List<Map>) list("stm4000DAO.selectStm4000CommonCodeDetailList", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000CommonCodeDetailListCnt(Map paramMap) throws Exception {
+		return  (Integer)select("stm4000DAO.selectStm4000CommonCodeDetailListCnt", paramMap);
+	}
+	
+	
+    @SuppressWarnings("rawtypes")
+	public Map selectStm4000CommonCodeDetailInfo(Map paramMap) throws Exception {
+        return (Map) select("stm4000DAO.selectStm4000CommonCodeDetailInfo", paramMap);    
+    }
+	
+    
+	@SuppressWarnings("rawtypes")
+	public void insertStm4000CommonCodeMaster(Map paramMap) throws Exception{
+		insert("stm4000DAO.insertStm4000CommonCodeMaster", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void updateStm4000CommonCodeMaster(Map paramMap) throws Exception{
+		update("stm4000DAO.updateStm4000CommonCodeMaster", paramMap );
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void deleteStm4000CommonCodeMaster(Map paramMap) throws Exception {
+		
+		delete("stm4000DAO.deleteStm4000CommonCodeMaster", paramMap);
+	}
+	
+
+	
+	@SuppressWarnings("rawtypes")
+	public void deleteStm4000CommonCodeDetailAll(Map paramMap) throws Exception{
+		
+		delete("stm4000DAO.deleteStm4000CommonCodeDetailToMstCd", paramMap);
+	}
+	
+    
+	@SuppressWarnings("rawtypes")
+	public void insertStm4000CommonCodeDetail(Map paramMap) throws Exception{
+		insert("stm4000DAO.insertStm4000CommonCodeDetail", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void updateStm4000CommonCodeDetail(Map paramMap) throws Exception{
+		update("stm4000DAO.updateStm4000CommonCodeDetail", paramMap );
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void deleteStm4000CommonCodeDetail(Map paramMap) throws Exception {
+		delete("stm4000DAO.deleteStm4000CommonCodeDetail", paramMap);
+	}
+
+	
+	public void  selectStm4000MasterExcelList(LoginVO loginVO, ExcelDataListResultHandler resultHandler) throws Exception {
+		listExcelDownSql("stm4000DAO.selectStm4000MasterExcelList", loginVO, resultHandler);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void  selectStm4000DetailExcelList(Map paramMap, ExcelDataListResultHandler resultHandler) throws Exception {
+		listExcelDownSql("stm4000DAO.selectStm4000DetailExcelList", paramMap, resultHandler);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000CommonCodeCount(Map paramMap) throws Exception {
+		return (Integer)select("stm4000DAO.selectStm4000CommonCodeCount", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000CommonDetailCodeCount(Map paramMap) throws Exception {
+		return (Integer)select("stm4000DAO.selectStm4000CommonDetailCodeCount", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000MstCodeNextOrd(Map paramMap) throws Exception{
+		return (Integer) select("stm4000DAO.selectStm4000MstCodeNextOrd",paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm4000DetailCodeNextOrd(Map paramMap) throws Exception{
+		return (Integer) select("stm4000DAO.selectStm4000DetailCodeNextOrd",paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public List selectStm4000MultiCommonCodeList(Map paramMap) throws Exception{
+		return list("stm4000DAO.selectStm4000MultiCommonCodeList", paramMap);
+	}
 }

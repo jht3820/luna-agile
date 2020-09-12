@@ -9,59 +9,35 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.FileVO;
-import egovframework.com.cmm.util.EgovBasicLogger;
-import egovframework.com.cmm.util.EgovResourceCloseHelper;
-import egovframework.com.cmm.util.EgovUserDetailsHelper;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import kr.opensoftlab.oslits.com.vo.LoginVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * 파일 다운로드를 위한 컨트롤러 클래스
- * @author 공통서비스개발팀 이삼섭
- * @since 2009.06.01
- * @version 1.0
- * @see
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *
- *     수정일      	수정자           수정내용
- *  ------------   --------    ---------------------------
- *   2009.03.25  	이삼섭          최초 생성
- *   2014.02.24		이기하          IE11 브라우저 한글 파일 다운로드시 에러 수정
- *
- * Copyright (C) 2009 by MOPAS  All right reserved.
- * </pre>
- */
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.util.EgovBasicLogger;
+import egovframework.com.cmm.util.EgovResourceCloseHelper;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
+
+
 @Controller
 public class EgovFileDownloadController {
 
 	@Resource(name = "EgovFileMngService")
 	private EgovFileMngService fileService;
 
-	/**
-	 * 브라우저 구분 얻기.
-	 *
-	 * @param request
-	 * @return
-	 */
+	
 	private String getBrowser(HttpServletRequest request) {
 		String header = request.getHeader("User-Agent");
 		if (header.indexOf("MSIE") > -1) {
 			return "MSIE";
-		} else if (header.indexOf("Trident") > -1) { // IE11 문자열 깨짐 방지
+		} else if (header.indexOf("Trident") > -1) { 
 			return "Trident";
 		} else if (header.indexOf("Chrome") > -1) {
 			return "Chrome";
@@ -71,14 +47,7 @@ public class EgovFileDownloadController {
 		return "Firefox";
 	}
 
-	/**
-	 * Disposition 지정하기.
-	 *
-	 * @param filename
-	 * @param request
-	 * @param response
-	 * @throws Exception
-	 */
+	
 	private void setDisposition(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String browser = getBrowser(request);
 
@@ -87,7 +56,7 @@ public class EgovFileDownloadController {
 
 		if (browser.equals("MSIE")) {
 			encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
-		} else if (browser.equals("Trident")) { // IE11 문자열 깨짐 방지
+		} else if (browser.equals("Trident")) { 
 			encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
 		} else if (browser.equals("Firefox")) {
 			encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1") + "\"";
@@ -115,25 +84,19 @@ public class EgovFileDownloadController {
 		}
 	}
 
-	/**
-	 * 첨부파일로 등록된 파일에 대하여 다운로드를 제공한다.
-	 *
-	 * @param commandMap
-	 * @param response
-	 * @throws Exception
-	 */
+	
 	@RequestMapping(value = "/cmm/fms/FileDown.do")
 	public void cvplFileDownload(@RequestParam Map<String, Object> commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String atchFileId = (String) commandMap.get("atchFileId");
 		String fileSn = (String) commandMap.get("fileSn");
 
-		//로그인VO 가져오기
+		
 		HttpSession ss = request.getSession();
 		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 		if(loginVO != null){
-		//Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
-		//if (isAuthenticated) {
+		
+		
 
 			FileVO fileVO = new FileVO();
 			fileVO.setAtchFileId(atchFileId);
@@ -146,18 +109,13 @@ public class EgovFileDownloadController {
 			if (fSize > 0) {
 				String mimetype = "application/x-msdownload";
 
-				//response.setBufferSize(fSize);	// OutOfMemeory 발생
+				
 				response.setContentType(mimetype);
-				//response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8") + "\"");
+				
 				setDisposition(fvo.getOrignlFileNm(), request, response);
-				//response.setContentLength(fSize);
+				
 
-				/*
-				 * FileCopyUtils.copy(in, response.getOutputStream());
-				 * in.close();
-				 * response.getOutputStream().flush();
-				 * response.getOutputStream().close();
-				 */
+				
 				BufferedInputStream in = null;
 				BufferedOutputStream out = null;
 
@@ -168,8 +126,8 @@ public class EgovFileDownloadController {
 					FileCopyUtils.copy(in, out);
 					out.flush();
 				} catch (IOException ex) {
-					// 다음 Exception 무시 처리
-					// Connection reset by peer: socket write error
+					
+					
 					EgovBasicLogger.ignore("IO Exception", ex);
 				} finally {
 					EgovResourceCloseHelper.close(in, out);

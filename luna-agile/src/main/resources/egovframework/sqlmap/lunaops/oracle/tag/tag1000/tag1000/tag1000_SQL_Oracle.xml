@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="tag1000DAO">
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+    <select id="tag1000DAO.selectTag1000TagListCnt" resultClass="java.lang.Integer">
+		SELECT 
+		   COUNT(A.TAG_ID) AS CNT
+		FROM TAG1000 A
+		WHERE 1 = 1
+    </select>
+    
+    <select id="tag1000DAO.selectTag1000TagInfo" parameterClass="java.util.Map"  resultClass="java.lang.String">
+		SELECT 
+		   A.TAG_NM AS TAG_NM
+		FROM TAG1000 A
+		WHERE 1 = 1
+		AND TAG_ID = #tagId#
+    </select>
+    
+    <select id="tag1000DAO.selectTag1000TagInfoCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+		SELECT 
+		   A.TAG_ID AS TAG_ID
+		FROM TAG1000 A
+		WHERE 1 = 1
+		AND TAG_NM = #tagNm#
+    </select>
+    
+    <insert id="tag1000DAO.insertTag1000TagInfo" parameterClass="java.util.Map">
+	    <selectKey resultClass="java.lang.String" keyProperty="newTagId">
+		<![CDATA[
+			SELECT	NVL( 
+			          SUBSTR(NEW_TAG_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_TAG_ID, 12, 5)) + 1) , 5, '0')
+			      ,	'TAG' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+			  ) AS NEW_TAG_ID 
+			FROM	(
+			      SELECT	MAX(TAG_ID)  AS NEW_TAG_ID
+			      FROM	TAG1000 A
+			      WHERE	1 = 1
+			      AND		A.LIC_GRP_ID = #licGrpId#
+			  )
+		]]>
+		</selectKey>
+		INSERT INTO TAG1000 (
+			LIC_GRP_ID
+			, TAG_ID
+			, TAG_NM
+			, REG_DTM
+			, REG_USR_ID
+			, REG_USR_IP
+			, MODIFY_DTM
+			, MODIFY_USR_ID
+			, MODIFY_USR_IP
+		) VALUES (
+			#licGrpId#
+			, #newTagId#
+			, #tagNm#
+			, SYSDATE
+			, #regUsrId#
+			, #regUsrIp#
+			, SYSDATE
+			, #modifyUsrId#
+			, #modifyUsrIp#
+		)
+    </insert>
+
+	<select id="tag1000DAO.selectTag1000TopInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT
+			ROWNUM RN
+			, C.CNT AS CNT
+			, C.TAG_ID AS TAG_ID
+			, D.TAG_NM AS TAG_NM
+		FROM ( 
+			SELECT
+				COUNT(A.TAG_ID) AS CNT
+				, A.TAG_ID AS TAG_ID
+			FROM BAD1010 A
+			WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="dsTypeCd">
+				<isNotEmpty property="dsTypeCd">
+					<isEqual property="dsTypeCd" compareValue="02">
+						AND A.PRJ_GRP_ID = #prjGrpId#
+					</isEqual>
+					<isEqual property="dsTypeCd" compareValue="03">
+						AND A.PRJ_ID = #prjId#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			AND A.MENU_ID = #menuId#
+			GROUP BY A.TAG_ID
+			ORDER BY CNT DESC
+		) C LEFT JOIN (
+			SELECT
+				B.TAG_ID AS TAG_ID
+				, B.TAG_NM AS TAG_NM
+			FROM TAG1000 B
+		) D
+		ON C.TAG_ID = D.TAG_ID
+		WHERE 1 = 1
+		AND ROWNUM BETWEEN 1 AND 5
+    </select>
+    
+</sqlMap>

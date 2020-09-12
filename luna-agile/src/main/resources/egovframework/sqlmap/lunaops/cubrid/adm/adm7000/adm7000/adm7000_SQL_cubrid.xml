@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="adm7000DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	<sql id="selectAdm7000DeptList">
+		SELECT 		
+				T.* 
+		FROM
+		(
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM ADM7000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+	        <isNotEmpty property="searchSelect">
+	        	<isEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 2
+			        ]]>
+	        	</isEqual>
+	        	<isNotEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 1
+			        ]]>
+	        	</isNotEqual>
+	        </isNotEmpty>
+	        <isNotEmpty property="searchSelect">
+	        	<isNotEmpty property="searchTxt">
+		        	<isNotEqual property="searchSelect" compareValue="all">
+			        	UNION
+			        	SELECT C.*
+			        	FROM
+			        	(
+				       		SELECT
+									B.LIC_GRP_ID
+								,	B.DEPT_ID
+								,	B.UPPER_DEPT_ID
+								,	B.DEPT_NAME
+								,	B.DEPT_ADMIN_USR_ID
+								,	B.ORD
+								,	B.USE_CD
+								,	B.DEPT_ETC
+								,	B.LVL
+								,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+								,	B.REG_USR_ID
+								,	B.REG_USR_IP
+								,	TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+								,	B.MODIFY_USR_ID
+								,	B.MODIFY_USR_IP
+							FROM ADM7000 B 
+							WHERE 1=1
+							AND	B.LIC_GRP_ID = #licGrpId#
+						    <isNotEmpty property="viewType">
+								<isEqual property="viewType" compareValue="cmm1200" >
+									AND B.USE_CD = '01'
+								</isEqual>
+							</isNotEmpty> 
+						) C
+						<isEqual property="searchSelect" compareValue="deptName">
+							START WITH C.DEPT_NAME LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+						<isEqual property="searchSelect" compareValue="deptEtc">
+							START WITH C.DEPT_ETC LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+				        CONNECT BY PRIOR  C.UPPER_DEPT_ID = C.DEPT_ID 
+		        	</isNotEqual>
+	        	</isNotEmpty>
+			</isNotEmpty>
+		) T
+      	WHERE 1=1
+      	ORDER BY T.ORD ASC, T.REG_DTM ASC
+	</sql>
+
+    <select id="adm7000DAO.selectAdm7000DeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT *
+		FROM
+			(
+				<include refid="selectAdm7000DeptList"/>
+	    	)
+    </select>
+    
+    
+    <select id="adm7000DAO.selectAdm7000SubDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT
+				A.LIC_GRP_ID
+			,	A.DEPT_ID
+			,	A.UPPER_DEPT_ID
+			,	A.DEPT_NAME
+			,	A.DEPT_ADMIN_USR_ID
+			,	A.ORD
+			,	A.USE_CD
+			,	A.DEPT_ETC
+			,	A.LVL
+			,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+			,	A.REG_USR_ID
+			,	A.REG_USR_IP
+			,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+			,	A.MODIFY_USR_ID
+			,	A.MODIFY_USR_IP
+		FROM ADM7000 A 
+		WHERE 1=1
+		AND A.LIC_GRP_ID =  #licGrpId#
+		AND A.UPPER_DEPT_ID = #deptId#
+	    <isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01'
+			</isEqual>
+		</isNotEmpty>
+ 		ORDER BY A.ORD ASC, A.DEPT_NAME ASC
+    </select>
+    
+	<select id="adm7000DAO.selectAdm7000DeptInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	
+					LIC_GRP_ID
+				,	DEPT_ID
+			    ,	UPPER_DEPT_ID
+			    ,	DEPT_NAME
+			    ,	DEPT_ADMIN_USR_ID
+			    ,	ORD
+			    ,	USE_CD
+			    ,	DEPT_ETC
+			    ,	LVL
+			    ,	TO_CHAR(REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+			    ,	REG_USR_ID
+			    ,	REG_USR_IP
+			    ,	TO_CHAR(MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+			    ,	MODIFY_USR_ID
+			    ,	MODIFY_USR_IP
+			FROM ADM7000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+			AND	A.DEPT_ID = #deptId#
+ 		]]> 
+	</select>
+	
+	<insert id="adm7000DAO.insertAdm7000RootDeptInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDeptId">
+		<![CDATA[
+			SELECT	COALESCE( 
+							SUBSTR(NEW_DEPT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DEPT_ID, 12, 5)) + 1) , 5, '0')
+						,	'DPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '00001'
+            		) AS NEW_DPT_ID 
+			FROM	(
+			            SELECT	MAX(DEPT_ID)  AS NEW_DEPT_ID
+			            FROM	ADM7000 A
+			            WHERE	1=1
+                        AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.DEPT_ID LIKE 'DPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO ADM7000
+			(
+					LIC_GRP_ID			,	DEPT_ID  			,	UPPER_DEPT_ID  		,	DEPT_NAME
+			  	,	DEPT_ADMIN_USR_ID	,	ORD					,	USE_CD		 		,	DEPT_ETC
+			  	,	LVL				  	,	REG_DTM	  			,	REG_USR_ID 			,	REG_USR_IP
+			  	,	MODIFY_DTM		  	,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#			,	#newDeptId#			,	null		,	#deptName#   
+			    ,	#deptAdminUsrId#	,	0					,	'01'		,	'최상위 조직'		
+			    ,	0	    			,	CURRENT_TIMESTAMP	,	#regUsrId#	,	#regUsrIp#
+			    ,	CURRENT_TIMESTAMP	,	#regUsrId#			,	#regUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+	<insert id="adm7000DAO.insertAdm7000DeptInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDeptId">
+		<![CDATA[
+			SELECT	COALESCE( 
+							SUBSTR(NEW_DEPT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DEPT_ID, 12, 5)) + 1) , 5, '0')
+						,	'DPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '00001'
+            		) AS NEW_DEPT_ID 
+			FROM	(
+			            SELECT	MAX(DEPT_ID)  AS NEW_DEPT_ID
+			            FROM	ADM7000 A
+			            WHERE	1=1
+                        AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.DEPT_ID LIKE 'DPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO ADM7000
+			(
+					LIC_GRP_ID			,	DEPT_ID  			,	UPPER_DEPT_ID  		,	DEPT_NAME
+			  	,	DEPT_ADMIN_USR_ID	,	ORD					,	USE_CD		 		
+			  	,	DEPT_ETC
+			  	,	LVL				  	,	REG_DTM	  			,	REG_USR_ID 			,	REG_USR_IP
+			  	,	MODIFY_DTM		  	,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#			,	#newDeptId#		,	#upperDeptId#		,	#deptName#   
+			    ,	#deptAdminUsrId#	,	#ord#			,	'01'	
+		]]>			
+			    <isEmpty property="deptEtc">
+			   		, NULL
+			    </isEmpty>
+			    <isNotEmpty property="deptEtc">
+			     	, #deptEtc#
+			    </isNotEmpty>
+		<![CDATA[ 	    		
+			    ,	#lvl# + 1	    	,	CURRENT_TIMESTAMP			,	#regUsrId#			,	#regUsrIp#
+			    ,	CURRENT_TIMESTAMP	,	#modifyUsrId#				,	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+	<update id="adm7000DAO.updateAdm7000DpteInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		UPDATE ADM7000 A SET		
+				A.UPPER_DEPT_ID		= #upperDeptId#
+        	,	A.DEPT_NAME			= #deptName#
+    ]]>
+        	<isEmpty property="deptEtc">
+		   		,	A.DEPT_ETC		= NULL
+		    </isEmpty>
+		    <isNotEmpty property="deptEtc">
+		     	,	A.DEPT_ETC		= #deptEtc#
+		    </isNotEmpty>
+   <![CDATA[     	
+            ,	A.LVL				= #lvl#
+            ,	A.ORD				= #ord#
+            ,	A.USE_CD			= #useCd#
+            ,	A.MODIFY_DTM		= CURRENT_TIMESTAMP
+            ,	A.MODIFY_USR_ID		= #modifyUsrId#
+            ,	A.MODIFY_USR_IP		= #modifyUsrIp#
+        WHERE 1=1
+        AND	A.LIC_GRP_ID = #licGrpId#
+        AND	A.DEPT_ID = #deptId#
+	]]>
+	</update>
+	
+	
+	<delete id="adm7000DAO.deleteAdm7000DeptInfo" parameterClass="java.util.Map">
+	<![CDATA[
+        DELETE FROM ADM7000 A
+		WHERE 1=1
+		AND	A.LIC_GRP_ID 	= #licGrpId#
+		AND	A.DEPT_ID IN ($deptId$)
+	]]>
+	</delete>
+	
+	
+	<select id="adm7000DAO.selectAdm7000UpperDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.DEPT_NAME
+			FROM	ADM7000 A 
+			WHERE	1=1
+			AND 	A.LIC_GRP_ID 	= #licGrpId#
+			START WITH DEPT_ID = #deptId#
+			CONNECT BY PRIOR UPPER_DEPT_ID = DEPT_ID
+ 		]]> 
+	</select>
+	
+	
+	<select id="adm7000DAO.selectAdm7000ExistDeptChk" parameterClass="java.util.Map" resultClass="int">
+		<![CDATA[ 
+			SELECT	COUNT(*) AS CNT
+			FROM	ADM7000 A
+			WHERE	1=1
+			AND		A.LIC_GRP_ID 	= #licGrpId#
+			AND		A.DEPT_ID 		= #deptId#
+ 		]]> 
+	</select>
+	
+    <select id="adm7000DAO.selectAdm7000NormalDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT T.* FROM
+		(
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM ADM7000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="viewType">
+				<isEqual property="viewType" compareValue="cmm1200" >
+					AND A.USE_CD = '01' /* 사용유무가 사용인 조직만 조회 */
+					<isNotEmpty property="searchDeptNm">
+						AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		) T
+		<isEmpty property="viewType">
+			START WITH T.UPPER_DEPT_ID IS NULL
+			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  
+    		ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
+		</isEmpty>
+    </select>
+	
+</sqlMap>

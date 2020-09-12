@@ -1,17 +1,6 @@
-package kr.opensoftlab.oslops.com.vo;
+package kr.opensoftlab.lunaops.com.vo;
 
-/**
- * @Class Name : SessionVO.java
- * @Description : SessionVO VO class
- * @Modification Information
- *
- * @author 정형택
- * @since 2015.12.30.
- * @version 1.0
- * @see
- *  
- *  Copyright (C)  All right reserved.
- */
+
 public class SessionVO extends DefaultVO{
     
     private String sessionId;
