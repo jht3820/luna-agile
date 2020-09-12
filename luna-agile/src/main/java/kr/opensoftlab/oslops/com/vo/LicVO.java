@@ -1,18 +1,6 @@
-package kr.opensoftlab.oslops.com.vo;
+package kr.opensoftlab.lunaops.com.vo;
 
-/**
- * @Class Name : LicVO.java
- * @Description : LicVO VO class
- * @Modification Information
- * @Decription : 라이선스 정보를 담을 Bean 
- * 
- * @author 정형택
- * @since 2015.12.30.
- * @version 1.0
- * @see
- *  
- *  Copyright (C)  All right reserved.
- */
+
 public class LicVO extends DefaultVO{
     
 	private String licGrpId;

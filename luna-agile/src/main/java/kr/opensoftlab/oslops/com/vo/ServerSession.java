@@ -1,21 +1,9 @@
-package kr.opensoftlab.oslops.com.vo;
 
 import javax.websocket.Session;
 
 import java.io.Serializable;
 
-/**
- * @Class Name : ServerSession.java
- * @Description : ServerSession VO class
- * @Modification Information
- *
- * @author 진주영
- * @since 2016.05.03
- * @version 1.0
- * @see
- *  
- *  Copyright (C)  All right reserved.
- */
+
 public class ServerSession implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -30,7 +18,6 @@ public class ServerSession implements Serializable{
 	private String userName;
 	private String usrImgId;
 	
-	//들어온 시간
 	private String joinDate;
 	
 	public ServerSession() {

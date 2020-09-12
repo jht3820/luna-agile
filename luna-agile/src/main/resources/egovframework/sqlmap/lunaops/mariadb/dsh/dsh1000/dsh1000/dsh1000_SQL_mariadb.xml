@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dsh1000DAO">
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="dsh1000VO"	type="kr.opensoftlab.oslops.dsh.dsh1000.dsh1000.vo.Dsh1000VO"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="resultMapDsh1000" class="dsh1000VO">
+		<result property="prjId"              column="PRJ_ID" /> 
+		<result property="reqId"              column="REQ_ID" /> 
+		<result property="reqOrd"              column="REQ_ORD" /> 
+		<result property="reqClsId"              column="REQ_CLS_ID" /> 
+		<result property="reqClsNm"              column="REQ_CLS_NM" /> 
+		<result property="reqNo"              column="REQ_NO" /> 
+		<result property="reqUsrId"              column="REQ_USR_ID" /> 
+		<result property="reqUsrNm"              column="REQ_USR_NM" /> 
+		<result property="reqDtm"              column="REQ_DTM" /> 
+		<result property="reqUsrDeptNm"              column="REQ_USR_DEPT_NM" /> 
+		<result property="reqUsrEmail"              column="REQ_USR_EMAIL" /> 
+		<result property="reqUsrNum"              column="REQ_USR_NUM" /> 
+		<result property="reqNm"              column="REQ_NM" /> 
+		<result property="reqDesc"              column="REQ_DESC" /> 
+		<result property="reqChargerId"              column="REQ_CHARGER_ID" /> 
+		<result property="reqCompleteRatio"              column="REQ_COMPLETE_RATIO" /> 
+		<result property="reqFp"              column="REQ_FP" /> 
+		<result property="reqExFp"              column="REQ_EX_FP" /> 
+		<result property="reqChargerNm"              column="REQ_CHARGER_NM" /> 
+		<result property="reqStDtm"              column="REQ_ST_DTM" /> 
+		<result property="reqEdDtm"              column="REQ_ED_DTM" /> 
+		<result property="reqStDuDtm"              column="REQ_ST_DU_DTM" /> 
+		<result property="reqEdDuDtm"              column="REQ_ED_DU_DTM" /> 
+		<result property="reqProType"              column="REQ_PRO_TYPE" /> 
+		<result property="reqProTypeNm"              column="REQ_PRO_TYPE_NM" /> 
+		<result property="reqNewType"              column="REQ_NEW_TYPE" /> 
+		<result property="reqNewTypeNm"              column="REQ_NEW_TYPE_NM" /> 
+		<result property="reqAcceptTxt"              column="REQ_ACCEPT_TXT" /> 
+		<result property="sclCd"              column="SCL_CD" /> 
+		<result property="reqTypeCd"              column="REQ_TYPE_CD" /> 
+		<result property="piaCd"              column="PIA_CD" /> 
+		<result property="sclNm"              column="SCL_NM" /> 
+		<result property="reqTypeNm"              column="REQ_TYPE_NM" /> 
+		<result property="piaNm"              column="PIA_NM" /> 
+		<result property="labInp"              column="LAB_INP" /> 
+		<result property="atchFileId"              column="ATCH_FILE_ID" /> 
+		<result property="cbAtchFileId"              column="CB_ATCH_FILE_ID" /> 
+		<result property="milestoneId"              column="MILESTONE_ID" /> 
+		<result property="processId"              column="PROCESS_ID" /> 
+		<result property="processNm"              column="PROCESS_NM" /> 
+		<result property="flowId"              column="FLOW_ID" /> 
+		<result property="flowNm"              column="FLOW_NM" /> 
+		<result property="flowNextId"              column="FLOW_NEXT_ID" /> 
+		<result property="useCd"              column="USE_CD" /> 
+		<result property="regDtm"              column="REG_DTM" /> 
+		<result property="regDtmDay"              column="REG_DTM_DAY" /> 
+		<result property="regUsrId"              column="REG_USR_ID" /> 
+		<result property="regUsrIp"              column="REG_USR_IP" /> 
+		<result property="modifyDtm"              column="MODIFY_DTM" /> 
+		<result property="modifyUsrId"              column="MODIFY_USR_ID" /> 
+		<result property="modifyUsrIp"              column="MODIFY_USR_IP" /> 
+		<result property="orgReqId"              column="ORG_REQ_ID" /> 
+
+    </resultMap>
+    
+    <select id="dsh1000DAO.selectDsh1000ProcessReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT
+    		NVL(A.PROCESS_ID,'request') AS PROCESS_ID
+    		, NVL(C.PROCESS_NM,'접수 대기') AS PROCESS_NM
+    		, COUNT(*) AS ALL_CNT
+    		, COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+    		, COUNT(DECODE(A.REQ_CHARGER_ID,#usrId#,1)) AS CHARGER_CNT
+		FROM REQ4100 A, FLW1100 B, FLW1000 C
+		WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PRJ_ID = B.PRJ_ID(+)
+			AND A.PROCESS_ID = B.PROCESS_ID(+)
+			AND A.FLOW_ID = B.FLOW_ID(+)
+			AND B.PRJ_ID = C.PRJ_ID(+)
+			AND B.PROCESS_ID = C.PROCESS_ID(+)
+		<![CDATA[
+			AND A.REQ_PRO_TYPE <> '03'
+			AND A.REQ_PRO_TYPE <> '05'
+			AND A.REQ_PRO_TYPE <> '06'
+		]]>
+		GROUP BY A.PROCESS_ID, C.PROCESS_NM, C.PROCESS_ORD
+		ORDER BY NVL(C.PROCESS_ORD, -1),A.PROCESS_ID NULLS FIRST
+    </select>   
+    
+    <select id="dsh1000DAO.selectDsh1000MonthProcessReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT A.*, B.PROCESS_NM
+		FROM
+		(
+			SELECT 
+				Y.PRJ_ID
+				, Y.PROCESS_ID
+				, Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT
+				, COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+				, COUNT(DECODE(Y.REQ_CHARGER_ID,#usrId#,1)) AS REQ_CHARGER_CNT
+                , SUM(COUNT(*)) OVER (PARTITION BY REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+		    FROM
+		    (
+		        SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+		            CASE
+		                WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+		                WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+		                WHEN Z.REQ_ED_DTM IS NULL THEN -1
+		                 <![CDATA[
+		                WHEN Z.REQ_ED_DTM <= TO_DATE(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') THEN 1
+		                ]]>
+		                ELSE 0 END AS REQ_ED_RATIO_NUM
+		        FROM REQ4100 Z
+		        WHERE 1=1
+		        AND Z.PRJ_ID = #prjId#
+		        AND Z.REQ_PRO_TYPE != '05'
+		        AND Z.REQ_PRO_TYPE != '06'
+		    ) Y
+		    WHERE 1=1
+		    GROUP BY Y.PRJ_ID, Y.PROCESS_ID, Y.REQ_ED_DU_MM
+		) A, FLW1000 B
+		WHERE 1=1
+		AND A.PRJ_ID = B.PRJ_ID(+)
+		AND A.PROCESS_ID = B.PROCESS_ID(+)
+		AND A.PROCESS_ID IS NOT NULL
+		AND A.REQ_ED_DU_MM IS NOT NULL
+		ORDER BY A.REQ_ED_DU_MM, B.PROCESS_ORD
+    </select> 
+    
+    
+    	<sql id="selectDsh1000ReqList">
+		<![CDATA[
+		SELECT  
+				 ROWNUM RN , 
+				 A.PRJ_ID ,
+		         A.REQ_ID ,
+		         A.REQ_ORD ,
+		         A.REQ_CLS_ID ,
+		         NVL(SF_REQ4000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '2'), '') AS REQ_CLS_NM ,
+		         A.REQ_NO ,
+		         A.REQ_USR_ID ,
+		         NVL(A.REQ_USR_NM, SF_ADM2000_USR_INFO(A.REQ_USR_ID, '1')) AS REQ_USR_NM ,
+		         TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD')                          AS REQ_DTM ,
+		         A.REQ_USR_DEPT_NM ,
+		         A.REQ_USR_EMAIL ,
+		         A.REQ_USR_NUM ,
+		         A.REQ_NM ,
+		         REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC ,
+		         A.REQ_CHARGER_ID ,
+		         A.REQ_COMPLETE_RATIO ,
+		         A.REQ_FP ,
+		         A.REQ_EX_FP ,
+		         D.USR_NM AS REQ_CHARGER_NM ,
+		         NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DTM ,
+		         NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DTM ,
+		         NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD') , '') REQ_ST_DU_DTM ,
+		         NVL2(A.REQ_ED_DU_DTM, TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD') , '') REQ_ED_DU_DTM ,
+		         A.REQ_PRO_TYPE ,
+		         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM ,
+		         A.REQ_NEW_TYPE ,
+		         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00009', A.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM ,
+		         A.REQ_ACCEPT_TXT ,
+		         A.SCL_CD ,
+		         A.REQ_TYPE_CD ,
+		         A.PIA_CD ,
+		         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00011', A.SCL_CD, '1')      AS SCL_NM ,
+		         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00012', A.REQ_TYPE_CD, '1') AS REQ_TYPE_NM ,
+		         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'CMM00001', A.PIA_CD, '1')      AS PIA_NM ,
+		         A.LAB_INP ,
+		         A.ATCH_FILE_ID ,
+		         A.CB_ATCH_FILE_ID ,
+		         A.MILESTONE_ID ,
+		         A.PROCESS_ID ,
+		         B.PROCESS_NM ,
+		         A.FLOW_ID ,
+		         C.FLOW_NM ,
+		         C.FLOW_NEXT_ID ,
+		         A.USE_CD ,
+		         TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM ,
+		         TO_CHAR(A.REG_DTM, 'YYYY-MM-DD')            AS REG_DTM_DAY ,
+		         A.REG_USR_ID ,
+		         A.REG_USR_IP ,
+		         TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM ,
+		         A.MODIFY_USR_ID ,
+		         A.MODIFY_USR_IP ,
+		         A.ORG_REQ_ID
+		FROM     REQ4100 A ,
+		         FLW1000 B ,
+		         FLW1100 C ,
+		         ADM2000 D
+		WHERE    1                =	1
+		AND      A.PRJ_ID         = #prjId#
+		AND      A.PRJ_ID         = B.PRJ_ID(+)
+		AND      A.PROCESS_ID     = B.PROCESS_ID(+)
+		AND      A.PRJ_ID         = C.PRJ_ID(+)
+		AND      A.PROCESS_ID     = C.PROCESS_ID(+)
+		AND      A.FLOW_ID        = C.FLOW_ID(+)
+		AND      A.REQ_CHARGER_ID = D.USR_ID(+)
+		AND A.REQ_PRO_TYPE <> '05'
+		AND A.REQ_PRO_TYPE <> '06'
+		]]>
+		<isNotEmpty property="processNm">
+		AND      B.PROCESS_NM     =	#processNm#
+		</isNotEmpty>
+		<isNotEmpty property="processId">
+		AND      A.PROCESS_ID     =	#processId#
+		</isNotEmpty>
+		<isNotEmpty property="reqProType">
+		AND       A.REQ_PRO_TYPE     =	#reqProType#
+		</isNotEmpty>
+		<isNotEmpty property="processMonth">
+		AND      TO_CHAR(A.REQ_ED_DU_DTM ,'YYYYMM')    =	TO_CHAR((A.REQ_ED_DU_DTM+0) ,'YYYY') || #processMonth#
+		AND		 TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= A.REQ_ED_DTM
+		AND		A.REQ_PRO_TYPE = '04'
+		</isNotEmpty>
+		<isNotEmpty property="processStartMonth">
+		AND      TO_CHAR(A.REQ_ED_DU_DTM ,'YYYYMM')    BETWEEN 	TO_CHAR((A.REQ_ED_DU_DTM) ,'YYYY') || #processStartMonth#  AND TO_CHAR((A.REQ_ED_DU_DTM) ,'YYYY') || #processEndMonth#
+		AND		 TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= A.REQ_ED_DTM 
+		AND		A.REQ_PRO_TYPE = '04'
+		</isNotEmpty>
+		<isNotEmpty property="overType">
+			<isEqual property="overType" compareValue="01" >
+				<![CDATA[
+				AND A.REQ_PRO_TYPE != '04'
+				AND ( A.REQ_ED_DU_DTM  IS NULL OR  TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) )
+				AND ( A.REQ_ED_DU_DTM  IS NULL OR   TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) )
+				]]>
+			</isEqual>
+			<isEqual property="overType" compareValue="02" >
+				<![CDATA[
+				AND A.REQ_PRO_TYPE != '04'
+				AND A.REQ_ED_DU_DTM IS NOT NULL
+				AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+				AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+				]]>
+			</isEqual>
+			<isEqual property="overType" compareValue="03" >
+				<![CDATA[
+				AND A.REQ_PRO_TYPE != '04'
+				AND A.REQ_ED_DU_DTM  IS NOT NULL
+				AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) 
+				]]>
+			</isEqual>
+			<isEqual property="overType" compareValue="04" >
+				<![CDATA[
+				AND A.REQ_PRO_TYPE = '04' 
+				AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+				]]>
+			</isEqual>
+			<isEqual property="overType" compareValue="05" >
+				<![CDATA[
+				AND A.REQ_PRO_TYPE = '04' 
+				AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+				]]>
+			</isEqual>
+			 AND A.REQ_PRO_TYPE != '01'
+			 AND A.PROCESS_ID IS NOT NULL
+		</isNotEmpty>
+		ORDER BY TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST
+
+		
+
+	</sql>
+        
+	<select id="dsh1000DAO.selectDsh1000ReqList" parameterClass="dsh1000VO" resultMap="resultMapDsh1000">
+			SELECT 
+				A.*
+			FROM ( 
+			<include refid="selectDsh1000ReqList"/>
+			) A
+			WHERE A.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+    <select id="dsh1000DAO.selectDsh1000ReqListCnt" parameterClass="dsh1000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectDsh1000ReqList"/>
+		) A
+    </select>
+    
+    
+      
+</sqlMap>

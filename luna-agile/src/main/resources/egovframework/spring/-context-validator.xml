@@ -5,7 +5,6 @@
 				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	
-    <!-- Integrated Apache Commons Validator by Spring Modules -->              
     <bean id="beanValidator" class="org.springmodules.validation.commons.DefaultBeanValidator">
         <property name="validatorFactory" ref="validatorFactory"/>
     </bean>

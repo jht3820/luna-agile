@@ -1,32 +1,107 @@
-package kr.opensoftlab.oslops.stm.stm9000.stm9000.vo;
+package kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo;
 
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
 
-
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 public class Stm9000VO extends PageVO {
-	/** 상세 기본 Defind */
+	
+	
+	private String srchEvent;  
+	private String srchReqNm;
+	private String srchReqChargerNm;
+	
+	
 	private String rn;
 	private String licGrpId;
-	private String prjId;
-	private String reqId;
-	private String orgReqId;
-	private String reqNm;
-	private String reqDesc; 
-	private String reqProTypeNm;
-	private String regDtm; 
-	private String reqUsrNm;
-	private String reqStDtm; 
-	private String reqEdDtm; 
-	private String reqStDuDtm;
-	private String reqEdDuDtm;
+	private String loginUsrId;
 	
-	private String restApiReqUsrNm;
-	private String srchFromDt;
-	private String srchToDt;
 
+	private String    jenId;               
+    private String    jenNm;              
+    private String    jenUsrId;               
+    private String    jenUsrTok;              
+    private String    jenUrl; 				
+    private String    jenDesc;              
+    
+    private String    useCd;               
+    private String    useNm; 
+    private String    delCd; 
+	
+	public String getUseNm() {
+		return useNm;
+	}
+	public void setUseNm(String useNm) {
+		this.useNm = useNm;
+	}
+	public String getJenUrl() {
+		return jenUrl;
+	}
+	public void setJenUrl(String jenUrl) {
+		this.jenUrl = jenUrl;
+	}
+	public String getLoginUsrId() {
+		return loginUsrId;
+	}
+	public void setLoginUsrId(String loginUsrId) {
+		this.loginUsrId = loginUsrId;
+	}
+	
+	public String getJenId() {
+		return jenId;
+	}
+	public void setJenId(String jenId) {
+		this.jenId = jenId;
+	}
+	public String getJenNm() {
+		return jenNm;
+	}
+	public void setJenNm(String jenNm) {
+		this.jenNm = jenNm;
+	}
 
+	public String getJenDesc() {
+		return jenDesc;
+	}
+	public void setJenDesc(String jenDesc) {
+		this.jenDesc = jenDesc;
+	}
+	public String getJenUsrId() {
+		return jenUsrId;
+	}
+	public void setJenUsrId(String jenUsrId) {
+		this.jenUsrId = jenUsrId;
+	}
+	public String getJenUsrTok() {
+		return jenUsrTok;
+	}
+	public void setJenUsrTok(String jenUsrTok) {
+		this.jenUsrTok = jenUsrTok;
+	}
+	public String getUseCd() {
+		return useCd;
+	}
+	public void setUseCd(String useCd) {
+		this.useCd = useCd;
+	}
+	public String getSrchEvent() {
+		return srchEvent;
+	}
+	public void setSrchEvent(String srchEvent) {
+		this.srchEvent = srchEvent;
+	}
+	public String getSrchReqNm() {
+		return srchReqNm;
+	}
+	public void setSrchReqNm(String srchReqNm) {
+		this.srchReqNm = srchReqNm;
+	}
+	public String getSrchReqChargerNm() {
+		return srchReqChargerNm;
+	}
+	public void setSrchReqChargerNm(String srchReqChargerNm) {
+		this.srchReqChargerNm = srchReqChargerNm;
+	}
 	public String getRn() {
 		return rn;
 	}
@@ -39,97 +114,11 @@ public class Stm9000VO extends PageVO {
 	public void setLicGrpId(String licGrpId) {
 		this.licGrpId = licGrpId;
 	}
-	public String getPrjId() {
-		return prjId;
+	public String getDelCd() {
+		return delCd;
 	}
-	public void setPrjId(String prjId) {
-		this.prjId = prjId;
+	public void setDelCd(String delCd) {
+		this.delCd = delCd;
 	}
-	public String getReqId() {
-		return reqId;
-	}
-	public void setReqId(String reqId) {
-		this.reqId = reqId;
-	}
-	public String getOrgReqId() {
-		return orgReqId;
-	}
-	public void setOrgReqId(String orgReqId) {
-		this.orgReqId = orgReqId;
-	}
-	public String getReqNm() {
-		return reqNm;
-	}
-	public void setReqNm(String reqNm) {
-		this.reqNm = reqNm;
-	}
-	public String getReqDesc() {
-		return reqDesc;
-	}
-	public void setReqDesc(String reqDesc) {
-		this.reqDesc = reqDesc;
-	}
-	public String getReqProTypeNm() {
-		return reqProTypeNm;
-	}
-	public void setReqProTypeNm(String reqProTypeNm) {
-		this.reqProTypeNm = reqProTypeNm;
-	}
-	public String getRegDtm() {
-		return regDtm;
-	}
-	public void setRegDtm(String regDtm) {
-		this.regDtm = regDtm;
-	}
-	public String getReqUsrNm() {
-		return reqUsrNm;
-	}
-	public void setReqUsrNm(String reqUsrNm) {
-		this.reqUsrNm = reqUsrNm;
-	}
-	public String getReqStDtm() {
-		return reqStDtm;
-	}
-	public void setReqStDtm(String reqStDtm) {
-		this.reqStDtm = reqStDtm;
-	}
-	public String getReqEdDtm() {
-		return reqEdDtm;
-	}
-	public void setReqEdDtm(String reqEdDtm) {
-		this.reqEdDtm = reqEdDtm;
-	}
-	public String getReqStDuDtm() {
-		return reqStDuDtm;
-	}
-	public void setReqStDuDtm(String reqStDuDtm) {
-		this.reqStDuDtm = reqStDuDtm;
-	}
-	public String getReqEdDuDtm() {
-		return reqEdDuDtm;
-	}
-	public void setReqEdDuDtm(String reqEdDuDtm) {
-		this.reqEdDuDtm = reqEdDuDtm;
-	}
-	public String getRestApiReqUsrNm() {
-		return restApiReqUsrNm;
-	}
-	public void setRestApiReqUsrNm(String restApiReqUsrNm) {
-		this.restApiReqUsrNm = restApiReqUsrNm;
-	}
-	public String getSrchFromDt() {
-		return srchFromDt;
-	}
-	public void setSrchFromDt(String srchFromDt) {
-		this.srchFromDt = srchFromDt;
-	}
-	public String getSrchToDt() {
-		return srchToDt;
-	}
-	public void setSrchToDt(String srchToDt) {
-		this.srchToDt = srchToDt;
-	}
-
 	
-
 }

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm5000DAO">
+	 <!--  in / out class define  -->
+    <typeAlias alias="stm5000VO"	type="kr.opensoftlab.lunaops.stm.stm5000.stm5000.vo.Stm5000VO"/>
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="resultMapSelectStm5000" class="stm5000VO">
+			<result property="rn"			column="RN"/>
+			<result property="licGrpId"     column="LIC_GRP_ID"/>
+			<result property="loginHisId"   column="LOGIN_HIS_ID"/>
+			<result property="loginUsrId"   column="LOGIN_USR_ID"/>
+			<result property="loginTime"    column="LOGIN_TIME"/>
+			<result property="logoutTime"   column="LOGOUT_TIME"/>
+			<result property="loginIp"      column="LOGIN_IP"/>
+			<result property="loginStatus"  column="LOGIN_STATUS"/>
+			<result property="loginUsrNm"   column="USR_NM"/>
+    </resultMap>
+	
+	<!-- sql Define  -->
+	<sql id="selectStm5000List">
+		SELECT ROWNUM RN, T1.*
+		FROM
+		(
+			SELECT 
+						A.LIC_GRP_ID
+					,	A.LOGIN_HIS_ID
+					,	A.LOGIN_USR_ID
+					,	TO_CHAR(A.LOGIN_TIME,'YYYY-MM-DD HH24:MI:SS') as LOGIN_TIME 	/* 로그인 일시 */
+					,	TO_CHAR(A.LOGOUT_TIME,'YYYY-MM-DD HH24:MI:SS') as LOGOUT_TIME	/* 로그아웃 일시 */
+					,	A.LOGIN_IP
+					,	B.USR_NM
+					,	B.USR_IMG_ID
+					,	A.LOGIN_STATUS
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00006', A.LOGIN_STATUS, '1') AS LOGIN_STATUS_NM
+			FROM STM5000 A 
+			INNER JOIN STM3000 B 
+			ON ( A.LOGIN_USR_ID = B.USR_ID AND A.LIC_GRP_ID = B.LIC_GRP_ID )
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY  A.LOGIN_TIME DESC
+			</isEmpty>
+		) T1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetId">
+			<isEqual property="searchTargetId" compareValue="usrNm">
+			    AND T1.USR_NM LIKE '%'||#searchTargetData#||'%' 
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="loginIp">
+				AND T1.LOGIN_IP LIKE '%'||#searchTargetData#||'%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="loginUsrId">
+				AND T1.LOGIN_USR_ID LIKE '%'||#searchTargetData#||'%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="loginStatus">
+				AND	T1.LOGIN_STATUS = #searchTargetData#
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="loginTime">
+				<isNotEmpty property="searchStartDt">
+					AND T1.LOGIN_TIME &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+				</isNotEmpty>
+				<isNotEmpty property="searchEndDt">
+					AND T1.LOGIN_TIME &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="logoutTime">
+				<isNotEmpty property="searchStartDt">
+					AND T1.LOGOUT_TIME &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+				</isNotEmpty>
+				<isNotEmpty property="searchEndDt">
+					AND T1.LOGOUT_TIME &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+    </sql>
+    
+    <select id="stm5000DAO.selectStm5000List" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT *
+		FROM
+		(	
+			<include refid="selectStm5000List"/>
+	    ) Z
+	    WHERE 1=1
+	    AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+
+    
+    <select id="stm5000DAO.selectStm5000ListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm5000List"/>
+		) Z
+    </select>
+    
+    
+    <select id="stm5000DAO.selectStm5000ExcelList" parameterClass="stm5000VO"  resultClass="egovMap">
+		<include refid="selectStm5000List"/>
+    </select>
+
+	<insert id="stm5000DAO.insertStm5000AuthLoginLog" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newLoginHisId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_LOGIN_HIS_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_LOGIN_HIS_ID, 12, 5)) + 1) , 5, '0')
+						,	'LGN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_REQ_ID 
+			FROM	(
+			            SELECT	MAX(LOGIN_HIS_ID)  AS NEW_LOGIN_HIS_ID
+			            FROM	STM5000 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.LOGIN_HIS_ID LIKE 'LGN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO STM5000
+            (	
+            	LIC_GRP_ID,		LOGIN_HIS_ID,	LOGIN_USR_ID,	LOGIN_TIME,		
+            	LOGOUT_TIME,	LOGIN_IP,		LOGIN_STATUS
+            )
+            VALUES
+            (
+            	#licGrpId#,		#newLoginHisId#,	#loginUsrId#,		SYSDATE,
+            	NULL,          	#loginIp#,      	#loginStatus#
+            )
+		]]>
+	</insert>
+	
+	<update id="stm5000DAO.updateStm5000AuthLogoutLog" parameterClass="java.util.Map">
+	<![CDATA[
+		UPDATE STM5000 A
+		SET A.LOGOUT_TIME = SYSDATE
+		WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND	A.LOGIN_USR_ID = #loginUsrId#
+			AND A.LOGOUT_TIME IS NULL
+			 AND A.LOGIN_TIME = (
+			 SELECT MAX(LOGIN_TIME) FROM   STM5000 
+		        WHERE 1=1
+		        AND LIC_GRP_ID = #licGrpId#
+		        AND	LOGIN_USR_ID = #loginUsrId#
+		        AND LOGOUT_TIME IS NULL
+			)
+	]]>
+	</update>
+	
+	
+    <select id="stm5000DAO.selectStm5000LastLogin" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT
+				 NVL(TO_CHAR(MAX(T1.LOGIN_TIME),'YYYY-MM-DD HH24:MI:SS'), TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') )as LOGIN_TIME 
+		FROM 
+				STM5000 T1,
+				STM3000 T2
+		WHERE 	T1.LOGIN_USR_ID 	= T2.USR_ID 
+		AND 	T1.LIC_GRP_ID 		= T2.LIC_GRP_ID
+		AND		T1.LIC_GRP_ID		= #licGrpId#
+        AND	  	T1.LOGIN_USR_ID 	= #usrId#
+    </select>
+	
+	
+	 <select id="stm5000DAO.selectStm5000RecentLogin" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT 
+				MAX(T.REC_LOGIN_TIME) AS LOGIN_TIME 
+		FROM
+				(
+					SELECT 
+            				TO_CHAR(LEAD(T1.LOGIN_TIME) OVER(ORDER BY T1.LOGIN_TIME DESC ),'YYYY-MM-DD HH24:MI:SS') AS REC_LOGIN_TIME
+				 	FROM 
+							STM5000 T1,
+							STM3000 T2
+				 	WHERE 	T1.LOGIN_USR_ID 	= T2.USR_ID 
+				 	AND 	T1.LIC_GRP_ID 		= T2.LIC_GRP_ID
+				 	AND		T1.LIC_GRP_ID		= #licGrpId#
+				 	AND		T1.LOGIN_USR_ID 	= #usrId#
+    			) T
+    </select>
+	
+</sqlMap>

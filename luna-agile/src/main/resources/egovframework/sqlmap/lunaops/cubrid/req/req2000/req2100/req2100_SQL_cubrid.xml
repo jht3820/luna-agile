@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="req2100DAO">
+	 <!--  in / out class define  -->
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	<select id="req2100DAO.selectReq2100ProcessAllReqCntAjax" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT 
+					ROWNUM AS RN
+		     	, 	T.*
+		    FROM
+			(
+				SELECT
+		    			A.PROCESS_ID
+		        	,	C.PROCESS_NM
+		    		, 	COUNT(*) AS ALL_CNT	
+		    		, 	COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+				FROM
+				( 
+					SELECT X.*
+      				FROM REQ4100 X
+    				WHERE 1=1
+    	]]>		
+			        <isNotEmpty property="searchStDtm">
+						AND X.REQ_DTM 	&gt;= 	TO_DATE(#searchStDtm#, 'YYYY-MM-DD')
+					</isNotEmpty>
+					<isNotEmpty property="searchEdDtm">
+						AND X.REQ_DTM 	&lt;=   TO_DATE(#searchEdDtm#, 'YYYY-MM-DD')
+					</isNotEmpty>
+		<![CDATA[			
+				) A
+				LEFT JOIN FLW1100 B
+				ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID AND A.FLOW_ID = B.FLOW_ID)
+				LEFT JOIN FLW1000 C
+				ON ( B.PRJ_ID = C.PRJ_ID AND B.PROCESS_ID = C.PROCESS_ID)
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.REQ_PRO_TYPE <> '03'
+				AND A.REQ_PRO_TYPE <> '05'
+				AND A.REQ_PRO_TYPE <> '06'
+				GROUP BY A.PROCESS_ID, C.PROCESS_NM, C.PROCESS_ORD
+				ORDER BY COALESCE(C.PROCESS_ORD, -1),A.PROCESS_ID NULLS FIRST
+			) T
+			WHERE 1=1
+			AND T.PROCESS_ID IS NOT NULL 
+		]]>
+	</select>
+	
+	<select id="req2100DAO.selectReq2100ProcessEndReqCntAjax" parameterClass="java.util.Map" resultClass="egovMap">
+	<![CDATA[
+		SELECT A.*, B.PROCESS_NM
+		FROM
+		(
+			SELECT 
+					Y.PRJ_ID
+				, 	Y.PROCESS_ID
+				, 	Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT	
+				, 	COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+      			, 	SUM(COUNT(*)) OVER (PARTITION BY REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+		    FROM
+		    (
+		        SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+		            CASE
+		                WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+		                WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+		                WHEN Z.REQ_ED_DTM IS NULL THEN -1
+		                WHEN Z.REQ_ED_DTM <= TO_DATETIME(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') THEN 1
+		                ELSE 0 END AS REQ_ED_RATIO_NUM
+		        FROM REQ4100 Z
+		        WHERE 1=1
+		        AND Z.PRJ_ID = #prjId#
+		        AND Z.REQ_PRO_TYPE != '03'
+		        AND Z.REQ_PRO_TYPE != '05'
+		        AND Z.REQ_PRO_TYPE != '06'
+	]]>        
+		        <isNotEmpty property="searchStDtm">
+					AND REQ_DTM 	&gt;= 	TO_DATE(#searchStDtm#, 'YYYY-MM-DD')
+				</isNotEmpty>
+				<isNotEmpty property="searchEdDtm">
+					AND REQ_DTM 	&lt;=   TO_DATE(#searchEdDtm#, 'YYYY-MM-DD')
+				</isNotEmpty>
+	<![CDATA[		
+		    ) Y
+		    WHERE 1=1
+		    GROUP BY Y.PRJ_ID, Y.PROCESS_ID, Y.REQ_ED_DU_MM
+		) A
+		LEFT JOIN FLW1000 B
+		ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID)
+		WHERE 1=1
+		AND A.PROCESS_ID IS NOT NULL
+		ORDER BY A.REQ_ED_DU_MM, B.PROCESS_ORD
+	]]>
+	</select>
+	
+	<select id="req2100DAO.selectReq2100ProcessEtcItemCntAjax" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[	
+			SELECT
+        			B.PROCESS_ID
+             	,	B.PROCESS_NM
+             	,	A.SUB_CD
+				,	A.SUB_CD_NM 
+             	,	COALESCE(B.REQ_CNT, 0) AS REQ_CNT
+		    FROM
+		    (
+		    	SELECT  
+		    			LIC_GRP_ID
+		    		,	MST_CD
+		    		,	SUB_CD
+		    		,	SUB_CD_NM
+		    		,	ORD
+		    		,	USE_YN
+		    		,	SUB_CD_REF1
+		    		,	SUB_CD_REF2
+		    		,	SUB_CD_REF3
+		    		,	SUB_CD_REF4
+		    		,	SUB_CD_REF5
+		    		,	SUB_CD_DESC
+		    	FROM ADM4100 
+		    	WHERE 1=1 
+		    	AND MST_CD = 'REQ00012'
+		    	AND UPPER(SUB_CD_REF1) = 'ETC' 
+		    	AND LIC_GRP_ID = #licGrpId# 
+		    ) A
+		    LEFT JOIN
+		    (	
+        			SELECT 		
+						 	Z.PROCESS_ID
+						,	Z.PROCESS_NM
+              			,	Y.REQ_TYPE_CD
+						, 	COALESCE(Y.REQ_CNT,0) AS REQ_CNT
+					FROM FLW1000 Z
+					LEFT JOIN
+					(
+					   	SELECT 
+					   			PRJ_ID
+					   		,	PROCESS_ID
+                  			, 	REQ_TYPE_CD
+					   		, 	COUNT(*) AS REQ_CNT
+					    FROM REQ4100
+					    WHERE 1=1
+					    AND PROCESS_ID IS NOT NULL
+					    AND REQ_PRO_TYPE = '04'
+					    AND PRJ_ID = #prjId#
+					    AND REQ_ED_DTM IS NOT NULL 
+					    AND TO_DATE(TO_CHAR(REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(TO_CHAR(REQ_ED_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') /* 작업종료 예정일자가 실제 작업 종료일자보다 큰것 */
+		]]>
+				        <isNotEmpty property="searchStDtm">
+							AND REQ_DTM 	&gt;= 	TO_DATE(#searchStDtm#, 'YYYY-MM-DD')
+						</isNotEmpty>
+						<isNotEmpty property="searchEdDtm">
+							AND REQ_DTM 	&lt;=   TO_DATE(#searchEdDtm#, 'YYYY-MM-DD')
+						</isNotEmpty>
+		<![CDATA[			    
+					    GROUP BY PRJ_ID, PROCESS_ID, REQ_TYPE_CD
+					) Y
+					ON (  Z.PRJ_ID = Y.PRJ_ID AND Z.PROCESS_ID = Y.PROCESS_ID )
+					WHERE 1=1
+					AND Z.PRJ_ID = #prjId#
+					AND Z.PROCESS_CONFIRM_CD = '02' 
+					AND Z.USE_CD = '01'	
+	        ) B
+	        ON (A.SUB_CD = B.REQ_TYPE_CD)
+	        ORDER BY A.SUB_CD
+	     ]]>   
+	</select>
+	
+</sqlMap>

@@ -1,69 +1,88 @@
-package kr.opensoftlab.oslops.stm.stm2000.stm2100.service.impl;
+package kr.opensoftlab.lunaops.stm.stm2000.stm2100.service.impl;
 
 import java.util.List;
 import java.util.Map;
 
-import kr.opensoftlab.oslops.com.dao.ComOslitsAbstractDAO;
-import kr.opensoftlab.oslops.stm.stm2000.stm2100.vo.Stm2100VO;
-
 import org.springframework.stereotype.Repository;
 
-/**
- * @Class Name : Stm2100DAO.java
- * @Description : Stm2100DAO DAO Class
- * @Modification Information
- *
- * @author 공대영
- * @since 2018.08.16
- * @version 1.0
- * @see
- *  
- *  Copyright (C)  All right reserved.
- */
+import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
+
 
 @Repository("stm2100DAO")
 public class Stm2100DAO extends ComOslitsAbstractDAO {
 
-	/**
-	 * Stm2100 프로젝트에 배정 가능한 SVN Repository 목록을 조회한다.
-	 * @param paramMap
-	 * @return List - 배정 가능 SVN Repository 목록
-	 * @exception Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public List selectStm2100ProjectAuthList(Map paramMap) throws Exception {
-		return (List) list("stm2100DAO.selectStm2100ProjectAuthList", paramMap);
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm2100BadList(Map<String, String> paramMap) throws Exception {
+		return  (List<Map>) list("stm2100DAO.selectStm2100BadList", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map<String, String> selectStm2100BadInfo(Map<String, String> paramMap) throws Exception {
+		return  (Map) select("stm2100DAO.selectStm2100BadInfo", paramMap);
+	}
+	
+	
+	
+	public void updateStm2100BadOptions(Map<String, String> paramMap) throws Exception {
+		update("stm2100DAO.updateStm2100BadOptions", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm2110BadAdmList(Map<String, String> paramMap) throws Exception {
+		return  (List<Map>) list("stm2100DAO.selectStm2110BadAdmList", paramMap);
+	}
+	
+
+	
+	public void insertStm2110BadAdmin(Map<String, String> paramMap) throws Exception {
+		insert("stm2100DAO.insertStm2110BadAdmin", paramMap);
+	}
+	
+	
+	public void deleteStm2110BadAdmin(Map<String, String> paramMap) throws Exception {
+		delete("stm2100DAO.deleteStm2110BadAdmin", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm2120BadWtList(Map<String, String> paramMap) throws Exception {
+		return  (List<Map>) list("stm2100DAO.selectStm2120BadWtList", paramMap);
 	}
 
-	/**
-	 * Stm2100 프로젝트에  SVN Repository를 배정한다.
-	 * @param stm2100vo
-	 * @return 
-	 * @exception Exception
-	 */
-	public void insertStm2100(Stm2100VO stm2100vo) throws Exception{
-		insert("stm2100DAO.insertStm2100",stm2100vo);
+	
+	public void insertStm2120BadWriter(Map<String, String> paramMap) throws Exception {
+		insert("stm2100DAO.insertStm2120BadWriter", paramMap);
+	}
+	
+	
+	public void deleteStm2120BadWriter(Map<String, String> paramMap) throws Exception {
+		delete("stm2100DAO.deleteStm2120BadWriter", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm2100BadGrpList(Map<String, String> paramMap) throws Exception {
+		return  (List<Map>) list("stm2100DAO.selectStm2100BadGrpList", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm2100BadUsrList(Map<String, String> paramMap) throws Exception {
+		return  (List<Map>) list("stm2100DAO.selectStm2100BadUsrList", paramMap);
+	}
+	
+	
+	public String selectStm2100AdminCheck(Map<String, String> paramMap) throws Exception {
+		return  (String) select("stm2100DAO.selectStm2100AdminCheck", paramMap);
+	}
+	
+	
+	public String selectStm2100WriterCheck(Map<String, String> paramMap) throws Exception {
+		return  (String) select("stm2100DAO.selectStm2100WriterCheck", paramMap);
 	}
 
-	/**
-	 * Stm2100 프로젝트에  SVN Repository를 배정제외 한다.
-	 * @param stm2100vo
-	 * @return 
-	 * @exception Exception
-	 */
-	public void deleteStm2100(Stm2100VO stm2100vo) throws Exception{
-		delete("stm2100DAO.deleteStm2100",stm2100vo);
-	}
-
-	/**
-	 * Stm2100 프로젝트에 배정된 SVN Repository 목록을 조회한다.
-	 * @param paramMap
-	 * @return 
-	 * @exception Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public List selectStm2100ProjectListAjax(Map paramMap) throws Exception {
-		return (List) list("stm2100DAO.selectStm2100ProjectListAjax", paramMap);
-	}
-
+	
 }

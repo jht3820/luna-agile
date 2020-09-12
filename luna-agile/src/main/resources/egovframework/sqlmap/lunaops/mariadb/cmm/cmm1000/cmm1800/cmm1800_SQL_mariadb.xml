@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmm1800DAO">
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	 
+    <select id="cmm1800DAO.selectCmm1800ProcessList" parameterClass="java.util.Map"  resultClass="egovMap" >
+    		SELECT
+			            PRJ_ID,               
+			            PROCESS_ID,           
+			            PROCESS_NM,           
+			            PROCESS_DESC,          
+			            PROCESS_CONFIRM_CD,    
+			             
+			            USE_CD,                
+			            PROCESS_ORD            
+			FROM
+			            FLW1000
+			WHERE 1=1
+			    AND PRJ_ID = #prjId# 
+				<isNotEmpty property="searchPopTxt"> 
+    				 AND PROCESS_NM like '%' || #searchPopTxt#  ||'%' 
+    			</isNotEmpty>
+			    
+			    AND PROCESS_CONFIRM_CD = '02'
+			    ORDER BY PROCESS_ORD ASC
+	
+    </select>
+	
+	
+	
+	
+</sqlMap>            

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="req4110DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<select id="req4110DAO.selectReq4110PrjReqOptList"  parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT
+				T1.PRJ_ID,				T1.PROCESS_ID,			T1.ITEM_ID
+				,T1.ITEM_VALUE
+				,T1.CHG_DTM
+				,COALESCE((
+                	CASE T1.ITEM_CODE WHEN '04' THEN SF_ADM2000_USR_INFO(T1.ITEM_VALUE,'1')
+                	 WHEN '05' THEN (SELECT	REQ_CLS_NM FROM REQ4000 WHERE 1=1 AND PRJ_ID = T1.PRJ_ID AND REQ_CLS_ID = T1.ITEM_VALUE)
+                	 WHEN '06' THEN SF_ADM7000_DEPT_NM(#licGrpId#, T1.ITEM_VALUE, '2')
+                    ELSE NULL END
+                ),' ') AS ITEM_VALUE_NM
+				,T1.VALUE_IN_DTM
+				,T1.ITEM_NM,				T1.ITEM_CODE,			T1.ITEM_COMMON_CODE,			T1.ITEM_ROW_NUM
+				,T1.ITEM_TYPE,				T1.ITEM_LENGTH,			T1.ITEM_ESSENTIAL_CD,			T1.ITEM_ACCEPT_CD
+				,T1.ITEM_SD_CD,				T1.ITEM_ORD,			T1.USE_CD
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00001', T1.ITEM_CODE, '1') AS ITEM_CODE_STR
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00003', T1.ITEM_TYPE, '1') AS ITEM_TYPE_STR
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00002', T1.ITEM_ROW_NUM, '1') AS ITEM_ROW_NUM_STR
+				,SF_ADM4000_MST_CD_NM(#licGrpId#, T1.ITEM_COMMON_CODE) AS ITEM_COMMON_CODE_STR
+				,T1.REG_DTM
+				,T1.REG_USR_ID,			T1.REG_USR_IP
+			FROM
+			(
+				SELECT
+					A.PRJ_ID,				A.PROCESS_ID,			A.ITEM_ID
+					,B.ITEM_VALUE
+					,B.REG_DTM AS VALUE_IN_DTM
+					,C.CHG_DTM
+					,A.ITEM_NM,				A.ITEM_CODE,			A.ITEM_COMMON_CODE,			A.ITEM_ROW_NUM
+					,A.ITEM_TYPE,			A.ITEM_LENGTH,			A.ITEM_ESSENTIAL_CD,		A.ITEM_ACCEPT_CD
+					,A.ITEM_SD_CD,			A.ITEM_ORD,			A.USE_CD
+					,TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+					,A.REG_USR_ID,			A.REG_USR_IP
+				FROM REQ4110 A
+				LEFT OUTER JOIN REQ4120 B
+				ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID AND A.ITEM_ID = B.ITEM_ID AND B.REQ_ID = #reqId#)
+				INNER JOIN REQ4700 C
+				ON ( A.PRJ_ID = C.PRJ_ID AND A.PROCESS_ID = C.PROCESS_ID AND C.REQ_ID = #reqId# AND C.REQ_CHG_TYPE != '02')
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.PROCESS_ID = #processId#
+				AND A.USE_CD = '01'
+			) T1
+			ORDER BY T1.CHG_DTM, T1.ITEM_ORD
+		]]>
+	</select>
+	
+	<select id="req4110DAO.selectReq4110PrjProOptList"  parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT 
+				T1.PRJ_ID,				T1.PROCESS_ID,			T1.ITEM_ID
+				,T1.ITEM_VALUE_NM,		T1.ITEM_VALUE,			T1.VALUE_IN_DTM
+				,T1.ITEM_NM,			T1.ITEM_CODE,			T1.ITEM_COMMON_CODE,		T1.ITEM_ROW_NUM
+				,T1.ITEM_TYPE,			T1.ITEM_LENGTH,			T1.ITEM_ESSENTIAL_CD,		T1.ITEM_ACCEPT_CD
+				,T1.ITEM_SD_CD,			T1.ITEM_ORD,			T1.USE_CD,					T1.ITEM_VALUE_EXIST_CNT
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00001', T1.ITEM_CODE, '1') AS ITEM_CODE_STR
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00003', T1.ITEM_TYPE, '1') AS ITEM_TYPE_STR
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'FLW00002', T1.ITEM_ROW_NUM, '1') AS ITEM_ROW_NUM_STR
+				,SF_ADM4000_MST_CD_NM(#licGrpId#, T1.ITEM_COMMON_CODE) AS ITEM_COMMON_CODE_STR
+				,T1.REG_DTM
+				,T1.REG_USR_ID,			T1.REG_USR_IP
+			FROM 
+			(
+				SELECT
+					A.PRJ_ID,				A.PROCESS_ID,			A.ITEM_ID
+					,COALESCE((
+	                	CASE A.ITEM_CODE WHEN '04' THEN SF_ADM2000_USR_INFO(B.ITEM_VALUE,'1')
+	                	 WHEN '05' THEN (SELECT	REQ_CLS_NM FROM REQ4000 WHERE 1=1 AND PRJ_ID = B.PRJ_ID AND REQ_CLS_ID = B.ITEM_VALUE)
+	                	 WHEN '06' THEN SF_ADM7000_DEPT_NM(#licGrpId#, B.ITEM_VALUE, '2')
+	                    ELSE NULL END
+	                ),' ') AS ITEM_VALUE_NM
+					,B.ITEM_VALUE,			B.REG_DTM AS VALUE_IN_DTM
+					,A.ITEM_NM,				A.ITEM_CODE,			A.ITEM_COMMON_CODE,			A.ITEM_ROW_NUM
+					,A.ITEM_TYPE,			A.ITEM_LENGTH,			A.ITEM_ESSENTIAL_CD,		A.ITEM_ACCEPT_CD
+					,A.ITEM_SD_CD,			A.ITEM_ORD,				A.USE_CD
+					,(
+			          	CASE A.ITEM_CODE WHEN '03' THEN
+			            	(SELECT COUNT(*) FROM REQ4120 Z INNER JOIN COMTNFILEDETAIL Y ON( Y.ATCH_FILE_ID = Z.ITEM_VALUE) WHERE Z.PRJ_ID = A.PRJ_ID AND Z.PROCESS_ID = A.PROCESS_ID AND Z.ITEM_ID = A.ITEM_ID)
+			            ELSE
+			          		(SELECT COUNT(*) FROM REQ4120 WHERE PRJ_ID = A.PRJ_ID AND PROCESS_ID = A.PROCESS_ID AND ITEM_ID = A.ITEM_ID AND ITEM_VALUE IS NOT NULL)
+			            END
+					) AS ITEM_VALUE_EXIST_CNT
+					,TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+					,A.REG_USR_ID,			A.REG_USR_IP
+				FROM REQ4110 A
+				LEFT JOIN REQ4120 B
+				ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID AND A.ITEM_ID = B.ITEM_ID AND B.REQ_ID = #reqId#)
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.PROCESS_ID = #processId#
+				]]>
+				<isNotEmpty property="itemId">
+					AND A.ITEM_ID = #itemId#
+				</isNotEmpty>
+				<![CDATA[
+				AND A.USE_CD = '01'
+				ORDER BY A.ITEM_ORD, A.REG_DTM DESC
+			) T1
+			WHERE 1=1
+		]]>
+			<isNotEmpty property="itemAcceptCd">
+				AND T1.ITEM_ACCEPT_CD = #itemAcceptCd#
+			</isNotEmpty>
+	</select>
+	
+	<select id="req4110DAO.selectReq4110PrjProOptCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS CNT
+			FROM REQ4120 A
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId# 
+			AND A.REQ_ID =  #reqId#
+			AND A.ITEM_ID =  #itemId#
+		]]>
+	</select>
+	
+	<insert id="req4110DAO.insertReq4110PrjProOtpInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newItemId">
+		<![CDATA[
+			SELECT	COALESCE( 
+							SUBSTR(NEW_ITEM_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_ITEM_ID, 12, 5)) + 1) , 5, '0')
+						,	'OPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '00001'
+            		) AS NEW_ITEM_ID 
+			FROM	(
+			            SELECT	MAX(ITEM_ID)  AS NEW_ITEM_ID
+			            FROM	REQ4110 A
+			            WHERE	1=1
+                        AND		A.PRJ_ID = #prjId#
+                        AND		A.PROCESS_ID = #processId#
+			            AND		A.ITEM_ID LIKE 'OPT' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[
+			INSERT INTO REQ4110 A
+			(
+				A.PRJ_ID,				A.PROCESS_ID,				A.ITEM_ID
+				,A.ITEM_NM,				A.ITEM_CODE,				A.ITEM_COMMON_CODE,			A.ITEM_ROW_NUM
+				,A.ITEM_TYPE,			A.ITEM_LENGTH,				A.ITEM_ESSENTIAL_CD,		A.ITEM_ACCEPT_CD
+				,A.ITEM_SD_CD,			A.ITEM_ORD					,A.USE_CD
+				,A.REG_DTM,				A.REG_USR_ID,				A.REG_USR_IP
+				,A.MODIFY_DTM,			A.MODIFY_USR_ID,			A.MODIFY_USR_IP
+			)
+			VALUES
+			(
+				#prjId#,				#processId#,					#newItemId#
+				,#itemNm#,				#itemCode#,						#itemCommonCode#,			#itemRowNum#
+				,#itemType#,			COALESCE(#itemLength#,255),		#itemEssentialCd#,			#itemAcceptCd#
+				,#itemSdCd#,			COALESCE(#itemOrd#,0)			,'01'
+				,CURRENT_TIMESTAMP,				#regUsrId#,				#regUsrIp#
+				,CURRENT_TIMESTAMP,				#modifyUsrId#,			#modifyUsrIp#
+			)		
+		
+		]]>
+	</insert>
+	
+	<insert id="req4110DAO.insertReq4110PrjProOtpCopyInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			INSERT INTO REQ4110
+			(
+				PRJ_ID,				PROCESS_ID,				ITEM_ID
+				,ITEM_NM,			ITEM_CODE,				ITEM_COMMON_CODE,			ITEM_ROW_NUM
+				,ITEM_TYPE,			ITEM_LENGTH,			ITEM_ESSENTIAL_CD,			ITEM_ACCEPT_CD
+				,ITEM_SD_CD,		ITEM_ORD,				USE_CD
+				,REG_DTM,			REG_USR_ID,				REG_USR_IP
+				,MODIFY_DTM,		MODIFY_USR_ID,			MODIFY_USR_IP
+			)
+			VALUES
+			(
+				#prjId#,				#processId#,					#itemId#
+				,#itemNm#,				#itemCode#,						#itemCommonCode#,			#itemRowNum#
+				,#itemType#,			COALESCE(#itemLength#,255),		#itemEssentialCd#,			#itemAcceptCd#
+				,#itemSdCd#,			COALESCE(#itemOrd#,0)			,'01'
+				,CURRENT_TIMESTAMP,				#regUsrId#,				#regUsrIp#
+				,CURRENT_TIMESTAMP,				#modifyUsrId#,			#modifyUsrIp#
+			)		
+		
+		]]>
+	</insert>
+	
+	<update id="req4110DAO.updateReq4110PrjPrpOtpInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			UPDATE REQ4110 A
+			SET
+				ITEM_NM					=	#itemNm#
+				,ITEM_ROW_NUM			=	#itemRowNum#
+				,ITEM_SD_CD				=	#itemSdCd#
+				,ITEM_ORD				=	#itemOrd#
+				,A.MODIFY_DTM 			= 	CURRENT_TIMESTAMP
+				,A.MODIFY_USR_ID 		= 	#modifyUsrId#
+				,A.MODIFY_USR_IP 		= 	#modifyUsrIp#
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+			AND	A.ITEM_ID = #itemId#
+		]]>
+	</update>
+	
+	<update id="req4110DAO.deleteReq4110PrjProOtpInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			UPDATE REQ4110 A
+			SET
+				USE_CD					=	'02'
+				,A.MODIFY_DTM 			= 	CURRENT_TIMESTAMP
+				,A.MODIFY_USR_ID 		= 	#modifyUsrId#
+				,A.MODIFY_USR_IP 		= 	#modifyUsrIp#
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+		]]>
+		<isNotEmpty property="itemId">
+			AND	A.ITEM_ID = #itemId#
+		</isNotEmpty>
+	</update>
+	
+	<insert id="req4110DAO.insertReq411OPrjProOtpValueInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			INSERT INTO REQ4120
+			(
+				PRJ_ID,					PROCESS_ID,				REQ_ID					
+				,ITEM_ID,				ITEM_VALUE
+				,REG_DTM,				REG_USR_ID,				REG_USR_IP
+				,MODIFY_DTM,			MODIFY_USR_ID,			MODIFY_USR_IP
+			)
+			VALUES
+			(
+				#prjId#,				#processId#,				#reqId#
+				,#itemId#,				#itemValue#
+				,CURRENT_TIMESTAMP,				#regUsrId#,					#regUsrIp#
+				,CURRENT_TIMESTAMP,				#modifyUsrId#,				#modifyUsrIp#
+			)		
+		
+		]]>
+	</insert>
+	
+	<update id="req4110DAO.updateReq4110PrjProOtpValueInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			UPDATE REQ4120 A
+			SET
+				ITEM_VALUE				=	#itemValue#
+				,A.MODIFY_DTM 			= 	CURRENT_TIMESTAMP
+				,A.MODIFY_USR_ID 		= 	#modifyUsrId#
+				,A.MODIFY_USR_IP 		= 	#modifyUsrIp#
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+			AND A.REQ_ID = #reqId#
+			AND	A.ITEM_ID = #itemId#
+		]]>
+	</update>
+	
+	<select id="req4110DAO.selectReq4110PrjProOptExistFileIdList"  parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT A.*
+			FROM REQ4120 A
+			INNER JOIN REQ4110 B
+			ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID AND A.ITEM_ID = B.ITEM_ID )
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.ITEM_VALUE IS NOT NULL
+			AND B.ITEM_CODE = '03'
+		]]>
+	</select>
+</sqlMap>

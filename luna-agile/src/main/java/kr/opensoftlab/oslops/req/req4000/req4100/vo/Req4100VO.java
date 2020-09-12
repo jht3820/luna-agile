@@ -1,75 +1,61 @@
-package kr.opensoftlab.oslops.req.req4000.req4100.vo;
+package kr.opensoftlab.lunaops.req.req4000.req4100.vo;
 
-/**
- * @Class Name : Req1000Controller.java
- * @Description : Req1000Controller Controller class
- * @Modification Information
- *
- * @author 공대영
- * @since 2016.02.09.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp All right reserved.
- */
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 import kr.opensoftlab.sdf.excel.annotation.ExcelColumn;
 
 
 public class Req4100VO extends PageVO {
 	
-	/** 검색 조건 define */
-	private String srchEvent;  /** Event : onLoad, onSelect */
+	
+	private String srchEvent;  
 	private String srchReqDesc;
 	private String srchReqClsNm;
 	private String srchReqNm;
-	/** 기간 검색 조건*/
+	
 	private String srchFromDt;
 	private String srchToDt;
 	
-	/** 상세 기본 Defind */
+	
 	private String rn;
 	private String licGrpId;
 	private String prjId;
+	private String prjGrpId;
+	private String prjGrpNm;
 	private String selPrjId;
 	private String popupPrjId;
 	private String reqId;
 	private String reqClsId;
 	private String reqClsNm;
-	/** 엑셀 컬럼 두번째 - 공문번호 */
+	
 	@ExcelColumn(position=1)
 	private String reqNo;
-	/** 엑셀 컬럼 일곱번째 - 요청자 ID */
+	
 	@ExcelColumn(position=6)
 	private String reqUsrId;
-	/** 엑셀 컬럼 여덟번째 - 요청자 명*/
+	
 	@ExcelColumn(position=7)
 	private String reqUsrNm;
-	/** 엑셀 컬럼 다섯번째 - 요청일자 */
+	
 	@ExcelColumn(position=4)
 	private String reqDtm;
-	/** 엑셀 컬럼 아홉번째 - 요청자 소속명 */
+	
 	@ExcelColumn(position=8)
 	private String reqUsrDeptNm;
-	/** 엑셀 컬럼 열번째 - 요청자 이메일 */
+	
 	@ExcelColumn(position=9)
 	private String reqUsrEmail;
-	/** 엑셀 컬럼 열한번째 - 요청자 연락처 */
+	
 	@ExcelColumn(position=10)
 	private String reqUsrNum;
-	/** 엑셀 컬럼 세번째 - 요구사항명 */
+	
 	@ExcelColumn(position=2)
 	private String reqNm;
-	/** 엑셀 컬럼 네번째 - 요구사항 설명 */
+	
 	@ExcelColumn(position=3)
 	private String reqDesc;
-	/** 엑셀 컬럼 열두번째 - 요청자 직급 */
-	@ExcelColumn(position=11)
-	private String reqUsrPositionNm;
-	/** 엑셀 컬럼 열세번째 - 요청자 직책 */
-	@ExcelColumn(position=12)
-	private String reqUsrDutyNm;
+	private String reqUsrImgId;
 	private String reqChargerId;
 	private String reqCompleteRatio;
 	private String reqFp;
@@ -80,7 +66,7 @@ public class Req4100VO extends PageVO {
 	private String reqEdDuDtm;
 	private String reqProType;
 	private String reqProTypeNm;
-	/** 엑셀 컬럼 첫번째 - 접수유형 */
+	
 	@ExcelColumn(position=0)
 	private String reqNewType;
 	private String reqNewTypeNm;
@@ -102,13 +88,16 @@ public class Req4100VO extends PageVO {
 	private String reqKey;
 	
 	private String restApiReqUsrNm;
-	
-	//보고서 페이지에서 사용되는 변수
+
 	private String reportMode;
 	private String searchStDtm;
 	private String searchEdDtm;
 	
-	// 대시보드의 작업흐름의 담당/전체 요구사항 클릭시 사용변수
+	
+	
+	@ExcelColumn(position=5)
+	private String reqInputType;
+	
 	private String type;
 	
 	public String getType() {
@@ -117,10 +106,6 @@ public class Req4100VO extends PageVO {
 	public void setType(String type) {
 		this.type = type;
 	}
-	/** 엑셀업로드 시에만 사용하기 위한 요청자 정보 직접입력 여부값 */
-	/** 엑셀 컬럼 여섯번째 - 요청자 정보 직접입력 여부 */
-	@ExcelColumn(position=5)
-	private String reqInputType;
 
 	public String getSrchFromDt() {
 		return srchFromDt;
@@ -151,6 +136,13 @@ public class Req4100VO extends PageVO {
 	}
 	public void setSrchReqDesc(String srchReqDesc) {
 		this.srchReqDesc = srchReqDesc;
+	}
+	
+	public String getReqUsrImgId() {
+		return reqUsrImgId;
+	}
+	public void setReqUsrImgId(String reqUsrImgId) {
+		this.reqUsrImgId = reqUsrImgId;
 	}
 	public String getSrchReqClsNm() {
 		return srchReqClsNm;
@@ -188,6 +180,20 @@ public class Req4100VO extends PageVO {
 	}
 	public void setPopupPrjId(String popupPrjId) {
 		this.popupPrjId = popupPrjId;
+	}
+	
+	public String getPrjGrpId() {
+		return prjGrpId;
+	}
+	public void setPrjGrpId(String prjGrpId) {
+		this.prjGrpId = prjGrpId;
+	}
+	
+	public String getPrjGrpNm() {
+		return prjGrpNm;
+	}
+	public void setPrjGrpNm(String prjGrpNm) {
+		this.prjGrpNm = prjGrpNm;
 	}
 	public String getSelPrjId() {
 		return selPrjId;
@@ -242,19 +248,6 @@ public class Req4100VO extends PageVO {
 	}
 	public void setReqUsrDeptNm(String reqUsrDeptNm) {
 		this.reqUsrDeptNm = reqUsrDeptNm;
-	}
-	
-	public String getReqUsrPositionNm() {
-		return reqUsrPositionNm;
-	}
-	public void setReqUsrPositionNm(String reqUsrPositionNm) {
-		this.reqUsrPositionNm = reqUsrPositionNm;
-	}
-	public String getReqUsrDutyNm() {
-		return reqUsrDutyNm;
-	}
-	public void setReqUsrDutyNm(String reqUsrDutyNm) {
-		this.reqUsrDutyNm = reqUsrDutyNm;
 	}
 	public String getReqUsrEmail() {
 		return reqUsrEmail;
