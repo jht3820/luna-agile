@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="prj2100DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<sql id="selectPrj2100InUsrList">
+		SELECT
+			ROWNUM RN,
+			T1.LIC_GRP_ID,
+			T1.PRJ_ID,
+			T1.AUTH_GRP_ID,
+			T1.USR_ID,
+			T1.USR_NM,
+			T1.EMAIL,
+			T1.TELNO,
+			T1.USR_IMG_ID,
+			T1.DEPT_ID,
+			T1.DEPT_NAME,
+			T1.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', T1.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			T1.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', T1.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT 
+				B.LIC_GRP_ID,
+				A.PRJ_ID,
+				A.AUTH_GRP_ID,
+				A.USR_ID,
+				B.USR_NM,
+				B.EMAIL,
+				B.TELNO,
+				B.USR_IMG_ID,
+				B.DEPT_ID,
+				SF_STM6000_DEPT_NM(#licGrpId#, B.DEPT_ID, '2') AS DEPT_NAME,
+				B.USR_POSITION_CD,
+				B.USR_DUTY_CD
+			FROM PRJ2001 A
+				INNER JOIN STM3000 B ON ( B.LIC_GRP_ID = #licGrpId# AND A.USR_ID = B.USR_ID )
+			WHERE	1=1
+				AND	A.PRJ_ID = #prjId#
+				AND	A.AUTH_GRP_ID = #authGrpId#
+				AND B.DEL_CD = '02'
+				AND B.USE_CD = '01'
+				AND B.BLOCK = '01'
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY B.USR_NM, B.USR_POSITION_CD DESC, B.USR_DUTY_CD DESC
+			</isEmpty>
+		) T1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	T1.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	T1.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	T1.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	T1.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	T1.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="selectPrj2100AllUsrList">
+		SELECT
+			ROWNUM RN,
+			T1.LIC_GRP_ID,
+			T1.USR_ID,
+			T1.USR_NM,
+			T1.EMAIL,
+			T1.TELNO,
+			T1.USR_IMG_ID,
+			T1.DEPT_ID,
+			T1.DEPT_NAME,
+			T1.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', T1.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			T1.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', T1.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT 
+				A.LIC_GRP_ID,
+				A.USR_ID,
+				A.USR_NM,
+				A.EMAIL,
+				A.TELNO,
+				A.USR_IMG_ID,
+				A.DEPT_ID,
+				SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME,
+				A.USR_POSITION_CD,
+				A.USR_DUTY_CD
+			FROM STM3000 A
+			WHERE	1=1
+      			AND A.LIC_GRP_ID = #licGrpId#
+				AND A.DEL_CD = '02'
+				AND A.USE_CD = '01'
+				AND A.BLOCK = '01'
+        		AND	NOT EXISTS
+        		(
+					SELECT	Z.USR_ID
+                    FROM	PRJ2001 Z
+                    WHERE	1=1
+                    AND		A.USR_ID = Z.USR_ID
+                    AND		Z.PRJ_ID = #prjId#
+                    AND		Z.AUTH_GRP_ID = #authGrpId#
+				)
+				<isNotEmpty property="paramSortFieldId">
+					<isNotEmpty property="sortDirection">
+						ORDER BY $paramSortFieldId$
+						<isEqual property="sortDirection" compareValue="desc">
+							DESC
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isEmpty property="paramSortFieldId">
+					ORDER BY A.USR_NM
+				</isEmpty>
+		) T1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	T1.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	T1.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	T1.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	T1.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	T1.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+    <select id="prj2100DAO.selectPrj2100InUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT SUBT1.*
+		FROM
+		(
+			<include refid="selectPrj2100InUsrList"/>
+    	) SUBT1
+    	WHERE 1=1 
+    	AND SUBT1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="prj2100DAO.selectPrj2100InUsrListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj2100InUsrList"/>
+		) SUBT1
+    </select>
+	
+    <select id="prj2100DAO.selectPrj2100AllUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT SUBT1.*
+		FROM
+		(
+			<include refid="selectPrj2100AllUsrList"/>
+    	) SUBT1
+    	WHERE 1=1 
+    	AND SUBT1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="prj2100DAO.selectPrj2100AllUsrListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj2100AllUsrList"/>
+		) SUBT1
+    </select>
+    
+	<insert id="prj2100DAO.insertPrj2100PrjUsrAuthInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		INSERT INTO PRJ2001 A
+		(
+			PRJ_ID,			AUTH_GRP_ID,		USR_ID,			REG_DTM,		REG_USR_ID,
+		    REG_USR_IP,		MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+		)
+		SELECT	#prjId#
+			,	#authGrpId#
+		    ,	A.USR_ID
+		    ,	SYSDATE
+		    ,	#regUsrId#
+		    ,	#regUsrIp#
+		    ,	SYSDATE
+		    ,	#modifyUsrId#
+		    ,	#modifyUsrIp#
+		FROM	STM3000 A
+		WHERE	1=1
+		AND		A.LIC_GRP_ID = #licGrpId#
+		AND		A.USR_ID = #usrId#
+	]]>
+	</insert>
+	
+	<delete id="prj2100DAO.deletePrj2100PrjUsrAuthInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	PRJ2001 A
+		WHERE	1=1
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+		AND		A.USR_ID = #usrId#
+	]]>
+	</delete>
+</sqlMap>

@@ -1,36 +1,25 @@
-package kr.opensoftlab.oslops.prj.prj1000.prj1100.vo;
+package kr.opensoftlab.lunaops.prj.prj1000.prj1100.vo;
 
-/**
- * @Class Name : Prj1100VO.java
- * @Description : Prj1100VO VO class
- * @Modification Information
- *
- * @author 배용진
- * @since 2019.03.29.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp All right reserved.
- */
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 
 public class Prj1100VO extends PageVO {
 	
-	/** 검색 조건 define */
-	private String srchEvent;  /** Event : onLoad, onSelect */
+	
+	private String srchEvent;  
 	
 	private String rn;
-	/** 라이선스 그룹 ID */
+	
 	private String licGrpId;
-	/** 프로젝트 ID */
+	
 	private String prjId;
-	/** 요구사항 ID */
+	
 	private String reqId;
-	/** 프로세스 ID */
+	
 	private String processId;
-	/** 작업흐름 ID */
+	
 	private String flowId;
 	
 	public String getSrchEvent() {

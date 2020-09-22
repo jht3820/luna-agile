@@ -1,12 +1,6 @@
-package kr.opensoftlab.oslops.dsh.dsh1000.dsh1000.vo;
+package kr.opensoftlab.lunaops.dsh.dsh1000.dsh1000.vo;
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
-
-/**
- * 
- * @author Kong
- *
- */
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 public class Dsh1000VO extends PageVO {
 	
 	private String prjId;

@@ -25,11 +25,26 @@
 	
 	<script>
 		$(function(){
+			//http:// -> https:// redirect
+			var currentUrl = window.location.href;
+			if(currentUrl.indexOf("http://") != -1){
+				var redirectUrl = currentUrl.substring(7, currentUrl.length);
+				//window.location.href = "https://"+redirectUrl;
+			}
+			
+			
 			/* 레이어 팝업 띄우기 */
 			$('.find').click(function() {
 				//레이어팝업 공통함수 이용 호출할 것.
 				layer_popup('/cmm/cmm4000/cmm4001/selectCmm4001View.do', 'idPwFind');
+				
 			});
+			
+			// 메인팝업 보기 쿠키가 없을 경우에만 팝업을 띄운다.
+			if(isCookie("mainPopViewCookie") == false){
+				// 로그인 화면 메인팝업 오픈
+				window.open("/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do", "mainPopup", "width=800,height=453,left=0,top=0,location=no,menubar=no,status=noe,titlebar=no,toolbar=no", true);
+			}
 		});
 
 		
@@ -128,6 +143,23 @@
 			document.loginFrm.submit();
 		}
 		
+		/*
+		 * 쿠키의 유무 체크
+		 * @param cookieName 쿠키이름
+		 */
+		function isCookie(cookieName) {
+			cookieName = cookieName + '=';
+			var cookieData = document.cookie;
+			var cIdx = cookieData.indexOf(cookieName);
+			var exist = false;	
+			
+			if(cIdx != -1 ){
+				exist = true;	
+			}
+			
+			return exist;
+		}
+		
 		
 	</script>
 </head>
@@ -139,11 +171,11 @@
 			<input type="hidden" name="initPassYn" id="initPassYn" value="">
 			<input type="hidden" name="licGrpId" id="licGrpId" value="${requestScope.licGrpId}">
 			
-			<img class="logo" src="/images/login/login_logo.png"/>
+			<img class="logo" src="/images/login/login_logo_osl.png"/>
 			<input type="text" name="usrId" id="usrId" placeholder="Username" title="로그인" 
 			onkeyup="this.value=this.value.replace(/[^a-zA-Z-_0-9]/g,'');" maxlength="20"
 			>
-			<input type="password" name="usrPw" id="usrPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" style="margin-bottom:20px;" title="패스워드" 
+			<input type="password" name="usrPw" id="usrPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" style="margin-bottom:20px;" title="패스워드"
 			maxlength="200"
 			>
 			<a href="javascript:fnLoginAction();"><span class="login_button">Log In</span></a>	

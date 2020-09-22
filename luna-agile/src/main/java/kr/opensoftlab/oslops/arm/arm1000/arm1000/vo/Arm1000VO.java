@@ -1,30 +1,19 @@
-package kr.opensoftlab.oslops.arm.arm1000.arm1000.vo;
+package kr.opensoftlab.lunaops.arm.arm1000.arm1000.vo;
 
-/**
- * @Class Name : Arm1000VO.java
- * @Description : Arm1000 VO class
- * @Modification Information
- *
- * @author 진주영
- * @since 2018.01.05.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp All right reserved.
- */
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 
 public class Arm1000VO extends PageVO {
 	
-	/** 검색 조건 define */
-	private String srchEvent;  /** Event : onLoad, onSelect */
+	
+	private String srchEvent;  
 	private String srchReqDesc;
 	private String srchReqClsNm;
 	private String srchReqNm;
 	
-	/** 상세 기본 Defind */
+	
 	private String rn;
 	private String armId;
 	private String usrId;
@@ -33,10 +22,14 @@ public class Arm1000VO extends PageVO {
 	private String content;
 	private String viewCheck;
 	private String delCheck;
+	private String sendDelCheck;
 	private String reqIds;
 	private String regDtm;
 	private String CheckDtm;
 	private String delDtm;
+	private String sendDelDtm;
+	private String licGrpId;
+	private String armSendTypeCd;
 	
 	
 	public String getSrchEvent() {
@@ -111,6 +104,12 @@ public class Arm1000VO extends PageVO {
 	public void setDelCheck(String delCheck) {
 		this.delCheck = delCheck;
 	}
+	public String getSendDelCheck() {
+		return sendDelCheck;
+	}
+	public void setSendDelCheck(String sendDelCheck) {
+		this.sendDelCheck = sendDelCheck;
+	}
 	public String getReqIds() {
 		return reqIds;
 	}
@@ -135,5 +134,25 @@ public class Arm1000VO extends PageVO {
 	public void setDelDtm(String delDtm) {
 		this.delDtm = delDtm;
 	}
+	public String getLicGrpId() {
+		return licGrpId;
+	}
+	public void setLicGrpId(String licGrpId) {
+		this.licGrpId = licGrpId;
+	}
+	public String getSendDelDtm() {
+		return sendDelDtm;
+	}
+	public void setSendDelDtm(String sendDelDtm) {
+		this.sendDelDtm = sendDelDtm;
+	}
+	public String getArmSendTypeCd() {
+		return armSendTypeCd;
+	}
+	public void setArmSendTypeCd(String armSendTypeCd) {
+		this.armSendTypeCd = armSendTypeCd;
+	}
+	
+	
 	
 }
