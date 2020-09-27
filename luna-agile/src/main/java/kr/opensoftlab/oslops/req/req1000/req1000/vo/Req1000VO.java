@@ -1,34 +1,25 @@
-package kr.opensoftlab.oslops.req.req1000.req1000.vo;
+package kr.opensoftlab.lunaops.req.req1000.req1000.vo;
 
-/**
- * @Class Name : Req1000Controller.java
- * @Description : Req1000Controller Controller class
- * @Modification Information
- *
- * @author 정형택
- * @since 2016.01.23.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp All right reserved.
- */
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 public class Req1000VO extends PageVO {
 	
-	/** 검색 조건 define */
-	private String srchEvent;  /** Event : onLoad, onSelect */
+	
+	private String srchEvent;  
 	private String srchReqNm;
 	private String srchReqChargerNm;
 	private String srchFromDt;
 	private String srchToDt;
 	private String mode;
 	
-	/** 상세 기본 Defind */
+	
 	private String rn;
 	private String licGrpId;
 	private String prjId;
+	private String prjGrpId;
+	private String prjGrpNm;
 	private String prjNm;
 	private String selPrjId;
 	private String popupPrjId;
@@ -39,10 +30,9 @@ public class Req1000VO extends PageVO {
 	private String reqNo;
 	private String reqUsrId;
 	private String reqUsrNm;
+	private String reqUsrImgId;
 	private String reqDtm;
 	private String reqUsrDeptNm;
-	private String reqUsrPositionNm;
-	private String reqUsrDutyNm;
 	private String reqUsrEmail;
 	private String reqUsrNum;
 	private String reqNm;
@@ -75,6 +65,9 @@ public class Req1000VO extends PageVO {
 	private String loginUsrId;
 	private String regDtmDay;
 	private String reqKey;
+	
+	// 브라우저 타입 : 요구사항 엑셀 다운로드 시 브라우저별 엑셀파일 인코딩 처리를 달리 하기위해 사용
+	private String browserType;
 
 	public String getSrchEvent() {
 		return srchEvent;
@@ -144,6 +137,19 @@ public class Req1000VO extends PageVO {
 	public void setPopupPrjId(String popupPrjId) {
 		this.popupPrjId = popupPrjId;
 	}
+	
+	public String getPrjGrpId() {
+		return prjGrpId;
+	}
+	public void setPrjGrpId(String prjGrpId) {
+		this.prjGrpId = prjGrpId;
+	}
+	public String getPrjGrpNm() {
+		return prjGrpNm;
+	}
+	public void setPrjGrpNm(String prjGrpNm) {
+		this.prjGrpNm = prjGrpNm;
+	}
 	public String getPrjNm() {
 		return prjNm;
 	}
@@ -192,6 +198,13 @@ public class Req1000VO extends PageVO {
 	public void setReqUsrNm(String reqUsrNm) {
 		this.reqUsrNm = reqUsrNm;
 	}
+	
+	public String getReqUsrImgId() {
+		return reqUsrImgId;
+	}
+	public void setReqUsrImgId(String reqUsrImgId) {
+		this.reqUsrImgId = reqUsrImgId;
+	}
 	public String getReqDtm() {
 		return reqDtm;
 	}
@@ -203,19 +216,6 @@ public class Req1000VO extends PageVO {
 	}
 	public void setReqUsrDeptNm(String reqUsrDeptNm) {
 		this.reqUsrDeptNm = reqUsrDeptNm;
-	}
-	
-	public String getReqUsrPositionNm() {
-		return reqUsrPositionNm;
-	}
-	public void setReqUsrPositionNm(String reqUsrPositionNm) {
-		this.reqUsrPositionNm = reqUsrPositionNm;
-	}
-	public String getReqUsrDutyNm() {
-		return reqUsrDutyNm;
-	}
-	public void setReqUsrDutyNm(String reqUsrDutyNm) {
-		this.reqUsrDutyNm = reqUsrDutyNm;
 	}
 	public String getReqUsrEmail() {
 		return reqUsrEmail;
@@ -413,5 +413,10 @@ public class Req1000VO extends PageVO {
 	public void setReqKey(String reqKey) {
 		this.reqKey = reqKey;
 	}
-	
+	public String getBrowserType() {
+		return browserType;
+	}
+	public void setBrowserType(String browserType) {
+		this.browserType = browserType;
+	}
 }

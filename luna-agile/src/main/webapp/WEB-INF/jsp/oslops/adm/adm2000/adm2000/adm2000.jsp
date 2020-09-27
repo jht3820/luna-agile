@@ -260,7 +260,9 @@
 	                onChange: function () {
 	                   fnInGridListSet(this.page.selectPage,mySearch.getParam());
 	                }
-	            },
+	            }
+	            /* 
+	            ,
 	            contextMenu: {
 	                iconWidth: 20,
 	                acceleratorWidth: 100,
@@ -269,9 +271,9 @@
 	                    'arrow': '<i class="fa fa-caret-right"></i>'
 	                },
 	                items: [ // 마우스 우클릭 메뉴
-	                   /*  {type: "modify", label: "수정", icon:"<i class='fa fa-envelope' aria-hidden='true'></i>"},
+	                    {type: "modify", label: "수정", icon:"<i class='fa fa-envelope' aria-hidden='true'></i>"},
 	                    {type: "delete", label: "삭제", icon:"<i class='fa fa-trash' aria-hidden='true'></i>"},
-	                    {divide: true}, */
+	                    {divide: true},
 	                    {type: "reply", label: "쪽지 전송", icon:"<i class='fa fa-mail-reply' aria-hidden='true'></i>"},
 	                ],
 	                popupFilter: function (item, param) {
@@ -308,6 +310,7 @@
 	                    
 	                }
 	            }
+	             */
 	        });
 	        //그리드 데이터 불러오기
 	        fnInGridListSet();

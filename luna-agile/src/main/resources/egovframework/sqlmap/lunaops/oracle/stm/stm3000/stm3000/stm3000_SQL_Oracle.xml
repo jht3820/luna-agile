@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm3000DAO">
+	<typeAlias alias="stm3000VO"	type="kr.opensoftlab.lunaops.stm.stm3000.stm3000.vo.Stm3000VO"/>
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="rMapSelectStm3000" class="stm3000VO">
+   		<result property="rn" column="RN"/>
+		<result property="licGrpId" column="LIC_GRP_ID" />
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+		<result property="email" column="EMAIL" />
+		<result property="telno" column="TELNO" />
+		<result property="deptId" column="DEPT_ID" />
+		<result property="etc" column="ETC" />
+		<result property="useCd" column="USE_CD" />
+		<result property="useCdNm" column="USE_CD_NM" />
+		<result property="reqMainColor" column="REQ_MAIN_COLOR" />
+		<result property="reqFontColor" column="REQ_FONT_COLOR" />
+		<result property="wkStTm" column="WK_ST_TM"/>
+		<result property="wkEdTm" column="WK_ED_TM"/>
+		<result property="bkStTm" column="BK_ST_TM"/>
+		<result property="bkEdTm" column="BK_ED_TM"/>
+		<result property="pwFailCnt" column="PW_FAIL_CNT"/>
+		<result property="block" column="BLOCK"/>
+		<result property="blockNm" column="BLOCK_NM"/>
+		<result property="recLoginDtm" column="REC_LOGIN_DTM"/>
+		<result property="loginExprYn" column="LOGIN_EXPR_YN"/>
+		<result property="deptName" column="DEPT_NAME"/>
+		<result property="beforeBlock" column="BLOCK"/>
+		<result property="dshDisplayCd" column="DSH_DISPLAY_CD"/>
+		<result property="dshDisplayNm" column="DSH_DISPLAY_NM"/>
+    </resultMap>
+    
+    <resultMap id="rMapSelectStm3000CommonUser" class="stm3000VO">
+   		<result property="rn" column="RN"/>
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+    </resultMap>
+
+	<resultMap id="resultMapDefaultStm3000" class="HashMap">
+		<result property="licGrpId" column="LIC_GRP_ID" />
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+		<result property="email" column="EMAIL" />
+		<result property="telno" column="TELNO" />
+		<result property="usrImgId" column="USR_IMG_ID" />
+		<result property="deptId" column="DEPT_ID" />
+		<result property="etc" column="ETC" />
+		<result property="useCd" column="USE_CD" />
+		<result property="useNm" column="USE_NM" />
+		<result property="wkStTm" column="WK_ST_TM" />
+		<result property="wkEdTm" column="WK_ED_TM" />
+		<result property="bkStTm" column="BK_ST_TM" />
+		<result property="bkEdTm" column="BK_ED_TM" />
+		<result property="pwFailCnt" column="PW_FAIL_CNT" />
+		<result property="block" column="BLOCK" />
+		<result property="blockNm" column="BLOCK_NM" />
+		<result property="usrPositionCd" column="USR_POSITION_CD" />
+		<result property="usrPositionNm" column="USR_POSITION_NM" />
+		<result property="usrDutyCd" column="USR_DUTY_CD" />
+		<result property="usrDutyNm" column="USR_DUTY_NM" />
+		<result property="reqMainColor" column="REQ_MAIN_COLOR" />
+		<result property="reqFontColor" column="REQ_FONT_COLOR" />
+		<result property="recLoginDtm" column="REC_LOGIN_DTM" />
+		<result property="loginExprYn" column="LOGIN_EXPR_YN" />
+		<result property="deptName" column="DEPT_NAME" />
+		<result property="dshDisplayCd" column="DSH_DISPLAY_CD" />
+		<result property="dshDisplayNm" column="DSH_DISPLAY_NM" />
+		<result property="regDtm" column="REG_DTM" />
+		<result property="regUsrId" column="REG_USR_ID" />
+		<result property="regUsrIp" column="REG_USR_IP" />
+		<result property="modifyDtm" column="MODIFY_DTM" />
+		<result property="modifyUsrId" column="MODIFY_USR_ID" />
+		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
+	</resultMap>
+
+	<resultMap id="resultMapSelectStm3000" extends="resultMapDefaultStm3000" class="HashMap">
+		<result property="rn" column="RN" />
+	</resultMap>
+    
+    <resultMap id="resultMapSelectAdm2001" extends="resultMapDefaultStm3000" class="HashMap">
+		<result property="blkLog" column="BLK_LOG" jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+    
+	<sql id = "selectStm3000UsrList">
+		<![CDATA[
+		SELECT ROWNUM RN, T.*
+		FROM
+		(
+		   SELECT
+		   			A.LIC_GRP_ID  
+				, 	A.USR_ID
+				,	A.USR_NM
+				,	A.EMAIL
+				,	A.TELNO
+				,	A.USR_IMG_ID
+				,	A.DEPT_ID
+	    		,	ETC    			
+				,	A.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+				,	A.WK_ST_TM
+				,	A.WK_ED_TM
+				,	A.BK_ST_TM
+				,	A.BK_ED_TM
+				,	A.PW_FAIL_CNT
+				,	A.BLOCK
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00005', A.BLOCK, '1') AS BLOCK_NM
+				,	A.USR_POSITION_CD
+        		,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', A.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM
+        		,	A.USR_DUTY_CD
+				,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', A.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+				,	NVL(A.REQ_MAIN_COLOR,'##FFFFFF') AS REQ_MAIN_COLOR
+				,	NVL(A.REQ_FONT_COLOR,'##000000') AS REQ_FONT_COLOR
+				,	A.REC_LOGIN_DTM
+				,	CASE WHEN MONTHS_BETWEEN( SYSDATE, NVL(A.REC_LOGIN_DTM, SYSDATE) ) >= 3 THEN 'Y' ELSE 'N' END AS LOGIN_EXPR_YN
+				,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME
+				,	A.DSH_DISPLAY_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DSH00001', A.DSH_DISPLAY_CD, '1') AS DSH_DISPLAY_NM
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+		   FROM	STM3000 A
+		   WHERE 1=1 
+		   AND A.LIC_GRP_ID = #licGrpId#
+		   AND A.DEL_CD = '02'
+		   ]]>
+		   <isNotEmpty property="paramSortFieldId">
+					<isNotEmpty property="sortDirection">
+						ORDER BY $paramSortFieldId$
+						<isEqual property="sortDirection" compareValue="desc">
+							DESC
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isEmpty property="paramSortFieldId">
+					 ORDER BY A.REG_DTM DESC, A.USR_NM ASC
+				</isEmpty>
+		  
+		) T
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+		   	<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND T.USR_NM LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND T.USR_ID LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="email">
+					AND T.EMAIL LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="telno">
+					AND T.TELNO LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="etc">
+					AND T.ETC LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND T.DEPT_NAME LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND T.USE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="block">
+					AND T.BLOCK = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND T.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND T.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="regDtm">
+					<isNotEmpty property="searchStartDt">
+						AND T.REG_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND T.REG_DTM &lt;= TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+
+    <select id="stm3000DAO.selectStm3000UsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm3000UsrList" />
+		) Z
+    </select>
+    
+    <select id="stm3000DAO.selectStm3000UsrList" parameterClass="java.util.Map" resultMap="resultMapSelectStm3000">
+		SELECT Z.*
+	   	FROM
+	   	(
+			<include refid="selectStm3000UsrList" />
+		) Z
+		WHERE 1=1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+	<select id="stm3000DAO.selectStm3000UsrInfo" parameterClass="java.util.Map" resultMap="resultMapSelectAdm2001">
+		<![CDATA[ 
+			SELECT
+					A.LIC_GRP_ID
+				,	A.USR_ID
+				,	A.USR_NM
+				,	A.EMAIL
+				,	A.TELNO
+				,	A.DEPT_ID
+				,	A.ETC					 
+				,	A.USE_CD
+				,	A.USR_IMG_ID
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+				,	A.WK_ST_TM
+				,	A.WK_ED_TM
+				,	A.BK_ST_TM
+				,	A.BK_ED_TM
+				,	A.PW_FAIL_CNT
+				,	A.BLOCK
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00005', A.BLOCK, '1') AS BLOCK_NM
+				,	A.USR_POSITION_CD
+				,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', A.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM
+				,	A.USR_DUTY_CD
+				,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', A.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+				,	NVL(A.REQ_MAIN_COLOR,'##FFFFFF') AS REQ_MAIN_COLOR
+				,	NVL(A.REQ_FONT_COLOR,'##000000') AS REQ_FONT_COLOR
+				,	A.REC_LOGIN_DTM
+				,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME
+				,	CASE WHEN MONTHS_BETWEEN( SYSDATE, NVL(A.REC_LOGIN_DTM, SYSDATE) ) >= 3 THEN 'Y' ELSE 'N' END AS LOGIN_EXPR_YN
+				,	A.DSH_DISPLAY_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DSH00001', A.DSH_DISPLAY_CD, '1') AS DSH_DISPLAY_NM
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+				, 	( 
+						SELECT 
+							/*+ INDEX_DESC (C PK_STM3002 ) */  BLK_LOG 
+						FROM 
+						STM3002 C 
+						WHERE C.LIC_GRP_ID = A.LIC_GRP_ID 
+						AND C.USR_ID = #usrId#
+						AND ROWNUM = 1
+					)   AS BLK_LOG
+			FROM STM3000 A
+			WHERE 1=1
+			AND	LIC_GRP_ID = #licGrpId#
+			AND	USR_ID = #usrId#
+ 		]]>
+	</select>
+	
+    <insert id="stm3000DAO.insertStm3000UsrInfo" parameterClass="java.util.Map" >
+		<![CDATA[ 
+		INSERT INTO STM3000(
+				LIC_GRP_ID, 		USR_ID, 	USR_PW, 			USR_NM, 			EMAIL
+		  	,	TELNO, 				DEPT_ID, 		ETC, 				WK_ST_TM, 			WK_ED_TM
+		  	,	BK_ST_TM,			BK_ED_TM, 		PW_FAIL_CNT, 		BLOCK, 				USE_CD 
+		  	,	USR_POSITION_CD,	USR_DUTY_CD,	REQ_MAIN_COLOR,		REQ_FONT_COLOR,		DSH_DISPLAY_CD
+		  	,	DEL_CD,				USR_IMG_ID, 	REG_DTM,			REG_USR_ID,			REG_USR_IP
+		  	,	MODIFY_DTM,			MODIFY_USR_ID,	MODIFY_USR_IP
+		)VALUES(
+				#licGrpId#,				#usrId#,				#enUsrPw#,		#usrNm#, 				#email#
+		  	,	#telno#,				#deptId#,				#etc#,			NVL(#wkStTm#,'0900'),	NVL(#wkEdTm#,'1800')
+			,	NVL(#bkStTm#,'1200'),	NVL(#bkEdTm#,'1300'),	'0',			'01',					'01'
+		  	,	#usrPositionCd#,		#usrDutyCd#,			#reqMainColor#,	#reqFontColor#,			'01'
+		  	,	'02',					#usrImgId#,				SYSDATE,		#regUsrId#,				#regUsrIp#
+		  	,	SYSDATE,				#regUsrIp#,				#regUsrId#
+		)
+		]]>
+		
+		<selectKey resultClass="java.lang.String" keyProperty="newUsrId">
+		<![CDATA[
+			SELECT USR_ID
+			FROM STM3000
+			WHERE USR_ID = #usrId#
+		]]>
+		</selectKey>
+    </insert>
+    
+	<update id="stm3000DAO.updateStm3000UsrInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+			USR_NM				= #usrNm#,
+			EMAIL				= #email#,
+		  	TELNO				= #telno#,
+		  	DEPT_ID				= #deptId#,
+		  	ETC					= #etc#,
+		  	WK_ST_TM			= #wkStTm#,
+			WK_ED_TM			= #wkEdTm#,
+			BK_ST_TM			= #bkStTm#,
+			BK_ED_TM			= #bkEdTm#,
+			PW_FAIL_CNT			= #pwFailCnt#,	
+			BLOCK				= #block#,
+		  	USE_CD				= #useCd#,
+		  	USR_POSITION_CD		= #usrPositionCd#,
+		  	USR_DUTY_CD			= #usrDutyCd#,
+		  	USR_IMG_ID			= #usrImgId#,
+		  	REQ_MAIN_COLOR		= #reqMainColor#,
+			REQ_FONT_COLOR		= #reqFontColor#,
+		]]>
+		<isNotEmpty property="enUsrPw">
+			USR_PW				= #enUsrPw#,
+		</isNotEmpty>	
+		<isNotEmpty property="dshDisplayCd">
+			DSH_DISPLAY_CD		= #dshDisplayCd#,
+		</isNotEmpty>	
+		<isNotEmpty property="loginExprYn">
+			<isEqual property="loginExprYn" compareValue="N">
+				REC_LOGIN_DTM = sysdate,
+			</isEqual>
+		</isNotEmpty>
+		<![CDATA[
+		  	MODIFY_DTM			= sysdate,
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+		]]>
+	</update>
+	
+    <select id="stm3000DAO.selectCmm2000IdCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS CNT
+			FROM STM3000 A
+		    WHERE 1=1
+		    AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.USR_ID = #usrId#
+        ]]> 
+    </select>
+    
+    <select id="stm3000DAO.selectStm3000EmailCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS CNT
+			FROM STM3000 A
+		    WHERE A.EMAIL = #email#
+        ]]> 
+    </select>
+    
+	<update id="stm3000DAO.updateStm3000UseCd" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+		  	USE_CD					= #useCd#,
+		  	MODIFY_DTM			= sysdate,
+      		MODIFY_USR_ID	= #regUsrId#,
+      		MODIFY_USR_IP	= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+	
+	<update id="stm3000DAO.updateStm3000Block" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+			PW_FAIL_CNT		= #pwFailCnt#,	
+		  	BLOCK			= #block#,
+		]]>  	
+		<isNotEmpty property="loginExprChange">
+			<isEqual property="loginExprChange" compareValue="Y">
+				REC_LOGIN_DTM = sysdate,
+			</isEqual>
+		</isNotEmpty>
+		<![CDATA[
+		  	MODIFY_DTM		= sysdate,
+      		MODIFY_USR_ID	= #regUsrId#,
+      		MODIFY_USR_IP	= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+		]]>
+	</update>
+	
+	<update id="stm3000DAO.deleteStm3000UsrInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+				DEL_CD				= '01'
+			  	,MODIFY_DTM			= sysdate
+	      		,MODIFY_USR_ID		= #regUsrId#
+	      		,MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID = #usrId#
+		]]>
+	</update>
+	
+	<select id="stm3000DAO.selectStm3000ExcelList" parameterClass="stm3000VO" resultClass="egovMap">
+		<include refid="selectStm3000UsrList"/>		
+	</select>
+	    
+	<select id="stm3000DAO.selectPRJ2001ExistUsrInProject" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+		SELECT COUNT(*) AS CNT
+		FROM PRJ2001
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID = #usrId#
+		]]>
+	</select>
+	    
+	<select id="stm3000DAO.selectStm3000PwCheck" parameterClass="java.util.Map" resultClass="java.lang.String">
+		<![CDATA[ 
+			SELECT	A.USR_PW
+			FROM	STM3000 A
+			WHERE	1=1
+		]]> 	
+		<isNotEmpty property="licGrpId"> 	
+		      	AND	A.LIC_GRP_ID 	= #licGrpId#
+		</isNotEmpty> 
+		<![CDATA[ 
+			AND		USR_ID = #usrId#
+ 		]]>
+	</select>
+	
+	<sql id = "selectStm3000CommonUserList">
+		SELECT
+				B.USR_ID
+			,	B.USR_NM
+			,	B.EMAIL
+			,	B.TELNO
+			,	A.PRJ_ID
+		FROM PRJ2001 A, STM3000 B
+		WHERE 1=1
+		AND A.USR_ID = B.USR_ID
+		AND A.PRJ_ID = #prjId#
+		AND B.LIC_GRP_ID = #licGrpId#
+		AND B.USE_CD  = '01'
+		<isNotEmpty property="searchPopTxt">
+			AND B.USR_NM LIKE '%'||#searchPopTxt#||'%'
+		</isNotEmpty>
+	</sql>
+	
+	 <select id="stm3000DAO.selectStm3000CommonUserListCnt" resultClass="java.lang.Integer">
+		<![CDATA[
+	    SELECT	COUNT(*)
+		  FROM	(
+		]]>
+		  			<include refid="selectStm3000CommonUserList" />
+		<![CDATA[
+		  			) A
+		 ]]>
+    </select>
+    <select id="stm3000DAO.selectStm3000CommonUserList" parameterClass="stm3000VO"  resultMap="rMapSelectStm3000CommonUser">
+    	<![CDATA[
+		SELECT	*
+		   FROM (
+    					SELECT ROWNUM RN,
+    			     				A.*
+    					  FROM 
+    								(
+    	]]>
+    								<include refid="selectStm3000CommonUserList" />
+    	<![CDATA[
+    								) A
+    				 )
+		WHERE  RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+		ORDER BY USR_NM asc
+		]]>
+    </select>
+    
+    <select id="stm3000DAO.selectStm3000PrjAuthUserList" parameterClass="java.util.Map" resultClass="egovMap">
+    	<![CDATA[
+		SELECT	*
+		FROM 
+		(
+    		SELECT 	T.USR_ID
+				,	T.USR_NM
+				,	T.EMAIL
+				,	T.TELNO
+				,	T.PRJ_ID
+    		FROM 
+    		(
+    	]]>
+				<include refid="selectStm3000CommonUserList" />
+    	<![CDATA[
+			) T
+   			GROUP BY T.USR_ID, T.USR_NM, T.EMAIL, T.TELNO, T.PRJ_ID
+    	)
+		ORDER BY USR_NM ASC
+		]]>
+    </select>
+	
+	<update id="stm3000DAO.updateStm3000AccountInit" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+			USR_PW				= #enUsrPw#,
+			INI_YN				= #iniYn#,
+			INI_DTM				= sysdate,
+		  	MODIFY_DTM			= sysdate,
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+
+	<update id="stm3000DAO.updateStm3000PasswordExprInit" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3000 A SET
+			USR_PW				= #enUsrPw#,
+			BLOCK				= #block#,
+		  	MODIFY_DTM			= sysdate,
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+	
+	<insert id="stm3000DAO.insertStm3002BlockLog" parameterClass="java.util.Map">
+		<![CDATA[
+			INSERT INTO STM3002
+			(
+					LIC_GRP_ID, 	USR_ID, 		SEQ, 		BLK_LOG,  		REG_DTM
+			    ,	REG_USR_ID, 	REG_USR_IP, 	MODIFY_DTM, MODIFY_USR_ID, 	MODIFY_USR_IP          
+			)
+			VALUES
+			(
+					#licGrpId#,		#usrId#,	( SELECT NVL(MAX(SEQ),0) +1  FROM STM3002 WHERE USR_ID = #usrId# AND LIC_GRP_ID = #licGrpId#  )
+				,	#blkLog#,		SYSDATE
+				,	#regUsrId#,		#regUsrIp#, 	SYSDATE, 	#regUsrId#,		#regUsrIp# 
+			)
+			]]>
+	</insert>
+	
+</sqlMap>            

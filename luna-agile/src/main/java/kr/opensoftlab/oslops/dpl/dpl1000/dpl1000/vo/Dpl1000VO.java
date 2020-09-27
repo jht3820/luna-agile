@@ -1,12 +1,11 @@
-package kr.opensoftlab.oslops.dpl.dpl1000.dpl1000.vo;
+package kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.vo;
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 public class Dpl1000VO extends PageVO{
 	private String rn;
 	private String licGrpId;
 	
-	/** 상세 기본 Defind */
 	private String prjId;  		
 	private String dplId;		
 	private String dplNm; 		

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="usr1000DAO">
+
+	<typeAlias alias="egovMap"	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="loginVO" type="kr.opensoftlab.lunaops.com.vo.LoginVO"/>
+	
+	<resultMap id="rtnLoginVO" class="kr.opensoftlab.lunaops.com.vo.LoginVO">
+		<result property="usrId" column="USR_ID"/>
+		<result property="licGrpId" column="LIC_GRP_ID"/>
+		<result property="usrPw" column="USR_PW"/>
+		<result property="usrNm" column="USR_NM"/>
+		<result property="email" column="EMAIL"/>
+		<result property="telno" column="TELNO"/>
+		<result property="etc" column="ETC"/>
+		<result property="wkStTm" column="WK_ST_TM"/>
+		<result property="wkEdTm" column="WK_ED_TM"/>
+		<result property="usrImgId" column="USR_IMG_ID"/>
+		<result property="useCd" column="USE_CD"/>
+		<result property="reqMainColor" column="REQ_MAIN_COLOR" />
+		<result property="reqFontColor" column="REQ_FONT_COLOR" />
+		<result property="regDtm" column="REG_DTM"/>
+		<result property="regUsrId" column="REG_USR_ID"/>
+		<result property="regUsrIp" column="REG_USR_IP"/>
+		<result property="modifyDtm" column="MODIFY_DTM"/>
+		<result property="modifyUsrId" column="MODIFY_USR_ID"/>
+		<result property="modifyUsrIp" column="MODIFY_USR_IP"/>
+		<result property="pwFailCnt" column="PW_FAIL_CNT"/>
+		<result property="block" column="BLOCK"/>
+		<result property="prjId" column="PRJ_ID"/>
+		<result property="admYn" column="ADM_YN"/>
+		<result property="iniYn" column="INI_YN"/>
+		<result property="modMin" column="MOD_MIN"/>
+	</resultMap>
+	
+	<resultMap id="resultMapDefaultUsr1000" class="HashMap">
+		<result property="licGrpId" column="LIC_GRP_ID" />
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+		<result property="email" column="EMAIL" />
+		<result property="telno" column="TELNO" />
+		<result property="etc" column="ETC" />
+		<result property="deptId" column="DEPT_ID" />
+		<result property="deptName" column="DEPT_NAME" />
+		<result property="currentDeptNm" column="CURRENT_DEPT_NM" />
+		<result property="wkStTm" column="WK_ST_TM" />
+		<result property="wkEdTm" column="WK_ED_TM" />
+		<result property="bkStTm" column="BK_ST_TM" />
+		<result property="bkEdTm" column="BK_ED_TM" />
+		<result property="pwFailCnt" column="PW_FAIL_CNT" />
+		<result property="block" column="BLOCK" />
+		<result property="usrImgId" column="USR_IMG_ID" />
+		<result property="useCd" column="USE_CD" />
+		<result property="usrPositionCd" column="USR_POSITION_CD" />
+		<result property="usrPositionNm" column="USR_POSITION_NM" />
+		<result property="usrDutyCd" column="USR_DUTY_CD" />
+		<result property="usrDutyNm" column="USR_DUTY_NM" />
+		<result property="reqMainColor" column="REQ_MAIN_COLOR" />
+		<result property="reqFontColor" column="REQ_FONT_COLOR" />		
+		<result property="dshDisplayCd" column="DSH_DISPLAY_CD" />	
+		<result property="dshDisplayNm" column="DSH_DISPLAY_NM" />
+		<result property="regDtm" column="REG_DTM" />
+		<result property="regUsrId" column="REG_USR_ID" />
+		<result property="regUsrIp" column="REG_USR_IP" />
+		<result property="modifyDtm" column="MODIFY_DTM" />
+		<result property="modifyUsrId" column="MODIFY_USR_ID" />
+		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
+		<result property="prjNm" column="PRJ_NM" />
+		<result property="pwModifyDtm" column="PW_MODIFY_DTM" />
+	</resultMap>
+	
+	<select id="usr1000DAO.selectUsr1000UsrInfo" parameterClass="java.util.Map" resultMap="resultMapDefaultUsr1000">
+		SELECT	
+				A.LIC_GRP_ID
+			,	A.USR_ID
+			,	A.USR_NM
+			,	A.EMAIL
+			,	A.TELNO
+			,	A.ETC
+			,	A.DEPT_ID
+			,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '1') AS CURRENT_DEPT_NM
+			,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME 
+			,	A.WK_ST_TM
+			,	A.WK_ED_TM
+			,	A.BK_ST_TM
+			,	A.BK_ED_TM
+			,	A.PW_FAIL_CNT
+			,	A.BLOCK
+			,	A.USR_IMG_ID
+			,	A.USE_CD
+			,	A.USR_POSITION_CD
+       		,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', A.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM
+       		,	A.USR_DUTY_CD
+			,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', A.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+			,	NVL(A.REQ_MAIN_COLOR,'##FFFFFF') AS REQ_MAIN_COLOR
+			,	NVL(A.REQ_FONT_COLOR,'##000000') AS REQ_FONT_COLOR
+			,	A.DSH_DISPLAY_CD
+			,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DSH00001', A.DSH_DISPLAY_CD, '1') AS DSH_DISPLAY_NM
+			,	A.REG_DTM
+			,	A.REG_USR_ID
+			,	A.REG_USR_IP
+			,	A.MODIFY_DTM
+			,	A.MODIFY_USR_ID
+			,	A.MODIFY_USR_IP
+			,   ( 
+					SELECT  B.PRJ_NM
+	       			FROM PRJ1000 B
+	       			WHERE 1=1
+	    			AND B.LIC_GRP_ID = #licGrpId#
+	    			AND B.PRJ_ID = A.PRJ_ID 
+	    		) AS PRJ_NM
+	    	, ( 
+	    			SELECT TO_CHAR(MAX(PW_MODIFY_DTM),'YYYY-MM-DD AM HH:MI') 
+		      	  	FROM STM3003 A
+		          	WHERE A.USR_ID = #usrId#
+					AND A.LIC_GRP_ID = #licGrpId# 
+				) AS PW_MODIFY_DTM
+		FROM STM3000 A
+		WHERE 1=1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.USR_ID = #usrId#
+	</select>
+	
+	<select id="usr1000DAO.selectUsr1000LoginVO" parameterClass="java.util.Map" resultMap="rtnLoginVO">
+		SELECT	A.USR_ID
+			,	A.LIC_GRP_ID
+		    ,	A.USR_PW
+		    ,	A.USR_NM
+		    ,	A.EMAIL
+		    ,	A.TELNO
+		    ,	A.ETC
+		    ,	A.WK_ST_TM
+            ,	A.WK_ED_TM
+            ,	A.USR_IMG_ID
+		    ,	A.USE_CD
+		    ,	A.REQ_MAIN_COLOR
+		    ,	A.REQ_FONT_COLOR
+		    ,	A.REG_DTM
+		    ,	A.REG_USR_ID
+		    ,	A.REG_USR_IP
+		    ,	A.MODIFY_DTM
+		    ,	A.MODIFY_USR_ID
+		    ,	A.MODIFY_USR_IP
+		    ,   A.PW_FAIL_CNT
+		    ,   A.BLOCK
+		    ,   (SELECT PRJ_ID FROM PRJ2001 B WHERE A.PRJ_ID = B.PRJ_ID AND A.USR_ID = B.USR_ID AND ROWNUM = 1) AS PRJ_ID
+		    ,   NVL(A.ADM_YN,'N') AS ADM_YN
+		    ,   NVL(A.INI_YN,'N') AS INI_YN
+		    ,   NVL2(  A.INI_DTM , ROUND (  ( SYSDATE - A.INI_DTM ) * 1440 , 0 ) , 0 )  AS MOD_MIN
+		FROM STM3000 A
+		WHERE 1=1
+		AND	A.USR_ID = #usrId#
+	</select>
+	
+	<select id="usr1000DAO.selectUsr1000emailChRepAjax" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT COUNT(*) AS CNT
+		FROM STM3000 A
+	    WHERE 1=1
+	    AND A.EMAIL = #email#
+	</select>
+	
+	
+	<update id="usr1000DAO.updateUsr1000UsrInfo" parameterClass="java.util.Map">
+		UPDATE STM3000 
+		SET		USR_NM				= #usrNm#
+			,	EMAIL				= #email#
+			,	TELNO				= #telno#
+			,	ETC					= #etc#
+			,	DEPT_ID				= #deptId#
+			,	USR_IMG_ID			= #usrImgId#
+			, 	USR_POSITION_CD 	= #usrPositionCd#
+			,	USR_DUTY_CD			= #usrDutyCd#
+			,	REQ_MAIN_COLOR		= #reqMainColor#
+			,	REQ_FONT_COLOR		= #reqFontColor#
+			,	MODIFY_DTM			= SYSDATE
+			,	MODIFY_USR_ID		= #modifyUsrId#
+			,	MODIFY_USR_IP		= #modifyUsrIp#
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+		AND	USR_ID = #usrId#
+	</update>
+	    
+	<select id="usr1000DAO.selectUsr1000BeforePwCheck" parameterClass="java.util.Map" resultClass="java.lang.String">
+		<![CDATA[ 
+			SELECT USR_PW
+			FROM STM3000
+			WHERE 1=1
+			AND	LIC_GRP_ID = #licGrpId#
+			AND	USR_ID = #usrId#
+ 		]]> 
+	</select>
+	
+	<update id="usr1000DAO.updateUsr1000PasswordChange" parameterClass="java.util.Map">
+		UPDATE	STM3000
+		SET		USR_PW				= #usrPw#
+			,	MODIFY_DTM			= SYSDATE
+			,	MODIFY_USR_ID		= #modifyUsrId#
+			,	MODIFY_USR_IP		= #modifyUsrIp#
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+		AND	USR_ID = #usrId#
+	</update>
+	
+	
+	<select id="usr1000DAO.selectUsr1002" parameterClass="java.util.Map" resultClass="egovMap">
+			SELECT		A.DSH_DISPLAY_CD AS POPUP_DSH_DISPLAY_CD
+					,   A.PRJ_ID
+					,   ( SELECT  
+			       				B.PRJ_NM
+			       		FROM 
+			       				PRJ1000 B
+			       		WHERE 	1=1
+			    		AND 	B.LIC_GRP_ID =  #licGrpId#
+			    		AND 	B.PRJ_ID	 = 	A.PRJ_ID ) AS POP_PRJ_NM
+			FROM		STM3000 A
+			WHERE		1=1
+				AND		LIC_GRP_ID 	= #licGrpId#
+				AND		USR_ID 		= #regUsrId#
+ 		
+	</select>
+	
+	<update id="usr1000DAO.updateUsr1002" parameterClass="java.util.Map">
+		UPDATE		STM3000 A
+		  	  SET	A.DSH_DISPLAY_CD = #dshDisplayCd#
+		  	  	  , A.PRJ_ID		 = #prjId#
+		WHERE 		1=1
+		     AND 	LIC_GRP_ID	= #licGrpId#
+			 AND	USR_ID 		= #regUsrId#
+ 		
+	</update>
+    
+</sqlMap>

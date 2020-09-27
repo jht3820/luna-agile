@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bad1100DAO">
+	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		
+    <select id="bad1100DAO.selectBad1100CmtListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		SELECT
+			COUNT(A.BAD_CMT_ID) AS CNT
+		FROM BAD1100 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="badCmtUsrId">
+					AND A.BAD_CMT_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="badCmtContent">
+					AND A.BAD_CMT_CONTENT LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="badCmtDtm">
+					AND A.BAD_CMT_DTM BETWEEN TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS') 
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="dsTypeCd">
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		AND A.MENU_ID = #menuId#
+		AND A.BAD_ID = #badId#
+    </select>
+    
+    <select id="bad1100DAO.selectBad1100CmtList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT
+			C.RN AS RN
+			, C.LIC_GRP_ID AS LIC_GRP_ID
+			, C.PRJ_GRP_ID AS PRJ_GRP_ID
+			, C.PRJ_ID AS PRJ_ID
+			, C.BAD_ID AS BAD_ID
+			, C.BAD_CMT_ID AS BAD_CMT_ID
+			, C.BAD_CMT_USR_ID AS BAD_CMT_USR_ID
+			, C.BAD_CMT_RE_USR_ID AS BAD_CMT_RE_USR_ID
+			, C.BAD_CMT_CONTENT AS BAD_CMT_CONTENT
+			, C.BAD_CMT_DTM AS BAD_CMT_DTM
+			, C.DEL_CD AS DEL_CD
+			, C.BAD_CMT_USR_NM AS BAD_CMT_USR_NM
+			, C.BAD_CMT_USR_IMG_ID AS BAD_CMT_USR_IMG_ID
+		FROM (
+			SELECT
+				ROWNUM RN
+				, B.LIC_GRP_ID AS LIC_GRP_ID
+				, B.PRJ_GRP_ID AS PRJ_GRP_ID
+				, B.PRJ_ID AS PRJ_ID
+				, B.BAD_ID AS BAD_ID
+				, B.BAD_CMT_ID AS BAD_CMT_ID
+				, B.BAD_CMT_USR_ID AS BAD_CMT_USR_ID
+				, B.BAD_CMT_RE_USR_ID AS BAD_CMT_RE_USR_ID
+				, B.BAD_CMT_CONTENT AS BAD_CMT_CONTENT
+				, B.BAD_CMT_DTM AS BAD_CMT_DTM
+				, B.DEL_CD AS DEL_CD
+				, B.BAD_CMT_USR_NM AS BAD_CMT_USR_NM
+				, B.BAD_CMT_USR_IMG_ID AS BAD_CMT_USR_IMG_ID
+			FROM (
+				SELECT
+					A.LIC_GRP_ID AS LIC_GRP_ID
+					, A.PRJ_GRP_ID AS PRJ_GRP_ID
+					, A.PRJ_ID AS PRJ_ID
+					, A.BAD_ID AS BAD_ID 
+					, A.BAD_CMT_ID AS BAD_CMT_ID
+					, A.BAD_CMT_USR_ID AS BAD_CMT_USR_ID
+					, A.BAD_CMT_RE_USR_ID AS BAD_CMT_RE_USR_ID
+					, A.BAD_CMT_CONTENT AS BAD_CMT_CONTENT
+					, TO_CHAR(A.BAD_CMT_DTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_CMT_DTM
+					, A.DEL_CD AS DEL_CD
+					, SF_STM3000_USR_INFO(A.BAD_CMT_USR_ID, 1) AS BAD_CMT_USR_NM
+					, SF_STM3000_USR_INFO(A.BAD_CMT_USR_ID, 6) AS BAD_CMT_USR_IMG_ID
+				FROM BAD1100 A
+				WHERE 1 = 1
+				AND A.LIC_GRP_ID = #licGrpId#
+				<isNotEmpty property="searchTargetData">
+					<isNotEmpty property="searchTargetId">
+						<isEqual property="searchTargetId" compareValue="badCmtUsrId">
+							AND A.BAD_CMT_ID LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="badCmtContent">
+							AND A.BAD_CMT_CONTENT LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="badCmtDtm">
+							AND A.BAD_CMT_DTM BETWEEN TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS') 
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isNotEmpty property="dsTypeCd">
+					<isNotEmpty property="dsTypeCd">
+						<isEqual property="dsTypeCd" compareValue="02">
+							AND A.PRJ_GRP_ID = #prjGrpId#
+						</isEqual>
+						<isEqual property="dsTypeCd" compareValue="03">
+							AND A.PRJ_ID = #prjId#
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				AND A.MENU_ID = #menuId#
+				AND A.BAD_ID = #badId#
+				ORDER BY BAD_CMT_ID DESC
+			) B
+			WHERE 1 = 1
+		) C
+		WHERE 1 = 1
+		AND RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+		ORDER BY RN ASC
+    </select>	
+    
+    <insert id="bad1100DAO.insertBad1100CmtInfo" parameterClass="java.util.Map">
+	    <selectKey resultClass="java.lang.String" keyProperty="newBadCmtId">
+			<![CDATA[
+				SELECT	NVL( 
+				          SUBSTR(BAD_CMT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_CMT_ID, 12, 5)) + 1) , 5, '0')
+				      ,	'CMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+				  ) AS NEW_BAD_CMT_ID 
+				FROM	(
+				      SELECT	MAX(BAD_CMT_ID)  AS BAD_CMT_ID
+				      FROM	BAD1100 A
+				      WHERE	 1 = 1
+				      AND LIC_GRP_ID = #licGrpId#
+				      AND PRJ_GRP_ID = #prjGrpId#
+					  AND PRJ_ID = #prjId#
+					  AND MENU_ID = #menuId#
+					  AND BAD_CMT_ID LIKE 'CMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+				  )
+				WHERE 1 = 1
+			]]>
+		</selectKey>
+		INSERT INTO BAD1100 (
+			LIC_GRP_ID
+			, PRJ_GRP_ID
+			, PRJ_ID
+			, MENU_ID
+			, BAD_ID
+			, BAD_CMT_ID
+			, BAD_CMT_USR_ID
+			, BAD_CMT_RE_USR_ID
+			, BAD_CMT_CONTENT
+			, BAD_CMT_DTM
+			, DEL_CD
+			, REG_DTM
+			, REG_USR_ID
+			, REG_USR_IP
+			, MODIFY_DTM
+			, MODIFY_USR_ID
+			, MODIFY_USR_IP
+		) VALUES (
+			#licGrpId#
+			, #prjGrpId#
+			, #prjId#
+			, #menuId#
+			, #badId#
+			, #newBadCmtId#
+			, #badCmtUsrId#
+			, #badCmtReUsrId#
+			, #badCmtContent#
+			, SYSDATE
+			, '02'
+			, SYSDATE
+			, #regUsrId#
+			, #regUsrIp#
+			, SYSDATE
+			, #modifyUsrId#
+			, #modifyUsrIp#
+		)
+	</insert>
+	
+    <update id="bad1100DAO.deleteBad1100CmtInfo" parameterClass="java.util.Map">
+		UPDATE BAD1100
+		SET
+			DEL_CD = '01'
+			, DEL_TYPE_CD = #delTypeCd#
+			, DEL_TXT = #delTxt#
+			, MODIFY_DTM = SYSDATE
+			, MODIFY_USR_ID = #modifyUsrId#
+			, MODIFY_USR_IP = #modifyUsrIp#
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		AND DEL_CD = '02'
+		<isNotEmpty property="dsTypeCd">
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		AND MENU_ID = #menuId#
+		AND BAD_ID = #badId#
+		<isNotEmpty property="badCmtId">
+			<isNotEmpty property="badCmtId">
+				AND BAD_CMT_ID = #badCmtId#
+			</isNotEmpty>
+		</isNotEmpty>
+	</update>
+	
+    <delete id="bad1100DAO.deleteBad1100CmtDelInfo" parameterClass="java.util.Map">
+		DELETE FROM BAD1100
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		<isNotEmpty property="dsTypeCd">
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		AND MENU_ID = #menuId#
+		AND BAD_ID = #badId#
+		<isNotEmpty property="badCmtId">
+			<isNotEmpty property="badCmtId">
+				AND BAD_CMT_ID = #badCmtId#
+			</isNotEmpty>
+		</isNotEmpty>
+	</delete>
+	
+    <update id="bad1100DAO.updateBad1100CmtRestore" parameterClass="java.util.Map">
+		UPDATE BAD1100
+		SET
+			DEL_CD = '02'
+			, DEL_TYPE_CD = NULL
+			, DEL_TXT = NULL
+			, MODIFY_DTM = SYSDATE
+			, MODIFY_USR_ID = #modifyUsrId#
+			, MODIFY_USR_IP = #modifyUsrIp#
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		AND DEL_CD = '01'
+		<isNotEmpty property="dsTypeCd">
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		AND MENU_ID = #menuId#
+		AND BAD_ID = #badId#
+		<isNotEmpty property="badCmtId">
+			<isNotEmpty property="badCmtId">
+				AND BAD_CMT_ID = #badCmtId#
+			</isNotEmpty>
+		</isNotEmpty>
+	</update>
+	
+	<select id="bad1100DAO.selectBad1100CmtAllCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		SELECT
+			COUNT(A.BAD_CMT_ID) AS CNT
+		FROM BAD1100 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.MENU_ID = #menuId#
+		AND A.DEL_CD = '02'
+    </select>
+
+	<select id="bad1100DAO.selectBad1100CmtMaxInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+	    SELECT
+	    	ROWNUM RE_RN
+			, C.RN AS RN
+			, C.BAD_ID AS BAD_ID
+			, C.PRJ_GRP_ID AS PRJ_GRP_ID
+			, C.PRJ_ID AS PRJ_ID
+			, D.CNT AS CNT
+		FROM (
+			SELECT
+				ROWNUM RN
+				, B.BAD_ID AS BAD_ID
+				, B.PRJ_GRP_ID AS PRJ_GRP_ID
+				, B.PRJ_ID AS PRJ_ID
+			FROM BAD1000 B
+			WHERE 1 = 1
+			AND B.LIC_GRP_ID = #licGrpId#
+			AND B.MENU_ID = #menuId#
+			AND B.DEL_CD = '02'
+			ORDER BY BAD_ID DESC
+		) C JOIN (
+			SELECT
+				COUNT(A.BAD_ID) AS CNT
+				, A.BAD_ID AS BAD_ID
+			FROM BAD1100 A
+			WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND A.MENU_ID = #menuId#
+			AND A.DEL_CD = '02'
+			AND ( A.DEL_TYPE_CD IS NULL OR A.DEL_TYPE_CD = '' )
+			GROUP BY A.BAD_ID
+			ORDER BY CNT DESC
+		) D
+		ON C.BAD_ID = D.BAD_ID
+		WHERE 1 = 1
+		AND ROWNUM = 1
+    </select>
+</sqlMap>

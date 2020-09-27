@@ -2020,7 +2020,12 @@ function fnWorkRefresh(_pageNo, flowId){
 	ajaxObj.send();
 }
 //요구사항 임시 저장
-function fnReqHalfSave(){
+function fnReqHalfSave(addMsg){
+	var alertAddMsg = addMsg;
+	if(gfnIsNull(alertAddMsg)){
+		alertAddMsg = '';
+	}
+	
 	//담당자 같은지 체크
 	if(usrId != reqUsrId){
 		jAlert("담당자가 아닌경우 처리가 불가능합니다.","경고");
@@ -2060,7 +2065,7 @@ function fnReqHalfSave(){
 		return false;	
 	}
 	
-	jConfirm("임시 저장하시겠습니까?"+signStr+fileListStr, "알림", function( result ) {
+	jConfirm(alertAddMsg+"임시 저장하시겠습니까?"+signStr+fileListStr, "알림", function( result ) {
 		if( result ){
 			//실제 파일 FormData에 적재
 			fnFileUploadAppendData();
@@ -2175,7 +2180,7 @@ function fnReqFlowChgBeforeSucc(){
 			$.each(work_grid.list,function(idx, map){
 				if(map.workStatusCd == "01"){
 					workStatusChk = false;
-					jAlert("완료되지 않은 작업이 존재합니다.","경고");
+					fnReqHalfSave("완료되지 않은 작업이 존재합니다.<br>");
 					return false;
 				}
 			});

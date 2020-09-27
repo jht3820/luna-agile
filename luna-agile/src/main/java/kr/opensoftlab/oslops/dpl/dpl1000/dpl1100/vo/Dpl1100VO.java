@@ -1,112 +1,96 @@
-package kr.opensoftlab.oslops.dpl.dpl1000.dpl1100.vo;
+package kr.opensoftlab.lunaops.dpl.dpl1000.dpl1100.vo;
 
-/**
- * @Class Name : Dpl1100VO.java
- * @Description : Dpl1100VO Controller class
- * @Modification Information
- *
- * @author 배용진
- * @since 2019.03.11.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab Corp All right reserved.
- */
 
-import kr.opensoftlab.oslops.com.vo.PageVO;
+
+import kr.opensoftlab.lunaops.com.vo.PageVO;
 
 public class Dpl1100VO extends PageVO {
 	
-	/** 검색 조건 define */
-	private String srchEvent;  /** Event : onLoad, onSelect */
-	/** 검색 배포계획 ID */
+	
+	private String srchEvent;  
+	
 	private String srchDplId;
-	/** 
-	 * <페이징 처리 유무>
-	 * 배포계획에 배정/미배정된 요구사항 조회시 페이징 처리 필요,
-	 * 요구사항 단건 조회시 해당 요구사항이 배포계획에 배정되어있는지 조회할 떄에는
-	 * 페이징 처리 필요없음
-	 */
+	
 	private String pagingYn;
 	
-	/**** 상세 기본 Defind ****/
-	/** 라이선스 그룹 ID */
+	
+	
 	private String licGrpId;
-	/** 프로젝트 ID */
+	
 	private String prjId;
 	
-	/**** 배포 계획 정보 ****/
-	/** 배포 ID */
+	
+	
 	private String dplId;
-	/** 배포 명 */
+	
 	private String dplNm;
-	/** 배포 버전 */
+	
 	private String dplVer;
-	/** 배포 진행상태 코드 */
+	
 	private String dplStsCd;
-	/** 배포 진행상태 명 */
+	
 	private String dplStsNm;
-	/** 배포 일시 */
+	
 	private String dplDt; 
-	/** 배포자 DI */
+	
 	private String dplUsrId; 
-	/** 배포자 명 */
+	
 	private String dplUsrNm; 
-	/** 배포 방법 코드 */
+	
 	private String dplTypeCd; 
-	/** 배포 방법 명 */
+	
 	private String dplTypeNm;
-	/** 배포 설명 */
+	
 	private String dplDesc; 
 	
-	/**** 요구사항 정보 ****/
-	/** 요구사항 ID */
+	
+	
 	private String reqId;
-	/** 요구사항 순번 */
+	
 	private String reqOrd;
-	/** 공문번호 */
+	
 	private String reqNo;
-	/** 요구사항 명 */
+	
 	private String reqNm;
-	/** 요구사항 내용 */
+	
 	private String reqDesc;
-	/** 담당자 ID */
+	
 	private String reqChargerId;
-	/** 담당자 명 */
+	
 	private String reqChargerNm;
-	/** 요청자 ID */
+	
 	private String reqUsrID;
-	/** 요청자 명 */
+	
 	private String reqUsrNm;
-	/** 요청일자 */
+	
 	private String reqDtm;
-	/** 작업 시작 일자 */
+	
 	private String reqStDtm;
-	/** 작업 종료 일자 */
+	
 	private String reqEdDtm;
-	/** 작업 시작 예정일자 */
+	
 	private String reqStDuDtm;
-	/** 작업 종료 예정일자 */
+	
 	private String reqEdDuDtm;
-	/** 요구사항 유형 코드 */
+	
 	private String reqTypeCd;
-	/** 요구사항 유형 코드 명 */
+	
 	private String reqTypeNm;
-	/** 요구사항 처리유형 코드 */
+	
 	private String reqProType; 
-	/** 요구사항 처리유형 명 */
+	
 	private String reqProTypeNm;
-	/** 요구사항 접수유형 코드 */
+	
 	private String reqNewType;
-	/** 요구사항 접수유형 명 */
+	
 	private String reqNewTypeNm;
-	/** 프로세스 ID */
+	
 	private String processId;
-	/** 프로세스 명 */
+	
 	private String processNm;
-	/** 작업흐름 ID */
+	
 	private String flowId;
-	/** 작업흐름 명 */
+	
 	private String flowNm;
 	
 	public String getSrchEvent() {

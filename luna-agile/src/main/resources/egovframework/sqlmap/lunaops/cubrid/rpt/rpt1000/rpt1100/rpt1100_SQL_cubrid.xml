@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="rpt1100DAO">
+
+	 <!--  in / out class define  -->
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+    <select id="rpt1100DAO.selectRpt1100PrjDplJenJobList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT 'DPL' AS NODE_TYPE
+				, DPL_ID AS NODE_ID
+				, PRJ_ID AS UPPER_NODE_ID
+				, DPL_NM AS NODE_NM
+				, DPL_VER AS NODE_SUB_NM
+		FROM DPL1000
+		WHERE 1=1
+			AND PRJ_ID = #prjId#
+			AND DPL_DEL_CD = '02'
+		UNION ALL
+		SELECT DISTINCT 'JEN' AS NODE_TYPE
+				, Z.JEN_ID AS NODE_ID
+				, Z.DPL_ID AS UPPER_NODE_ID
+				, Y.JEN_NM AS NODE_NM
+				, NULL AS NODE_SUB_NM
+		FROM DPL1300 Z
+		INNER JOIN DPL1000 X
+			ON ( Z.PRJ_ID = X.PRJ_ID AND Z.DPL_ID = X.DPL_ID AND X.DPL_DEL_CD = '02')
+		INNER JOIN JEN1000 Y
+			ON ( Y.LIC_GRP_ID = #licGrpId# AND Z.JEN_ID = Y.JEN_ID AND Y.USE_CD = '01' AND Y.DEL_CD = '02')
+		WHERE 1=1
+			AND Z.PRJ_ID = #prjId#
+			AND Z.USE_CD = '01'
+		UNION ALL
+		SELECT DISTINCT 'JOB' AS NODE_TYPE
+				, Z.JOB_ID AS NODE_ID
+				, Z.JEN_ID AS UPPER_NODE_ID
+				, X.JOB_ID AS NODE_NM
+				, SF_ADM4100_COM_CD_INFO(X.LIC_GRP_ID, 'DPL00002', X.JOB_TYPE_CD, '1') AS NODE_SUB_NM
+		FROM DPL1300 Z
+		INNER JOIN DPL1000 W
+			ON ( Z.PRJ_ID = W.PRJ_ID AND Z.DPL_ID = W.DPL_ID AND W.DPL_DEL_CD = '02')
+		INNER JOIN JEN1000 Y
+			ON ( Y.LIC_GRP_ID = #licGrpId# AND Z.JEN_ID = Y.JEN_ID AND Y.USE_CD = '01' AND Y.DEL_CD = '02')
+		INNER JOIN JEN1100 X
+			ON ( Y.LIC_GRP_ID = X.LIC_GRP_ID AND Z.JEN_ID = X.JEN_ID AND Z.JOB_ID = X.JOB_ID AND X.USE_CD = '01' )
+		WHERE 1=1
+			AND Z.PRJ_ID = #prjId#
+			AND Z.USE_CD = '01'
+    </select>
+    
+    <select id="rpt1100DAO.selectRpt1100SelTargetBldResultCntList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    SELECT SUBT1.*
+	    FROM
+	    (
+	    	SELECT A.BLD_RESULT, COUNT(*) AS BLD_RESULT_CNT, SUM(A.BLD_DURATION_TM) AS BLD_DURATION_TM_SUM
+			FROM DPL1400 A
+			WHERE 1=1
+				AND A.BLD_RESULT_CD NOT IN('01','02')
+				AND A.PRJ_ID = #prjId#
+				<isNotEmpty property="dplId">
+					AND A.DPL_ID = #dplId#
+				</isNotEmpty>
+				<isNotEmpty property="jenId">
+					AND A.JEN_ID = #jenId#
+				</isNotEmpty>
+				<isNotEmpty property="jobId">
+					AND A.JOB_ID = #jobId#
+				</isNotEmpty>
+				<isNotEmpty property="searchStDtm">
+					<![CDATA[
+						AND A.REG_DTM >= TO_DATETIME(#searchStDtm# || ' 00:00', 'YYYY-MM-DD HH24:MI')
+					]]>
+				</isNotEmpty>
+				<isNotEmpty property="searchEdDtm">
+					<![CDATA[
+						AND A.REG_DTM <= TO_DATETIME(#searchEdDtm# || ' 23:59', 'YYYY-MM-DD HH24:MI')
+					]]>
+				</isNotEmpty>
+			GROUP BY A.BLD_RESULT
+	    ) SUBT1
+	    <isNotEmpty property="rptChartDataSort">
+	    	ORDER BY 
+			<isEqual property="rptChartDataSort" compareValue="bldResult">
+				SUBT1.BLD_RESULT
+			</isEqual>
+			<isEqual property="rptChartDataSort" compareValue="bldResultCnt">
+				SUBT1.BLD_RESULT_CNT
+			</isEqual>
+			<isEqual property="rptChartDataSort" compareValue="bldDurationTmSum">
+				SUBT1.BLD_DURATION_TM_SUM
+			</isEqual>
+			<isEqual property="rptChartDataSortOrd" compareValue="desc">
+				DESC
+			</isEqual>
+	    </isNotEmpty>
+    </select>
+    
+    
+    <select id="rpt1100DAO.selectRpt1100SelTargetDplResultSuccCntList" parameterClass="java.util.Map"  resultClass="egovMap">
+    	SELECT SUBT2.*
+    	FROM
+    	(
+    		SELECT
+	    		SUBT1.*
+		    	, TRUNC((SUBT1.BLD_SUCC_RESULT_CNT/BLD_RESULT_CNT)*100) AS BLD_SUCC_PERCENT
+		    	, (
+					SELECT COUNT(*)
+					FROM DPL1700
+				  	WHERE 1=1
+				  	AND PRJ_ID = SUBT1.PRJ_ID
+				  	AND DPL_ID = SUBT1.DPL_ID
+				) AS REVISION_PATHS_CNT
+			FROM
+			(
+			    SELECT
+				    A.PRJ_ID
+				    , A.DPL_ID
+				    , B.DPL_NM
+				    , COUNT(*) AS BLD_RESULT_CNT
+				    , COUNT(DECODE(A.BLD_RESULT,'SUCCESS',1)) AS BLD_SUCC_RESULT_CNT
+				    , SUM(A.BLD_DURATION_TM) AS BLD_DURATION_TM_SUM
+				FROM DPL1400 A
+				INNER JOIN DPL1000 B
+					ON ( A.PRJ_ID = B.PRJ_ID AND A.DPL_ID = B.DPL_ID AND B.DPL_DEL_CD = '02' )
+				WHERE 1=1
+					AND A.BLD_RESULT_CD NOT IN('01','02')
+					AND A.PRJ_ID = #prjId#
+					<isNotEmpty property="dplId">
+						AND A.DPL_ID = #dplId#
+					</isNotEmpty>
+					<isNotEmpty property="jenId">
+						AND A.JEN_ID = #jenId#
+					</isNotEmpty>
+					<isNotEmpty property="jobId">
+						AND A.JOB_ID = #jobId#
+					</isNotEmpty>
+					<isNotEmpty property="searchStDtm">
+						<![CDATA[
+							AND A.REG_DTM >= TO_DATETIME(#searchStDtm# || ' 00:00', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+					<isNotEmpty property="searchEdDtm">
+						<![CDATA[
+							AND A.REG_DTM <= TO_DATETIME(#searchEdDtm# || ' 23:59', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+				GROUP BY A.PRJ_ID, A.DPL_ID, B.DPL_NM
+			) SUBT1
+    	) SUBT2
+		<isNotEmpty property="rptDplDataSort">
+	    	ORDER BY 
+			<isEqual property="rptDplDataSort" compareValue="dplNm">
+				SUBT2.DPL_NM
+			</isEqual>
+			<isEqual property="rptDplDataSort" compareValue="bldResultCnt">
+				SUBT2.BLD_RESULT_CNT
+			</isEqual>
+			<isEqual property="rptDplDataSort" compareValue="bldSuccResultCnt">
+				SUBT2.BLD_SUCC_RESULT_CNT
+			</isEqual>
+			<isEqual property="rptDplDataSort" compareValue="bldSuccPercent">
+				SUBT2.BLD_SUCC_PERCENT
+			</isEqual>
+			<isEqual property="rptDplDataSort" compareValue="bldDurationTmSum">
+				SUBT2.BLD_DURATION_TM_SUM
+			</isEqual>
+			<isEqual property="rptDplDataSort" compareValue="revisionPathsCnt">
+				SUBT2.REVISION_PATHS_CNT
+			</isEqual>
+			<isEqual property="rptDplDataSortOrd" compareValue="desc">
+				DESC
+			</isEqual>
+	    </isNotEmpty>
+    </select>
+    
+    <select id="rpt1100DAO.selectRpt1100SelTargetJobResultSuccCntList" parameterClass="java.util.Map"  resultClass="egovMap">
+    	SELECT SUBT2.*
+    	FROM
+    	(
+    		SELECT
+		    	SUBT1.PRJ_ID
+		    	, SUBT1.JEN_ID
+		    	, SUBT1.JEN_NM
+		    	, SUBT1.JOB_ID
+		    	, SUBT1.BLD_RESULT_CNT
+		    	, SUBT1.BLD_SUCC_RESULT_CNT
+		    	, SUBT1.BLD_DURATION_TM_SUM
+		    	, TRUNC((SUBT1.BLD_SUCC_RESULT_CNT/BLD_RESULT_CNT)*100) AS BLD_SUCC_PERCENT
+		    	, (
+						SELECT COUNT(*)
+						FROM DPL1700
+						WHERE 1=1
+						AND PRJ_ID = SUBT1.PRJ_ID
+						AND JEN_ID = SUBT1.JEN_ID
+						AND JOB_ID = SUBT1.JOB_ID
+					) AS REVISION_PATHS_CNT
+			FROM
+			(
+			    SELECT
+				    A.PRJ_ID
+				    , A.JEN_ID
+				    , B.JEN_NM
+				    , A.JOB_ID
+				    , COUNT(*) AS BLD_RESULT_CNT
+				    , COUNT(DECODE(A.BLD_RESULT,'SUCCESS',1)) AS BLD_SUCC_RESULT_CNT
+				    , SUM(A.BLD_DURATION_TM) AS BLD_DURATION_TM_SUM
+				    
+				FROM DPL1400 A
+					INNER JOIN JEN1000 B
+					ON ( B.LIC_GRP_ID = #licGrpId# AND A.JEN_ID = B.JEN_ID AND B.USE_CD = '01' AND B.DEL_CD = '02')
+				WHERE 1=1
+					AND A.BLD_RESULT_CD NOT IN('01','02')
+					AND A.PRJ_ID = #prjId#
+					<isNotEmpty property="dplId">
+						AND A.DPL_ID = #dplId#
+					</isNotEmpty>
+					<isNotEmpty property="jenId">
+						AND A.JEN_ID = #jenId#
+					</isNotEmpty>
+					<isNotEmpty property="jobId">
+						AND A.JOB_ID = #jobId#
+					</isNotEmpty>
+					<isNotEmpty property="searchStDtm">
+						<![CDATA[
+							AND A.REG_DTM >= TO_DATETIME(#searchStDtm# || ' 00:00', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+					<isNotEmpty property="searchEdDtm">
+						<![CDATA[
+							AND A.REG_DTM <= TO_DATETIME(#searchEdDtm# || ' 23:59', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+				GROUP BY A.PRJ_ID, A.JEN_ID, B.JEN_NM, A.JOB_ID
+			) SUBT1
+    	) SUBT2
+		<isNotEmpty property="rptJobDataSort">
+	    	ORDER BY 
+			<isEqual property="rptJobDataSort" compareValue="jenNm">
+				SUBT2.JEN_NM
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="jobId">
+				SUBT2.JOB_ID
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="bldResultCnt">
+				SUBT2.BLD_RESULT_CNT
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="bldSuccResultCnt">
+				SUBT2.BLD_SUCC_RESULT_CNT
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="bldSuccPercent">
+				SUBT2.BLD_SUCC_PERCENT
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="bldDurationTmSum">
+				SUBT2.BLD_DURATION_TM_SUM
+			</isEqual>
+			<isEqual property="rptJobDataSort" compareValue="revisionPathsCnt">
+				SUBT2.REVISION_PATHS_CNT
+			</isEqual>
+			<isEqual property="rptJobDataSortOrd" compareValue="desc">
+				DESC
+			</isEqual>
+	    </isNotEmpty>
+    </select>
+    
+      
+    <select id="rpt1100DAO.selectRpt1100SelTargetRecentDplLogList" parameterClass="java.util.Map"  resultClass="egovMap">
+    	SELECT SUBT2.*
+		FROM
+		(
+			SELECT
+				ROWNUM AS RN
+				, SUBT1.PRJ_ID
+				, SUBT1.DPL_ID
+				, SUBT1.JEN_ID
+				, SUBT1.JOB_ID
+				, SUBT1.BLD_SEQ
+				, SUBT1.BLD_NUM
+				, SUBT1.BLD_RESULT
+				, SUBT1.BLD_RESULT_MSG
+				, SUBT1.BLD_DURATION_TM
+				, TO_CHAR(COALESCE(SUBT1.BLD_START_DTM, SUBT1.REG_DTM), 'YYYY-MM-DD HH24:MI') AS BLD_START_DTM
+				, SUBT1.JEN_NM
+				, SUBT1.DPL_NM
+				, TO_CHAR(SUBT1.REG_DTM, 'YYYY-MM-DD HH24:MI') AS REG_DTM
+				, SUBT1.REG_USR_ID
+				, COALESCE(SF_ADM2000_USR_INFO(SUBT1.REG_USR_ID, '1'),'없음') AS BLD_USR_NM
+				, (
+		            SELECT COUNT(*)
+		            FROM DPL1700
+		            WHERE 1=1
+			            AND PRJ_ID = SUBT1.PRJ_ID
+			            AND DPL_ID = SUBT1.DPL_ID
+			            AND JEN_ID = SUBT1.JEN_ID
+			            AND JOB_ID = SUBT1.JOB_ID
+			            AND BLD_SEQ = SUBT1.BLD_SEQ
+		          ) AS REVISION_PATHS_CNT
+			FROM
+			(
+				SELECT A.*, B.JEN_NM, C.DPL_NM
+				FROM DPL1400 A
+					INNER JOIN JEN1000 B
+					ON ( B.LIC_GRP_ID = #licGrpId# AND A.JEN_ID = B.JEN_ID AND B.USE_CD = '01' AND B.DEL_CD = '02')
+					INNER JOIN DPL1000 C
+					ON ( A.PRJ_ID = C.PRJ_ID AND A.DPL_ID = C.DPL_ID AND C.DPL_DEL_CD = '02' )
+				WHERE 1=1
+					AND A.BLD_RESULT_CD NOT IN ('01','02')
+					AND A.PRJ_ID = #prjId#
+					<isNotEmpty property="dplId">
+						AND A.DPL_ID = #dplId#
+					</isNotEmpty>
+					<isNotEmpty property="jenId">
+						AND A.JEN_ID = #jenId#
+					</isNotEmpty>
+					<isNotEmpty property="jobId">
+						AND A.JOB_ID = #jobId#
+					</isNotEmpty>
+					<isNotEmpty property="searchStDtm">
+						<![CDATA[
+							AND A.REG_DTM >= TO_DATE(#searchStDtm# || ' 00:00', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+					<isNotEmpty property="searchEdDtm">
+						<![CDATA[
+							AND A.REG_DTM <= TO_DATE(#searchEdDtm# || ' 23:59', 'YYYY-MM-DD HH24:MI')
+						]]>
+					</isNotEmpty>
+				ORDER BY A.REG_DTM DESC
+			) SUBT1
+		) SUBT2
+		WHERE 1=1
+		AND SUBT2.RN <![CDATA[<=]]>
+		<isNotEmpty property="rptRecentBldDataSortCnt">
+			#rptRecentBldDataSortCnt#
+		</isNotEmpty>
+		<isEmpty property="rptRecentBldDataSortCnt">
+			20
+		</isEmpty>
+		<isNotEmpty property="rptRecentBldDataSort">
+	    	ORDER BY 
+			<isEqual property="rptRecentBldDataSort" compareValue="jenNm">
+				SUBT2.JEN_NM
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="jobId">
+				SUBT2.JOB_ID
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="dplNm">
+				SUBT2.DPL_NM
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="bldStartDtm">
+				SUBT2.BLD_START_DTM
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="bldUsrNm">
+				SUBT2.BLD_USR_NM
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="bldDurationTm">
+				SUBT2.BLD_DURATION_TM
+			</isEqual>
+			<isEqual property="rptRecentBldDataSort" compareValue="revisionPathsCnt">
+				SUBT2.REVISION_PATHS_CNT
+			</isEqual>
+			<isEqual property="rptRecentBldDataSortOrd" compareValue="desc">
+				DESC
+			</isEqual>
+	    </isNotEmpty>
+</sqlMap>

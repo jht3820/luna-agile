@@ -1,19 +1,7 @@
-package kr.opensoftlab.oslops.com.vo;
+package kr.opensoftlab.lunaops.com.vo;
 
-/**
- * @Class Name : DefaultVO.java
- * @Description : DefaultVO VO class
- * @Modification Information
- * @Decription : 디폴트 정보를 담은 클래스 
- * 
- * @author 정형택
- * @since 2015.12.31.
- * @version 1.0
- * @see
- *  
- *  Copyright (C) OpenSoftLab All right reserved.
- */
-public class DefaultVO{
+
+public abstract class DefaultVO{
 
     private String regDtm;
     private String regUsrId;

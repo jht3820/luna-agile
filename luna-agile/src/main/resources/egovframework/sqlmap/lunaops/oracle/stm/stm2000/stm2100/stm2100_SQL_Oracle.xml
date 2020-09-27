@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm2100DAO">
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+    <select id="stm2100DAO.selectStm2100BadList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT
+			C.LIC_GRP_ID AS LIC_GRP_ID
+			, C.MENU_ID AS MENU_ID
+			, C.STM_TYPE_CD AS STM_TYPE_CD
+			, C.STM_TYPE_NM AS STM_TYPE_NM
+			, C.STM_NM AS STM_NM
+			, C.STM_DS_TYPE_CD AS STM_DS_TYPE_CD
+			, C.STM_DS_TYPE_NM AS STM_DS_TYPE_NM
+			, TO_CHAR(COUNT(CASE WHEN C.DEL_CD='01' THEN 1 ELSE NULL END)) AS DEL_CNT
+			, TO_CHAR(COUNT(CASE WHEN C.DEL_CD='02' THEN 1 ELSE NULL END)) AS CNT 
+		FROM (
+			SELECT 
+	    		A.LIC_GRP_ID AS LIC_GRP_ID
+			    , A.MENU_ID AS MENU_ID
+			    , A.STM_TYPE_CD AS STM_TYPE_CD
+			    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00001', A.STM_TYPE_CD, '1') AS STM_TYPE_NM
+			    , A.STM_NM AS STM_NM
+			    , A.STM_DS_TYPE_CD AS STM_DS_TYPE_CD
+			    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00002', A.STM_DS_TYPE_CD, '1') AS STM_DS_TYPE_NM
+				, B.BAD_ID AS BAD_ID
+	            , B.DEL_CD AS DEL_CD
+			FROM STM2100 A
+	        LEFT JOIN BAD1000 B
+	        ON A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID
+	        WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+	  	) C
+		GROUP BY C.LIC_GRP_ID, C.MENU_ID, C.STM_TYPE_CD, C.STM_TYPE_NM, C.STM_NM, C.STM_DS_TYPE_CD, C.STM_DS_TYPE_NM
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="stmTypeCd">
+					AND C.STM_TYPE_CD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="stmNm">
+					AND C.STM_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY MENU_ID DESC
+	</select>
+
+    <select id="stm2100DAO.selectStm2100BadInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT 
+		    A.STM_TYPE_CD AS STM_TYPE_CD
+		    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00001', A.STM_TYPE_CD, '1') AS STM_TYPE_NM
+		    , A.STM_NM AS STM_NM
+		    , A.STM_DS_TYPE_CD AS STM_DS_TYPE_CD
+		    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00002', A.STM_DS_TYPE_CD, '1') AS STM_DS_TYPE_NM
+		    , A.STM_NTC_YN_CD AS STM_NTC_YN_CD
+		    , A.STM_PW_YN_CD AS STM_PW_YN_CD
+		    , A.STM_CMT_YN_CD AS STM_CMT_YN_CD
+		    , A.STM_TAG_YN_CD AS STM_TAG_YN_CD
+		    , A.STM_FILE_CNT AS STM_FILE_CNT
+		    , A.STM_FILE_STRG / (1024 * 1024) AS STM_FILE_STRG
+		FROM STM2100 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.MENU_ID = #menuId#
+    </select>
+    
+	<update id="stm2100DAO.updateStm2100BadOptions" parameterClass="java.util.Map">
+		UPDATE 
+			STM2100
+		SET 
+			STM_TYPE_CD = #stmTypeCd#
+			, STM_DS_TYPE_CD = #stmDsTypeCd#
+			, STM_NTC_YN_CD = #stmNtcYnCd#
+			, STM_PW_YN_CD = #stmPwYnCd#
+			, STM_CMT_YN_CD = #stmCmtYnCd#
+			, STM_TAG_YN_CD = #stmTagYnCd#
+			, STM_FILE_CNT = #stmFileCnt#
+			, STM_FILE_STRG = #stmFileStrg#
+			, MODIFY_DTM = sysdate
+			, MODIFY_USR_ID = #modifyUsrId#
+			, MODIFY_USR_IP = #modifyUsrIp#
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		AND MENU_ID = #menuId#
+	</update>
+    
+    <select id="stm2100DAO.selectStm2110BadAdmList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT T1.*
+		FROM
+		(
+		  SELECT
+		    A.STM_ADMIN_ID AS STM_ADMIN_ID
+		    , A.STM_ADMIN_CD AS STM_ADMIN_CD
+		    , B.USR_IMG_ID AS USR_IMG_ID
+		    , B.USR_NM AS USR_NM
+		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
+		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
+		    , A.PRJ_ID AS PRJ_ID
+		    , D.PRJ_NM AS PRJ_NM
+		    , A.PRJ_GRP_ID AS PRJ_GRP_ID
+		    , E.PRJ_NM AS PRJ_GRP_NM
+		  FROM STM2110 A
+		  LEFT JOIN STM3000 B ON (A.STM_ADMIN_CD = '02'  AND B.USR_ID = A.STM_ADMIN_ID )
+		  LEFT JOIN PRJ2000 C ON ( 
+			  C.LIC_GRP_ID = A.LIC_GRP_ID 
+			  AND C.PRJ_ID = A.PRJ_ID 
+			  AND C.USE_CD = '01' 
+			  AND A.STM_ADMIN_CD = '01' 
+			  AND C.AUTH_GRP_ID = A.STM_ADMIN_ID )
+		  LEFT JOIN PRJ1000 D ON(
+		  	D.PRJ_ID = A.PRJ_ID
+		  )
+		  LEFT JOIN PRJ1000 E ON(
+		  	E.PRJ_ID = A.PRJ_GRP_ID
+		  )
+		  WHERE 1=1
+		  AND A.LIC_GRP_ID = #licGrpId#
+		  AND A.MENU_ID = #menuId#
+		) T1
+		ORDER BY T1.STM_ADMIN_CD ASC, T1.STM_ADMIN_ID ASC, T1.DEPT_NM ASC
+    </select>
+    
+	<insert id="stm2100DAO.insertStm2110BadAdmin" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
+			<![CDATA[
+				SELECT	NVL( 
+				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
+				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+				  ) AS LBL_ID 
+				FROM	(
+				      SELECT	MAX(LBL_ID)  AS LBL_ID
+				      FROM	STM2110 A
+				      WHERE	1 = 1
+				  )
+			]]>
+		</selectKey>
+		INSERT INTO STM2110
+		(
+			LIC_GRP_ID
+			, MENU_ID
+			, LBL_ID
+			, STM_ADMIN_CD
+			, STM_ADMIN_ID
+			, PRJ_GRP_ID
+			, PRJ_ID
+			, REG_DTM
+			, REG_USR_ID
+			, REG_USR_IP
+			, MODIFY_DTM
+			, MODIFY_USR_ID
+			, MODIFY_USR_IP
+		) VALUES (
+			#licGrpId#
+			, #menuId#
+		    , #lblId#
+		    , #stmAdminCd#
+		    , #stmAdminId#
+		    , #prjGrpId#
+		    , #prjId#
+		    , SYSDATE
+		    , #regUsrId#
+		    , #regUsrIp#
+		    , SYSDATE
+		    , #modifyUsrId#
+		    , #modifyUsrIp#
+		)
+	</insert>
+        
+	<delete id="stm2100DAO.deleteStm2110BadAdmin" parameterClass="java.util.Map">
+		DELETE FROM STM2110 
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		AND MENU_ID = #menuId#
+	</delete>
+	
+    <select id="stm2100DAO.selectStm2120BadWtList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT T1.*
+		FROM
+		(
+		 SELECT
+		    A.STM_WT_ID AS STM_WT_ID
+		    , A.STM_WT_CD AS STM_WT_CD
+		    , B.USR_IMG_ID AS USR_IMG_ID
+		    , B.USR_NM AS USR_NM
+		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
+		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
+		    , A.PRJ_ID AS PRJ_ID
+		    , D.PRJ_NM AS PRJ_NM
+		    , A.PRJ_GRP_ID AS PRJ_GRP_ID
+		    , E.PRJ_NM AS PRJ_GRP_NM
+		  FROM STM2120 A
+		  LEFT JOIN STM3000 B ON (A.STM_WT_CD = '02' AND B.USR_ID = A.STM_WT_ID )
+		  LEFT JOIN PRJ2000 C ON ( 
+			  C.LIC_GRP_ID = A.LIC_GRP_ID 
+			  AND C.PRJ_ID = A.PRJ_ID 
+			  AND C.USE_CD = '01' 
+			  AND A.STM_WT_CD = '01' 
+			  AND C.AUTH_GRP_ID = A.STM_WT_ID )
+		  LEFT JOIN PRJ1000 D ON(
+		  	D.PRJ_ID = A.PRJ_ID
+		  )
+		  LEFT JOIN PRJ1000 E ON(
+		  	E.PRJ_ID = A.PRJ_GRP_ID
+		  )
+		  WHERE 1=1
+		  AND A.LIC_GRP_ID = #licGrpId#
+		  AND A.MENU_ID = #menuId#
+		) T1
+		ORDER BY T1.STM_WT_CD ASC, T1.STM_WT_ID ASC, T1.DEPT_NM ASC
+    </select>
+    
+	<insert id="stm2100DAO.insertStm2120BadWriter" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
+			<![CDATA[
+				SELECT	NVL( 
+				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
+				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+				  ) AS LBL_ID 
+				FROM	(
+				      SELECT	MAX(LBL_ID)  AS LBL_ID
+				      FROM	STM2120 A
+				      WHERE	1 = 1
+				  )
+			]]>
+		</selectKey>
+		INSERT INTO STM2120
+		(
+			LIC_GRP_ID
+			, MENU_ID
+			, LBL_ID
+			, STM_WT_CD
+			, STM_WT_ID
+			, PRJ_GRP_ID
+			, PRJ_ID
+			, REG_DTM
+			, REG_USR_ID
+			, REG_USR_IP
+			, MODIFY_DTM
+			, MODIFY_USR_ID
+			, MODIFY_USR_IP
+		) VALUES (
+			#licGrpId#
+			, #menuId#
+		    , #lblId#
+		    , #stmWtCd#
+		    , #stmWtId#
+		    , #prjGrpId#
+		    , #prjId#
+		    , SYSDATE
+		    , #regUsrId#
+		    , #regUsrIp#
+		    , SYSDATE
+		    , #modifyUsrId#
+		    , #modifyUsrIp#
+		)
+	</insert>
+	
+	<delete id="stm2100DAO.deleteStm2120BadWriter" parameterClass="java.util.Map">
+		DELETE FROM STM2120
+		WHERE 1 = 1
+		AND LIC_GRP_ID = #licGrpId#
+		AND MENU_ID = #menuId#
+	</delete>
+	
+    <select id="stm2100DAO.selectStm2100BadGrpList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT
+			A.AUTH_GRP_NM AS AUTH_GRP_NM
+			, A.AUTH_GRP_ID AS AUTH_GRP_ID
+			, B.PRJ_ID AS PRJ_ID
+			, B.PRJ_NM AS PRJ_NM
+			, B.PRJ_GRP_ID AS PRJ_GRP_ID
+		FROM PRJ2000 A
+		LEFT JOIN PRJ1000 B
+		ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.PRJ_ID = B.PRJ_ID )
+		WHERE 1 = 1
+		AND A.USE_CD = '01'
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.PRJ_ID IS NOT NULL
+	</select>
+
+    <select id="stm2100DAO.selectStm2100BadUsrList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2100BadUsrList 전체 사용자 목록 조회 */
+	    SELECT
+			A.USR_ID AS USR_ID
+			, A.USR_NM AS USR_NM
+			, SF_STM6000_DEPT_NM(A.LIC_GRP_ID, A.DEPT_ID, '2') AS DEPT_NM
+			, A.USR_IMG_ID AS USR_IMG_ID
+		FROM STM3000 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.USE_CD = '01'
+		AND A.DEL_CD = '02'
+		ORDER BY USR_NM ASC
+	</select>
+	
+    <select id="stm2100DAO.selectStm2100AdminCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+		SELECT
+			NVL2(A.LBL_ID, 'Y', 'N') AS YN
+		FROM STM2110 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.MENU_ID = #menuId#
+		AND ( ( A.STM_ADMIN_CD = '01' AND A.STM_ADMIN_ID = #authGrpId#  AND A.PRJ_ID = #prjId# )
+			OR ( A.STM_ADMIN_CD = '02' AND A.STM_ADMIN_ID = #usrId# )
+		)
+	</select>
+	
+    <select id="stm2100DAO.selectStm2100WriterCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+		SELECT
+			NVL2(A.LBL_ID, 'Y', 'N') AS YN
+		FROM STM2120 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.MENU_ID = #menuId#
+		AND ( ( A.STM_WT_CD = '01' AND A.STM_WT_ID = #authGrpId#  AND A.PRJ_ID = #prjId#  )
+			OR ( A.STM_WT_CD = '02' AND A.STM_WT_ID = #usrId# )
+		)
+	</select>
+
+</sqlMap>
