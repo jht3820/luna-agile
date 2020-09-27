@@ -568,6 +568,8 @@ label.required:after {
 }
 .fileReadonly button.uppy-DashboardContent-addMore,
 .fileReadonly button.uppy-Dashboard-Item-action--remove,
+.fileReadonly .uppy-DashboardTabs,
+.fileReadonly .uppy-Dashboard-dropFilesHereHint,
 .fileReadonly button.uppy-DashboardItem-action--remove {
     display: none;
 }
