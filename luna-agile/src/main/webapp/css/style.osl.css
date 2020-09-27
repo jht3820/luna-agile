@@ -1,9 +1,77 @@
 @charset "UTF-8";
-
+/* 1025px 이상 로고 width */
 #kt_header_brand > a > img{
 	width:130px;
 }
+/* flex */
+.osl-align-items-center{
+	-webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+}
+.osl-flex-shrink-0{
+	-ms-flex-negative: 0 !important;
+    flex-shrink: 0 !important;
+}
+.osl-margin-r-1rm{
+	margin-right: 1rem !important;
+}
+.osl-margin-r-2rm{
+	margin-right: 2rem !important;
+}
+.osl-margin-r-3rm{
+	margin-right: 3rem !important;
+}
+.osl-margin-t-2rm{
+	margin-top: 2rem !important;	
+}
+.osl-margin-t-3rm{
+	margin-top: 3rem !important;	
+}
+.osl-margin-b-05rm{
+	margin-bottom: 0.5rem !important;	
+}
+.osl-margin-b-1rm{
+	margin-bottom: 1rem !important;	
+}
+.osl-margin-b-175rm{
+	margin-bottom: 1.75rem !important;	
+}
+.osl-padding-t-025rm{
+	padding-top: 0.25rem !important;
+}
+.osl-font-size-125rm{
+	font-size:1.25rem !important;
+}
+.osl-font-size-15rm{
+	font-size:1.5rem !important;
+}
 
+.osl-d-flex{
+	display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+}
+.osl-flex-column{
+	-webkit-box-orient: vertical !important;
+    -webkit-box-direction: normal !important;
+    -ms-flex-direction: column !important;
+    flex-direction: column !important;
+}
+.osl-margin-r-auto{
+	margin-right: auto !important;
+}
+.osl-flex-wrap{
+	-ms-flex-wrap: wrap !important;
+    flex-wrap: wrap !important;
+}
+.osl-flex-row-fluid{
+	-webkit-box-flex: 1;
+    flex: 1 auto;
+    -ms-flex: 1 0 0px;
+    min-width: 0;
+}
+/* 폰트 지정 */
 body {
   font-family: "Poppins", "Nanum Gothic";
 }
@@ -16,11 +84,11 @@ body {
 .kt-uppy .uppy-Root {
   font-family: "Poppins", "Nanum Gothic";
 }
-
+/* input 유효성 값 오류 시 글자 크기 */
 .invalid-feedback {
     font-size: 85%;
 }
-
+/* chrome input 자동완성 색상 지우기 */
 input:-webkit-autofill,
     input:-webkit-autofill:hover,
     input:-webkit-autofill:focus,
@@ -30,7 +98,7 @@ input:-webkit-autofill,
      -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
 
-
+/* 정렬 */
 .osl-align-center--imp{
 	text-align:center !important;
 }
@@ -50,20 +118,22 @@ input:-webkit-autofill,
 	vertical-align: bottom !important;
 }
 
-
+/* 여백 */
 .osl-padding-r0{
 	padding-right: 0 !important;
 }
 .osl-padding-l05{
 	padding-left:0.5rem;
 }
-
-
+.osl-margin-b-05{
+	margin-bottom: 0.5rem;
+}
+/* 높이값 */
 .osl-min-h-px--130 {
   min-height: 130px; 
 }
 
-
+/* 글자크기 */
 .osl-font-lg {
   font-size: 1.1rem !important; 
 }
@@ -71,11 +141,11 @@ input:-webkit-autofill,
 	font-size: 1.2rem;
 }
 
-
+/* toast 내용 글자 크기 */
 .toast .toast-message {
     font-size: 1rem;
 }
-
+/* 즐겨찾기 색상 */
 .osl-favorites--active:before{
 	color:#fdb723;
 }
@@ -83,14 +153,14 @@ input:-webkit-autofill,
 	-ms-flex-direction: column;
     flex-direction: column;
 }
-
+/* 로그인 input 영어 입력 모드 */
 form#kt_login_form #usrId, form#kt_login_form #usrPw{
 	-webkit-ime-mode:inactive;
 	-moz-ime-mode:inactive;
 	-ms-ime-mode:inactive;
 	ime-mode:inactive;
 }
-
+/* 상단 메뉴바 조절 */
 .kt-header__topbar .kt-header__topbar-item .kt-header__topbar-icon{
 	height: 34px;
     width: 34px;
@@ -102,7 +172,7 @@ form#kt_login_form #usrId, form#kt_login_form #usrPw{
 .kt-subheader .kt-container{
 	height:60px;
 }
-
+/* 프로젝트 및 권한그룹 선택*/
 .kt-aside{
 	width: 375px !important;
 	left: -375px;
@@ -140,7 +210,7 @@ form#kt_login_form #usrId, form#kt_login_form #usrPw{
 {
 	padding-left:0;
 }
-
+/* ie 스크롤 렌더링 문제로 한번 더 선언 */
 .ps{overflow:hidden !important;}
 .kt-header__topbar .kt-header__topbar-item.kt-header__topbar-item--user .kt-header__topbar-wrapper img {
     width: 34px;
@@ -186,7 +256,7 @@ select[id^=usrOpt_] {
     padding-top: 15px;
     padding-bottom: 15px;
 }
-
+/* prj1000 */
 .osl-prj-group-md{
     height: 26px;
     font-size: 15px;
@@ -212,7 +282,10 @@ select[id^=usrOpt_] {
     height: 4rem;
     text-align: center;
 }
-
+.kt-media span{
+	background-color: #ebedf2;
+}
+/* @media */
 @media (max-width: 1400px) and (min-width: 1025px){
 	.osl-widget-info__item .osl-widget-info__item-icon{
 		display:none;
@@ -243,40 +316,40 @@ select[id^=usrOpt_] {
     font-size: 2rem;
     color: #1ea780;
 }
-
+/* datatable */
 .kt-datatable.osl-datatable-footer__divide.kt-datatable--default > .kt-datatable__pager{
 	background-color: #fff;
 	padding-bottom:25px;
 }
 .input-group i{color:#fff;}
-
+/* datatable header boldest*/
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__head .kt-datatable__row > .kt-datatable__cell > span, .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__foot .kt-datatable__row > .kt-datatable__cell > span,
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row-detail .kt-datatable__detail .kt-datatable__row > .kt-datatable__cell:first-child{
 	font-weight:900;
 }
-
+/* datatable row even bgColor*/
 .kt-datatable.kt-datatable--default.kt-datatable--loaded > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.kt-datatable__row--even {
     background-color: #fafcfb;
 }
-
+/* datatable row hover bgColor*/
 .kt-datatable.kt-datatable--default.kt-datatable--loaded > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.kt-datatable__row--hover {
     background-color: #d9ede7;
 }
-
+/* datatable row max height*/
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__head .kt-datatable__row > .kt-datatable__cell.kt-datatable__cell--left > span, .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row > .kt-datatable__cell.kt-datatable__cell--left > span, .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__foot .kt-datatable__row > .kt-datatable__cell.kt-datatable__cell--left > span{
 	max-height: 112px;
     overflow: hidden;
 }
-
+/* datatable row detail overflow padding */
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row-detail .kt-datatable__detail{
     padding: 0 20px;
 }
-
+/* datatable row active bgColor */
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.kt-datatable__row--active > .kt-datatable__cell{
 	background: #d9ede7;
 }
 
-
+/* datatable row checkbox bg-color */
 .kt-datatable > .kt-datatable__table > .kt-datatable__body .kt-datatable__row > .kt-datatable__cell .kt-checkbox.kt-checkbox--solid > input:checked ~ span{
 	background: #ffffff;
 }
@@ -403,7 +476,7 @@ label.required:after {
 .select2-container--default .select2-results__option .select2-results__group {
     font-weight: 900;
 }
-
+/* modal */
 .modal .modal-content .modal-body{
 	background-color: #eeeef4;
 	overflow-y: auto;
@@ -417,11 +490,11 @@ label.required:after {
     top: 20px;
     font-size: 0;
 }
-
+/* tree */
 .jstree-default .jstree-anchor {
     color: #2f2e38;
 }
-
+/* table 내부 checkbox, radio 위치 */
 .table th .kt-radio, .table td .kt-radio{
 	right:-5px;
 }
@@ -429,12 +502,12 @@ label.required:after {
 	top:5px;
 }
 
-
+/* summernote 수정 불가 (contenteditable="false")일 때 배경색 */
 .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
     background-color: #fbfbfb !important;
 }
 
-
+/* element min width */
 .osl-min-width--11rem{
 	min-width: 11rem;
 }
@@ -445,7 +518,7 @@ label.required:after {
 	min-width: 5rem;
 }
 
-
+/* element min height */
 .osl-min-height--9rem{
 	min-height:9rem;
 }
@@ -459,19 +532,19 @@ label.required:after {
 	min-height:12rem;
 }
 
-
+/* kt-avatar 이미지 사이즈 크게 */
 .kt-avatar .osl-avatar__holder-lg{
 	width: 145px;
     height: 145px;
 }
 
-
+/* element border */
 .osl-content__border--light{
  	border: 1px solid #ebedf2;
 }
 
-
-
+/* fileUpload */
+/*첨부파일  - 썸네일 다운로드 모양*/
 .osl-uppy-DashboardItem-action--download{
 	position: absolute;
 	top: 0;
@@ -498,61 +571,61 @@ label.required:after {
 .fileReadonly button.uppy-DashboardItem-action--remove {
     display: none;
 }
-
+/*사용자 정보 - 모달 폰트 색상*/
 .osl-user-info__modal{
 	color: #333;
 }
-
+/*사용자 정보 - 모달 사용자 사진 감싸는 박스*/
 .osl-user-info__modal .col-3{
 	display: flex;
 }
-
+/*사용자 정보 - 모달 사용자 정보 텍스트 영역 벗어날 시 줄바꿈*/
 .osl-user-info__modal .col-9{
 	word-break: break-all;
 }
-
+/*사용자 정보 - 모달 사용자 사진 영역*/
 .kt-media.osl-media{
 	margin: auto;
 }
-
+/*사용자 정보 - 모달 사용자 사진*/
 .osl-media{
 	width: 100%;
 }
-
+/*사용자 정보 - 모달 사용자 사진 이미지*/
 .kt-media.osl-media img{
 	max-width: 120px;
 	max-height: 150px;
 	height: auto;
 	margin: auto;
 }
-
+/*사용자 정보 - 사용자 이름*/
 .osl-user-name{
 	font-size: 1.5rem;
 	line-height: 40px;
 }
-
+/*사용자 정보 - 메세지 버튼 우측 정렬*/
 .osl-user__message-btn--right{
 	float:right;
 }
-
+/*사용자 정보 - 내용 아이콘*/
 .osl-user-info__modal i {
 	line-height: 21px;
 }
 .osl-padding-none{
 	padding:0 !important;
 }
-
+/* @media */
 @media (min-width: 1025px) {
-	
+	/* 로고 배경 색상 제거 */
 	.kt-header__brand {
 	    background: none;
 	    padding: 0 0 0 15px;
 	}
-	
+	/* 로그인 화면 로고 */
 	.kt-login-v2__logo > a > img {
 	    width: 100px;
 	}
-	
+	/* 상단 2depth 메뉴 */
 	.kt-header-menu .kt-menu__nav > .kt-menu__item .kt-menu__submenu > .kt-menu__subnav .kt-menu__content .kt-menu__heading > .kt-menu__link-text {
 	    font-weight:800;
 	}
@@ -586,7 +659,7 @@ label.required:after {
 		flex: 0 0 25px;
 	}
 	
-	
+	/* 상단 기능 메뉴 레이아웃 변경 */
 	.kt-header-mobile--fixed .kt-header__topbar {
 	    position: fixed;
 	    z-index: 96;
@@ -728,6 +801,7 @@ label.required:after {
 		padding-top:65px;
 	}
 	
+	/*사용자 정보 정렬 속성 변경*/
 	.osl-flex-info-column{
 		flex-flow: column;
 		align-items: start !important;
@@ -757,9 +831,11 @@ label.required:after {
 	}
 }
 @media (max-width:400px){
+	/*사용자 정보 - 모달 사용자 사진 숨김*/
 	.osl-user-info__modal_dislay--none{
 		display: none !important;
 	}
+	/*사용자 정보 - 텍스트 영역 full사이즈 변환*/
 	.osl-user-info__modal_dislay--full{
 		max-width: 100%;
 		flex: 0 0 100%;
