@@ -4,182 +4,327 @@
 <sqlMap namespace="bad1000DAO">
 	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	 
- 	<!-- Map Define -->
    	<resultMap id="resultMapSelectBad1000" class="egovMap">
+   		<result property="badNum"				column="BAD_NUM"/>
+   		<result property="licGrpId"				column="LIC_GRP_ID"/>
+   		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+   		<result property="prjId"					column="PRJ_ID"/>
+   		<result property="delCd"					column="DEL_CD"/>
    		<result property="badTitle"				column="BAD_TITLE"/>
    		<result property="badContent"		column="BAD_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
    		<result property="badUsrId"			column="BAD_USR_ID"/>
    		<result property="badUsrNm"			column="BAD_USR_NM"/>
    		<result property="badUsrImgId"		column="BAD_USR_IMG_ID"/>
-   		<result property="badNtcType"		column="BAD_NTC_TYPE"/>
    		<result property="badNtcStdtm"		column="BAD_NTC_STDTM"/>
-   		<result property="badNtcEdtm"		column="BAD_NTC_EDDTM"/>
+   		<result property="badNtcEddtm"		column="BAD_NTC_EDDTM"/>
+		<result property="badNtcCheck"		column="BAD_NTC_CHECK"/>
+		<result property="moment"			column="MOMENT"/>
 		<result property="badWtdtm"			column="BAD_WTDTM"/>
 		<result property="badHit"				column="BAD_HIT"/>
 		<result property="badPw"				column="BAD_PW"/>
-   		<result property="delCd"				column="DEL_CD"/>
 		<result property="badCmtYn"			column="BAD_CMT_YN"/>
 		<result property="atchFileId"			column="ATCH_FILE_ID"/>
 		<result property="fileSn"				column="FILE_SN"/>
+		<result property="badCmtCnt"		column="BAD_CMT_CNT"/>
     </resultMap>
 	
-	<!-- sql 정의 -->
 	<sql id="selectBad1000List">
 		SELECT
-			ROWNUM RN
-			, Y.LIC_GRP_ID AS LIC_GRP_ID
-		    , Y.PRJ_GRP_ID AS PRJ_GRP_ID
-		    , Y.PRJ_ID AS PRJ_ID
-		    , Y.MENU_ID AS MENU_ID
-		    , Y.BAD_ID AS BAD_ID
-			, Y.BAD_NUM AS BAD_NUM
+		    ROWNUM RN
+		    , Y.BAD_NUM AS BAD_NUM
+		    , Y.LIC_GRP_ID AS LIC_GRP_ID
+	     	, Y.PRJ_GRP_ID AS PRJ_GRP_ID
+	     	, Y.PRJ_ID AS PRJ_ID 
+			, Y.BAD_ID AS BAD_ID
+			, Y.DEL_CD AS DEL_CD
 		    , Y.BAD_TITLE AS BAD_TITLE
 		    , Y.BAD_USR_ID AS BAD_USR_ID
 		    , Y.BAD_USR_NM AS BAD_USR_NM
 		    , Y.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
 		    , Y.BAD_WTDTM AS BAD_WTDTM
-		    , Y.BAD_NTC_TYPE AS BAD_NTC_TYPE
-		    , Y.BAD_NTC_CHECK AS BAD_NTC_CHECK
-		    , Y.BAD_CMT_YN AS BAD_CMT_YN
 		    , Y.BAD_HIT AS BAD_HIT
 		    , Y.BAD_PW AS BAD_PW
+		    , Y.BAD_NTC_STDTM AS BAD_NTC_STDTM
+		    , Y.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+		    , Y.BAD_NTC_CHECK AS BAD_NTC_CHECK
+		    , Y.MOMENT AS MOMENT
+		    , Y.BAD_CMT_YN AS BAD_CMT_YN
 		    , Y.ATCH_FILE_ID AS ATCH_FILE_ID
-		    , ( SELECT MIN(B.FILE_SN) AS FILE_SN
-		        FROM COMTNFILEDETAIL B
-		        WHERE 1 = 1
-		        AND Y.ATCH_FILE_ID = B.ATCH_FILE_ID
-		        ) AS FILE_SN         
-		    , ( SELECT 
-		            TO_CHAR(NVL(COUNT(B.FILE_SN), 0 )) AS FILE_CNT
-		        FROM COMTNFILEDETAIL B
-		        WHERE 1 = 1
-		        AND Y.ATCH_FILE_ID = B.ATCH_FILE_ID
-		    	) AS BAD_FILE_CNT
-		    , ( SELECT
-		            TO_CHAR(NVL(COUNT(C.BAD_CMT_ID), 0 )) AS CMT_CNT
-		        FROM BAD1100 C
-		        WHERE 1 = 1
-		        AND Y.LIC_GRP_ID = C.LIC_GRP_ID
-		        AND Y.MENU_ID = C.MENU_ID
-		        AND Y.BAD_ID = C.BAD_ID
-		        <isNotEmpty property="dsTypeCd">
-		            <isEqual property="dsTypeCd" compareValue="02">
-		                AND C.PRJ_GRP_ID = #prjGrpId#
-		            </isEqual>
-		            <isEqual property="dsTypeCd" compareValue="03">
-		                AND C.PRJ_ID = #prjId#
-		            </isEqual>
-		        </isNotEmpty>
-		     ) AS BAD_CMT_CNT
-		   , Y.DEL_CD AS DEL_CD
-		   , X.STM_NTC_YN_CD AS STM_NTC_YN_CD
-		   , X.STM_PW_YN_CD AS STM_PW_YN_CD
-		   , X.STM_CMT_YN_CD AS STM_CMT_YN_CD
-		   , X.STM_TAG_YN_CD AS STM_TAG_YN_CD
-		   , X.STM_FILE_CNT AS STM_FILE_CNT
-		   , X.STM_FILE_STRG AS STM_FILE_STRG
+		    , Y.FILE_SN AS FILE_SN
+		    , Y.BAD_FILE_CNT AS BAD_FILE_CNT       
+		    , Y.BAD_CMT_CNT AS BAD_CMT_CNT
 		FROM (
 			SELECT
-				C.*
-				, SF_STM3000_USR_INFO(C.BAD_USR_ID, 1) AS BAD_USR_NM
-		    	, SF_STM3000_USR_INFO(C.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
+				C.BAD_NUM AS BAD_NUM
+				, C.LIC_GRP_ID AS LIC_GRP_ID
+				, C.PRJ_GRP_ID AS PRJ_GRP_ID
+				, C.PRJ_ID AS PRJ_ID 
+				, C.BAD_ID AS BAD_ID
+				, C.DEL_CD AS DEL_CD
+				, C.BAD_TITLE AS BAD_TITLE
+				, C.BAD_CONTENT AS BAD_CONTENT
+				, C.BAD_USR_ID AS BAD_USR_ID
+				, C.BAD_USR_NM AS BAD_USR_NM
+				, C.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+				, C.BAD_WTDTM AS BAD_WTDTM
+				, C.BAD_HIT AS BAD_HIT
+				, C.BAD_PW AS BAD_PW
+				, C.BAD_NTC_STDTM AS BAD_NTC_STDTM
+				, C.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
 				, '01' AS BAD_NTC_CHECK
-			FROM (
+				, C.MOMENT AS MOMENT
+				, C.BAD_CMT_YN AS BAD_CMT_YN
+				, C.ATCH_FILE_ID AS ATCH_FILE_ID
+				, C.FILE_SN AS FILE_SN
+				, C.BAD_FILE_CNT AS BAD_FILE_CNT 
+				, C.BAD_CMT_CNT AS BAD_CMT_CNT
+			FROM ( 
 				SELECT
-					ROWNUM BAD_NUM
-				    , B.*
-				FROM (
-					SELECT
-					    A.LIC_GRP_ID AS LIC_GRP_ID
-					    , A.PRJ_GRP_ID AS PRJ_GRP_ID
-					    , A.PRJ_ID AS PRJ_ID
-					    , A.MENU_ID AS MENU_ID
-					    , A.BAD_ID AS BAD_ID
-					    , A.BAD_TITLE AS BAD_TITLE
-					    , A.BAD_CONTENT AS BAD_CONTENT
-					    , A.BAD_USR_ID AS BAD_USR_ID
-					    , TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
-					    , A.BAD_NTC_TYPE AS BAD_NTC_TYPE
-					    , NVL2( A.BAD_NTC_STDTM, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_STDTM
-					    , NVL2( A.BAD_NTC_EDDTM, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_EDDTM
-					    , TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
-					    , TO_CHAR(A.BAD_HIT) AS BAD_HIT
-					    , A.BAD_CMT_YN AS BAD_CMT_YN
-					    , NVL2(A.BAD_PW, '01', '02') AS BAD_PW
-					    , A.ATCH_FILE_ID AS ATCH_FILE_ID
-					    , A.DEL_CD AS DEL_CD
-					FROM BAD1000 A
+						ROWNUM BAD_NUM
+						, B.LIC_GRP_ID AS LIC_GRP_ID
+						, B.PRJ_GRP_ID AS PRJ_GRP_ID
+						, B.PRJ_ID AS PRJ_ID 
+						, B.BAD_ID AS BAD_ID
+						, B.DEL_CD AS DEL_CD
+						, B.BAD_TITLE AS BAD_TITLE
+						, B.BAD_CONTENT AS BAD_CONTENT
+						, B.BAD_USR_ID AS BAD_USR_ID
+						, B.BAD_USR_NM AS BAD_USR_NM
+						, B.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+						, B.BAD_WTDTM AS BAD_WTDTM
+						, B.BAD_HIT AS BAD_HIT
+						, B.BAD_PW AS BAD_PW
+						, B.BAD_NTC_STDTM AS BAD_NTC_STDTM
+						, B.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+						, B.MOMENT AS MOMENT
+						, B.BAD_CMT_YN AS BAD_CMT_YN
+						, B.ATCH_FILE_ID AS ATCH_FILE_ID
+						, B.FILE_SN AS FILE_SN
+						, B.BAD_FILE_CNT AS BAD_FILE_CNT
+						, B.BAD_CMT_CNT AS BAD_CMT_CNT
+					FROM ( 
+						SELECT
+							A.LIC_GRP_ID AS LIC_GRP_ID
+							, A.PRJ_GRP_ID AS PRJ_GRP_ID
+							, A.PRJ_ID AS PRJ_ID 
+							, A.BAD_ID AS BAD_ID
+							, A.DEL_CD AS DEL_CD
+							, A.BAD_TITLE AS BAD_TITLE
+							, A.BAD_CONTENT AS BAD_CONTENT
+							, A.BAD_USR_ID AS BAD_USR_ID
+							, SF_STM3000_USR_INFO(A.BAD_USR_ID, 1) AS BAD_USR_NM
+							, SF_STM3000_USR_INFO(A.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
+							, TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD  HH24:MI:SS') AS BAD_WTDTM
+							, TO_CHAR(A.BAD_HIT) AS BAD_HIT
+							, NVL2(A.BAD_PW, '01', '02') AS BAD_PW
+							, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AS BAD_NTC_STDTM
+							, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD') AS BAD_NTC_EDDTM
+							, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
+							, A.BAD_CMT_YN AS BAD_CMT_YN
+							, A.ATCH_FILE_ID AS ATCH_FILE_ID
+							, ( SELECT MIN(D.FILE_SN) AS FILE_SN
+							    FROM COMTNFILEDETAIL D
+							    WHERE 1 = 1
+							    AND A.ATCH_FILE_ID = D.ATCH_FILE_ID
+							    ) AS FILE_SN         
+							, ( SELECT 
+							        TO_CHAR(NVL(COUNT(D.FILE_SN), 0 ))AS FILE_CNT
+							    FROM COMTNFILEDETAIL D
+							    WHERE 1 = 1
+							    AND A.ATCH_FILE_ID = D.ATCH_FILE_ID
+							) AS BAD_FILE_CNT
+							, ( SELECT
+                            		TO_CHAR(NVL(COUNT(D.BAD_CMT_ID), 0 )) AS CMT_CNT
+                            	FROM BAD1100 D
+                                WHERE 1 = 1
+                                AND A.LIC_GRP_ID = D.LIC_GRP_ID
+                                AND A.MENU_ID = D.MENU_ID
+                                AND A.BAD_ID = D.BAD_ID
+                                <isNotEmpty property="dsTypeCd">
+									<isEqual property="dsTypeCd" compareValue="02">
+										AND D.PRJ_GRP_ID = #prjGrpId#
+									</isEqual>
+									<isEqual property="dsTypeCd" compareValue="03">
+										AND D.PRJ_ID = #prjId#
+									</isEqual>
+								</isNotEmpty>
+                             ) AS BAD_CMT_CNT
+						FROM BAD1000 A
+						WHERE 1 = 1
+						AND A.LIC_GRP_ID = #licGrpId#
+						AND A.MENU_ID = #menuId#
+						ORDER BY BAD_ID ASC
+						) B
+						ORDER BY BAD_NUM DESC
+					) C
 					WHERE 1 = 1
-					AND A.LIC_GRP_ID = #licGrpId#
-					AND A.MENU_ID = #menuId#
-					ORDER BY BAD_ID ASC
-				) B
-				WHERE 1 = 1
-				ORDER BY BAD_NUM DESC
-			) C
-			WHERE 1 = 1
-			AND C.BAD_NTC_TYPE = '03'
-			OR ( C.BAD_NTC_TYPE = '02' AND C.MOMENT BETWEEN C.BAD_NTC_STDTM AND C.BAD_NTC_EDDTM )
-			<isNotEmpty property="dsTypeCd">
-			    <isEqual property="dsTypeCd" compareValue="02">
-			        AND C.PRJ_GRP_ID = #prjGrpId#
-			    </isEqual>
-			    <isEqual property="dsTypeCd" compareValue="03">
-			        AND C.PRJ_ID = #prjId#
-			    </isEqual>
-			</isNotEmpty>
-			UNION ALL
-			SELECT
-				G.*
-				, SF_STM3000_USR_INFO(G.BAD_USR_ID, 1) AS BAD_USR_NM
-		    	, SF_STM3000_USR_INFO(G.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
-				, '02' AS BAD_NTC_CHECK
-			FROM (
+					AND C.MOMENT BETWEEN C.BAD_NTC_STDTM AND C.BAD_NTC_EDDTM
+			    	<isNotEmpty property="searchTargetData">
+						<isNotEmpty property="searchTargetId">
+							<isEqual property="searchTargetId" compareValue="badUsrId">
+								AND C.BAD_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+							</isEqual>
+							<isEqual property="searchTargetId" compareValue="badTitle">
+								AND C.BAD_TITLE LIKE '%'|| #searchTargetData# ||'%'
+							</isEqual>
+							<isEqual property="searchTargetId" compareValue="badContent">
+							<![CDATA[
+								AND DBMS_LOB.INSTR(C.BAD_CONTENT, #searchTargetData#) > 0
+							]]>
+							</isEqual>
+							<isEqual property="searchTargetId" compareValue="badWtdtm">
+								AND C.BAD_WTDTM BETWEEN TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS') 
+							</isEqual>
+						</isNotEmpty>
+					</isNotEmpty>
+					<isNotEmpty property="dsTypeCd">
+						<isEqual property="dsTypeCd" compareValue="02">
+							AND C.PRJ_GRP_ID = #prjGrpId#
+						</isEqual>
+						<isEqual property="dsTypeCd" compareValue="03">
+							AND C.PRJ_ID = #prjId#
+						</isEqual>
+					</isNotEmpty>
+		   	UNION ALL
 				SELECT
-					ROWNUM BAD_NUM
-				    , F.*
-				FROM (
+					G.BAD_NUM AS BAD_NUM
+					, G.LIC_GRP_ID AS LIC_GRP_ID
+					, G.PRJ_GRP_ID AS PRJ_GRP_ID
+					, G.PRJ_ID AS PRJ_ID 
+					, G.BAD_ID AS BAD_ID
+					, G.DEL_CD AS DEL_CD
+					, G.BAD_TITLE AS BAD_TITLE
+					, G.BAD_CONTENT AS BAD_CONTENT
+					, G.BAD_USR_ID AS BAD_USR_ID
+					, G.BAD_USR_NM AS BAD_USR_NM
+					, G.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+					, G.BAD_WTDTM AS BAD_WTDTM
+					, G.BAD_HIT AS BAD_HIT
+					, G.BAD_PW AS BAD_PW
+					, G.BAD_NTC_STDTM AS BAD_NTC_STDTM
+					, G.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+					, '02' AS BAD_NTC_CHECK
+					, G.MOMENT AS MOMENT
+					, G.BAD_CMT_YN AS BAD_CMT_YN
+					, G.ATCH_FILE_ID AS ATCH_FILE_ID
+					, G.FILE_SN AS FILE_SN
+					, G.BAD_FILE_CNT AS BAD_FILE_CNT 
+					, G.BAD_CMT_CNT AS BAD_CMT_CNT
+				FROM ( 
 					SELECT
-					    E.LIC_GRP_ID AS LIC_GRP_ID
-					    , E.PRJ_GRP_ID AS PRJ_GRP_ID
-					    , E.PRJ_ID AS PRJ_ID
-					    , E.MENU_ID AS MENU_ID
-					    , E.BAD_ID AS BAD_ID
-					    , E.BAD_TITLE AS BAD_TITLE
-					    , E.BAD_CONTENT AS BAD_CONTENT
-					    , E.BAD_USR_ID AS BAD_USR_ID
-					    , TO_CHAR(E.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
-					    , E.BAD_NTC_TYPE AS BAD_NTC_TYPE
-					    , NVL2( E.BAD_NTC_STDTM, TO_CHAR(E.BAD_NTC_STDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_STDTM
-					    , NVL2( E.BAD_NTC_EDDTM, TO_CHAR(E.BAD_NTC_EDDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_EDDTM
-					    , TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
-					    , TO_CHAR(E.BAD_HIT) AS BAD_HIT
-					    , E.BAD_CMT_YN AS BAD_CMT_YN
-					    , NVL2(E.BAD_PW, '01', '02') AS BAD_PW
-					    , E.ATCH_FILE_ID AS ATCH_FILE_ID
-					    , E.DEL_CD AS DEL_CD
-					FROM BAD1000 E
-					WHERE 1 = 1
-					AND E.LIC_GRP_ID = #licGrpId#
-					AND E.MENU_ID = #menuId#
-					ORDER BY BAD_ID ASC
-				) F
+						ROWNUM BAD_NUM
+						, F.LIC_GRP_ID AS LIC_GRP_ID
+						, F.PRJ_GRP_ID AS PRJ_GRP_ID
+						, F.PRJ_ID AS PRJ_ID 
+						, F.BAD_ID AS BAD_ID
+						, F.DEL_CD AS DEL_CD
+						, F.BAD_TITLE AS BAD_TITLE
+						, F.BAD_CONTENT AS BAD_CONTENT
+						, F.BAD_USR_ID AS BAD_USR_ID
+						, F.BAD_USR_NM AS BAD_USR_NM
+						, F.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+						, F.BAD_WTDTM AS BAD_WTDTM
+						, F.BAD_HIT AS BAD_HIT
+						, F.BAD_PW AS BAD_PW
+						, F.BAD_NTC_STDTM AS BAD_NTC_STDTM
+						, F.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+						, F.MOMENT AS MOMENT
+						, F.BAD_CMT_YN AS BAD_CMT_YN
+						, F.ATCH_FILE_ID AS ATCH_FILE_ID
+						, F.FILE_SN AS FILE_SN
+						, F.BAD_FILE_CNT AS BAD_FILE_CNT 
+						, F.BAD_CMT_CNT AS BAD_CMT_CNT
+					FROM ( 
+						SELECT
+							E.LIC_GRP_ID AS LIC_GRP_ID
+							, E.PRJ_GRP_ID AS PRJ_GRP_ID
+							, E.PRJ_ID AS PRJ_ID 
+							, E.BAD_ID AS BAD_ID
+							, E.DEL_CD AS DEL_CD
+							, E.BAD_TITLE AS BAD_TITLE
+							, E.BAD_CONTENT AS BAD_CONTENT
+							, E.BAD_USR_ID AS BAD_USR_ID
+							, SF_STM3000_USR_INFO(E.BAD_USR_ID, 1) AS BAD_USR_NM
+							, SF_STM3000_USR_INFO(E.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
+							, TO_CHAR(E.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
+							, TO_CHAR(E.BAD_HIT) AS BAD_HIT
+							, NVL2(E.BAD_PW, '01', '02') AS BAD_PW
+							, TO_CHAR(E.BAD_NTC_STDTM, 'YYYY-MM-DD') AS BAD_NTC_STDTM
+							, TO_CHAR(E.BAD_NTC_EDDTM, 'YYYY-MM-DD') AS BAD_NTC_EDDTM
+							, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
+							, E.BAD_CMT_YN AS BAD_CMT_YN
+							, E.ATCH_FILE_ID AS ATCH_FILE_ID
+							, ( SELECT MIN(F.FILE_SN) AS FILE_SN
+							    FROM COMTNFILEDETAIL F
+							    WHERE 1 = 1
+							    AND E.ATCH_FILE_ID = F.ATCH_FILE_ID
+							    ) AS FILE_SN
+							, ( SELECT 
+							        TO_CHAR(NVL(COUNT(F.FILE_SN), 0 )) AS FILE_CNT
+							    FROM COMTNFILEDETAIL F
+							    WHERE 1 = 1
+							    AND E.ATCH_FILE_ID = F.ATCH_FILE_ID
+							) AS BAD_FILE_CNT
+							, ( SELECT
+                            		TO_CHAR(NVL(COUNT(F.BAD_CMT_ID), 0 )) AS CMT_CNT
+                            	FROM BAD1100 F
+                                WHERE 1 = 1
+                                AND E.LIC_GRP_ID = F.LIC_GRP_ID
+                                AND E.MENU_ID = F.MENU_ID
+                                AND E.BAD_ID = F.BAD_ID
+                                <isNotEmpty property="dsTypeCd">
+									<isEqual property="dsTypeCd" compareValue="02">
+										AND F.PRJ_GRP_ID = #prjGrpId#
+									</isEqual>
+									<isEqual property="dsTypeCd" compareValue="03">
+										AND F.PRJ_ID = #prjId#
+									</isEqual>
+								</isNotEmpty>
+				<![CDATA[
+                             ) AS BAD_CMT_CNT
+						FROM BAD1000 E
+						WHERE 1 = 1
+						AND E.LIC_GRP_ID = #licGrpId#
+						AND E.MENU_ID = #menuId#
+						ORDER BY BAD_ID ASC
+					) F
+					ORDER BY BAD_NUM DESC
+				) G
 				WHERE 1 = 1
-				ORDER BY BAD_NUM DESC
-			) G
-			WHERE 1 = 1
-			AND G.BAD_NTC_TYPE = '01'
-			OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &lt; G.BAD_NTC_STDTM )
-			OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &gt; G.BAD_NTC_EDDTM )
-			<isNotEmpty property="dsTypeCd">
-			    <isEqual property="dsTypeCd" compareValue="02">
-			        AND G.PRJ_GRP_ID = #prjGrpId#
-			    </isEqual>
-			    <isEqual property="dsTypeCd" compareValue="03">
-			        AND G.PRJ_ID = #prjId#
-			    </isEqual>
-			</isNotEmpty>
-		) Y INNER JOIN STM2100 X ON ( Y.MENU_ID = X.MENU_ID AND X.USE_CD = '01')
+			    AND ( G.MOMENT < G.BAD_NTC_STDTM
+			             OR G.MOMENT > G.BAD_NTC_EDDTM
+			             OR G.BAD_NTC_STDTM IS NULL
+			             OR G.BAD_NTC_EDDTM IS NULL)
+ 		 		]]>
+				<isNotEmpty property="searchTargetData">
+					<isNotEmpty property="searchTargetId">
+						<isEqual property="searchTargetId" compareValue="badUsrId">
+							AND G.BAD_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="badTitle">
+							AND G.BAD_TITLE LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="badContent">
+							<![CDATA[
+								AND DBMS_LOB.INSTR(G.BAD_CONTENT, #searchTargetData#) > 0
+							]]>
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="badWtdtm">
+							AND G.BAD_WTDTM BETWEEN TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS') 
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isNotEmpty property="dsTypeCd">
+					<isNotEmpty property="dsTypeCd">
+						<isEqual property="dsTypeCd" compareValue="02">
+							AND G.PRJ_GRP_ID = #prjGrpId#
+						</isEqual>
+						<isEqual property="dsTypeCd" compareValue="03">
+							AND G.PRJ_ID = #prjId#
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+		) Y
 		WHERE 1 = 1
 		<isNotEmpty property="stmRootYn">
 			<isEqual property="stmRootYn" compareValue="N">
@@ -190,63 +335,107 @@
 			AND Y.DEL_CD = '02'
 		</isEmpty>
 		<isNotEmpty property="searchTargetData">
-		    <isNotEmpty property="searchTargetId">
-		        <isEqual property="searchTargetId" compareValue="delCd">
-		            AND Y.DEL_CD = #searchTargetData#
-		        </isEqual>
-		        <isEqual property="searchTargetId" compareValue="badNtcCheck">
-		            AND Y.BAD_NTC_CHECK = #searchTargetData#
-		            AND Y.DEL_CD = '02'
-		        </isEqual>
-		    </isNotEmpty>
-		    <isEqual property="searchTargetId" compareValue="badUsrId">
-	        	AND ( 
-	        		 Y.BAD_USR_ID LIKE '%'|| #searchTargetData# ||'%'
-	        	OR Y.BAD_USR_NM LIKE '%'|| #searchTargetData# ||'%'
-	        	)
-	        </isEqual>
-	        <isEqual property="searchTargetId" compareValue="badTitle">
-	        	AND Y.BAD_TITLE LIKE '%'|| #searchTargetData# ||'%'
-	        </isEqual>
-	        <isEqual property="searchTargetId" compareValue="badContent">
-	        	AND DBMS_LOB.INSTR(Y.BAD_CONTENT, #searchTargetData#) &gt; 0
-	        </isEqual>
-	        <isEqual property="searchTargetId" compareValue="badWtdtm">
-		        AND Y.BAD_WTDTM BETWEEN TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS') 
-	        </isEqual>
-	        <isEqual property="searchTargetId" compareValue="cmtContent">
-	            AND EXISTS (
-	                SELECT
-	                    COUNT(H.BAD_CMT_ID)
-	                FROM BAD1100 H
-	                WHERE 1 = 1
-	                AND G.BAD_ID = H.BAD_ID
-	                <isNotEmpty property="dsTypeCd">
-	                    <isEqual property="dsTypeCd" compareValue="02">
-	                        AND H.PRJ_GRP_ID = #prjGrpId#
-	                    </isEqual>
-	                    <isEqual property="dsTypeCd" compareValue="03">
-	                        AND H.PRJ_ID = #prjId#
-	                    </isEqual>
-	                </isNotEmpty>
-	                AND H.BAD_CMT_CONTENT LIKE '%'|| #searchTargetData# ||'%'
-                )
-			</isEqual>
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="delCd">
+					AND Y.DEL_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="badNtcCheck">
+					AND Y.BAD_NTC_CHECK = #searchTargetData#
+					AND Y.DEL_CD = '02'
+				</isEqual>
+			</isNotEmpty>
 		</isNotEmpty>
-		
 	</sql>
 	
     <select id="bad1000DAO.selectBad1000BadListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
 		SELECT
-			COUNT(Z.BAD_ID) AS CNT
+			COUNT(B.BAD_ID) AS BAD_ID
 		FROM ( 
-			<include refid="selectBad1000List"/>
-		) Z
+			SELECT
+				A.BAD_ID AS BAD_ID
+				, TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD  HH24:MI:SS') AS BAD_WTDTM
+				, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AS BAD_NTC_STDTM
+				, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD') AS BAD_NTC_EDDTM
+				, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
+				, A.DEL_CD AS DEL_CD
+			FROM BAD1000 A
+			WHERE 1 = 1
+			<isNotEmpty property="stmRootYn">
+				<isEqual property="stmRootYn" compareValue="N">
+						AND A.DEL_CD = '02'
+				</isEqual>
+			</isNotEmpty>
+			<isEmpty property="stmRootYn">
+				AND A.DEL_CD = '02'
+			</isEmpty>
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND A.MENU_ID = #menuId#
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="badUsrId">
+						AND A.BAD_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="badTitle">
+						AND A.BAD_TITLE LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="delCd">
+						AND A.DEL_CD = #searchTargetData#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			) B
+			WHERE 1 = 1
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="badNtcCheck">
+						<isEqual property="searchTargetData" compareValue="01">
+							AND B.MOMENT BETWEEN B.BAD_NTC_STDTM AND B.BAD_NTC_EDDTM
+							AND B.DEL_CD = '02'
+						</isEqual>
+						<isEqual property="searchTargetData" compareValue="02">
+							AND ( B.MOMENT &lt; B.BAD_NTC_STDTM
+								OR B.MOMENT &gt; B.BAD_NTC_EDDTM
+							)
+							AND B.DEL_CD = '02'
+						</isEqual>
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
     </select>
     
     <select id="bad1000DAO.selectBad1000BadList" parameterClass="java.util.Map"  resultClass="egovMap">
 		SELECT
-		    Z.*
+		    Z.RN AS RN
+		    , Z.BAD_NUM AS BAD_NUM
+		    , Z.LIC_GRP_ID AS LIC_GRP_ID
+		    , Z.PRJ_GRP_ID AS PRJ_GRP_ID
+		    , Z.PRJ_ID AS PRJ_ID
+		    , Z.BAD_ID AS BAD_ID
+		    , Z.DEL_CD AS DEL_CD
+		    , Z.BAD_TITLE AS BAD_TITLE
+		    , Z.BAD_USR_ID AS BAD_USR_ID
+		    , Z.BAD_USR_NM AS BAD_USR_NM
+		    , Z.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+		    , Z.BAD_WTDTM AS BAD_WTDTM
+		    , Z.BAD_HIT AS BAD_HIT
+		    , Z.BAD_PW AS BAD_PW
+		    , Z.BAD_NTC_STDTM AS BAD_NTC_STDTM
+		    , Z.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+		    , Z.BAD_NTC_CHECK AS BAD_NTC_CHECK
+		    , Z.MOMENT AS MOMENT
+		    , Z.BAD_CMT_YN AS BAD_CMT_YN
+		    , Z.ATCH_FILE_ID AS ATCH_FILE_ID
+		    , Z.FILE_SN AS FILE_SN
+		    , Z.BAD_FILE_CNT AS BAD_FILE_CNT       
+		    , Z.BAD_CMT_CNT AS BAD_CMT_CNT
 		FROM (
 	   		<include refid="selectBad1000List"/>
 		) Z
@@ -279,57 +468,120 @@
     
     <select id="bad1000DAO.selectBad1000BadInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectBad1000">
 	    SELECT
-			A.BAD_TITLE AS BAD_TITLE
-			, A.BAD_CONTENT AS BAD_CONTENT
-			, A.BAD_USR_ID AS BAD_USR_ID
-			, SF_STM3000_USR_INFO(A.BAD_USR_ID, 1) AS BAD_USR_NM
-			, SF_STM3000_USR_INFO(A.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
-			, TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
-			, A.BAD_NTC_TYPE AS BAD_NTC_TYPE
-			, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AS BAD_NTC_STDTM
-			, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD') AS BAD_NTC_EDDTM
-			, A.BAD_HIT AS BAD_HIT
-			, A.BAD_PW AS BAD_PW
-			, NVL(A.DEL_CD, '02') AS DEL_CD
-			, A.BAD_CMT_YN AS BAD_CMT_YN
-			, A.ATCH_FILE_ID AS ATCH_FILE_ID
-			, A.FILE_SN AS FILE_SN
-			, ( SELECT
-					TO_CHAR(NVL(COUNT(B.BAD_CMT_ID), 0 )) AS CMT_CNT
-				FROM BAD1100 B
+		    C.BAD_NUM AS BAD_NUM
+			, C.LIC_GRP_ID AS LIC_GRP_ID
+			, C.PRJ_GRP_ID AS PRJ_GRP_ID
+			, C.PRJ_ID AS PRJ_ID 
+			, C.BAD_ID AS BAD_ID
+			, C.DEL_CD AS DEL_CD
+			, C.BAD_TITLE AS BAD_TITLE
+			, C.BAD_CONTENT AS BAD_CONTENT
+			, C.BAD_USR_ID AS BAD_USR_ID
+			, C.BAD_USR_NM AS BAD_USR_NM
+			, C.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+			, C.BAD_WTDTM AS BAD_WTDTM
+			, C.BAD_HIT AS BAD_HIT
+			, C.BAD_PW AS BAD_PW
+			, C.BAD_NTC_STDTM AS BAD_NTC_STDTM
+			, C.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+			, C.BAD_NTC_CHECK AS BAD_NTC_CHECK
+			, C.MOMENT AS MOMENT
+			, C.BAD_CMT_YN AS BAD_CMT_YN
+			, C.ATCH_FILE_ID AS ATCH_FILE_ID
+			, C.FILE_SN AS FILE_SN
+			, C.BAD_CMT_CNT AS BAD_CMT_CNT
+	    FROM (
+			SELECT
+				ROWNUM BAD_NUM
+				, B.LIC_GRP_ID AS LIC_GRP_ID
+				, B.PRJ_GRP_ID AS PRJ_GRP_ID
+				, B.PRJ_ID AS PRJ_ID 
+				, B.MENU_ID AS MENU_ID
+				, B.BAD_ID AS BAD_ID
+				, B.BAD_TITLE AS BAD_TITLE
+				, B.BAD_CONTENT AS BAD_CONTENT
+				, B.BAD_USR_ID AS BAD_USR_ID
+				, B.BAD_USR_NM AS BAD_USR_NM
+				, B.BAD_USR_IMG_ID AS BAD_USR_IMG_ID
+				, B.BAD_WTDTM AS BAD_WTDTM
+				, B.BAD_HIT AS BAD_HIT
+				, B.BAD_PW AS BAD_PW
+				, B.DEL_CD AS DEL_CD
+				, B.BAD_NTC_STDTM AS BAD_NTC_STDTM
+				, B.BAD_NTC_EDDTM AS BAD_NTC_EDDTM
+				, B.BAD_NTC_CHECK AS BAD_NTC_CHECK
+				, B.MOMENT AS MOMENT
+				, B.BAD_CMT_YN AS BAD_CMT_YN
+				, B.ATCH_FILE_ID AS ATCH_FILE_ID
+				, B.FILE_SN AS FILE_SN
+				, B.BAD_CMT_CNT AS BAD_CMT_CNT
+			FROM (
+				SELECT
+					A.LIC_GRP_ID AS LIC_GRP_ID
+					, A.PRJ_GRP_ID AS PRJ_GRP_ID
+					, A.PRJ_ID AS PRJ_ID
+					, A.MENU_ID AS MENU_ID
+					, A.BAD_ID AS BAD_ID
+					, A.BAD_TITLE AS BAD_TITLE
+					, A.BAD_CONTENT AS BAD_CONTENT
+					, A.BAD_USR_ID AS BAD_USR_ID
+					, SF_STM3000_USR_INFO(A.BAD_USR_ID, 1) AS BAD_USR_NM
+					, SF_STM3000_USR_INFO(A.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
+					, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AS BAD_NTC_STDTM
+					, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD') AS BAD_NTC_EDDTM
+					, NVL2(
+						TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD')
+						, NVL2(TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD'), '01', '02')
+						, '02'
+					) AS BAD_NTC_CHECK
+		    		, TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
+					, TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
+					, A.BAD_HIT AS BAD_HIT
+					, A.BAD_PW AS BAD_PW
+					, NVL(A.DEL_CD, '02') AS DEL_CD
+					, A.BAD_CMT_YN AS BAD_CMT_YN
+					, A.ATCH_FILE_ID AS ATCH_FILE_ID
+					, A.FILE_SN AS FILE_SN
+					, ( SELECT
+							TO_CHAR(NVL(COUNT(C.BAD_CMT_ID), 0 )) AS CMT_CNT
+						FROM BAD1100 C
+						WHERE 1 = 1
+						AND A.LIC_GRP_ID = C.LIC_GRP_ID
+						AND A.MENU_ID = C.MENU_ID
+						AND A.BAD_ID = C.BAD_ID
+						<isNotEmpty property="dsTypeCd">
+							<isEqual property="dsTypeCd" compareValue="02">
+								AND C.PRJ_GRP_ID = #prjGrpId#
+							</isEqual>
+							<isEqual property="dsTypeCd" compareValue="03">
+								AND C.PRJ_ID = #prjId#
+							</isEqual>
+						</isNotEmpty>
+		                      ) AS BAD_CMT_CNT
+				FROM BAD1000 A
 				WHERE 1 = 1
-				AND A.LIC_GRP_ID = B.LIC_GRP_ID
-				AND A.MENU_ID = B.MENU_ID
-				AND A.BAD_ID = B.BAD_ID
-				<isNotEmpty property="dsTypeCd">
-					<isEqual property="dsTypeCd" compareValue="02">
-						AND B.PRJ_GRP_ID = #prjGrpId#
-					</isEqual>
-					<isEqual property="dsTypeCd" compareValue="03">
-						AND B.PRJ_ID = #prjId#
-					</isEqual>
-				</isNotEmpty>
-              ) AS BAD_CMT_CNT
-		FROM BAD1000 A
+				ORDER BY A.BAD_ID ASC
+			) B
+		)C
 		WHERE 1 = 1
 		<isNotEmpty property="stmRootYn">
 			<isEqual property="stmRootYn" compareValue="N">
-					AND A.DEL_CD = '02'
+					AND Y.DEL_CD = '02'
 			</isEqual>
 		</isNotEmpty>
-		AND A.LIC_GRP_ID = #licGrpId#
+		AND C.LIC_GRP_ID = #licGrpId#
 		<isNotEmpty property="dsTypeCd">
 			<isNotEmpty property="dsTypeCd">
 				<isEqual property="dsTypeCd" compareValue="02">
-					AND A.PRJ_GRP_ID = #prjGrpId#
+					AND C.PRJ_GRP_ID = #prjGrpId#
 				</isEqual>
 				<isEqual property="dsTypeCd" compareValue="03">
-					AND A.PRJ_ID = #prjId#
+					AND C.PRJ_ID = #prjId#
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		AND A.MENU_ID = #menuId#
-		AND A.BAD_ID = #badId#
+		AND C.MENU_ID = #menuId#
+		AND C.BAD_ID = #badId#
 	</select>
 	
 	<select id="bad1000DAO.selectBad1000ForBadHstInfo" parameterClass="java.util.Map" resultClass="egovMap">
@@ -437,7 +689,6 @@
 			, BAD_USR_ID
 			, BAD_HIT
 			, BAD_WTDTM
-			, BAD_NTC_TYPE
 			, BAD_NTC_STDTM
 			, BAD_NTC_EDDTM
 			, BAD_PW
@@ -462,14 +713,6 @@
 			, #usrId#
 			, 0
 			, SYSDATE
-			<isNotNull property="badNtcType">
-				<isNotEmpty property="badNtcType">
-					, #badNtcType#
-				</isNotEmpty>
-			</isNotNull>
-			<isEmpty property="badNtcType">
-				, '01'
-			</isEmpty>
 			, #badNtcStdtm#
 			, #badNtcEddtm#
 			, #badPw#
@@ -540,14 +783,6 @@
 		SET
 			BAD_TITLE = #badTitle#
 			, BAD_CONTENT = #badContent#
-			<isNotNull property="badNtcType">
-				<isNotEmpty property="badNtcType">
-					, BAD_NTC_TYPE = #badNtcType#
-				</isNotEmpty>
-			</isNotNull>
-			<isEmpty property="badNtcType">
-				, BAD_NTC_TYPE = '01'
-			</isEmpty>
 			, BAD_NTC_STDTM = #badNtcStdtm#
 			, BAD_NTC_EDDTM = #badNtcEddtm#
 			<isNotNull property="badPw">
@@ -643,12 +878,8 @@
 		AND A.LIC_GRP_ID = #licGrpId#
 		AND A.MENU_ID = #menuId#
 		AND A.DEL_CD = '02'
-		AND ( A.BAD_NTC_TYPE = '03'
-				OR ( A.BAD_NTC_TYPE = '02'
-					AND TO_CHAR(SYSDATE, 'YYYY-MM-DD') 
-					BETWEEN TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AND TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD')
-					)
-				)
+		AND TO_CHAR(SYSDATE, 'YYYY-MM-DD') 
+			BETWEEN TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD') AND TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD')
 	</select>
 	
     <select id="bad1000DAO.selectBad1000NtcCurrent" parameterClass="java.util.Map" resultClass="egovMap">

@@ -223,11 +223,11 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
 			
-			
+			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
 			
 			
 			Map bad1001Info = bad1000Service.selectBad1000BadInfo(paramMap);
-			System.out.println("bad1001Info : "+ bad1001Info.entrySet());
+			
 			
 			
 			List<FileVO> fileList = null;
@@ -253,7 +253,7 @@ public class Bad1000Controller {
 			
 			List<String> bad1001TagList = bad1000Service.selectBad1000BadTagList(paramMap);
 
-			
+			model.addAttribute("badInfo", stm2100Info); 
 			model.addAttribute("bad1001Info", bad1001Info);
 			if(fileList != null) {
 				model.addAttribute("bad1001FileList", fileList);
@@ -461,7 +461,6 @@ public class Bad1000Controller {
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			
-			
 			bad1000Service.updateBad1000BadRestore(paramMap);
 			
 			
@@ -470,7 +469,6 @@ public class Bad1000Controller {
 		}
 		catch(Exception ex){
 			Log.error("updateBad1001BadRestoreAjax()", ex);
-			
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
