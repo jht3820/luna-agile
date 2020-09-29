@@ -84,7 +84,6 @@ public class Prj1000Controller {
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
 			
-			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -111,7 +110,6 @@ public class Prj1000Controller {
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			paramMap.put("prjGrpCd", "01");
-			
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -171,7 +169,6 @@ public class Prj1000Controller {
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			paramMap.put("prjGrpCd", "01");
-			
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
