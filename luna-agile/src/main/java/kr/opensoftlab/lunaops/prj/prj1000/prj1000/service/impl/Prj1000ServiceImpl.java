@@ -330,10 +330,8 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1000WizardProject(Map paramMap) throws Exception {
-		
     	
 		String dbType = EgovProperties.getProperty("Globals.DbType");
-		
 		
 		String licGrpId = (String) paramMap.get("licGrpId");
 		String regUsrId = (String) paramMap.get("regUsrId");
@@ -348,27 +346,18 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		regModiMap.put("modifyUsrId", modifyUsrId);
 		regModiMap.put("modifyUsrIp", modifyUsrIp);
 		
-		
-		
 		String wizardData = (String) paramMap.get("wizardData");
 		
 		JSONObject wizardJsonData = new JSONObject(wizardData);
 		
-		
-		
 		JSONObject projectJson = wizardJsonData.getJSONObject("project");
 		
-		
 		Map projectMapData = new Gson().fromJson(projectJson.toString(), HashMap.class);
-		
 		
 		projectMapData.putAll(regModiMap);
 		
 		
-		
 		String newPrjId = prj1000DAO.insertPrj1000PrjWizardAjax(projectMapData);
-		
-		
 		
 		
 		if(wizardJsonData.has("process")){
@@ -500,8 +489,6 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 				prj3000DAO.insertPrj3000ParamMenuInfo(prjDocInfo);
 			}
 		}
-		
-		
 		
 		
 		if(wizardJsonData.has("class")){
