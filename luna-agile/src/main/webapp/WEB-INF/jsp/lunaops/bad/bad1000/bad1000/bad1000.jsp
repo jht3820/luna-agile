@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<style>
+.kt-widget__wrapper>button{
+	min-width: 43px;
+	max-height : 35.33px;
+	
+}
+</style>
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
@@ -37,6 +44,9 @@
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="delete" title="게시글 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
 					<i class="fa fa-trash-alt"></i><span>삭제</span>
 				</button>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="detail" title="게시글 상세" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="detail" tabindex="5">
+					<i class="fa flaticon2-document"></i><span>상세</span>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -51,12 +61,18 @@
 <script>
  "use strict";
  var OSLBad1000Popup = function() {
+	 //담당자/글작성범위 해당 여부(Y/N)를 담을 변수 선언
 	 var okManager;
 	 var okWriter;
+	 
+	 //현재 로그인 사용자 id
 	 var id = $.osl.user.userInfo.usrId;
+	 
+	 //데이터 테이블 아이디
 	 var dataTableId = "bad1000BadTable";
+	 
 	 var documentSetting = function() {
-		 //시스템 관리 게시판에서 접근하는 경우 검색 조건 '삭제유무'추가
+		 //시스템 관리 게시판에서 접근하는 경우 검색 조건 '삭제유무', '댓글' 추가
 		 var searchAdd;
 		 //시스템 관리 게시판에서 넘오는 것이 아니라 일반 메뉴로 들어올 경우
 		 //메뉴id와 게시판 유형, 게시판명을 받아 저장
@@ -71,10 +87,22 @@
 					{field: 'badContent', title:"내용", searchOrd: 2},
 					{field: 'badNtcCheck', title:"공지유무", searchOrd: 4, searchType:"select", searchCd: "CMM00001"},
 					{field: 'delCd', title:"삭제유무", searchOrd: 5, searchType:"select", searchCd: "CMM00001"},
+					{field: 'cmtContent', title:"댓글내용", searchOrd: 5},
 				];
 		 }
 
-		 //권한 체크
+		 //게시판 속성값 담을 변수 선언(insert에 전달하기 위해)
+		 var checkOptionStm = true;
+		 var stmOptionCnt = 0;
+		 var stmNtcYnCd;
+		 var stmPwYnCd;
+		 var stmTagYnCd;
+		 var stmCmtYnCd;
+		 var stmFileCnt;
+		 var stmFileStrg;
+		var modalSize;
+		 
+		 //권한 체크 ->결과값 okManager, okWriter
 		 checkUser();
 		 
 		 //게시글 목록 출력
@@ -102,7 +130,48 @@
 			},
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: "kt-checkbox--solid"}, sortable: false, autoHide: false},
-				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false},
+				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false,
+					 template:function(row){
+						 if(checkOptionStm){
+							//게시판 옵션 한번 체크
+							if(row.stmNtcYnCd == '01'){
+								stmOptionCnt++;
+							}
+							if(row.stmPwYnCd == '01'){
+								stmOptionCnt++;
+							}
+							if(row.stmTagYnCd == '01'){
+								stmOptionCnt++;
+							}
+							if(row.stmCmtYnCd == '01'){
+								stmOptionCnt++;
+							}
+							if(row.stmFileCnt > 0){
+								stmOptionCnt++;
+							}
+							if(row.stmFileStrg > 0){
+								stmOptionCnt++;
+							}
+							checkOptionStm = false;
+							
+							//게시판 옵션 담기
+							stmNtcYnCd = row.stmNtcYnCd;
+							stmPwYnCd = row.stmPwYnCd;
+							stmTagYnCd = row.stmTagYnCd;
+							stmCmtYnCd = row.stmCmtYnCd;
+							stmFileCnt = row.stmFileCnt;
+							stmFileStrg = row.stmFileStrg;
+							
+							//모달크기
+							if(stmOptionCnt==0){
+								modalSize = "md";
+							}else{
+								modalSize = "xl";
+							}
+						 }
+						return row.badNum;
+					 }
+				 },
 				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true,
 					template: function(row){
 						var returnStr = "";
@@ -120,10 +189,10 @@
 							returnStr += "<span class='kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-margin-5'>공지</span>";
 						}
 						// 제목
-						returnStr += row.badTitle;
+						returnStr += $.osl.escapeHtml(row.badTitle);
 						// 댓글이 있는 경우
 						if(row.badCmtCnt > 0){
-							returnStr += "<span class='kt-badge kt-badge--success kt-badge--inline kt-badge--pill kt-margin-5'>"+row.badCmtCnt+"</span>";
+							returnStr += "<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10'>"+row.badCmtCnt+"</span>";
 						}
 						// 비밀번호가 걸린 글인 경우
 						if(row.badPw == "01"){
@@ -159,73 +228,59 @@
 				}
 			],
 			searchColumns: searchAdd,
-			rows: {
-				beforeTemplate: function(row, data, index){
-					if(data.delCd == "01"){
-						/* $.each($(row).children("td"), function(idx, val){
-							$(val).css("text-decoration", "line-through");
-						}); */
-						/* $(row).css("background-color", "#d3dae6"); */
-					}
-				},
-			},
 			actionBtn:{
 				"title" : "수정 / 삭제 / 상세",
 				"width" : 200,
-				"click" : true
+				"detail" : true
 			},
 			actionTooltip:{
 				"update" : "게시글 수정",
 				"delete": "게시글 삭제",
-				"click": "게시글 상세보기",
+				"detail": "게시글 상세보기",
 			},
 			actionFn:{
 				"insert":function(rowData){
 					var data = {
 							type:"insert",
 							menuId : $("#menuId").val(),
+							stmNtcYnCd : stmNtcYnCd,
+							stmPwYnCd : stmPwYnCd,
+							stmTagYnCd : stmTagYnCd,
+							stmCmtYnCd : stmCmtYnCd,
+							stmFileCnt : stmFileCnt,
+							stmFileStrg : stmFileStrg,
+							stmOptionCnt : stmOptionCnt
 						};
 					var options = {
 							idKey: "bad1002_insert",
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]",
 							closeConfirm: true,
 							autoHeight: false,
-							modalSize: "xl",
+							modalSize: modalSize,
 						};
 					
 					if(okManager == true || okWriter == true){
 						$.osl.layerPopupOpen('/bad/bad1000/bad1000/insertBad1002View.do',data,options);
 					}else{
-						$.osl.alert("게시글 작성 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("bad1000.notAuthority.insertMessage"), {"type":"warning"});
 					}
 				},
-				"click": function(rowData){
-					var targetId = $(".osl-datatable-search__dropdown[data-datatable-id="+dataTableId+"] > .dropdown-item.active").data("field-id");
-					var targetType = $(".osl-datatable-search__dropdown[data-datatable-id="+dataTableId+"] > .dropdown-item.active").data("opt-type");
-					var targetData;
-					if(targetType == "select"){
-						targetData = $(".osl-datatable-search__select[data-datatable-id="+dataTableId+"]").val();
-					}else if(targetType == "all"){
-						targetData = null;
+				"detail": function(rowDatas, datatableId, type, rowNum){
+					var rowData;
+					if(type == "list"){
+						if(rowNum != 1){
+							$.osl.alert($.osl.lang("bad1000.selectBadInfoCnt", rowNum));
+						}else{
+							rowData = rowDatas[0];
+						}
 					}else{
-						targetData = $(".osl-datatable-search__input[data-datatable-id="+dataTableId+"] > input#searchData").val();
+							rowData = rowDatas;
 					}
-					var searchTargetData = [{
-						searchTargetId : targetId,
-						searchTargetType : targetType,
-						searchTargetData : targetData
-					}];
+					rowData.stmOptionCnt = stmOptionCnt;
 					var data = {
 							stmTypeCd : $("#stmTypeCd").val(),
-							stmNm : $("#stmNm").val(),
-							badNum : rowData.badNum,
-							menuId : $("#menuId").val(),
-							prjGrpId : rowData.prjGrpId,
-				   			prjId : rowData.prjId,
-							badId : rowData.badId,
-							badDelCd : rowData.delCd,
-							atchFileId : rowData.atchFileId,
-							searchTarget : JSON.stringify(searchTargetData),
+							stmNm : $.osl.escapeHtml($("#stmNm").val()),
+							paramRow : JSON.stringify(rowData),
 							backPageYn: "N",
 							stmRootYn: $("#stmRootYn").val(),
 						};
@@ -257,48 +312,29 @@
 							}
 						}
 					}else{
-						$.osl.alert("게시글에 대한 접근 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("bad1000.notAuthority.selectMessage"), {"type":"warning"});
 					}
 				},
 				"update":function(rowData){
-					var targetId = $(".osl-datatable-search__dropdown[data-datatable-id="+dataTableId+"] > .dropdown-item.active").data("field-id");
-					var targetType = $(".osl-datatable-search__dropdown[data-datatable-id="+dataTableId+"] > .dropdown-item.active").data("opt-type");
-					var targetData;
-					if(targetType == "select"){
-						targetData = $(".osl-datatable-search__select[data-datatable-id="+dataTableId+"]").val();
-					}else if(targetType == "all"){
-						targetData = null;
-					}else{
-						targetData = $(".osl-datatable-search__input[data-datatable-id="+dataTableId+"] > input#searchData").val();
-					}
-					var searchTargetData = [{
-						searchTargetId : targetId,
-						searchTargetType : targetType,
-						searchTargetData : targetData
-					}];
 					var data = {
 							detailRootYn : 'N',
-							prjGrpId : rowData.prjGrpId,
 							stmDsTypeCd: $("#stmDstypeCd").val(),
 							stmNm: $.osl.escapeHtml($("#stmNm").val()),
-				   			prjId : rowData.prjId,
-							menuId : $("#menuId").val(),
-							badId : rowData.badId,
-							badDelCd : rowData.delCd,
-							atchFileId: rowData.atchFileId,
-							searchTarget : JSON.stringify(searchTargetData),
 							stmRootYn: $("#stmRootYn").val(),
+							paramRow : JSON.stringify(rowData),
+							stmOptionCnt : stmOptionCnt,
 						};
 					var options = {
 							idKey: "bad1003_"+rowData.badId,
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
 							closeConfirm: true,
-							modalSize: "xl",
+							autoHeight: false,
+							modalSize: modalSize,
 						};
 					if(okManager == true || rowData.badUsrId == id){
 	 					$.osl.layerPopupOpen('/bad/bad1000/bad1000/updateBad1003View.do',data,options);
 					}else{
-						$.osl.alert("해당 게시글에 대한 수정 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("bad1000.notAuthority.updateMessage"), {"type":"warning"});
 					}
 				},
 				"delete":function(rowDatas){
@@ -335,16 +371,19 @@
 						$.osl.layerPopupOpen('/bad/bad1000/bad1000/deleteBad1000View.do', data, options);
 					}else{
 						if(okWriter == true && selfCheck == "N"){
-							$.osl.alert("본인의 글만 삭제 가능합니다.", {"type":"warning"});
+							$.osl.alert($.osl.lang("bad1000.notWriter.deleteMessage"), {"type":"warning"});
 						}else{
-							$.osl.alert("해당 게시글에 대한 삭제 권한이 없습니다.", {"type":"warning"});
+							$.osl.alert($.osl.lang("bad1000.notAuthority.deleteMessage"), {"type":"warning"});
 						}
 					}
 				},
 			 },
 			 theme: {
+				 actionBtn:{
+					 "detail" : "",
+				 },
 				 actionBtnIcon:{
-					 "click": "la la-external-link",
+					 "detail": "fa flaticon2-document",
 				 }
 			 }
 		 });
