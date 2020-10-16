@@ -215,20 +215,6 @@ var OSLCoreLangSetting = function () {
 				modify: "수정",
 				trashMove: "휴지통 이동(삭제)",
 				projectListMove: "프로젝트 목록 이동",
-				createProject: "신규 프로젝트 그룹 추가",
-				projectDetail: "상세 정보"
-			}
-		},
-		prj1001:{
-			startDate: "시작일",
-			endDate: "종료일",
-			completedRatio: "진척률",
-			requestAll: "전체",
-			requestInProgress: "진행 중",
-			requestDone: "완료",
-			menu:{
-				modify: "수정",
-				trashMove: "휴지통 이동(삭제)",
 				createProject: "신규 프로젝트 추가",
 				projectDetail: "상세 정보"
 			}

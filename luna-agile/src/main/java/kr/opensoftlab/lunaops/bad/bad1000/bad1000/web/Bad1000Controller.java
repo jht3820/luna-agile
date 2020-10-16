@@ -27,23 +27,17 @@ import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
-
-
 @Controller
 public class Bad1000Controller {
-
-
 	
 	private static final Logger Log = Logger.getLogger(Bad1000Controller.class);
 
-	
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
 	
 	
 	@Resource(name = "bad1000Service")
 	private Bad1000Service bad1000Service;
-
 	
 	@Resource(name = "stm2100Service")
 	private Stm2100Service stm2100Service;
@@ -61,7 +55,6 @@ public class Bad1000Controller {
 	public String selectBad1000View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 			return "/bad/bad1000/bad1000/bad1000";
 	}
-	
 	
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "/bad/bad1000/bad1000/selectBad1000DsTypeGetAjax.do")
@@ -222,13 +215,8 @@ public class Bad1000Controller {
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
-			
-			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
-			
-			
 			Map bad1001Info = bad1000Service.selectBad1000BadInfo(paramMap);
-			
-			
+			System.out.println("bad1001Info : "+ bad1001Info.entrySet());
 			
 			List<FileVO> fileList = null;
 			
@@ -253,7 +241,7 @@ public class Bad1000Controller {
 			
 			List<String> bad1001TagList = bad1000Service.selectBad1000BadTagList(paramMap);
 
-			model.addAttribute("badInfo", stm2100Info); 
+			
 			model.addAttribute("bad1001Info", bad1001Info);
 			if(fileList != null) {
 				model.addAttribute("bad1001FileList", fileList);
@@ -297,7 +285,6 @@ public class Bad1000Controller {
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-	
 			
 			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
 			
@@ -336,8 +323,6 @@ public class Bad1000Controller {
 			
 			fileMngService.insertFileDetail(_result);  
 			
-			
-			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
 		}
@@ -366,10 +351,7 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("usrId", loginVO.getUsrId());
 			
-			
-			
 			bad1000Service.insertBad1000Badinfo(paramMap);
-			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
@@ -397,7 +379,6 @@ public class Bad1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 
-			
 			bad1000Service.updateBad1000BadInfo(paramMap);
 			
 			
@@ -461,6 +442,7 @@ public class Bad1000Controller {
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			
+			
 			bad1000Service.updateBad1000BadRestore(paramMap);
 			
 			
@@ -469,6 +451,7 @@ public class Bad1000Controller {
 		}
 		catch(Exception ex){
 			Log.error("updateBad1001BadRestoreAjax()", ex);
+			
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));

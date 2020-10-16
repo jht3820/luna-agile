@@ -14,16 +14,21 @@
 		<div class="kt-portlet__head kt-portlet__head--lg">
 			<input type="hidden" id="stmDsTypeCd" name="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 			<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
-			<input type="hidden" name="fileCnt" id="fileCnt" value="" /> 
-			<input type="hidden" name="fileStrg" id="fileStrg" value="" /> 
-			<input type="hidden" name="atchFileId" id="atchFileId">
+			<input type="hidden" name="paramStmNtcYnCd" id="paramStmNtcYnCd" value="${param.stmNtcYnCd }" /> 
+			<input type="hidden" name="paramStmPwYnCd" id="paramStmPwYnCd" value="${param.stmPwYnCd }" /> 
+			<input type="hidden" name="paramStmTagYnCd" id="paramStmTagYnCd" value="${param.stmTagYnCd }" /> 
+			<input type="hidden" name="paramStmCmtYnCd" id="paramStmCmtYnCd" value="${param.stmCmtYnCd }" /> 
+			<input type="hidden" name="paramStmFileCnt" id="paramStmFileCnt" value="${param.stmFileCnt }" /> 
+			<input type="hidden" name="paramStmFileStrg" id="paramStmFileStrg" value="${param.stmFileStrg }" /> 
+			<input type="hidden" name="paramStmOptionCnt" id="paramStmOptionCnt" value="${param.stmOptionCnt }" /> 
+			<input type="hidden" name="atchFileId" id="atchFileId" value="" /> 
 			<div class="kt-portlet__head-label col-6 row" name="writerDiv" id="writerDiv"></div>
 		</div>
 		<hr class="kt-margin-0">
 		<div class="kt-portlet__body">
 			<div class="row">
 				<!-- left -->
-				<div class="col-lg-6 kt-padding-r-10">
+				<div class="col-lg-6 kt-padding-5" name="leftDiv" id="leftDiv">
 					<div name="badTitleDiv" id="badTitleDiv" class="form-group">
 						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i>제목</label>
 						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
@@ -34,7 +39,7 @@
 					</div>
 				</div>
 				<!-- right -->
-				<div class="col-lg-6 kt-padding-l-10">
+				<div class="col-lg-6 kt-padding-5" name="rightDiv" id="rightDiv">
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
@@ -44,13 +49,14 @@
 				 	</div>
 			 		<!-- 공지사항 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group row kt-hide bad_box" name="ntcOption" id="ntcOption">
-				 		<div class="kt-input-icon pull-right">
-					 		<input type="text" class="form-control small" placeholder="공지시작일, 종료일" name="badNtcRange" id="badNtcRange"/>
+				 		<div class="input-group kt-input-icon pull-right">
+					 		<label class="input-group-addon kt-margin-5 kt-padding-5">공지 기간</label>
+					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
 				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
 				 		</div>
 				 		<div class="kt-margin-t-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
-								 종료기간 무시(시작일부터 상단 고정 유지)
+								 공지 기간 무시
 								<span></span>
 							</label>
 				 		</div>
@@ -85,7 +91,7 @@
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
 							<i class="fa fa-file-upload kt-margin-r-5"></i>파일 첨부
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height: 120px;" name="bad1002FileUpload" id="bad1002FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height:260px;" name="bad1002FileUpload" id="bad1002FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -142,39 +148,84 @@ var OSLBad1002Popup = function () {
 	//fileObject
 	var fileUploadObj;
     var documentSetting = function () {
-    	selectStmBadInfo();
     	
-    	//문구 세팅
+		//문구 세팅
     	$("#bad1002InsertSubmit").text(pageTypeData["insert"]["saveBtnString"]);
-    	
-    	// 스위치 on/off 이벤트
-    	// 공지사항 스위치
-    	$("#badNtcYnCd").click(function(){
-    		if($("#badNtcYnCd").is(":checked")==true){
-    			//세부 속성 보이기
-    			$("#ntcOption").removeClass("kt-hide");
-    		}else{
-    			//세부 속성 숨기기
-    			$("#ntcOption").addClass("kt-hide");
+		
+    	//게시판 옵션이 없을 경우 div 변경
+    	if($("#paramStmOptionCnt").val()==0){
+    		$("#leftDiv").attr("class", "col-lg-12 kt-padding-5");
+    		$("#rightDiv").addClass("kt-hide");
+    	}else{
+    		var maxStrg = $("#paramStmFileStrg").val();
+    		if(maxStrg == null || maxStrg == ""){
+    			maxStrg = 0;			
     		}
-    	});
-    	
-    	// 비밀번호 스위치
-    	$("#badPwYnCd").click(function(){
-    		if($("#badPwYnCd").is(":checked")==true){
-    			//세부 속성 보이기
-    			$("#pwOption").removeClass("kt-hide");
-    		}else{
-    			//세부 속성 숨기기
-    			$("#pwOption").addClass("kt-hide");
+    		var maxCnt = parseInt($("#paramStmFileCnt").val());
+    		if(maxStrg == null || maxStrg == ""){
+    			maxCnt = 0;
     		}
-    	});
-    	
+    		// 파일 업로드 세팅
+    		fileUploadObj = $.osl.file.uploadSet("bad1002FileUpload",{
+    			url: '/bad/bad1000/bad1000/insertBad1002BadAtchFileInfo.do',
+    			meta: {"atchFileId": $("#atchFileId").val(), "fileSn": 0},
+    			maxFileSize: maxStrg,
+    			maxNumberOfFiles: maxCnt,
+    			height: 260,
+    			
+    			//파일 업로드 전 실행
+    			onBeforeUpload: function(files){
+    				var rtnValue = files;
+    				var uploadFiles = {};
+    				
+    				//atchFileId 생성
+    				$.osl.file.makeAtchfileId(function(data){
+    					if(data.errorYn == "Y"){
+    						$.osl.toastr(data.message);
+    						rtnValue = [];
+    					}else{
+    						$("#atchFileId").val(data.atchFileIdString);
+    					 	fileUploadObj.setMeta({atchFileId: data.atchFileIdString});
+    					 
+    						//파일명 뒤에 ms 붙이기
+    	    				$.each(files, function(idx, map){
+    	    					map.meta.atchFileId = data.atchFileIdString;
+    	    					
+    	    					var jsonTmp = {};
+    							jsonTmp[map.id] = map;
+    							uploadFiles = $.extend(uploadFiles, jsonTmp);
+    	    				});
+    						
+    	    				rtnValue = uploadFiles;
+    	    				
+    						//게시글 등록
+    						submitInsertAction(data);
+    					}
+    				});
+    			},
+    			//파일 업로드 시 건당 발생 함수
+    			onBeforeFileAdded: function(currentFile, files){
+    				if(currentFile.source != "database" && currentFile.source != "remove"){
+    					var newNm = new Date().format("ssms")+"_"+currentFile.name;
+    					currentFile.name = newNm;
+    					currentFile.meta.name = newNm;
+    					currentFile.meta.atchFileId = $("#atchFileId").val();
+    					
+    	    			//fileSn default
+    	    			var fileSn = fileUploadObj.getState().meta.fileSn;
+    	    			
+    	    			currentFile.meta.fileSn = fileSn;
+    	    			fileUploadObj.setMeta({fileSn: (fileSn+1)});
+    				}
+    			}
+    		});
+    		setOption();
+    	}
+
     	//submit 동작
     	$("#bad1002InsertSubmit").click(function(){
     		
 			var form = $('#'+formId);    		
-        	
     		//폼 유효 값 체크
     		if (!form.valid()) {
     			return;
@@ -189,9 +240,8 @@ var OSLBad1002Popup = function () {
     		}
     		
     		//첨부파일 가능 개수 넘기는지 확인
-			if($(".uppy-Dashboard-files").children("li").length > Number($("#fileCnt").val())){
-				var massage = "첨부파일 가능한 개수는\n" + $("#fileCnt").val() + "개입니다.";
-				$.osl.alert(massage, {"type":"warning"});
+			if($(".uppy-Dashboard-files").children("li").length > Number($("#paramStmFileCnt").val())){
+				$.osl.alert($.osl.lang("bad1002.formCheck.fileCntMessage", $("#paramStmFileCnt").val()), {"type":"warning"});
 				return;
 			}
     					
@@ -210,254 +260,199 @@ var OSLBad1002Popup = function () {
      		// 기본 데이터 가져오기
      		localData.badTitle = $("#badTitle").val();
      		localData.badContent = $("#badContent").val();
+     		
+   			if($("#paramStmOptionCnt").val() > 0){
+           		//공지사항 사용할 경우
+          		if($("#badNtcYnCd").is(":checked")==true){
+          			//dateRange 기간 입력
+          			var stdtm = ($("#badNtcRange").val()).split(" - ")[0];
+          			var eddtm = ($("#badNtcRange").val()).split(" - ")[1];
+      	    		
+          			localData.badNtcStdtm = stdtm;
+          			localData.badNtcEddtm = eddtm;
+          				
+          			//공지기간 무시 체크한 경우
+      	    		if($("#badNtcTopYnCd").is(":checked")==true){
+      	    			localData.badNtcType = '03';
+      	    		}else{
+      	    			localData.badNtcType = '02';
+      	    		}
+      			}
+          		
+          		//비밀글 사용할 경우
+          		if($("#badPwYnCd").is(":checked")==true){
+          			if($("#badPw").val() != null && $("#badPw").val() != ""){
+          				if($("#badPw").val()==$("#badPwCheck").val()){
+              				localData.badPw = $("#badPw").val();
+              			}else{
+              				$.osl.alert($.osl.lang("bad1002.formCheck.passwordMatching"));
+              				$("#badPw").val("");
+              				$("#badPwCheck").val("");
+              				$("#badPw").focus();
+              				return false;
+              			}
+          			}else{
+          				$.osl.alert($.osl.lang("bad1002.formCheck.passwordMessage"));
+          				$("#badPw").focus();
+          				return false;
+          			}
+          		}
 
-     		//공지사항 사용할 경우
-    		if($("#badNtcYnCd").is(":checked")==true){
-    			//dateRange 기간 입력
-    			var stdtm = ($("#badNtcRange").val()).split(" - ")[0];
-    			var eddtm = ($("#badNtcRange").val()).split(" - ")[1];
-	    		
-    			localData.badNtcStdtm = stdtm;
-    			localData.badNtcEddtm = eddtm;
-    				
-    			//상단고정 사용한 경우
-	    		if($("#badNtcTopYnCd").is(":checked")==true){
-	    			localData.badNtcEddtm = '9999-12-30';
-	    		}
-			}
-    		
-    		//비밀글 사용할 경우
-    		if($("#badPwYnCd").is(":checked")==true){
-    			if($("#badPw").val() != null && $("#badPw").val() != ""){
-    				if($("#badPw").val()==$("#badPwCheck").val()){
-        				localData.badPw = $("#badPw").val();
-        			}else{
-        				$.osl.alert("입력된 비밀번호가 서로 다릅니다.");
-        				$("#badPw").val("");
-        				$("#badPwCheck").val("");
-        				$("#badPw").focus();
-        				return false;
-        			}
-    			}else{
-    				$.osl.alert("비밀글에 사용할 비밀번호를 입력해주세요.");
-    				$("#badPw").focus();
-    				return false;
-    			}
-    		}
-
-    		//태그
-    		localData.tagList = JSON.stringify(tag);
-    		
-			//댓글
-    		if($("#badCmtYnCd").is(":checked")==true){
-    			localData.badCmtYn = "01";
-    		}else{
-    			localData.badCmtYn = "02";
-    		}
-    		
-    		$.osl.confirm(pageTypeData["insert"]["saveString"],null,function(result) {
-    	        if (result.value) {
-    	        	data = localData;
-    	        	data.menuId = $("#menuId").val();
-    	        	fileUploadObj.upload();
-    	        }
-    		});
+          		//태그
+          		localData.tagList = JSON.stringify(tag);
+          		
+      			//댓글
+          		if($("#badCmtYnCd").is(":checked")==true){
+          			localData.badCmtYn = "01";
+          		}else{
+          			localData.badCmtYn = "02";
+          		}
+          		
+          		$.osl.confirm(pageTypeData["insert"]["saveString"],null,function(result) {
+          	        if (result.value) {
+          	        	data = localData;
+          	        	data.menuId = $("#menuId").val();
+          	        	fileUploadObj.upload();
+          	        }
+          		});
+          		
+          		//태그
+           	   $("#tagWriter").on("keypress", function (e) {
+           	        var self = $(this);
+           	        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
+           	        if (e.key == "Enter" || e.keyCode == 32) {
+           	            var tagValue = self.val();
+           	            // 값이 없으면 검사 안함
+           	            if (tagValue != "") {
+           	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+           	                var result = Object.values(tag).filter(function (word) {
+           	                    return word == tagValue;
+           	                })
+           	            
+           	                // 태그 중복 검사
+           	                if (result.length == 0) { 
+           	                	var innerHtml = "";
+           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+           	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
+           	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
+           	                	
+           	                    $("#tagListDiv").append(innerHtml);
+           	                    tag.push(tagValue);
+           	                    self.val("");
+           	                } else {
+           	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
+           	                    $("#tagWriter").val("");
+           	                }
+           	            }
+           	         // SpaceBar 시 빈공간이 생기지 않도록 방지
+           	            e.preventDefault(); 
+           	        }
+           	    });
+           	   
+           		// 태그 삭제(document 대신...?)
+           	    $(document).off("click", ".tagify__tag__removeBtn").on("click", ".tagify__tag__removeBtn", function (e) {
+           	    	//상위 태그명 가져오기
+           	    	var tagText = $(this).parent().attr("value");
+           	    	//배열에서 일치하는 인덱스 번호 가져오기
+           	    	var idx = tag.indexOf(tagText);
+           	    	//가져온 인덱스 삭제하기
+           	    	tag.splice(idx, 1);
+           	    	//태그 지우기
+           	    	$(this).parent().remove();
+           	    });
+     		}
     	});
-		
-		//태그
-	   $("#tagWriter").on("keypress", function (e) {
-	        var self = $(this);
-	        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-	        if (e.key == "Enter" || e.keyCode == 32) {
-	            var tagValue = self.val();
-	            // 값이 없으면 검사 안함
-	            if (tagValue != "") {
-	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-	                var result = Object.values(tag).filter(function (word) {
-	                    return word == tagValue;
-	                })
-	            
-	                // 태그 중복 검사
-	                if (result.length == 0) { 
-	                	var innerHtml = "";
-	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
-	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
-	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
-	                	
-	                    $("#tagListDiv").append(innerHtml);
-	                    tag.push(tagValue);
-	                    self.val("");
-	                } else {
-	                	$.osl.toastr("태그값이 중복됩니다.", {"type" : "warning"});
-	                    $("#tagWriter").val("");
-	                }
-	            }
-	         // SpaceBar 시 빈공간이 생기지 않도록 방지
-	            e.preventDefault(); 
-	        }
-	    });
-	   
-		// 태그 삭제
-	    $(document).off("click", ".tagify__tag__removeBtn").on("click", ".tagify__tag__removeBtn", function (e) {
-	    	//상위 태그명 가져오기
-	    	var tagText = $(this).parent().attr("value");
-	    	//배열에서 일치하는 인덱스 번호 가져오기
-	    	var idx = tag.indexOf(tagText);
-	    	//가져온 인덱스 삭제하기
-	    	tag.splice(idx, 1);
-	    	//태그 지우기
-	    	$(this).parent().remove();
-	    });
-
-   		// 댓글 스위치는 글 작성 후 해당 게시글에 댓글 기능 여부를 확인하는 것이므로 이벤트 없음
-
-		var maxStrg = $("#fileStrg").val();
-		if(maxStrg == null || maxStrg == ""){
-			maxStrg = 0;			
-		}
-		var maxCnt = parseInt($("#fileCnt").val());
-		if(maxStrg == null || maxStrg == ""){
-			maxCnt = 0;
-		}
-		
-		// 파일 업로드 세팅
-		fileUploadObj = $.osl.file.uploadSet("bad1002FileUpload",{
-			url: '/bad/bad1000/bad1000/insertBad1002BadAtchFileInfo.do',
-			meta: {"atchFileId": $("#atchFileId").val(), "fileSn": 0},
-			maxFileSize: maxStrg,
-			maxNumberOfFiles: maxCnt,
-			height: 120,
-			
-			//파일 업로드 전 실행
-			onBeforeUpload: function(files){
-				var rtnValue = files;
-				var uploadFiles = {};
-				
-				//atchFileId 생성
-				$.osl.file.makeAtchfileId(function(data){
-					if(data.errorYn == "Y"){
-						$.osl.toastr(data.message);
-						rtnValue = [];
-					}else{
-						$("#atchFileId").val(data.atchFileIdString);
-					 	fileUploadObj.setMeta({atchFileId: data.atchFileIdString});
-					 
-						//파일명 뒤에 ms 붙이기
-	    				$.each(files, function(idx, map){
-	    					map.meta.atchFileId = data.atchFileIdString;
-	    					
-	    					var jsonTmp = {};
-							jsonTmp[map.id] = map;
-							uploadFiles = $.extend(uploadFiles, jsonTmp);
-	    				});
-						
-	    				rtnValue = uploadFiles;
-	    				
-						//게시글 등록
-						submitInsertAction(data);
-					}
-				});
-			},
-			//파일 업로드 시 건당 발생 함수
-			onBeforeFileAdded: function(currentFile, files){
-				if(currentFile.source != "database" && currentFile.source != "remove"){
-					var newNm = new Date().format("ssms")+"_"+currentFile.name;
-					currentFile.name = newNm;
-					currentFile.meta.name = newNm;
-					currentFile.meta.atchFileId = $("#atchFileId").val();
-					
-	    			//fileSn default
-	    			var fileSn = fileUploadObj.getState().meta.fileSn;
-	    			
-	    			currentFile.meta.fileSn = fileSn;
-	    			fileUploadObj.setMeta({fileSn: (fileSn+1)});
-				}
-			}
-		});
     }
     
  	// 게시판 속성에 따라 데이터 작성 포맷 가져오기
     /**
-	* function 명 	: selectStmBadInfo
+	* function 명 	: setOption
 	* function 설명	: 게시글 정보를 조회하여 팝업에 세팅한다.
 	*/
-    var selectStmBadInfo = function(){
-    	// 전달할 데이터 세팅
-		var data={
-    			"menuId" : $("#menuId").val(),
-    	}
-    	
-    	//ajax 설정 - fileUploadFile에 해당 함수 호출 후 받은 데이터 전달하기 위해 async false 동기 처리
-    	var ajaxObj = new $.osl.ajaxRequestAction(
-    			{"url":"<c:url value='/bad/bad1000/bad1000/insertBad1002InfoAjax.do'/>", "async": false}
-				, data);
-    	
-    	//ajax 전송 성공 함수
-    	ajaxObj.setFnSuccess(function(data){
-    		if(data.errorYn == "Y"){
-				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
-				$.osl.layerPopupClose();
+    var setOption = function(){
+		// 가져온 데이터로 세팅하기
+		// head ------------------
+		// 작성자 정보 넣기
+		$("#writerDiv").empty();
+		$("#writerDiv").append($.osl.user.usrImgSet($.osl.user.userInfo.usrImgId, $.osl.user.userInfo.usrNm+" ( "+$.osl.user.userInfo.usrId+" )"));
+		
+		// body ------------------
+		//edit 세팅
+    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 420}));
+    	$("#badContent").removeClass("kt-hide");
+		
+    	if($("#paramStmOptionCnt").val()>0){
+			// 게시판 속성 : 공지사항 기능을 사용하는 경우
+			if($("#paramStmNtcYnCd").val() == "01"){
+				$("#stmNtcYnCd").removeClass("kt-hide");
+				$.osl.date.daterangepicker($("#badNtcRange"));
 			}else{
-				var info = data.badInfo;
-				
-				// 가져온 데이터로 세팅하기
-				// head ------------------
-				// 작성자 정보 넣기
-				$("#writerDiv").empty();
-				$("#writerDiv").append($.osl.user.usrImgSet($.osl.user.userInfo.usrImgId, $.osl.user.userInfo.usrNm+" ( "+$.osl.user.userInfo.usrId+" )"));
-				
-				// body ------------------
-				//edit 세팅
-		    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 430}));
-				$("#badContent").removeClass("kt-hide");
-				
-				// option ------------------
-				// 게시판 속성 : 공지사항 기능을 사용하는 경우
-				if(info.stmNtcYnCd == "01"){
-					$("#stmNtcYnCd").removeClass("kt-hide");
-					$.osl.date.daterangepicker("#badNtcRange");
-				}else{
-					$("#stmNtcYnCd").addClass("kt-hide");
-				}
-				
-				// 비밀글
-				if(info.stmPwYnCd == "01"){
-					$("#stmPwYnCd").removeClass("kt-hide");
-				}else{
-					$("#stmPwYnCd").addClass("kt-hide");
-				}
-				
-				// 첨부파일
-				if(info.stmFileCnt != null && info.stmFiileCnt != "" && info.stmFileCnt != 0){
-					$("#badFileOption").removeClass("kt-hide");
-					$("#fileCnt").attr("value", info.stmFileCnt);
-					$("#fileStrg").attr("value", info.stmFileStrg);
-				}else{
-					$("#badFileOption").addClass("kt-hide");
-				}
-				
-				// 태그
-				if(info.stmTagYnCd == "01"){
-					$("#badTagOption").removeClass("kt-hide");
-				}else{
-					$("#badTagOption").addClass("kt-hide");
-				}
-				
-				// 댓글
-				if(info.stmCmtYnCd == "01"){
-					$("#stmCmtYnCd").removeClass("kt-hide");
-					$("#badCmtDiv").removeClass("kt-hide");
-				}else{
-					$("#stmCmtYnCd").addClass("kt-hide");
-					$("#badCmtDiv").addClass("kt-hide");
-				}
-
+				$("#stmNtcYnCd").addClass("kt-hide");
 			}
-    	});
-    	
-    	//AJAX 전송
-		ajaxObj.send();
+	
+	    	// 공지사항 스위치
+	    	$("#badNtcYnCd").click(function(){
+	    		if($("#badNtcYnCd").is(":checked")==true){
+	    			//세부 속성 보이기
+	    			$("#ntcOption").removeClass("kt-hide");
+	    		}else{
+	    			//세부 속성 숨기기
+	    			$("#ntcOption").addClass("kt-hide");
+	    		}
+	    	});
+	    	
+	    	// 비밀번호 스위치
+	    	$("#badPwYnCd").click(function(){
+	    		if($("#badPwYnCd").is(":checked")==true){
+	    			//세부 속성 보이기
+	    			$("#pwOption").removeClass("kt-hide");
+	    		}else{
+	    			//세부 속성 숨기기
+	    			$("#pwOption").addClass("kt-hide");
+	    		}
+	    	});
+			
+			// 비밀글
+			if($("#paramStmPwYnCd").val()  == "01"){
+				$("#stmPwYnCd").removeClass("kt-hide");
+			}else{
+				$("#stmPwYnCd").addClass("kt-hide");
+			}
+	
+			// 비밀번호 스위치
+	    	$("#badPwYnCd").click(function(){
+	    		if($("#badPwYnCd").is(":checked")==true){
+	    			//세부 속성 보이기
+	    			$("#pwOption").removeClass("kt-hide");
+	    		}else{
+	    			//세부 속성 숨기기
+	    			$("#pwOption").addClass("kt-hide");
+	    		}
+	    	});
+			
+			// 첨부파일
+			if($("#paramStmFileCnt").val()  != null && $("#paramStmFileCnt").val() != "" && $("#paramStmFileCnt").val()!= 0){
+				$("#badFileOption").removeClass("kt-hide");
+			}else{
+				$("#badFileOption").addClass("kt-hide");
+			}
+			
+			// 태그
+			if($("#paramStmTagYnCd") == "01"){
+				$("#badTagOption").removeClass("kt-hide");
+			}else{
+				$("#badTagOption").addClass("kt-hide");
+			}
+			
+			// 댓글
+			if($("#paramStmCmtYnCd") == "01"){
+				$("#stmCmtYnCd").removeClass("kt-hide");
+				$("#badCmtDiv").removeClass("kt-hide");
+			}else{
+				$("#stmCmtYnCd").addClass("kt-hide");
+				$("#badCmtDiv").addClass("kt-hide");
+			}
+    	}
 	}
 	
     /**
