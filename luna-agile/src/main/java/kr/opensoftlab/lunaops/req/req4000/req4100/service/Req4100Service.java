@@ -93,6 +93,10 @@ public interface Req4100Service {
 	List<Map> selectReq4100ProcessReqList(Map paramMap) throws Exception;
 
 	
+	@SuppressWarnings({ "rawtypes" })
+	List<Map> selectReq4100ReqProTypeOrdList(Map paramMap) throws Exception;
+	
+	
 	
 	
 	@SuppressWarnings("rawtypes")
