@@ -5,12 +5,7 @@
 <div class="kt-portlet kt-portlet--mobile">
 	<input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd }" /> 
 	<input type="hidden" id="stmDsTypeCd" name="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
-	<input type="hidden" name="prjGrpId" id="prjGrpId" value="${param.prjGrpId }" /> 
-	<input type="hidden" name="prjId" id="prjId" value="${param.prjId }" /> 
-	<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
-	<input type="hidden" name="badNum" id="badNum" value="${param.badNum }" /> 
-	<input type="hidden" name="badId" id="badId" value="${param.badId }" />
-	<input type="hidden" name="searchTarget" id="searchTarget" value='${param.searchTarget }' />
+	<input type="hidden" name="paramRow" id="paramRow" value='${param.paramRow }' />
 	<input type="hidden" name="backPageYn" id="backPageYn" value="${param.backPageYn }" /> 
 	<div class="kt-portlet__body">
 		<div class="kt-align-center">
@@ -32,6 +27,9 @@
 "use strict";
 
 var OSLBad1004Popup = function () {
+	//목록에서 받아온 row data
+	var rowData = JSON.parse($("#paramRow").val());
+	
 	$("#badPw").focus();
 	
     var documentSetting = function () {
@@ -49,11 +47,11 @@ var OSLBad1004Popup = function () {
     
     var selectPwInfo = function(){
     	var data = {
-   			"badPw" : $("#badPwInput").val(),
-   			"badId" : $("#badId").val(),
-   			"menuId" : $("#menuId").val(),
-   			"prjGrpId" : $("#prjGrpId").val(),
-   			"prjId" : $("#prjId").val(),
+   			badPw : $("#badPwInput").val(),
+   			badId : rowData.badId,
+   			menuId : rowData.menuId,
+   			prjGrpId : rowData.prjGrpId,
+   			prjId : rowData.prjId,
     	}
     	
     	var ajaxObj = new $.osl.ajaxRequestAction(
@@ -70,16 +68,11 @@ var OSLBad1004Popup = function () {
 				var pwCheck = data.resultPwCheck;
 				//비밀번호가 일치하는 경우
 				if(pwCheck == "Y"){
-					var goData = {
-							"badNum" :  $("#badNum").val(),
-							"badId" : $("#badId").val(),
-				   			"menuId" : $("#menuId").val(),
-				   			"prjGrpId" : $("#prjGrpId").val(),
-				   			"prjId" : $("#prjId").val(),
-				   			"searchTarget" : $("#searchTarget").val(),
-				   			"badHit" : true,
+					var data = {
+							paramRow : $("#paramRow").val(),
+				   			badHit : true,
 					};
-					var goOptions = {
+					var options = {
 							modalTitle: "게시글 상세보기",
 							closeConfirm: false,
 							modalSize: "xl",
@@ -89,20 +82,20 @@ var OSLBad1004Popup = function () {
 					//현재 비밀번호 창 닫기
 					$.osl.layerPopupClose();
 					
-					fileUploadObj.reset();
+					//fileUploadObj.reset();
 					
 					//미리 열려진 게시글 팝업이 없을 경우
 					if(backPageYn == "N"){
 						var stmTypeCd = $("#stmTypeCd").val();
 						//해당 게시글 팝업 열기
 						if(stmTypeCd == "01" || stmTypeCd == "02"){
-							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',goData,goOptions);
+							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1007View.do',goData,goOptions);
+							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1007View.do',data,options);
 						}
 					}
 				}else{
-					$.osl.alert("비밀번호가 틀렸습니다. 다시 입력하세요." , {"type" : "warning"});
+					$.osl.alert($.osl.lang("bad1004.passwordMiss") , {"type" : "warning"});
 					$("#badPwInput").val("");
 					$("#badPwInput").focus;
 				}
