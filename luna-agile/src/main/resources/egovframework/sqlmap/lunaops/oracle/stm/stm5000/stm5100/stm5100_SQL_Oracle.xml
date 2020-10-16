@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm5100DAO">
+	 <!--  in / out class define  -->
+    <typeAlias alias="stm5100VO"	type="kr.opensoftlab.lunaops.stm.stm5000.stm5100.vo.Stm5100VO"/>
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="resultMapSelectStm5100" class="stm5100VO">
+			<result property="rn"			column="RN"/>
+			<result property="licGrpId"     column="LIC_GRP_ID"/>
+			<result property="logUseId"     column="LOG_USE_ID"/>
+			<result property="logUsrId"   column="LOG_USR_ID"/>
+			<result property="logTime"    column="LOG_TIME"/>
+			<result property="logIp"      column="LOG_IP"/>
+			<result property="logUsrNm"   column="USR_NM"/>
+			<result property="menuId"   column="MENU_ID"/>
+			<result property="menuNm"   column="MENU_NM"/>
+			<result property="menuUrl"   column="MENU_URL"/>
+			<result property="menuCd"   column="MENU_CD"/>
+    </resultMap>
+	
+	<!-- sql Define  -->
+	<sql id="selectStm5100List">
+		SELECT ROWNUM RN, T1.*
+		FROM
+		(
+			SELECT 
+						A.LIC_GRP_ID
+					,	A.LOG_USE_ID
+					,	A.LOG_USR_ID
+					, 	TO_CHAR(A.LOG_TIME,'YYYY-MM-DD HH24:MI:SS') as LOG_TIME /* 로그 일시 */
+					,	A.LOG_IP
+					,	A.LOG_URL
+					,	NVL(B.USR_NM,'-') USR_NM
+					,	B.USR_IMG_ID
+					,	A.MENU_ID
+					,	A.MENU_NM
+					,	A.MENU_URL
+					,	A.MENU_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE MST_CD = 'ADM00003' AND SUB_CD = A.MENU_CD AND LIC_GRP_ID = #licGrpId#) AS LOG_TYPE
+			FROM ( SELECT * FROM STM5100 WHERE LIC_GRP_ID = #licGrpId# ) A
+			INNER JOIN ( SELECT USR_ID, USR_NM, USR_IMG_ID FROM STM3000 WHERE LIC_GRP_ID = #licGrpId# ) B
+			ON ( A.LOG_USR_ID = B.USR_ID)
+			WHERE 1=1
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.LOG_TIME DESC
+			</isEmpty>
+		) T1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetId" >
+			<isEqual property="searchTargetId" compareValue="menuCd">
+				AND	T1.MENU_CD = #searchTargetData#
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="logUsrId">
+				AND	T1.LOG_USR_ID LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="usrNm">
+				AND	T1.USR_NM LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="logIp">
+				AND	T1.LOG_IP LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="menuNm">
+				AND	T1.MENU_NM LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="logUrl">
+				AND	T1.LOG_URL LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+			<isEqual property="searchTargetId" compareValue="menuUrl">
+				AND	T1.MENU_URL LIKE '%'|| #searchTargetData# || '%'
+			</isEqual>
+		</isNotEmpty>
+		<isEqual property="searchTargetId" compareValue="logTime">
+			<isNotEmpty property="searchStartDt">
+				AND T1.LOG_TIME &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+			<isNotEmpty property="searchEndDt">
+				AND T1.LOG_TIME &lt;= TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+		</isEqual>
+    </sql>
+    
+    <select id="stm5100DAO.selectStm5100List" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm5100List"/>
+	    ) Z
+	    WHERE 1=1
+	    AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="stm5100DAO.selectStm5100ListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm5100List"/>
+		) Z
+    </select>
+	
+	
+	<select id="stm5100DAO.selectStm5100ExcelList" parameterClass="stm5100VO"  resultClass="egovMap">
+
+		<include refid="selectStm5100List"/>
+
+    </select>
+	
+	<insert id="stm5100DAO.insertStm5100SystemUseLog" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newLogUseId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_LOG_USE_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_LOG_USE_ID, 12, 5)) + 1) , 5, '0')
+						,	'USE' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_REQ_ID 
+			FROM	(
+			            SELECT	MAX(LOG_USE_ID)  AS NEW_LOG_USE_ID
+			            FROM	STM5100 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.LOG_USE_ID LIKE 'USE' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO STM5100
+            (	
+            	LIC_GRP_ID,		LOG_USE_ID,		LOG_TIME,	LOG_URL,	LOG_USR_ID,		
+            	LOG_IP,			MENU_ID,		MENU_NM,	MENU_URL,
+            	MENU_CD
+            )
+            VALUES
+            (
+            	#licGrpId#,		#newLogUseId#,		SYSDATE,	#logUrl#,	#logUsrId#,	
+            	#logIp#,		#menuId#,			#menuNm#,	#menuUrl#,
+            	#menuCd#
+            )
+		]]>
+	</insert>
+	
+</sqlMap>

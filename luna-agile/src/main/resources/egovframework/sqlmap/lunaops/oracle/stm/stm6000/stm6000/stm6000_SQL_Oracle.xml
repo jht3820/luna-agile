@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm6000DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	<resultMap id="resultMapDefaultStm6000" class="HashMap">
+		<result property="licGrpId" column="LIC_GRP_ID" />
+		<result property="deptId" column="DEPT_ID" />
+		<result property="upperDeptId" column="UPPER_DEPT_ID" />
+		<result property="deptAdminUsrId" column="DEPT_ADMIN_USR_ID" />
+		<result property="deptName" column="DEPT_NAME" />
+		<result property="ord" column="ORD" />
+		<result property="useCd" column="USE_CD" />
+		<result property="deptEtc" column="DEPT_ETC" />
+		<result property="lvl" column="LVL" />
+		<result property="regDtm" column="REG_DTM" />
+		<result property="regUsrId" column="REG_USR_ID" />
+		<result property="regUsrIp" column="REG_USR_IP" />
+		<result property="modifyDtm" column="MODIFY_DTM" />
+		<result property="modifyUsrId" column="MODIFY_USR_ID" />
+		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
+	</resultMap>
+
+    <resultMap id="resultMapselectStm6000DeptInfo" extends="resultMapDefaultStm6000" class="HashMap">
+		<result property="upperDeptNm" column="UPPER_DEPT_NM" />
+		<result property="useNm" column="USE_NM" />
+	</resultMap>
+
+
+	<sql id="selectStm6000DeptList">
+		SELECT 		
+				T.* 
+		FROM
+		(
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM STM6000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+	        <isNotEmpty property="searchSelect">
+	        	<isEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 2
+			        ]]>
+	        	</isEqual>
+	        	<isNotEqual property="searchSelect" compareValue="all">
+	        		<![CDATA[
+			        	AND lvl < 1
+			        ]]>
+	        	</isNotEqual>
+	        </isNotEmpty>
+	        <isNotEmpty property="searchSelect">
+	        	<isNotEmpty property="searchTxt">
+		        	<isNotEqual property="searchSelect" compareValue="all">
+			        	UNION
+			        	SELECT C.*
+			        	FROM
+			        	(
+				       		SELECT
+									B.LIC_GRP_ID
+								,	B.DEPT_ID
+								,	B.UPPER_DEPT_ID
+								,	B.DEPT_NAME
+								,	B.DEPT_ADMIN_USR_ID
+								,	B.ORD
+								,	B.USE_CD
+								,	B.DEPT_ETC
+								,	B.LVL
+								,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+								,	B.REG_USR_ID
+								,	B.REG_USR_IP
+								,	TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+								,	B.MODIFY_USR_ID
+								,	B.MODIFY_USR_IP
+							FROM STM6000 B 
+							WHERE 1=1
+							AND	B.LIC_GRP_ID = #licGrpId#
+						    <isNotEmpty property="viewType">
+								<isEqual property="viewType" compareValue="cmm1200" >
+									AND B.USE_CD = '01' 
+								</isEqual>
+							</isNotEmpty> 
+						) C
+						<isEqual property="searchSelect" compareValue="deptName">
+							START WITH C.DEPT_NAME LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+						<isEqual property="searchSelect" compareValue="deptEtc">
+							START WITH C.DEPT_ETC LIKE '%'||#searchTxt#||'%'
+						</isEqual>
+				        CONNECT BY PRIOR  C.UPPER_DEPT_ID = C.DEPT_ID 
+		        	</isNotEqual>
+	        	</isNotEmpty>
+			</isNotEmpty>
+		) T
+      	WHERE 1=1
+      	ORDER BY T.ORD ASC, T.REG_DTM ASC
+	</sql>
+
+    <select id="stm6000DAO.selectStm6000DeptList" parameterClass="java.util.Map" resultMap="resultMapDefaultStm6000">
+		SELECT *
+		FROM
+			(
+				<include refid="selectStm6000DeptList"/>
+	    	)
+    </select>
+    
+    
+    <select id="stm6000DAO.selectStm6000SubDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		SELECT
+				A.LIC_GRP_ID
+			,	A.DEPT_ID
+			,	A.UPPER_DEPT_ID
+			,	A.DEPT_NAME
+			,	A.DEPT_ADMIN_USR_ID
+			,	A.ORD
+			,	A.USE_CD
+			,	A.DEPT_ETC
+			,	A.LVL
+			,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+			,	A.REG_USR_ID
+			,	A.REG_USR_IP
+			,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+			,	A.MODIFY_USR_ID
+			,	A.MODIFY_USR_IP
+		FROM STM6000 A 
+		WHERE 1=1
+		AND A.LIC_GRP_ID =  #licGrpId#
+		AND A.UPPER_DEPT_ID = #deptId#
+	    <isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01' 
+			</isEqual>
+		</isNotEmpty>
+ 		ORDER BY A.ORD ASC, A.DEPT_NAME ASC
+    </select>
+    
+	
+	<!-- 조직 정보 가져오기(단건)-->
+	<select id="stm6000DAO.selectStm6000DeptInfo" parameterClass="java.util.Map" resultMap="resultMapselectStm6000DeptInfo">
+		<![CDATA[ 
+			/* stm6000DAO.selectStm6000DeptInfo - 조직 정보 가져오기(단건) */
+			SELECT	
+					LIC_GRP_ID
+				,	DEPT_ID
+			    ,	UPPER_DEPT_ID
+          		,	NVL((SELECT T.DEPT_NAME FROM STM6000 T WHERE T.LIC_GRP_ID = #licGrpId# AND T.DEPT_ID = A.UPPER_DEPT_ID ), '-') AS UPPER_DEPT_NM
+			    ,	DEPT_NAME
+			    ,	DEPT_ADMIN_USR_ID
+			    ,	ORD
+			    ,	USE_CD
+   				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+			    ,	DEPT_ETC
+			    ,	LVL
+			    ,	TO_CHAR(REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+			    ,	REG_USR_ID
+			    ,	REG_USR_IP
+			    ,	TO_CHAR(MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+			    ,	MODIFY_USR_ID
+			    ,	MODIFY_USR_IP
+			FROM STM6000 A 
+			WHERE 1=1
+			AND	LIC_GRP_ID = #licGrpId#
+			AND	DEPT_ID = #deptId#
+ 		]]> 
+	</select>
+	
+	
+	<!-- 조직 루트디렉토리 생성-->
+	<insert id="stm6000DAO.insertStm6000RootDeptInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDeptId">
+		<![CDATA[
+			/* stm6000DAO.insertStm6000RootMenu - 신규 조직 등록(ROOT DEPT_ID 따기)*/ 
+			SELECT	NVL( 
+							SUBSTR(NEW_DEPT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DEPT_ID, 12, 5)) + 1) , 5, '0')
+						,	'DPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_DPT_ID 
+			FROM	(
+			            SELECT	MAX(DEPT_ID)  AS NEW_DEPT_ID
+			            FROM	STM6000 A
+			            WHERE	1=1
+                        AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.DEPT_ID LIKE 'DPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			/* stm6000DAO.insertStm6000RootMenu - 조직 루트디렉토리 생성  */
+			INSERT INTO STM6000 A
+			(
+					LIC_GRP_ID			,	DEPT_ID  			,	UPPER_DEPT_ID  		,	DEPT_NAME
+			  	,	DEPT_ADMIN_USR_ID	,	ORD					,	USE_CD		 		,	DEPT_ETC
+			  	,	LVL				  	,	REG_DTM	  			,	REG_USR_ID 			,	REG_USR_IP
+			  	,	MODIFY_DTM		  	,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#			,	#newDeptId#		,	null		,	#deptName#   
+			    ,	#deptAdminUsrId#	,	0				,	'01'		,	'최상위 조직'		
+			    ,	0	    			,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+			    ,	SYSDATE	    		,	#regUsrId#		,	#regUsrIp#
+			)
+		]]>
+	</insert>
+	
+	<!-- 조직 등록 시 등록된 조직의 다음 순번을 가져온다. -->
+	<select id="stm6000DAO.selectStm6000DeptNextOrd"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* stm6000DAO.selectStm6000DeptNextOrd - 조직 등록 시 등록된 조직의 다음 순번을 가져온다. (조직 등록 팝업에 사용) */
+		SELECT NVL(MAX(ORD), 0) + 1 AS NEX_ORD
+        FROM STM6000 
+        WHERE 1=1 
+        AND LIC_GRP_ID = #licGrpId#
+        AND UPPER_DEPT_ID = #upperDeptId#
+    </select>
+	
+	<!-- 신규 조직 등록 -->
+	<insert id="stm6000DAO.insertStm6000DeptInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDeptId">
+		<![CDATA[
+			/* stm6000DAO.insertStm6000RootMenu - 신규 조직 등록(새로운 DEPT_ID 따기)*/ 
+			SELECT	NVL( 
+							SUBSTR(NEW_DEPT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DEPT_ID, 12, 5)) + 1) , 5, '0')
+						,	'DPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_DEPT_ID 
+			FROM	(
+			            SELECT	MAX(DEPT_ID)  AS NEW_DEPT_ID
+			            FROM	STM6000 A
+			            WHERE	1=1
+                        AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.DEPT_ID LIKE 'DPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			/* stm6000DAO.insertStm6000DeptInfo - 신규 조직 등록  */
+			INSERT INTO STM6000 A
+			(
+					LIC_GRP_ID			,	DEPT_ID  			,	UPPER_DEPT_ID  		,	DEPT_NAME
+			  	,	DEPT_ADMIN_USR_ID	,	ORD					,	USE_CD		 		,	DEPT_ETC
+			  	,	LVL				  	,	REG_DTM	  			,	REG_USR_ID 			,	REG_USR_IP
+			  	,	MODIFY_DTM		  	,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#			,	#newDeptId#		,	#upperDeptId#		,	#deptName#   
+			    ,	#deptAdminUsrId#	,	#ord#			,	'01'				,	#deptEtc#		
+			    ,	#lvl# + 1	    	,	SYSDATE			,	#regUsrId#			,	#regUsrIp#
+			    ,	SYSDATE	    		,	#modifyUsrId#	,	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+	<!-- 선택한 조직 정보 수정(단건) -->
+	<update id="stm6000DAO.updateStm6000DpteInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		/* stm6000DAO.updateStm6000DpteInfo - 선택한 조직 정보 수정 */
+		UPDATE	STM6000 A
+        SET		A.UPPER_DEPT_ID		= #upperDeptId#
+        	,	A.DEPT_NAME			= #deptName#
+        	,	A.DEPT_ETC			= #deptEtc#
+            ,	A.LVL				= #lvl#
+            ,	A.ORD				= #ord#
+            ,	A.USE_CD			= #useCd#
+            ,	A.MODIFY_DTM		= SYSDATE
+            ,	A.MODIFY_USR_ID		= #modifyUsrId#
+            ,	A.MODIFY_USR_IP		= #modifyUsrIp#
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.DEPT_ID = #deptId#
+	]]>
+	</update>
+	
+	
+	<!-- 조직에 사용자가 배정되어있는지 체크 : 조직 삭제 시 사용자가 배정된 조직 확인을 위해 사용 -->
+	<select id="stm6000DAO.selectStm6000ExistUsrInDept" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* stm6000DAO.selectStm6000ExistUsrInDept 조직에 사용자가 배정되어있는지 체크 : 조직 삭제 시 사용자가 배정된 조직 확인을 위해 사용  */
+		<![CDATA[
+			SELECT COUNT(*) AS CNT
+		    FROM STM3000 A
+		    WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.DEPT_ID = #deptId#
+		]]>
+	</select>
+	
+	<!-- 선택한 조직 정보 삭제 -->
+	<delete id="stm6000DAO.deleteStm6000DeptInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		/* stm6000DAO.deleteStm6000DeptInfo - 선택한 조직 정보 삭제 */
+        DELETE FROM STM6000 A
+		WHERE 1=1
+		AND	A.LIC_GRP_ID = #licGrpId#
+		AND	A.DEPT_ID = #deptId#
+	]]>
+	</delete>
+	
+	<!-- 조직 공통팝업 호출 전 검색하려는 조직목록을 찾는다. 검색된 조직이 1개일 경우 조직 ID, 상위조직을 포함한 조직명을 화면에 세팅한다 -->
+	<select id="stm6000DAO.selectStm6000BeforeCmmDeptList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			/* 
+			 *	stm6000DAO.selectStm6000BeforeCmmDeptList - 조직 공통팝업 호출 전 검색하려는 조직목록 검색
+			 *  검색된 조직이 1개일 경우 조직 ID, 상위조직을 포함한 조직명을 화면에 세팅
+			 */
+			SELECT	
+	      			A.DEPT_ID
+	      		, 	SUBSTR(SYS_CONNECT_BY_PATH ( A.DEPT_NAME, ' > '), 4) AS DEPT_NAME
+	        FROM
+			( 
+				SELECT X.DEPT_ID, X.UPPER_DEPT_ID, X.DEPT_NAME
+	            FROM STM6000 X
+	            WHERE 1=1
+	            AND X.LIC_GRP_ID = #licGrpId#
+	            AND X.USE_CD = '01'
+			) A
+	        WHERE 1=1
+	        AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+	        START WITH A.UPPER_DEPT_ID IS NULL
+	        CONNECT BY A.UPPER_DEPT_ID = PRIOR A.DEPT_ID
+ 		]]> 
+	</select>
+	
+	
+	<!-- 해당 조직ID가 있는지 체크 -->
+	<select id="stm6000DAO.selectStm6000ExistDeptChk" parameterClass="java.util.Map" resultClass="int">
+		/* stm6000DAO.selectStm6000ExistDeptChk 해당 조직ID가 있는지 체크 */
+		<![CDATA[ 
+			SELECT	COUNT(*) AS CNT
+			FROM	STM6000 A
+			WHERE	1=1
+			AND		A.LIC_GRP_ID 	= #licGrpId#
+			AND		A.DEPT_ID 		= #deptId#
+ 		]]> 
+	</select>
+	
+	<!-- 
+	       조직 목록 조회 : 조직 엑셀 다운로드, 사용자 등록&수정 화면, 업무처리 화면에서 사용 
+	
+	   1. 조직 공통팝업 호출 전 조직 검색
+	      - 검색결과가 1개일 경우 조직 공통팝업 오픈하지 않고 바로 검색된 조직을 세팅한다.
+	      - 검색결과가 2개이상이라면 조직 공통팝업을 오픈한다.
+	      
+	   <isNotEmpty property="viewType">
+			<isEqual property="viewType" compareValue="cmm1200" >
+				AND A.USE_CD = '01'
+				<isNotEmpty property="searchDeptNm">
+					AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		
+		
+		2. 조직 엑셀 다운로드시 해당 부분 실행되며 계층으로 전체 조직을 조회한다.
+		<isEmpty property="viewType">
+			START WITH T.UPPER_DEPT_ID IS NULL
+			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  
+    		ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
+		</isEmpty>
+	
+	-->
+    <select id="stm6000DAO.selectStm6000NormalDeptList" parameterClass="java.util.Map" resultMap="resultMapDefaultStm6000">
+	    /*  stm6000DAO.selectStm6000NormalDeptList - 조직 목록 조회   */
+		SELECT T.* FROM
+		(
+        	SELECT
+				 	A.LIC_GRP_ID
+				,	A.DEPT_ID
+				,	A.UPPER_DEPT_ID
+				,	A.DEPT_NAME
+				,	A.DEPT_ADMIN_USR_ID
+				,	A.ORD
+				,	A.USE_CD
+				,	A.DEPT_ETC
+				,	A.LVL
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM STM6000 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="viewType">
+				<isEqual property="viewType" compareValue="cmm1200" >
+					AND A.USE_CD = '01' /* 사용유무가 사용인 조직만 조회 */
+					<isNotEmpty property="searchDeptNm">
+						AND A.DEPT_NAME LIKE '%'||#searchDeptNm#||'%'
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		) T
+		<isEmpty property="viewType">
+			START WITH T.UPPER_DEPT_ID IS NULL
+			CONNECT BY  PRIOR  T.DEPT_ID = T.UPPER_DEPT_ID  
+    		ORDER SIBLINGS BY T.ORD ASC, T.REG_DTM ASC
+		</isEmpty>
+    </select>
+	
+</sqlMap>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="adm4000DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="loginVO"	type="kr.opensoftlab.oslops.com.vo.LoginVO"/>
+
+	<select id="adm4000DAO.selectAdm4000CommonCodeMasterList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+				SELECT
+				  MST_CD
+				, UPPER_MST_CD
+				, MST_CD_NM
+				, MST_CD_ENG_NM
+				, A.MST_CD_DESC
+				, REGEXP_REPLACE (A.MST_CD_DESC ,'</br>|<br>|<br/>' , ' ' ) AS MST_CD_DESC_GRID
+				, LVL
+				, ORD
+				, USE_YN
+				, STM_USE_YN
+				FROM ADM4000 a
+		]]>
+				WHERE a.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchTxt">
+					<isEqual property="searchSelect" compareValue="mstCd" prepend="AND">
+						A.MST_CD LIKE '%'||#searchTxt#||'%'
+					</isEqual>
+					<isEqual property="searchSelect" compareValue="mstCdNm" prepend="AND">
+						A.MST_CD_NM LIKE '%'||#searchTxt#||'%'
+					</isEqual>
+					<isEqual property="searchSelect" compareValue="mstCdDesc" prepend="AND">
+						A.MST_CD_DESC LIKE '%'||#searchTxt#||'%'
+					</isEqual>
+				</isNotEmpty>
+				<isNotEmpty property="searchCd">
+					<isEqual property="searchSelect" compareValue="useYn" prepend="AND">
+							<![CDATA[ A.USE_YN = #searchCd# ]]> 
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			ORDER BY ORD
+	</select>
+	
+	<select id="adm4000DAO.selectAdm4000CommonCodeDetailList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+				SELECT
+						  A.MST_CD
+						, A.SUB_CD
+						, A.SUB_CD_NM
+						, A.SUB_CD_REF1
+						, A.SUB_CD_REF2
+						, A.SUB_CD_REF3
+						, A.SUB_CD_REF4
+						, A.SUB_CD_REF5
+						, A.SUB_CD_DESC
+						, REGEXP_REPLACE (A.SUB_CD_DESC ,'</br>|<br>|<br/>' , ' ' ) AS SUB_CD_DESC_GRID
+						, A.ORD
+						, A.USE_YN
+						, ( SELECT B.STM_USE_YN 
+							FROM ADM4000 B 
+							WHERE LIC_GRP_ID = #licGrpId# 
+							AND B.MST_CD = #mstCd#
+						   ) AS STM_USE_YN
+				FROM ADM4100 A
+		]]>
+				WHERE a.LIC_GRP_ID = #licGrpId#
+				AND A.MST_CD = #mstCd#
+				<isNotEmpty property="selSubCd" prepend="AND">
+					A.SUB_CD = #selSubCd#
+				</isNotEmpty>
+				<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchTxt">
+					<isEqual property="searchSelect" compareValue="subCdNm" prepend="AND">
+						A.SUB_CD_NM LIKE '%'||#searchTxt#||'%'
+					</isEqual>
+					<isEqual property="searchSelect" compareValue="subCdRef" prepend="AND">
+						A.SUB_CD_REF1 LIKE '%'||#searchTxt#||'%' OR A.SUB_CD_REF2 LIKE '%'||#searchTxt#||'%' 
+					</isEqual>
+					<isEqual property="searchSelect" compareValue="subCdDesc" prepend="AND">
+						A.SUB_CD_DESC LIKE '%'||#searchTxt#||'%' 
+					</isEqual>
+				</isNotEmpty>
+				<isNotEmpty property="searchCd">
+					<isEqual property="searchSelect" compareValue="useYn" prepend="AND">
+							<![CDATA[ A.USE_YN = #searchCd# ]]> 
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+	</select>
+	
+	<update id="adm4000DAO.saveAdm4000CommonCodeMaster" parameterClass="java.util.Map">
+		<![CDATA[
+			MERGE INTO ADM4000 ADM
+				USING (
+					SELECT #licGrpId# AS LIC_GRP_ID
+							, upper(#mstCd#) AS MST_CD
+					FROM  DUAL 
+						) TMP
+				ON  (
+						ADM.LIC_GRP_ID = TMP.LIC_GRP_ID
+						AND ADM.MST_CD  = TMP.MST_CD 
+					) WHEN MATCHED THEN
+				UPDATE
+					SET 
+		]]>		
+			<isNotEmpty property="stmUseYn">
+				<isEqual property="stmUseYn" compareValue="N"> 
+					ADM.UPPER_MST_CD  = #upperMstCd#
+					, ADM.MST_CD_NM  = #mstCdNm#
+					, ADM.MST_CD_ENG_NM = #mstCdEngNm#
+					, ADM.MST_CD_DESC = #mstCdDesc#
+					, ADM.ABORT_DT = #abortDt#
+					, ADM.LVL = #lvl#
+					, ADM.ORD = #ord#
+					, ADM.USE_YN = #useYn#
+					, ADM.STM_USE_YN = 'N' 
+				</isEqual>	
+				<isEqual property="stmUseYn" compareValue="Y"> 
+					ADM.ORD = #ord#
+				</isEqual>
+					, ADM.MODIFY_DTM = (CURRENT_TIMESTAMP+0)
+					, ADM.MODIFY_USR_ID = #modifyUsrId#
+					, ADM.MODIFY_USR_IP = #modifyUsrIp#
+			</isNotEmpty>			
+		<![CDATA[				
+				WHEN NOT MATCHED THEN
+				INSERT
+				(
+					ADM.LIC_GRP_ID				, ADM.MST_CD				, ADM.UPPER_MST_CD				, ADM.MST_CD_NM				, ADM.MST_CD_ENG_NM
+					, ADM.MST_CD_DESC			, ADM.ABORT_DT				, ADM.LVL						, ADM.ORD					, ADM.USE_YN
+					, ADM.STM_USE_YN
+					, ADM.REG_DTM				, ADM.REG_USR_ID			, ADM.REG_USR_IP				, ADM.MODIFY_DTM			, ADM.MODIFY_USR_ID
+					, ADM.MODIFY_USR_IP
+				) VALUES
+				(
+					#licGrpId#					, upper(#mstCd#)			, #upperMstCd#					, #mstCdNm#					, #mstCdEngNm#
+					, #mstCdDesc#				, #abortDt#					, #lvl#							, #ord#						, #useYn#
+					, #stmUseYn#
+					, (CURRENT_TIMESTAMP+0)					, #regUsrId#				, #regUsrIp#					, (CURRENT_TIMESTAMP+0)					, #modifyUsrId#
+					, #modifyUsrIp#
+				)
+		]]>
+	</update>
+	
+	<update id="adm4000DAO.updateAdm4000CommonCodeList" parameterClass="java.util.Map">
+		<![CDATA[ 
+			
+		]]>
+	</update>
+	
+	<delete id="adm4000DAO.deleteAdm4000CommonCodeList" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	DPL1000 a
+        	WHERE	1=1
+        	AND		a.PRJ_ID = #prjId#
+        	AND		a.DPL_ID = #dplId#
+		]]>
+	</delete>
+	
+	
+	
+	<update id="adm4000DAO.saveAdm4000CommonCodeDetail" parameterClass="java.util.Map">
+		<![CDATA[
+			MERGE INTO ADM4100 ADM
+				USING (
+					SELECT #licGrpId# AS LIC_GRP_ID 
+							, upper(#mstCd#) AS MST_CD 
+							, upper(#subCd#) AS SUB_CD  
+					FROM  DUAL 
+						) TMP
+				ON  (
+						ADM.LIC_GRP_ID = TMP.LIC_GRP_ID
+						AND ADM.MST_CD  = TMP.MST_CD 
+						AND ADM.SUB_CD  = TMP.SUB_CD
+					) WHEN MATCHED THEN
+				UPDATE
+				SET
+		]]>		
+			<isNotEmpty property="stmUseYn">
+				<isEqual property="stmUseYn" compareValue="N"> 
+				   ADM.SUB_CD_NM	  	=  #subCdNm#  	
+					, ADM.ORD	 	  	=  #ord#      	
+					, ADM.USE_YN	  	=  #useYn#        
+					, ADM.SUB_CD_REF1 	=  #subCdRef1#  
+					, ADM.SUB_CD_REF2 	=  #subCdRef2#  
+					, ADM.SUB_CD_REF3 	=  #subCdRef3#  
+					, ADM.SUB_CD_REF4 	=  #subCdRef4#  
+					, ADM.SUB_CD_REF5 	=  #subCdRef5#  
+					, ADM.SUB_CD_DESC 	=  #subCdDesc#  	
+				</isEqual>	
+				<isEqual property="stmUseYn" compareValue="Y"> 
+					ADM.ORD	 	  		=  #ord#      	
+				</isEqual>	
+			</isNotEmpty>				
+					, ADM.MODIFY_DTM    = (CURRENT_TIMESTAMP+0)
+					, ADM.MODIFY_USR_ID = #modifyUsrId#
+					, ADM.MODIFY_USR_IP = #modifyUsrIp#
+		<![CDATA[			
+				WHEN NOT MATCHED THEN
+				INSERT
+				(
+					ADM.LIC_GRP_ID				, ADM.MST_CD				, ADM.SUB_CD				, ADM.SUB_CD_NM				
+					, ADM.ORD					, ADM.USE_YN				, ADM.SUB_CD_REF1			, ADM.SUB_CD_REF2			
+					, ADM.SUB_CD_REF3			, ADM.SUB_CD_REF4			, ADM.SUB_CD_REF5			, ADM.SUB_CD_DESC			
+					, ADM.REG_DTM				, ADM.REG_USR_ID			, ADM.REG_USR_IP			, ADM.MODIFY_DTM			
+					, ADM.MODIFY_USR_ID 		, ADM.MODIFY_USR_IP
+					
+				) VALUES
+				(
+					#licGrpId#					, upper(#mstCd#)			, upper(#subCd#)			, #subCdNm#					
+					, #ord#						, #useYn#					, #subCdRef1#				, #subCdRef2#			
+					, #subCdRef3#				, #subCdRef4#				, #subCdRef5#				, #subCdDesc#    			
+					, (CURRENT_TIMESTAMP+0)					, #regUsrId#				, #regUsrIp#				, (CURRENT_TIMESTAMP+0)					
+					, #modifyUsrId#				, #modifyUsrIp#
+				)
+		]]>
+	</update>
+	
+	<delete id="adm4000DAO.deleteAdm4000CommonCodeDetail" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	ADM4100 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd#
+        	AND		a.SUB_CD = #subCd#
+		]]>
+	</delete>
+	
+	<delete id="adm4000DAO.deleteAdm4000CommonCodeDetailToMstCd" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	ADM4100 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd#       	
+		]]>
+	</delete>
+	
+	<delete id="adm4000DAO.deleteAdm4000CommonCodeMaster" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	ADM4000 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd#       	
+		]]>
+	</delete>
+	
+	<select id="adm4000DAO.selectAdm4000MasterExcelList" parameterClass="loginVO"  resultClass="egovMap">
+			SELECT
+				  MST_CD
+				, UPPER_MST_CD
+				, MST_CD_NM
+				, MST_CD_ENG_NM
+				, MST_CD_DESC
+				, LVL
+				, ORD
+				, USE_YN
+			FROM ADM4000 a
+			WHERE a.LIC_GRP_ID = #licGrpId#
+    </select>
+    
+    <select id="adm4000DAO.selectAdm4000DetailExcelList" parameterClass="java.util.Map"  resultClass="egovMap">
+			SELECT
+				  MST_CD
+				, SUB_CD
+				, SUB_CD_NM
+				, SUB_CD_REF1
+				, SUB_CD_REF2
+				, SUB_CD_REF3
+				, SUB_CD_REF4
+				, SUB_CD_REF5
+				, SUB_CD_DESC
+				, ORD
+				, USE_YN
+				FROM ADM4100 A
+			WHERE a.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+    </select>
+    
+    <select id="adm4000DAO.selectAdm4000CommonCodeCount" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+			SELECT
+				  COUNT(1) AS CNT
+				FROM ADM4000 A
+			WHERE A.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+    </select>    
+
+    <select id="adm4000DAO.selectAdm4000CommonDetailCodeCount" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+			SELECT
+				  COUNT(1) AS CNT
+				FROM ADM4100 A
+			WHERE A.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+			AND A.SUB_CD = #subCd#
+    </select>    
+	
+</sqlMap>

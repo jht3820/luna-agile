@@ -11,22 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-/**
- * Utility class  to support to double submit preventer
- * @author Vincent Han
- * @since 2014.08.07
- * @version 1.0
- * @see
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *   
- *   수정일        수정자       수정내용
- *  -------       --------    ---------------------------
- *   2014.08.07	표준프레임워크센터	최초 생성
- *
- * </pre>
- */
+
 public class EgovDoubleSubmitHelper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovDoubleSubmitHelper.class);
 		
