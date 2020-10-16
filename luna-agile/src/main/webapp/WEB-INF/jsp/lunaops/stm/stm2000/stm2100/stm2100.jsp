@@ -32,7 +32,7 @@
 					<i class="fa flaticon-settings-1"></i><span>관리</span>
 				</button>
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="summery" title="게시판 통계" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="summery" tabindex="4">
-					<i class="la la-external-link"></i><span>통계</span>
+					<i class="fa flaticon-information"></i><span>통계</span>
 				</button>
 				<!-- 엑셀 출력 버튼 넣기 -->
 			</div>
@@ -130,16 +130,14 @@
 					if(okManager == true){
 						$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2101View.do',data,options);
 					}else{
-						$.osl.alert("해당 게시판에 대한 접근 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("stm2100.notAuthority"), {"type":"warning"});
 					}
 				},
 				"detail":function(rowDatas, datatableId, type, rowNum){
 					var rowData;
 					if(type == "list"){
-						if(rowNum == 0){
-							$.osl.alert("1건의 데이터를 선택해주세요");
-						}else if(rowNum >1){
-							$.osl.alert("1건의 데이터만 선택해주세요\n"+rowDatas.length+"건의 데이터가 선택되었습니다.");
+						if(rowNum != 1){
+							$.osl.alert($.osl.lang("stm2100.selectStmInfoCnt", rowNum), {"type":"warning"});
 						}else{
 							rowData = rowDatas[0];
 						}
@@ -170,16 +168,14 @@
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1006View.do',data,options);
 						}
 					}else{
-						$.osl.alert("해당 게시판에 대한 접근 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("stm2100.notAuthority"), {"type":"warning"});
 					}
 				},
 				"summery" : function(rowDatas, datatableId, type, rowNum){
 					var rowData;
 					if(type == "list"){
-						if(rowNum == 0){
-							$.osl.alert("1건의 데이터를 선택해주세요");
-						}else if(rowNum >1){
-							$.osl.alert("1건의 데이터만 선택해주세요\n"+rowDatas.length+"건의 데이터가 선택되었습니다.");
+						if(rowNum != 1){
+							$.osl.alert($.osl.lang("stm2100.selectStmInfoCnt", rowNum), {"type":"warning"});
 						}else{
 							rowData = rowDatas[0];
 						}
@@ -204,7 +200,7 @@
 					if(okManager == true){
 	 					$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2103View.do',data,options);
 					}else{
-						$.osl.alert("해당 게시판에 대한 접근 권한이 없습니다.", {"type":"warning"});
+						$.osl.alert($.osl.lang("stm2100.selectStmInfoCnt", rowNum), {"type":"warning"});
 					}
 				},
 			 },
@@ -215,7 +211,7 @@
 				 },
 				 actionBtnIcon:{
 					 "detail": "fa flaticon-settings-1",
-					 "summery" : "la la-external-link",
+					 "summery" : "fa flaticon-information",
 				 }
 			 }
 		 });
