@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="srh1000DAO">
+	 <!--  in / out class define  -->
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+    <typeAlias alias="srh1000VO"	type="kr.opensoftlab.oslops.srh.srh1000.srh1000.vo.Srh1000VO"/>
+    
+    <!-- Map Define -->
+   	<resultMap id="resultMapSelectSrh1000" class="srh1000VO">
+		<result property="rn"  				column="RN"/>
+		<result property="prjId"			column="PRJ_ID"/>
+		<result property="linkId"			column="LINK_ID"/>
+		<result property="linkNm"			column="LINK_NM"/>
+		<result property="linkSub1Id"		column="LINK_SUB1_ID"/>
+		<result property="linkSub1Nm"		column="LINK_SUB1_NM"/>
+		<result property="linkSub2Id"		column="LINK_SUB2_ID"/>
+		<result property="linkSub2Nm"		column="LINK_SUB2_NM"/>
+		<result property="atchFileId"		column="ATCH_FILE_ID"/>
+		<result property="orignlFileNm"		column="ORIGNL_FILE_NM"/>
+		<result property="fileSn"			column="FILE_SN"/>
+		<result property="fileExtsn"		column="FILE_EXTSN"/>
+		<result property="fileSize"			column="FILE_SIZE"/>
+		<result property="regDtm"			column="REG_DTM"/>
+		<result property="linkTypeCd"		column="LINK_TYPE_CD"/>
+		<result property="linkTypeNm"		column="LINK_TYPE_NM"/>
+    </resultMap>
+    
+    <sql id="selectSrh1000List">
+    	SELECT ROWNUM AS RN, SUBT2.*
+    	FROM
+    	(
+	    	SELECT
+	    		SUBT1.*
+	    		, ( SELECT SUB_CD_NM FROM ADM4100 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = 'SRH00001' AND SUB_CD = SUBT1.LINK_TYPE_CD ) AS LINK_TYPE_NM
+			FROM
+			(
+				SELECT
+					
+					 A.PRJ_ID
+					,	A.DOC_ID AS LINK_ID 
+				    ,	A.DOC_NM AS LINK_NM
+				    ,	' ' AS LINK_SUB1_ID
+				    ,	' ' AS LINK_SUB1_NM
+				    ,	' ' AS LINK_SUB2_ID
+				    ,	' ' AS LINK_SUB2_NM
+				    ,	B.ATCH_FILE_ID
+				    ,	B.ORIGNL_FILE_NM
+				    ,	B.FILE_SN
+				    ,	B.FILE_EXTSN
+				    ,	B.FILE_SIZE
+				    ,	B.REG_DTM
+				    ,	'01' AS LINK_TYPE_CD
+				  FROM PRJ3000 A
+				  INNER JOIN COMTNFILEDETAIL B
+				  ON ( A.DOC_ATCH_FILE_ID = B.ATCH_FILE_ID )
+				  WHERE 1=1
+				  AND A.PRJ_ID = #prjId#
+				  AND A.USE_CD = '01'
+				  UNION ALL
+				  SELECT
+						A.PRJ_ID
+				    ,	A.DOC_ID AS LINK_ID 
+				    ,	A.DOC_NM AS LINK_NM
+				    ,	' ' AS LINK_SUB1_ID
+				    ,	' ' AS LINK_SUB1_NM
+				    ,	' ' AS LINK_SUB2_ID
+				    ,	' ' AS LINK_SUB2_NM
+				    ,	B.ATCH_FILE_ID
+				    ,	B.ORIGNL_FILE_NM
+				    ,	B.FILE_SN
+				    ,	B.FILE_EXTSN
+				    ,	B.FILE_SIZE
+				    ,	B.REG_DTM
+				    ,	'02' AS LINK_TYPE_CD
+				  FROM PRJ3000 A
+				  INNER JOIN COMTNFILEDETAIL B
+				  ON ( A.DOC_FORM_FILE_ID = B.ATCH_FILE_ID )
+				  WHERE 1=1
+				  AND A.PRJ_ID = #prjId#
+				  AND A.USE_CD = '01'
+				  UNION ALL
+				  SELECT 
+						A.PRJ_ID
+				    ,	A.REQ_ID AS LINK_ID 
+				    ,	A.REQ_NM AS LINK_NM
+				    ,	C.REQ_PRO_TYPE AS LINK_SUB1_ID
+				    ,	' ' AS LINK_SUB1_NM
+				    ,	' ' AS LINK_SUB2_ID
+				    ,	' ' AS LINK_SUB2_NM
+				    ,	B.ATCH_FILE_ID
+				    ,	B.ORIGNL_FILE_NM
+				    ,	B.FILE_SN
+				    ,	B.FILE_EXTSN
+				    ,	B.FILE_SIZE
+				    ,	B.REG_DTM
+				    ,	'03' AS LINK_TYPE_CD
+				  FROM REQ4100 A
+				  INNER JOIN COMTNFILEDETAIL B
+				  ON ( A.ATCH_FILE_ID = B.ATCH_FILE_ID )
+				  LEFT JOIN REQ4100 C
+                  ON ( A.PRJ_ID = C.PRJ_ID AND A.REQ_ID = C.REQ_ID )
+				  WHERE 1=1
+				  AND A.PRJ_ID = #prjId#
+				  UNION ALL
+				  SELECT
+						A.PRJ_ID
+				    ,	A.REQ_ID AS LINK_ID 
+				    ,	B.ITEM_NM AS LINK_NM
+				    ,	F.REQ_PRO_TYPE AS LINK_SUB1_ID
+				    ,	D.PROCESS_NM AS LINK_SUB1_NM
+				    ,	C.FLOW_ID AS LINK_SUB2_ID
+				    ,	C.FLOW_NM AS LINK_SUB2_NM
+				    ,	E.ATCH_FILE_ID
+				    ,	E.ORIGNL_FILE_NM
+				    ,	E.FILE_SN
+				    ,	E.FILE_EXTSN
+				    ,	E.FILE_SIZE
+				    ,	E.REG_DTM
+				    ,	'04' AS LINK_TYPE_CD
+				  FROM FLW1300 A
+				  INNER JOIN FLW1200 B
+				  ON ( A.PRJ_ID = B.PRJ_ID AND A.PROCESS_ID = B.PROCESS_ID AND A.FLOW_ID = B.FLOW_ID AND A.ITEM_ID = B.ITEM_ID AND B.ITEM_CODE = '03' )
+				  INNER JOIN FLW1100 C
+				  ON ( A.PRJ_ID = C.PRJ_ID AND A.PROCESS_ID = C.PROCESS_ID AND A.FLOW_ID = C.FLOW_ID )
+				  INNER JOIN FLW1000 D
+				  ON ( A.PRJ_ID = D.PRJ_ID AND A.PROCESS_ID = D.PROCESS_ID )
+				  INNER JOIN COMTNFILEDETAIL E
+				  ON ( A.ITEM_VALUE = E.ATCH_FILE_ID )
+				  LEFT JOIN REQ4100 F
+                  ON ( A.PRJ_ID = F.PRJ_ID AND A.REQ_ID = F.REQ_ID )
+				  WHERE 1=1
+				  AND A.PRJ_ID = #prjId#
+				  AND B.USE_CD = '01'
+				  AND C.USE_CD = '01'
+				  AND D.USE_CD = '01'
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchTxt">
+					<isEqual property="searchSelect" compareValue="orignlFileNm" prepend="AND">
+					UPPER(SUBT1.ORIGNL_FILE_NM) LIKE '%'|| UPPER( #searchTxt# )||'%'
+					</isEqual>
+				</isNotEmpty>
+				<isNotEmpty property="searchCd">
+					<isEqual property="searchSelect" compareValue="linkTypeCd" prepend="AND">
+						SUBT1.LINK_TYPE_CD = #searchCd#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			ORDER BY SUBT1.REG_DTM DESC
+		) SUBT2
+    </sql>
+    
+    <select id="srh1000DAO.selectSrh1000SearchFileListCnt" parameterClass="Srh1000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectSrh1000List"/>
+		) T1
+    </select>
+    
+    <select id="srh1000DAO.selectSrh1000SearchFileList" parameterClass="Srh1000VO"  resultMap="resultMapSelectSrh1000" >
+	    SELECT *
+		FROM
+		(
+			<include refid="selectSrh1000List"/>
+		) T1
+	    WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+</sqlMap>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="rpt1000DAO">
+
+	 <!--  in / out class define  -->
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+    <select id="rpt1000DAO.selectRpt1000ReqLastSignDataInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT SUBT1.*
+		FROM
+		(
+			SELECT ROWNUM AS RN, A.PRJ_ID
+					,A.REQ_ID
+					,A.SIGN_ID
+					,A.PROCESS_ID
+					,A.SIGN_PREV_FLOW_ID AS PREV_FLOW_ID
+					,A.SIGN_FLOW_ID
+					,A.SIGN_USR_ID
+					,B.USR_NM AS SIGN_USR_NM
+					,SF_ADM7000_DEPT_NM('jht1215_GRP', B.DEPT_ID, '2') AS SIGN_USR_DEPT_NM
+					,( SELECT SUB_CD_NM FROM ADM4100 WHERE LIC_GRP_ID = 'jht1215_GRP' AND MST_CD = 'ADM00007' AND SUB_CD = B.USR_POSITION_CD ) AS USR_POSITION_NM
+					,A.SIGN_CD
+					,A.SIGN_REJECT_CMNT
+					,A.SIGN_DTM
+					,A.REG_DTM
+					,A.REG_USR_ID
+					,A.REG_USR_IP
+				FROM REQ4900 A
+				LEFT JOIN ADM2000 B
+				ON ( A.SIGN_USR_ID = B.USR_ID )
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.REQ_ID = #reqId#
+				ORDER BY A.REG_DTM DESC
+		) SUBT1
+		WHERE 1=1
+		AND SUBT1.RN = 1
+    </select>
+</sqlMap>
