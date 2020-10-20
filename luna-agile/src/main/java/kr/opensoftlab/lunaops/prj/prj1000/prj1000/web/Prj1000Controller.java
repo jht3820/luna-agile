@@ -22,6 +22,7 @@ import kr.opensoftlab.lunaops.cmm.cmm4000.cmm4000.service.Cmm4000Service;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
 import kr.opensoftlab.lunaops.prj.prj2000.prj2000.service.Prj2000Service;
+import kr.opensoftlab.lunaops.req.req4000.req4100.service.Req4100Service;
 import kr.opensoftlab.sdf.util.ModuleUseCheck;
 import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
@@ -45,6 +46,10 @@ public class Prj1000Controller {
     
     @Resource(name = "prj2000Service")
     private Prj2000Service prj2000Service;
+    
+    
+    @Resource(name = "req4100Service")
+    private Req4100Service req4100Service;
     
     
 	@Resource(name = "egovMessageSource")
@@ -84,6 +89,7 @@ public class Prj1000Controller {
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
 			
+			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -110,6 +116,28 @@ public class Prj1000Controller {
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			paramMap.put("prjGrpCd", "01");
+			
+			
+			
+			int totCnt = 0;
+			List<Map> dataList = null;
+			Map<String, Object> metaMap = null;
+			
+			
+			totCnt = prj1000Service.selectPrj1000PrjGrpListCnt(paramMap);
+
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+
+			
+			
+			dataList = (List) prj1000Service.selectPrj1000PrjGrpList(paramMap);
+			
+        	
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -170,6 +198,29 @@ public class Prj1000Controller {
 			
 			paramMap.put("prjGrpCd", "01");
 			
+			
+			
+			int totCnt = 0;
+			List<Map> dataList = null;
+			Map<String, Object> metaMap = null;
+			
+			
+			totCnt = prj1000Service.selectPrj1000PrjListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			
+			dataList = (List) prj1000Service.selectPrj1000PrjList(paramMap);
+			
+			List<Map> reqChartDataList = (List) req4100Service.selectReq4100ReqProTypeOrdList(paramMap);
+			
+			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
@@ -178,6 +229,8 @@ public class Prj1000Controller {
 			
 			model.addAttribute("data", dataList);
 			model.addAttribute("meta", metaMap);
+			model.addAttribute("reqChartDataList", reqChartDataList);
+			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
 			
