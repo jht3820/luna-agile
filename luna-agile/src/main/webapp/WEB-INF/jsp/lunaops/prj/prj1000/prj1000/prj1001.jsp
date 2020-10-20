@@ -59,22 +59,36 @@ var OSLPrj1001Popup = function () {
 			chart: {
 				toolbar:{show:false},
 				width: '100%',
-				height: 150,
+				height: 195,
 				type: 'heatmap',
 				offsetX: -5,
+				events: {
+					click: function(event, chartContext, config) {
+						console.log(event);
+						var series = config.config.series;
+						console.log(series[config.seriesIndex]["data"][config.dataPointIndex]);
+						//요구사항 상세정보
+					}
+				},
+			},
+			title:{
+				text: "처리유형별 요구사항",
+				align: "center",
 			},
 			dataLabels: {enabled: false},
 			xaxis:{labels:{show:false}, axisBorder:{show:false}, axisTicks:{show:false}, crosshairs:{show:false}, tooltip: {enabled: false}},
 			yaxis:{labels:{show:false}, axisBorder:{show:false}, axisTicks:{show:false}, crosshairs:{show:false}, tooltip: {enabled: false}},
-			legend:{position: 'top',
-			    horizontalAlign: 'right'},
+			legend:{
+				position: 'bottom',
+				horizontalAlign: 'right',
+			},
 			grid: {
 			    show: false,
 			    padding: {
 			    	top: 0,
 			    	bottom: 0,
-			      left: 0,
-			      right: 0
+					left: 0,
+					right: 0
 			    }
 			  },
 			plotOptions:{
@@ -82,7 +96,7 @@ var OSLPrj1001Popup = function () {
 		            radius: 0,
 		            reverseNegativeShade: false,
 		            enableShades: false,
-		            useFillColorAsStroke: true,
+		            useFillColorAsStroke: false,
 		            colorScale:{
 						ranges:[
 							{from: 1,to: 1,color: "#9fd1f2", name:"접수 요청"},
@@ -100,10 +114,10 @@ var OSLPrj1001Popup = function () {
 					var dataPointIndex = data.dataPointIndex;
 					
 					var selData = data.w.config.series[seriesIndex].data[dataPointIndex];
-					var reqProTypeNm = selData.reqProTypeNm;
+					var reqOrd = selData.reqOrd;
 					var reqNm = selData.reqNm
 					
-					return "["+reqProTypeNm+"] "+reqNm;
+					return '<div class="osl-chart--project__tooltip">['+reqOrd+'] '+reqNm+'</div>';
 					//return series[seriesIndex][dataPointIndex];
 				}
 			},
@@ -135,21 +149,16 @@ var OSLPrj1001Popup = function () {
 					,template: function (row) {return String(row.reqDoneCnt)}},
 			],
 			actionBtn:{
-				"dblClick": true,
 				"update": false,
 				"delete": false,
 				"title": "기능 버튼",
 				"width": 100,
 			},
 			actionTooltip:{
-				"dblClick": "프로젝트 목록",
 				"update": "프로젝트 수정",
 				"delete": "프로젝트 삭제"
 			},
 			actionFn:{
-				"dblClick":function(rowData, row, datatableId){
-					console.log(rowData);
-				}
 			},
 			theme:{
 				actionBtnIcon:{
@@ -183,7 +192,7 @@ var OSLPrj1001Popup = function () {
 					var prjGrpStr = '';
 					var rowCnt = 0;
 					$.each(list, function(idx, map){
-						var prjGrpAuthList = '';
+						var prjAuthList = '';
 						var prjAuthTargetList = [];
 						try{
 							//사용자
@@ -211,10 +220,10 @@ var OSLPrj1001Popup = function () {
 								if(authIdx > 10){
 									//남은 담당자 수 
 									var endAuthCnt = (prjAuthTargetList.length-authIdx);
-									prjGrpAuthList += '<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="그 외 담당자 +'+endAuthCnt+'"><span>'+endAuthCnt+'+</span></a>';
+									prjAuthList += '<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="그 외 담당자 +'+endAuthCnt+'"><span>'+endAuthCnt+'+</span></a>';
 									return false;
 								}else{
-									prjGrpAuthList += '<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="'+authMap.authTargetNm+'" data-original-title="'+authMap.authTargetNm+'" onclick="$.osl.user.usrInfoPopup(\''+authMap.authTargetId+'\');"><img src="'+authMap.authImg+'"></a>';
+									prjAuthList += '<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="'+authMap.authTargetNm+'" data-original-title="'+authMap.authTargetNm+'" onclick="$.osl.user.usrInfoPopup(\''+authMap.authTargetId+'\');"><img src="'+authMap.authImg+'"></a>';
 								}
 							});
 							
@@ -360,7 +369,8 @@ var OSLPrj1001Popup = function () {
 								y: parseInt(reqInfo.reqProType),
 								reqProTypeNm: reqInfo.reqProTypeNm,
 								reqId: reqInfo.reqId,
-								reqNm: reqInfo.reqNm
+								reqNm: reqInfo.reqNm,
+								reqOrd: reqInfo.reqOrd
 							});
 							xCursor++;
 							
