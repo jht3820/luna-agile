@@ -617,11 +617,14 @@ label.required:after {
 	padding:0 !important;
 }
 .osl-chart--project{
-	height: 165px;
+	height: 210px;
 	text-align: center;
     display: flex;
     justify-content: center;
     flex-direction: column;
+}
+.osl-chart--project__tooltip {
+    padding: 1rem;
 }
 /* @media */
 @media (min-width: 1025px) {
