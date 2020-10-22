@@ -4,7 +4,6 @@
 <sqlMap namespace="bad1000DAO">
 	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	 
- 	<!-- Map Define -->
    	<resultMap id="resultMapSelectBad1000" class="egovMap">
    		<result property="badTitle"				column="BAD_TITLE"/>
    		<result property="badContent"		column="BAD_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
@@ -23,7 +22,6 @@
 		<result property="fileSn"				column="FILE_SN"/>
     </resultMap>
 	
-	<!-- sql 정의 -->
 	<sql id="selectBad1000List">
 		SELECT
 			ROWNUM RN
@@ -255,6 +253,7 @@
 		ORDER BY RN ASC
     </select>	
     
+    <!-- 게시글 비밀번호 일치여부 조회 -->
     <select id="bad1000DAO.selectBad1000BadPwInfo" parameterClass="java.util.Map"  resultClass="java.lang.String">
 		SELECT
 			A.BAD_ID AS BAD_ID
@@ -411,6 +410,7 @@
     <insert id="bad1000DAO.insertBad1000BadInfo" parameterClass="java.util.Map">
 	    <selectKey resultClass="java.lang.String" keyProperty="newBadId">
 			<![CDATA[
+				 
 				SELECT	NVL( 
 				          SUBSTR(BAD_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'BAD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'

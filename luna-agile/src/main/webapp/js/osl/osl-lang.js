@@ -1,11 +1,8 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		modal:{
 			close: "닫기"
@@ -52,6 +49,7 @@ var OSLCoreLangSetting = function () {
 				delete: "삭제"
 			},
 			action:{
+				functionNm: "기능 버튼",
 				update:{
 					nonSelect: "수정하려는 데이터를 선택해주세요",
 					manySelect: "1건의 데이터만 선택해주세요.</br> ${1}건의 데이터가 선택되었습니다."
@@ -147,7 +145,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -202,7 +200,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -215,8 +213,13 @@ var OSLCoreLangSetting = function () {
 				modify: "수정",
 				trashMove: "휴지통 이동(삭제)",
 				projectListMove: "프로젝트 목록 이동",
-				createProject: "신규 프로젝트 그룹 추가",
+				createProject: "신규 프로젝트 추가",
 				projectDetail: "상세 정보"
+			},
+			button:{
+				title:{
+					insert: "신규 프로젝트 그룹 등록"
+				}
 			}
 		},
 		prj1001:{
@@ -229,9 +232,11 @@ var OSLCoreLangSetting = function () {
 			menu:{
 				modify: "수정",
 				trashMove: "휴지통 이동(삭제)",
-				createProject: "신규 프로젝트 추가",
 				projectDetail: "상세 정보"
 			}
+		},
+		prj1002:{
+			title: "신규 프로젝트 그룹 생성"
 		},
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
@@ -260,7 +265,7 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		bad1000:{
-			selectBadInfoCnt : "1건의 게시글만 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
+			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시글에 대한 권한이 없습니다.",
 					insertMessage : "게시글 등록 권한이 없습니다.",
@@ -274,6 +279,7 @@ var OSLCoreLangSetting = function () {
 		},
 		bad1001:{
 			notAuthority : {
+				updateMessage : "해당 게시글에 대한 수정 권한이 없습니다.",
 				restoreMessage : "해당 댓글에 대한 복원 권한이 없습니다.",
 				deleteMessage : "해당 게시글에 대한 삭제 권한이 없습니다.",
 				deleteCmtMessage : "해당 댓글에 대한 삭제 권한이 없습니다.",
@@ -283,6 +289,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		bad1002:{
+			insert: "글 작성을 완료하시겠습니까?",
 			formCheck : {
 				fileCntMessage : "첨부파일 가능한 개수는 ${1}개입니다.",
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
@@ -290,12 +297,15 @@ var OSLCoreLangSetting = function () {
 				tagMatching : "태그값이 중복됩니다.",
 			}
 		},
+		bad1003:{
+			update: "글 수정을 완료하시겠습니까?",
+		},
 		bad1004:{
 			passwordMiss : "비밀번호가 틀렸습니다.\n다시입력하세요.",
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		modal:{
 			close: "Close"
@@ -338,6 +348,7 @@ var OSLCoreLangSetting = function () {
 				insert: "Insert",
 				update: "Update",
 				delete: "Delete",
+				trash: "Trash",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -346,6 +357,7 @@ var OSLCoreLangSetting = function () {
 				}
 			},
 			action:{
+				functionNm: "Function Button",
 				update:{
 					nonSelect: "Please select the data you want to modify",
 					manySelect: "Please select only one data. </br> ${1} data was selected."
@@ -380,7 +392,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -393,6 +405,15 @@ var OSLCoreLangSetting = function () {
 				reqUsrDeptNm: "Request Department Name",
 				reqUsrNum: "Request User Number",
 				reqKey: "Request Key",
+			},
+			prj1000PrjTable:{
+				prjNm: "Project Name",
+				startDt: "Start Date",
+				endDt: "End Date",
+				prjChildCnt: "Project Count",
+				reqAllCnt: "Request All",
+				reqInProgressCnt: "Request In Porgress",
+				reqDoneCnt: "Request Done",
 			}
 		},
 		date:{
@@ -449,7 +470,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -504,7 +525,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -519,6 +540,17 @@ var OSLCoreLangSetting = function () {
 				projectListMove: "Move Project List",
 				createProject: "Add New Prject",
 				projectDetail: "Details"
+			},
+			button:{
+				title:{
+					select: "Project Group Select",
+					insert: "New Project Group Insert",
+					update: "Project Group Update",
+					delete: "Project Group Delete",
+					trash: "Project Group Trash List",
+					card: "List View Card Type",
+					grid: "List View Grid Type"
+				}
 			}
 		},
 		prj2100:{
@@ -544,12 +576,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -558,7 +590,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };

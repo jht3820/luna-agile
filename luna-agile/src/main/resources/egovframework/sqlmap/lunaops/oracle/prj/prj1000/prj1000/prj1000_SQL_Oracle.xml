@@ -153,6 +153,8 @@
 		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
 		        ,	SUBT1.PRJ_ACRM
 		        ,	SUBT1.PRJ_GRP_CD
+		        ,	SUBT1.PRJ_BG_COLOR
+		       	,	SUBT1.PRJ_COLOR
 		        ,	SUBT1.USR_ID
 		        ,	SUBT1.REQ_ALL_CNT
 		        ,	SUBT1.REQ_IN_PROGRESS_CNT
@@ -298,6 +300,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1000Info" parameterClass="java.util.Map" resultClass="egovMap">
+			
             SELECT T1.*
 			FROM
 			(
@@ -316,6 +319,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1001PrjGrpAuthList" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			SELECT A.PRJ_ID, A.PRJ_AUTH_TYPE_CD, A.PRJ_AUTH_TARGET_ID, B.USR_NM, B.USR_IMG_ID, B.EMAIL
 			FROM PRJ1001 A
 			INNER JOIN STM3000 B ON (B.USR_ID = A.PRJ_AUTH_TARGET_ID AND B.LIC_GRP_ID = #licGrpId# AND B.USE_CD = '01' AND B.BLOCK = '01')
@@ -333,6 +337,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -341,6 +346,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpIdExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -365,6 +371,7 @@
 					)
 		]]>
 		</selectKey>
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
@@ -384,6 +391,7 @@
 	
 	<update id="prj1000DAO.updatePrj1000Ajax" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		UPDATE	PRJ1000 A
         SET		PRJ_NM			= #prjNm#
         	,	START_DT		= REPLACE(#startDt#, '-', '')
@@ -412,6 +420,7 @@
 	
 	<delete id="prj1000DAO.deletePrj1000PrjGrpAjax" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		DELETE	
 		FROM	PRJ1000 A
         WHERE	1=1
@@ -462,6 +471,7 @@
 	</procedure>
 	
 	<select id="prj1000DAO.selectPrj1000ProjectGroupListAjax" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			SELECT Z.*, CONNECT_BY_ISLEAF AS LEAF
 	     	FROM(
 		      		SELECT  
@@ -492,7 +502,7 @@
 		    		AND 	A.USE_CD = '01'	
 		    		<isNotEmpty property="pageType">
 			    		<isEqual property="pageType" compareValue="systemAdmin">
-				    		AND A.PRJ_GRP_CD = '01'
+				    		AND A.PRJ_GRP_CD = '01' 
 				   	 	</isEqual>
 					</isNotEmpty>	
 	     	) Z
@@ -502,6 +512,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1000ProjectAcronymCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+			
       		SELECT  
       				COUNT(1) AS CNT 
        		FROM 
@@ -513,6 +524,7 @@
 	</select>
 	
 	<update id="prj1000DAO.updatePrj1000UserProjectId" parameterClass="java.util.Map" >
+			
       		UPDATE	STM3000 SET  PRJ_ID = NULL
        		WHERE 	1=1
     		AND 	LIC_GRP_ID =  #licGrpId#
@@ -521,6 +533,7 @@
 	</update>
 	
 	<select id="prj1000DAO.selectPrj1000AdminPrjList" parameterClass="java.util.Map" resultClass="egovMap">
+			
       		SELECT B.PRJ_ID
 					, B.PRJ_NM
 					, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
@@ -556,6 +569,7 @@
                 )
 		]]>
 		</selectKey>
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
