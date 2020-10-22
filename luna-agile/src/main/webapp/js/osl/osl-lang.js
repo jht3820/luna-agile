@@ -4,6 +4,27 @@ var OSLCoreLangSetting = function () {
 	var lang = {};
 	
 	lang["ko"] = {
+		fromValidate:{
+			messages: {
+				required: "필수 값 입니다.",
+				remote: "값을 수정해주세요.",
+				email: "유효한 이메일 주소를 입력해주세요.",
+				url: "유효한 URL을 입력해주세요.",
+				date: "유효한 날짜를 입력해주세요.",
+				dateISO: "유효한 날짜를 입력해주세요. (ISO)",
+				number: "유효한 번호를 입력해주세요.",
+				digits: "숫자만 입력 가능합니다.",
+				equalTo: "값을 다시 입력해주세요. (값이 동일하지 않음)",
+				maxlength: "{0}자 이하로 입력해주세요.",
+				minlength: "최소 {0}자 이상 입력해주세요.",
+				rangelength: "{0}에서 {1}자 사이에 값을 입력해주세요.",
+				range: "{0}에서 {1}사이의 값을 입력해주세요.",
+				max: "{0} 보다 작거나 같은 값을 입력해주세요..",
+				min: "{0} 보다 크거나 같은 값을 입력해주세요..",
+				step: "{0}의 배수를 입력해주세요.",
+				regexstr: "입력 값이 형식에 맞지 않습니다."
+			}
+		},
 		modal:{
 			close: "닫기"
 		},
@@ -236,7 +257,16 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		prj1002:{
-			title: "신규 프로젝트 그룹 생성"
+			title: "신규 프로젝트 그룹 생성",
+			complete: "완료",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
 		},
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
@@ -257,11 +287,27 @@ var OSLCoreLangSetting = function () {
 			reqDesc: "요청 내용",
 			attachments: "파일 첨부", 
 			complete: "완료",
+			insert:{
+				saveString: "신규 요구사항을 요청하시겠습니까?",
+				saveBtnString: "작성 완료"
+			},
+			update:{
+				saveString: "요구사항 정보를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
 		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.\n${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
+			},
+		},
+		stm2101:{
+			update: "게시판 정보를 수정하시겠습니까?",
+			formCheck:{
+				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.",
+				fileMaxStrgMessage : "게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.",
+				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
 			},
 		},
 		bad1000:{
@@ -280,7 +326,7 @@ var OSLCoreLangSetting = function () {
 		bad1001:{
 			notAuthority : {
 				updateMessage : "해당 게시글에 대한 수정 권한이 없습니다.",
-				restoreMessage : "해당 댓글에 대한 복원 권한이 없습니다.",
+				restoreMessage : "해당 게시글에 대한 복원 권한이 없습니다.",
 				deleteMessage : "해당 게시글에 대한 삭제 권한이 없습니다.",
 				deleteCmtMessage : "해당 댓글에 대한 삭제 권한이 없습니다.",
 			},
@@ -295,7 +341,7 @@ var OSLCoreLangSetting = function () {
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 				tagMatching : "태그값이 중복됩니다.",
-			}
+			},
 		},
 		bad1003:{
 			update: "글 수정을 완료하시겠습니까?",
@@ -307,6 +353,27 @@ var OSLCoreLangSetting = function () {
 	
 	
 	lang["en"] = {
+		fromValidate:{
+			messages: {
+				required: "This field is required.",
+				remote: "Please fix this field.",
+				email: "Please enter a valid email address.",
+				url: "Please enter a valid URL.",
+				date: "Please enter a valid date.",
+				dateISO: "Please enter a valid date (ISO).",
+				number: "Please enter a valid number.",
+				digits: "Please enter only digits.",
+				equalTo: "Please enter the same value again.",
+				maxlength: "Please enter no more than {0} characters.",
+				minlength: "Please enter at least {0} characters.",
+				rangelength: "Please enter a value between {0} and {1} characters long.",
+				range: "Please enter a value between {0} and {1}.",
+				max: "Please enter a value less than or equal to {0}.",
+				min: "Please enter a value greater than or equal to {0}.",
+				step: "Please enter a multiple of {0}.",
+				regexstr: "The input value does not fit the format."
+			}
+		},
 		modal:{
 			close: "Close"
 		},
@@ -407,7 +474,7 @@ var OSLCoreLangSetting = function () {
 				reqKey: "Request Key",
 			},
 			prj1000PrjTable:{
-				prjNm: "Project Name",
+				prjNm: "Project Group Name",
 				startDt: "Start Date",
 				endDt: "End Date",
 				prjChildCnt: "Project Count",
@@ -551,6 +618,31 @@ var OSLCoreLangSetting = function () {
 					card: "List View Card Type",
 					grid: "List View Grid Type"
 				}
+			}
+		},
+		prj1001:{
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			requestAll: "전체",
+			requestInProgress: "진행 중",
+			requestDone: "완료",
+			menu:{
+				modify: "수정",
+				trashMove: "휴지통 이동(삭제)",
+				projectDetail: "상세 정보"
+			}
+		},
+		prj1002:{
+			title: "New Project Group Insert",
+			complete: "Complete",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "Insert Action"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "Update Action"
 			}
 		},
 		prj2100:{

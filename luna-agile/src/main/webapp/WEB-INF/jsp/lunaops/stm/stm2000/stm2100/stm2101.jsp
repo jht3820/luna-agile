@@ -232,11 +232,11 @@
 			}
 			// 사용 안할 땐 알아서 0으로 세팅    		
 			//동작
-			$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
-				if(result.value){
-				submitBadOption();
-				}
-			});
+// 			$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
+// 				if(result.value){
+					submitBadOption();
+// 				}
+// 			});
 		});
 	};
 
@@ -711,10 +711,8 @@
 			else if(stmFileCnt > 10)
 			{
 				//첨부파일 갯수가 10개를 넘어가는지 확인
-				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
+				//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
 				$("#stmFileCnt").val(10);
-				//확인시키기 위해 return false
-				return false;
 			}
 			
 			//게시판 유형 최대 용량 파일을 넘기면 최대 값으로 수정
@@ -722,7 +720,7 @@
 			
 			if(stmFileStrg <= 0)
 			{
-				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
+				//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
 				//첨부파일 용량은 default로 지정
 				//자료실인 경우 최대 파일 용량(총합) 4GB
 				if(stmTypeCd == "02")
@@ -752,7 +750,7 @@
 					defaultStrg = 4096;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "4GB"));
+						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "4GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -763,7 +761,7 @@
 					defaultStrg = 2048;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "2GB"));
+						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "2GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -774,7 +772,7 @@
 					defaultStrg = 500;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "500MB"));
+						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "500MB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -789,44 +787,47 @@
 			stmFileStrg = 0;
 		}
 
+		$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
+			if(result.value){
+				//AJAX 설정
+				var data = {
+						"menuId" : menuId ,
+						"stmTypeCd" : stmTypeCd ,
+						"stmAdmList" : stmAdmList ,
+						"stmWtList" : stmWtList ,
+						"stmDsTypeCd" : stmDsTypeCd ,
+						"stmNtcYnCd" : stmNtcYnCd ,
+						"stmCmtYnCd" : stmCmtYnCd ,
+						"stmPwYnCd" : stmPwYnCd ,
+						"stmTagYnCd" : stmTagYnCd ,
+						"stmFileCnt" : stmFileCnt ,
+						"stmFileStrg" : stmFileStrg * (1024*1024),
+					};
 		
-		//AJAX 설정
-		var data = {
-				"menuId" : menuId ,
-				"stmTypeCd" : stmTypeCd ,
-				"stmAdmList" : stmAdmList ,
-				"stmWtList" : stmWtList ,
-				"stmDsTypeCd" : stmDsTypeCd ,
-				"stmNtcYnCd" : stmNtcYnCd ,
-				"stmCmtYnCd" : stmCmtYnCd ,
-				"stmPwYnCd" : stmPwYnCd ,
-				"stmTagYnCd" : stmTagYnCd ,
-				"stmFileCnt" : stmFileCnt ,
-				"stmFileStrg" : stmFileStrg * (1024*1024),
-			};
-
-		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/stm/stm2000/stm2100/updateStm2100BadTypeAjax.do'/>"}
-				, data);
-		
-  		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data){
-			if(data.errorYn == "Y"){
-				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
-				$.osl.layerPopupClose();
-			}else{
-				$.osl.toastr(data.message,{type: 'success'});
-				//모달 창 닫기
-				$.osl.layerPopupClose();
+				var ajaxObj = new $.osl.ajaxRequestAction(
+						{"url":"<c:url value='/stm/stm2000/stm2100/updateStm2100BadTypeAjax.do'/>"}
+						, data);
 				
-				//datatable 조회
-   				$("button[data-datatable-id=stm2100StmTable][data-datatable-action=select]").click();
-			}
+		  		//AJAX 전송 성공 함수
+				ajaxObj.setFnSuccess(function(data){
+					if(data.errorYn == "Y"){
+						$.osl.alert(data.message,{type: 'error'});
+						//모달 창 닫기
+						$.osl.layerPopupClose();
+					}else{
+						$.osl.toastr(data.message,{type: 'success'});
+						//모달 창 닫기
+						$.osl.layerPopupClose();
+						
+						//datatable 조회
+		   				$("button[data-datatable-id=stm2100StmTable][data-datatable-action=select]").click();
+					}
+				});
+				
+				//AJAX 전송
+				ajaxObj.send();
+			};
 		});
-		
-		//AJAX 전송
-		ajaxObj.send();
 	};
 	
 	return {
