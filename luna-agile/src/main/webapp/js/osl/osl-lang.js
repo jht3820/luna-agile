@@ -1,8 +1,11 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -166,7 +169,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -221,7 +224,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -302,14 +305,6 @@ var OSLCoreLangSetting = function () {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
 		},
-		stm2101:{
-			update: "게시판 정보를 수정하시겠습니까?",
-			formCheck:{
-				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.",
-				fileMaxStrgMessage : "게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.",
-				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
-			},
-		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -326,7 +321,7 @@ var OSLCoreLangSetting = function () {
 		bad1001:{
 			notAuthority : {
 				updateMessage : "해당 게시글에 대한 수정 권한이 없습니다.",
-				restoreMessage : "해당 게시글에 대한 복원 권한이 없습니다.",
+				restoreMessage : "해당 댓글에 대한 복원 권한이 없습니다.",
 				deleteMessage : "해당 게시글에 대한 삭제 권한이 없습니다.",
 				deleteCmtMessage : "해당 댓글에 대한 삭제 권한이 없습니다.",
 			},
@@ -341,7 +336,7 @@ var OSLCoreLangSetting = function () {
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 				tagMatching : "태그값이 중복됩니다.",
-			},
+			}
 		},
 		bad1003:{
 			update: "글 수정을 완료하시겠습니까?",
@@ -351,7 +346,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -459,7 +454,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
+			/* 추가된 datatable별로 언어 지정 */
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -537,7 +532,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -592,7 +587,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -668,12 +663,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -682,7 +677,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };
