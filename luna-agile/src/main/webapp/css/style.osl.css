@@ -140,7 +140,8 @@ input:-webkit-autofill,
 .kt-login-v2__form.kt-form .form-control{
 	font-size: 1.2rem;
 }
-
+/* datepicker */
+.daterangepicker select.yearselect{float:left;}
 /* toast 내용 글자 크기 */
 .toast .toast-message {
     font-size: 1rem;
