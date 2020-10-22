@@ -93,6 +93,8 @@ var OSLPrj1000Popup = function () {
 					"insert":function(datatableId, type, rowNum){
 						var data = {type:"insert"};
 						var options = {
+								autoHeight: false,
+								modalSize: "md",
 								idKey: datatableId,
 								modalTitle: $.osl.lang("prj1002.title"),
 								closeConfirm: false,
@@ -120,16 +122,16 @@ var OSLPrj1000Popup = function () {
 							var prjGrpAuthList = '';
 							var prjAuthTargetList = [];
 							try{
-								
+								//사용자
 								if(!$.osl.isNull(map.prjUsrChargerList)){
 									var usrList = (map.prjUsrChargerList).split(",");
-									
+									//사용자 목록
 									$.each(usrList, function(usrListIdx, usrInfoStr){
-										
-										
+										//사용자 정보 
+										// 인덱스: 0 - 담당자분류, 1 - 사용자 ID, 2 - 이미지 ID, 3 - 사용자명
 										var usrInfo = usrInfoStr.split("|");
 										
-										
+										//사용자 데이터 추가
 										prjAuthTargetList.push({
 												authType: usrInfo[0],
 												authTargetId: usrInfo[1],
@@ -139,11 +141,11 @@ var OSLPrj1000Popup = function () {
 									});
 								}
 								
-								
+								//실제 담당자 인원 표시
 								$.each(prjAuthTargetList, function(authIdx, authMap){
-									
+									//지정 수 넘어가는 경우 +로 표시
 									if(authIdx > 10){
-										
+										//남은 담당자 수 
 										var endAuthCnt = (prjAuthTargetList.length-authIdx);
 										prjGrpAuthList += '<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="그 외 담당자 +'+endAuthCnt+'"><span>'+endAuthCnt+'+</span></a>';
 										return false;
@@ -152,13 +154,13 @@ var OSLPrj1000Popup = function () {
 									}
 								});
 							}catch(subE){
-								
+								//오류인경우 무시
 							}
 							
 							if(rowCnt == 0){
 								prjGrpStr += '<div class="row">';
 							}
-							
+							//카드 UI
 							prjGrpStr += 
 								'<div class="col-lg-6 col-md-12 col-sm-12">'
 								+'<div class="kt-portlet kt-portlet--mobile osl-prj-info-obj">'
@@ -266,37 +268,37 @@ var OSLPrj1000Popup = function () {
 								}
 						});
 						
-						
+						//로드된 데이터 CARD형식으로 추가
 						$("#prj1000CardTable").html(prjGrpStr);
 					}
 				}
 			};
 		
-		
+		//데이터 테이블 세팅
 		$.osl.datatable.setting("prj1000PrjTable", config);
 		
-		
+		//뷰 변경 이벤트
 		$(".btn-view-type").click(function(){
 			var viewType = $(this).data("view-type");
 			
-			
+			//active 교체
 			$(".btn-view-type.active").removeClass("active");
 			$(this).addClass("active");
 			
 			currentViewType = viewType;
 			
-			
+			//뷰어 변경
 			fnViewerChange();
 		});
 	};
 	
 	var fnViewerChange = function(){
-		
-		if(currentViewType == "01"){	
+		//현재 viewType에 따라 show/hide
+		if(currentViewType == "01"){	//카드 형식
 			$("#prj1000PrjTable .kt-datatable__table").css({visibility: "hidden", height: 0});
 		    
 			$("#prj1000CardTable").show();
-		}else{	
+		}else{	//데이터테이블 형식
 			$("#prj1000PrjTable .kt-datatable__table").css({visibility: "visible",height: "auto"});
 			$("#prj1000CardTable").hide();
 		}

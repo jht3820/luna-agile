@@ -130,18 +130,6 @@ var OSLReq1001Popup = function () {
 	//수정 중 삭제한 파일Sn 목록
 	var uploadRemoveFiles = [];
 	
-	//type별 데이터
-	var pageTypeData = {
-			"insert":{
-				"saveString": "신규 요구사항을 요청하시겠습니까?",
-				"saveBtnString": "작성 완료"
-			},
-			"update":{
-				"saveString": "요구사항 정보를 수정하시겠습니까?",
-				"saveBtnString": "수정 완료"
-			}
-	};
-	
     // Private functions
     var documentSetting = function () {
 
@@ -151,8 +139,8 @@ var OSLReq1001Popup = function () {
     	//type
     	var type = $("#type").val();
     	
-    	//문구 세팅
-    	$("#req1001SaveSubmit").text(pageTypeData[type]["saveBtnString"]);
+    	//문구 세팅 
+    	$("#req1001SaveSubmit").text($.osl.lang("req1001."+type+".saveBtnString"));
     	
     	//atchfileId
     	var atchFileId = $("#atchFileId").val();
@@ -308,7 +296,7 @@ var OSLReq1001Popup = function () {
     		if (!form.valid()) {
     			return;
     		}
-    		$.osl.confirm(pageTypeData[type]["saveString"],null,function(result) {
+    		$.osl.confirm($.osl.lang("req1001."+type+".saveString"),null,function(result) {
     	        if (result.value) {
     	        	fileUploadObj.upload();
     	        }
