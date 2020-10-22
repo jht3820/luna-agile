@@ -96,15 +96,20 @@
 					<div class="col-4"><label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="stmTagYnCd" id="stmTagYnCd"> 태그 사용<span></span></label></div>
 					<div class="col-4"><label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"> 파일첨부 사용<span></span></label></div>
 				</div>
-				<div class="row col-12 kt-padding-l-20 kt-margin-t-20" id="stmFileOption" name="stmFileOption" style="display: none">
-					<div class="form-group">
-						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 개수</label>
-						<input type="text" class="form-control" name="stmFileCnt" id="stmFileCnt" autocomplete="off" regexstr="^0$|^[1-9]{1}$|^10$" maxlength="2" placeholder="최대 10개 파일" regexalert="숫자만 가능합니다" required />
-					</div>
-					<div class="form-group">
-						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 용량 제한(MB)</label>
-						<span style="font-size: 0.5rem; font-style: italic; color: gray; float: right;">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
-						<input type="text" class="form-control" name="stmFileStrg" id="stmFileStrg" autocomplete="off" regexstr="^0$|^[1-9]{1}[0-9]*$" maxlength="10" regexalert="숫자만 가능합니다" required />
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="form-group row kt-margin-t-20 kt-hide" id="stmFileOption" name="stmFileOption">
+						<div class="col-5">
+							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 개수</label>
+							<input type="text" class="form-control" name="stmFileCnt" id="stmFileCnt" autocomplete="off" regexstr="^0$|^[1-9]{1}$|^10$" maxlength="2" placeholder="최대 10개 파일" regexalert="최대 숫자 10" required />
+							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;">최대 개수 : 10</span>
+						</div>
+						<div class="col-7">
+							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 용량 제한(MB)</label>
+							<input type="text" class="form-control" name="stmFileStrg" id="stmFileStrg" autocomplete="off" regexstr="^0$|^[1-9]{1}[0-9]*$" maxlength="10" regexalert="숫자만 가능" required />
+							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -124,13 +129,6 @@
 	 
 	// form validate 주입
 	var formValidate = $.osl.validate(formId);
-
-	var pageTypeData = {
-			"update":{
-				"saveString" : "게시판 정보를 수정하시겠습니까?",
-				"saveBtnString" : "수정 완료"
-			}
-	};
 	
 	//담당자/글작성 범위 목록 되돌리기를 위한 변수 선언
 	var oriAdmin = [];
@@ -138,14 +136,11 @@
 	
 	// 기본 설정
 	var documentSetting = function(){
-		//문구 세팅
-    	$("#stm2101SaveSubmit").text(pageTypeData["update"]["saveBtnString"]);
   		
     	//해당 게시판 정보 가져오기
     	selectBadInfo(); // 게시판 속성
     	selectBadChargerList(); // 게시판 담당자
     	selectBadWriterList(); // 게시판 글 작성 범위
-    	
     	
 		// 게시판 유형 변경 시 이벤트 발생
 		$("#stmTypeCd").change(function(){
@@ -173,11 +168,11 @@
 			// 체크박스 on인경우 첨부파일 옵션 보이기
 			if($("#stmFileYnCd").is(":checked")==true)
 			{
-				document.getElementById("stmFileOption").style.display="block";
+				$("#stmFileOption").removeClass("kt-hide");
 			}// 체크박스 off인경우 첨부파일 옵션 숨기기
 			else
 			{
-				document.getElementById("stmFileOption").style.display="none";
+				$("#stmFileOption").addClass("kt-hide");
 			}
 		});
 		 
@@ -236,7 +231,12 @@
 	    		}
 			}
 			// 사용 안할 땐 알아서 0으로 세팅    		
-			submitBadOption();
+			//동작
+			$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
+				if(result.value){
+				submitBadOption();
+				}
+			});
 		});
 	};
 
@@ -457,7 +457,7 @@
 				{
 					$("#stmFileYnCd").attr("checked", true);
 					//파일 첨부 사용 시 첨부파일 개수 및 용량 제한 입력 div 보이기
-					$("#stmFileOption").attr("style","display:block");
+					$("#stmFileOption").removeClass("kt-hide");
 					// 옵션 - 첨부파일 개수
 					$("#stmFileCnt").attr("value", info.stmFileCnt);
 					// 옵션 - 첨부파일 용량 제한
@@ -520,7 +520,6 @@
 				
 				//ori 정보 가지고 있기
 				oriAdmin = JSON.stringify(sendManagerList("stmAdmList", false, true, true));
-				console.log(oriAdmin);
 			}
 		});
 		
@@ -660,7 +659,6 @@
 	*/
     var submitBadOption = function(){
 		//넘길 데이터 정리
-		
 		//게시판 id
 		var menuId = $("#menuId").val();
 		//게시판 유형
@@ -704,11 +702,6 @@
 		var stmFileStrg = 0;
 		
 		if(stmFileYnCd == "01"){
-			//첨부파일 개수 - 왼쪽에 0을 입력한 경우 제거
-			stmFileCnt = ($("#stmFileCnt").val()).replace(/(^0+)/,"");
-			//첨부파일 용량 - 왼쪽에 0을 입력한 경우 제거
-			stmFileStrg =($("#stmFileStrg").val()).replace(/(^0+)/,"");
-			
 			if(stmFileCnt <= 0)
 			{
 				//첨부파일 갯수를 0 이하로 설정한 경우
@@ -718,8 +711,9 @@
 			else if(stmFileCnt > 10)
 			{
 				//첨부파일 갯수가 10개를 넘어가는지 확인
-				$.osl.alert("첨부 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.", {type:'error'});
+				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
 				$("#stmFileCnt").val(10);
+				//확인시키기 위해 return false
 				return false;
 			}
 			
@@ -728,7 +722,7 @@
 			
 			if(stmFileStrg <= 0)
 			{
-				$.osl.alert("게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.");
+				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
 				//첨부파일 용량은 default로 지정
 				//자료실인 경우 최대 파일 용량(총합) 4GB
 				if(stmTypeCd == "02")
@@ -746,7 +740,6 @@
 					defaultStrg = 500;
 				}
 				$("#stmFileStrg").val(defaultStrg);
-				stmFileStrg =($("#stmFileStrg").val()).replace(/(^0+)/,"");
 			}
 			//첨부파일 용량이 존재 할 경우
 			else
@@ -759,7 +752,7 @@
 					defaultStrg = 4096;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert("최대 첨부파일 용량을 초과합니다.\n최대용량(4GB)으로 변경됩니다.");
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "4GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -770,7 +763,7 @@
 					defaultStrg = 2048;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert("최대 첨부파일 용량을 초과합니다.\n최대용량(2GB)으로 변경됩니다.");
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "2GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -781,7 +774,7 @@
 					defaultStrg = 500;
 					if(stmFileStrg > defaultStrg)
 					{
-						$.osl.alert("최대 첨부파일 용량을 초과합니다.\n최대용량(500MB)으로 변경됩니다.");
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "500MB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
 					}
@@ -796,6 +789,7 @@
 			stmFileStrg = 0;
 		}
 
+		
 		//AJAX 설정
 		var data = {
 				"menuId" : menuId ,
