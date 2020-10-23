@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm3001DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+    
+	<select id="stm3001DAO.selectStm3001UsrOptList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.USR_ID,
+					A.USR_OPT_MST_CD,
+		            B.MST_CD_NM,
+		            B.MST_CD_DESC,
+					A.USR_OPT_CD,
+					C.SUB_CD_NM,
+					A.REG_DTM,
+				  	A.REG_USR_ID,
+				  	A.REG_USR_IP,
+				  	A.MODIFY_DTM,
+				  	A.MODIFY_USR_ID,
+				  	A.MODIFY_USR_IP
+			FROM	STM3001 A INNER JOIN STM4000 B
+      		ON ( B.LIC_GRP_ID = #licGrpId# AND A.USR_OPT_MST_CD = B.MST_CD AND B.USE_YN = 'Y')
+      		INNER JOIN STM4001 C
+      		ON ( B.LIC_GRP_ID = C.LIC_GRP_ID AND C.MST_CD = A.USR_OPT_MST_CD AND C.SUB_CD = A.USR_OPT_CD )
+			WHERE	1=1
+			AND		USR_ID = #usrId#
+ 		]]> 
+	</select>
+    
+	<select id="stm3001DAO.selectStm3001UsrOptInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.USR_ID,
+					A.USR_OPT_MST_CD,
+		            B.MST_CD_NM,
+		            B.MST_CD_DESC,
+					A.USR_OPT_CD,
+					C.SUB_CD_NM,
+					A.REG_DTM,
+				  	A.REG_USR_ID,
+				  	A.REG_USR_IP,
+				  	A.MODIFY_DTM,
+				  	A.MODIFY_USR_ID,
+				  	A.MODIFY_USR_IP
+			FROM	STM3001 A INNER JOIN STM4000 B
+      		ON ( B.LIC_GRP_ID = #licGrpId# AND A.USR_OPT_MST_CD = B.MST_CD AND B.USE_YN = 'Y')
+      		INNER JOIN STM4001 C
+      		ON ( B.LIC_GRP_ID = C.LIC_GRP_ID AND C.MST_CD = A.USR_OPT_MST_CD AND C.SUB_CD = A.USR_OPT_CD )
+			WHERE	1=1
+			AND		USR_ID = #usrId#
+			AND		USR_OPT_MST_CD = #usrOptMstCd#
+ 		]]> 
+	</select>
+	
+	<select id="stm3001DAO.selectStm3001UsrOptCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+		<![CDATA[					
+			SELECT count(*)
+			FROM STM3001 A
+			WHERE	1=1
+				AND	USR_ID 		= #usrId#
+				AND USR_OPT_MST_CD = #usrOptMstCd#
+		]]>
+	</select>
+	
+    <insert id="stm3001DAO.insertStm3001UsrOptInfo" parameterClass="java.util.Map" >
+		<![CDATA[ 
+		INSERT INTO STM3001(
+			USR_ID,
+		  	USR_OPT_MST_CD,
+			USR_OPT_CD,
+		  	REG_DTM,
+		  	REG_USR_ID,
+		  	REG_USR_IP,
+		  	MODIFY_DTM,
+		  	MODIFY_USR_ID,
+		  	MODIFY_USR_IP
+		)VALUES(
+			#usrId#,
+		  	#usrOptMstCd#,
+		  	#usrOptCd#,
+		  	SYSDATE,
+		  	#regUsrId#,
+		  	#regUsrIp#,
+		  	SYSDATE,
+			#regUsrId#,
+			#regUsrIp#
+		)
+		]]>
+    </insert>
+    
+	<update id="stm3001DAO.updateStm3001UsrOptInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE STM3001 A SET
+			USR_OPT_CD 			= #usrOptCd#,
+		  	MODIFY_DTM			= sysdate,
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	USR_ID 		= #usrId#
+			AND USR_OPT_MST_CD = #usrOptMstCd#
+		]]>
+	</update>
+	
+</sqlMap>            

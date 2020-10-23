@@ -2,11 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-	<!-- 현재 사용하지 않으나 egov 공통 모듈에서 참조하기에 세팅 주석 처리하지 않음. -->
 	<bean name="egovIdGnrService"
 		class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrService"
 		destroy-method="destroy">
-		<property name="dataSource" ref="oslops.dataSource" />
+		<property name="dataSource" ref="lunaops.dataSource" />
 		<property name="strategy" ref="mixPrefixSample" />
 		<property name="blockSize" 	value="10"/>
 		<property name="table"	   	value="IDS"/>
@@ -23,7 +22,7 @@
 	<bean name="egovFileIdGnrService"
 		class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrService"
 		destroy-method="destroy">
-		<property name="dataSource" ref="oslops.dataSource" />
+		<property name="dataSource" ref="lunaops.dataSource" />
 		<property name="strategy" ref="fileStrategy" />
 		<property name="blockSize" 	value="1"/>
 		<property name="table"	   	value="COMTNCOPSEQ"/>

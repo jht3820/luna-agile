@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm4000DAO">
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<select id="stm4000DAO.selectPrj1000LicGrpPrjList" parameterClass="java.util.Map" resultClass="egovMap">
+			SELECT Z.*, CONNECT_BY_ISLEAF AS LEAF
+	     	FROM(
+		      		SELECT  
+					            A.PRJ_ID		
+					        ,	A.PRJ_GRP_ID	
+					        ,	A.LIC_GRP_ID	
+					        ,	A.PRJ_NM	
+					        ,	TO_CHAR(TO_DATE(A.START_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS START_DT 
+					        ,	TO_CHAR(TO_DATE(A.END_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS END_DT   	
+					        ,	A.ORD			
+					        ,	A.PRJ_DESC		
+					        ,	A.USE_CD		
+					        ,	A.PRJ_TYPE		
+					        ,	SF_ADM4100_COM_CD_INFO(#licGrpId#, 'PRJ00013', A.PRJ_TYPE, '1') AS PRJ_TYPE_NM
+					        ,	A.PRJ_ACRM		
+					        ,	A.PRJ_GRP_CD	
+					        ,	A.REG_DTM		
+					        ,	A.REG_USR_ID	
+					        ,	A.REG_USR_IP	
+					        ,	A.MODIFY_DTM	
+					        ,	A.MODIFY_USR_ID	
+					        ,	A.MODIFY_USR_IP	
+		       		FROM 
+		       				PRJ1000 A
+		       		WHERE 	1=1
+		    		AND 	A.LIC_GRP_ID =  #licGrpId#
+		    		<isNotEqual property="viewType" compareValue="all">
+			    		AND A.USE_CD = '01'
+			    	</isNotEqual>
+	     	) Z
+	      	CONNECT BY PRIOR Z.PRJ_ID = Z.PRJ_GRP_ID 
+	      	START WITH Z.PRJ_GRP_ID IS NULL 
+			ORDER SIBLINGS BY Z.ORD, Z.PRJ_NM
+	</select>
+	
+
+	<select id="stm4000DAO.selectPrj1000LicGrpAdminPrjList" parameterClass="java.util.Map" resultClass="egovMap">
+      		SELECT B.PRJ_ID
+					, B.PRJ_NM
+					, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
+			FROM
+						(
+							SELECT DISTINCT Z.PRJ_ID
+							FROM ADM1100 Z, ADM1300 X
+							WHERE 1=1
+							AND Z.PRJ_ID = X.PRJ_ID
+							AND Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+							AND Z.USR_TYP = '02'	
+							AND Z.LIC_GRP_ID = #licGrpId#
+						) A, PRJ1000 B
+						WHERE 1=1
+						AND A.PRJ_ID = B.PRJ_ID
+			            AND B.USE_CD = '01'
+			ORDER BY B.ORD
+	</select>
+	
+	
+
+</sqlMap>

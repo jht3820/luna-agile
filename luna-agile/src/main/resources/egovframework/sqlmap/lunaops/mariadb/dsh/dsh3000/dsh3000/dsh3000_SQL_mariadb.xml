@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dsh3000DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="dsh3000VO"	type="kr.opensoftlab.oslops.dsh.dsh3000.dsh3000.vo.Dsh3000VO"/>
+	
+    <select id="dsh3000DAO.selectDsh3000AllPrjGrpReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    		SELECT D.PRJ_ID, D.PRJ_NM, SUM(C.ALL_CNT) AS ALL_CNT, SUM(C.END_CNT) AS END_CNT
+			FROM
+			(
+				SELECT B.*, C.PRJ_NM, C.PRJ_GRP_ID
+			    FROM
+			    (
+			        SELECT	A.PRJ_ID
+			            , COUNT(*) AS ALL_CNT
+			            , COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+			        FROM REQ4100 A
+			        WHERE 1=1
+			        <![CDATA[
+						AND A.REQ_PRO_TYPE <> '03'
+						AND A.REQ_PRO_TYPE <> '05'
+						AND A.REQ_PRO_TYPE <> '06'
+					]]>
+			            AND A.PROCESS_ID IS NOT NULL
+			        GROUP BY A.PRJ_ID
+			    ) B, PRJ1000 C,
+			    (            
+		                SELECT	Z.PRJ_ID
+		                    ,	Z.USR_ID
+		                FROM	ADM1300 Z
+		                    ,	ADM1100 X
+		                WHERE	1=1
+		                AND		Z.PRJ_ID = X.PRJ_ID
+		                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+		                AND		Z.USR_ID = #usrId#
+		                GROUP BY Z.PRJ_ID, Z.USR_ID
+    			) D    
+			    WHERE 1=1
+			    AND B.PRJ_ID = C.PRJ_ID
+			    AND C.PRJ_ID = D.PRJ_ID(+)
+    			AND (C.PRJ_GRP_ID IS NULL OR D.USR_ID IS NOT NULL)
+			) C, PRJ1000 D
+			WHERE 1=1
+			AND C.PRJ_GRP_ID = D.PRJ_ID
+			AND D.LIC_GRP_ID = #licGrpId#
+			GROUP BY D.PRJ_ID, D.PRJ_NM ,D.ORD
+			ORDER BY D.ORD
+    </select>   
+    
+    <select id="dsh3000DAO.selectDsh3000MonthAllPrjGrpReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT C.*,D.PRJ_NM
+		FROM
+		(
+			SELECT B.PRJ_GRP_ID AS PRJ_ID,  A.REQ_ED_DU_MM, SUM(A.REQ_MM_TOTAL_CNT) AS REQ_MM_TOTAL_CNT, SUM(A.REQ_ED_MM_CNT) AS REQ_ED_MM_CNT, SUM(SUM(A.REQ_MM_TOTAL_CNT)) OVER (PARTITION BY REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+		            FROM
+		            (
+		                SELECT 
+		                    Y.PRJ_ID
+		                    , Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT
+		                    , COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+		                FROM
+		                (
+		                    SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+		                        CASE
+		                            WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+		                            WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+		                            WHEN Z.REQ_ED_DTM IS NULL THEN -1
+		                            <![CDATA[
+		                                WHEN TO_DATE(TO_CHAR(NVL(Z.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') THEN 1
+		                            ]]>
+		                            ELSE 0 END AS REQ_ED_RATIO_NUM
+		                    FROM REQ4100 Z
+		                    WHERE 1=1
+		                    AND Z.PROCESS_ID IS NOT NULL
+		                    AND Z.REQ_PRO_TYPE != '05'
+		                    AND Z.REQ_PRO_TYPE != '06'
+		                ) Y
+		                WHERE 1=1
+		                GROUP BY Y.PRJ_ID, Y.REQ_ED_DU_MM
+		            ) A, PRJ1000 B,
+		            (            
+		                SELECT	Z.PRJ_ID
+		                    ,	Z.USR_ID
+		                FROM	ADM1300 Z
+		                    ,	ADM1100 X
+		                WHERE	1=1
+		                AND		Z.PRJ_ID = X.PRJ_ID
+		                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+		                AND		Z.USR_ID = #usrId#
+		                GROUP BY Z.PRJ_ID, Z.USR_ID
+    				) C
+		            WHERE 1=1
+		            AND A.PRJ_ID = B.PRJ_ID
+		            AND A.REQ_ED_DU_MM IS NOT NULL
+		            AND B.LIC_GRP_ID = #licGrpId#
+		            AND B.PRJ_ID = C.PRJ_ID(+)
+    				AND (B.PRJ_GRP_ID IS NULL OR C.USR_ID IS NOT NULL)
+		            GROUP BY B.PRJ_GRP_ID, A.REQ_ED_DU_MM
+		) C,PRJ1000 D
+		WHERE 1=1
+		AND C.PRJ_ID = D.PRJ_ID
+		ORDER BY C.REQ_ED_DU_MM, D.ORD
+
+    </select>   
+    
+    <select id="dsh3000DAO.selectDsh3000PrjGrpReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    		SELECT C.PRJ_GRP_ID AS PRJ_ID, C.PRJ_NM, B.ALL_CNT, B.END_CNT 
+		    FROM
+		    (
+		    	SELECT	A.PRJ_ID
+		    		, COUNT(*) AS ALL_CNT
+		    		, COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+				FROM REQ4100 A
+				WHERE 1=1
+					<![CDATA[
+						AND A.REQ_PRO_TYPE <> '03'
+						AND A.REQ_PRO_TYPE <> '05'
+						AND A.REQ_PRO_TYPE <> '06'
+					]]>
+		            AND A.PROCESS_ID IS NOT NULL
+				GROUP BY A.PRJ_ID
+		    ) B, PRJ1000 C,
+		     (            
+                SELECT	Z.PRJ_ID
+                    ,	Z.USR_ID
+                FROM	ADM1300 Z
+                    ,	ADM1100 X
+                WHERE	1=1
+                AND		Z.PRJ_ID = X.PRJ_ID
+                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+                AND		Z.USR_ID = #usrId#
+                GROUP BY Z.PRJ_ID, Z.USR_ID
+        	) D
+		    WHERE 1=1
+		    AND B.PRJ_ID = C.PRJ_ID
+            AND C.LIC_GRP_ID = #licGrpId#
+            AND C.PRJ_ID = D.PRJ_ID(+)
+        	AND (C.PRJ_GRP_ID IS NULL OR D.USR_ID IS NOT NULL)
+		    ORDER BY C.PRJ_GRP_ID, C.ORD
+    </select>   
+    
+    <select id="dsh3000DAO.selectDsh3000MonthPrjGrpReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT B.PRJ_GRP_ID, B.PRJ_ID, B.PRJ_NM,A.REQ_ED_DU_MM, A.REQ_MM_TOTAL_CNT, A.REQ_ED_MM_CNT, A.REQ_TOTAL_CNT
+		FROM
+		(
+			SELECT 
+				Y.PRJ_ID
+				, Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT
+				, COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+                , SUM(COUNT(*)) OVER (PARTITION BY X.PRJ_GRP_ID, REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+		    FROM
+		    (
+		        SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+		            CASE
+		                WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+		                WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+		                WHEN Z.REQ_ED_DTM IS NULL THEN -1
+		                <![CDATA[
+		               		WHEN TO_DATE(TO_CHAR(NVL(Z.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') THEN 1
+		               	]]>
+		                ELSE 0 END AS REQ_ED_RATIO_NUM
+		        FROM REQ4100 Z
+		        WHERE 1=1
+                AND Z.PROCESS_ID IS NOT NULL
+                AND Z.REQ_PRO_TYPE != '05'
+                AND Z.REQ_PRO_TYPE != '06'
+		    ) Y, PRJ1000 X
+		    WHERE 1=1
+            AND Y.PRJ_ID = X.PRJ_ID
+		    GROUP BY X.PRJ_GRP_ID, Y.PRJ_ID, Y.REQ_ED_DU_MM
+		) A, PRJ1000 B,
+		(            
+                SELECT	Z.PRJ_ID
+                    ,	Z.USR_ID
+                FROM	ADM1300 Z
+                    ,	ADM1100 X
+                WHERE	1=1
+                AND		Z.PRJ_ID = X.PRJ_ID
+                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+                AND		Z.USR_ID = #usrId#
+                GROUP BY Z.PRJ_ID, Z.USR_ID
+    	) C
+		WHERE 1=1
+        AND A.PRJ_ID = B.PRJ_ID
+        AND B.LIC_GRP_ID = #licGrpId#
+		AND A.REQ_ED_DU_MM IS NOT NULL
+		AND B.PRJ_ID = C.PRJ_ID(+)
+    	AND (B.PRJ_GRP_ID IS NULL OR C.USR_ID IS NOT NULL)
+		ORDER BY A.REQ_ED_DU_MM, B.ORD
+    </select>  
+    
+    <select id="dsh3000DAO.selectDsh3000PrjReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    		SELECT B.*, C.PRJ_NM
+		    FROM
+		    (
+		    	SELECT	A.PRJ_ID
+		    		, COUNT(*) AS ALL_CNT
+		    		, COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+				FROM REQ4100 A
+				WHERE 1=1
+					AND A.PRJ_ID  IN (
+		                	SELECT Y.PRJ_ID
+		                    FROM PRJ1000 Y
+		                    WHERE 1=1
+		                    AND Y.PRJ_GRP_ID = #prjId#
+		                )
+					<![CDATA[
+						AND A.REQ_PRO_TYPE <> '03'
+						AND A.REQ_PRO_TYPE <> '05'
+						AND A.REQ_PRO_TYPE <> '06'
+					]]>
+		            AND A.PROCESS_ID IS NOT NULL
+				GROUP BY A.PRJ_ID
+		    ) B, PRJ1000 C
+		    WHERE 1=1
+		    AND B.PRJ_ID = C.PRJ_ID
+		    AND (SELECT COUNT(*) FROM ADM1300 Z WHERE B.PRJ_ID = Z.PRJ_ID AND Z.USR_ID = #usrId#) > 0
+		    ORDER BY C.ORD
+    </select>   
+    
+    <select id="dsh3000DAO.selectDsh3000MonthPrjReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT A.*, B.PRJ_NM
+		FROM
+		(
+			SELECT 
+				Y.PRJ_ID
+				, Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT
+				, COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+                , SUM(COUNT(*)) OVER (PARTITION BY REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+		    FROM
+		    (
+		        SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+		            CASE
+		                WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+		                WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+		                WHEN Z.REQ_ED_DTM IS NULL THEN -1
+		                <![CDATA[
+		               		WHEN Z.REQ_ED_DTM <= TO_DATE(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') THEN 1
+		                ]]>
+		                ELSE 0 END AS REQ_ED_RATIO_NUM
+		        FROM REQ4100 Z
+		        WHERE 1=1
+		        AND Z.PRJ_ID IN (
+                	SELECT Y.PRJ_ID
+                    FROM PRJ1000 Y
+                    WHERE 1=1
+                    AND Y.PRJ_GRP_ID = #prjId#
+                )
+                AND Z.PROCESS_ID IS NOT NULL
+                AND Z.REQ_PRO_TYPE != '05'
+                AND Z.REQ_PRO_TYPE != '06'
+		    ) Y
+		    WHERE 1=1
+		    GROUP BY Y.PRJ_ID, Y.REQ_ED_DU_MM
+		) A, PRJ1000 B
+		WHERE 1=1
+        AND A.PRJ_ID = B.PRJ_ID
+		AND A.REQ_ED_DU_MM IS NOT NULL
+		AND (SELECT COUNT(*) FROM ADM1300 Z WHERE B.PRJ_ID = Z.PRJ_ID AND Z.USR_ID = #usrId#) > 0
+		ORDER BY A.REQ_ED_DU_MM, B.ORD
+    </select>   
+    
+    <select id="dsh3000DAO.selectDsh3000PrjProcessReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT D.*,E.PRJ_NM
+		FROM
+		(
+		 	 SELECT
+		          A.PRJ_ID
+		            , NVL(A.PROCESS_ID,'request') AS PROCESS_ID
+		            , NVL(C.PROCESS_NM,'접수 대기') AS PROCESS_NM
+		            , COUNT(*) AS ALL_CNT
+		            , COUNT(DECODE(A.REQ_PRO_TYPE,'04',1)) AS END_CNT
+		            , C.PROCESS_ORD
+		        FROM REQ4100 A, FLW1100 B, FLW1000 C
+		        WHERE 1=1
+		            AND A.PRJ_ID  IN (
+		                            SELECT Y.PRJ_ID
+		                            FROM PRJ1000 Y
+		                            WHERE 1=1
+		                            AND Y.PRJ_GRP_ID = #prjId#
+		                        )
+		            AND A.PRJ_ID = B.PRJ_ID(+)
+		            AND A.PROCESS_ID = B.PROCESS_ID(+)
+		            AND A.FLOW_ID = B.FLOW_ID(+)
+		            AND B.PRJ_ID = C.PRJ_ID(+)
+		            AND B.PROCESS_ID = C.PROCESS_ID(+)
+		             <![CDATA[
+		            AND A.REQ_PRO_TYPE <> '03'
+		            AND A.REQ_PRO_TYPE <> '05'
+		            AND A.REQ_PRO_TYPE <> '06'
+		            ]]>
+		        GROUP BY A.PRJ_ID, A.PROCESS_ID, C.PROCESS_NM, C.PROCESS_ORD
+		) D, PRJ1000 E
+		WHERE 1=1
+		AND D.PRJ_ID = E.PRJ_ID
+		AND (SELECT COUNT(*) FROM ADM1300 Z WHERE D.PRJ_ID = Z.PRJ_ID AND Z.USR_ID = #usrId#) > 0
+		ORDER BY E.ORD, NVL(D.PROCESS_ORD, -1),D.PROCESS_ID NULLS FIRST
+    </select> 
+    
+    <select id="dsh3000DAO.selectDsh3000MonthPrjProcessReqCntList" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT C.*, D.PRJ_NM
+		FROM
+		(
+			SELECT A.*, B.PROCESS_NM, B.PROCESS_ORD
+				FROM
+				(
+					SELECT 
+						Y.PRJ_ID
+						, Y.PROCESS_ID
+						, Y.REQ_ED_DU_MM, COUNT(*) AS REQ_MM_TOTAL_CNT
+						, COUNT(DECODE(Y.REQ_ED_RATIO_NUM,1,1)) AS REQ_ED_MM_CNT
+		                , SUM(COUNT(*)) OVER (PARTITION BY PRJ_ID, REQ_ED_DU_MM) AS REQ_TOTAL_CNT
+				    FROM
+				    (
+				        SELECT Z.*, TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY') AS REQ_ED_DU_YY, TO_CHAR(Z.REQ_ED_DU_DTM,'MM') AS REQ_ED_DU_MM,
+				            CASE
+				                WHEN Z.REQ_PRO_TYPE != '04' THEN -1
+				                WHEN Z.REQ_ED_DU_DTM IS NULL THEN -1
+				                WHEN Z.REQ_ED_DTM IS NULL THEN -1
+				                <![CDATA[
+				                WHEN TO_DATE(TO_CHAR(NVL(Z.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(TO_CHAR(Z.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') THEN 1
+				                ]]>
+				                ELSE 0 END AS REQ_ED_RATIO_NUM
+				        FROM REQ4100 Z
+				        WHERE 1=1
+				       AND Z.PRJ_ID  IN (
+		                            SELECT Y.PRJ_ID
+		                            FROM PRJ1000 Y
+		                            WHERE 1=1
+		                            AND Y.PRJ_GRP_ID = #prjId#
+		                        )
+				    ) Y
+				    WHERE 1=1
+				    GROUP BY Y.PRJ_ID, Y.PROCESS_ID, Y.REQ_ED_DU_MM
+				) A, FLW1000 B
+				WHERE 1=1
+				AND A.PRJ_ID = B.PRJ_ID(+)
+				AND A.PROCESS_ID = B.PROCESS_ID(+)
+				AND A.PROCESS_ID IS NOT NULL
+				AND A.REQ_ED_DU_MM IS NOT NULL
+				AND A.REQ_PRO_TYPE != '05'
+				AND A.REQ_PRO_TYPE != '06'
+		) C, PRJ1000 D
+		WHERE 1=1
+		AND C.PRJ_ID = D.PRJ_ID
+		AND (SELECT COUNT(*) FROM ADM1300 Z WHERE C.PRJ_ID = Z.PRJ_ID AND Z.USR_ID = #usrId#) > 0
+		ORDER BY C.REQ_ED_DU_MM, D.ORD, C.PROCESS_ORD
+    </select>     
+    
+	<select id="dsh3000DAO.selectDsh3000PrjReqDtmOverAlertList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT B.PRJ_ID, B.OVER_TYPE, COUNT(*) AS OVER_CNT
+			FROM
+			(
+				SELECT 
+                	CASE A.REQ_PRO_TYPE WHEN '04' THEN
+                		CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '04'
+		                ELSE '05' END 
+		            ELSE
+		            	CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '03'
+                        	WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '02'
+                        ELSE '01' END 
+		            END	AS OVER_TYPE
+			        ,A.PRJ_ID
+			    FROM REQ4100 A
+			    WHERE 1=1
+			    AND A.REQ_PRO_TYPE != '01'
+			    AND A.PROCESS_ID IS NOT NULL
+			    AND A.PRJ_ID  IN (
+                            SELECT Y.PRJ_ID
+                            FROM PRJ1000 Y
+                            WHERE 1=1
+                            AND Y.PRJ_GRP_ID = #prjId#
+                        )
+			) B
+			GROUP BY B.PRJ_ID, B.OVER_TYPE
+			ORDER BY B.PRJ_ID, B.OVER_TYPE
+		]]>
+	</select>
+    
+	<select id="dsh3000DAO.selectDsh3000PrjGrpReqDtmOverAlertList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT D.PRJ_GRP_ID AS PRJ_ID, C.OVER_TYPE, SUM(C.OVER_CNT) AS OVER_CNT
+			FROM
+			(
+				SELECT B.PRJ_ID, B.OVER_TYPE, COUNT(*) AS OVER_CNT
+						FROM
+						(
+							SELECT 
+			                	CASE A.REQ_PRO_TYPE WHEN '04' THEN
+			                		CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '04'
+					                ELSE '05' END 
+					            ELSE
+					            	CASE WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '03'
+			                        	WHEN TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD'),'YYYY-MM-DD') < TO_DATE(TO_CHAR(NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)),'YYYY-MM-DD'),'YYYY-MM-DD') THEN '02'
+			                        ELSE '01' END 
+					            END	AS OVER_TYPE
+						        ,A.PRJ_ID
+						    FROM REQ4100 A
+						    WHERE 1=1
+						    AND A.REQ_PRO_TYPE != '01'
+						    AND A.PROCESS_ID IS NOT NULL
+						) B
+						GROUP BY B.PRJ_ID, B.OVER_TYPE
+			) C,PRJ1000 D,
+            (            
+                SELECT	Z.PRJ_ID
+                    ,	Z.USR_ID
+                FROM	ADM1300 Z
+                    ,	ADM1100 X
+                WHERE	1=1
+                AND		Z.PRJ_ID = X.PRJ_ID
+                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+                AND		Z.USR_ID = #usrId#
+                GROUP BY Z.PRJ_ID, Z.USR_ID
+            ) E
+			WHERE 1=1
+			AND C.PRJ_ID = D.PRJ_ID
+			AND D.LIC_GRP_ID = #licGrpId#
+			AND D.PRJ_ID = E.PRJ_ID(+)
+            AND (D.PRJ_GRP_ID IS NULL OR E.USR_ID IS NOT NULL)
+			GROUP BY D.PRJ_GRP_ID, C.OVER_TYPE
+			ORDER BY D.PRJ_GRP_ID, C.OVER_TYPE
+		]]>
+	</select>
+
+	 
+	<sql id="selectDsh3000ReqList">
+		<![CDATA[
+		SELECT   
+				ROWNUM RN, T2.LIC_GRP_ID, SF_PRJ1000_GRP_NM(PRJ_GRP_ID) AS PRJ_GRP_NM, T2.PRJ_NM, T1.*
+        FROM 
+        (
+			SELECT  
+					 A.PRJ_ID ,
+			         A.REQ_ID ,
+			         A.REQ_ORD ,
+			         A.REQ_CLS_ID ,
+			         NVL(SF_REQ4000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '2'), '') AS REQ_CLS_NM ,
+			         A.REQ_NO ,
+			         A.REQ_USR_ID ,
+			         NVL(A.REQ_USR_NM, SF_ADM2000_USR_INFO(A.REQ_USR_ID, '1')) AS REQ_USR_NM ,
+			         TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD')                          AS REQ_DTM ,
+			         A.REQ_USR_DEPT_NM ,
+			         A.REQ_USR_EMAIL ,
+			         A.REQ_USR_NUM ,
+			         A.REQ_NM ,
+			         REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC ,
+			         A.REQ_CHARGER_ID ,
+			         A.REQ_COMPLETE_RATIO ,
+			         A.REQ_FP ,
+			         A.REQ_EX_FP ,
+			         D.USR_NM AS REQ_CHARGER_NM ,
+			         NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DTM ,
+			         NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DTM ,
+			         NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD') , '') REQ_ST_DU_DTM ,
+			         NVL2(A.REQ_ED_DU_DTM, TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD') , '') REQ_ED_DU_DTM ,
+			         A.REQ_PRO_TYPE ,
+			         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM ,
+			         A.REQ_NEW_TYPE ,
+			         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00009', A.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM ,
+			         A.REQ_ACCEPT_TXT ,
+			         A.SCL_CD ,
+			         A.REQ_TYPE_CD ,
+			         A.PIA_CD ,
+			         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00011', A.SCL_CD, '1')      AS SCL_NM ,
+			         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'REQ00012', A.REQ_TYPE_CD, '1') AS REQ_TYPE_NM ,
+			         SF_ADM4100_COM_CD_INFO(#licGrpId#, 'CMM00001', A.PIA_CD, '1')      AS PIA_NM ,
+			         A.LAB_INP ,
+			         A.ATCH_FILE_ID ,
+			         A.CB_ATCH_FILE_ID ,
+			         A.MILESTONE_ID ,
+			         A.PROCESS_ID ,
+			         B.PROCESS_NM ,
+			         A.FLOW_ID ,
+			         C.FLOW_NM ,
+			         C.FLOW_NEXT_ID ,
+			         A.USE_CD ,
+			         TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM ,
+			         TO_CHAR(A.REG_DTM, 'YYYY-MM-DD')            AS REG_DTM_DAY ,
+			         A.REG_USR_ID ,
+			         A.REG_USR_IP ,
+			         TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM ,
+			         A.MODIFY_USR_ID ,
+			         A.MODIFY_USR_IP ,
+			         A.ORG_REQ_ID
+			FROM     REQ4100 A ,
+			         FLW1000 B ,
+			         FLW1100 C ,
+			         ADM2000 D
+			WHERE    1                =	1
+			AND      A.PRJ_ID         = B.PRJ_ID(+)
+			AND      A.PROCESS_ID     = B.PROCESS_ID(+)
+			AND      A.PRJ_ID         = C.PRJ_ID(+)
+			AND      A.PROCESS_ID     = C.PROCESS_ID(+)
+			AND      A.FLOW_ID        = C.FLOW_ID(+)
+			AND      A.REQ_CHARGER_ID = D.USR_ID(+)
+			]]>
+			<isNotEqual property="prjId" compareValue="all">
+				<isNotEmpty property="prjId">
+				AND      A.PRJ_ID  IN ( SELECT Y.PRJ_ID FROM PRJ1000 Y WHERE 1=1 AND Y.PRJ_GRP_ID = #prjId#)
+				</isNotEmpty>
+			</isNotEqual>
+			<isNotEmpty property="reqProType">
+			AND       A.REQ_PRO_TYPE     =	#reqProType#
+			</isNotEmpty>
+			<isNotEmpty property="projectMonth">
+			AND		TO_CHAR(A.REQ_ED_DU_DTM ,'YYYYMM')    =	TO_CHAR((A.REQ_ED_DU_DTM) ,'YYYY') || #projectMonth#
+			AND		TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= A.REQ_ED_DTM
+			AND		A.REQ_PRO_TYPE = '04'
+			</isNotEmpty>
+			<isNotEmpty property="projectStartMonth">
+			AND		TO_CHAR(A.REQ_ED_DU_DTM ,'YYYYMM')    BETWEEN 	TO_CHAR((A.REQ_ED_DU_DTM) ,'YYYY') || #projectStartMonth#  AND TO_CHAR((A.REQ_ED_DU_DTM) ,'YYYY') || #projectEndMonth#
+			AND		TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= A.REQ_ED_DTM
+			AND		A.REQ_PRO_TYPE = '04'
+			</isNotEmpty>
+			<isNotEmpty property="chartType">
+				<![CDATA[
+				AND A.REQ_PRO_TYPE <> '03'
+		   		AND A.PROCESS_ID IS NOT NULL
+		   		]]>
+			</isNotEmpty>	
+			<isNotEmpty property="overType">
+				<isEqual property="overType" compareValue="01" >
+					<![CDATA[
+					AND A.REQ_PRO_TYPE != '04'
+					AND ( A.REQ_ED_DU_DTM  IS NULL OR  TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) )
+					AND ( A.REQ_ED_DU_DTM  IS NULL OR   TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) )
+					]]>
+				</isEqual>
+				<isEqual property="overType" compareValue="02" >
+					<![CDATA[
+					AND A.REQ_PRO_TYPE != '04'
+					AND A.REQ_ED_DU_DTM IS NOT NULL
+					AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+					AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM-3,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+					]]>
+				</isEqual>
+				<isEqual property="overType" compareValue="03" >
+					<![CDATA[
+					AND A.REQ_PRO_TYPE != '04'
+					AND A.REQ_ED_DU_DTM  IS NOT NULL
+					AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0)) 
+					]]>
+				</isEqual>
+				<isEqual property="overType" compareValue="04" >
+					<![CDATA[
+					AND A.REQ_PRO_TYPE = '04' 
+					AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') < NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+					]]>
+				</isEqual>
+				<isEqual property="overType" compareValue="05" >
+					<![CDATA[
+					AND A.REQ_PRO_TYPE = '04' 
+					AND TO_DATE(TO_CHAR(A.REQ_ED_DU_DTM,'YYYY-MM-DD') || ' 23:59','YYYY-MM-DD HH24:MI') >= NVL(A.REQ_ED_DTM,(CURRENT_TIMESTAMP+0))
+					]]>
+				</isEqual>
+				 AND A.REQ_PRO_TYPE != '01'
+				 AND A.PROCESS_ID IS NOT NULL
+			</isNotEmpty>
+		) T1, PRJ1000 T2,
+		(            
+                SELECT	Z.PRJ_ID
+                    ,	Z.USR_ID
+                FROM	ADM1300 Z
+                    ,	ADM1100 X
+                WHERE	1=1
+                AND		Z.PRJ_ID = X.PRJ_ID
+                AND		Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+                AND		Z.USR_ID = #usrId#
+                GROUP BY Z.PRJ_ID, Z.USR_ID
+        ) T3
+		WHERE 1=1
+		AND T1.PRJ_ID = T2.PRJ_ID 
+		AND T2.PRJ_ID = T3.PRJ_ID(+)
+    	AND (T2.PRJ_GRP_ID IS NULL OR T3.USR_ID IS NOT NULL)
+        AND T2.LIC_GRP_ID = #licGrpId#
+        <isNotEmpty property="chartType">
+			<isEqual property="chartType" compareValue="prjReqChart" >
+				 AND T2.PRJ_NM = (SELECT PRJ_NM FROM PRJ1000 WHERE 1=1 AND PRJ_GRP_ID = #prjGrpId# AND PRJ_NM = #prjNm#) 
+			</isEqual>
+		</isNotEmpty>
+        ORDER BY PRJ_GRP_NM, T2.PRJ_NM, TO_NUMBER(REGEXP_REPLACE(T1.REQ_ORD, '[^0-9]')) DESC NULLS LAST
+	</sql>
+	
+	
+	<select id="dsh3000DAO.selectDsh3000ReqList" parameterClass="dsh3000VO" resultClass="egovMap">
+			SELECT 
+				T4.*
+			FROM ( 
+			<include refid="selectDsh3000ReqList"/>
+			) T4
+			WHERE T4.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+    <select id="dsh3000DAO.selectDsh3000ReqListCnt" parameterClass="dsh3000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectDsh3000ReqList"/>
+		) T4
+    </select>
+	
+</sqlMap>
