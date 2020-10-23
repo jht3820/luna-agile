@@ -23,6 +23,11 @@
 				<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
 				<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" required>
 			</div>
+			<div class="form-group">
+				<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
+				<select class="form-control kt-select2" id="useCd" name="useCd" opttype="-1">
+				</select>
+			</div>
 		</div>
 	</div>
 </form>
@@ -60,7 +65,14 @@ var OSLPrj1002Popup = function () {
 			$("#startDt").val(startDt);
 			$("#endDt").val(endDt);
 		});
-    	
+
+    	// 팝업 공통코드 select 세팅
+		var commonCodeArr = [
+			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"} // 사용유무
+		];
+		//공통코드 채우기
+		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
+		
 		//submit 동작
     	$("#prj1002SaveSubmit").click(function(){
 			var form = $('#'+formId);    		
@@ -97,7 +109,7 @@ var OSLPrj1002Popup = function () {
    				$.osl.layerPopupClose();
    				
    				//datatable 조회
-   				//$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=select]").click();
+   				$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=select]").click();
    			}
    		});
    		

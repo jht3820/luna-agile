@@ -94,8 +94,6 @@ public class Prj1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
-			
-			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -124,29 +122,21 @@ public class Prj1000Controller {
 			paramMap.put("prjGrpCd", "01");
 			
 			
-			
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
-			
 			totCnt = prj1000Service.selectPrj1000PrjGrpListCnt(paramMap);
-
 			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-
 			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
 			
-			
 			dataList = (List) prj1000Service.selectPrj1000PrjGrpList(paramMap);
 			
-        	
-			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
-			
 			
 			metaMap.put("sort", sortDirection);
 			metaMap.put("field", sortFieldId);
@@ -175,26 +165,20 @@ public class Prj1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
-			
-			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
-			
 			String paramPrjGrpId = (String) paramMap.get("paramPrjGrpId");
 			HttpSession ss = request.getSession();
-			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
 			}
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			
-			
 			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
 			String usrId = loginVo.getUsrId();
 			paramMap.put("usrId", usrId);
-			
 			
 			String sortFieldId = (String) paramMap.get("sortFieldId");
 			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
@@ -204,18 +188,13 @@ public class Prj1000Controller {
 			
 			paramMap.put("prjGrpCd", "01");
 			
-			
-			
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
-			
 			totCnt = prj1000Service.selectPrj1000PrjListCnt(paramMap);
 			
-			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
 			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
@@ -251,13 +230,30 @@ public class Prj1000Controller {
 	}
 	
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value="/prj/prj1000/prj1000/savePrj1002PrjGrpInfo.do")
 	public ModelAndView savePrj1002PrjGrpInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			HttpSession ss = request.getSession();
+			String type = (String) paramMap.get("type");
+			
+			
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			String usrId = loginVo.getUsrId();
+			
+			
+			if("insert".equals(type)) {
+				paramMap.put("prjGrpCd", "01");
+				
+				String prjGrpId = prj1000Service.insertPrj1000PrjGrpAjax(paramMap);
+				
+				paramMap.put("prjId", prjGrpId);
+				paramMap.put("prjAuthTypeCd", "01");
+				paramMap.put("prjAuthTargetId", usrId);
+				prj1000Service.insertPrj1000PrjAuthInfo(paramMap);
+			}
 			
 			
         	model.addAttribute("errorYn", "N");
