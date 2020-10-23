@@ -2756,16 +2756,45 @@
 				ajaxObj.send();
 			}
 			
-			,usrImgSet: function(paramUsrImgId, paramUsrNm){
+			,usrImgSet: function(paramUsrImgId, paramData){
 				var usrImgId = $.osl.user.usrImgUrlVal(paramUsrImgId);
 				
+				var cardContent = $.osl.escapeHtml(paramData);
+				var imgSize = "kt-media--sm";
+				
+				
+				var cardBtn = ""
+					, cardPic = ""
+					, usrImg = ""
+					, cardDetail = ""
+					, cardName = "";
+				
+				
+				if(typeof paramData == "object"){
+					cardContent = paramData["html"];
+					imgSize = "kt-media--"+$.osl.escapeHtml(paramData["imgSize"]);
+					
+					if(paramData["imgSize"] == "md"){
+						imgSize = "";
+					}
+					
+					
+					if(paramData.hasOwnProperty("class")){
+						cardBtn = $.osl.escapeHtml(paramData["class"]["cardBtn"]);
+						cardPic = $.osl.escapeHtml(paramData["class"]["cardPic"]);
+						usrImg = $.osl.escapeHtml(paramData["class"]["usrImg"]);
+						cardDetail = $.osl.escapeHtml(paramData["class"]["cardDetail"]);
+						cardName = $.osl.escapeHtml(paramData["class"]["cardName"]);
+					}
+				}
+				
 				var returnStr = 
-					'<div class="kt-user-card-v2 btn">'
-						+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-							+'<img src="'+usrImgId+'"/>'
+					'<div class="kt-user-card-v2 btn '+cardBtn+'">'
+						+'<div class="kt-user-card-v2__pic kt-media '+imgSize+' kt-media--circle '+cardPic+'">'
+							+'<img class=" '+usrImg+'" src="'+usrImgId+'"/>'
 						+'</div>'
-						+'<div class="kt-user-card-v2__details">'
-							+'<span class="kt-user-card-v2__name">'+$.osl.escapeHtml(paramUsrNm)+'</span>'
+						+'<div class="kt-user-card-v2__details '+cardDetail+'">'
+							+'<span class="kt-user-card-v2__name '+cardName+'">'+cardContent+'</span>'
 						+'</div>'
 					+'</div>';
 				
