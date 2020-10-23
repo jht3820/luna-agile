@@ -14,7 +14,7 @@
 			, C.STM_DS_TYPE_CD AS STM_DS_TYPE_CD
 			, C.STM_DS_TYPE_NM AS STM_DS_TYPE_NM
 			, TO_CHAR(COUNT(CASE WHEN C.DEL_CD='01' THEN 1 ELSE NULL END)) AS DEL_CNT
-			, TO_CHAR(COUNT(C.DEL_CD)) AS CNT 
+			, TO_CHAR(COUNT(CASE WHEN C.DEL_CD='02' THEN 1 ELSE NULL END)) AS CNT 
 		FROM (
 			SELECT 
 	    		A.LIC_GRP_ID AS LIC_GRP_ID
@@ -25,7 +25,7 @@
 			    , A.STM_DS_TYPE_CD AS STM_DS_TYPE_CD
 			    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00002', A.STM_DS_TYPE_CD, '1') AS STM_DS_TYPE_NM
 				, B.BAD_ID AS BAD_ID
-	            , NVL(B.DEL_CD, '02') AS DEL_CD
+	            , B.DEL_CD AS DEL_CD
 			FROM STM2100 A
 	        LEFT JOIN BAD1000 B
 	        ON A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID
@@ -45,7 +45,7 @@
 		</isNotEmpty>
 		ORDER BY MENU_ID DESC
 	</select>
-	
+
     <select id="stm2100DAO.selectStm2100BadInfo" parameterClass="java.util.Map"  resultClass="egovMap">
 		SELECT 
 		    A.STM_TYPE_CD AS STM_TYPE_CD

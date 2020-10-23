@@ -1364,6 +1364,11 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 	}
 
 	
+	@SuppressWarnings({ "rawtypes" })
+	public List<Map> selectReq4100ReqProTypeOrdList(Map paramMap) throws Exception {
+		return req4100DAO.selectReq4100ReqProTypeOrdList(paramMap);
+	}
+	
 	
 	
 	

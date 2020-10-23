@@ -50,8 +50,6 @@ public interface Prj1000Service {
 	String insertPrj1001Ajax(Map paramMap) throws Exception;
 	
 	
-	
-	
 	@SuppressWarnings("rawtypes")
 	int updatePrj1000Ajax(Map paramMap) throws Exception;
 	
@@ -70,11 +68,14 @@ public interface Prj1000Service {
 	int selectPrj1000ProjectAcronymCount(Map paramMap) throws Exception;
 	
 
-	
 	@SuppressWarnings("rawtypes")
 	List selectPrj1000AdminPrjList(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1000WizardProject(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception;
 }

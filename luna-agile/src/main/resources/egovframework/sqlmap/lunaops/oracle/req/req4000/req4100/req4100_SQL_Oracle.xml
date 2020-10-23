@@ -84,6 +84,7 @@
 	<insert id="req4100DAO.insertReq4100ReqInfoAjax" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newReqId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_REQ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_REQ_ID, 12, 5)) + 1) , 5, '0')
 						,	'REQ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -99,6 +100,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			 
 			INSERT INTO REQ4100
 			(
 			        PRJ_ID,				REQ_ID,				PRJ_GRP_ID,			REQ_CLS_ID,			REQ_NO,					REQ_ORD
@@ -131,6 +133,7 @@
 	</insert>
 	
 	<select id="req4100DAO.selectReq4100ReqUsrChk" parameterClass="java.util.Map" resultClass="int">
+		
 		<![CDATA[ 
 			SELECT	COUNT(*) AS CNT
 			FROM	STM3000 A
@@ -141,6 +144,7 @@
 	</select>
 	
 	<update id="req4100DAO.updateReq4100ReqInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET	
 			<isNotEmpty property="reqNm">
@@ -166,6 +170,7 @@
 	</update>
 	
 	<update id="req4100DAO.updateReq4100ReqKey" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		REQ_KEY		= #reqKey# 	
 		WHERE	1=1
@@ -174,6 +179,7 @@
 	</update>
 	
 	<update id="req4100DAO.updateReq4100ReqFlowChgInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET	
 			<isEmpty property="signCd">
@@ -216,6 +222,7 @@
 	</update>
 	
 	<update id="req4100DAO.updateReq4100ReqMiddleDoneInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET	
 					FLOW_ID	= #doneFlowId#
@@ -230,6 +237,7 @@
 	</update>
 	
 	<update id="req4100DAO.updateReq4100ReqFileInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		
 		    	ATCH_FILE_ID	= #atchFileId#
@@ -242,6 +250,7 @@
 	</update>
 
 	<update id="req4100DAO.updateReq4106NewReqAccpetInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET	
 					REQ_ACCEPT_TXT		= #reqAcceptTxt#
@@ -286,12 +295,7 @@
 					,	A.REQ_ORD
 					,	A.REQ_CLS_ID
 					,	NVL(SF_REQ2000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '2'), '') AS REQ_CLS_NM
-					/*,	(SELECT	REQ_CLS_NM
-					        FROM	REQ2000 
-					        WHERE	1=1
-					        AND		PRJ_ID =A.PRJ_ID
-					        AND		REQ_CLS_ID = A.REQ_CLS_ID
-				        ) AS REQ_CLS_NM*/
+					
 					,	A.REQ_NO
 					,	A.REQ_USR_ID
 					,	NVL(A.REQ_USR_NM, SF_STM3000_USR_INFO(A.REQ_USR_ID, '1'))  AS REQ_USR_NM
@@ -306,7 +310,7 @@
 	    			</isNotEmpty>
 					<isEmpty property="reqId">
 						<![CDATA[ 
-	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				
 	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC    
 	    				]]>
 	    			</isEmpty>
@@ -489,6 +493,7 @@
     </sql>
     
     <select id="req4100DAO.selectReq4100List" parameterClass="req4100VO"  resultClass="egovMap" >
+	    
 		SELECT *
 		FROM
 			(
@@ -498,6 +503,7 @@
     </select>
     
     <select id="req4100DAO.selectReq4100ExcelList" parameterClass="java.util.Map"  resultClass="egovMap" >
+	    
 		SELECT *
 		FROM
 			(
@@ -506,6 +512,7 @@
     </select>
     
     <select id="req4100DAO.selectReq4100ListCnt" parameterClass="req4100VO"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 			COUNT(*)
 		FROM	(
@@ -514,6 +521,7 @@
     </select>
 	
 	<select id="req4100DAO.selectPrj1104ReqInfoAjax" parameterClass="java.util.Map"  resultClass="egovMap">
+		
 		<include refid="req4100DAO.selectReq4100List"/>
 		<isNotEmpty property="reqId">
 	    	AND		T1.REQ_ID = #reqId#
@@ -526,11 +534,13 @@
 	
 	
     <select id="req4100DAO.selectReq4100AllList" parameterClass="req4100VO"  resultClass="egovMap" >
+	    
 		<include refid="req4100DAO.selectReq4100List"/>
 
     </select>
     
     <select id="req4100DAO.selectReq4100ProcessFlowReqCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer" >
+	    
 	    SELECT
 	    	 	COUNT(*) AS TOT_CNT
 	    FROM
@@ -548,6 +558,7 @@
     </select>
     
     <select id="req4100DAO.selectReq4100ProcessFlowReqList" parameterClass="java.util.Map"  resultClass="egovMap" >
+	    
 	    SELECT
 	    	 	T2.*
 	    FROM
@@ -566,6 +577,7 @@
     </select>
     
     <select id="req4100DAO.selectReq4100ReqFlowWorkList" parameterClass="java.util.Map"  resultClass="egovMap" >
+	    
 		SELECT A.PRJ_ID				,A.REQ_ID					,A.PROCESS_ID			,A.FLOW_ID
 			,	A.WORK_ID			,A.WORK_STATUS_CD			,A.WORK_CONTENT
 			,	A.WORK_CHARGER_ID
@@ -594,6 +606,7 @@
 	
 	<select id="req4100DAO.selectReq6001ReqHistoryList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 			SELECT 'CHG' AS TYPE 
 					,A.PRJ_ID
 					,A.REQ_ID
@@ -690,6 +703,7 @@
 	
 	<select id="req4100DAO.selectReq5000ReqSignList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 			SELECT 'CHK' TYPE  
 				,A.PRJ_ID
 				,A.REQ_ID
@@ -743,6 +757,7 @@
 	</select>
     
 	<select id="req4100DAO.selectReq4100ReqUserInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 					A.USR_NM
@@ -758,6 +773,7 @@
 	</select>
     
     <select id="req4100DAO.selectReq4100ReqInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
 			SELECT *
 			FROM (
 				<include refid="req4100DAO.selectReq4100List"/>
@@ -770,6 +786,7 @@
 	<insert id="req4100DAO.insertReq4100ReqInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newReqId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_REQ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_REQ_ID, 12, 5)) + 1) , 5, '0')
 						,	'REQ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -784,6 +801,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			 
 			INSERT INTO REQ4100
 			(
 			        PRJ_ID,				REQ_ID,				REQ_CLS_ID,			REQ_NO,					REQ_ORD
@@ -816,6 +834,7 @@
 	</insert>
 	
 	<update id="req4100DAO.updateReq4100ReqInfo" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		REQ_NM			= #reqNm# 	
 			,	REQ_NO			= #reqNo#
@@ -836,6 +855,7 @@
 	</update>
 	
 	<select id="req4100DAO.selectReq4100NextReqOrd" parameterClass="java.util.Map" resultClass="String">
+		
 		<![CDATA[
             SELECT  NVL(MAX(T.NEXT_REQ_ORD), '1') AS REQ_ORD
 			FROM (
@@ -849,6 +869,7 @@
 	</select>
 	
 	<delete id="req4100DAO.deleteReq4100ReqAtchFile" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE 	FROM COMTNFILE
 			WHERE 	1=1
@@ -857,6 +878,7 @@
 	</delete>
 	
 	<delete id="req4100DAO.deleteReq4100ReqAtchFileDetail" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE 	FROM COMTNFILEDETAIL
 			WHERE 	1=1
@@ -865,6 +887,7 @@
 	</delete>
 	
 	<select id="req4100DAO.selectReq4100RevisionList" parameterClass="req4100VO" resultClass="egovMap">
+		
 		SELECT *
 		FROM
 			(
@@ -879,6 +902,7 @@
 	</select>
 	
     <select id="req4100DAO.selectReq4100RevisionListCnt" parameterClass="req4100VO"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 				COUNT(*)
 		FROM(
@@ -887,6 +911,7 @@
     </select>
 	
     <select id="req4100DAO.selectReq4100PrjAuthReqList" parameterClass="java.util.Map"  resultClass="egovMap" >
+	    
 				SELECT T1.*, ROWNUM RN
 		FROM
 		(
@@ -896,12 +921,7 @@
 					,	A.REQ_ORD
 					,	A.REQ_CLS_ID
 					,	NVL(SF_REQ2000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '2'), '') AS REQ_CLS_NM
-					/*,	(SELECT	REQ_CLS_NM
-					        FROM	REQ2000 
-					        WHERE	1=1
-					        AND		PRJ_ID =A.PRJ_ID
-					        AND		REQ_CLS_ID = A.REQ_CLS_ID
-				        ) AS REQ_CLS_NM*/
+					
 					,	A.REQ_NO
 					,	A.REQ_USR_ID
 					,	NVL(A.REQ_USR_NM, SF_STM3000_USR_INFO(A.REQ_USR_ID, '1'))  AS REQ_USR_NM
@@ -915,7 +935,7 @@
 	    			</isNotEmpty>
 					<isEmpty property="reqId">
 						<![CDATA[ 
-	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				
 	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC    
 	    				]]>
 	    			</isEmpty>
@@ -1003,6 +1023,7 @@
     </select>
     
 	<update id="req4100DAO.updateReq4100ReqChargerChgInfoAjax" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET	
 			REQ_CHARGER_ID			= #reqChargerId#
@@ -1016,6 +1037,7 @@
 	
 	
     <select id="req4100DAO.selectReq4100ProcessReqList" parameterClass="java.util.Map"  resultClass="egovMap" >
+	    
 	    SELECT
 	    	 	T2.*
 	    FROM
@@ -1026,9 +1048,47 @@
 		ORDER BY decode(T2.REQ_CHARGER_ID, #regUsrId#,1), T2.PROCESS_ID, T2.FLOW_ID
     </select>
     
+    <select id="req4100DAO.selectReq4100ReqProTypeOrdList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+	    SELECT
+	    	SUBT1.PRJ_GRP_ID 
+			, SUBT1.PRJ_ID
+			, SUBT1.REQ_ID
+			, SUBT1.REQ_NM
+			, SUBT1.REQ_ORD
+			, SUBT1.REQ_PRO_TYPE
+			, (SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = 'REQ00008' AND SUB_CD = SUBT1.REQ_PRO_TYPE) AS REQ_PRO_TYPE_NM
+			, SUBT1.REQ_DTM
+			, SUBT1.REG_DTM
+	    FROM
+	    (
+	    	SELECT
+				A.PRJ_GRP_ID 
+				, A.PRJ_ID
+				, A.REQ_ID
+				, A.REQ_NM
+				, A.REQ_ORD
+				, A.REQ_PRO_TYPE
+				, A.REQ_DTM
+				, A.REG_DTM
+			FROM REQ4100 A
+			INNER JOIN
+			(
+			      SELECT	Z.USR_ID, Z.PRJ_ID
+			      FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
+			      WHERE	1=1
+			      GROUP BY  Z.USR_ID, Z.PRJ_ID
+			) B ON (A.PRJ_ID = B.PRJ_ID)
+			WHERE 1=1
+			AND A.PRJ_GRP_ID = #prjGrpId#
+	    ) SUBT1
+	    ORDER BY PRJ_ID, TO_NUMBER(REGEXP_REPLACE(REQ_ORD, '[^0-9]')) NULLS LAST, REQ_DTM DESC, REG_DTM DESC
+    </select>
+    
 
     
     <select id="req4100DAO.selectReq4110ReqInfo" parameterClass="java.util.Map"  resultClass="egovMap" >
+	   	 
 	   	SELECT T1.*
 		FROM
 		(
@@ -1053,7 +1113,7 @@
 	    			</isNotEmpty>
 					<isEmpty property="reqId">
 						<![CDATA[ 
-	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				
 	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC    
 	    				]]>
 	    			</isEmpty>

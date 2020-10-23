@@ -153,6 +153,8 @@
 		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
 		        ,	SUBT1.PRJ_ACRM
 		        ,	SUBT1.PRJ_GRP_CD
+		        ,	SUBT1.PRJ_BG_COLOR
+		       	,	SUBT1.PRJ_COLOR
 		        ,	SUBT1.USR_ID
 		        ,	SUBT1.REQ_ALL_CNT
 		        ,	SUBT1.REQ_IN_PROGRESS_CNT
@@ -250,6 +252,7 @@
 		) SUBT2
 	</sql>
 	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpAllList" parameterClass="java.util.Map" resultClass="egovMap">
 		SELECT T1.*
 		FROM
@@ -258,6 +261,7 @@
     	) T1
     	WHERE 1=1
 	</select>
+	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpList" parameterClass="java.util.Map" resultClass="egovMap">
 		SELECT T1.*
@@ -269,6 +273,7 @@
     	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
 		SELECT
 			COUNT(*)
@@ -277,6 +282,7 @@
 			<include refid="selectPrj1000PrjList"/>
 		) T1
 	</select>
+	
 	
 	<select id="prj1000DAO.selectPrj1000PrjList" parameterClass="java.util.Map" resultClass="egovMap">
 		SELECT T1.*
@@ -288,6 +294,7 @@
     	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
+	
 	<select id="prj1000DAO.selectPrj1000PrjListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
 		SELECT
 			COUNT(*)
@@ -297,7 +304,9 @@
 		) T1
 	</select>
 	
+	
 	<select id="prj1000DAO.selectPrj1000Info" parameterClass="java.util.Map" resultClass="egovMap">
+			
             SELECT T1.*
 			FROM
 			(
@@ -315,7 +324,9 @@
 			ORDER BY T1.ORD ASC
 	</select>
 	
+	
 	<select id="prj1000DAO.selectPrj1001PrjGrpAuthList" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			SELECT A.PRJ_ID, A.PRJ_AUTH_TYPE_CD, A.PRJ_AUTH_TARGET_ID, B.USR_NM, B.USR_IMG_ID, B.EMAIL
 			FROM PRJ1001 A
 			INNER JOIN STM3000 B ON (B.USR_ID = A.PRJ_AUTH_TARGET_ID AND B.LIC_GRP_ID = #licGrpId# AND B.USE_CD = '01' AND B.BLOCK = '01')
@@ -332,7 +343,9 @@
 	</select>
 	
 	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -340,7 +353,9 @@
 			AND A.PRJ_GRP_CD = '01'
 	</select>
 	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpIdExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -348,6 +363,7 @@
 			AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_GRP_CD = '02'
 	</select>
+	
 	
 	<insert id="prj1000DAO.insertPrj1000PrjGrpAjax" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newPrjGrpId">
@@ -365,6 +381,7 @@
 					)
 		]]>
 		</selectKey>
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
@@ -384,6 +401,7 @@
 	
 	<update id="prj1000DAO.updatePrj1000Ajax" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		UPDATE	PRJ1000 A
         SET		PRJ_NM			= #prjNm#
         	,	START_DT		= REPLACE(#startDt#, '-', '')
@@ -410,8 +428,10 @@
 	]]>
 	</update>
 	
+	
 	<delete id="prj1000DAO.deletePrj1000PrjGrpAjax" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		DELETE	
 		FROM	PRJ1000 A
         WHERE	1=1
@@ -422,6 +442,7 @@
 	</delete>
 	
 		
+	
 	<parameterMap id="deletePrj1001InfoParam" 	class="java.util.Map">
 		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
 		<parameter property="prjId"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
@@ -432,6 +453,7 @@
 	<procedure id="prj1000DAO.deletePrj1001Ajax" parameterMap="deletePrj1001InfoParam" >
 		{ CALL SP_PRJ1000_PRJ_INFO_DELETE(?,?,?,?) }
 	</procedure>
+	
 	
 	<parameterMap id="insertPrj1001InfoParam" 	class="java.util.Map">
 		<parameter property="prjGrpCd"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN" nullValue="02"/>
@@ -461,7 +483,9 @@
 		{ CALL SP_PRJ1000_PRJ_INFO_INSERT(?,	?,?,?,?,?		,?,?,?,?,?,?,?		,?,?,?,?,?) }
 	</procedure>
 	
+	
 	<select id="prj1000DAO.selectPrj1000ProjectGroupListAjax" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			SELECT Z.*, CONNECT_BY_ISLEAF AS LEAF
 	     	FROM(
 		      		SELECT  
@@ -490,9 +514,10 @@
 		       		WHERE 	1=1
 		    		AND 	A.LIC_GRP_ID =  #licGrpId#
 		    		AND 	A.USE_CD = '01'	
+		    		
 		    		<isNotEmpty property="pageType">
 			    		<isEqual property="pageType" compareValue="systemAdmin">
-				    		AND A.PRJ_GRP_CD = '01'
+				    		AND A.PRJ_GRP_CD = '01' 
 				   	 	</isEqual>
 					</isNotEmpty>	
 	     	) Z
@@ -502,6 +527,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1000ProjectAcronymCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+			
       		SELECT  
       				COUNT(1) AS CNT 
        		FROM 
@@ -513,6 +539,7 @@
 	</select>
 	
 	<update id="prj1000DAO.updatePrj1000UserProjectId" parameterClass="java.util.Map" >
+			
       		UPDATE	STM3000 SET  PRJ_ID = NULL
        		WHERE 	1=1
     		AND 	LIC_GRP_ID =  #licGrpId#
@@ -520,7 +547,9 @@
 			
 	</update>
 	
+	
 	<select id="prj1000DAO.selectPrj1000AdminPrjList" parameterClass="java.util.Map" resultClass="egovMap">
+			
       		SELECT B.PRJ_ID
 					, B.PRJ_NM
 					, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
@@ -541,6 +570,7 @@
 			ORDER BY B.ORD
 	</select>
 	
+	
 	<insert id="prj1000DAO.insertPrj1000PrjWizardAjax" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newPrjId">
 		<![CDATA[
@@ -556,6 +586,7 @@
                 )
 		]]>
 		</selectKey>
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
@@ -570,6 +601,23 @@
 	            ,	#wizard_ord#	,	#wizard_prjDesc#	,	'01'			,	#wizard_prjType# 		,	#wizard_prjAcrm#
 	            ,	'02'		,	SYSDATE			
 	           	,	#regUsrId#		,	#regUsrIp#	,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+	        )		
+		]]>
+	</insert>
+	
+	
+	<insert id="prj1000DAO.insertPrj1000PrjAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO PRJ1001
+			(
+                PRJ_ID,				PRJ_AUTH_TYPE_CD,		PRJ_AUTH_TARGET_ID	
+            ,	REG_DTM,			REG_USR_ID,				REG_USR_IP
+            ,	MODIFY_DTM,			MODIFY_USR_ID,			MODIFY_USR_IP
+	        )VALUES(
+	        	#prjId#,			#prjAuthTypeCd#,		#prjAuthTargetId#
+	        	,SYSDATE,			#regUsrId#,				#regUsrIp#
+	        	,SYSDATE,			#regUsrId#,				#regUsrIp#
 	        )		
 		]]>
 	</insert>
