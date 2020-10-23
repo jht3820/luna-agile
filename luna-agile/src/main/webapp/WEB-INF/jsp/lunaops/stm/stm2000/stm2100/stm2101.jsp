@@ -1,31 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="kt-portlet kt-portlet--mobile">
-	<div class="kt-portlet__head kt-portlet__head--lg">
-		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title kt-font-boldest kt-font-brand">
-				<c:if test="${param.stmTypeCd eq '01' }">
-					<i class="la la-newspaper-o kt-margin-r-5"></i>[일반]
-				</c:if>
-				<c:if test="${param.stmTypeCd eq '02' }">
-					<i class="la la-server kt-margin-r-5"></i>[자료실]
-				</c:if>
-				<c:if test="${param.stmTypeCd eq '03' }">
-					<i class="la la-image kt-margin-r-5"></i>[갤러리]
-				</c:if>
-				<c:if test="${param.stmTypeCd eq '04' }">
-					<i class="la la-youtube-play kt-margin-r-5"></i>[영상]
-				</c:if>
-				<c:out value="${param.stmNm }"/>
-			</h3>
-		</div>
-		<div class="kt-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper">
+
+<form class="kt-form" id="stm2101Info" autocomplete="off" >
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__head kt-portlet__head--lg">
+			<div class="kt-portlet__head-label">
+				<h3 class="kt-portlet__head-title kt-font-boldest kt-font-brand">
+					<c:if test="${param.stmTypeCd eq '01' }">
+						<i class="la la-newspaper-o kt-margin-r-5"></i>[일반]
+					</c:if>
+					<c:if test="${param.stmTypeCd eq '02' }">
+						<i class="la la-server kt-margin-r-5"></i>[자료실]
+					</c:if>
+					<c:if test="${param.stmTypeCd eq '03' }">
+						<i class="la la-image kt-margin-r-5"></i>[갤러리]
+					</c:if>
+					<c:if test="${param.stmTypeCd eq '04' }">
+						<i class="la la-youtube-play kt-margin-r-5"></i>[영상]
+					</c:if>
+					<c:out value="${param.stmNm }"/>
+				</h3>
+			</div>
+			<div class="kt-portlet__head-toolbar">
+				<div class="kt-portlet__head-wrapper">
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="kt-portlet__body">
-		<form class="kt-form" id="stm2101Info">
+		<div class="kt-portlet__body">
 			<input type="hidden" id="menuId" name="menuId" value="${param.menuId }"/>
 			<input type="hidden" id="paramStmDsTypeCd" name="paramStmDsTypeCd" value="${param.stmDsTypeCd }"/>
 			<div class="row">
@@ -97,38 +98,31 @@
 					<div class="col-4"><label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"> 파일첨부 사용<span></span></label></div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-12">
-					<div class="form-group row kt-margin-t-20 kt-hide" id="stmFileOption" name="stmFileOption">
-						<div class="col-5">
-							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 개수</label>
-							<input type="text" class="form-control" name="stmFileCnt" id="stmFileCnt" autocomplete="off" regexstr="^0$|^[1-9]{1}$|^10$" maxlength="2" placeholder="최대 10개 파일" regexalert="최대 숫자 10" required />
-							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;">최대 개수 : 10</span>
-						</div>
-						<div class="col-7">
-							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 용량 제한(MB)</label>
-							<input type="text" class="form-control" name="stmFileStrg" id="stmFileStrg" autocomplete="off" regexstr="^0$|^[1-9]{1}[0-9]*$" maxlength="10" regexalert="숫자만 가능" required />
-							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
-						</div>
+				<div class="row kt-margin-t-20" id="stmFileOption" name="stmFileOption">
+					<div class="col-5 form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 개수</label>
+						<input type="text" class="form-control" name="stmFileCnt" id="stmFileCnt" regexstr="^0$|^[1-9]{1}$|^10$" maxlength="2" placeholder="최대 10개 파일" regexalert="최대 숫자 10" required />
+						<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;">최대 개수 : 10</span>
 					</div>
-				</div>
+					<div class="col-7 form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>첨부파일 용량 제한(MB)</label>
+						<input type="text" class="form-control" name="stmFileStrg" id="stmFileStrg" regexstr="^0$|^[1-9]{1}[0-9]*$" maxlength="10" placeholder="최대 용량(합)"  regexalert="숫자만 가능" required />
+						<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;" name="stmFileStrgStr" id="stmFileStrgStr">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
+					</div>
 			</div>
-		</form>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-brand" id="stm2101SaveSubmit">수정 완료</button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+		</div>
 	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-brand" id="stm2101SaveSubmit">수정 완료</button>
-		<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
-	</div>
-</div>
+</form>
 <!-- begin page script -->
 <script>
  "use strict";
  
  var OSLStm2101Popup = function(){
 	var formId="stm2101Info";
-	 
-	// form validate 주입
-	var formValidate = $.osl.validate(formId);
 	
 	//담당자/글작성 범위 목록 되돌리기를 위한 변수 선언
 	var oriAdmin = [];
@@ -150,16 +144,16 @@
 			// 자료실인 경우 최대 파일 용량(총 합) 4GB
 			if(typeCd == '02')
 			{
-				$("#stmFileStrg").attr('placeholder', '최대 4096MB');
+				$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.storage"));
 			}
 			// 영상인 경우 최대 파일 용량(총 합) 2GB
 			else if(typeCd == '04')
 			{
-				$("#stmFileStrg").attr('placeholder', '최대 2048MB');
+				$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.movie"));
 			}
 			else
 			{
-				$("#stmFileStrg").attr('placeholder', '최대 500MB');
+				$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.normal"));
 			}
 		});
 		
@@ -213,7 +207,7 @@
 			}
 		});
 		
-		//사용자 아이콘 클릭 시
+		//사용자 아이콘 클릭 시 사용자 정보 팝업
 		$(document).on("click", ".openid", function(){
 				var usrId = $(this).data("openid");
 				$.osl.user.usrInfoPopup(usrId);
@@ -223,20 +217,17 @@
 		$("#stm2101SaveSubmit").click(function(){
 			// 첨부파일 기능 사용할 경우에만 폼 유효값 체크
 			if($("#stmFileYnCd").is(":checked")==true){
-				var form = $('#'+formId);    		
-	        	
-	    		//폼 유효 값 체크
-	    		if (!form.valid()) {
+				 
+				// form validate 주입
+				var formValidate = $.osl.validate(formId);
+				console.log(formValidate);
+				
+				//폼 유효 값 체크
+	    		if (!$("#"+formId).valid()) {
 	    			return;
 	    		}
 			}
-			// 사용 안할 땐 알아서 0으로 세팅    		
-			//동작
-// 			$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
-// 				if(result.value){
-					submitBadOption();
-// 				}
-// 			});
+			submitBadOption();
 		});
 	};
 
@@ -348,7 +339,7 @@
 				};
 			var options = {
 					idKey: "sub_"+$("#menuId").val(),
-					modalTitle: "담당자 지정",
+					modalTitle: $.osl.lang("stm2101.title.admin"),
 					closeConfirm: false,
 					callback:[{
 						targetId: "stm2102SaveSubmit",
@@ -372,7 +363,7 @@
 				};
 			var options = {
 					idKey: "sub_"+$("#menuId").val(),
-					modalTitle: "글 작성 범위 지정",
+					modalTitle: $.osl.lang("stm2101.title.writer"),
 					closeConfirm: false,
 					callback:[{
 						targetId: "stm2102SaveSubmit",
@@ -452,6 +443,23 @@
 				}else{
 					$("#stmTagYnCd").attr("checked", false);
 				}
+				// 게시판 유형에 따라 파일첨부 최대용량 라벨 변경
+				// 첨부파일 용량 제한 placeholder 변경
+				var typeCd = document.getElementById("stmTypeCd").value;
+				// 자료실인 경우 최대 파일 용량(총 합) 4GB
+				if(typeCd == '02')
+				{
+					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.storage"));
+				}
+				// 영상인 경우 최대 파일 용량(총 합) 2GB
+				else if(typeCd == '04')
+				{
+					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.movie"));
+				}
+				else
+				{
+					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.normal"));
+				}
 				// 옵션 - 파일 첨부 사용
 				if(info.stmFileCnt > 0)
 				{
@@ -462,7 +470,11 @@
 					$("#stmFileCnt").attr("value", info.stmFileCnt);
 					// 옵션 - 첨부파일 용량 제한
 					$("#stmFileStrg").attr("value", info.stmFileStrg);
+				}else{
+					//파일 첨부 사용 시 첨부파일 개수 및 용량 제한 입력 div 보이기
+					$("#stmFileOption").addClass("kt-hide");
 				}
+				
 			}
 		});
 		
@@ -592,7 +604,7 @@
     * param : managerCheck 통합 목록 중 권한그룹과 사용자 목록 나눠 그릴 것인지 확인(true, false)
 	*/
 	var drawList = function(setData, elemId, managerCheck){
-		var formId = '#' + elemId;
+		var divId = '#' + elemId;
 		
 		var listHtml = "";
 		
@@ -607,7 +619,7 @@
 					listHtml += $.osl.escapeHtml(value.managerNm) + "(" +$.osl.escapeHtml(value.managerPrjNm) + ")</div>";
 					listHtml += "</div>";
 					
-					$(formId+"_auth").append(listHtml);
+					$(divId+"_auth").append(listHtml);
 				}
 				else
 				{
@@ -623,7 +635,7 @@
 					
 					listHtml += "</div>";
 
-					$(formId+"_user").append(listHtml);
+					$(divId+"_user").append(listHtml);
 				}
 			}
 			else
@@ -648,7 +660,7 @@
 				}
 				listHtml += "</div>";
 				
-				$(formId).append(listHtml);
+				$(divId).append(listHtml);
 			}
 		});
 	}
@@ -698,29 +710,34 @@
 			stmFileYnCd = "01";
 		}
 
-		var stmFileCnt = 0;
-		var stmFileStrg = 0;
+		var stmFileCnt = $("#stmFileCnt").val();
+		var stmFileStrg = $("#stmFileStrg").val();
 		
+		//첨부파일을 사용하면
 		if(stmFileYnCd == "01"){
+			//입력한 파일 갯수가 0이하일 때
 			if(stmFileCnt <= 0)
 			{
 				//첨부파일 갯수를 0 이하로 설정한 경우
 				//첨부파일 갯수를 1로 자동 변경
 				stmFileCnt = 1;
+				$("#stmFileCnt").val(1);
+				$.osl.alert($.osl.lang("stm2101.formCheck.fileCntMessage"));
+				return false;
 			}
 			else if(stmFileCnt > 10)
 			{
 				//첨부파일 갯수가 10개를 넘어가는지 확인
-				//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
 				$("#stmFileCnt").val(10);
+				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
+				return false;
 			}
 			
 			//게시판 유형 최대 용량 파일을 넘기면 최대 값으로 수정
 			var defaultStrg = 0;
-			
+			//최대용량을 0 이하로 한 경우 defalult로 지정
 			if(stmFileStrg <= 0)
 			{
-				//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
 				//첨부파일 용량은 default로 지정
 				//자료실인 경우 최대 파일 용량(총합) 4GB
 				if(stmTypeCd == "02")
@@ -738,6 +755,8 @@
 					defaultStrg = 500;
 				}
 				$("#stmFileStrg").val(defaultStrg);
+				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
+				return false;
 			}
 			//첨부파일 용량이 존재 할 경우
 			else
@@ -750,9 +769,10 @@
 					defaultStrg = 4096;
 					if(stmFileStrg > defaultStrg)
 					{
-						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "4GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "4GB"));
+						return false;
 					}
 				}
 				// 영상인 경우 최대 파일 용량(총 합) 2GB
@@ -761,9 +781,10 @@
 					defaultStrg = 2048;
 					if(stmFileStrg > defaultStrg)
 					{
-						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "2GB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "2GB"));
+						return false;
 					}
 				}
 				// 그 외 500MB
@@ -772,9 +793,10 @@
 					defaultStrg = 500;
 					if(stmFileStrg > defaultStrg)
 					{
-						//$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "500MB"));
 						$("#stmFileStrg").val(defaultStrg);
 						stmFileStrg = defaultStrg;
+						$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgOutMessage", "500MB"));
+						return false;
 					}
 				}
 			}
@@ -803,7 +825,7 @@
 						"stmFileCnt" : stmFileCnt ,
 						"stmFileStrg" : stmFileStrg * (1024*1024),
 					};
-		
+
 				var ajaxObj = new $.osl.ajaxRequestAction(
 						{"url":"<c:url value='/stm/stm2000/stm2100/updateStm2100BadTypeAjax.do'/>"}
 						, data);

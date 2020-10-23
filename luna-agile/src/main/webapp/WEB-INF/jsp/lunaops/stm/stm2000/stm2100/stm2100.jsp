@@ -3,16 +3,7 @@
 <jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
-<style>
-.osl-stm__width__100{
-	word-break: break-word;
-}
-@media (max-width: 1400px){
-	.osl-stm__width__100{
-		width:300px !important; 
-	}
-}
-</style>
+
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
@@ -56,9 +47,9 @@
 <!-- begin page script -->
 <script>
  "use strict";
- var okManager;
- var okWriter;
  var OSLStm2100Popup = function() {
+	 var okManager;
+	 var okWriter;
 	 var documentSetting = function() {		
 		 $.osl.datatable.setting("stm2100StmTable", {
 			 data: {
@@ -70,46 +61,46 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				 {field: 'stmTypeNm', title: '유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
-				 {field: 'stmNm', title: '게시판명', textAlign: 'left', width: 300, autoHide: false, search: true, 
+				 {field: 'stmTypeNm', title: $.osl.lang("stm2100.field.stmTypeNm"), textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
+				 {field: 'stmNm', title: $.osl.lang("stm2100.field.stmNm"), textAlign: 'left', width: 300, autoHide: false, search: true, 
 // 						template: function(row){
 // 							var returnStr = "<span class='stmNmTxt' style='word-break: break-word;'>"+row.stmNm+"</span>";
 // 							return returnStr;
 // 						}	 
 				 },
-				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200},
-				 {field: 'cnt', title: '전체글 수', textAlign: 'left', width: 150},
-				 {field: 'badCnt', title: '유효글 수', textAlign: 'left', width: 150,
+				 {field: 'stmDsTypeNm', title: $.osl.lang("stm2100.field.stmDsTypeNm"), textAlign: 'left', width: 200},
+				 {field: 'cnt', title: $.osl.lang("stm2100.field.cnt"), textAlign: 'center', width: 150},
+				 {field: 'badCnt', title: $.osl.lang("stm2100.field.badCnt"), textAlign: 'center', width: 150,
 					 template : function(row){
 						return String(parseInt(row.cnt) - parseInt(row.delCnt)); 
 					 },
 				 },
-				 {field: 'delCnt', title: '삭제글 수', textAlign: 'left', width: 150},
+				 {field: 'delCnt', title: $.osl.lang("stm2100.field.delCnt"), textAlign: 'center', width: 150},
 			 ],
 // 			 rows:{
 // 				 afterTemplate: function(row, data, index){
-// 					$(".stmNmTxt").parents("span").addClass("osl-stm__width__100");
+// 					$(".stmNmTxt").parents("span").addClass("osl-bad__width__100");
 // 					var titleRow = $("#stm2100StmTable>table>thead>tr").children("th");
 // 					$.each(titleRow, function(idx, item){
 // 						if(item.dataset.field=="stmNm"){
-// 							//item.classList.add("osl-stm__width__100");
-// 							//item.classList = ["osl-stm__width__100"];
+// 							//item.classList.add("osl-bad__width__100");
+// 							//item.classList = ["osl-bad__width__100"];
 // 							console.log(item.classList);
 // 						}
 // 					}); 
 // 				}
 // 			 },
 			 actionBtn:{
-				"title" : "수정 / 관리 / 통계",
+				"title" : $.osl.lang("stm2100.actionBtn.title"),
 				"width" : 120,
 				"delete" : false,
 				"detail": true,
 				"summery" : true,
 			},
 			actionTooltip:{
-				"update" : "게시판 속성",
-				"detail": "게시글 관리",
-				"summery": "통계 보기",
+				"update" : $.osl.lang("stm2100.actionBtn.updateBtn"),
+				"detail": $.osl.lang("stm2100.actionBtn.detailBtn"),
+				"summery": $.osl.lang("stm2100.actionBtn.summeryBtn"),
 			},
 			actionFn:{
 				"update":function(rowData){
@@ -122,8 +113,9 @@
 						};
 					var options = {
 							idKey: rowData.menuId,
-							modalTitle: "[ "+rowData.stmNm+ " ]게시판 속성",
-							closeConfirm: false
+							modalTitle: "[ "+rowData.stmNm+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
+							closeConfirm: false,
+							autoHeight: false,
 						};
 					
 					checkUser(rowData.menuId, rowData.stmDsTypeCd);
@@ -155,9 +147,9 @@
 						};
 					var options = {
 							idKey: "bad_"+rowData.menuId,
-							modalTitle:"[ "+ rowData.stmNm +" ] 게시글 관리",
+							modalTitle:"[ "+ rowData.stmNm +" ] "+$.osl.lang("stm2100.title.detailTitle"),
 							closeConfirm: false,
-							modalSize: "xl",
+							modalSize: "fs",
 							autoHeight: false,
 						};
 					checkUser(rowData.menuId, rowData.stmDsTypeCd);
@@ -191,7 +183,7 @@
 						};
 					var options = {
 							idKey: "summery_"+rowData.menuId,
-							modalTitle: "[ "+ rowData.stmNm +" ] 통계보기",
+							modalTitle: "[ "+ rowData.stmNm +" ] "+$.osl.lang("stm2100.title.summeryTitle"),
 							closeConfirm: false,
 							autoHeight: false,
 						};
