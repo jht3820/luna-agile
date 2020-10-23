@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmm1400DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	    
+    <select id="cmm1400DAO.selectCmm1400SVNRepositoryList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT
+            A.LIC_GRP_ID,              
+            A.SVN_REP_ID,              
+            A.SVN_REP_NM,              
+            A.SVN_TXT,               
+            A.USE_CD,               
+            A.REG_DTM,              
+            A.REG_USR_ID,           
+            A.REG_USR_IP,           
+            A.MODIFY_DTM,           
+            A.MODIFY_USR_ID,        
+            A.MODIFY_USR_IP         
+		FROM
+            SVN1000 A, SVN1100 B
+		WHERE 1=1
+    		AND A.LIC_GRP_ID = #licGrpId#
+    		AND B.PRJ_ID = #prjId#
+   			AND A.LIC_GRP_ID = B.LIC_GRP_ID 
+   			AND A.SVN_REP_ID = B.SVN_REP_ID
+    </select>
+	
+</sqlMap>

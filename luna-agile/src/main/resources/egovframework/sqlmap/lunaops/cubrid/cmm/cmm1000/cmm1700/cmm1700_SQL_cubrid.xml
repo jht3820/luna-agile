@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmm1700DAO">
+	<typeAlias alias="cmm1700DAO"	type="kr.opensoftlab.oslops.cmm.cmm1000.cmm1700.vo.Cmm1700VO"/>
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+    
+    <resultMap id="cmm1700ResultMap" class="cmm1700DAO">
+   		<result property="licGrpId"       column="LIC_GRP_ID" /> 	 
+		<result property="prjId"          column="PRJ_ID" /> 		 
+		<result property="authGrpId"      column="AUTH_GRP_ID" /> 	 
+		<result property="authGrpNm"      column="AUTH_GRP_NM" /> 	 
+		<result property="authGrpDesc"    column="AUTH_GRP_DESC" />  
+		<result property="createDt"       column="CREATE_DT" /> 	 
+		<result property="useCd"          column="USE_CD" /> 		 
+		<result property="ord"            column="ORD" /> 			 
+		<result property="usrTyp"         column="USR_TYP" /> 		 
+    </resultMap>
+    	
+	<sql id = "selectCmm1700CommonAuthList">
+		SELECT
+				LIC_GRP_ID		 
+		 	,	PRJ_ID			 
+			,	AUTH_GRP_ID		 
+			,	AUTH_GRP_NM		 
+			,	AUTH_GRP_DESC	 
+			,	CREATE_DT		 
+			,	USE_CD			 
+			,	ORD              
+			,	USR_TYP			 
+		FROM ADM1100
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId# 
+		AND PRJ_ID = #prjId#
+		AND USE_CD = '01'	
+		<isNotEmpty property="searchPopTxt"> 
+    		AND AUTH_GRP_NM like '%' || #searchPopTxt#  ||'%' 
+    	</isNotEmpty>	
+	</sql>
+	
+	<select id="cmm1700DAO.selectCmm1700CommonAuthListCnt" parameterClass="cmm1700DAO"  resultClass="java.lang.Integer">
+	<![CDATA[
+	    SELECT	COUNT(*)
+		FROM
+		(
+	]]>
+			<include refid="selectCmm1700CommonAuthList" />
+	<![CDATA[
+		) A
+	]]>
+    </select>
+    
+    <select id="cmm1700DAO.selectCmm1700CommonAuthList" parameterClass="cmm1700DAO"  resultMap="cmm1700ResultMap">
+    <![CDATA[
+		SELECT	*
+		FROM
+		(
+			SELECT	ROWNUM RN
+				,	A.*
+    		FROM 
+    		(
+    ]]>
+    			<include refid="selectCmm1700CommonAuthList" />
+    <![CDATA[
+    		) A
+		)
+		WHERE  RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+		ORDER BY ORD
+	]]>
+    </select>
+	
+	
+	
+	
+</sqlMap>            

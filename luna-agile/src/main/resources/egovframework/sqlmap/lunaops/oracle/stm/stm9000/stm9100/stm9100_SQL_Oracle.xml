@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm9100DAO">
+
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+    <typeAlias alias="stm9100VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9100.vo.Stm9100VO"/>	
+	
+	<resultMap id="resultMapSelectStm9100VO" class="stm9100VO">
+		<result property="rn"  			    column="RN"/>
+		<result property="licGrpId"         column="LIC_GRP_ID" /> 		 
+		<result property="prjId"            column="PRJ_ID" />			 
+		<result property="jenId"            column="JEN_ID" />  		
+		<result property="jenNm"            column="JEN_NM" />			
+		<result property="jenUrl"           column="JEN_URL" /> 		 
+		<result property="jobId"            column="JOB_ID" /> 			 
+		<result property="jobRestoreId" 	column="JOB_RESTORE_ID" /> 	 
+		<result property="jobTypeCd"        column="JOB_TYPE_CD" /> 	
+		<result property="jobTypeNm"        column="JOB_TYPE_NM" /> 	
+		<result property="jobDesc"        	column="JOB_DESC" /> 		
+		<result property="regDtm"           column="REG_DTM" /> 		 
+		<result property="regUsrId"         column="REG_USR_ID" /> 		 
+		<result property="regUsrIp"         column="REG_USR_IP" /> 		 
+		<result property="modifyDtm"        column="MODIFY_DTM" /> 		 
+		<result property="modifyUsrId"      column="MODIFY_USR_ID" /> 	 
+		<result property="modifyUsrIp"      column="MODIFY_USR_IP" /> 	 
+    </resultMap>
+	
+	
+	<sql id="selectStm9100JenkinsProjectList">
+		 SELECT
+			      	A.LIC_GRP_ID 		
+                ,	A.JEN_ID			
+                ,	C.JEN_NM			
+                ,	C.JEN_URL			
+                ,	B.JOB_ID			
+                ,	B.JOB_TYPE_CD		
+                ,	SF_STM4001_COM_CD_INFO( #licGrpId#, 'DPL00002', B.JOB_TYPE_CD, '1') AS JOB_TYPE_NM 
+                ,	B.JOB_RESTORE_ID	
+                ,	B.JOB_DESC			
+                , 	A.PRJ_ID 			
+                ,	A.REG_DTM			
+			    ,	A.REG_USR_ID		
+			    ,	A.REG_USR_IP		
+			    ,	A.MODIFY_DTM		
+			    ,	A.MODIFY_USR_ID		
+			    ,	A.MODIFY_USR_IP		
+		 FROM
+				STM9002 A 
+           		LEFT JOIN STM9001 B ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID)
+            	LEFT JOIN STM9000 C ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.JEN_ID = C.JEN_ID)
+		 WHERE   1=1
+		 AND A.LIC_GRP_ID = #licGrpId#
+		 AND A.PRJ_ID = #prjId#
+		 <isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="jenNm"> 
+					AND		UPPER( C.JEN_NM ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="jobId"> 
+					AND		UPPER( B.JOB_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="jobRestoreId"> 
+					AND		UPPER( B.JOB_RESTORE_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty>
+			<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchCd">
+					<isEqual property="searchSelect" compareValue="jobTypeCd">
+						AND 	B.JOB_TYPE_CD LIKE '%'||#searchCd#||'%'
+					</isEqual>
+					<isEqual property="searchSelect" compareValue="useCd">
+						AND 	B.USE_CD LIKE '%'||#searchCd#||'%'
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+		</isNotEmpty>
+		 ORDER BY B.JOB_ID
+	</sql>
+	
+	<sql id="selectStm9100JenkinsProjectAuthList">
+		SELECT T.* 
+		FROM(
+				SELECT
+					      	A.LIC_GRP_ID 		
+		                ,	A.JEN_ID			
+		                ,	B.JEN_NM			
+		                ,	B.JEN_URL			
+		                ,	B.DEL_CD			
+		                ,	A.JOB_ID			
+		                ,	A.JOB_TYPE_CD	
+		                ,	SF_STM4001_COM_CD_INFO( #licGrpId#, 'DPL00002', A.JOB_TYPE_CD, '1') AS JOB_TYPE_NM
+		                ,	A.JOB_RESTORE_ID
+		                ,	A.JOB_DESC			
+		                ,	A.USE_CD			
+		                ,	A.REG_DTM			
+					    ,	A.REG_USR_ID		
+					    ,	A.REG_USR_IP		
+					    ,	A.MODIFY_DTM		
+					    ,	A.MODIFY_USR_ID		
+					    ,	A.MODIFY_USR_IP		
+				FROM
+		           		STM9001 A
+		            	LEFT JOIN STM9000 B ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
+     
+		) T         
+		WHERE   1=1
+		AND T.LIC_GRP_ID = #licGrpId#
+		AND	T.DEL_CD = '02'			
+		AND T.JOB_TYPE_CD != '03'	
+		AND	T.USE_CD = '01'			
+		AND	NOT EXISTS (
+     				SELECT *FROM STM9002 X
+            		WHERE 1=1
+					AND	T.JEN_ID = X.JEN_ID
+              		AND	T.JOB_ID = X.JOB_ID
+            		AND X.LIC_GRP_ID = #licGrpId#
+            		AND X.PRJ_ID  = #prjId# 
+		)
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="jenNm"> 
+					AND		UPPER( T.JEN_NM ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="jobId"> 
+					AND		UPPER( T.JOB_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="jobRestoreId"> 
+					AND		UPPER( T.JOB_RESTORE_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="jobDesc"> 
+					AND		UPPER( T.JOB_DESC )  like '%'|| UPPER( #searchTxt#  ) ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+			<isEqual property="searchSelect" compareValue="jobTypeCd">
+				AND T.JOB_TYPE_CD LIKE '%'||#searchCd#||'%'
+			</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY T.JOB_ID
+	</sql>
+	
+	
+	<sql id="selectStm9003JenkinsJobAuthGrpList">
+		SELECT 
+	  		  		A.LIC_GRP_ID	
+				,	A.PRJ_ID		
+				,	A.JEN_ID		
+				,	A.JOB_ID		
+          		,	A.AUTH_GRP_ID	
+			    ,	B.AUTH_GRP_NM	
+			    ,	B.AUTH_GRP_DESC	 
+			    ,	B.CREATE_DT		
+			    ,	B.USE_CD		
+			    ,	B.USR_TYP		
+			    ,	SF_STM4001_COM_CD_INFO( #licGrpId#, 'ADM00004', B.USR_TYP, '1') AS USR_TYP_NM
+		FROM	STM9003 A
+      			INNER JOIN PRJ2000 B ON (A.PRJ_ID = B.PRJ_ID AND A.AUTH_GRP_ID = B.AUTH_GRP_ID)
+		WHERE 1=1
+		AND B.LIC_GRP_ID 	= #licGrpId#
+		AND	A.PRJ_ID 		= #prjId#
+		AND A.JEN_ID 		= #jenId#
+      	AND A.JOB_ID 		= #jobId#
+		AND B.USE_CD 		= '01'		
+	</sql>
+	
+	
+	<select id="stm9100DAO.selectStm9100JenkinsProjectList" parameterClass="stm9100VO"  resultMap="resultMapSelectStm9100VO" >
+		 	SELECT *
+			FROM
+			(
+    			SELECT 	ROWNUM RN,
+    			     	T.*
+    			FROM
+    			(
+					<include refid="selectStm9100JenkinsProjectList"/>
+	    		 ) T
+	    	)
+	    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+    <select id="stm9100DAO.selectStm9100JenkinsProjectListCnt" parameterClass="stm9100VO"  resultClass="java.lang.Integer">
+	    	SELECT
+					COUNT(*)
+			FROM
+			(
+				<include refid="selectStm9100JenkinsProjectList"/>
+			) A
+    </select>
+	
+	
+	<select id="stm9100DAO.selectStm9100JenkinsProjectAuthList" parameterClass="stm9100VO"  resultClass="egovMap" >
+	<![CDATA[]]>
+		SELECT *
+			FROM
+			(
+    			SELECT 	ROWNUM RN,
+    			     	T.*
+    			FROM
+    			(
+					<include refid="selectStm9100JenkinsProjectAuthList"/>
+	    		 ) T
+	    	)
+	    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+    <select id="stm9100DAO.selectStm9100JenkinsProjectAuthListCnt" parameterClass="stm9100VO"  resultClass="java.lang.Integer">
+	    	SELECT
+					COUNT(*)
+			FROM
+			(
+				<include refid="selectStm9100JenkinsProjectAuthList"/>
+			) A
+    </select>
+	
+	
+	
+	<insert id="stm9100DAO.insertStm9002ProjectAddJob" parameterClass="java.util.Map">
+		<![CDATA[ 
+		INSERT INTO STM9002
+			(
+					LIC_GRP_ID, 		PRJ_ID, 			JEN_ID, 			JOB_ID 		  	
+                ,	REG_DTM, 			REG_USR_ID, 		REG_USR_IP, 		MODIFY_DTM
+                ,	MODIFY_USR_ID,		MODIFY_USR_IP	
+			)
+			VALUES
+			(
+					#licGrpId#,			#prjId#,			#jenId#,			#jobId#
+				,	SYSDATE,			#regUsrId#,			#regUsrIp#,			SYSDATE
+				,	#regUsrId#,			#regUsrIp#			
+			)
+		]]>
+	</insert>
+	
+	
+	<delete id="stm9100DAO.deleteStm9002ProjectDelJob" parameterClass="java.util.Map">
+		DELETE	
+		FROM	STM9002 A
+		WHERE	1=1
+		AND		A.LIC_GRP_ID	= #licGrpId#
+		AND		A.PRJ_ID 		= #prjId#
+		AND 	A.JEN_ID 		= #jenId#
+		AND		A.JOB_ID 		= #jobId# 
+	</delete>
+	
+	<select id="stm9100DAO.selectStm9003JenkinsJobAuthGrpNormalList" parameterClass="java.util.Map" resultClass="egovMap">
+   			SELECT 	ROWNUM RN,
+   			     	T.*
+   			FROM
+   			(
+				<include refid="selectStm9003JenkinsJobAuthGrpList"/>
+    		 ) T
+	</select>
+	
+	<select id="stm9100DAO.selectStm9003JenkinsJobAuthGrpList" parameterClass="stm9100VO" resultClass="egovMap">
+		SELECT *
+			FROM
+			(
+    			SELECT 	ROWNUM RN,
+    			     	T.*
+    			FROM
+    			(
+					<include refid="selectStm9003JenkinsJobAuthGrpList"/>
+	    		 ) T
+	    	)
+	    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+    <select id="stm9100DAO.selectStm9003JenkinsJobAuthGrpListCnt" parameterClass="stm9100VO"  resultClass="java.lang.Integer">
+	    	SELECT
+					COUNT(*)
+			FROM
+			(
+				<include refid="selectStm9003JenkinsJobAuthGrpList"/>
+			) A
+    </select>
+	
+	
+	<select id="stm9100DAO.selectStm9003JenkinsJobAuthGrpCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS AUTH_GRP_CNT
+			FROM STM9003 A
+			WHERE 1=1
+			AND	A.PRJ_ID 		= #prjId#
+			AND A.JEN_ID 		= #jenId#
+			AND A.JOB_ID 		= #jobId#
+			AND A.AUTH_GRP_ID 	= #authGrpId#		
+		]]>
+	</select>
+	
+	
+	<insert id="stm9100DAO.insertStm9003JenkinsJobAuthGrpInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			INSERT INTO STM9003 A
+			(
+					A.LIC_GRP_ID,	A.PRJ_ID,			A.JEN_ID,			A.JOB_ID
+				,	A.AUTH_GRP_ID,	A.REG_DTM,			A.REG_USR_ID,		A.REG_USR_IP
+				,	A.MODIFY_DTM,	A.MODIFY_USR_ID,	A.MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#,		#prjId#,		#jenId#,		#jobId#
+				,	#authGrpId#,	SYSDATE,		#regUsrId#,		#regUsrIp#
+				,	SYSDATE,		#regUsrId#,		#regUsrIp#
+			)		
+		
+		]]>
+	</insert>
+	
+	
+	<delete id="stm9100DAO.deleteStm9003JenkinsJobAuthGrpInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			DELETE FROM STM9003 A
+			WHERE 1=1
+			AND	A.PRJ_ID 		= #prjId#
+			AND A.JEN_ID 		= #jenId#
+			AND A.JOB_ID 		= #jobId#
+		]]>	
+		<isNotEmpty property="authGrpId">
+			AND A.AUTH_GRP_ID 	= #authGrpId#
+		</isNotEmpty>
+		
+	</delete>
+
+	<update id="stm9100DAO.updateStm9001JenkinsJobRestoreInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			UPDATE STM9001 SET
+				JOB_RESTORE_ID = null
+			WHERE 1=1
+			AND	LIC_GRP_ID 		= #licGrpId#
+			AND JEN_ID 			= #jenId#
+			AND JOB_RESTORE_ID	= #jobId#
+		]]>	
+		
+	</update>
+</sqlMap>

@@ -1,31 +1,6 @@
 package egovframework.com.cmm.web;
 
-/**
- * 컴포넌트 설치 후 설치된 컴포넌트들을 IncludedInfo annotation을 통해 찾아낸 후
- * 화면에 표시할 정보를 처리하는 Controller 클래스
- * <Notice>
- * 		개발시 메뉴 구조가 잡히기 전에 배포파일들에 포함된 공통 컴포넌트들의 목록성 화면에
- * 		URL을 제공하여 개발자가 편하게 활용하도록 하기 위해 작성된 것으로,
- * 		실제 운영되는 시스템에서는 적용해서는 안 됨
- *      실 운영 시에는 삭제해서 배포해도 좋음
- * <Disclaimer>
- * 		운영시에 본 컨트롤을 사용하여 메뉴를 구성하는 경우 성능 문제를 일으키거나
- * 		사용자별 메뉴 구성에 오류를 발생할 수 있음
- * @author 공통컴포넌트 정진오
- * @since 2011.08.26
- * @version 2.0.0
- * @see
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *
- *  수정일		수정자		수정내용
- *  -------    	--------    ---------------------------
- *  2011.08.26	정진오 		최초 생성
- *  2011.09.16  서준식		컨텐츠 페이지 생성
- *  2011.09.26  이기하		header, footer 페이지 생성
- * </pre>
- */
+
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -90,16 +65,14 @@ public class EgovComIndexController implements ApplicationContextAware, Initiali
 	@RequestMapping("/EgovLeft.do")
 	public String setLeftMenu(ModelMap model) {
 
-		/* 최초 한 번만 실행하여 map에 저장해 놓는다. */
+		
 		if (map == null) {
 			map = new TreeMap<Integer, IncludedCompInfoVO>();
 			RequestMapping rmAnnotation;
 			IncludedInfo annotation;
 			IncludedCompInfoVO zooVO;
 
-			/*
-			 * EgovLoginController가 AOP Proxy되는 바람에 클래스를 reflection으로 가져올 수 없음
-			 */
+			
 			try {
 				Class<?> loginController = Class.forName("egovframework.com.uat.uia.web.EgovLoginController");
 				Method[] methods = loginController.getMethods();
@@ -125,9 +98,9 @@ public class EgovComIndexController implements ApplicationContextAware, Initiali
 			} catch (ClassNotFoundException e) {
 				LOGGER.error("No egovframework.com.uat.uia.web.EgovLoginController!!");
 			}
-			/* 여기까지 AOP Proxy로 인한 코드 */
+			
 
-			/*@Controller Annotation 처리된 클래스를 모두 찾는다.*/
+			
 			Map<String, Object> myZoos = applicationContext.getBeansWithAnnotation(Controller.class);
 			LOGGER.debug("How many Controllers : ", myZoos.size());
 			for (final Object myZoo : myZoos.values()) {
@@ -144,9 +117,7 @@ public class EgovComIndexController implements ApplicationContextAware, Initiali
 						zooVO.setName(annotation.name());
 						zooVO.setOrder(annotation.order());
 						zooVO.setGid(annotation.gid());
-						/*
-						 * 목록형 조회를 위한 url 매핑은 @IncludedInfo나 @RequestMapping에서 가져온다
-						 */
+						
 						rmAnnotation = methods[i].getAnnotation(RequestMapping.class);
 						if ("".equals(annotation.listUrl())) {
 							zooVO.setListUrl(rmAnnotation.value()[0]);

@@ -13,22 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.AntPathMatcher;
 
-/**
- * @Class Name : UrlRewriteFilter.java
- * @Description : UrlRewriteFilter Class
- * @Modification Information
- * @
- * @  수정일      수정자              수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2014.09.30           최초생성
- *
- * @author 전자정부 표준프레임워크 유지보수
- * @since 2014. 09.30
- * @version 1.0
- * @see
- *
- *  Copyright (C) by MOPAS All right reserved.
- */
+
 public class EgovUrlRewriteFilter implements Filter {
 
 	@SuppressWarnings("unused")

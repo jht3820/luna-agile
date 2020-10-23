@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="adm1000DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	<select id="adm1000DAO.selectAdm1000BaseMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	LPAD('ㄴ', LVL*4, ' ') || A.MENU_NM AS MENU_LVL
+				,	A.MENU_NM
+			    ,	A.LIC_GRP_ID
+			    ,	A.MENU_ID
+			    ,	A.UPPER_MENU_ID
+			    ,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+			    ,	(SELECT	UPPER_MENU_ID FROM ADM1000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS TWO_UPPER_MENU_ID
+			    ,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+                ,	A.LVL
+			    ,	A.ORD
+			    ,	A.USE_CD
+			    ,	A.MENU_DESC
+			    ,	A.MENU_PATH
+			    ,	A.MENU_TYPE_CD
+			    ,	A.MENU_URL
+			    ,	A.MENU_IMG_URL
+			    ,	'' AS ROW_STATUS
+			    ,	A.MODULE_TYPE
+            FROM	(
+            			SELECT * 
+            			FROM ADM1000 
+            			WHERE LIC_GRP_ID = #licGrpId#
+         ]]>
+            <isEqual property="adminYn" compareValue="N">
+		 	<![CDATA[ 
+			 		 AND (MENU_ID < '000900000000' OR MENU_ID >= '001000000000')
+		 	]]> 				  			
+			</isEqual>
+		 <![CDATA[ 
+            		) A
+            WHERE	1=1
+            START WITH A.MENU_ID = '000'
+            CONNECT BY PRIOR	A.MENU_ID = A.UPPER_MENU_ID
+            ORDER BY ORD ASC
+ 		 ]]> 
+	</select>
+	
+	<select id="adm1000DAO.selectAdm1000MenuInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.LIC_GRP_ID
+				,	A.MENU_ID
+				,	A.UPPER_MENU_ID
+				,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+			    ,	(SELECT	UPPER_MENU_ID FROM ADM1000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS TWO_UPPER_MENU_ID
+			    ,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+				,	A.MENU_NM
+				,	A.MENU_TYPE_CD
+				,	A.MENU_DESC
+				,	A.MENU_URL
+				,	A.MENU_PATH
+				,	A.MENU_IMG_URL
+				,	A.LVL
+				,	A.ORD
+				,	A.USE_CD
+				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+				,   A.PRJ_TYPE
+				,	A.MODULE_TYPE
+				,  ( SELECT COUNT(1)  FROM	ADM1200 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MENU_ID = A.MENU_ID AND ROWNUM = 1 ) AS AUT_CNT
+            FROM	ADM1000 A
+            WHERE	1=1
+            AND		A.LIC_GRP_ID = #licGrpId#
+            AND		A.MENU_ID = #menuId#
+            ORDER BY ORD
+ 		]]> 
+	</select>
+	
+	<select id="adm1000DAO.selectAdm1000PrjAuthGrpList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.PRJ_ID
+				,	A.AUTH_GRP_ID
+			    ,	A.AUTH_GRP_NM
+			    ,	COALESCE(A.AUTH_GRP_DESC, ' ') AS AUTH_GRP_DESC
+			    ,	A.CREATE_DT
+			    ,	A.USE_CD
+			    ,	A.ORD
+			    ,	A.USR_TYP
+			    ,   SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ADM00004', A.USR_TYP, '1') AS USR_TYP_NM
+			    ,   SF_ADM4100_COM_CD_INFO(#licGrpId#, 'CMM00001', A.ACCEPT_USE_CD, '1') AS ACCEPT_USE_NM
+			FROM	ADM1100 A
+			WHERE	1=1
+			AND		A.PRJ_ID = #prjId#
+			AND     A.LIC_GRP_ID = #licGrpId#
+			ORDER BY ORD ASC
+ 		]]> 
+	</select>
+	
+	<select id="adm1000DAO.selectAdm1000AuthGrpSmallMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT *
+			FROM
+			(
+				SELECT *
+			FROM
+			(
+				SELECT	A.LIC_GRP_ID
+		            	,	A.MENU_ID
+		                ,	A.MENU_NM
+		                ,	A.UPPER_MENU_ID
+		                ,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+		                ,	(SELECT	UPPER_MENU_ID FROM ADM1000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS UPUP_MENU_ID
+					    ,	SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+					    ,	COUNT(*) OVER(PARTITION BY SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3')) AS GRP_CNT
+		                ,	RANK() OVER(PARTITION BY SF_ADM1000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') ORDER BY ORD ASC) AS GRP_RANK
+		 			    ,	A.PRJ_ID
+		                ,	A.AUTH_GRP_ID
+		                ,	COALESCE(A.MAIN_YN, 'N') AS MAIN_YN
+		                ,	COALESCE(A.ACCESS_YN, 'N') AS ACCESS_YN
+		                ,	COALESCE(A.SELECT_YN, 'N') AS SELECT_YN
+		                ,	COALESCE(A.REG_YN, 'N') AS REG_YN
+		                ,	COALESCE(A.MODIFY_YN, 'N') AS MODIFY_YN
+		                ,	COALESCE(A.DEL_YN, 'N') AS DEL_YN
+		                ,	COALESCE(A.EXCEL_YN, 'N') AS EXCEL_YN
+		                ,	COALESCE(A.PRINT_YN, 'N') AS PRINT_YN
+		                ,	'R' AS STATUS /* R:조회, C:등록, U:수정, D:삭제 */
+		                ,   A.MENU_TYPE_CD
+		                ,	A.ORD
+			            ,	A.LVL
+			            ,	A.MODULE_TYPE
+		            FROM	(
+			         			SELECT A.* , B.PRJ_ID ,B.AUTH_GRP_ID, B.MAIN_YN, B.ACCESS_YN ,B.SELECT_YN, B.REG_YN, B.MODIFY_YN, B.DEL_YN, B.EXCEL_YN, B.PRINT_YN
+			         			FROM ADM1000 A
+			         			LEFT JOIN
+			         			(
+		 							SELECT * 
+		 							FROM ADM1200 
+		 							WHERE 1=1 
+		 							AND AUTH_GRP_ID = #authGrpId# 
+		 							AND LIC_GRP_ID = #licGrpId# 
+		 							AND PRJ_ID = #prjId#
+		 						) B
+		            			ON A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID
+		            		) A
+		            WHERE	1=1
+		            AND		A.LIC_GRP_ID = #licGrpId#
+		 ]]>
+		          <isEqual property="adminYn" compareValue="N">
+				  <![CDATA[ 
+				  
+					AND (A.MENU_ID < '000900000000' OR A.MENU_ID >= '001000000000')
+				  
+				  ]]> 				  			
+				  </isEqual>
+			<![CDATA[ 
+			        AND		A.USE_CD = '01'
+			) Z
+	            START WITH Z.UPPER_MENU_ID IS NULL
+			  	CONNECT BY PRIOR Z.MENU_ID = Z.UPPER_MENU_ID OR Z.UPPER_MENU_ID = Z.UPUP_MENU_ID
+			  	ORDER SIBLINGS BY Z.ORD ASC
+			) Y
+			WHERE 1=1
+			AND Y.LVL = 3
+ 			]]> 			
+	</select>
+	
+	<select id="adm1000DAO.selectAdm1000DupChkAuthGrpId" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	CASE WHEN COUNT(*) = 0 THEN 'N' ELSE 'Y' END AS DUP_YN
+            FROM	ADM1100 A
+            WHERE	1=1
+            AND		A.PRJ_ID = 'ROOTSYSTEM_PRJ'
+            AND		A.AUTH_GRP_ID = #newAuthGrpId#
+ 		]]> 
+	</select>
+	
+	<insert id="adm1000DAO.insertAdm1000MenuInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newMenuId">
+		<![CDATA[
+			SELECT	SF_ADM1000_GET_NEW_MENU_ID(#licGrpId#, #menuId#) AS NEW_MENU_ID
+			FROM	db_root
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO ADM1000
+			(
+					LIC_GRP_ID	,	MENU_ID  	,	UPPER_MENU_ID  	,	MENU_NM  		,	MENU_TYPE_CD
+			  	,	MENU_DESC  	,	MENU_URL  	,	MENU_PATH  		,	MENU_IMG_URL  	,	LVL
+			  	,	ORD		  	,	USE_CD  	,	REG_DTM  		,	REG_USR_ID		,	REG_USR_IP
+			  	,	MODIFY_DTM 	,	MODIFY_USR_ID,	MODIFY_USR_IP   ,   PRJ_TYPE		,	MODULE_TYPE
+			)
+			VALUES
+			(
+					#licGrpId#	,	#newMenuId# ,	#menuId#	    ,	'메뉴명'		 	,	CASE WHEN #lvl# < 2 THEN '01' ELSE '02' END   
+			    ,	NULL		,	NULL		,	NULL			,	NULL			,	#lvl# + 1
+			    ,	NULL		,	'02'		,	CURRENT_TIMESTAMP			,	#regUsrId#		,	#regUsrIp#
+			    ,	CURRENT_TIMESTAMP		,	#regUsrId#	,	#regUsrIp#      ,   #prjType#		,	#moduleType#
+			)
+		]]>
+	</insert>
+	
+	<delete id="adm1000DAO.deleteAdm1000MenuInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	ADM1000 A
+		WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+		AND		A.MENU_ID		= #menuId#	
+	]]>
+	</delete>
+	
+	<update id="adm1000DAO.updateAdm1000MenuInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		UPDATE	ADM1000 A
+        SET		UPPER_MENU_ID   = #upperMenuId#
+            ,	MENU_NM         = #menuNm#
+            ,	MENU_TYPE_CD    = #menuTypeCd#
+            ,	MENU_DESC       = #menuDesc#
+            ,	MENU_URL        = #menuUrl#
+            ,	MENU_PATH       = #menuPath#
+            ,	MENU_IMG_URL    = #menuImgUrl#
+            ,	LVL             = #lvl#
+            ,	ORD             = #ord#
+            ,	USE_CD          = #useCd#
+            ,	REG_DTM         = CURRENT_TIMESTAMP
+            ,	REG_USR_ID      = #regUsrId#
+            ,	REG_USR_IP      = #regUsrIp#
+            ,	MODIFY_DTM      = CURRENT_TIMESTAMP
+            ,	MODIFY_USR_ID   = #modifyUsrId#
+            ,	MODIFY_USR_IP   = #modifyUsrIp#
+            ,	PRJ_TYPE        = #prjType#
+        WHERE	1=1
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.MENU_ID		= #menuId#
+	]]>
+	</update>
+	
+	<insert id="adm1000DAO.inserAdm1000AuthGrpInfoAjax" parameterClass="java.util.Map">
+		<![CDATA[ 
+			INSERT INTO ADM1100
+            (	
+            	PRJ_ID,			AUTH_GRP_ID,	AUTH_GRP_NM,		AUTH_GRP_DESC,
+                CREATE_DT,		
+                USE_CD,			ORD,			REG_DTM,			REG_USR_ID,
+                REG_USR_IP,		MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+            )
+            VALUES
+            (
+            	'ROOTSYSTEM_PRJ',#newAuthGrpId#,#authGrpNm#,		#authGrpDesc#,
+            	TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD'),
+            	#authGrpUseCd#,	#authGrpOrd#,	CURRENT_TIMESTAMP,			#regUsrId#,
+            	#regUsrIp#,		CURRENT_TIMESTAMP,		#modifyUsrId#,		#modifyUsrIp#	
+            )
+		]]>
+	</insert>
+	
+	<select id="adm1000DAO.selectAdm1000AuthGrpInfoAjax" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT 
+					PRJ_ID
+				,	AUTH_GRP_ID
+				,	AUTH_GRP_NM
+				,	AUTH_GRP_DESC
+                ,	CREATE_DT
+                ,	USR_TYP
+                ,	ACCEPT_USE_CD
+                ,	USE_CD
+                ,	ORD
+                ,	TO_CHAR(REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+                ,	REG_USR_ID
+                ,	REG_USR_IP
+                ,	TO_CHAR(MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+                ,	MODIFY_USR_ID
+                ,	MODIFY_USR_IP
+            FROM ADM1100
+            WHERE 1=1
+            AND LIC_GRP_ID = #licGrpId#
+            AND PRJ_ID = #prjId#
+            AND AUTH_GRP_ID = #authGrpId#
+		]]>
+	</select>
+		
+	<delete id="adm1000DAO.deleteAdm1000AuthGrpInfoAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	ADM1100 A
+        WHERE	1=1
+        AND		A.PRJ_ID = 'ROOTSYSTEM_PRJ'
+        AND		A.AUTH_GRP_ID = #authGrpId#
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+	]]>
+	</delete>
+	
+	<delete id="adm1000DAO.deleteAdm1000MenuUsrAuthListAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	ADM1200 A
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.PRJ_ID = 'ROOTSYSTEM_PRJ'
+        AND		A.AUTH_GRP_ID = #authGrpId#
+	]]>
+	</delete>
+	
+	<parameterMap id="saveAdm1000AuthGrpMenuAuthListParam" class="java.util.Map">
+		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="prjId"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="authGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="menuId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="accessYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<parameter property="selectYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regYn"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="delYn"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="excelYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<parameter property="printYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regUsrId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regUsrIp"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyUsrId"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyUsrIp"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<!-- <parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
+		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/> -->
+	</parameterMap>
+	
+	<select id="adm1000DAO.saveAdm1000AuthGrpMenuAuthList" parameterMap="saveAdm1000AuthGrpMenuAuthListParam" resultClass="egovMap">
+		SELECT SF_ADM1000_MENU_AUTH_SAVE(?,?,?,?,?		,?,?,?,?,?		,?,?,?,?,?) FROM db_root
+	</select>
+	
+	
+	<select id="adm1000DAO.selectAdm1000deleteMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	A.LIC_GRP_ID , A.PRJ_ID ,A.AUTH_GRP_ID , A.MENU_ID
+	        FROM	ADM1200 A
+	        INNER JOIN ADM1000 B
+	        ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID)
+	        WHERE	1=1
+	        AND	 A.LIC_GRP_ID = #licGrpId# 
+	        AND  A.PRJ_ID 	= #prjId#
+	        AND  A.MENU_ID = #menuId#
+			AND  B.PRJ_TYPE = #prjType# 
+ 		]]> 
+	</select>
+	
+	
+	<delete id="adm1000DAO.deleteAdm1000projectTypeAuth" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	ADM1200 A
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+        AND		A.MENU_ID = #menuId#
+	]]>
+	</delete>
+	
+</sqlMap>
