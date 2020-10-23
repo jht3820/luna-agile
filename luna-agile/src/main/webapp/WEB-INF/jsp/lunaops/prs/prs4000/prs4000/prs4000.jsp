@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
-<jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
+<%@ include file="/WEB-INF/jsp/lunaops/top/header.jsp" %>
+<jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
 
 <link rel='stylesheet' href='<c:url value='/css/oslops/prs.css'/>' type='text/css'>
 
@@ -285,5 +285,5 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<jsp:include page="/WEB-INF/jsp/oslops/bottom/footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/lunaops/bottom/footer.jsp" />
     
