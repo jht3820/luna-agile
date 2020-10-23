@@ -6,6 +6,7 @@
 	<input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd }" /> 
 	<input type="hidden" id="stmDsTypeCd" name="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 	<input type="hidden" name="paramRow" id="paramRow" value='${param.paramRow }' />
+	<input type="hidden" name="paramStmOptionCnt" id="paramStmOptionCnt" value='${param.stmOptionCnt }' />
 	<input type="hidden" name="backPageYn" id="backPageYn" value="${param.backPageYn }" /> 
 	<div class="kt-portlet__body">
 		<div class="kt-align-center">
@@ -73,7 +74,7 @@ var OSLBad1004Popup = function () {
 				   			badHit : true,
 					};
 					var options = {
-							modalTitle: "게시글 상세보기",
+							modalTitle: $.osl.lang("bad1004.title.detail"),
 							closeConfirm: false,
 							modalSize: "xl",
 						};
