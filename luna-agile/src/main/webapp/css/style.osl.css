@@ -491,6 +491,18 @@ label.required:after {
     top: 20px;
     font-size: 0;
 }
+.modal.modal-fs{
+	padding:0 !important;
+}
+.modal-dialog.modal-fs{
+	max-width:100%;
+	margin: 0;
+	height: 100%;
+}
+.modal-dialog.modal-fs > .modal-content{
+	height:100%;
+	border-radius: 0;
+}
 /* tree */
 .jstree-default .jstree-anchor {
     color: #2f2e38;
