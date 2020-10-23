@@ -125,76 +125,76 @@
 				//가져온 데이터로 세팅하기
 				if(ntcInfo != "N"){
 					if(ntcInfo.cnt != 0){
-						$("#ntcCnt").text("공지사항 수 : " + ntcInfo.cnt +" 건");
-						$("#ntcCurrent").text("최신 공지일 : " + ntcInfo.badNtcStdtm);
+						$("#ntcCnt").text($.ols.lang("stm2103.summery.noticeCntY", ntcInfo.cnt));
+						$("#ntcCurrent").text($.ols.lang("stm2103.summery.ntcCurrentY", ntcInfo.badNtcStdtm));
 						$("#ntcCurrent").data("badId", ntcInfo.badId);
 						$("#ntcCurrent").data("prjGrpId", ntcInfo.prjGrpId);
 						$("#ntcCurrent").data("prjId", ntcInfo.prjId);
 					}else{
-						$("#ntcCnt").text("공지사항 수 : 없음");
-						$("#ntcCurrent").text("최신 공지일 : 없음");
+						$("#ntcCnt").text($.ols.lang("stm2103.summery.noticeCntN"));
+						$("#ntcCurrent").text($.ols.lang("stm2103.summery.ntcCurrentN"));
 						$("#ntcCurrent").data("badId", '');
 						$("#ntcCurrent").data("prjGrpId", '');
 						$("#ntcCurrent").data("prjId",'');
 					}
 				}else{
-					$("#ntcCnt").text("공지사항 수 : 없음");
-					$("#ntcCurrent").text("최신 공지일 : 없음");
+					$("#ntcCnt").text($.ols.lang("stm2103.summery.noticeCntN"));
+					$("#ntcCurrent").text($.ols.lang("stm2103.summery.ntcCurrentN"));
 				}
 				if(badCmtInfo != "N"){
-					$("#cmtAllCnt").text("전체 댓글 수 : " + badCmtInfo.allCnt +" 건");
-					$("#cmtMaxInfo").text("최다 댓글 수 : " + badCmtInfo.cnt + " 건");
+					$("#cmtAllCnt").text($.ols.lang("stm2103.summery.cmtAllCntY", badCmtInfo.allCnt));
+					$("#cmtMaxInfo").text($.ols.lang("stm2103.summery.cmtMaxInfoY", badCmtInfo.cnt ));
 					$("#cmtMaxInfo").data("badId", badCmtInfo.badId);
 					$("#cmtMaxInfo").data("prjGrpId", badCmtInfo.prjGrpId);
 					$("#cmtMaxInfo").data("prjId", badCmtInfo.prjId);
 				}else{
-					$("#cmtAllCnt").text("전체 댓글 수 : 없음");
-					$("#cmtMaxInfo").text("최다 댓글 수 : 없음");
+					$("#cmtAllCnt").text($.ols.lang("stm2103.summery.cmtAllCntN"));
+					$("#cmtMaxInfo").text($.ols.lang("stm2103.summery.cmtMaxInfoN"));
 					$("#cmtMaxInfo").data("badId", '');
 					$("#cmtMaxInfo").data("prjGrpId", '');
 					$("#cmtMaxInfo").data("prjId", '');
 				}
 				if(badCntInfo != "N"){
-					$("#badAllCnt").text("전체 게시글 수 : 등록 "+badCntInfo.badCntAll+" 건 / 삭제 "+badCntInfo.badCntDel+" 건");	
+					$("#badAllCnt").text($.ols.lang("stm2103.summery.badAllCntY", badCntInfo.badCntAll , badCntInfo.badCntDel));	
 				}else{
-					$("#badAllCnt").text("전체 게시글 수 : 없음");
+					$("#badAllCnt").text($.ols.lang("stm2103.summery.badAllCntN"));
 				}
 				if(badHitInfo != "N"){
-					$("#badHitInfo").text("최다 조회 수 : "+badHitInfo.badHit+" 회");
+					$("#badHitInfo").text($.ols.lang("stm2103.summery.badHitInfoY", badHitInfo.badHit));
 					$("#badHitInfo").data("badId", badHitInfo.badId);
 					$("#badHitInfo").data("prjGrpId", badHitInfo.prjGrpId);
 					$("#badHitInfo").data("prjId", badHitInfo.prjId);
 				}else{
-					$("#badHitInfo").text("최다 조회 수 : 없음");
+					$("#badHitInfo").text($.ols.lang("stm2103.summery.badHitInfoN"));
 					$("#badHitInfo").data("badId", '');
 					$("#badHitInfo").data("prjGrpId", '');
 					$("#badHitInfo").data("prjId", '');
 				}
 				if(pwCnt != 0){
-					$("#badPwCnt").text("비밀글 수 : " + pwCnt + " 건");
+					$("#badPwCnt").text($.ols.lang("stm2103.summery.badPwCntY", pwCnt));
 				}else{
-					$("#badPwCnt").text("비밀글 수 : 없음");
+					$("#badPwCnt").text($.ols.lang("stm2103.summery.badPwCntN"));
 				}
 				if(tagInfo != null && tagInfo != "" && tagInfo != "N"){
 				console.log(tagInfo);
 					$("#tagTop").empty();
 					$.each(tagInfo, function(idx, value){
 						if(idx < 3){ //sql 조회 top 5
-							var innerHtml = "<li class='list-group-item kt-padding-l-35'>사용 TOP " + (idx + 1) + " : #" + $.osl.escapeHtml(value.tagNm)+ "</li>";
+							var innerHtml = "<li class='list-group-item kt-padding-l-35'>"+$.osl.lang("stm2103.summery.tagLabelY",idx+1, $.osl.escapeHtml(value.tagNm))+ "</li>";
 							$("#tagTop").append(innerHtml);
 						}
 					});
 				}else{
 					$("#tagTop").empty();
-					var innerHtml = "<li class='list-group-item kt-padding-l-35'>사용 태그 없음</li>";
+					var innerHtml = "<li class='list-group-item kt-padding-l-35'>"+$.osl.lang("stm2103.summery.tagLabelN")+"</li>";
 					$("#tagTop").append(innerHtml);
 				}
 				if(fileSummery != "N"){
-					$("#fileAllCnt").text("전체 첨부파일 수 : " +parseInt(fileSummery.fileTotalCnt) + " 건");
-					$("#fileAllSize").text("전체 첨부파일 크기 : " + $.osl.byteCalc(parseInt(fileSummery.fileTotalSize)));
+					$("#fileAllCnt").text($.osl.lang("stm2103.summery.fileAllCntY", parseInt(fileSummery.fileTotalCnt));
+					$("#fileAllSize").text($.osl.lang("stm2103.summery.fileAllSizeY", $.osl.byteCalc(parseInt(fileSummery.fileTotalSize))));
 				}else{
-					$("#fileAllCnt").text("전체 첨부파일 수 : 없음");
-					$("#fileAllSize").text("전체 첨부파일 크기 : 없음");
+					$("#fileAllCnt").text($.osl.lang("stm2103.summery.fileAllCntN"));
+					$("#fileAllSize").text($.osl.lang("stm2103.summery.fileAllSizeN"));
 				}
 			}
 	 	});
