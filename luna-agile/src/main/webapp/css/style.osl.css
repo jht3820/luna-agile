@@ -908,21 +908,18 @@ label.required:after {
 .osl-bad__card-body{
 	position: relative;
 }
-.osl-portlet__head-toolbar{
+.osl-portlet__sub-toolbar{
 	position: absolute;
 	right: 15px;
-	top: -50px;
+	top: -55px;
 }
 .osl-portlet__head-toolbar>button{
-	min-width: 43px;
-}
-.kt-widget__wrapper>button{
 	min-width: 43px;
 	max-height : 35.33px;
 }
 .osl-portlet__head-label>div{
 	width: 40%;
-	line-height: 32px;
+	line-height: 42px;
 	float:left;
 	text-align: center;
 }
@@ -932,7 +929,7 @@ label.required:after {
 .osl-padding-b-6__5{
  	padding-bottom: 6.5px !important; 
 }
-.osl-cmt__width__100{
+.osl-bad__width__100{
 	word-break: break-word;
 }
 .osl-width__fit-content{
@@ -944,7 +941,7 @@ label.required:after {
 	padding: 15px;
 }
 @media (max-width: 1400px){
-	.osl-cmt__width__100{
+	.osl-bad__width__100{
 		width:300px !important; 
 	}
 	.osl-portlet__head-label>div{
