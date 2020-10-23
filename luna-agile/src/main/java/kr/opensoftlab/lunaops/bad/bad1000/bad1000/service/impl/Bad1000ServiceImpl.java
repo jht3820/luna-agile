@@ -138,7 +138,7 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		String str = (String) paramMap.get("tagList");
 
 		
-		if(!"[]".equals(str)) {
+		if(str != null && !"[]".equals(str)) {
 			str = str.substring(1, str.length()-1);
 			str = str.replaceAll("\"", "");
 			String[] tagNm = str.split(",");
@@ -186,7 +186,9 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		
 		bad1000DAO.updateBad1000BadInfo(paramMap);
 		
+		
 		bad1000DAO.deleteBad1000BadTagList(paramMap);
+
 		
 		String str = (String) paramMap.get("tagList");
 
@@ -247,10 +249,6 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 
 		JSONObject jsonObj = null;
 		
-
-
-		
-		
 		Map<String, String> deleteBadCmt = new HashMap<>();
 		
 		deleteBadCmt.put("delTypeCd", "01");
@@ -260,6 +258,7 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		deleteBadCmt.put("modifyUsrId", (String) paramMap.get("modifyUsrId"));
 		deleteBadCmt.put("modifyUsrIp", (String) paramMap.get("modifyUsrIp"));
 				
+		
 		
 		for(int i=0; i<jsonArray.size(); i++) {
 			jsonObj = (JSONObject) jsonArray.get(i);
@@ -286,7 +285,7 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 			
 			
 			bad1000DAO.deleteBad1000BadInfo(infoMap);
-
+			
 			deleteBadCmt.put("badId", (String) histInfo.get("badId")); 
 			deleteBadCmt.put("menuId", (String) histInfo.get("menuId"));
 			deleteBadCmt.put("prjGrpId", (String) deleteDataType.get("prjGrpId"));
@@ -294,22 +293,24 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 			bad1100DAO.deleteBad1100CmtInfo(deleteBadCmt);
 		}
 
+
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void updateBad1000BadRestore(Map paramMap) throws Exception{
 		
+		
 		bad1000DAO.updateBad1000BadRestore(paramMap);
 		
-		Map hisdtInfo = bad1000DAO.selectBad1000BadInfo(paramMap);
+		Map histInfo = bad1000DAO.selectBad1000BadInfo(paramMap);
 		
-		hisdtInfo.put("badHstTypeCd", "02");
+		histInfo.put("badHstTypeCd", "04");
 		
-		hisdtInfo.put("modifyUsrId", paramMap.get("modifyUsrId"));
-		hisdtInfo.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
+		histInfo.put("modifyUsrId", paramMap.get("modifyUsrId"));
+		histInfo.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
 		
-		bad1200DAO.insertBad1200BadInfo(hisdtInfo);
+		bad1200DAO.insertBad1200BadInfo(histInfo);
 		
 		bad1100DAO.updateBad1100CmtRestore(paramMap);
 	}
