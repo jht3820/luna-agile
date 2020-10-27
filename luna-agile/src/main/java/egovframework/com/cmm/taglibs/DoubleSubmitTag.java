@@ -15,28 +15,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * TagSupport to support to double submit preventer
- * @author Vincent Han
- * @since 2014.08.07
- * @version 1.0
- * @see
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *   
- *   수정일        수정자       수정내용
- *  -------       --------    ---------------------------
- *   2014.08.07	표준프레임워크센터	최초 생성
- *
- * </pre>
- */
+
 public class DoubleSubmitTag extends TagSupport {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoubleSubmitTag.class);
 
-	/**
-	 * Generated Serial Version UID
-	 */
+	
 	private static final long serialVersionUID = 5242217605452312594L;
 	
 	private String tokenKey = EgovDoubleSubmitHelper.DEFAULT_TOKEN_KEY;

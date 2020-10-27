@@ -1,34 +1,18 @@
 package egovframework.com.cmm.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
-
-
-import egovframework.com.cmm.service.CommonService;
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-/**
- * @Class Name : CommonServiceImpl.java
- * @Description : 
- * @Modification Information
- *
- *    수정일       수정자         수정내용
- *    -------        -------     -------------------
+import egovframework.com.cmm.CustomObjectMapper;
+import egovframework.com.cmm.service.CommonService;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
- *
- * @author 공대영
- * @since 2018. 7. 24.
- * @version
- * @see
- *
- */
+
 @Service("commonService")
 public class CommonServiceImpl extends EgovAbstractServiceImpl implements CommonService {
 
@@ -39,11 +23,27 @@ public class CommonServiceImpl extends EgovAbstractServiceImpl implements Common
     	return commonDAO.selectServerTime(paramMap);
     }
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Map> selectDynamicComboBoxAjax(Map<String, String> paramMap)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return commonDAO.selectDynamicComboBoxAjax(paramMap);
 	}
+	
+	
+	
+	
+	@Override
+    public MappingJackson2JsonView getJsonView(String textPlain) {
+        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
+        jsonView.setObjectMapper(new CustomObjectMapper()); // 문자열이 null 이면 공백("") 으로 치환함.
+
+        if ("text".equals(textPlain))
+            jsonView.setContentType("text/plain; charset=UTF-8");
+        else
+            jsonView.setContentType("application/json; charset=UTF-8");
+
+        return jsonView;
+    }
        
 }

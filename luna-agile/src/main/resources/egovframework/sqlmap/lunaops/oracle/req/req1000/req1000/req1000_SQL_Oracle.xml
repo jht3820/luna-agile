@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="req1000DAO">
+	 <!--  in / out class define  -->
+    <typeAlias alias="req1000VO"	type="kr.opensoftlab.lunaops.req.req1000.req1000.vo.Req1000VO"/>
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="resultMapSelectReq1000" class="egovMap">
+		<result property="rn"  					column="RN"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="prjNm"				column="PRJ_NM"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjGrpNm"				column="PRJ_GRP_NM"/>
+		<result property="selPrjId"				column="PRJ_ID"/>
+		<result property="reqId"				column="REQ_ID"/>
+		<result property="reqOrd"				column="REQ_ORD"/>
+		<result property="reqClsId"				column="REQ_CLS_ID"/>
+		<result property="reqClsNm"				column="REQ_CLS_NM"/>
+		<result property="reqUsrId"				column="REQ_USR_ID"/>
+		<result property="reqUsrNm"				column="REQ_USR_NM"/>
+		<result property="reqDtm"				column="REQ_DTM"/>
+		<result property="reqUsrDeptNm"			column="REQ_USR_DEPT_NM"/>
+		<result property="reqUsrEmail"			column="REQ_USR_EMAIL"/>
+		<result property="reqUsrNum"			column="REQ_USR_NUM"/>
+		<result property="reqUsrImgId"			column="REQ_USR_IMG_ID"/>
+		<result property="reqNm"				column="REQ_NM"/>
+		<result property="reqDesc"				column="REQ_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="reqChargerId"			column="REQ_CHARGER_ID"/>
+		<result property="reqStDtm"				column="REQ_ST_DTM"/>
+		<result property="reqEdDtm"				column="REQ_ED_DTM"/>
+		<result property="reqStDuDtm"			column="REQ_ST_DU_DTM"/>
+		<result property="reqEdDuDtm"			column="REQ_ED_DU_DTM"/>
+		<result property="reqProType"			column="REQ_PRO_TYPE"/>
+		<result property="reqProTypeNm"			column="REQ_PRO_TYPE_NM"/>
+		<result property="reqNewType"			column="REQ_NEW_TYPE"/>
+		<result property="reqNewTypeNm"			column="REQ_NEW_TYPE_NM"/>	
+		<result property="reqAcceptTxt"			column="REQ_ACCEPT_TXT"/>
+		<result property="reqTypeCd"			column="REQ_TYPE_CD"/>
+		<result property="atchFileId"			column="ATCH_FILE_ID"/>
+		<result property="cbAtchFileId"			column="CB_ATCH_FILE_ID"/>
+		<result property="milestoneId"			column="MILESTONE_ID"/>
+		<result property="processId"			column="PROCESS_ID"/>
+		<result property="processNm"			column="PROCESS_NM"/>
+		<result property="flowId"				column="FLOW_ID"/>
+		<result property="flowNm"				column="FLOW_NM"/>
+		<result property="useCd"				column="USE_CD"/>
+		<result property="regDtmDay"			column="REG_DTM_DAY"/>
+		<result property="reqKey"				column="REQ_KEY"/>
+    </resultMap>
+	
+	<!-- sql Define  -->
+	<sql id="selectReq1000List">
+		SELECT T1.*, ROWNUM RN
+		FROM
+		(
+			SELECT 
+					A.PRJ_ID
+					,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM
+					,	A.PRJ_GRP_ID
+					,	SF_PRJ1000_GRP_NM(A.PRJ_GRP_ID) AS PRJ_GRP_NM
+					,	DECODE(A.PRJ_ID, #prjId#, '1', '2') AS USR_SEL_PRJ_ORD
+					,	A.REQ_ID
+					,	A.REQ_ORD
+					,	A.REQ_CLS_ID
+					,	NVL(SF_REQ2000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '1'), '') AS REQ_CLS_NM
+					,	A.REQ_USR_ID
+					,	NVL(REQ_USR_NM, SF_STM3000_USR_INFO(A.REQ_USR_ID, '1')) AS REQ_USR_NM
+					,	TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM
+					,	A.REQ_USR_DEPT_ID
+					,	A.REQ_USR_DEPT_NM
+					,	A.REQ_USR_EMAIL
+					,	A.REQ_USR_NUM
+					,	SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
+					,	A.REQ_NM
+					<isNotEmpty property="reqId">
+	    				,	A.REQ_DESC
+	    			</isNotEmpty>
+					<isEmpty property="reqId">
+						<![CDATA[ 
+	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC      
+	    				]]>
+	    			</isEmpty>
+					,	A.REQ_CHARGER_ID
+					,	D.USR_NM			AS REQ_CHARGER_NM
+					, 	NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
+    		   		, 	NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+					, 	NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DU_DTM
+					, 	NVL2(A.REQ_ED_DU_DTM, TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DU_DTM
+					,	A.REQ_PRO_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+					,	A.REQ_NEW_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', A.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM
+					,	A.REQ_ACCEPT_TXT
+			    	,	A.REQ_TYPE_CD
+			    	,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', A.REQ_TYPE_CD, '1') AS REQ_TYPE_NM
+					,	A.ATCH_FILE_ID
+					,	A.CB_ATCH_FILE_ID
+					,	A.MILESTONE_ID
+					,	A.PROCESS_ID
+					,	'' AS PROCESS_NM
+					,	A.FLOW_ID
+					,	'' AS FLOW_NM
+					,	A.USE_CD
+					,	A.REQ_KEY
+					,	A.REQ_MIDDLE_DONE_TXT
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+		    FROM (SELECT * FROM REQ4100) A
+			    ,	STM3000 D
+		    WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND	A.REQ_CHARGER_ID 	= D.USR_ID(+)
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>, A.REG_DTM DESC
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.REQ_PRO_TYPE ASC, USR_SEL_PRJ_ORD ASC, PRJ_NM ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC
+			</isEmpty>
+		) T1 WHERE 1 = 1
+			AND		T1.REQ_USR_ID = #reqUsrId#
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+						AND	T1.REQ_PRO_TYPE = #searchTargetData#
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjNm">
+						AND		T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjGrpNm">
+						AND		T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqNm">
+						AND		T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqDesc">
+						AND		T1.REQ_DESC LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrNm">
+						AND		T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+						AND		T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrNum">
+						AND		T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqDtm">
+						<isNotEmpty property="searchStartDt">
+								AND T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+						<isNotEmpty property="searchEndDt">
+								AND T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="regDtmDay">
+						<isNotEmpty property="searchStartDt">
+								AND T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+						<isNotEmpty property="searchEndDt">
+								AND T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrNum">
+						AND		T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+    </sql>
+    
+    <select id="req1000DAO.selectReq1000ReqList" parameterClass="java.util.Map" resultMap="resultMapSelectReq1000">
+		SELECT *
+		FROM
+			(
+					<include refid="selectReq1000List"/>
+	    	) Z
+	    	WHERE 1=1 
+	    	AND 	Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="req1000DAO.selectReq1000ReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectReq1000List"/>
+						) A
+    </select>
+    
+    <select id="req1000DAO.selectReq1000List" parameterClass="req1000VO"  resultMap="resultMapSelectReq1000">
+		SELECT *
+		FROM
+			(
+					<include refid="selectReq1000List"/>
+	    	) Z
+	    	WHERE 1=1 
+	    	AND 	Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="req1000DAO.selectReq1000AllList" parameterClass="req1000VO"  resultMap="resultMapSelectReq1000">
+		SELECT *
+		FROM
+			(
+					<include refid="selectReq1000List"/>
+	    	) Z
+	    	WHERE 1=1
+	    <isNotEmpty property="prjId">
+			AND		Z.PRJ_ID = #prjId#
+		</isNotEmpty>
+    </select>
+    
+    <select id="req1000DAO.selectReq1000ListCnt" parameterClass="req1000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectReq1000List"/>
+						) A
+    </select>
+    
+	<select id="req1000DAO.selectReq1000ReqInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectReq1000">
+		<include refid="selectReq1000List"/>
+		<isNotEmpty property="prjId">
+			AND		T1.PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isEmpty property="prjId">
+			<isNotEmpty property="selPrjId">
+				AND		T1.PRJ_ID = #selPrjId#
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="reqId">
+	    	AND		T1.REQ_ID = #reqId#
+	    </isNotEmpty>
+	    
+	</select>
+	
+	<insert id="req1000DAO.insertReq1001ReqInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newReqId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_REQ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_REQ_ID, 12, 5)) + 1) , 5, '0')
+						,	'REQ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_REQ_ID 
+			FROM	(
+			            SELECT	MAX(REQ_ID)  AS NEW_REQ_ID
+			            FROM	REQ4100 A
+			            WHERE	1=1
+                        AND		A.PRJ_ID = #prjId#
+			            AND		A.REQ_ID LIKE 'REQ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO REQ4100
+			(
+			        PRJ_ID,				REQ_ID,				PRJ_GRP_ID,			REQ_CLS_ID,			REQ_ORD
+			        ,REQ_USR_ID,		REQ_USR_NM,			REQ_DTM,			REQ_USR_DEPT_NM,		REQ_USR_DEPT_ID		
+			        ,REQ_USR_EMAIL
+			        ,REQ_USR_NUM,		REQ_NM,				REQ_DESC,			REQ_CHARGER_ID
+			        ,REQ_ST_DTM,		REQ_ED_DTM,			REQ_ST_DU_DTM,		REQ_ED_DU_DTM,			REQ_PRO_TYPE
+			        ,REQ_NEW_TYPE,		ATCH_FILE_ID,		CB_ATCH_FILE_ID,	MILESTONE_ID		
+			        ,PROCESS_ID,		FLOW_ID,			REQ_KEY
+			        ,USE_CD,			REG_DTM,			REG_USR_ID,			REG_USR_IP
+			        ,MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+			)                    
+			VALUES
+			(
+					#prjId#,			#newReqId#,			#prjGrpId#,			#reqClsId#,			#reqOrd#
+					,#regUsrId#,		#reqUsrNm#
+					,TO_DATE(REPLACE(#reqDtm#, '-'), 'YYYYMMDD')
+					,#reqUsrDeptNm#,	#reqUsrDeptId#,		#reqUsrEmail#
+					,#reqUsrNum#,		#reqNm#,			#reqDesc#,			#reqChargerId#
+					,TO_DATE(REPLACE(#reqStDtm#, '-'), 'YYYYMMDD')
+					,TO_DATE(REPLACE(#reqEdDtm#, '-'), 'YYYYMMDD')
+					,TO_DATE(REPLACE(#reqStDuDtm#, '-'), 'YYYYMMDD HH24:MI')
+					,TO_DATE(REPLACE(#reqEdDuDtm#, '-'), 'YYYYMMDD HH24:MI')
+					,'01'
+					,'01',				#atchFileId#,		#cbAtchFileId#,		#milestroneId#
+					,#processId#,		#flowId#,			#reqKey#
+					,'01',				SYSDATE,			#regUsrId#,			#regUsrIp#
+					,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	<update id="req1000DAO.updateReq1001ReqInfo" parameterClass="java.util.Map">
+		UPDATE 	REQ4100 A
+		SET		REQ_NM			= #reqNm# 	
+		    ,	REQ_DESC		= #reqDesc#
+		    ,	REQ_USR_EMAIL	= #reqUsrEmail#
+			,	REQ_USR_NUM		= #reqUsrNum#
+			,	REQ_USR_IMG_ID	= #reqUsrImgId#
+		    ,	ATCH_FILE_ID	= #atchFileId#
+		    ,	MODIFY_DTM		= SYSDATE
+		    ,	MODIFY_USR_ID	= #modifyUsrId#
+		    ,	MODIFY_USR_IP	= #modifyUsrIp#
+		    ,   REQ_CLS_ID      = #reqClsId# 
+		WHERE	1=1
+		AND		A.PRJ_ID = #prjId#
+		AND		A.REQ_ID = #reqId#
+	</update>
+	
+	
+	<update id="req1000DAO.updateReq1000ReqKey" parameterClass="java.util.Map">
+		UPDATE 	REQ4100 A
+		SET		REQ_KEY		= #reqKey# 	
+		WHERE	1=1
+		AND		A.PRJ_ID = #prjId#
+		AND		A.REQ_ID = #reqId#
+	</update>
+	
+	<update id="req1000DAO.updateReq1001ReqSubInfo" parameterClass="java.util.Map">
+		UPDATE 	REQ4100 A
+		SET		REQ_CHARGER_ID = #reqChargerId#
+			,	REQ_CHARGER_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
+		    ,	REQ_DEV_WK_TM	= #reqDevWkTm#
+		    ,	MODIFY_DTM		= SYSDATE
+		    ,	MODIFY_USR_ID	= #modifyUsrId#
+		    ,	MODIFY_USR_IP	= #modifyUsrIp#
+		WHERE	1=1
+		AND		A.PRJ_ID = #prjId#
+		AND		A.REQ_ID = #reqId#
+	</update>
+	
+	<delete id="req1000DAO.deleteReq1001ReqInfo" parameterClass="java.util.Map">
+		DELETE	
+		FROM	REQ4100 A
+		WHERE	1=1
+		AND		A.PRJ_ID = #prjId#
+		AND 	A.REQ_ID = #reqId#
+	</delete>
+	
+    <select id="req1000DAO.selectReq1000ExcelList" parameterClass="req1000VO"  resultClass="egovMap">
+	
+		<include refid="selectReq1000List"/>
+
+    </select>
+    
+    
+	<select id="req1000DAO.selectReq1000ReqUserInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT 
+					A.USR_NM
+					,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NM
+					,	A.EMAIL
+			    	,	A.TELNO
+			FROM 
+				STM3000 A
+			WHERE 1=1
+			AND A.LIC_GRP_ID 	= #licGrpId#
+			AND A.USR_ID 		= #reqUsrId#
+		]]>
+	</select>
+	
+	<select id="req1000DAO.selectReq1000ReqPrjInfo" parameterClass="java.util.Map" resultClass="egovMap">
+     		<![CDATA[
+	      		SELECT  
+	       					A.PRJ_NM
+	       				,	A.PRJ_ACRM
+	       		FROM 
+	       				PRJ1000 A
+	       		WHERE 	1=1
+	    		AND 	A.LIC_GRP_ID =  #licGrpId#
+	    		AND 	A.PRJ_ID	 = 	#prjId#
+			]]>
+	</select>
+	
+	<select id="req1000DAO.selectReq1000NextReqOrd" parameterClass="java.util.Map" resultClass="String">
+		<![CDATA[
+			SELECT  NVL(MAX(T.NEXT_REQ_ORD), '1') AS REQ_ORD
+			FROM (
+					SELECT	NVL( TO_CHAR( TO_NUMBER(SUBSTR(A.REQ_ORD, INSTR(A.REQ_ORD, '-')+1))) +1, '1' )
+			       				AS NEXT_REQ_ORD   
+					FROM	REQ4100 A
+					WHERE	1=1
+			        AND		A.PRJ_ID = #prjId# 
+			) T   
+		]]>
+	</select>
+	
+	<delete id="req1000DAO.deleteReq1000ReqAtchFile" parameterClass="java.util.Map">
+		<![CDATA[
+			DELETE 	FROM COMTNFILE
+			WHERE 	1=1
+			AND		ATCH_FILE_ID = #atchFileId#
+		]]>	
+	</delete>
+	
+	<delete id="req1000DAO.deleteReq1000ReqAtchFileDetail" parameterClass="java.util.Map">
+		<![CDATA[
+			DELETE 	FROM COMTNFILEDETAIL
+			WHERE 	1=1
+			AND		ATCH_FILE_ID = #atchFileId#
+		]]>	
+	</delete>
+	
+	    
+	<sql id="selectReq1000IntegratedDshAcceptReqList">
+		SELECT T1.*, ROWNUM RN
+		FROM
+		(
+			SELECT 
+					A.PRJ_ID
+					,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM
+					,	A.REQ_ID
+					,	A.REQ_ORD
+					,	A.REQ_CLS_ID
+					,	NVL(SF_REQ2000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '1'), '') AS REQ_CLS_NM
+					,	A.REQ_USR_ID
+					,	NVL(REQ_USR_NM, SF_STM3000_USR_INFO(A.REQ_USR_ID, '1')) AS REQ_USR_NM
+					,	TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM
+					,	A.REQ_USR_DEPT_NM
+					,	A.REQ_USR_EMAIL
+					,	A.REQ_USR_NUM
+					,	A.REQ_NM
+					<isNotEmpty property="reqId">
+	    				,	A.REQ_DESC
+	    			</isNotEmpty>
+					<isEmpty property="reqId">
+						<![CDATA[ 
+	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC      
+	    				]]>
+	    			</isEmpty>
+					,	A.REQ_CHARGER_ID
+					,	D.USR_NM			AS REQ_CHARGER_NM
+					, 	NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
+    		   		, 	NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+					, 	NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DU_DTM
+					, 	NVL2(A.REQ_ED_DU_DTM, TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DU_DTM
+					,	A.REQ_PRO_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+					,	A.REQ_NEW_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', A.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM
+					,	A.REQ_ACCEPT_TXT
+			    	,	A.REQ_TYPE_CD
+			    	,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', A.REQ_TYPE_CD, '1') AS REQ_TYPE_NM
+					,	A.ATCH_FILE_ID
+					,	A.CB_ATCH_FILE_ID
+					,	A.MILESTONE_ID
+					,	A.PROCESS_ID
+					,	'' AS PROCESS_NM
+					,	A.FLOW_ID
+					,	'' AS FLOW_NM
+					,	A.USE_CD
+					,	A.REQ_KEY
+					,	A.REQ_MIDDLE_DONE_TXT
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+		    FROM (SELECT * FROM REQ4100) A
+			    ,	STM3000 D
+		    WHERE 1=1
+			AND			A.REQ_CHARGER_ID 	= D.USR_ID(+)
+			ORDER BY A.REQ_PRO_TYPE ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC /* 접수요청으로 정렬 접수요청이 제일 위에 */
+		) T1 
+		WHERE 1 = 1
+		AND T1.PRJ_ID = #prjId#		
+		AND	T1.REQ_PRO_TYPE = '01'
+    </sql>
+    
+    <select id="req1000DAO.selectReq1000IntegratedDshAcceptReqList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT *
+		FROM
+		(
+				<include refid="selectReq1000IntegratedDshAcceptReqList"/>
+	    ) Z
+	    WHERE 1=1 
+	    AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+
+    
+    <select id="req1000DAO.selectReq1000IntegratedDshAcceptReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*) AS REQ_CNT
+		FROM	
+		(
+			<include refid="selectReq1000IntegratedDshAcceptReqList"/>
+		) Z
+    </select>
+
+</sqlMap>

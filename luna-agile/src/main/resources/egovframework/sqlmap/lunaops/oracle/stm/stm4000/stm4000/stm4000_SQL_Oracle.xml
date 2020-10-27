@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm4000DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="loginVO"	type="kr.opensoftlab.lunaops.com.vo.LoginVO"/>
+
+
+   	<resultMap id="resultMapSelectStm4000MsterCode" class="egovMap">
+		<result property="rn"  				column="RN"/>
+		<result property="mstCd"			column="MST_CD"/>
+		<result property="upperMstCd"		column="UPPER_MST_CD"/>
+		<result property="mstCdNm"			column="MST_CD_NM"/>
+		<result property="mstCdEngNm"		column="MST_CD_ENG_NM"/>
+		<result property="mstCdDesc"		column="MST_CD_DESC"/>
+		<result property="lvl"				column="LVL"/>
+		<result property="ord"				column="ORD"/>
+		<result property="useYn"			column="USE_YN"/>
+		<result property="stmUseYn"			column="STM_USE_YN"/>
+    </resultMap>
+    
+   	<resultMap id="resultMapSelectStm4000DetailCode" class="egovMap">
+		<result property="rn"  				column="RN"/>
+		<result property="mstCd"			column="MST_CD"/>
+		<result property="mstCdNm"			column="MST_CD_NM"/>
+		<result property="subCd"			column="SUB_CD"/>
+		<result property="subCdNm"			column="SUB_CD_NM"/>
+		<result property="subCdRef1"		column="SUB_CD_REF1"/>
+		<result property="subCdRef2"		column="SUB_CD_REF2"/>
+		<result property="subCdRef3"		column="SUB_CD_REF3"/>
+		<result property="subCdRef4"		column="SUB_CD_REF4"/>
+		<result property="subCdRef5"		column="SUB_CD_REF5"/>
+		<result property="subCdDesc"		column="SUB_CD_DESC"/>
+		<result property="ord"				column="ORD"/>
+		<result property="useYn"			column="USE_YN"/>
+		<result property="stmUseYn"			column="STM_USE_YN"/>
+    </resultMap>
+
+
+	<sql id="selectStm4000CommonCodeMasterList">
+		SELECT ROWNUM RN, T.*
+		FROM
+		(
+			SELECT
+					A.MST_CD
+				,	A.UPPER_MST_CD
+				,	A.MST_CD_NM
+				,	A.MST_CD_ENG_NM
+				,	A.MST_CD_DESC
+				,	A.LVL
+				,	A.ORD
+				,	A.USE_YN
+				,	A.STM_USE_YN
+			FROM STM4000 A
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>, A.ORD DESC
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.ORD
+			</isEmpty>
+		) T
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="mstCd">
+					AND T.MST_CD LIKE '%'|| UPPER(#searchTargetData#) ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mstCdNm">
+					AND T.MST_CD_NM LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mstCdDesc">
+					AND T.MST_CD_DESC LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useYn">
+					<isEqual property="searchTargetData" compareValue="01">
+						AND T.USE_YN = 'Y'
+					</isEqual>
+					<isEqual property="searchTargetData" compareValue="02">
+						AND T.USE_YN = 'N'
+					</isEqual>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="stmUseYn">
+					<isEqual property="searchTargetData" compareValue="01">
+						AND T.STM_USE_YN = 'Y'
+					</isEqual>
+					<isEqual property="searchTargetData" compareValue="02">
+						AND T.STM_USE_YN = 'N'
+					</isEqual>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<sql id="selectStm4000CommonCodeDetailList">
+		SELECT ROWNUM RN, T.*
+		FROM
+		(
+			SELECT
+				  	A.MST_CD
+				,	(SELECT MST_CD_NM FROM STM4000 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = A.MST_CD) AS MST_CD_NM 	
+				,	A.SUB_CD
+				,	A.SUB_CD_NM
+				,	A.SUB_CD_REF1
+				,	A.SUB_CD_REF2
+				,	A.SUB_CD_REF3
+				,	A.SUB_CD_REF4
+				,	A.SUB_CD_REF5
+				,	A.SUB_CD_DESC
+				,	A.ORD
+				,	A.USE_YN
+				,	( SELECT B.STM_USE_YN FROM STM4000 B WHERE LIC_GRP_ID = #licGrpId# AND B.MST_CD = A.MST_CD) AS STM_USE_YN
+			FROM STM4001 A
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>, A.ORD DESC
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.ORD
+			</isEmpty>
+		) T
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="subCd">
+					AND T.SUB_CD LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="subCdNm">
+					AND T.SUB_CD_NM LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="subCdRef1">
+					AND A.SUB_CD_REF1 LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="subCdRef2">
+					AND A.SUB_CD_REF2 LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="subCdDesc">
+					AND T.SUB_CD_DESC LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useYn">
+					<isEqual property="searchTargetData" compareValue="01">
+						AND T.USE_YN = 'Y'
+					</isEqual>
+					<isEqual property="searchTargetData" compareValue="02">
+						AND T.USE_YN = 'N'
+					</isEqual>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+
+	<select id="stm4000DAO.selectStm4000CommonCodeMasterList" parameterClass="java.util.Map" resultMap="resultMapSelectStm4000MsterCode">
+		SELECT Z.*
+	   	FROM
+	   	(
+			<include refid="selectStm4000CommonCodeMasterList" />
+		) Z
+		WHERE 1=1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000CommonCodeMasterListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm4000CommonCodeMasterList" />
+		) Z
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000CommonCodeMasterInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectStm4000MsterCode">
+		<include refid="selectStm4000CommonCodeMasterList"/>
+		<isNotEmpty property="mstCd">
+			AND		T.MST_CD = #mstCd#
+		</isNotEmpty>
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000CommonCodeDetailList" parameterClass="java.util.Map" resultMap="resultMapSelectStm4000DetailCode">
+		SELECT Z.*
+	   	FROM
+	   	(
+			<include refid="selectStm4000CommonCodeDetailList" />
+		) Z
+		WHERE 1=1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000CommonCodeDetailListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm4000CommonCodeDetailList" />
+		) Z		
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000CommonCodeDetailInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectStm4000DetailCode">
+		<include refid="selectStm4000CommonCodeDetailList"/>
+		<isNotEmpty property="subCd">
+			AND		T.SUB_CD = #subCd#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="stm4000DAO.insertStm4000CommonCodeMaster" parameterClass="java.util.Map">
+		<![CDATA[ 
+            INSERT INTO STM4000
+			(
+					LIC_GRP_ID,		MST_CD, 			UPPER_MST_CD,		MST_CD_NM,		MST_CD_ENG_NM
+				,	MST_CD_DESC,	ABORT_DT,			LVL,				ORD,			USE_YN
+				, 	STM_USE_YN, 	REG_DTM, 			REG_USR_ID,			REG_USR_IP,		MODIFY_DTM
+				,	MODIFY_USR_ID, 	MODIFY_USR_IP
+			) VALUES
+			(
+					#licGrpId#, 	upper(#mstCd#), 	#upperMstCd#, 		#mstCdNm#, 		#mstCdEngNm#
+				,	#mstCdDesc#, 	#abortDt#,			#lvl#,				#ord#,			#useYn#
+				,	'N', 			SYSDATE,			#regUsrId#,			#regUsrIp#,		SYSDATE
+				,	#modifyUsrId#, 	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	<update id="stm4000DAO.updateStm4000CommonCodeMaster" parameterClass="java.util.Map">
+		UPDATE STM4000 A SET
+		<isNotEmpty property="stmUseYn">
+			<isEqual property="stmUseYn" compareValue="N"> 
+					UPPER_MST_CD  = #upperMstCd#
+				, 	MST_CD_NM  = #mstCdNm#
+				, 	MST_CD_DESC = #mstCdDesc#
+				<isNotEmpty property="mstCdEngNm">
+					, 	MST_CD_ENG_NM = #mstCdEngNm#
+				</isNotEmpty>
+				<isNotEmpty property="abortDt">
+					, 	ABORT_DT = #abortDt#
+				</isNotEmpty>
+				, 	LVL = #lvl#
+				, 	ORD = #ord#
+				, 	USE_YN = #useYn#
+			</isEqual>	
+			<isEqual property="stmUseYn" compareValue="Y"> 
+				ORD = #ord#
+			</isEqual>
+				, MODIFY_DTM = SYSDATE
+				, MODIFY_USR_ID = #modifyUsrId#
+				, MODIFY_USR_IP = #modifyUsrIp#
+		</isNotEmpty>
+		WHERE	1=1
+		AND	LIC_GRP_ID 	= #licGrpId#
+		AND	MST_CD 		= #mstCd#
+	</update>
+	
+	 
+	<insert id="stm4000DAO.insertStm4000CommonCodeDetail" parameterClass="java.util.Map">
+		<![CDATA[ 
+            INSERT INTO STM4001
+			(
+					LIC_GRP_ID, 		MST_CD, 			SUB_CD, 			SUB_CD_NM				
+				, 	ORD, 				USE_YN, 			SUB_CD_REF1, 		SUB_CD_REF2			
+				, 	SUB_CD_REF3,	 	SUB_CD_REF4, 		SUB_CD_REF5, 		SUB_CD_DESC			
+				, 	REG_DTM, 			REG_USR_ID, 		REG_USR_IP, 		MODIFY_DTM			
+				, 	MODIFY_USR_ID, 		MODIFY_USR_IP
+					
+			) VALUES
+			(
+					#licGrpId#, 		upper(#mstCd#), 	upper(#subCd#), 	#subCdNm#					
+				, 	#ord#, 				#useYn#,			#subCdRef1#,		#subCdRef2#			
+				, 	#subCdRef3#, 		#subCdRef4#, 		#subCdRef5#, 		#subCdDesc#    			
+				, 	SYSDATE, 			#regUsrId#,			#regUsrIp#,			SYSDATE					
+				, 	#modifyUsrId#, 		#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	<update id="stm4000DAO.updateStm4000CommonCodeDetail" parameterClass="java.util.Map">
+		UPDATE STM4001 A SET
+			<isNotEmpty property="stmUseYn">
+				<isEqual property="stmUseYn" compareValue="N"> 
+				   		SUB_CD_NM = #subCdNm#
+					, 	ORD = #ord# 
+					, 	USE_YN = #useYn#  
+					, 	SUB_CD_REF1 = #subCdRef1#
+					, 	SUB_CD_REF2 = #subCdRef2#
+					, 	SUB_CD_REF3 = #subCdRef3#
+					, 	SUB_CD_REF4 = #subCdRef4#
+					, 	SUB_CD_REF5 = #subCdRef5#
+					, 	SUB_CD_DESC = #subCdDesc#
+				</isEqual>	
+				<isEqual property="stmUseYn" compareValue="Y"> 
+					ORD = #ord#
+				</isEqual>	
+				, MODIFY_DTM = SYSDATE
+				, MODIFY_USR_ID = #modifyUsrId#
+				, MODIFY_USR_IP = #modifyUsrIp#
+			</isNotEmpty>	
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId#
+		AND	MST_CD = #mstCd#
+		AND	SUB_CD = #subCd#
+	</update>
+	
+	<delete id="stm4000DAO.deleteStm4000CommonCodeMaster" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	STM4000 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd#       	
+		]]>
+	</delete>
+	
+	<delete id="stm4000DAO.deleteStm4000CommonCodeDetail" parameterClass="java.util.Map">
+		<![CDATA[
+			DELETE
+			FROM	STM4001 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd# 
+        	AND		a.SUB_CD = #subCd#
+		]]>
+	</delete>
+	
+	<delete id="stm4000DAO.deleteStm4000CommonCodeDetailToMstCd" parameterClass="java.util.Map">
+		<![CDATA[ 
+			DELETE
+			FROM	STM4001 a
+        	WHERE	1=1
+        	AND		a.LIC_GRP_ID = #licGrpId#
+        	AND		a.MST_CD = #mstCd#       	
+		]]>
+	</delete>
+	
+	
+	<select id="stm4000DAO.selectStm4000MasterExcelList" parameterClass="loginVO"  resultClass="egovMap">
+			SELECT
+				  MST_CD
+				, UPPER_MST_CD
+				, MST_CD_NM
+				, MST_CD_ENG_NM
+				, MST_CD_DESC
+				, LVL
+				, ORD
+				, USE_YN
+			FROM STM4000 a
+			WHERE a.LIC_GRP_ID = #licGrpId#
+    </select>
+    
+    <select id="stm4000DAO.selectStm4000DetailExcelList" parameterClass="java.util.Map"  resultClass="egovMap">
+			SELECT
+				  MST_CD
+				, SUB_CD
+				, SUB_CD_NM
+				, SUB_CD_REF1
+				, SUB_CD_REF2
+				, SUB_CD_REF3
+				, SUB_CD_REF4
+				, SUB_CD_REF5
+				, SUB_CD_DESC
+				, ORD
+				, USE_YN
+				FROM STM4001 A
+			WHERE a.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+    </select>
+    
+    <select id="stm4000DAO.selectStm4000CommonCodeCount" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+			SELECT
+				  COUNT(1) AS CNT
+				FROM STM4000 A
+			WHERE A.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+    </select>    
+
+    <select id="stm4000DAO.selectStm4000CommonDetailCodeCount" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+			SELECT
+				  COUNT(1) AS CNT
+				FROM STM4001 A
+			WHERE A.LIC_GRP_ID = #licGrpId#
+			AND A.MST_CD = #mstCd#
+			AND A.SUB_CD = #subCd#
+    </select>    
+	
+	<select id="stm4000DAO.selectStm4000MultiCommonCodeList" parameterClass="java.util.HashMap" resultClass="egovMap">
+		<![CDATA[					
+			SELECT	A.MST_CD
+				,	A.SUB_CD
+			    ,	A.SUB_CD_NM
+			    ,	SUB_CD_REF1
+			    ,	SUB_CD_REF2
+			    ,	(SELECT MST_CD_NM FROM STM4000 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = A.MST_CD) AS MST_CD_NM
+			FROM	STM4001 A
+			WHERE	1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+		]]>
+		<isNotEmpty property="mstCd">
+			AND		A.MST_CD = #mstCd#
+		</isNotEmpty>
+		<isNotEqual property="useYn" compareValue="A">
+			AND		A.USE_YN = #useYn#
+		</isNotEqual>
+			ORDER BY MST_CD, ORD
+	</select>
+	
+	<select id="stm4000DAO.selectStm4000MstCodeNextOrd"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+			SELECT NVL(MAX(ORD), 0)+1 AS NEW_ORD 
+			FROM STM4000
+		    WHERE 1=1
+		    AND LIC_GRP_ID = #licGrpId#
+    </select>
+    
+	<select id="stm4000DAO.selectStm4000DetailCodeNextOrd"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+			SELECT NVL(MAX(ORD), 0)+1 AS NEW_ORD 
+			FROM STM4001
+		    WHERE 1=1
+		    AND LIC_GRP_ID = #licGrpId#
+		    AND MST_CD = #mstCd#
+    </select>
+	
+</sqlMap>

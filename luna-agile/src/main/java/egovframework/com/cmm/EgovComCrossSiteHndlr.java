@@ -10,28 +10,11 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.tag.common.core.Util;
 
-/**
- * Cross-Site Scripting 체크하여 값을 되돌려 받는 핸들러 JSP TLD, 자바에서 사용가능
- *
- * @author 공통서비스 장동한
- * @since 2010.11.09
- * @version 1.0
- * @see <pre>
- * &lt;&lt; 개정이력(Modification Information) &gt;&gt;
- *
- *   수정일      수정자           수정내용
- *  -------    --------    ---------------------------
- *   2010.11.09  장동한          최초 생성
- *
- * </pre>
- */
+
 @SuppressWarnings("serial")
 public class EgovComCrossSiteHndlr extends BodyTagSupport {
 
-	/*
-	 * (One almost wishes XML and JSP could support "anonymous tags," given the
-	 * amount of trouble we had naming this one!) :-) - sb
-	 */
+	
 
 	// *********************************************************************
 	// Internal state
@@ -59,11 +42,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 						"&#43;","&#45;"
 						};
 
-	/**
-	 * Constructs a new handler. As with TagSupport, subclasses should not
-	 * provide other constructors and are expected to call the superclass
-	 * constructor.
-	 */
+	
 	public EgovComCrossSiteHndlr() {
 		super();
 		init();
@@ -150,15 +129,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 	// *********************************************************************
 	// Public utility methods
 
-	/**
-	 * Outputs <tt>text</tt> to <tt>pageContext</tt>'s current JspWriter. If
-	 * <tt>escapeXml</tt> is true, performs the following substring replacements
-	 * (to facilitate output to XML/HTML pages):
-	 *
-	 * & -> &amp; < -> &lt; > -> &gt; " -> &#034; ' -> &#039;
-	 *
-	 * See also Util.escapeXml().
-	 */
+	
 	public static void out(PageContext pageContext, boolean escapeXml,
 			Object obj) throws IOException {
 		JspWriter w = pageContext.getOut();
@@ -199,12 +170,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 
 	}
 
-	/**
-	 *
-	 * Optimized to create no extra objects and write directly to the JspWriter
-	 * using blocks of escaped and unescaped characters
-	 *
-	 */
+	
 	private static void writeEscapedXml(char[] buffer, int length, JspWriter w)
 			throws IOException {
 		int start = 0;
@@ -230,12 +196,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 		}
 	}
 
-	/**
-	 *
-	 * Optimized to create no extra objects and write directly to the JspWriter
-	 * using blocks of escaped and unescaped characters
-	 *
-	 */
+	
 	@SuppressWarnings("unused")
 	private String getWriteEscapedXml() throws IOException {
 		String sRtn = "";
@@ -295,12 +256,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 		return sRtn;
 	}
 
-	/**
-	 *
-	 * Optimized to create no extra objects and write directly to the JspWriter
-	 * using blocks of escaped and unescaped characters
-	 *
-	 */
+	
 	@SuppressWarnings("unused")
 	private String getWriteEscapedXml(String sWriteString) throws IOException {
 
@@ -376,30 +332,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
         this.escapeXml = escapeXml;
     }
 
-    /** 2011.10.10 cmd 라인상에서 편의제공을 위해 제공, 필요없을시 삭제하여도 무방함
-    public static void main(String[] args) throws IOException
-    {
-
-    	EgovComCrossSiteHndlr egovComCrossSiteHndlr = new EgovComCrossSiteHndlr();
-
-    	egovComCrossSiteHndlr.value = "TRNSMIT";
-
-    	String sCrossSiteHndlr = egovComCrossSiteHndlr.getWriteEscapedXml();
-    	//System.out.println("writeEscapedXml " + egovComCrossSiteHndlr.getWriteEscapedXml());
-    	/*
-    	System.out.println("sCrossSiteHndlr|"+ sCrossSiteHndlr + "|");
-
-    	try{
-    		System.out.println("TRY TEST 1");
-    		throw new Exception();
-    	}catch(Exception e){
-    		System.out.println("TRY TEST 2");
-    	}finally{
-    		System.out.println("TRY TEST 3");
-
-    	}
-    }
-     */
+    
  }
 
 

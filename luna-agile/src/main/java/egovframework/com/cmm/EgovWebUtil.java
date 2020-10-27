@@ -2,18 +2,7 @@ package egovframework.com.cmm;
 
 import java.util.regex.Pattern;
 
-/**
- * 교차접속 스크립트 공격 취약성 방지(파라미터 문자열 교체)
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *
- *   수정일      수정자           수정내용
- *  -------    	--------    ---------------------------
- *   2011.10.10  한성곤          최초 생성
- *
- * </pre>
- */
+
 
 public class EgovWebUtil {
 	public static String clearXSSMinimum(String value) {
@@ -64,12 +53,7 @@ public class EgovWebUtil {
 		return returnValue;
 	}
 
-	/**
-	 * 행안부 보안취약점 점검 조치 방안.
-	 *
-	 * @param value
-	 * @return
-	 */
+	
 	public static String filePathReplaceAll(String value) {
 		String returnValue = value;
 		if (returnValue == null || returnValue.trim().equals("")) {

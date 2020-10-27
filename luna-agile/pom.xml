@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>kr.opensoftlab</groupId>
-	<artifactId>luna-agile</artifactId>
+	<artifactId>lunaops</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>luna-agile</name>
+	<name>lunaops</name>
 	<url>http://www.egovframe.go.kr</url>
 
 	<properties>
@@ -18,7 +18,6 @@
 		<webapp.lib>${basedir}/src/main/webapp/WEB-INF/lib</webapp.lib>
 	</properties>
 	
-	<!-- 프로파일 설정 -->
 	<!-- <profiles>
 		<profile>
 			<id>real</id>
@@ -46,7 +45,6 @@
 		</profile>
 	</profiles> -->
 	
-	<!-- Maven 빌드 설정 -->
 	<build>
 		<defaultGoal>install</defaultGoal>
 		<directory>${basedir}/target</directory>
@@ -78,7 +76,6 @@
 							,WEB-INF/classes/kr/opensoftlab/sdf/jenkins/service/impl/*.class
 							,WEB-INF/classes/kr/opensoftlab/sdf/jenkins/task/*.class
 							,WEB-INF/classes/kr/opensoftlab/sdf/jenkins/vo/*.class
-							,WEB-INF/classes/kr/opensoftlab/sdf/jenkins/*.class
 							,WEB-INF/classes/kr/opensoftlab/sdf/paging/*.class
 							,WEB-INF/classes/kr/opensoftlab/sdf/svn/*.class
 							,WEB-INF/classes/kr/opensoftlab/sdf/svn/handler/*.class
@@ -119,9 +116,6 @@
 
 	<repositories>
 	
-		<!-- 오픈소프트랩 사설저장소(Nexus) 설정 해당 사설 저장소에 리파지토리 프록시등으로 설정 되어 있음. -->
-		<!-- 사설 저장소를 외부 연결이 안되는 폐쇄망에서 사용할때는 이클립스는 이클립스 설정에서 Maven setting.xml의 Mirror 설정을 먼저 참조하기에  -->
-		<!-- maven setting.xml의 mirror 항목에 해당 저장소 위치 등록해야함. default는 외부망임.-->
 		<!-- <repository>
 			<id>oslnexus</id>
 			<url>http://192.168.109.15:7080/nexus/content/groups/public/</url>
@@ -133,10 +127,9 @@
 			</snapshots>
 		</repository> -->
 		
-		<!-- MAVEN 중앙 저장소 -->
 		<repository>
 			<id>mvn2</id>
-			<url>http://repo1.maven.org/maven2/</url>
+			<url>https://repo1.maven.org/maven2/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -145,7 +138,6 @@
 			</snapshots>
 		</repository>
 
-		<!-- 전자정부프레임워크 저장소 -->
 		<repository>
 			<id>egovframe</id>
 			<url>http://maven.egovframe.kr:8080/maven/</url>
@@ -157,7 +149,6 @@
 			</snapshots>
 		</repository>
 
-		<!-- 오라클 JDBC 저장소 -->
 		<repository>
 			<id>oracle</id>
 			<name>ORACLE JDBC Repositories</name>
@@ -170,7 +161,6 @@
 			</snapshots>
 		</repository>
 		
-		<!-- 큐브리드 JDBC 저장소 -->
 		<repository>
 			<id>cubrid.release.repository</id>
 			<url>http://maven.cubrid.org</url>
@@ -190,10 +180,9 @@
 			<artifactId>kr.opensoftlab.sdf</artifactId>
 			<version> 1.0</version>
 			<scope>system</scope>
-			<systemPath>${webapp.lib}/lunaits_sdf.jar</systemPath>
+			<systemPath>${webapp.lib}/sdf.jar</systemPath>
 		</dependency>
 		
-		<!-- 표준프레임워크 lib start -->
 		<dependency>
 			<groupId>egovframework.rte</groupId>
 			<artifactId>egovframework.rte.ptl.mvc</artifactId>
@@ -253,7 +242,6 @@
 			<artifactId>sndng-mail</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<!-- 전자정부프레임워크 lib end -->
 		
 		<!-- Servlet lib Start -->
 		<dependency>
@@ -420,12 +408,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- xmlbeans 2.3.0과 충돌하여 제거 
-		<dependency>
-			<groupId>xmlbeans</groupId>
-			<artifactId>xbean</artifactId>
-			<version>2.2.0</version>
-		</dependency> -->
 
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -550,7 +532,7 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
-			<version>11.1.0.7.0</version>
+			<version>12.1.0.2</version>
 		</dependency>
 		
 	 	<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
@@ -568,7 +550,6 @@
 		</dependency>
 				
 				
-		<!-- JSON lib 추가-->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -581,26 +562,24 @@
 		</dependency>
 		
 		
-		<!-- JsonView 사용을 위한com.fasterxml.jackson.core, databind, annotations -->
         <dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>2.7.0</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.7.0</version>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.7.0</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.7.0</version>
 		</dependency>
 		
-		<!-- jasypt 암호화 알고리즘 -->
 		<dependency>
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
@@ -626,6 +605,43 @@
 		    <artifactId>svnkit</artifactId>
 		    <version>1.9.3</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>6.10.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>6.10.0</version>
+		</dependency>
+						
+		<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
+		<dependency>
+		    <groupId>org.codehaus.groovy</groupId>
+		    <artifactId>groovy-all</artifactId>
+		    <version>2.5.8</version>
+		    <type>pom</type>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+		<dependency>
+		    <groupId>com.lowagie</groupId>
+		    <artifactId>itext</artifactId>
+		    <version>2.1.7</version>
+		</dependency>
+
+
+							
+		<!-- 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>springloaded</artifactId>
+			<version>1.2.5.RELEASE</version>
+		</dependency>-->
+		
 		
 	</dependencies>
 

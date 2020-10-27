@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="prj2000DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="Prj2000VO"	type="kr.opensoftlab.lunaops.prj.prj2000.prj2000.vo.Prj2000VO"/>
+	
+	
+	<resultMap id="resultMapDefaultPrj2000" class="HashMap">
+		<result property="rn" column="RN" />
+		<result property="prjId" column="PRJ_ID" />
+		<result property="authGrpId" column="AUTH_GRP_ID" />
+		<result property="authGrpNm" column="AUTH_GRP_NM" />
+		<result property="authGrpDesc" column="AUTH_GRP_DESC" />
+		<result property="createDt" column="CREATE_DT" />
+		<result property="useCd" column="USE_CD" />
+		<result property="useNm" column="USE_NM" />
+		<result property="ord" column="ORD" />
+		<result property="usrTyp" column="USR_TYP" />
+		<result property="usrTypNm" column="USR_TYP_NM" />
+		<result property="acceptUseCd" column="ACCEPT_USE_CD" />
+		<result property="acceptUseNm" column="ACCEPT_USE_NM" />
+	</resultMap>
+	
+	<resultMap id="resultMapSelectPrj2000AuthPageList" extends="resultMapDefaultPrj2000" class="HashMap">
+		<result property="rn" column="RN" />
+		<result property="assignCnt" column="ASSIGN_CNT" />
+	</resultMap>
+	
+	<resultMap id="resultMapSelectPrj2000AuthList" extends="resultMapDefaultPrj2000" class="HashMap">
+		<result property="assignCnt" column="ASSIGN_CNT" />
+	</resultMap>
+	
+	<resultMap id="resultMapSelectPrj2000AuthCopyList" class="HashMap">
+		<result property="rn" column="RN" />
+		<result property="prjId" column="PRJ_ID" />
+		<result property="prjNm" column="PRJ_NM" />
+		<result property="authGrpId" column="AUTH_GRP_ID" />
+		<result property="authGrpNm" column="AUTH_GRP_NM" />
+		<result property="authGrpDesc" column="AUTH_GRP_DESC" />
+		<result property="createDt" column="CREATE_DT" />
+		<result property="useCd" column="USE_CD" />
+		<result property="ord" column="ORD" />
+		<result property="usrTyp" column="USR_TYP" />
+		<result property="usrTyp_nm" column="USR_TYP_NM" />
+		<result property="acceptUseNm" column="ACCEPT_USE_NM" />
+	</resultMap>
+	
+	<sql id = "selectPrj2000PrjAuthGrpList">
+		<![CDATA[
+			SELECT ROWNUM RN, T.*
+			FROM
+			(
+			   SELECT	
+						A.PRJ_ID
+					,	A.AUTH_GRP_ID
+				    ,	A.AUTH_GRP_NM
+				    ,	NVL(A.AUTH_GRP_DESC, ' ') AS AUTH_GRP_DESC
+				    ,	A.CREATE_DT
+				    ,	A.USE_CD
+				    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+				    ,	A.ORD
+				    ,	A.USR_TYP
+				    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00004', A.USR_TYP, '1') AS USR_TYP_NM
+				    ,	A.ACCEPT_USE_CD
+				    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.ACCEPT_USE_CD, '1') AS ACCEPT_USE_NM
+				    ,	(
+					    	SELECT COUNT(*)
+							FROM PRJ2001 B
+							WHERE 1=1
+							AND	B.PRJ_ID = A.PRJ_ID
+							AND	B.AUTH_GRP_ID = A.AUTH_GRP_ID
+           				 ) AS ASSIGN_CNT
+				FROM	PRJ2000 A
+				WHERE	1=1
+				AND		A.LIC_GRP_ID = #licGrpId#
+				AND		A.PRJ_ID = #prjId#
+		]]> 
+				<isEmpty property="view">
+					AND		A.USE_CD = '01'
+				</isEmpty>
+				<isNotEmpty property="paramSortFieldId">
+					<isNotEmpty property="sortDirection">
+						ORDER BY $paramSortFieldId$
+						<isEqual property="sortDirection" compareValue="desc">
+							DESC
+						</isEqual>, A.ORD ASC
+					</isNotEmpty>
+				</isNotEmpty>
+				<isEmpty property="paramSortFieldId">
+					ORDER BY A.ORD ASC, A.AUTH_GRP_NM ASC
+				</isEmpty>
+			) T
+			WHERE 1=1
+		<isNotEmpty property="searchTargetData">	
+		   	<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="authGrpNm">
+					AND T.AUTH_GRP_NM LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="authGrpDesc">
+					AND T.AUTH_GRP_DESC LIKE '%'||#searchTargetData#||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND T.USE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="acceptUseCd">
+					AND T.ACCEPT_USE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrTyp">
+					AND T.USR_TYP = #searchTargetData#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+    <select id="prj2000DAO.selectPrj2000PrjAuthGrpListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    SELECT COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectPrj2000PrjAuthGrpList" />
+		) Z
+    </select>
+    
+    <select id="prj2000DAO.selectPrj2000PrjAuthGrpPageList" parameterClass="java.util.Map" resultMap="resultMapSelectPrj2000AuthList">
+		SELECT Z.*
+	   	FROM
+	   	(
+			<include refid="selectPrj2000PrjAuthGrpList" />
+		) Z
+		WHERE 1=1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+	
+	<select id="prj2000DAO.selectPrj2000PrjAuthGrpList" parameterClass="java.util.Map" resultMap="resultMapDefaultPrj2000">
+		<include refid="selectPrj2000PrjAuthGrpList" />
+	</select>
+	
+	<select id="prj2000DAO.selectPrj2000AuthGrpInfoAjax" parameterClass="java.util.Map" resultMap="resultMapDefaultPrj2000" >
+	<![CDATA[
+		SELECT	
+					ROWNUM AS RN
+				,	A.PRJ_ID
+				,	A.AUTH_GRP_ID
+			    ,	A.AUTH_GRP_NM
+			    ,	A.AUTH_GRP_DESC
+			    ,	A.CREATE_DT
+			    ,	A.USE_CD
+			    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+			    ,	A.ORD
+			    ,	A.USR_TYP
+			    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00004', A.USR_TYP, '1') AS USR_TYP_NM
+			    ,	A.ACCEPT_USE_CD
+			    ,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.ACCEPT_USE_CD, '1') AS ACCEPT_USE_NM
+		FROM PRJ2000 A
+        WHERE 1=1
+        AND	A.LIC_GRP_ID = #licGrpId#
+        AND	A.PRJ_ID = #prjId#
+        AND	A.AUTH_GRP_ID = #authGrpId#
+	]]>
+	</select>
+	
+	<update id="prj2000DAO.updatePrj2000AuthGrpInfoAjax" parameterClass="java.util.Map"  >
+	<![CDATA[
+		UPDATE PRJ2000 SET 
+        		AUTH_GRP_NM = #authGrpNm#
+            ,	AUTH_GRP_DESC = #authGrpDesc#
+            ,	USE_CD = #useCd#
+            ,	ORD = #ord# 
+            ,	USR_TYP = #usrTyp# 
+            ,	ACCEPT_USE_CD = #acceptUseCd#
+            ,	MODIFY_DTM = SYSDATE 
+            ,	MODIFY_USR_ID = #modifyUsrId# 
+            ,	MODIFY_USR_IP = #modifyUsrIp# 
+		WHERE 1=1
+        AND	LIC_GRP_ID = #licGrpId#
+        AND	PRJ_ID = #prjId#
+        AND	AUTH_GRP_ID = #authGrpId#
+	]]>
+	</update>
+	
+	<select id="prj2000DAO.selectPrj2000AuthGrpCopyList"  parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			SELECT B.PRJ_ID
+				, C.PRJ_NM
+				,	B.AUTH_GRP_ID
+				,	B.AUTH_GRP_NM
+				,	NVL(B.AUTH_GRP_DESC, ' ') AS AUTH_GRP_DESC
+				,	B.CREATE_DT
+				,	B.USE_CD
+				,	B.ORD
+				,	B.USR_TYP
+				,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00004', B.USR_TYP, '1') AS USR_TYP_NM
+				,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', B.ACCEPT_USE_CD, '1') AS ACCEPT_USE_NM
+			FROM
+						(
+							SELECT DISTINCT Z.PRJ_ID
+							FROM PRJ2000 Z, PRJ2001 X
+							WHERE 1=1
+							AND Z.PRJ_ID = X.PRJ_ID
+							AND Z.AUTH_GRP_ID = X.AUTH_GRP_ID
+							AND Z.USR_TYP = '02'
+							AND Z.LIC_GRP_ID = #licGrpId#
+		]]>					
+		 					<isNotEqual property="selectType" compareValue="systemAdmin">
+			    				AND USR_ID = #usrId#
+			    			</isNotEqual>
+		<![CDATA[	    			
+						) A, PRJ2000 B, PRJ1000 C
+						WHERE 1=1
+						AND A.PRJ_ID = B.PRJ_ID
+						AND A.PRJ_ID = C.PRJ_ID
+						AND C.USE_CD = '01'
+			            AND B.USE_CD = '01'
+			ORDER BY B.PRJ_ID, B.ORD
+		]]>
+	</select>
+	
+	<select id="prj2000DAO.selectPrj2000AuthGrpNextOrd"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+			SELECT	NVL(MAX(A.ORD), 0)+1 AS NEW_ORD
+			FROM	PRJ2000 A
+			WHERE	1=1
+			AND		A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="view">
+				<isEqual property="view" compareValue="stm2000">
+					AND		A.PRJ_ID = 'ROOTSYSTEM_PRJ'
+				</isEqual>
+				<isEqual property="view" compareValue="prj2000">
+					AND		A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+    </select>
+	
+	<select id="prj2000DAO.selectPrj2000PrjAuthGrpList_new" parameterClass="Prj2000VO" resultClass="egovMap">
+	            RN
+	            ,A.PRJ_ID
+				,A.AUTH_GRP_ID
+			    ,A.AUTH_GRP_NM
+			    ,NVL(A.AUTH_GRP_DESC, ' ') AS AUTH_GRP_DESC
+			    ,A.CREATE_DT
+			    ,A.USE_CD
+			    ,A.ORD
+			    ,A.USR_TYP
+			    ,SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00004', A.USR_TYP, '1') AS USR_TYP_NM
+			    ,SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.ACCEPT_USE_CD, '1') AS ACCEPT_USE_NM
+	          	,(
+		          	SELECT count(1) 
+		          	FROM PRJ2000 A 
+		          	WHERE A.LIC_GRP_ID = #licGrpId# 
+		          	AND A.PRJ_ID = #prjId#
+		          	<isEmpty property="view">
+						AND		A.USE_CD = '01' 
+					</isEmpty>
+		          	<isNotEmpty property="searchTxt">
+					 	AND INSTR(UPPER(AUTH_GRP_NM), UPPER(#searchTxt#)) > 0
+					</isNotEmpty>
+				) AS TOTAL_CNT
+	     FROM (
+	         SELECT	ROWNUM RN
+	         		,A.PRJ_ID
+					,A.AUTH_GRP_ID
+			    	,A.AUTH_GRP_NM
+			    	,A.AUTH_GRP_DESC
+			    	,A.CREATE_DT
+			    	,A.USE_CD
+			    	,A.ORD
+			    	,A.USR_TYP
+			    	,A.ACCEPT_USE_CD
+			FROM	PRJ2000 A
+			WHERE	A.LIC_GRP_ID = #licGrpId#
+			AND		A.PRJ_ID = #prjId#
+			<isEmpty property="view">
+				AND		A.USE_CD = '01'
+			</isEmpty>
+			<isNotEmpty property="searchTxt">
+			 	AND INSTR(UPPER(AUTH_GRP_NM), UPPER(#searchTxt#)) > 0
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>, A.ORD DESC
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY ORD ASC
+			</isEmpty>
+     	) A
+       WHERE A.RN BETWEEN #firstRecordIndex# + 1 AND #firstRecordIndex# + #recordCountPerPage#
+	</select>
+	
+	<select id="prj2000DAO.selectPrj2000AuthGrpSmallMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			 SELECT *
+			FROM
+			(
+				SELECT *
+			FROM
+			(
+				SELECT	A.LIC_GRP_ID
+		            	,	A.MENU_ID
+		                ,	A.MENU_NM
+		                ,	A.UPPER_MENU_ID
+		                ,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+		                ,	(SELECT	UPPER_MENU_ID FROM STM2000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS UPUP_MENU_ID
+					    ,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+					    ,	COUNT(*) OVER(PARTITION BY SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3')) AS GRP_CNT
+		                ,	RANK() OVER(PARTITION BY SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') ORDER BY ORD ASC) AS GRP_RANK
+		            	,	B.PRJ_ID
+		                ,	B.AUTH_GRP_ID
+		                ,	NVL(B.MAIN_YN, 'N') AS MAIN_YN
+		                ,	NVL(B.ACCESS_YN, 'N') AS ACCESS_YN
+		                ,	NVL(B.SELECT_YN, 'N') AS SELECT_YN
+		                ,	NVL(B.REG_YN, 'N') AS REG_YN
+		                ,	NVL(B.MODIFY_YN, 'N') AS MODIFY_YN
+		                ,	NVL(B.DEL_YN, 'N') AS DEL_YN
+		                ,	NVL(B.EXCEL_YN, 'N') AS EXCEL_YN
+		                ,	NVL(B.PRINT_YN, 'N') AS PRINT_YN
+		                ,	'R' AS STATUS /* R:조회, C:등록, U:수정, D:삭제 */
+		                ,   A.MENU_TYPE_CD
+		                ,	A.ORD
+			            ,	A.LVL
+			            ,	A.MODULE_TYPE
+		            FROM	STM2000 A
+		            	,	(SELECT * FROM STM2001 WHERE 1=1 AND AUTH_GRP_ID = #authGrpId# AND LIC_GRP_ID = #licGrpId# AND PRJ_ID = #prjId#) B
+		            WHERE	1=1
+		            AND		A.LIC_GRP_ID = B.LIC_GRP_ID(+)
+		            AND		A.MENU_ID = B.MENU_ID(+)
+		            AND		A.LIC_GRP_ID = #licGrpId#
+						 ]]>
+				            <isEqual property="adminYn" compareValue="N">
+							<![CDATA[ 
+							 			AND A.SYS_CD = '02'
+							]]> 				  			
+							</isEqual>
+						<![CDATA[ 
+			            AND		A.USE_CD = '01'
+			) Z
+			            START WITH Z.UPPER_MENU_ID IS NULL
+					  	CONNECT BY PRIOR Z.MENU_ID = Z.UPPER_MENU_ID OR Z.UPPER_MENU_ID = Z.UPUP_MENU_ID
+					  	ORDER SIBLINGS BY Z.ORD ASC
+			) Y
+			WHERE 1=1
+			AND Y.LVL = 3
+ 		]]> 
+	</select>
+	
+	
+	<insert id="prj2000DAO.inserPrj2000AuthGrpInfoAjax" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newAuthGrpId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_AUTH_GRP_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_AUTH_GRP_ID, 12, 5)) + 1) , 5, '0')
+						,	'AUT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_REQ_ID 
+			FROM	(
+			            SELECT	MAX(AUTH_GRP_ID)  AS NEW_AUTH_GRP_ID
+			            FROM	PRJ2000 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+                        AND		A.PRJ_ID = #selPrjId#
+			            AND		A.AUTH_GRP_ID LIKE 'AUT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO PRJ2000
+            (	
+            	PRJ_ID,			AUTH_GRP_ID,	AUTH_GRP_NM,		AUTH_GRP_DESC,
+                CREATE_DT,		
+                USE_CD,			ORD,			REG_DTM,			REG_USR_ID,
+                REG_USR_IP,		MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP,
+                LIC_GRP_ID,     USR_TYP,		ACCEPT_USE_CD
+            )
+            VALUES
+            (
+            	#prjId#,		#newAuthGrpId#,	#authGrpNm#,		#authGrpDesc#,
+            	TO_CHAR(SYSDATE, 'YYYYMMDD'),
+            	#useCd#,		#ord#,			SYSDATE,			#regUsrId#,
+            	#regUsrIp#,		SYSDATE,		#modifyUsrId#,		#modifyUsrIp#,
+            	#licGrpId#,     #usrTyp#,		#acceptUseCd#
+            )
+		]]>
+	</insert>
+		
+	<delete id="prj2000DAO.deletePrj2000AuthGrpInfoAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	PRJ2000 A
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+	]]>
+	</delete>
+	
+	<delete id="prj2000DAO.deletePrj2000AuthPrjUsrListAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	PRJ2001 A
+		WHERE	1=1
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+	]]>
+	</delete>
+	
+	<delete id="prj2000DAO.deletePrj2000MenuUsrAuthListAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	STM2001 A
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+	]]>
+	</delete>
+	
+	<parameterMap id="savePrj2000AuthGrpMenuAuthListParam" class="java.util.Map">
+		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="prjId"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="authGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="menuId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="mainMenuId"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="accessYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<parameter property="selectYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regYn"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="delYn"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="excelYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<parameter property="printYn"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regUsrId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="regUsrIp"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyUsrId"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		<parameter property="modifyUsrIp"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
+		
+		<parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
+		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
+	</parameterMap>
+	
+	<procedure id="prj2000DAO.savePrj2000AuthGrpMenuAuthListAjax" parameterMap="savePrj2000AuthGrpMenuAuthListParam" >
+		{ CALL SP_STM2001_MENUAUTH_SAVE(?,?,?,?,?	,?	,?,?,?,?,?		,?,?,?,?,?		,?,?) }
+	</procedure>
+	
+	<insert id="prj2000DAO.insertPrj2000PrjUsrAuthListAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		/* prj2000DAO.insertPrj2000PrjUsrAuthListAjax - 사용자 배정 정보 등록 */
+		INSERT INTO PRJ2001 A
+		(
+			PRJ_ID,			AUTH_GRP_ID,	USR_ID,			REG_DTM,		REG_USR_ID,
+		    REG_USR_IP,		MODIFY_DTM,		MODIFY_USR_ID,	MODIFY_USR_IP
+		)
+		SELECT	#prjId#
+			,	#authGrpId#
+		    ,	A.USR_ID
+		    ,	SYSDATE
+		    ,	#regUsrId#
+		    ,	#regUsrIp#
+		    ,	SYSDATE
+		    ,	#modifyUsrId#
+		    ,	#modifyUsrIp#
+		FROM	STM3000 A
+		WHERE	1=1
+		AND		A.LIC_GRP_ID = #licGrpId#
+		AND		A.USR_ID = #usrId#
+	]]>
+	</insert>
+	
+	<delete id="prj2000DAO.deletePrj2000PrjUsrAuthListAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		DELETE	
+		FROM	PRJ2001 A
+		WHERE	1=1
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+		AND		A.USR_ID = #usrId#
+	]]>
+	</delete>
+</sqlMap>

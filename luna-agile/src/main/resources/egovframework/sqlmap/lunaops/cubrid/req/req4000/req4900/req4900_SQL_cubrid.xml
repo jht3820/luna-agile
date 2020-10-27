@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="req4900DAO">
+	 <!-- out class define  -->
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<insert id="req4900DAO.insertReq4900ReqSignInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newSignId">
+		<![CDATA[
+			SELECT	COALESCE( 
+							SUBSTR(NEW_SIGN_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_SIGN_ID, 12, 5)) + 1) , 5, '0')
+						,	'SIG' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '00001'
+            		) AS NEW_SIGN_ID 
+			FROM	(
+			            SELECT	MAX(SIGN_ID)  AS NEW_SIGN_ID
+			            FROM	REQ4900 A
+			            WHERE	1=1
+			            AND		SIGN_ID LIKE 'SIG' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		    INSERT     	INTO     REQ4900
+			(
+			            PRJ_ID             	,  
+			            REQ_ID             	,  
+			            SIGN_ID             ,  
+			            PROCESS_ID          , 
+			            SIGN_PREV_FLOW_ID	,  
+			            SIGN_FLOW_ID        ,  
+			            SIGN_USR_ID         ,  
+			            SIGN_CD             ,  
+			            SIGN_REJECT_CMNT    ,  
+			            SIGN_DTM            ,  
+			            REG_DTM             ,  
+			            REG_USR_ID          ,  
+			            REG_USR_IP          ,  
+			            MODIFY_DTM          ,  
+			            MODIFY_USR_ID       ,  
+			            MODIFY_USR_IP          
+			)
+			VALUES
+			(
+			            #prjId#, 
+			            #reqId#, 
+			            #newSignId#, 
+			            #processId#,
+			            #preFlowId#,
+			            #signFlowId#, 
+			            #signUsrId#, 
+			            #signCd#,
+			            #signRejectCmnt#, 
+			            CURRENT_TIMESTAMP, 
+			            CURRENT_TIMESTAMP, 
+			            #regUsrId#, 
+			            #regUsrIp#, 
+			            CURRENT_TIMESTAMP, 
+			            #modifyUsrId#, 
+			            #modifyUsrIp# 
+			)
+	</insert>
+</sqlMap>

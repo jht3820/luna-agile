@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="adm2000DAO">
+	<typeAlias alias="adm2000VO"	type="kr.opensoftlab.oslops.adm.adm2000.adm2000.vo.Adm2000VO"/>
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="rMapSelectAdm2000" class="adm2000VO">
+   		<result property="rn" column="RN"/>
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+		<result property="email" column="EMAIL" />
+		<result property="telno" column="TELNO" />
+		<result property="deptId" column="DEPT_ID" />
+		<result property="etc" column="ETC" />
+		<result property="useCd" column="USE_CD" />
+		<result property="useCdNm" column="USE_CD_NM" />
+		<result property="reqMainColor" column="REQ_MAIN_COLOR" />
+		<result property="reqFontColor" column="REQ_FONT_COLOR" />
+		<result property="wkStTm" column="WK_ST_TM"/>
+		<result property="wkEdTm" column="WK_ED_TM"/>
+		<result property="bkStTm" column="BK_ST_TM"/>
+		<result property="bkEdTm" column="BK_ED_TM"/>
+		<result property="pwFailCnt" column="PW_FAIL_CNT"/>
+		<result property="block" column="BLOCK"/>
+		<result property="blockNm" column="BLOCK_NM"/>
+		<result property="recLoginDtm" column="REC_LOGIN_DTM"/>
+		<result property="loginExprYn" column="LOGIN_EXPR_YN"/>
+		<result property="deptName" column="DEPT_NAME"/>
+		<result property="beforeBlock" column="BLOCK"/>
+		<result property="dshDisplayCd" column="DSH_DISPLAY_CD"/>
+		<result property="dshDisplayNm" column="DSH_DISPLAY_NM"/>
+    </resultMap>
+    
+    <resultMap id="rMapSelectAdm2000CommonUser" class="adm2000VO">
+   		<result property="rn" column="RN"/>
+		<result property="usrId" column="USR_ID" />
+		<result property="usrNm" column="USR_NM" />
+		
+    </resultMap>
+    
+	<sql id = "selectAdm2000UsrList">
+		<![CDATA[
+		   SELECT  
+				 A.USR_ID
+				,A.USR_NM
+				,A.EMAIL
+				,A.TELNO
+				,A.DEPT_ID
+				/*,A.ETC */
+		]]>		
+				<![CDATA[ 
+	    				, REGEXP_REPLACE (A.ETC ,'</br>|<br>|<br/>' , ' ' ) AS ETC    
+	    		]]>
+	    <![CDATA[ 				
+				,A.USE_CD
+				,DECODE(A.USE_CD, '01', '사용', '02', '미사용' ) AS USE_CD_NM
+				,A.WK_ST_TM
+				,A.WK_ED_TM
+				,A.BK_ST_TM
+				,A.BK_ED_TM
+				,A.PW_FAIL_CNT
+				,A.BLOCK
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ADM00005', A.BLOCK, '1') AS BLOCK_NM
+				,NVL(A.REQ_MAIN_COLOR,'##FFFFFF') AS REQ_MAIN_COLOR
+				,NVL(A.REQ_FONT_COLOR,'##000000') AS REQ_FONT_COLOR
+				,A.REG_DTM
+				,A.REC_LOGIN_DTM
+				,CASE WHEN MONTHS_BETWEEN( (CURRENT_TIMESTAMP+0), NVL(A.REC_LOGIN_DTM, (CURRENT_TIMESTAMP+0)) ) >= 3 THEN 'Y' ELSE 'N' END AS LOGIN_EXPR_YN
+				,SF_ADM7000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME
+				,A.DSH_DISPLAY_CD
+				,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'DSH00001', A.DSH_DISPLAY_CD, '1') AS DSH_DISPLAY_NM
+		   FROM  ADM2000 A
+		   WHERE  1=1 
+		   AND	A.LIC_GRP_ID = #licGrpId#
+		   ]]>
+	   	<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+			<isEqual property="searchSelect" compareValue="usrNm" prepend="AND">
+				A.USR_NM LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="usrId" prepend="AND">
+				A.USR_ID LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="email" prepend="AND">
+				A.EMAIL LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="telno" prepend="AND">
+				A.TELNO LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="etc" prepend="AND">
+				A.ETC LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	  	<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+			<isEqual property="searchSelect" compareValue="useCd" prepend="AND">
+				A.USE_CD LIKE '%'||#searchCd#||'%'
+			</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+	</sql>
+
+	
+    <select id="adm2000DAO.selectAdm2000UsrListCnt" resultClass="java.lang.Integer">
+		<![CDATA[
+	    SELECT	COUNT(*)
+		  FROM	(
+		]]>
+		  			<include refid="selectAdm2000UsrList" />
+		<![CDATA[
+		  			) A
+		 ]]>
+    </select>
+    
+    <select id="adm2000DAO.selectAdm2000UsrList" parameterClass="adm2000VO"  resultMap="rMapSelectAdm2000">
+    	<![CDATA[
+		SELECT	*
+		   FROM (
+    					SELECT ROWNUM RN,
+    			     				A.*
+    					  FROM 
+    								(
+    	]]>
+    								<include refid="selectAdm2000UsrList" />
+    	<![CDATA[
+    								) A
+    				 )
+		WHERE  RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+		ORDER BY REG_DTM DESC
+		]]>
+    </select>
+    
+	<select id="adm2000DAO.selectAdm2000UsrInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT		A.USR_ID
+						,A.USR_NM
+						,A.EMAIL
+						,A.TELNO
+						,A.DEPT_ID
+						,A.ETC					 
+						,A.USE_CD
+						,DECODE(A.USE_CD, '01', '사용', '02', '미사용' ) AS USE_CD_NM
+						,A.USR_PW
+						,A.WK_ST_TM
+						,A.WK_ED_TM
+						,A.BK_ST_TM
+						,A.BK_ED_TM
+						,A.PW_FAIL_CNT
+						,A.BLOCK
+						,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ADM00005', A.BLOCK, '1') AS BLOCK_NM
+						,A.USR_POSITION_CD
+						,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ADM00007', A.USR_POSITION_CD, '1') AS USR_POSITION_CD_NM
+						,A.USR_DUTY_CD
+						,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ADM00008', A.USR_DUTY_CD, '1') AS USR_DUTY_CD_NM
+						,NVL(A.REQ_MAIN_COLOR,'##FFFFFF') AS REQ_MAIN_COLOR
+						,NVL(A.REQ_FONT_COLOR,'##000000') AS REQ_FONT_COLOR
+						,A.REC_LOGIN_DTM
+						,SF_ADM7000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME
+						,A.DSH_DISPLAY_CD
+						,SF_ADM4100_COM_CD_INFO(#licGrpId#, 'DSH00001', A.DSH_DISPLAY_CD, '1') AS DSH_DISPLAY_NM
+						, ( SELECT 
+							       	/*+ INDEX_DESC (C PK_ADM2100 ) */  BLK_LOG 
+							  FROM 
+							        ADM2100 C 
+							  WHERE C.LIC_GRP_ID = A.LIC_GRP_ID 
+								AND C.USR_ID = #usrId#
+								AND ROWNUM = 1
+							)   AS BLK_LOG 
+			FROM	ADM2000 A
+			WHERE	1=1
+			AND		LIC_GRP_ID = #licGrpId#
+			AND		USR_ID = #usrId#
+ 		]]> 
+	</select>
+	
+    
+    <insert id="adm2000DAO.insertAdm2000UsrInfo" parameterClass="java.util.Map" >
+		<![CDATA[ 
+		INSERT INTO ADM2000(
+			USR_ID,
+		  	LIC_GRP_ID,
+		  	USR_PW,
+		  	USR_NM,
+		  	EMAIL,
+		  	TELNO,
+		  	DEPT_ID,
+		  	ETC,
+		  	WK_ST_TM,
+			WK_ED_TM,
+			BK_ST_TM,
+			BK_ED_TM,
+			PW_FAIL_CNT,
+			BLOCK,
+		  	USE_CD,
+		  	USR_POSITION_CD,
+		  	USR_DUTY_CD,
+		  	REQ_MAIN_COLOR,
+			REQ_FONT_COLOR,
+			DSH_DISPLAY_CD,
+		  	REG_DTM,
+		  	REG_USR_ID,
+		  	REG_USR_IP,
+		  	MODIFY_DTM,
+		  	MODIFY_USR_ID,
+		  	MODIFY_USR_IP
+		)VALUES(
+			#usrId#,
+		  	#licGrpId#,
+			#enUsrPw#,
+		  	#usrNm#,
+		  	#usrEmail#,
+		  	#usrTelNo#,
+		  	#deptId#,
+		  	#usrEtc#,
+			NVL(#wkStTm#,'0900'),
+			NVL(#wkEdTm#,'1800'),
+			NVL(#bkStTm#,'1200'),
+			NVL(#bkEdTm#,'1300'),
+			'0',
+			'01',
+		  	#useCd#,
+		  	#usrPositionCd#,
+		  	#usrDutyCd#,
+		  	#reqMainColor#,
+		  	#reqFontColor#,
+		  	'01',
+		  	(CURRENT_TIMESTAMP+0),
+		  	#regUsrId#,
+		  	#regUsrIp#,
+		  	(CURRENT_TIMESTAMP+0),
+			#regUsrId#,
+			#regUsrIp#
+		)
+		]]>
+		
+		<selectKey resultClass="java.lang.String" keyProperty="newUsrId">
+		<![CDATA[
+			SELECT	USR_ID
+			   FROM	ADM2000
+			WHERE	USR_ID = #usrId#
+		]]>
+		</selectKey>
+		
+    </insert>
+    
+	<update id="adm2000DAO.updateAdm2000UsrInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+			USR_NM				= #usrNm#,
+			USR_PW				= #enUsrPw#,
+			EMAIL				= #usrEmail#,
+		  	TELNO				= #usrTelNo#,
+		  	DEPT_ID				= #deptId#,
+		  	ETC					= #usrEtc#,
+		  	WK_ST_TM			= #wkStTm#,
+			WK_ED_TM			= #wkEdTm#,
+			BK_ST_TM			= #bkStTm#,
+			BK_ED_TM			= #bkEdTm#,
+			PW_FAIL_CNT			= #pwFailCnt#,	
+			BLOCK				= #block#,
+		  	USE_CD				= #useCd#,
+		  	USR_POSITION_CD		= #usrPositionCd#,
+		  	USR_DUTY_CD			= #usrDutyCd#,
+		  	REQ_MAIN_COLOR		= #reqMainColor#,
+			REQ_FONT_COLOR		= #reqFontColor#,
+			DSH_DISPLAY_CD		= #dshDisplayCd#,
+		  	MODIFY_DTM			= (CURRENT_TIMESTAMP+0),
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+	
+	
+    <select id="adm2000DAO.selectCmm2000IdCheck" parameterClass="java.util.Map" resultClass="int">
+		<![CDATA[
+		SELECT	COUNT(A.USR_ID) uCnt
+		  FROM	ADM2000 A
+	    WHERE 1=1
+	    AND A.USR_ID = #usrId#
+        ]]> 
+    </select>
+    
+    
+    <select id="adm2000DAO.selectCmm2000EmailCheck" parameterClass="java.util.Map" resultClass="int">
+		<![CDATA[
+		SELECT	COUNT(A.USR_ID) uCnt
+		  FROM	ADM2000 A
+	    WHERE EMAIL = #usrEmail#
+        ]]> 
+    </select>
+    
+	<update id="adm2000DAO.updateAdm2000UseCd" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+		  	USE_CD					= #useCd#,
+		  	MODIFY_DTM			= (CURRENT_TIMESTAMP+0),
+      		MODIFY_USR_ID	= #regUsrId#,
+      		MODIFY_USR_IP	= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+	
+	<update id="adm2000DAO.updateAdm2000Block" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+			PW_FAIL_CNT		= #pwFailCnt#,	
+		  	BLOCK			= #block#,
+		]]>  	
+		<isNotEmpty property="loginExprChange">
+			<isEqual property="loginExprChange" compareValue="Y">
+				REC_LOGIN_DTM = (CURRENT_TIMESTAMP+0),
+			</isEqual>
+		</isNotEmpty>
+		<![CDATA[
+		  	MODIFY_DTM		= (CURRENT_TIMESTAMP+0),
+      		MODIFY_USR_ID	= #regUsrId#,
+      		MODIFY_USR_IP	= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+		]]>
+	</update>
+	
+	
+	<update id="adm2000DAO.deleteAdm2000UsrInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+				USE_CD				= '02'
+			  	,MODIFY_DTM			= (CURRENT_TIMESTAMP+0)
+	      		,MODIFY_USR_ID		= #regUsrId#
+	      		,MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID IN ($usrId$)
+			]]>
+			
+	</update>
+	
+	<select id="adm2000DAO.selectAdm2000ExcelList" parameterClass="adm2000VO" resultClass="egovMap">
+		
+		<include refid="selectAdm2000UsrList"/>		
+	</select>
+	    
+    
+	<select id="adm2000DAO.selectAdm1300ExistUsrInProject" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+		SELECT COUNT(0)
+		FROM ADM1300
+		WHERE	1=1
+			AND	USR_ID IN ($usrId$)
+		]]>
+	</select>
+	    
+
+	<select id="adm2000DAO.selectAdm2000PwCheck" parameterClass="java.util.Map" resultClass="java.lang.String">
+		<![CDATA[ 
+			SELECT	A.USR_PW
+			FROM	ADM2000 A
+			WHERE	1=1
+		]]> 	
+		<isNotEmpty property="licGrpId"> 	
+		      	AND	A.LIC_GRP_ID 	= #licGrpId#
+		</isNotEmpty> 
+		<![CDATA[ 
+			AND		USR_ID = #usrId#
+ 		]]>
+	</select>
+	
+	
+	<sql id = "selectAdm2000CommonUserList">
+				SELECT
+					b.USR_ID
+				  , b.USR_NM
+		
+				FROM ADM1300 a
+	 			   , ADM2000 b
+				WHERE 1=1
+				AND a.USR_ID = b.USR_ID
+				AND a.PRJ_ID = #prjId#
+				AND b.LIC_GRP_ID = #licGrpId#
+				AND b.USE_CD  = '01'
+				<isNotEmpty property="searchPopTxt">
+				AND b.USR_NM LIKE '%'||#searchPopTxt#||'%'
+				</isNotEmpty>
+				
+	</sql>
+	
+	
+	 <select id="adm2000DAO.selectAdm2000CommonUserListCnt" resultClass="java.lang.Integer">
+		<![CDATA[
+	    SELECT	COUNT(*)
+		  FROM	(
+		]]>
+		  			<include refid="selectAdm2000CommonUserList" />
+		<![CDATA[
+		  			) A
+		 ]]>
+    </select>
+    <select id="adm2000DAO.selectAdm2000CommonUserList" parameterClass="adm2000VO"  resultMap="rMapSelectAdm2000CommonUser">
+    	<![CDATA[
+		SELECT	*
+		   FROM (
+    					SELECT ROWNUM RN,
+    			     				A.*
+    					  FROM 
+    								(
+    	]]>
+    								<include refid="selectAdm2000CommonUserList" />
+    	<![CDATA[
+    								) A
+    				 )
+		WHERE  RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+		ORDER BY USR_NM asc
+		]]>
+    </select>
+	
+	<select id="adm2000DAO.selectAdm2000ExistUsrInDept" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[
+			 SELECT 
+	            	DISTINCT (
+						SELECT	DEPT_NAME
+						FROM	ADM7000 B
+						WHERE	1=1
+						AND	B.LIC_GRP_ID = #licGrpId#
+						AND B.DEPT_ID = A.DEPT_ID           
+					) DEPT_NAME
+            FROM ADM2000 A
+            WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+            AND A.DEPT_ID IN ($deptId$)
+		]]>
+	</select>	
+	
+	
+	
+	<update id="adm2000DAO.updateAdm2000AccountInit" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+			
+			USR_PW				= #enUsrPw#,
+			INI_YN				= #iniYn#,
+			INI_DTM				= (CURRENT_TIMESTAMP+0),
+		  	MODIFY_DTM			= (CURRENT_TIMESTAMP+0),
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+
+	<update id="adm2000DAO.updateAdm2000PasswordExprInit" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ADM2000 A SET
+			USR_PW				= #enUsrPw#,
+			BLOCK				= #block#,
+		  	MODIFY_DTM			= (CURRENT_TIMESTAMP+0),
+      		MODIFY_USR_ID		= #regUsrId#,
+      		MODIFY_USR_IP		= #regUsrIp#
+		WHERE	1=1
+			AND	LIC_GRP_ID 	= #licGrpId#
+			AND	USR_ID 		= #usrId#
+			]]>
+	</update>
+	
+	<insert id="adm2000DAO.insertAdm2100BlockLog" parameterClass="java.util.Map">
+		<![CDATA[
+			INSERT	     INTO     ADM2100
+			(
+			        	 LIC_GRP_ID     	    ,  
+			             USR_ID     	        ,  
+			             SEQ             		,  
+			             BLK_LOG             	,  
+			             REG_DTM             	,  
+			             REG_USR_ID             ,  
+			             REG_USR_IP             ,  
+			             MODIFY_DTM             ,  
+			             MODIFY_USR_ID          ,  
+			             MODIFY_USR_IP             
+			)
+			VALUES
+			(
+			             #licGrpId#, 
+			             #usrId#, 
+			             ( SELECT NVL(MAX(SEQ),0) +1  FROM ADM2100 WHERE USR_ID = #usrId# AND LIC_GRP_ID = #licGrpId#  ) , 
+			             #blkLog#, 
+			             (CURRENT_TIMESTAMP+0), 
+			             #regUsrId#, 
+			             #regUsrIp#, 
+			             (CURRENT_TIMESTAMP+0), 
+			             #regUsrId#, 
+			             #regUsrIp# 
+			)
+			]]>
+	</insert>
+	
+</sqlMap>            

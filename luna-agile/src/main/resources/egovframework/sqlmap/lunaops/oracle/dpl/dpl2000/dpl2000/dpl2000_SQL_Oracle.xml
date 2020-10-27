@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="dpl2000DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias 	alias="dpl2000VO"	type="kr.opensoftlab.lunaops.dpl.dpl2000.dpl2000.vo.Dpl2000VO"/>
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	<!-- Map Define -->
+   	<resultMap id="resultMapSelectDpl2000" class="dpl2000VO">
+		<result property="rn"					column="RN" /> 
+		<result property="prjId"				column="PRJ_ID" /> 
+		<result property="dplId"				column="DPL_ID" /> 
+		<result property="signId"				column="SIGN_ID" /> 
+		<result property="signUsrId"            column="SIGN_USR_ID" /> 
+		<result property="signUsrNm"            column="SIGN_USR_NM" /> 
+		<result property="signUsrImg"			column="SIGN_USR_IMG" />
+		<result property="signTxt"				column="SIGN_TXT" /> 
+		<result property="signStsCd"			column="SIGN_STS_CD" /> 
+		<result property="signStsNm"			column="SIGN_STS_NM" /> 
+		<result property="signRejectTxt"		column="SIGN_REJECT_TXT" /> 
+		<result property="signDtm"				column="SIGN_DTM" />
+		<result property="signRegUsrId"         column="SIGN_REG_USR_ID" /> 
+		<result property="signRegUsrNm"         column="SIGN_REG_USR_NM" />
+		<result property="signRegUsrImg"       	column="SIGN_REG_USR_IMG" />
+		<result property="dplNm"  				column="DPL_NM"/>
+		<result property="dplVer"  				column="DPL_VER"/>
+		<result property="dplDt"  				column="DPL_DT"/>
+		<result property="dplUsrId"  			column="DPL_USR_ID"/>
+		<result property="dplUsrNm"  			column="DPL_USR_NM"/>
+		<result property="dplDesc" 				column="DPL_DESC"/>
+		<result property="dplStsCd"  			column="DPL_STS_CD"/>
+		<result property="dplStsNm"  			column="DPL_STS_NM"/>
+		<result property="dplTypeCd"  			column="DPL_TYPE_CD"/>
+		<result property="dplTypeNm"  			column="DPL_TYPE_NM"/>
+		<result property="dplAutoAfterCd" 		column="DPL_AUTO_AFTER_CD"/>
+		<result property="dplAutoAfterNm" 		column="DPL_AUTO_AFTER_NM"/>
+		<result property="dplAutoDtm" 			column="DPL_AUTO_DTM"/>
+		<result property="dplRestoreCd"  		column="DPL_RESTORE_CD"/>
+		<result property="dplRestoreNm"  		column="DPL_RESTORE_NM"/>
+		<result property="regDtm"              	column="REG_DTM" /> 
+		<result property="regUsrId"            	column="REG_USR_ID" />
+		<result property="regUsrNm"				column="REG_USR_NM" /> 
+		<result property="regUsrImg"			column="REG_USR_IMG" /> 
+		<result property="regUsrIp"            	column="REG_USR_IP" /> 
+		<result property="modifyDtm"        	column="MODIFY_DTM" />  
+		<result property="modifyUsrId"      	column="MODIFY_USR_ID" /> 
+		<result property="modifyUsrIp"      	column="MODIFY_USR_IP" /> 
+    </resultMap>
+    
+    <sql id="selectDpl2000SignList">
+	    SELECT	T1.* 	 
+		FROM
+    	(
+			SELECT
+				A.PRJ_ID
+				, A.DPL_ID
+				, A.SIGN_ID
+				, A.SIGN_USR_ID
+				, SF_STM3000_USR_INFO(A.SIGN_USR_ID, 1) SIGN_USR_NM
+                , SF_STM3000_USR_INFO(A.SIGN_USR_ID, 6) SIGN_USR_IMG
+				, A.SIGN_TXT
+				, A.SIGN_STS_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00004', A.SIGN_STS_CD, '1') AS SIGN_STS_NM
+				, A.SIGN_REJECT_TXT
+				, A.SIGN_DTM
+				, A.SIGN_REG_USR_ID
+				, SF_STM3000_USR_INFO(A.SIGN_REG_USR_ID, 1) SIGN_REG_USR_NM
+                , SF_STM3000_USR_INFO(A.SIGN_REG_USR_ID, 6) SIGN_REG_USR_IMG
+				, B.DPL_NM
+				, B.DPL_VER
+				, B.DPL_DT
+				, B.DPL_USR_ID
+				, SF_STM3000_USR_INFO(B.DPL_USR_ID, 1) DPL_USR_NM
+				, B.DPL_DESC
+				, B.DPL_STS_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00001', B.DPL_STS_CD, '1') AS DPL_STS_NM
+				, B.DPL_TYPE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', B.DPL_TYPE_CD, '1') AS DPL_TYPE_NM
+				, B.DPL_AUTO_AFTER_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00004', B.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
+				, B.DPL_AUTO_DTM
+				, B.DPL_RESTORE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00005', B.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
+				, A.REG_DTM                  
+	            , A.REG_USR_ID               
+	            , SF_STM3000_USR_INFO(A.REG_USR_ID, 1) REG_USR_NM
+                , SF_STM3000_USR_INFO(A.REG_USR_ID, 6) REG_USR_IMG
+	            , A.REG_USR_IP               
+	            , A.MODIFY_DTM               
+	            , A.MODIFY_USR_ID            
+	            , A.MODIFY_USR_IP              
+			FROM DPL1200 A LEFT JOIN DPL1000 B ON(A.PRJ_ID = B.PRJ_ID AND A.DPL_ID = B.DPL_ID)
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND B.DPL_DEL_CD = '02' 
+			AND A.SIGN_STS_CD != '04'
+			AND A.SIGN_DTM = (
+                			SELECT 
+						            	/*+ INDEX_DESC (Z IDX_PRJ_DPL_SIGN_DTM ) */  SIGN_DTM 
+						      FROM 
+						      			DPL1200 Z 
+							   WHERE 	1=1
+								AND 	Z.PRJ_ID 	= A.PRJ_ID
+								AND 	Z.DPL_ID 	= A.DPL_ID
+								AND 	ROWNUM 		= 1    
+        					)
+			ORDER BY A.SIGN_DTM DESC, A.SIGN_STS_CD ASC
+		) T1 
+		WHERE 1 = 1
+		<isNotEmpty property="dpl2000LoginUsrIdChk">
+			AND T1.REG_USR_ID = #dpl2000LoginUsrIdChk#
+		</isNotEmpty>
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+			<isEqual property="searchSelect" compareValue="signUsrNm" prepend="AND">
+				T1.SIGN_USR_NM LIKE '%' || #searchTxt# || '%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="signTxt" prepend="AND">
+				T1.SIGN_TXT LIKE '%' || #searchTxt# || '%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="signRejectTxt" prepend="AND">
+				T1.SIGN_REJECT_TXT LIKE '%' || #searchTxt# || '%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="dplVer" prepend="AND">
+				T1.DPL_VER LIKE '%'|| #searchTxt# ||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="dplNm" prepend="AND">
+				T1.DPL_NM LIKE '%'|| #searchTxt# ||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="dplUsrNm" prepend="AND">
+				T1.DPL_USR_NM LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+			<isEqual property="searchSelect" compareValue="dplDesc" prepend="AND">
+				T1.DPL_DESC LIKE '%'||#searchTxt#||'%'
+			</isEqual>
+
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+				<isEqual property="searchSelect" compareValue="signStsCd" prepend="AND">
+					T1.SIGN_STS_CD = #searchCd#
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="dplStsCd" prepend="AND">
+					T1.DPL_STS_CD = #searchCd#
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="dplTypeCd" prepend="AND">
+					T1.DPL_TYPE_CD = #searchCd#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>	
+    </sql>	
+    
+    <select id="dpl2000DAO.selectDpl2000SignList" parameterClass="dpl2000VO"  resultMap="resultMapSelectDpl2000">
+		SELECT *
+		FROM
+			(
+    		SELECT ROWNUM RN,
+    			     A.*
+    		FROM
+    		(
+					<include refid="selectDpl2000SignList"/>
+	    			) A
+	    	)
+	    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="dpl2000DAO.selectDpl2000SignListCnt" parameterClass="dpl2000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectDpl2000SignList"/>
+				) A
+    </select>
+    
+    <select id="dpl2000DAO.selectDpl2000SignInfoAjax" parameterClass="java.util.Map" resultClass="egovMap">
+    	SELECT
+				A.PRJ_ID
+				, A.DPL_ID
+				, A.SIGN_ID
+				, A.SIGN_USR_ID
+				, SF_STM3000_USR_INFO(A.SIGN_USR_ID, 1) SIGN_USR_NM
+                , SF_STM3000_USR_INFO(A.SIGN_USR_ID, 6) SIGN_USR_IMG
+				, A.SIGN_TXT
+				, A.SIGN_STS_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00004', A.SIGN_STS_CD, '1') AS SIGN_STS_NM
+				, A.SIGN_REJECT_TXT
+				, A.SIGN_DTM
+				, A.SIGN_REG_USR_ID
+				, SF_STM3000_USR_INFO(A.SIGN_REG_USR_ID, 1) SIGN_REG_USR_NM
+                , SF_STM3000_USR_INFO(A.SIGN_REG_USR_ID, 6) SIGN_REG_USR_IMG
+				, B.DPL_NM
+				, B.DPL_VER
+				, B.DPL_DT
+				, B.DPL_USR_ID
+				, SF_STM3000_USR_INFO(B.DPL_USR_ID, 1) DPL_USR_NM
+				, B.DPL_DESC
+				, B.DPL_STS_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00001', B.DPL_STS_CD, '1') AS DPL_STS_NM
+				, B.DPL_TYPE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', B.DPL_TYPE_CD, '1') AS DPL_TYPE_NM
+				, B.DPL_AUTO_AFTER_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00004', B.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
+				, B.DPL_AUTO_DTM
+				, B.DPL_RESTORE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00005', B.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
+				, A.REG_DTM                  
+	            , A.REG_USR_ID               
+	            , SF_STM3000_USR_INFO(A.REG_USR_ID, 1) REG_USR_NM
+                , SF_STM3000_USR_INFO(A.REG_USR_ID, 6) REG_USR_IMG
+	            , A.REG_USR_IP               
+	            , A.MODIFY_DTM               
+	            , A.MODIFY_USR_ID            
+	            , A.MODIFY_USR_IP              
+			FROM DPL1200 A LEFT JOIN DPL1000 B ON(A.PRJ_ID = B.PRJ_ID AND A.DPL_ID = B.DPL_ID)
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND	A.DPL_ID = #dplId#
+			AND	A.SIGN_ID = #signId#
+    </select>
+</sqlMap>

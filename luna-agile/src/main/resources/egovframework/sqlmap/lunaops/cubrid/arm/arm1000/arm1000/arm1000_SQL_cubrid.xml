@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="arm1000DAO">
+
+	<typeAlias alias="arm1000VO"	type="kr.opensoftlab.oslops.arm.arm1000.arm1000.vo.Arm1000VO"/>
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+    
+	<select id="arm1000DAO.selectArm1000AlarmList" parameterClass="arm1000VO" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT SUBT1.*
+			FROM
+			(
+				SELECT
+					ROWNUM AS RN
+					, Z.*
+					, SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ARM00001', Z.ARM_TYPE_CD, '1') AS ARM_TYPE_NM
+					, SF_ADM4100_COM_CD_INFO(#licGrpId#, 'ARM00002', Z.ARM_SEND_TYPE_CD, '1') AS ARM_SEND_TYPE_NM
+				FROM
+				(
+					SELECT Y.*
+					FROM
+					(
+					  SELECT	
+					      A.ARM_ID
+					      ,CASE USR_ID WHEN SEND_USR_ID THEN '03' ELSE '02' END AS ARM_TYPE_CD
+					      ,A.USR_ID
+					      ,SF_ADM2000_USR_INFO(A.USR_ID, '1') AS USR_NM
+					      ,A.SEND_USR_ID
+					      ,SF_ADM2000_USR_INFO(A.SEND_USR_ID, '1') AS SEND_USR_NM
+					      ,A.TITLE
+					      ,A.CONTENT
+					      ,A.VIEW_CHECK
+					      ,A.DEL_CHECK
+					      ,A.SEND_DEL_CHECK
+					      ,A.REQ_IDS
+					      ,A.REG_DTM
+					      ,A.CHECK_DTM
+					      ,A.DEL_DTM 
+					      ,A.SEND_DEL_DTM
+					      ,A.ARM_SEND_TYPE_CD
+					  FROM ARM1000 A
+					  WHERE 1=1
+					  AND A.USR_ID = #usrId#
+					  AND A.DEL_CHECK = '02'
+					  UNION ALL
+					  SELECT	
+					      B.ARM_ID
+					      ,'01' AS ARM_TYPE_CD
+					      ,B.USR_ID
+					      ,SF_ADM2000_USR_INFO(B.USR_ID, '1') AS USR_NM
+					      ,B.SEND_USR_ID
+					      ,SF_ADM2000_USR_INFO(B.SEND_USR_ID, '1') AS SEND_USR_NM
+					      ,B.TITLE
+					      ,B.CONTENT
+					      ,B.VIEW_CHECK
+					      ,B.DEL_CHECK
+					      ,B.SEND_DEL_CHECK
+					      ,B.REQ_IDS
+					      ,B.REG_DTM
+					      ,B.CHECK_DTM
+					      ,B.DEL_DTM
+					      ,B.SEND_DEL_DTM
+					      ,B.ARM_SEND_TYPE_CD
+					  FROM ARM1000 B
+					  WHERE 1=1
+					  AND B.SEND_USR_ID = #usrId#
+					  AND B.SEND_DEL_CHECK = '02'
+					  AND B.SEND_USR_ID <> B.USR_ID
+					) Y
+					ORDER BY Y.REG_DTM DESC, Y.CHECK_DTM				
+				) Z
+			) SUBT1
+			WHERE SUBT1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+ 		]]> 
+ 		<isNotEmpty property="searchSelect" >
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="sendUsrNm">
+					AND		SUBT1.SEND_USR_NM LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="usrNm">
+					AND		SUBT1.USR_NM LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="title">
+					AND		SUBT1.TITLE LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="content">
+					AND		SUBT1.CONTENT LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqId">
+					AND		SUBT1.REQ_IDS LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty property="searchCd">
+				<isEqual property="searchSelect" compareValue="viewCheck">
+					AND		SUBT1.VIEW_CHECK = #searchCd#
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="armSendTypeCd">
+					AND		SUBT1.ARM_SEND_TYPE_CD = #searchCd#
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="armTypeCd">
+					<isEqual property="searchCd" compareValue="03">
+						<![CDATA[
+							AND SUBT1.SEND_USR_ID = SUBT1.USR_ID
+						]]>
+					</isEqual>
+					<isNotEqual property="searchCd" compareValue="03">
+						AND		SUBT1.ARM_TYPE_CD = #searchCd#
+					</isNotEqual>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+	
+	<select id="arm1000DAO.selectArm1000AlarmCnt" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT
+				NVL(COUNT(*),0) AS ALL_CNT
+				,NVL(COUNT(DECODE(A.VIEW_CHECK,'02',1)),0) AS VIEW_CNT
+				,NVL(COUNT(DECODE(A.ARM_SEND_TYPE_CD,'02',1)),0) AS SIGN_CNT
+				,NVL(COUNT(DECODE(A.ARM_SEND_TYPE_CD,'03',1)),0) AS CHARGER_CNT
+			FROM (SELECT Z.*,SF_ADM2000_USR_INFO(Z.SEND_USR_ID, '1') AS SEND_USR_NM FROM ARM1000 Z) A
+			WHERE 1=1
+			AND A.USR_ID = #usrId#
+			AND A.DEL_CHECK = '02'
+ 		]]> 
+ 		<isNotEmpty property="searchSelect" >
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="sendUsrNm">
+					AND		A.SEND_USR_NM LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="usrNm">
+					AND		B.USR_NM LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="title">
+					AND		A.TITLE LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="content">
+					AND		A.CONTENT LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqId">
+					AND		A.REQ_IDS LIKE '%' || #searchTxt# || '%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="viewCheck">
+					AND		A.VIEW_CHECK = #searchTxt#
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty property="searchCd">
+				<isEqual property="searchSelect" compareValue="viewCheck">
+					AND		A.VIEW_CHECK = #searchCd#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+	
+	<insert id="arm1000DAO.insertArm1000AlarmInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newArmId">
+		<![CDATA[
+			SELECT	COALESCE( 
+							SUBSTR(ARM_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(ARM_ID, 12, 5)) + 1) , 5, '0')
+						,	'ARM' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '00001'
+            		) AS NEW_ARM_ID 
+			FROM
+            (
+            	SELECT MAX(ARM_ID) AS ARM_ID
+                FROM ARM1000
+            )
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			/* arm1000DAO.insertArm1000AlarmInfo - 쪽지 등록  */
+			INSERT INTO ARM1000 A
+			(
+				ARM_ID,			USR_ID,				SEND_USR_ID,
+				TITLE,			CONTENT,			VIEW_CHECK,
+				DEL_CHECK,		SEND_DEL_CHECK,		REQ_IDS,
+				ARM_SEND_TYPE_CD,	REG_DTM
+			)
+			VALUES
+			(
+				#newArmId#,			#usrId#,			#sendUsrId#,
+				#title#,			#content#,			'02',
+				'02',				'02',				#reqIds#,
+				#armSendTypeCd#,	SYSDATE
+			)
+		]]>
+	</insert>
+
+	<update id="arm1000DAO.updateArm1000AlarmInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		UPDATE	ARM1000 A
+        SET		
+	    ]]>
+	    	<isNotEmpty property="viewCheck">
+	    		VIEW_CHECK	=	#viewCheck#,
+	    		CHECK_DTM	=	SYSDATE
+	    	</isNotEmpty>
+	        <isNotEmpty property="delCheck">
+	        	<isNotEmpty property="armTypeCd">
+					<isEqual property="armTypeCd" compareValue="01">
+						A.SEND_DEL_CHECK	=	#delCheck#,
+		       			A.SEND_DEL_DTM		=	SYSDATE
+					</isEqual>
+					<isEqual property="armTypeCd" compareValue="02">
+						A.DEL_CHECK		=	#delCheck#,
+		       			A.DEL_DTM		=	SYSDATE
+					</isEqual>
+					<isEqual property="armTypeCd" compareValue="03">
+						A.SEND_DEL_CHECK	=	#delCheck#,
+		       			A.DEL_CHECK		=	#delCheck#,
+		       			A.SEND_DEL_DTM		=	SYSDATE,
+		       			A.DEL_DTM		=	SYSDATE
+					</isEqual>
+				</isNotEmpty>
+	        </isNotEmpty>
+	    <![CDATA[
+	        WHERE	1=1
+	        AND		A.ARM_ID 	=	#armId#
+		]]>
+	</update>
+	
+	<select id="arm1000DAO.selectArm1000AlarmInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT	ROWNUM AS RN,
+					A.ARM_ID, 			A.USR_ID, 		SF_ADM2000_USR_INFO(A.USR_ID, '1') AS USR_NM,
+					A.SEND_USR_ID,		SF_ADM2000_USR_INFO(A.SEND_USR_ID, '1') AS SEND_USR_NM,
+			        A.TITLE, 			A.CONTENT, 		A.VIEW_CHECK, A.DEL_CHECK,
+			        A.REQ_IDS, 			A.REG_DTM, 		A.CHECK_DTM, A.DEL_DTM,
+			        A.SEND_DEL_CHECK,	A.SEND_DEL_DTM,	A.ARM_SEND_TYPE_CD
+			        
+			FROM ARM1000 A
+			WHERE 1=1
+			AND A.ARM_ID = #armId#
+		]]>
+			<isNotEmpty property="armTypeCd">
+				<isEqual property="armTypeCd" compareValue="01">
+					AND A.SEND_USR_ID = #usrId#
+				</isEqual>
+				<isEqual property="armTypeCd" compareValue="02">
+					AND A.USR_ID = #usrId#
+				</isEqual>
+			</isNotEmpty>
+		<![CDATA[
+			
+ 		]]> 
+	</select>
+	
+	<update id="arm1000DAO.updateArm1000AlarmList" parameterClass="java.util.Map">
+		<![CDATA[
+		UPDATE ARM1000 A
+		SET
+		]]>
+			<isNotEmpty property="armTypeCd">
+				<isEqual property="armTypeCd" compareValue="01">
+					A.SEND_DEL_CHECK	=	'01',
+        			A.SEND_DEL_DTM		=	SYSDATE
+				</isEqual>
+				<isEqual property="armTypeCd" compareValue="02">
+					A.DEL_CHECK		=	'01',
+        			A.DEL_DTM		=	SYSDATE
+				</isEqual>
+				<isEqual property="armTypeCd" compareValue="03">
+					A.SEND_DEL_CHECK	=	'01',
+        			A.DEL_CHECK		=	'01',
+        			A.SEND_DEL_DTM		=	SYSDATE,
+        			A.DEL_DTM		=	SYSDATE
+				</isEqual>
+			</isNotEmpty>
+		<![CDATA[
+		WHERE	1=1
+			AND	A.ARM_ID = #armId#
+		]]>
+	</update>
+	
+	<select id="arm1000DAO.selectAdm1300AuthUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			SELECT A.USR_ID
+			FROM ADM1300 A
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND AUTH_GRP_ID LIKE '%'|| #authGrp# ||'%'
+			GROUP BY A.USR_ID
+ 		]]> 
+	</select>
+</sqlMap>
