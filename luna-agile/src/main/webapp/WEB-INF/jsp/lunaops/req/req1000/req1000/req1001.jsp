@@ -1,623 +1,472 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html lang="ko">
-<title>OpenSoftLab</title>
-<script src="<c:url value='/js/common/oslFile.js'/>"></script>
-<link rel='stylesheet' href='<c:url value='/css/common/fileUpload.css'/>' type='text/css'>
-<style>
-.layer_popup_box .close_btn{top:12px; width:18px; height:18px; background:url(/images/login/x_white.png) no-repeat}
-.layer_popup_box .pop_left, .layer_popup_box .pop_right { height: 54px; }
-.required_info { color: red; }   
-.pop_menu_row .pop_menu_col2 .pop_radio{ line-height: 17px; padding-top: 5px;}  
-#reqDesc{ height: 200px;}
-/* #reqNm { width: 100%; } */
-#btn_insert_reqContinuePopup{display:none;}
-/* 필수 입력값 */
-.required_info{color:red; font-weight: bold; }
-/* 파일업로드 Div */
-#dragandrophandler { border: 1px solid #ccc !important; }
-.btn_div{margin-top: 22px !important;}
-
-/* 화면 레이아웃 */
-.pop_sub select {
-    width: 100%;
-    min-width: 150px;
-    height: 100%;
-    font-size: 10pt !important;
-}
-#reqInsertDiv{position:relative;}
-.pop_service_div {
-	display:none;
-    position: absolute;
-    width: 400px;
-    left: 640px;
-    height: 100%;
-    background-color: #fff;
-}
-.pop_service_title{    width: 100%;
-    height: 40px;
-    padding: 0px 15px;
-    background: #4b73eb;
-    color: #fff;
-    font-size: 12pt;
-    line-height: 40px;
-    font-weight: bold;}
-.pop_service_content {
-    border-left: 1px solid #ccc;
-    width: 100%;
-    display: inline-block;
-    height: 740px;
-    float: left;
-    padding: 20px 10px;
-    overflow-y: auto;
-}
-.serviceDiv {
-    width: 100%;
-    float: left;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 10pt;
-    box-shadow: 0 2px 3px 2px rgba(0,0,0,.03);
-    margin-bottom: 8px;
-    padding: 10px;
-}
-.serviceDiv_date {
-    text-align: right;
-    font-size: 10pt;
-    color: #666;
-    height: 20px;
-    line-height: 20px;
-    float:right;
-}
-.serviceDiv_topInfo {
-    display: inline-block;
-    width: 100%;
-    float:left;
-    margin-bottom: 2px;
-    padding: 0 5px;
-}
-.serviceDivInfo {
-    float: left;
-    display: inline-block;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-}
-.pop_service_cntTitle {
-    height: 20px;
-    text-align: right;
-    font-size: 10pt;
-    line-height: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-right: none;
-    padding-right: 5px;
-}
-.serviceDivInfo.serviceDivInfo_proType {
-    font-weight: bold;
-    margin-right: 5px;
-}
-.serviceDiv_date > small {
-    font-size: 8pt;
-}
-.serviceDiv:hover{border:1px solid #4b73eb;cursor:pointer;}
-.serviceDiv_reqNm {
-    display: inline-block;
-    float: left;
-    width: 100%;
-    height: 40px;
-    border: 1px solid #ccc;
-    line-height: 20px;
-    padding: 0 10px;
-    background-color: #f9f9f9;
-}
-.serviceDiv_reqDesc {
-    height: 80px;
-    width: 100%;
-    display: inline-block;
-    float: left;
-    border: 1px solid #ccc;
-    border-top: none;
-    padding: 5px 10px;
-    overflow-y: auto;
-}
-.serviceDiv_reqNm span ,.serviceDiv_reqDesc span {
-    color: #4b73eb;
-    font-weight: bold;
-}
-</style>
+<form class="kt-form" id="frReq1001">
+	<input type="hidden" name="type" id="type" value="${requestScope.type}">
+	<input type="hidden" name="reqId" id="reqId" value="${param.paramReqId}">
+	<input type="hidden" name="reqUsrId" id="reqUsrId" value="${param.paramReqUsrId}">
+	<input type="hidden" name="atchFileId" id="atchFileId">
+	<div class="kt-portlet kt-portlet--collapsed" id="req1001RequestUsrInfo">
+		<div class="kt-portlet__head">
+			<div class="kt-portlet__head-label">
+				<i class="fa fa-user kt-margin-r-5"></i><span data-lang-cd="req1001.reqUser.title">요청자 정보</span>
+			</div>
+			<div class="kt-portlet__head-toolbar">
+				<div class="kt-portlet__head-group">
+					<div class="kt-portlet__head-group">
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="kt-portlet__body">
+			<div class="row">
+				<div class="col-xl-2 kt-align-center">
+					<a href="#" class="kt-media kt-media--xl kt-media--circle">
+						<img type="img" id="usrImgId">
+					</a>
+				</div>
+				<div class="col-xl-5">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqUser.usrNm">요청자 이름</span></label>
+						<input type="text" class="form-control" placeholder="요청자 이름" name="reqUsrNm" id="usrNm" readonly="readonly" required>
+					</div>
+				</div>
+				<div class="col-xl-5">
+					<div class="form-group">
+						<label class="required"><i class="flaticon2-envelope kt-margin-r-5"></i><span data-lang-cd="req1001.reqUser.email">요청자 e-mail</span></label>
+						<input type="email" class="form-control" placeholder="요청자 이메일" name="reqUsrEmail" id="email" readonly="readonly" required>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-7">
+					<div class="form-group">
+						<label><i class="flaticon2-avatar kt-margin-r-5"></i><span data-lang-cd="req1001.reqUser.deptNm">요청자 소속</span></label>
+						<input type="text" class="form-control" name="reqUsrDeptNm" id="deptName" readonly="readonly">
+						<input type="hidden" name="reqUsrDeptId" id="deptId">
+					</div>
+				</div>
+				<div class="col-xl-5">
+					<div class="form-group">
+						<label class="required"><i class="flaticon2-phone kt-margin-r-5"></i><span data-lang-cd="req1001.reqUser.telNo">요청자 연락처</span></label>
+						<input type="text" class="form-control" placeholder="요청자 연락처" name="reqUsrNum" id="telno" readonly="readonly" required>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet">
+		<div class="kt-portlet__body">
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label for="exampleSelect1"><i class="fa fa-project-diagram kt-margin-r-5"></i><span data-lang-cd="req1001.prjNm">프로젝트</span></label>
+						<select class="form-control kt-select2" name="prjId" id="reqPrjSelect">
+						</select>
+					</div>
+				</div>
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label><i class="fa fa-calendar-alt kt-margin-r-5"></i><span data-lang-cd="req1001.reqDtm">요청 일자</span></label>
+						<input type="date" class="form-control" placeholder="요청 일자" name="reqDtm" id="reqDtm" readonly="readonly">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 제목</span></label>
+				<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
+			</div>
+			<div class="form-group">
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 내용</span></label>
+				<textarea  name="reqDesc" id="reqDesc" required></textarea>
+			</div>
+			<div class="form-group form-group-last">
+				<label><i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="req1001.attachments">파일 첨부</span> <button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn">삭제 초기화</button></label>
+				<div class="kt-uppy" id="req1001FileUpload">
+					<div class="kt-uppy__dashboard"></div>
+					<div class="kt-uppy__progress"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" id="req1001NewRequestOpt">
+		<div class="kt-portlet__head">
+			<div class="kt-portlet__head-label">
+				<i class="fa fa-user kt-margin-r-5"></i><span data-lang-cd="req1001.requestDefaultOptNm">접수 기본항목 입력</span>
+			</div>
+			<div class="kt-portlet__head-toolbar">
+				<div class="kt-portlet__head-group">
+					<div class="kt-portlet__head-group">
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="kt-portlet__body">
+		
+		</div>
+	</div>
+</form>
+<div class="modal-footer">
+	<button type="button" class="btn btn-brand" id="req1001SaveSubmit"><span data-lang-cd="req1001.complete">완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">Close</span></button>
+</div>
 <script>
-var url = "";
-var fd = new FormData();
-//중복 파일 업로드 방지 전역변수
-var fileChk = new Array();
-var fileAppendList = new Array();
+"use strict";
+	
 
-//팝업 화면 유형 구분값 - 등록/수정
-var pageType = "${pageType}";
+//파일 업로드 세팅
+var fileUploadObj;
+var OSLReq1001Popup = function () {
+	var formId = 'frReq1001';
+	
+	//edit 목록
+	var formEditList = [];
+	
+	//form validate 주입
+	var formValidate = $.osl.validate(formId);
+	
+	//수정 중 삭제한 파일Sn 목록
+	var uploadRemoveFiles = [];
+	
+    // Private functions
+    var documentSetting = function () {
 
-var autoData = [];
+    	//프로젝트 목록 세팅
+    	$("#reqPrjSelect").html($.osl.prjGrpAuthSelSetting(2,true));
 
-//연속 등록 체크
-var continueInsert = false;
+    	//type
+    	var type = $("#type").val();
+    	
+    	//문구 세팅 
+    	$("#req1001SaveSubmit").text($.osl.lang("req1001."+type+".saveBtnString"));
+    	
+    	//atchfileId
+    	var atchFileId = $("#atchFileId").val();
+    	
+    	//Portlet 세팅
+    	new KTPortlet('req1001RequestUsrInfo', $.osl.lang("portlet"));
+    	new KTPortlet('req1001NewRequestOpt', $.osl.lang("portlet"));
+    	
+    	//파일 업로드 세팅
+    	fileUploadObj = $.osl.file.uploadSet("req1001FileUpload",{
+    		url: '/req/req1000/req1000/insertReq1001ReqAtchFileInfo.do',
+    		maxFileSize: "${requestScope.fileSumMaxSize}",
+    		meta: {"atchFileId": atchFileId, "fileSn": 0},
+    		maxNumberOfFiles:20,
+    		//파일 업로드 전 실행 함수
+    		onBeforeUpload: function(files){
+    			var rtnValue = files;
+    			var uploadFiles = {};
+    			
+    			if(type == "insert"){
+    				//atchFileId 생성
+    				$.osl.file.makeAtchfileId(function(data){
+    					if(data.errorYn == "Y"){
+	   						$.osl.toastr(data.message);
+	   						rtnValue = [];
+	   					}else{
+	   						$("#atchFileId").val(data.atchFileIdString);
+	   					 	fileUploadObj.setMeta({atchFileId: data.atchFileIdString});
+	   					 
+	   						//파일명 뒤에 ms 붙이기
+	   	    				$.each(files, function(idx, map){
+	   	    					map.meta.atchFileId = data.atchFileIdString;
+	   	    					
+	   	    					var jsonTmp = {};
+	    						jsonTmp[map.id] = map;
+	    						uploadFiles = $.extend(uploadFiles, jsonTmp);
+	   	    				});
+	   						
+	   	    				rtnValue = uploadFiles;
+	   	    				
+	   						//요구사항 등록
+	   						submitInsertAction();
+	   					}
+    				});
+    			}else{
+    				//database 파일 제외하기
+    				$.each(files, function(idx, map){
+    					if(map.source != "database"){
+    						map.meta.atchFileId = $("#atchFileId").val();
+    						map.meta.source = map.source;
+    						
+    						var jsonTmp = {};
+    						jsonTmp[map.id] = map;
+    						uploadFiles = $.extend(uploadFiles, jsonTmp);
+    					}
+    				});
 
+					//요구사항 수정
+					submitUpdateAction();
+					
+    				rtnValue = uploadFiles;
+    			}
+   				return rtnValue;
+    		},
+    		//파일 업로드 시 건당 발생 함수
+    		onBeforeFileAdded: function(currentFile, files){
+    			if(currentFile.source != "database" && currentFile.source != "remove"){
+    				var newNm = new Date().format("ssms")+"_"+currentFile.name;
+    				currentFile.name = newNm;
+    				currentFile.meta.name = newNm;
+    				//currentFile.meta.atchFileId = $("#atchFileId").val();
+    				
+	    			//fileSn default
+	    			//var fileSn = fileUploadObj.getState().meta.fileSn;
+	    			
+	    			//currentFile.meta.fileSn = fileSn;
+	    			//fileUploadObj.setMeta({fileSn: (fileSn+1)});
+    			}
+    		}
+    	});
+    	
+    	//수정인경우
+    	if(type == "update"){
+    		//요구사항 정보 조회
+    		selectReqInfo();
+    		
+			//fileUploadObj.setMeta({atchFileId: atchFileId});
+			 	
+	    	//수정인경우 파일 삭제 기록하기
+	    	fileUploadObj.on('file-removed', function(file) {
+	    		file["fileSn"] = file.meta.fileSn;
+	    		file.source = "remove";
+	    		uploadRemoveFiles.push(file);
+	    		
+	    		//삭제 취소 버튼 활성화
+	    		//$(".uppy-DashboardContent-bar > div:eq(0)").append($("#fileRemoveResetBtn"));
+	    		$("#fileRemoveResetBtn").removeClass("d-none");
+			});
+	    	
+	    	//삭제 초기화 버튼 클릭 시 삭제한 파일 다시 추가
+	    	$("#fileRemoveResetBtn").click(function(){
+	    		$("#fileRemoveResetBtn").addClass("d-none");
+	    		
+	    		$.each(uploadRemoveFiles, function(idx, map){
+	    			fileUploadObj.addFile({
+	    			    name: map.name,
+	    			    type: map.type,
+	    			    source: 'database',
+	    			    meta: {
+	    			    	atchFileId: map.meta.atchFileId,
+	    			    	fileSn: map.meta.fileSn
+	    			    },
+	    				data: map.data,
+    				});
+	    		});
 
-//파일 업로드 제한 사이즈
-var FILE_INFO_MAX_SIZE = "${fileInfoMaxSize}";
-var FILE_SUM_MAX_SIZE = "${fileSumMaxSize}";
+	    		setTimeout(function(){
+	    			//파일 preview에 click 이벤트 걸기
+	    			$.each(fileUploadObj.getFiles(), function(idx, map){
+	    				//database에 등록된 파일만 다운로드 가능
+	    				if(map.source == "database"){
+	    					var target = $("#uppy_"+$.escapeSelector(map.id)+" > .uppy-DashboardItem-preview");
+	    					target.addClass("osl-cursor-pointer");
+	    					target.off("click");
+	    					target.click(function(){
+	    						$.osl.file.fileDownload(map.meta.atchFileId, map.meta.fileSn);
+	    					});
+	    				}
+	    			});
+	    		},2000);
+	    		
+	    		uploadRemoveFiles = [];
+	    	});
+    	}else{
+    		//요청자 정보 세팅
+        	$.osl.setDataFormElem($.osl.user.userInfo,"frReq1001", ["usrNm","email","telno","deptName","deptId","usrImgId"]);
+			
+	    	//현재 날짜 지정
+	    	$("#reqDtm").val(new Date().format("yyyy-MM-dd"));
+    	}
 
-// 기본 유효성 체크
-var arrChkObj = {"reqNm":{"type":"length","msg":"요청제목 500byte까지 입력이 가능합니다.","max":500}
-				,"reqUsrEmail":{"type":"length","msg":"이메일은 100byte까지 입력이 가능합니다.", "max":100}
-				,"reqUsrNum":{"type":"number"}
-				,"reqDesc":{"type":"length","msg":"요청내용은 4000byte까지 입력가능합니다.", "max":4000}
-				};
-
-// 연락처, 이메일  유효성 체크
-var saveObjectValid = {
-			"reqUsrNum":{"type":"regExp","pattern":/^([0-9]{3,13}).*$/ ,"msg":"연락처 형식이 아닙니다. (3~13자리) (예) 01012341234", "required":true}
-			 ,"reqUsrEmail":{"type":"regExp","pattern":/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i ,"msg":"이메일 형식이 아닙니다.<br>(예) mymail@naver.com","required":true}
-		};
-
-function fnReqClick(thisObj){
-	var prjId = $(thisObj).attr("prjid");
-	var reqId = $(thisObj).attr("reqid");
-	var reqProType = $(thisObj).attr("reqprotype");
-	
-	if(reqProType == "01" || reqProType == "03"){
-		// 접수요청(reqProType = 01), 반려(reqProType = 03)에 따라 팝업 높이 변경
-		var popHeight = "925";
-		if(reqProType == "03"){
-			popHeight = "900";
-		}
-		
-		var data = {
-             			"mode": "req",
-             			"popupPrjId":prjId,
-             			"reqId":reqId,
-             			"reqProType": reqProType,
-             			"reqPageType" : "usrReqPage"
-             	}; 
-       gfnLayerPopupOpen("/req/req1000/req1000/selectReq1002View.do", data, '640', popHeight,'scroll');
-	}
-	if(reqProType == "02" || reqProType == "04" || reqProType == "05"){
-		var data = {"mode":"newReq","popupPrjId":prjId,"reqId": reqId, "reqProType":"02"}; 
-		gfnLayerPopupOpen("/req/req4000/req4100/selectReq4104View.do", data, '1300', '850','scroll');
-	}
-}
-$(document).ready(function() {
-	
-	//프로젝트 세팅
-	$("select#viewPrjId").html($("#header_select").html());
-	
-	//유효성 체크
-	gfnInputValChk(arrChkObj);
-	
-	//탭인덱스 부여
-	//gfnSetFormAllObjTabIndex(document.getElementById("req1000PopupFrm"));
-	
-	// 연속등록 시 요청내용의 placeholder 부분에 <br>태그 들어가는 부분 제거
-	var ph_reqDesc = '${ph_reqInfoMap.reqDesc}';
-	if(!gfnIsNull(ph_reqDesc)){
-		$( '#reqDesc' ).prop( 'placeholder', ph_reqDesc.replace(/(<\/br>|<br>|<br\/>|<br \/>)/gi, '\r\n') );
-	}
-	
-	/* 타이틀 변경 및 버튼명 변경, 수정일경우 값 세팅 */
-	if(pageType == 'insert'){
-		
-		url = "<c:url value='/req/req1000/req1000/insertReq1001ReqInfoAjax.do'/>";
-    	// 등록이면 접수유형 시스템으로 체크
-    	$("#reqNewType_stm").prop("checked", true);
-		$(".pop_title").text("요청사항 생성");
-		$("#btn_insert_reqPopup").text('등록');
-		
-		//연속등록 버튼 보이기
-		$("#btn_insert_reqContinuePopup").css({"display":"inline-block"});
-	}
-	else if(pageType == 'update'){
-		
-		url = "<c:url value='/req/req1000/req1000/updateReq1001ReqInfoAjax.do'/>";
-		$(".pop_title").text("요청사항 수정");
-		$("#btn_insert_reqPopup").text('수정');
-		
-		var prjId = '${param.popupPrjId}';
-		var reqId = '${param.reqId}';
-		fnSelectReq1001Info(reqId,prjId);
-		
-		//프로젝트 고정
-		$("select#viewPrjId").attr("disabled","disabled");
-	}
-	
-	// 요청일 현재 날짜로 기본 세팅
-	$("#reqDtm").val( gfnGetServerTime('YYYY-MM-DD') );
-	
-	
-	/**
-	 * 	요구사항 하나 선택했을때 요구사항 디테일 정보 조회
-	 *	@param selReqId 수정하려는 요구사항
+    	//edit 세팅
+    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+    	
+    	//datepicker 세팅
+		$.osl.date.datepicker($("#reqDtm"), {});
+    	
+    	//submit 동작
+    	$("#req1001SaveSubmit").click(function(){
+			var form = $('#'+formId);    		
+        	
+    		//폼 유효 값 체크
+    		if (!form.valid()) {
+    			return;
+    		}
+    		$.osl.confirm($.osl.lang("req1001."+type+".saveString"),null,function(result) {
+    	        if (result.value) {
+    	        	fileUploadObj.upload();
+    	        }
+    		});
+    	});
+    };
+    
+    
+    /**
+	 * 	요구사항 정보 조회
 	 */
- 	function fnSelectReq1001Info(selReqId,selPrjId){
-		
+	 var selectReqInfo = function() {
+    	var paramPrjId = $("#prjId").val();
+    	var paramReqId = $("#reqId").val();
+    	var paramReqUsrId = $("#reqUsrId").val();
+    	
 		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/req/req1000/req1000/selectReq1000ReqInfoAjax.do'/>"}
-				,{"prjId":selPrjId, "reqId" : selReqId });
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/req/req1000/req1000/selectReq1000ReqInfoAjax.do'/>", "async": false}
+				,{"prjId": paramPrjId, "reqId" : paramReqId, "reqUsrId": paramReqUsrId });
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-        	
-        	//디테일폼 세팅
-        	gfnSetData2ParentObj(data.reqInfoMap, "req1000PopupFrm");
- 	
-        	//프로젝트
-        	$("select#viewPrjId").val($("#prjId").val());
-        	
-        	// 처리유형
-        	var reqProType = data.reqInfoMap.reqProType;
-        	// hidden에 처리 유형 세팅
-        	$("#reqProType").val(reqProType);
-        	
-        	// 접수유형
-        	var reqNewType = data.reqInfoMap.reqNewType;
-        	
-        	// hidden에 접수 유형 세팅
-        	$("#reqNewType").val(reqNewType);
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
 
-        	
-        	// 접수유형 선택
-    		switch(reqNewType){
-    		case '01':
-				$("#reqNewType_stm").prop("checked", true);
-    			break;
-    		case '02':
-    			$("#reqNewType_tel").prop("checked", true);
-    			break;
-    		case '03':
-    			$("#reqNewType_pub").prop("checked", true);
-    			break;
-    		case '04':
-    			$("#reqNewType_self").prop("checked", true);
-    			break;
-    		case '05':
-    			$("#reqNewType_brd").prop("checked", true);
-    			break;	
-    		}
-        	
-        	if(data.fileList.length > 0){
-        		//info 정보 show
-        		$('#dndCancel').show();
-        		$("#file_info").hide();
-        	}
-        	$.each(data.fileList, function(idx, fileVo){
-        		fileVo["reqId"] = '${param.reqId}';
-        		gfnFileListReadDiv(fileVo,'.pop_file','req');
-        	});
-        	if(!gfnIsNull(data.fileList)){
-
-        		$('#atchFileId').val(data.fileList[0].atchFileId);
-        		$('#fileCnt').val(data.fileListCnt);
-        	}
+				//모달 창 닫기
+				$.osl.layerPopupClose();
+			}else{
+				//요구사항 정보 세팅
+		    	$.osl.setDataFormElem(data.reqInfoMap,"frReq1001");
+				
+				//요청자 정보 세팅
+		    	$("#usrNm").val(data.reqInfoMap.reqUsrNm);
+		    	$("#email").val(data.reqInfoMap.reqUsrEmail);
+		    	$("#telno").val(data.reqInfoMap.reqUsrNum);
+		    	$("#deptName").val(data.reqInfoMap.reqUsrDeptNm);
+		    	$("#deptId").val(data.reqInfoMap.reqUsrDeptId);
+		    	$("#usrImgId").attr("src",$.osl.user.usrImgUrlVal(data.reqInfoMap.reqUsrImgId));
+		    	
+		    	$("#reqPrjSelect").val(data.reqInfoMap.prjId).trigger('change.select2');
+		    	$("#reqPrjSelect").prop("disabled", true);
+		    	
+		    	//파일Sn넣기
+		    	fileUploadObj.setMeta({fileSn: parseInt(data.fileListCnt)+1});
+		    	
+		    	//파일 목록 세팅
+		    	$.osl.file.fileListSetting(data.fileList, fileUploadObj);
+		    	
+			}
 		});
 		
 		//AJAX 전송 오류 함수
 		ajaxObj.setFnError(function(xhr, status, err){
-			data = ㅣㅐㅏJSON.parse(data);
+			data = JSON.parse(data);
 			jAlert(data.message, "알림창");
 		});
 		
 		//AJAX 전송
 		ajaxObj.send();
-	} 
+	};
+    
+    //atchFileId 생성 완료 시 요구사항 등록 시작
+    var submitInsertAction = function(paramActhFileId){
+    	var form = $('#'+formId);    		
+    	
+		//폼 유효 값 체크
+		if (!form.valid()) {
+			return;
+		}
+		
+       	//formData
+   		var fd = $.osl.formDataToJsonArray(formId);
 
-	
-	/* 저장버튼 클릭 시 */
-	$('#btn_insert_reqPopup').click(function() {
-
-		/* 필수입력값 체크 공통 호출 */
-		var strFormId = "req1000PopupFrm";
-		var strCheckObjArr = ["reqNm", "reqUsrEmail", "reqUsrNum", "reqDesc"];
-		var sCheckObjNmArr = ["요청제목", "이메일", "연락처", "요청 내용"];
-		if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-			return;	
-		}
-				
-		// 이메일 공백제거
-		var reqUsrEmali = $("#reqUsrEmail").val();
-		$("#reqUsrEmail").val(reqUsrEmali.trim());
-		
-		// 연락처, 이메일 유효성 검사
-		if(!gfnInputValChk(saveObjectValid)){
-			return false;	
-		}
-		
-		//FormData에 input값 Json형태로 넣기
-		gfnFormDataAutoJsonValue(strFormId,fd);
-		
-		
-		// 기본 유효성 검사
-		if(!gfnSaveInputValChk(arrChkObj)){
-			return false;	
-		}
-		
-		// 연락처, 이메일 유효성 검사
-		if(!gfnSaveInputValChk(saveObjectValid)){
-			return false;	
-		}
-		
-		fnInsertReqInfoAjax(strFormId);
-	});
-	
-	/* 연속 등록버튼 클릭 시 */
-	$('#btn_insert_reqContinuePopup').click(function() {
-		/* 필수입력값 체크 공통 호출 */
-		var strFormId = "req1000PopupFrm";
-		var strCheckObjArr = ["reqNm", "reqUsrEmail", "reqUsrNum", "reqDesc"];
-		var sCheckObjNmArr = ["요청제목", "이메일", "연락처", "요청 내용"];
-		if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-			return;	
-		}
-		
-		// 연락처, 이메일  유효성 체크
-/* 		var saveObjectValid = {
-					"reqUsrNum":{"type":"regExp","pattern":/^([0-9]{3,13}).*$/ ,"msg":"연락처 형식이 아닙니다. (3~13자리) (예) 01012341234", "required":true}
-					 ,"reqUsrEmail":{"type":"regExp","pattern":/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i ,"msg":"이메일 형식이 아닙니다. <br>(예) mymail@naver.com","required":true}
-		} */
-		
-		// 연락처, 이메일 유효성 검사
-		if(!gfnInputValChk(saveObjectValid)){
-			return false;	
-		}
-		
-		//FormData에 input값 Json형태로 넣기
-		gfnFormDataAutoJsonValue(strFormId,fd);
-		
-		continueInsert = true;
-
-		// 기본 유효성 검사
-		if(!gfnSaveInputValChk(arrChkObj)){
-			return false;	
-		}
-		
-		// 연락처, 이메일 유효성 검사
-		if(!gfnSaveInputValChk(saveObjectValid)){
-			return false;	
-		}
-		
-		// 연속등록 전 유효성 체크
-		fnInsertReqInfoAjax(strFormId);
-
-
-	});
-	
-	/* 취소버튼 클릭 시 팝업 창 사라지기*/
-	$('#btn_cancle_popup').click(function() {
-		gfnLayerPopupClose();
-	});
-	
-	$('#btn_cls_select').click(function() {
-		
-		gfnCommonClsPopup(function(reqClsId,reqClsNm){
-			$("#reqClsId").val(reqClsId);
-			$("#reqClsNm").val(reqClsNm);
+       	//파일 목록 추가하기 (수정이력 관리)
+       	fd.append("fileHistory",JSON.stringify(fileUploadObj.getFiles()));
+       	
+      	//파일명 뒤에 ms 붙이기
+		$.each(fileUploadObj.getFiles(), function(idx, map){
+			map.meta.atchFileId = paramActhFileId;
+			
+			fd.append("file",map);
 		});
+      
+      	//프로젝트 그룹 ID
+		var prjGrpId = $("#reqPrjSelect option[value="+$("#reqPrjSelect").val()+"]").data("prj-grp-id");
+		fd.append("prjGrpId",prjGrpId);
 		
-	});
-	
-	
-	$('#btn_delete_file').click(function(e) {
-		e.stopPropagation();
-	});
-	
-	
+   		//AJAX 설정
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/req/req1000/req1000/insertReq1001ReqInfoAjax.do'/>", "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false},fd);
+
+   		//AJAX 전송 성공 함수
+   		ajaxObj.setFnSuccess(function(data){
+   			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//등록 성공
+   				$.osl.toastr(data.message);
+
+   				//모달 창 닫기
+   				$.osl.layerPopupClose();
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id=req1000ReqTable][data-datatable-action=select]").click();
+   			}
+   		});
+   		
+   		//AJAX 전송
+   		ajaxObj.send();
+		
+    };
+    
+    //요구사항 수정 시작
+    var submitUpdateAction = function(){
+		var form = $('#'+formId);    		
+    	
+		//폼 유효 값 체크
+		if (!form.valid()) {
+			return;
+		}
+
+       	//formData
+   		var fd = $.osl.formDataToJsonArray(formId);
+       	
+       	//파일 목록 추가하기 (수정이력 관리)
+       	var uploadFileList = [];
+       	$.each(fileUploadObj.getFiles(), function(idx, map){
+       		if(!map.hasOwnProperty("source") || map.source == "database"){
+       			return true;
+       		}
+       		uploadFileList.push(map);
+       	});
+       	uploadFileList = uploadFileList.concat(uploadRemoveFiles);
+
+       	//파일 정보
+       	fd.append("fileHistory",JSON.stringify(uploadFileList));
+       	
+   		//AJAX 설정
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/req/req1000/req1000/updateReq1001ReqInfoAjax.do'/>", "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false},fd);
+
+   		//AJAX 전송 성공 함수
+   		ajaxObj.setFnSuccess(function(data){
+   			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//등록 성공
+   				$.osl.toastr(data.message);
+
+   				//모달 창 닫기
+   				$.osl.layerPopupClose();
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id=req1000ReqTable][data-datatable-action=select]").click();
+   			}
+   		});
+   		
+   		//AJAX 전송
+   		ajaxObj.send();
+    };
+    return {
+        // public functions
+        init: function() {
+        	documentSetting();
+        }
+    };
+}();
+
+// Initialization
+$.osl.ready(function(){
+	OSLReq1001Popup.init();
 });
 
-//요구사항 등록 함수
-function fnInsertReqInfoAjax(formId){
-	//FormData에 input값 넣기
-	//gfnFormDataAutoValue('req1000PopupFrm',fd);
 	
-	var fileListStr = fnFileUploadStrData();
-	
-	jConfirm("저장하시겠습니까?"+fileListStr, "알림", function( result ) {
-		if( result ){
-			//실제 파일 FormData에 적재
-			fnFileUploadAppendData();
-			
-			//AJAX 설정
-			var ajaxObj = new gfnAjaxRequestAction(
-					{"url":url
-						,"contentType":false
-						,"processData":false
-						,"cache":false}
-					,fd);
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				data = JSON.parse(data);
-		    	//로딩바 숨김
-		    	gfnShowLoadingBar(false)
-		    	
-		    	//요구사항 등록 실패의 경우 리턴
-		    	if(data.saveYN == 'N'){
-		    		jAlert(data.message, '알림창', function( result ) {
-					if( result ){
-						gfnLayerPopupClose();
-					}
-				});
-		    		return;
-		    	}
-		    	jAlert(data.message, '알림창');
-		    	gfnLayerPopupClose();
-		    	
-		    	//그리드 새로고침
-		    	if(pageType == "insert"){
-		    		//fnInGridListSet(firstGrid.page.currentPage,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-    				fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-		    		//연속 등록 아닌경우
-		    		if(continueInsert){ //연속 등록인경우
-		    			var reqInfo = data.reqInfo;
-		    			var data = {
-							"type": "insert",
-							"continueInsert":"Y",
-							"ph_prjId":reqInfo.prjId,
-							"ph_reqId":reqInfo.reqId
-						};
-						
-						gfnLayerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,"640","800",'scroll');
-		    		}
-		    	}else if(pageType == "update"){
-		    		// 수정일 경우 그리드 현재 페이지 번호, 검색어 정보를 전달하여 새로고침
-		    		fnInGridListSet(firstGrid.page.currentPage,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-		    	}
-		    	
-				
-				
-			});
-			
-			//AJAX 전송 오류 함수
-			ajaxObj.setFnError(function(xhr, status, err){
-				toast.push(xhr.status+"("+err+")"+" 에러가 발생했습니다.");
-		    	gfnLayerPopupClose();
-			});
-			//AJAX 전송
-			ajaxObj.send();
-		}else{
-			fd = new FormData();
-		}
-	});
-}
-
-
-//프로젝트 변경
-function fnPrjChg(thisObj){
-	$("#prjId").val(thisObj.value);
-}
-
 </script>
-<div class="popup" id="reqInsertDiv">
-<form id="req1000PopupFrm" name="req1000PopupFrm" method="post">
-	<input type="hidden" name="popupType" id="popupType" value="${pageType}"/>
-	<input type="hidden" name="reqId" id="reqId" value="${param.reqId}" />
-	<input type="hidden" name="prjId" id="prjId" value="${sessionScope.selPrjId}"/>
-	<input type="hidden" name="reqClsId" id="reqClsId" value=""/>
-	<input type="hidden" name="reqProType" id="reqProType" />
-	<input type="hidden" name="reqKey" id="reqKey" />
-	<!-- 접수유형은 01 (시스템) : 등록시 기본 접수유형 -->
-	<input type="hidden" name="reqNewType" id="reqNewType" value="01"/>
-
-	<div class="pop_title">	
-	</div>
-
-	<div class="pop_sub">
-		<!-- <input id="hidden" type="radio" modifyset="false" value="01"/> -->
-		<div class="pop_menu_row pop_menu_oneRow"style="border-top: 1px solid #ddd;">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="reqNewType">접수유형</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_oneRow_col2">
-				<div class="pop_radio">
-					<input id="reqNewType_stm" type="radio" modifyset="false" value="01"/><label>시스템</label>
-					<input id="reqNewType_tel" type="radio" modifyset="false" value="02"/><label>유선</label>
-					<input id="reqNewType_pub" type="radio" modifyset="false" value="03"/><label>공문</label>
-					<input id="reqNewType_self" type="radio" modifyset="false" value="04"/><label>자체식별</label>
-					<input id="reqNewType_brd" type="radio" modifyset="false" value="05"/><label>게시판</label>
-				</div>
-			</div>
-		</div>
-		<div class="pop_menu_row" style="border-top: 1px solid #ddd;">
-			<div class="pop_menu_col1"><label for="prjNm">대상체계</label></div>
-			<div class="pop_menu_col2">
-				<select id="viewPrjId" name="viewPrjId" modifyset="false" onchange="fnPrjChg(this)"></select>
-			</div>
-		</div>
-		<div class="pop_menu_row" style="border-top: 1px solid #ddd;">
-			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqNo">공문번호</label></div>
-			<div class="pop_menu_col2"><input id="reqNo" type="text" name="reqNo" title="공문번호"  class="readonly" readonly="readonly" placeholder="${ph_reqInfoMap.reqNo}"/></div>
-		</div>
-		
-		<div class="pop_menu_row pop_menu_oneRow">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="reqNm">요청제목</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_oneRow_col2"><input id="reqNm" type="text" name="reqNm" title="요청제목"  maxlength="300" placeholder="${ph_reqInfoMap.reqNm}"/></div>
-		</div>
-
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1"><label for="reqUsrNm">요청자 성명</label></div>
-			<div class="pop_menu_col2"><input id="reqUsrNm" type="text" name="reqUsrNm" title="요청자" class="readonly" readonly="readonly" value="${reqUsrInfoMap.usrNm}" /></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqDtm">요청일</label></div>
-			<div class="pop_menu_col2"><input id="reqDtm" type="text" name="reqDtm" title="요청일" class="readonly" readonly="readonly" /></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1"><label for="reqUsrDeptNm">요청부서</label></div>
-			<div class="pop_menu_col2"><input id="reqUsrDeptNm" type="text" name="reqUsrDeptNm" title="소속" class="readonly" readonly="readonly" value="${reqUsrInfoMap.deptNm}" /></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqUsrEmail">E-mail</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2"><input id="reqUsrEmail" type="text" name="reqUsrEmail" title="E-mail" value="${reqUsrInfoMap.email}"/></div>
-		</div>
-		<div class="pop_menu_row ">
-			<div class="pop_menu_col1"><label for="reqUsrNum">연락처</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2"><input id="reqUsrNum" type="text" name="reqUsrNum" title="연락처" maxlength="13" max="11199999999" value="${reqUsrInfoMap.telno}" /></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqUsrPositionNm">직급</label></div>
-			<div class="pop_menu_col2">
-				<input id="reqUsrPositionNm" type="text" name="reqUsrPositionNm" title="직급" class="readonly" readonly="readonly" value="${reqUsrInfoMap.usrPositionNm}" />
-			</div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1"></div>
-			<div class="pop_menu_col2"></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 pop_menu_col1_right"><label for="reqUsrDutyNm">직책</label></div>
-			<div class="pop_menu_col2">
-				<input id="reqUsrDutyNm" type="text" name="reqUsrDutyNm" title="직급" class="readonly" readonly="readonly" value="${reqUsrInfoMap.usrDutyNm}" />
-			</div>
-		</div>
-		<div class="pop_note" style="margin-bottom:10px;">
-			<div class="note_title">요청 내용<span class="required_info">&nbsp;*</span></div>
-			<textarea class="input_note" title="요청 내용" name="reqDesc" id="reqDesc" rows="7" value="${req1000ReqInfo.reqDesc}"  ></textarea> <!-- placeholder="${ph_reqInfoMap.reqDesc}" -->
-		</div>
-
-		<input type="hidden" id="atchFileId" name="atchFileId"/>
-		<input type="hidden" id="fileCnt" name="fileCnt"/>
-		<input type="hidden" id="insertFileCnt" name="insertFileCnt"/>
-			
-		<!-- 파일 목록 표시 -->
-		<div class="up_box">
-			<!-- <span id="dndCancel" class="abort" style="display: none;" onclick='dndCancel(); '>파일목록 초기화</span> -->
-			<span class="button_normal2 del_btn" onclick="document.getElementById('egovFileUpload').click(); " id="btn_insert_fileSelect">
-				<input type="file" style="display: none" id="egovFileUpload" name="uploadFileList" multiple="multiple" />파일선택
-			</span>
-		</div>
-		<div id="dndDiv">
-			<div class="note_title" id="statudDnd2">파일 첨부</div>
-			<div class="pop_file" id="dragandrophandler" onclick="document.getElementById('egovFileUpload').click(); ">
-				<div id="file_info">Drop files here or click to upload.</div>
-				<!-- 파일목록이 표시되는 공간 -->
-			</div>
-		</div>
-		<!-- 파일 목록 표시 -->
-		<!-- <div id="egovFileStatus" class="uploadOverFlow"></div> -->
-		
-		<div class="btn_div">
-			<div class="button_normal save_btn" id="btn_insert_reqContinuePopup">연속 등록</div>
-			<div class="button_normal save_btn" id="btn_insert_reqPopup">저장</div>
-			<div class="button_normal exit_btn" id="btn_cancle_popup">취소</div>
-		</div>
-	</div>
-</form>
-</div>
-<script type="text/javascript">
-		//첨부파일 업로드 설정 (Select)
-	   var maxFileNum = 30;
-	   if(maxFileNum==null || maxFileNum==""){
-	     maxFileNum = 3;
-	    }     
-	   var multi_selector = new MultiSelector( document.getElementById( 'egovFileStatus' ), maxFileNum );
-	   multi_selector.addElement( document.getElementById( 'egovFileUpload' ) );	
-	</script>
-</html>

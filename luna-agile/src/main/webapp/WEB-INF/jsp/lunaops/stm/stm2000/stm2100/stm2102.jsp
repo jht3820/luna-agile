@@ -507,12 +507,12 @@
 				drawList(setAuthGrpList, "groupList", false);
 				drawList(setUsrList, "userList", false);
 				drawList(setManagerList, "manager", true);
-				
+				/* 
 				//사용자 아이콘 클릭 시
 				$(".openid").click(function(){
 					var usrId = $(this).data("openid");
 					$.osl.user.usrInfoPopup(usrId);
-				});
+				}); */
 			}
 		});
   	

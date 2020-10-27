@@ -42,5 +42,6 @@ public interface Bad1000Service {
 	void deleteBad1000BadList(Map paramMap) throws Exception;
 
 	
+	
 	void updateBad1000BadRestore(Map<String, String> paramMap) throws Exception;
 }
