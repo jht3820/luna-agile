@@ -6,87 +6,14 @@
 img {
   max-width: 100%;
 }
-
-.osl-portlet__head-label{
-	width: 100%;
-}
-
-.card-body{
-	position: relative;
-}
-
-.osl-portlet__head-toolbar{
-	position: absolute;
-	right: 15px;
-	top: -50px;
-}
-.osl-portlet__head-toolbar>button{
-	min-width: 43px;
-}
-.kt-widget__wrapper>button{
-	min-width: 43px;
-}
-.osl-portlet__head-label>div{
-	width: 40%;
-	line-height: 32px;
-	float:left;
-	text-align: center;
-}
-.osl-portlet__head-label>div:nth-child(2){
-	text-align: right;
-}
-.osl-padding-b-6__5{
- 	padding-bottom: 6.5px !important; 
-}
-.osl-cmt__width__100{
-	word-break: break-word;
-}
-@media (max-width: 1400px){
-	.osl-cmt__width__100{
-		width:300px !important; 
-	}
-	.osl-portlet__head-label>div{
-		width: 35%;
-	}
-}
-@media (max-width: 1024px){
-	.osl-portlet__head-label > div:first-child{
-		width: 100%;
-	}
-	.osl-portlet__head-label > div:nth-child(2){
-		width: 100%;
-		text-align: left;
-		padding: 0 !important;
-	}
-	.osl-padding-b-6__5{
-		padding: 0 !important;
-		padding-bottom: 3.5px !important;
-	}
-}
-@media (max-width: 430px){
-	.osl-portlet__head-label > div:nth-child(2),.osl-portlet__head-label > div:last-child{
-		width: 100%;
-		height: 10px;
-		line-height: 10px;
-		text-align:left;
-	}
-}
 </style>
 
 <input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd}" /> 
 <input type="hidden" name="stmDsTypeCd" id="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 <input type="hidden" name="stmNm" id="stmNm" value='${param.stmNm}'/>
-<input type="hidden" name="badNum" id="badNum" value="${param.badNum }" />
-<input type="hidden" name="prjGrpId" id="prjGrpId" value="${param.prjGrpId }" /> 
-<input type="hidden" name="prjId" id="prjId" value="${param.prjId }" />  
-<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
-<input type="hidden" name="badId" id="badId" value="${param.badId }" />
-<input type="hidden" name="badDelCd" id="badDelCd" value="${param.badDelCd }" />
-<input type="hidden" name="atchFileId" id="atchFileId" value="${param.atchFileId }" />
-<input type="hidden" name="searchTarget" id="searchTarget" value='${param.searchTarget }' />
-<input type="hidden" name="fileCnt" id="fileCnt" value="" /> 
-<input type="hidden" name="fileStrg" id="fileStrg" value="" /> 
+<input type="hidden" name="paramRow" id="paramRow" value='${param.paramRow }' />
 <input type="hidden" id="stmRootYn" name="stmRootYn" value='${param.stmRootYn}'/>
+<input type="hidden" id="badHitYn" name="badHitYn" value='${param.badHitYn}'/>
 
 <div class="kt-section__content kt-section__content--border">
 	<div class="card">
@@ -100,9 +27,9 @@ img {
 				<!-- <div class="kt-padding-t-10 kt-padding-b-10" name="hitDiv" id="hitDiv"></div>	 -->
 			</div>	
 		</div>
-		<div class="card-body">
+		<div class="osl-bad__card-body">
 			<!-- 수정, 삭제, 복원 -->
-			<div class="osl-portlet__head-toolbar">
+			<div class="osl-portlet__sub-toolbar">
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" name="updateBtn" id="updateBtn" title="게시글 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
 					<i class="fa fa-edit"></i><span>수정</span>
 				</button>
@@ -114,18 +41,20 @@ img {
 				</button>
 			</div>
 			<!-- 내용 -->
-			<div class="bard-text kt-margin-t-10" style="min-height: 150px;" name="badContentDiv" id="badContentDiv"></div>
+			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20" style="min-height: 150px;" name="badContentDiv" id="badContentDiv"></div>
 			<!-- 첨부파일 목록 -->
-			<div class="form-group kt-margin-t-20 kt-margin-b-20 kt-hide" name="badFileOption" id="badFileOption">
+			<div class="form-group kt-margin-20 kt-hide" name="badFileOption" id="badFileOption">
 				<hr class="kt-margin-t-20 kt-margin-b-20">
 				<div class="kt-font-bolder kt-padding-l-5">
 					<i class="fa fa-file-upload kt-margin-r-5"></i>파일 첨부
 				</div>
-				<div class="kt-margin-t-10" name="fileListDiv" id="fileListDiv">
+				<div class="kt-margin-t-10 kt-uppy fileReadonly" name="fileListDiv" id="fileListDiv">
+					<div class="kt-uppy__dashboard"></div>
+					<div class="kt-uppy__progress"></div>
 				</div>
 			</div>
 			<!-- 태그 리스트 -->
-			<div class="form-group kt-margin-b-20 kt-hide" name="badTagOption" id="badTagOption">
+			<div class="form-group kt-margin-20 kt-hide" name="badTagOption" id="badTagOption">
 				<div class="kt-font-bolder kt-padding-l-5">
 					<i class="fa fa-hashtag kt-margin-r-5"></i> 태그
 				</div>
@@ -150,17 +79,17 @@ img {
 				</div>
 			</div>
 		</div>
-		<div class="card-body">
+		<div class="osl-bad__card-body">
 			<!-- 댓글 검색 -->
-			<div class="row">
+			<div class="row kt-padding-20 kt-padding-l-30">
 				<div class="osl-datatable-search col-lg-5 col-md-6 col-sm-6 col-12" data-datatable-id="bad1001CmtTable"></div>
 			</div>
 			<!-- 댓글 입력창 -->
 			<div class="input-group kt-margin-t-10 kt-margin-b-10 kt-padding-l-30 kt-padding-r-10 kt-hide" style="width:95%" name="badCmtInput" id="badCmtInput">
 				<div class="input-group-prepend kt-padding-r-15" name="loginUsr" id="loginUsr">
 				</div>
-				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" maxlength="200" />
-				<div class="input-group-append">
+				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" maxlength="370" />
+				<div class="form-group-append">
 					<button class="btn btn-brand" type="button" name="cmtSaveBtn" id="cmtSaveBtn">등록</button>
 				</div>
 			</div>
@@ -177,37 +106,61 @@ img {
 "use strict";
 
 var OSLBad1001Popup = function () {
+	//담당자 및 글작성 범위 해당여부를 담을 변수 선언
 	var okManager;
 	var okWriter;
-	var id = $.osl.user.userInfo.usrId;
+	
+	//파일 업로드 객체
 	var fileUploadObj;
+	
+	//태그 리스트를 담을 변수 선언
 	var tag = [];
 
-	var formId = 'bad1001Info';
+	//목록에서 받아온 row data
+	var paramRowData;
 	
+	//데이터 테이블 아이디 - 댓글
    	var dataTableId = "bad1001CmtTable";
+	
     var documentSetting = function () {
+    	//목록에서 받은 rowData
+    	paramRowData = JSON.parse($("#paramRow").val());
+
+    	//게시글 정보 비우기
+    	$("#paramRow").val('');
+    	
+    	//권한체크
 		checkUser();
 		
 		// 파일 업로드 세팅
 	   	fileUploadObj = $.osl.file.uploadSet("fileListDiv",{
-	   		url: '/bad/bad1000/bad1000/insertBad1002BadAtchFileInfo.do',
-	   		meta: {"atchFileId": $("#atchFileId").val(), "fileSn": 0},
-	   		maxFileSize: Number($("#fileStrg").val()),
-	   		maxNumberOfFiles: Number($("#fileCnt").val()),
-	   		height: 200,
+	   		meta: {"atchFileId": paramRowData.atchFileId, "fileSn": 0},
+	   		maxFileSize: Number(paramRowData.fileStrg)/(1024*1024),
+	   		maxNumberOfFiles: Number(paramRowData.fileCnt),
+	   		height: 370,
+	   		isDraggingOver: false,
+    		fileDownload: true,
+    		fileReadonly: true
 	   	});
-   	
-   		selectBadInfo(true);
 
+	   	fileUploadObj.reset();
+	   	//게시글 정보 가져오기
+	   	//만약 수정 후 호출이여서 badHitYn에 값이 있을 때
+	   	if($("#badHitYn").val() != null || $("#badHitYn").val() != ""){
+	   		selectBadInfo(false);
+	   	}else{
+	   		selectBadInfo(true);
+	   	}
+
+	   	//댓글 데이터 테이블 셋팅
     	$.osl.datatable.setting(dataTableId, {
 			 data: {
 				 source: {
 					 read: {
 						url: "/bad/bad1000/bad1100/selectBad1100CmtListAjax.do",
 						params : {
-							menuId: $("#menuId").val(),
-							badId : $("#badId").val(),
+							menuId: paramRowData.menuId,
+							badId : paramRowData.badId
 						}
 					 }
 				 },
@@ -216,7 +169,13 @@ var OSLBad1001Popup = function () {
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 30, selector: {class: "kt-checkbox--solid"}, sortable: false, autoHide: false},
 				 {field: 'badCmtUsrId', title: '작성자', textAlign: 'left', width: 180,
 						template: function (row) {
-							return $.osl.user.usrImgSet(row.badCmtUsrImgId, row.badCmtUsrNm+"("+row.badCmtUsrId+")");
+							var usrData = {
+									html: row.badCmtUsrNm + " (" + row.badCmtUsrId + ")",
+									class:{
+										cardBtn: "osl-width__fit-content"
+									}
+							};
+							return $.osl.user.usrImgSet(row.badCmtUsrImgId, usrData);
 						},
 						onclick: function(rowData){
 							$.osl.user.usrInfoPopup(rowData.badCmtUsrId);
@@ -224,7 +183,7 @@ var OSLBad1001Popup = function () {
 						, autoHide: true, search:true},
 				 {field: 'badCmtContent', title: '내용', textAlign: 'left', width:740, autoHide: false, search:true,
 					template:function(row){
-						var returnStr = "<span class='cmtTxt' style='word-break: break-word;'>"+row.badCmtContent+"</span>";
+						var returnStr = "<span class='cmtTxt' style='word-break: break-word;'>"+$.osl.escapeHtml(row.badCmtContent)+"</span>";
 						return returnStr;
 					}			
 				 },
@@ -247,15 +206,12 @@ var OSLBad1001Popup = function () {
 					},	
 				 }
 			 ],
-			 rows:{
-				afterTemplate: function(row, data, index){
-					$(".cmtTxt").parents("span").addClass("osl-cmt__width__100");
-				}
-			 },
 			 layout:{ "header" : false },
 			 actionBtn:{
-				 "title" : "삭제",
+				 "title": "삭제",
 				 "update": false,
+				 "delete": true,
+				 "click": true,
 			 },
 			 actionTooltip:{
 				"delete": "댓글 삭제",
@@ -263,19 +219,19 @@ var OSLBad1001Popup = function () {
 			 actionFn:{
 				 "delete":function(rowDatas){
 					 //삭제된 게시글이 아닌 경우에만 댓글 삭제 기능 가능
-					 if($("#badDelCd").val() =='02'){
+					 if(paramRowData.delCd =='02'){
 						//담당자 외 삭제 선택한 글 중 본인 외 작성 댓글이 포함된 경우인지 확인
 						var selfCheck = "Y";
 						$.each(rowDatas, function(idx, value){
-							if(value.badCmtUsrId != id){
+							if(value.badCmtUsrId != $.osl.user.userInfo.usrId){
 								selfCheck = "N";
 							}
 						});
-						 //담당자이거나 댓글 작성한 사용자와 현재 로그인한 회원이 같은 경우
-						 if(okManager == true || (okWriter == true && selfCheck == "Y")){
+						//담당자이거나 댓글 작성한 사용자와 현재 로그인한 회원이 같은 경우
+						if(okManager == true || (okWriter == true && selfCheck == "Y")){
 							var data = {
-		 							menuId : $("#menuId").val(),
-		 							badId : $("#badId").val(),
+		 							menuId : paramRowData.menuId,
+		 							badId : paramRowData.badId,
 		 							deleteDataList : JSON.stringify(rowDatas),
 							};
 							//ajax 설정
@@ -295,18 +251,39 @@ var OSLBad1001Popup = function () {
 					    	//AJAX 전송
 							ajaxObj.send();	
 					 	}else{
-					 		$.osl.alert("삭제 권한이 없습니다.", {"type":"warning"});
+					 		$.osl.alert($.osl.lang("bad1001.notCmtWriter.deleteMessage"), {"type":"warning"});
 					 	}
 					 }
-				 }
+				 },
+				 "click": function(row, datatableId, type, rowNum, elem){
+					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
+					//그 안에 있는 체크박스를 체크
+					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
+					if(targetElem.is(":checked")==true){
+						targetElem.prop("checked", false);
+						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
+						//선택된것처럼 row 컬러가 그대로 남아있으므로
+						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
+						$(elem).closest("tr").addClass("kt-datatable__row--even");
+					}else{
+						targetElem.prop("checked", true);
+						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
+					}
+				}
 			 },
-			 collback :{
-				 reloaded :{
-					 
+			 theme:{
+				 actionBtn:{
+					 //btn-"string"이기 때문에 kt-hide를 적용하려면 앞에 공백 추가
+					 click: " kt-hide"
 				 }
 			 }
     	});
-    	
+	   	//데이터 테이블 렌더링 업데이트 및 테이블 크기 조정 시 이벤트 발생
+    	$("#"+dataTableId).on("kt-datatable--on-layout-updated", function(){
+    		 //댓글 내용과 관련된 span에 댓글 내용 사이즈 변경을 위한 class 추가
+    		 $(".cmtTxt").parent("span").addClass("osl-bad__width__100");
+    	});
+	   	
     	//엔터키 막기 - 안막으면 강제종료
 		$("#cmtWriter").keydown(function(e){
 			if(e.keyCode=='13'){
@@ -330,26 +307,24 @@ var OSLBad1001Popup = function () {
     	//수정 버튼 클릭 시
     	$("#updateBtn").click(function(){
     		var data = {
-    				detailRootYn: 'Y',
-    				prjGrpId: $("#prjGrpId").val(),
-    				prjId : $("#prjId").val(),
-					menuId : $("#menuId").val(),
-					badId : $("#badId").val(),
-					atchFileId : $("#atchFileId").val(),
+    				paramRow : JSON.stringify(paramRowData),
+    				stmRootYn : $("#stmRootYn").val(),
 				};
 			var options = {
-					idKey: "bad1003_" + $("#badId").val(),
-					modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+$("#badNum").val(),
+					idKey: "bad1003_" + paramRowData.badId, 
+					modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+paramRowData.badNum,
 					closeConfirm: true,
 					autoHeight: false,
 					modalSize: "xl",
 				};
 			
 			//담당자 또는 글 작성자 본인만 수정 가능
-			if(okManager == true || $("#writerDiv").data("badUsrId") == id){
+			if(okManager == true || $("#writerDiv").data("badUsrId") == $.osl.user.userInfo.usrId){
+				//현재 팝업 닫기
+   				$.osl.layerPopupClose();
 				$.osl.layerPopupOpen('/bad/bad1000/bad1000/updateBad1003View.do',data,options);
 			}else{
-				$.osl.alert("수정 권한이 없습니다.", {"type":"waraning"});
+				$.osl.alert($.osl.lang("bad1001.notAuthority.updateMessage"), {"type":"warning"});
 			}
     	});
     	
@@ -357,27 +332,24 @@ var OSLBad1001Popup = function () {
 		$("#deleteBtn").click(function(){
 			var data = {
 					stmTypeCd : $("#stmTypeCd").val(),
-					prjGrpId: $("#prjGrpId").val(),
-    				prjId : $("#prjId").val(),
-					menuId : $("#menuId").val(),
-					badId : $("#badId").val(),
-					atchFileId : $("#atchFileId").val(),
 					menuRootYn : 'N',
+					deleteDataList : JSON.stringify(paramRowData),
 			};
+			
 			var options = {
-					idKey: "del_"+$("#badId").val(),
-					modalTitle: "[ NO." + $("#badNum").val() +" ] 게시글 삭제 사유",
+					idKey: "del_"+paramRowData.badId, //$("#badId").val(),
+					modalTitle: "[ NO." +paramRowData.badNum +" ] 게시글 삭제 사유",
 					closeConfirm: false,
 					autoHeight: false,
 					modalSize: "xl"
 				};
 			
 			//담당자 또는 글 작성자 본인만 삭제 가능
-			if(okManager == true || $("#writerDiv").data("badUsrId") == id){
+			if(okManager == true || $("#writerDiv").data("badUsrId") == $.osl.user.userInfo.usrId){
 				//삭제 사유 팝업
 				$.osl.layerPopupOpen('/bad/bad1000/bad1000/deleteBad1000View.do', data, options);
 			}else{
-				$.osl.alert("삭제 권한이 없습니다.", {"type":"waraning"});
+				$.osl.alert($.osl.lang("bad1001.notAuthority.deleteMessage"), {"type":"warning"});
 			}
     	});
     	
@@ -386,11 +358,11 @@ var OSLBad1001Popup = function () {
     		//담당자만 가능
 			if(okManager == true){
 	    		var data = {
-						menuId : $("#menuId").val(),
-						prjGrpId: $("#prjGrpId").val(),
-						prjId: $("#prjId").val(),
-						badId : $("#badId").val(),
-						atchFileId : $("#atchFileId").val(),
+	    				prjGrpId: paramRowData.prjGrpId,
+	    				prjId : paramRowData.prjId,
+						menuId : paramRowData.menuId,
+						badId : paramRowData.badId,
+						atchFileId : paramRowData.atchFileId,
 					};
 				
 	    		//ajax 설정
@@ -404,6 +376,8 @@ var OSLBad1001Popup = function () {
 						//모달 창 닫기
 						$.osl.layerPopupClose();
 					}else{
+						//reset안하면 파일 중복 올라감
+						fileUploadObj.reset();
 						//게시글 재호출하기
 						//복원 후 호출이므로 조회수 증가 안함
 						selectBadInfo(false);
@@ -414,7 +388,7 @@ var OSLBad1001Popup = function () {
 		    	//AJAX 전송
 				ajaxObj.send();
 			}else{
-				$.osl.alert("복원 권한이 없습니다.", {"type":"waraning"});
+				$.osl.alert($.osl.lang("bad1001.notAuthority.restoreMessage"), {"type":"warning"});
 			}
     	});
     };
@@ -428,20 +402,20 @@ var OSLBad1001Popup = function () {
     var selectBadInfo = function(badHitYn){
     	// 전달할 데이터 세팅
 		var data={
-				badNum : $("#badNum").val(),
-    			menuId : $("#menuId").val(),
-    			badId : $("#badId").val(),
-				searchTarget : $("#searchTarget").val(),
+				menuId : paramRowData.menuId,
+				badId : paramRowData.badId,
+				badNum : paramRowData.badNum,
     	}
+    	
     	//삭제된 게시글이 아니면
-    	if($("#badDelCd").val()=='02' && badHitYn == true){
+    	if(paramRowData.delCd=='02' && badHitYn == true){
     		data.badHit = true;
     	}else{
     		data.badHit = false;
     	}
     	//ajax 설정 - 게시글 후에 댓글 리스트 출력 하기 위해 "async": false
     	var ajaxObj = new $.osl.ajaxRequestAction(
-    			{"url":"<c:url value='/bad/bad1000/bad1000/selectBad1001InfoAjax.do'/>", "async": false}
+    			{"url":"<c:url value='/bad/bad1000/bad1000/selectBad1001InfoAjax.do'/>"}
 				, data);
     	
     	//ajax 전송 성공 함수
@@ -451,7 +425,6 @@ var OSLBad1001Popup = function () {
 				//모달 창 닫기
 				$.osl.layerPopupClose();
 			}else{
-				var info = data.badInfo;
 				var setBad = data.bad1001Info;
 				var tagList = data.bad1001Tag;
 				var fileList = data.bad1001FileList;
@@ -466,21 +439,16 @@ var OSLBad1001Popup = function () {
 				
 				// 공지사항인지 확인
 				if(setBad.badNtcCheck=='01'){
-					//오늘 날짜가 공지사항 기간에 해당하는지 확인
-					if(setBad.currentNtc == 'Y'){
-						// 공지사항인 경우 제목 스타일 변경
-						//$("#badTitleDiv").addClass("kt-bg-fill-success");
-						titleStr += "<span class='kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-margin-5'>공지</span>";
-						titleStr += title;
-					}
+					// 공지사항인 경우 badge 추가
+					titleStr += "<span class='kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-margin-5'>공지</span>";
+					titleStr += title;
 				}else{
 					titleStr += title;
 				}
 				// 비밀글인 경우 제목에 아이콘 추가
-				if(setBad.badPwYn == 'Y'){
+				if(setBad.badPw == '01'){
 					titleStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
 				}
-				
 				// 삭제된 글인지 확인
 				if(setBad.delCd=='01'){
 					titleStr = "<span class='kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-margin-5'>삭제</span>" + titleStr;
@@ -503,19 +471,25 @@ var OSLBad1001Popup = function () {
 				$("#badTitleDiv").append(titleStr);
 				
 				// 작성자 정보 넣기
-				$("#writerDiv").html($.osl.user.usrImgSet(setBad.badUsrImgId, setBad.badUsrNm+" ( "+setBad.badUsrId+" ) "));
+				var usrData = {
+						html: setBad.badUsrNm + " (" +setBad.badUsrId + ")",
+						class:{
+							cardBtn: "osl-width__fit-content"
+						}
+				};
+				$("#writerDiv").html($.osl.user.usrImgSet(setBad.badUsrImgId, usrData));
 				$("#writerDiv").data("badUsrId", setBad.badUsrId);
 				
 				//작성자 정보 상세 보기
-				$("#writerDiv").click(function(){
+				$("#writerDiv>.kt-user-card-v2.btn.osl-width__fit-content").children("div").click(function(){
 					$.osl.user.usrInfoPopup(setBad.badUsrId);
 				});
 				
 				// 작성일 정보 넣기
 				$("#writeDateDiv").text("작성일시 : " + setBad.badWtdtm);
 				
-				// 조회수 정보 넣기
-				$("#hitDiv").text("조회수 : " + setBad.badHit);
+// 				// 조회수 정보 넣기
+// 				$("#hitDiv").text("조회수 : " + setBad.badHit);
 				
 				// body ------------------
 				// 내용입력
@@ -525,12 +499,9 @@ var OSLBad1001Popup = function () {
 				// 첨부파일
 				if(fileList != null && fileList != ""){
 					$("#badFileOption").removeClass("kt-hide");
-					$("#fileCnt").attr("value", info.stmFileCnt);
-					$("#fileStrg").attr("value", info.stmFileStrg);
 					
 					//파일Sn넣기
 			    	fileUploadObj.setMeta({fileSn: parseInt(fileCnt)+1});
-			    	fileUploadObj.setMeta({atchFileId: fileList.atchFileId});
 			    	
 			    	//파일 목록 세팅
 			    	$.osl.file.fileListSetting(fileList, fileUploadObj);
@@ -557,16 +528,23 @@ var OSLBad1001Popup = function () {
 				
 				// 댓글
 				// 게시판 자체 댓글 기능이 활성화 되어있는 경우
-				if(info.stmCmtYnCd == "01"){
+				if(paramRowData.stmCmtYnCd == "01"){
 					// 해당 게시글에 댓글 기능을 활성화 한 경우
 					if(setBad.badCmtYn == "01"){
 						$("#badCmtDiv").removeClass("kt-hide");
 						$("#badCmtInput").removeClass("kt-hide");
 						// 댓글 입력창 앞에 현재 회원 사진 세팅
 						$("#loginUsr").empty();
-						$("#loginUsr").append($.osl.user.usrImgSet($.osl.user.userInfo.usrImgId, $.osl.user.userInfo.usrNm +" ( "+ id + " )"));
+						// 작성자 정보 넣기
+						var usrData = {
+								html: $.osl.user.userInfo.usrNm + " (" + $.osl.user.userInfo.usrId + ")",
+								class:{
+									cardBtn: "osl-width__fit-content"
+								}
+						};
+						$("#loginUsr").append($.osl.user.usrImgSet($.osl.user.userInfo.usrImgId, usrData));
 						$("#loginUsr").click(function(){
-							$.osl.user.usrInfoPopup(id);
+							$.osl.user.usrInfoPopup($.osl.user.userInfo.usrId);
 						});
 					}else{
 						//해당 게시글에 댓글 기능을 비활성화 한 경우
@@ -586,7 +564,7 @@ var OSLBad1001Popup = function () {
 
 				//조회수 카운트/복원리스트 적용위해
 				//datatable 조회
-   				$("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
+				OSLBad1000Popup.reload();
 			}
     	});
     	
@@ -610,9 +588,9 @@ var OSLBad1001Popup = function () {
     var insertCmtInfo = function(){
     	// 전달할 데이터 세팅
 		var data={
-    			menuId : $("#menuId").val(),
-    			badId : $("#badId").val(),
-    			badCmtContent: $("#cmtWriter").val(),
+    			menuId : paramRowData.menuId,
+    			badId : paramRowData.badId,
+    			badCmtContent: $.osl.escapeHtml($("#cmtWriter").val()),
    			};
     	
     	//ajax 설정
@@ -628,10 +606,10 @@ var OSLBad1001Popup = function () {
 				$.osl.layerPopupClose();
 			}else{
 				$("#cmtWriter").val('');
-				selectCmtList();
 				//댓글 카운트 적용 위해
 				//datatable 조회
-   				$("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
+   				OSLBad1000Popup.reload();
+				selectCmtList();
 			}
 		});
 		
@@ -646,6 +624,8 @@ var OSLBad1001Popup = function () {
 	 var checkUser = function(){
 		 var data = {
 				 authGrpId : $.osl.selAuthGrpId,
+				 prjGrpId :$.osl.selPrjGrpId,
+	   			 prjId : $.osl.selPrjId,
 				 menuId : $("#menuId").val(),
 				 dsTypeCd : $("#stmDsTypeCd").val(),
 		 };
@@ -664,7 +644,13 @@ var OSLBad1001Popup = function () {
 				if(result.resultManager == "Y"){
 					okManager = true;	
 				}else{
-					okManager = false;
+					//시스템게시판 관리자로 들어오면 무조건 관리자
+					if($("#stmRootYn").val()=='Y'){
+						okManager = true;
+					}else{
+						//시스템게시판 관리로 들어오지도 않고 담당자목록에도 없을 때
+						okManager = false;
+					}
 				}
 				//글작성 목록에 있으면 - 글 작성 범위에 해당하는 사람
 				//처음부터 글작성 목록이 비어있는경우 - 접근하는 사람 모두
@@ -685,7 +671,7 @@ var OSLBad1001Popup = function () {
         	documentSetting();
         },
         reDraw: function(badId) {
-        	$("#badId").val(badId);
+        	//$("#badId").val(badId);
         	selectBadInfo(true);
         }
     };

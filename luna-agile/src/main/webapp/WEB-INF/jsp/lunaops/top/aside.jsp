@@ -7,7 +7,7 @@
 <script src="<c:url value='/js/menu/aside.js'/>" ></script>
 
 <%-- 
-<jsp:include page="/WEB-INF/jsp/oslops/top/quickmenu.jsp" />		<!-- 퀵메뉴 -->
+<jsp:include page="/WEB-INF/jsp/lunaops/top/quickmenu.jsp" />		<!-- 퀵메뉴 -->
  --%>
 <script>
 	//페이지 로딩시 좌측 메뉴의 알림, 검수목록, 담당요구사항, 개발주기에 속한 요구사항 등 정보를 조회해 세팅한다.

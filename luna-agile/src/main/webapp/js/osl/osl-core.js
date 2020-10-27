@@ -185,6 +185,52 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -1148,7 +1194,10 @@
 	        				
 	        				
 	        				var submenudir = "kt-menu__submenu--left";
-	        				if(idx > 3){
+	        				if(idx == 3){
+	        					submenudir = "kt-menu__submenu--center";
+	        				}
+	        				else if(idx > 3){
 	        					submenudir = "kt-menu__submenu--right";
 	        				}
 	        				idx++;
@@ -1160,7 +1209,7 @@
 	        					if(depth2Cnt > menuConfig[topMenuType]["submenu-frame-cnt"]){
 	        						depth2Cnt = menuConfig[topMenuType]["submenu-frame-cnt"];
 	        					}
-	        					addStyleStr = 'style="min-width:'+(depth2Cnt * 230)+'px;"';
+	        					
 	        				}
 	        				menuInfoStr += '<div class="kt-menu__submenu '+menuConfig[topMenuType]["submenu-type"]+' '+submenudir+'" '+addStyleStr+'>';
 	        				
@@ -2707,16 +2756,45 @@
 				ajaxObj.send();
 			}
 			
-			,usrImgSet: function(paramUsrImgId, paramUsrNm){
+			,usrImgSet: function(paramUsrImgId, paramData){
 				var usrImgId = $.osl.user.usrImgUrlVal(paramUsrImgId);
 				
+				var cardContent = $.osl.escapeHtml(paramData);
+				var imgSize = "kt-media--sm";
+				
+				
+				var cardBtn = ""
+					, cardPic = ""
+					, usrImg = ""
+					, cardDetail = ""
+					, cardName = "";
+				
+				
+				if(typeof paramData == "object"){
+					cardContent = paramData["html"];
+					imgSize = "kt-media--"+$.osl.escapeHtml(paramData["imgSize"]);
+					
+					if(paramData["imgSize"] == "md"){
+						imgSize = "";
+					}
+					
+					
+					if(paramData.hasOwnProperty("class")){
+						cardBtn = $.osl.escapeHtml(paramData["class"]["cardBtn"]);
+						cardPic = $.osl.escapeHtml(paramData["class"]["cardPic"]);
+						usrImg = $.osl.escapeHtml(paramData["class"]["usrImg"]);
+						cardDetail = $.osl.escapeHtml(paramData["class"]["cardDetail"]);
+						cardName = $.osl.escapeHtml(paramData["class"]["cardName"]);
+					}
+				}
+				
 				var returnStr = 
-					'<div class="kt-user-card-v2 btn">'
-						+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-							+'<img src="'+usrImgId+'"/>'
+					'<div class="kt-user-card-v2 btn '+cardBtn+'">'
+						+'<div class="kt-user-card-v2__pic kt-media '+imgSize+' kt-media--circle '+cardPic+'">'
+							+'<img class=" '+usrImg+'" src="'+usrImgId+'"/>'
 						+'</div>'
-						+'<div class="kt-user-card-v2__details">'
-							+'<span class="kt-user-card-v2__name">'+$.osl.escapeHtml(paramUsrNm)+'</span>'
+						+'<div class="kt-user-card-v2__details '+cardDetail+'">'
+							+'<span class="kt-user-card-v2__name '+cardName+'">'+cardContent+'</span>'
 						+'</div>'
 					+'</div>';
 				
@@ -3230,7 +3308,7 @@
 		var rules = {};
 		
 		
-		var messages ={};
+		var messages = $.osl.lang("fromValidate.messages");
 		
 		
 		$.each(formInElem,function(idx, map){
@@ -3240,14 +3318,6 @@
 			
 			
 			var $elemInfo = $(map);
-			
-			
-			if($.osl.isNull(rules[targetId])){
-				rules[targetId] = {};
-			}
-			if($.osl.isNull(messages[targetId])){
-				messages[targetId] = {};
-			}
 			
 			
 			var labelText = $elemInfo.siblings("label").text();
@@ -3265,81 +3335,72 @@
 			}
 			
 			
-			if(!$.osl.isNull($elemInfo.attr("required"))){
+			if($elemInfo.attr("type") != "hidden"){
 				
-				var ruleJson = {required: true};
-				$.extend(rules[targetId],ruleJson);
-				
-				
-				var msgJson = {required: labelText+"(은)는 필수 값 입니다."};
-				$.extend(messages[targetId],msgJson);
-			}
-			
-			if(!$.osl.isNull($elemInfo.attr("minlength"))){
-				
-				var ruleJson = {minlength: $elemInfo.attr("minlength")};
-				$.extend(rules[targetId],ruleJson);
-				
-				
-				var msgJson = {minlength: labelText+"(은)는 {0}자 이상 입력하셔야합니다."};
-				$.extend(messages[targetId],msgJson);
-			}
-			
-			if(!$.osl.isNull($elemInfo.attr("maxlength"))){
-				
-				var ruleJson = {maxlength: $elemInfo.attr("maxlength")};
-				$.extend(rules[targetId],ruleJson);
-				
-				
-				var msgJson = {maxlength: labelText+"(은)는 {0}자 까지 입력이 가능합니다."};
-				$.extend(messages[targetId],msgJson);
-			}
-			
-			if(!$.osl.isNull($elemInfo.attr("equalTo"))){
-				
-				var ruleJson = {equalTo: $elemInfo.attr("equalTo")};
-				$.extend(rules[targetId],ruleJson);
-				
-				
-				var msgJson = {equalTo: labelText+"(을)를 다시 입력해주세요. (값이 동일하지 않음)"};
-				$.extend(messages[targetId],msgJson);
-			}
-			
-			if(!$.osl.isNull($elemInfo.attr("regexstr"))){
-				
-				var regexstr = $elemInfo.attr("regexstr");
-				var regexErrorStr = $elemInfo.attr("regexerrorstr");
-				
-				
-				var ruleJson = {regex: new RegExp(regexstr)};
-				$.extend(rules[targetId],ruleJson);
-				
-				
-				if(!$.osl.isNull(regexErrorStr)){
-					regexErrorStr = "&nbsp; ("+regexErrorStr+")";
-				}else{
-					regexErrorStr = "";
+				if($.osl.isNull(rules[targetId])){
+					rules[targetId] = {};
 				}
-				
-				
-				var regexalertStr = "입력 값이 형식에 맞지 않습니다."+regexErrorStr;
-				var regexalert = $elemInfo.attr("regexalert");
-				
-				
-				if(!$.osl.isNull(regexalert)){
-					regexalertStr = regexalertStr + "("+regexalert+")";
+				if($.osl.isNull(messages[targetId])){
+					messages[targetId] = {};
 				}
-				
-				
-				var msgJson = {regex: function(paramRegex,paramElem){
-					return regexalertStr;
-				}};
-				$.extend(messages[targetId],msgJson);
 			}
 			
-			if(!$.osl.isNull($elemInfo.attr("multipleValid"))){
-				var targetValue = $elemInfo.val();
-			}
+			
+			$.each(messages, function(messageId, messageStr){
+				if(!$.osl.isNull($elemInfo.attr(messageId))){
+					var ruleVal = $elemInfo.attr(messageId);
+					if($.osl.isNull(ruleVal)){
+						return true;
+					}
+					
+					if(ruleVal == "required"){
+						ruleVal = true;
+					}
+					
+					if(messageId == "regexstr"){
+						
+						var regexstr = $elemInfo.attr("regexstr");
+						var regexErrorStr = $elemInfo.attr("regexerrorstr");
+						
+						
+						var ruleJson = {regex: new RegExp(regexstr)};
+						$.extend(rules[targetId],ruleJson);
+						
+						
+						if(!$.osl.isNull(regexErrorStr)){
+							regexErrorStr = "&nbsp; ("+regexErrorStr+")";
+						}else{
+							regexErrorStr = "";
+						}
+						
+						
+						var regexalertStr = "입력 값이 형식에 맞지 않습니다."+regexErrorStr;
+						var regexalert = $elemInfo.attr("regexalert");
+						
+						
+						if(!$.osl.isNull(regexalert)){
+							regexalertStr = regexalertStr + "("+regexalert+")";
+						}
+						
+						
+						var msgJson = {regex: function(paramRegex,paramElem){
+							return regexalertStr;
+						}};
+						$.extend(messages[targetId],msgJson);
+					}else{
+						
+						var ruleJson = {};
+						ruleJson[messageId] = ruleVal;
+						$.extend(rules[targetId],ruleJson);
+						
+						
+						var msgJson = {};
+						msgJson[messageId] = messageStr;
+						$.extend(messages[targetId],msgJson);
+					}
+				}
+			});
+			
 		});
 		
 		var v = formTarget.validate({
@@ -3353,7 +3414,10 @@
 	                
 	                validator.errorList[0].element.focus();
 	            }
-	        }
+	        },
+	        submitHandler: function (frm){
+                return false;
+            },
 		});
 		
 		return v;
@@ -3963,7 +4027,7 @@
 					var rtnVal = JSON.stringify({optNm:eleTitle,optVal:eleValue,chgDetailOptTarget:chgDetailOptTarget, chgDetailOptType:chgDetailOptType, chgDetailCommonCd:chgDetailCommonCd, modifySetCd:modifySetCd, optFlowId: optFlowId});
 					
 					
-					if(chgDetailOptType != "05" && chgDetailOptType != "03" && element.type == "hidden"){
+					if(chgDetailOptType != "05" && chgDetailOptType != "03" && element.type == "hidden" || chgDetailOptType == -1){
 						rtnVal = eleValue;
 					}
 					

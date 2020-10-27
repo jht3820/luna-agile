@@ -7,6 +7,27 @@ var OSLCoreLangSetting = function () {
 	var lang = {};
 	//한국어
 	lang["ko"] = {
+		fromValidate:{
+			messages: {
+				required: "필수 값 입니다.",
+				remote: "값을 수정해주세요.",
+				email: "유효한 이메일 주소를 입력해주세요.",
+				url: "유효한 URL을 입력해주세요.",
+				date: "유효한 날짜를 입력해주세요.",
+				dateISO: "유효한 날짜를 입력해주세요. (ISO)",
+				number: "유효한 번호를 입력해주세요.",
+				digits: "숫자만 입력 가능합니다.",
+				equalTo: "값을 다시 입력해주세요. (값이 동일하지 않음)",
+				maxlength: "{0}자 이하로 입력해주세요.",
+				minlength: "최소 {0}자 이상 입력해주세요.",
+				rangelength: "{0}에서 {1}자 사이에 값을 입력해주세요.",
+				range: "{0}에서 {1}사이의 값을 입력해주세요.",
+				max: "{0} 보다 작거나 같은 값을 입력해주세요..",
+				min: "{0} 보다 크거나 같은 값을 입력해주세요..",
+				step: "{0}의 배수를 입력해주세요.",
+				regexstr: "입력 값이 형식에 맞지 않습니다."
+			}
+		},
 		modal:{
 			close: "닫기"
 		},
@@ -52,6 +73,7 @@ var OSLCoreLangSetting = function () {
 				delete: "삭제"
 			},
 			action:{
+				functionNm: "기능 버튼",
 				update:{
 					nonSelect: "수정하려는 데이터를 선택해주세요",
 					manySelect: "1건의 데이터만 선택해주세요.</br> ${1}건의 데이터가 선택되었습니다."
@@ -217,6 +239,36 @@ var OSLCoreLangSetting = function () {
 				projectListMove: "프로젝트 목록 이동",
 				createProject: "신규 프로젝트 추가",
 				projectDetail: "상세 정보"
+			},
+			button:{
+				title:{
+					insert: "신규 프로젝트 그룹 등록"
+				}
+			}
+		},
+		prj1001:{
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			requestAll: "전체",
+			requestInProgress: "진행 중",
+			requestDone: "완료",
+			menu:{
+				modify: "수정",
+				trashMove: "휴지통 이동(삭제)",
+				projectDetail: "상세 정보"
+			}
+		},
+		prj1002:{
+			title: "신규 프로젝트 그룹 생성",
+			complete: "완료",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
 			}
 		},
 		prj2100:{
@@ -238,15 +290,86 @@ var OSLCoreLangSetting = function () {
 			reqDesc: "요청 내용",
 			attachments: "파일 첨부", 
 			complete: "완료",
+			insert:{
+				saveString: "신규 요구사항을 요청하시겠습니까?",
+				saveBtnString: "작성 완료"
+			},
+			update:{
+				saveString: "요구사항 정보를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
 		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.\n${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
+			field:{
+				stmTypeNm: "유형",
+				stmNm: "게시판명",
+				stmDsTypeNm: "공개범위",
+				cnt: "전체글 수",
+				badCnt: "유효글 수",
+				delCnt: "삭제글 수",
+			},
+			actionBtn:{
+				title : "수정 / 관리 / 통계",
+				updateBtn : "게시판 속성",
+				detailBtn : "게시글 관리",
+				summeryBtn : "통계보기",
+			},
+			title:{
+				updateTitle : "게시판 속성",
+				detailTitle : "게시글 관리",
+				summeryTitle : "통계보기",
+			}
+		},
+		stm2101:{
+			update: "게시판 정보를 수정하시겠습니까?",
+			formCheck:{
+				fileCntMessage : "첨부파일 갯수는 최소 1부터 10까지 가능합니다\n첨부파일 갯수를 최솟값인 1로 변경합니다.",
+				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.",
+				fileMaxStrgMessage : "게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.",
+				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
+			},
+			label:{
+				maxFileStrg:{
+					normal: "최대 500MB",
+					movie: "최대 2048MB(2GB)",
+					storage: "최대 4096MB(4GB)"
+				}
+			},
+			title:{
+				admin: "담당자 지정",
+				writer: "글 작성 범위 지정"
+			}
+		},
+		stm2103:{
+			summery:{
+				noticeCntY: "공지사항 수 : ${1} 건",
+				noticeCntN: "공지사항 수 : 없음",
+				ntcCurrentY: "최신 공지일 : ${1}",
+				ntcCurrentN: "최신 공지일 : 없음",
+				cmtAllCntY: "전체 댓글 수 : ${1} 건",
+				cmtAllCntN: "전체 댓글 수 : 없음",
+				cmtMaxInfoY: "최다 댓글 수 : ${1} 건",
+				cmtMaxInfoN: "최다 댓글 수 : 없음",
+				badAllCntY: "전체 게시글 수 : 등록 ${1} 건 / 삭제 ${2} 건",
+				badAllCntN: "전체 게시글 수 : 없음",
+				badHitInfoY: "최다 조회 수 : ${1} 회",
+				badHitInfoN: "최다 조회 수 : 없음",
+				badPwCntY: "비밀글 수 : ${1} 건",
+				badPwCntN: "비밀글 수 : 없음",
+				tagLabelY: "사용 TOP ${1} : #${2}",
+				tagLabelN: "사용 태그 없음",
+				fileAllCntY: "전체 첨부파일 수 : ${1} 건",
+				fileAllCntN: "전체 첨부파일 수 : 없음",
+				fileAllSizeY: "전체 첨부파일 크기 : ${1}",
+				fileAllSizeN: "전체 첨부파일 없음 : 없음",
+			}
 		},
 		bad1000:{
-			selectBadInfoCnt : "1건의 게시글만 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
+			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시글에 대한 권한이 없습니다.",
 					insertMessage : "게시글 등록 권한이 없습니다.",
@@ -256,11 +379,41 @@ var OSLCoreLangSetting = function () {
 			},
 			notWriter : {
 				deleteMessage : "본인이 작성한 게시글만 삭제 가능합니다.",
+			},
+			field:{
+				badContent: "내용",
+				badNtcCheck : "공지유무",
+				delCd:"삭제유무",
+				cmtContent:"댓글내용",
+				badTitle:"제목",
+				badHit: "조회수",
+				badFileCnt: "첨부파일 수",
+				badUsrId: "작성자",
+				badWtdtm: "작성일",
+			},
+			label:{
+				deleteBadge: "삭제",
+				noticeBadge: "공지",
+			},
+			actionBtn:{
+				title: "수정 / 삭제 / 상세",
+				updateBtn:"게시글 수정",
+				deleteBtn:"게시글 삭제",
+				dblClick:"게시글 상세보기",
+			},
+			title:{
+				passwordCheck:"비밀번호 확인",
+				boardCheck:{
+					oneStep: "[ NO.${1} ] 게시글",
+					twoSep: "[ NO.${1} ] 게시글 외 ( ${2} ) 건"
+				},
+				deleteReason: "삭제 사유",
 			}
 		},
 		bad1001:{
 			notAuthority : {
-				restoreMessage : "해당 댓글에 대한 복원 권한이 없습니다.",
+				updateMessage : "해당 게시글에 대한 수정 권한이 없습니다.",
+				restoreMessage : "해당 게시글에 대한 복원 권한이 없습니다.",
 				deleteMessage : "해당 게시글에 대한 삭제 권한이 없습니다.",
 				deleteCmtMessage : "해당 댓글에 대한 삭제 권한이 없습니다.",
 			},
@@ -269,20 +422,48 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		bad1002:{
+			insert: "글 작성을 완료하시겠습니까?",
 			formCheck : {
 				fileCntMessage : "첨부파일 가능한 개수는 ${1}개입니다.",
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 				tagMatching : "태그값이 중복됩니다.",
-			}
+			},
+		},
+		bad1003:{
+			update: "글 수정을 완료하시겠습니까?",
 		},
 		bad1004:{
 			passwordMiss : "비밀번호가 틀렸습니다.\n다시입력하세요.",
+			title:{
+				detail:"게시글 상세보기",
+			}
 		}
 	};
 	
 	//영어
 	lang["en"] = {
+		fromValidate:{
+			messages: {
+				required: "This field is required.",
+				remote: "Please fix this field.",
+				email: "Please enter a valid email address.",
+				url: "Please enter a valid URL.",
+				date: "Please enter a valid date.",
+				dateISO: "Please enter a valid date (ISO).",
+				number: "Please enter a valid number.",
+				digits: "Please enter only digits.",
+				equalTo: "Please enter the same value again.",
+				maxlength: "Please enter no more than {0} characters.",
+				minlength: "Please enter at least {0} characters.",
+				rangelength: "Please enter a value between {0} and {1} characters long.",
+				range: "Please enter a value between {0} and {1}.",
+				max: "Please enter a value less than or equal to {0}.",
+				min: "Please enter a value greater than or equal to {0}.",
+				step: "Please enter a multiple of {0}.",
+				regexstr: "The input value does not fit the format."
+			}
+		},
 		modal:{
 			close: "Close"
 		},
@@ -324,6 +505,7 @@ var OSLCoreLangSetting = function () {
 				insert: "Insert",
 				update: "Update",
 				delete: "Delete",
+				trash: "Trash",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -332,6 +514,7 @@ var OSLCoreLangSetting = function () {
 				}
 			},
 			action:{
+				functionNm: "Function Button",
 				update:{
 					nonSelect: "Please select the data you want to modify",
 					manySelect: "Please select only one data. </br> ${1} data was selected."
@@ -379,6 +562,15 @@ var OSLCoreLangSetting = function () {
 				reqUsrDeptNm: "Request Department Name",
 				reqUsrNum: "Request User Number",
 				reqKey: "Request Key",
+			},
+			prj1000PrjTable:{
+				prjNm: "Project Group Name",
+				startDt: "Start Date",
+				endDt: "End Date",
+				prjChildCnt: "Project Count",
+				reqAllCnt: "Request All",
+				reqInProgressCnt: "Request In Porgress",
+				reqDoneCnt: "Request Done",
 			}
 		},
 		date:{
@@ -505,6 +697,42 @@ var OSLCoreLangSetting = function () {
 				projectListMove: "Move Project List",
 				createProject: "Add New Prject",
 				projectDetail: "Details"
+			},
+			button:{
+				title:{
+					select: "Project Group Select",
+					insert: "New Project Group Insert",
+					update: "Project Group Update",
+					delete: "Project Group Delete",
+					trash: "Project Group Trash List",
+					card: "List View Card Type",
+					grid: "List View Grid Type"
+				}
+			}
+		},
+		prj1001:{
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			requestAll: "전체",
+			requestInProgress: "진행 중",
+			requestDone: "완료",
+			menu:{
+				modify: "수정",
+				trashMove: "휴지통 이동(삭제)",
+				projectDetail: "상세 정보"
+			}
+		},
+		prj1002:{
+			title: "New Project Group Insert",
+			complete: "Complete",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "Insert Action"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "Update Action"
 			}
 		},
 		prj2100:{

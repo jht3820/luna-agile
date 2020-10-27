@@ -84,48 +84,13 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map selectBad1000BadInfo(Map paramMap) throws Exception{
-		
-		if("true".equals(paramMap.get("badHit"))) {
-			bad1000DAO.updateBad1000BadHit(paramMap);
-		}
+
 		
 		Map bad1000Info = bad1000DAO.selectBad1000BadInfo(paramMap);
 		
-		if("01".equals(bad1000Info.get("badNtcCheck")))
-		{
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date current = format.parse((String) bad1000Info.get("moment"));
-			Date stdtm = format.parse((String) bad1000Info.get("badNtcStdtm"));
-			Date eddtm = format.parse((String) bad1000Info.get("badNtcEddtm"));
-			
-			if(stdtm.getTime() <= current.getTime() && current.getTime() <= eddtm.getTime())
-			{
-				bad1000Info.put("currentNtc", "Y");
-			}else{
-				bad1000Info.put("currentNtc", "N");
-			}
-		}
 		
-		String badPwStr = (String)bad1000Info.get("badPw");
-		if(badPwStr != null && badPwStr != "") {
-			bad1000Info.put("badPwYn", "Y");
-		}else {
-			bad1000Info.put("badPwYn", "N");
-		}
-		
-		String searchDataStr = (String) paramMap.get("searchTarget");
-		if(searchDataStr != null && !searchDataStr.isEmpty()) {
-			
-			JSONParser jsonParser = new JSONParser();
-			JSONArray jsonArray = (JSONArray) jsonParser.parse(searchDataStr);
-			
-			JSONObject jsonObj = (JSONObject) jsonArray.get(0);
-			
-			Map infoMap = new Gson().fromJson(jsonObj.toJSONString(), new HashMap().getClass());
-
-			paramMap.put("searchTargetId", infoMap.get("searchTargetId"));
-			paramMap.put("searchTargetType", infoMap.get("searchTargetType"));
-			paramMap.put("searchTargetData", infoMap.get("searchTargetData"));
+		if("true".equals(paramMap.get("badHit"))) {
+			bad1000DAO.updateBad1000BadHit(paramMap);
 		}
 		
 		return bad1000Info;
@@ -173,7 +138,7 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		String str = (String) paramMap.get("tagList");
 
 		
-		if(!"[]".equals(str)) {
+		if(str != null && !"[]".equals(str)) {
 			str = str.substring(1, str.length()-1);
 			str = str.replaceAll("\"", "");
 			String[] tagNm = str.split(",");
@@ -221,9 +186,12 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		
 		bad1000DAO.updateBad1000BadInfo(paramMap);
 		
+		
 		bad1000DAO.deleteBad1000BadTagList(paramMap);
+
 		
 		String str = (String) paramMap.get("tagList");
+
 		
 		if(!"[]".equals(str)) {
 			str = str.substring(1, str.length()-1);
@@ -270,14 +238,17 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void deleteBad1000BadList(Map paramMap) throws Exception{
+
 		
 		String deleteDataList = (String) paramMap.get("deleteDataList");
 		Map deleteDataType =  new Gson().fromJson((String) paramMap.get("deleteDataType"), new HashMap().getClass());
+		
 		
 		JSONParser jsonParser = new JSONParser();
 		JSONArray jsonArray = (JSONArray) jsonParser.parse(deleteDataList);
 
 		JSONObject jsonObj = null;
+		
 		Map<String, String> deleteBadCmt = new HashMap<>();
 		
 		deleteBadCmt.put("delTypeCd", "01");
@@ -287,6 +258,8 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		deleteBadCmt.put("modifyUsrId", (String) paramMap.get("modifyUsrId"));
 		deleteBadCmt.put("modifyUsrIp", (String) paramMap.get("modifyUsrIp"));
 				
+		
+		
 		for(int i=0; i<jsonArray.size(); i++) {
 			jsonObj = (JSONObject) jsonArray.get(i);
 			
@@ -300,6 +273,7 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 			infoMap.put("modifyUsrId", paramMap.get("modifyUsrId"));
 			infoMap.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
 			
+			
 			Map histInfo = bad1000DAO.selectBad1000ForBadHstInfo(infoMap);
 			
 			histInfo.put("modifyUsrId", paramMap.get("modifyUsrId"));
@@ -309,13 +283,16 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 			
 			bad1200DAO.insertBad1200BadInfo(histInfo);
 			
+			
 			bad1000DAO.deleteBad1000BadInfo(infoMap);
+			
 			deleteBadCmt.put("badId", (String) histInfo.get("badId")); 
 			deleteBadCmt.put("menuId", (String) histInfo.get("menuId"));
 			deleteBadCmt.put("prjGrpId", (String) deleteDataType.get("prjGrpId"));
 			deleteBadCmt.put("prjId", (String) deleteDataType.get("prjId"));
 			bad1100DAO.deleteBad1100CmtInfo(deleteBadCmt);
 		}
+
 
 	}
 	
@@ -326,14 +303,14 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		
 		bad1000DAO.updateBad1000BadRestore(paramMap);
 		
-		Map hisdtInfo = bad1000DAO.selectBad1000BadInfo(paramMap);
+		Map histInfo = bad1000DAO.selectBad1000BadInfo(paramMap);
 		
-		hisdtInfo.put("badHstTypeCd", "02");
+		histInfo.put("badHstTypeCd", "04");
 		
-		hisdtInfo.put("modifyUsrId", paramMap.get("modifyUsrId"));
-		hisdtInfo.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
+		histInfo.put("modifyUsrId", paramMap.get("modifyUsrId"));
+		histInfo.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
 		
-		bad1200DAO.insertBad1200BadInfo(hisdtInfo);
+		bad1200DAO.insertBad1200BadInfo(histInfo);
 		
 		bad1100DAO.updateBad1100CmtRestore(paramMap);
 	}
