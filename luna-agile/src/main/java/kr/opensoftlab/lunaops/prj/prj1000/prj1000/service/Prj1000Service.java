@@ -24,6 +24,21 @@ public interface Prj1000Service {
 	
 	@SuppressWarnings("rawtypes")
 	int selectPrj1000PrjListCnt(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1000PrjAuthUsrList(Map paramMap) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1000PrjAuthUsrListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -50,6 +65,8 @@ public interface Prj1000Service {
 	String insertPrj1001Ajax(Map paramMap) throws Exception;
 	
 	
+	
+	
 	@SuppressWarnings("rawtypes")
 	int updatePrj1000Ajax(Map paramMap) throws Exception;
 	
@@ -68,6 +85,7 @@ public interface Prj1000Service {
 	int selectPrj1000ProjectAcronymCount(Map paramMap) throws Exception;
 	
 
+	
 	@SuppressWarnings("rawtypes")
 	List selectPrj1000AdminPrjList(Map paramMap) throws Exception;
 	

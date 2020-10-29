@@ -206,6 +206,7 @@
 		WHERE 1=1
 		AND LEAF = (CASE SUBT2.PRJ_GRP_CD WHEN '01' THEN 0 WHEN '02' THEN 1 END)
 	</sql>
+	
 	<sql id = "selectPrj1000PrjList">
 		SELECT
 			ROWNUM AS RN
@@ -326,7 +327,163 @@
 	</sql>
 	
 	
+	<sql id="selectPrj1000PrjAuthUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT1.LIC_GRP_ID,
+			SUBT1.PRJ_ID,
+			SUBT1.USR_ID,
+			SUBT1.USR_NM,
+			SUBT1.EMAIL,
+			SUBT1.TELNO,
+			SUBT1.USR_IMG_ID,
+			SUBT1.DEPT_ID,
+			SUBT1.DEPT_NAME,
+			SUBT1.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT1.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT1.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT1.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT
+				B.LIC_GRP_ID,
+				A.PRJ_ID,
+				A.PRJ_AUTH_TARGET_ID AS USR_ID,
+				B.USR_NM,
+				B.EMAIL,
+				B.TELNO,
+				B.USR_IMG_ID,
+				B.DEPT_ID,
+				SF_STM6000_DEPT_NM(#licGrpId#, B.DEPT_ID, '2') AS DEPT_NAME,
+				B.USR_POSITION_CD,
+				B.USR_DUTY_CD
+			FROM PRJ1001 A
+			INNER JOIN STM3000 B ON ( B.LIC_GRP_ID = #licGrpId# AND B.USR_ID = A.PRJ_AUTH_TARGET_ID )
+			WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				<isNotEmpty property="prjAuthTypeCd">
+					AND		A.PRJ_AUTH_TYPE_CD = #prjAuthTypeCd#
+				</isNotEmpty>
+				AND B.DEL_CD = '02'
+				AND B.USE_CD = '01'
+				AND B.BLOCK = '01'
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY B.USR_NM, B.USR_POSITION_CD DESC, B.USR_DUTY_CD DESC
+			</isEmpty>
+		) SUBT1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT1.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT1.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT1.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT1.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT1.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectPrj2100PrjAuthNoneUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT1.LIC_GRP_ID,
+			SUBT1.USR_ID,
+			SUBT1.USR_NM,
+			SUBT1.EMAIL,
+			SUBT1.TELNO,
+			SUBT1.USR_IMG_ID,
+			SUBT1.DEPT_ID,
+			SUBT1.DEPT_NAME,
+			SUBT1.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT1.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT1.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT1.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT 
+				A.LIC_GRP_ID,
+				A.USR_ID,
+				A.USR_NM,
+				A.EMAIL,
+				A.TELNO,
+				A.USR_IMG_ID,
+				A.DEPT_ID,
+				SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME,
+				A.USR_POSITION_CD,
+				A.USR_DUTY_CD
+			FROM STM3000 A
+			WHERE	1=1
+      			AND A.LIC_GRP_ID = #licGrpId#
+				AND A.DEL_CD = '02'
+				AND A.USE_CD = '01'
+				AND A.BLOCK = '01'
+        		AND	NOT EXISTS
+        		(
+					SELECT	Z.PRJ_AUTH_TARGET_ID
+                    FROM	PRJ1001 Z
+                    WHERE	1=1
+                    <isNotEmpty property="prjAuthTypeCd">
+	                    AND		Z.PRJ_AUTH_TYPE_CD = #prjAuthTypeCd#
+                    </isNotEmpty>
+                    AND		Z.PRJ_AUTH_TARGET_ID = A.USR_ID
+                    AND		Z.PRJ_ID = #prjId#
+				)
+				<isNotEmpty property="paramSortFieldId">
+					<isNotEmpty property="sortDirection">
+						ORDER BY $paramSortFieldId$
+						<isEqual property="sortDirection" compareValue="desc">
+							DESC
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isEmpty property="paramSortFieldId">
+					ORDER BY A.USR_NM
+				</isEmpty>
+		) SUBT1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT1.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT1.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT1.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT1.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT1.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpAllList" parameterClass="java.util.Map" resultClass="egovMap">
+		/* prj1000DAO.selectPrj1000PrjGrpAllList - 프로젝트 그룹 전체 목록 */
 		SELECT T1.*
 		FROM
 		(
@@ -337,6 +494,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpList" parameterClass="java.util.Map" resultClass="egovMap">
+		/* prj1000DAO.selectPrj1000PrjGrpList - 프로젝트 그룹 목록 조회 */
 		SELECT T1.*
 		FROM
 		(
@@ -348,6 +506,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* prj1000DAO.selectPrj1000PrjGrpListCnt - 프로젝트 그룹 목록 수 조회 */
 		SELECT
 			COUNT(*)
 		FROM
@@ -358,6 +517,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjList" parameterClass="java.util.Map" resultClass="egovMap">
+		/* prj1000DAO.selectPrj1000PrjList - 프로젝트 목록 조회 */
 		SELECT T1.*
 		FROM
 		(
@@ -369,11 +529,58 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* prj1000DAO.selectPrj1000PrjListCnt - 프로젝트 목록 수 조회*/
 		SELECT
 			COUNT(*)
 		FROM
 		(
 			<include refid="selectPrj1000PrjList"/>
+		) T1
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj1000PrjAuthUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		/* prj1000DAO.selectPrj1000PrjAuthUsrList - 프로젝트 담당자 조회 */
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1000PrjAuthUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj1000PrjAuthUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* prj1000DAO.selectPrj1000PrjAuthUsrListCnt - 프로젝트 담당자 수 조회 */
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj1000PrjAuthUsrList"/>
+		) T1
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		/* prj1000DAO.selectPrj2100PrjAuthNoneUsrList - 프로젝트 미 담당자 조회 */
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		/* prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt - 프로젝트 미 담당자 수 조회  */
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
 		) T1
 	</select>
 	
