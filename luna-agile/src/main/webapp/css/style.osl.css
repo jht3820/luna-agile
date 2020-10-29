@@ -277,6 +277,7 @@ select[id^=usrOpt_] {
     justify-content: center;
     padding: 1rem;
     flex: 1 1 0;
+    width: 100%;
 }
 .osl-widget-info__item .osl-widget-info__item-icon{
 	width: 4rem;
@@ -495,9 +496,8 @@ label.required:after {
 	padding:0 !important;
 }
 .modal-dialog.modal-fs{
-	max-width:100%;
-	margin: 0;
-	height: 100%;
+	max-width:95%;
+	height: 95%;
 }
 .modal-dialog.modal-fs > .modal-content{
 	height:100%;
@@ -505,6 +505,12 @@ label.required:after {
 }
 .osl-modal__cursor--move {
     cursor: move;
+}
+.modal .modal-content.osl-modal__screen--fit{
+	max-height: calc(100vh - 50px);
+}
+.modal-footer{
+	background-color:#fff;
 }
 /* tree */
 .jstree-default .jstree-anchor {
@@ -690,6 +696,9 @@ label.required:after {
     	left: -300px !important;
     	right: auto;
 	}
+	.kt-header-menu .kt-menu__nav > .kt-menu__item .kt-menu__submenu > .kt-menu__subnav .kt-menu__content > .kt-menu__item{
+		flex-basis: auto;
+	}
 	/* 상단 기능 메뉴 레이아웃 변경 */
 	.kt-header-mobile--fixed .kt-header__topbar {
 	    position: fixed;
@@ -837,6 +846,9 @@ label.required:after {
 		flex-flow: column;
 		align-items: start !important;
 		-webkit-box-align: start !important;
+	}
+	.modal .modal-content{
+		max-height: 100%;
 	}
 }
 @media (min-width: 1400px){
