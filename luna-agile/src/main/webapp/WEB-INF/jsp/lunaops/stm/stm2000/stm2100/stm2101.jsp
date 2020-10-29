@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http:
 
 <form class="kt-form" id="stm2101Info" autocomplete="off" >
 	<div class="kt-portlet kt-portlet--mobile">
@@ -111,6 +111,33 @@
 					</div>
 			</div>
 		</div>
+		
+		<!-- 테스트용 -->
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0" name="selectSearchBtn" id="selectSearchBtn">전체</button>
+					<div class="dropdown-menu">
+						<a class="selectSearchItem dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
+						<a class="selectSearchItem dropdown-item" href="javascript:void(0);" data-field-id="searchAuthGrpNm" data-opt-type="select">권한그룹명</a>
+						<a class="selectSearchItem dropdown-item" href="javascript:void(0);" data-field-id="searchUsrId" data-opt-type="text">사용자ID</a>
+						<a class="selectSearchItem dropdown-item" href="javascript:void(0);" data-field-id="searchUsrNm" data-opt-type="text">사용자명</a>
+					</div>
+				</div>
+				<select class="kt-select2 form-control kt-hide" id="searchSelect" name="searchSelect" aria-hidden="true">
+				</select>
+				<input type="text" class="form-control" disabled="disabled" name="subSearchData" id="subSearchData">
+				<div class="input-group-prepend">
+					<button class="btn btn-brand" type="button" name="searchBtn" id="searchBtn">
+						<span class=""><span>검색</span></span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="stmGroupUsrList">
+		</div>
+		<!-- 테스트용 끝 -->
+		
 		<div class="modal-footer">
 			<button type="button" class="btn btn-brand" id="stm2101SaveSubmit">수정 완료</button>
 			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
@@ -124,29 +151,111 @@
  var OSLStm2101Popup = function(){
 	var formId="stm2101Info";
 	
-	//담당자/글작성 범위 목록 되돌리기를 위한 변수 선언
+	
 	var oriAdmin = [];
 	var oriWriter = [];
 	
-	// 기본 설정
+	
 	var documentSetting = function(){
   		
-    	//해당 게시판 정보 가져오기
-    	selectBadInfo(); // 게시판 속성
-    	selectBadChargerList(); // 게시판 담당자
-    	selectBadWriterList(); // 게시판 글 작성 범위
     	
-		// 게시판 유형 변경 시 이벤트 발생
+    	selectBadInfo(); 
+    	selectBadChargerList(); 
+    	selectBadWriterList(); 
+    	setGrpAndUsrList(); 
+    	
+    	
+		$("#searchSelect~span").addClass("osl-datatable-search--hide");
+		
+		
+		$(".selectSearchItem").click(function(){
+			$(".selectSearchItem").removeClass("active");
+			$(this).addClass("active");
+			$("#selectSearchBtn").text($(this).text());
+			
+			
+			
+			$("#manager_auth").removeClass("kt-hide");
+			$("#manager_user").removeClass("kt-hide");
+			$.each($("#groupList").children("div"), function(idx, value){
+				$(this).removeClass("kt-hide");
+			});
+			$.each($("#userList").children("div"), function(idx, value){
+				$(this).removeClass("kt-hide");
+			});
+
+			
+			if($(this).data("opt-type")=="all"){
+				
+				$("#searchSelect").addClass("kt-hide");
+				$("#searchSelect~span").addClass("osl-datatable-search--hide");
+				
+				$("#subSearchData").removeClass("kt-hide");
+				
+				$("#subSearchData").val("");
+				$("#subSearchData").attr("disabled", true);
+				
+				$("#searchBtn").click();
+			 }else if($(this).data("opt-type")=="select"){
+				
+				$("#searchSelect").removeClass("kt-hide");
+				$("#searchSelect~span").removeClass("osl-datatable-search--hide");
+				
+				$("#subSearchData").addClass("kt-hide");
+				
+				$("#subSearchData").val("");
+				$("#subSearchData").attr("disabled", true);
+			 }else{
+				
+				$("#searchSelect").addClass("kt-hide");
+				$("#searchSelect~span").addClass("osl-datatable-search--hide");
+				
+				$("#subSearchData").removeClass("kt-hide");
+				
+				$("#subSearchData").val("");
+				$("#subSearchData").attr("disabled", false);
+			 }
+		});
+		
+		
+		$("#searchSelect").change(function(){
+			console.log("권한그룹 선택 이벤트")
+		});
+		
+		
+		$("#subSearchData").on("propertychange paste input", function(){
+			$("#searchBtn").click();
+		});
+		
+		
+		$("#"+formId).keydown(function(e){
+			if(e.keyCode=='13'){
+				e.preventDefault();
+				$("#searchBtn").click();
+				return;
+			}
+		});
+		
+		$("#searchBtn").click(function(){
+			var space = $(".selectSearchItem.dropdown-item.active").data("fieldId");
+			if(space == "-1"){
+			}else if(space == "searchAuthGrpNm"){ 
+			}else if(space == "searchUsrId"){ 
+			}else{ 
+			}
+		});
+    	
+		
 		$("#stmTypeCd").change(function(){
-			// 첨부파일 용량 제한 placeholder 변경
+			
 			var typeCd = document.getElementById("stmTypeCd").value;
 			
-			// 자료실인 경우 최대 파일 용량(총 합) 4GB
+			
 			if(typeCd == '02')
 			{
 				$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.storage"));
 			}
-			// 영상인 경우 최대 파일 용량(총 합) 2GB
+			
 			else if(typeCd == '04')
 			{
 				$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.movie"));
@@ -157,72 +266,72 @@
 			}
 		});
 		
-		 // 파일 첨부 옵션 체크박스가 클릭 될 때 이벤트 발생 
+		 
 		$("#stmFileYnCd").click(function(){
-			// 체크박스 on인경우 첨부파일 옵션 보이기
+			
 			if($("#stmFileYnCd").is(":checked")==true)
 			{
 				$("#stmFileOption").removeClass("kt-hide");
-			}// 체크박스 off인경우 첨부파일 옵션 숨기기
+			}
 			else
 			{
 				$("#stmFileOption").addClass("kt-hide");
 			}
 		});
 		 
-		 // 담당자 등록을 위한 수정 버튼 클릭 시 이벤트 발생
+		 
 		$("#updateBtn_admin").click(function(){
 			callUserSettingPopup("admin");
 		});
 		 
-		// 글 작성 범위 등록을 위한 수정 버튼 클릭 시 이벤트 발생
+		
 		$("#updateBtn_wt").click(function(){
 			callUserSettingPopup("writer");
 		});
 		
-		// 담당자 목록과 동일하게 적용하기 위한 검색 버튼 클릭 시 이벤트 발생
+		
 		$("#equalBtn").click(function(){
-			// 담당자 목록 가져오기
+			
 			var dataList = JSON.stringify(sendManagerList("stmAdmList", false, true, true));
 			
-			// 그대로 뿌리기
+			
 			$("#stmWtList").empty();
         	drawList(JSON.parse(dataList), "stmWtList", false, true);
 		});
 		
-		//담당자_수정취소 버튼 클릭 시
+		
 		$("#notUpdateBtn_admin").click(function(){
-			// 그대로 뿌리기
+			
 			$("#stmAdmList").empty();
 			if(oriAdmin != null && oriAdmin != ""){
 	        	drawList(JSON.parse(oriAdmin), "stmAdmList", false, true);
 			}
 		});
-		//글작성범위_수정취소 버튼 클릭 시
+		
 		$("#notUpdateBtn_wt").click(function(){
-			// 그대로 뿌리기
+			
 			$("#stmWtList").empty();
 			if(oriWriter != null && oriWriter != ""){
 	        	drawList(JSON.parse(oriWriter), "stmWtList", false, true);
 			}
 		});
 		
-		//사용자 아이콘 클릭 시 사용자 정보 팝업
+		
 		$(document).on("click", ".openid", function(){
 				var usrId = $(this).data("openid");
 				$.osl.user.usrInfoPopup(usrId);
 		});
 		
-		// 수정완료 버튼 클릭 될 때 이벤트 발생 
+		
 		$("#stm2101SaveSubmit").click(function(){
-			// 첨부파일 기능 사용할 경우에만 폼 유효값 체크
+			
 			if($("#stmFileYnCd").is(":checked")==true){
 				 
-				// form validate 주입
+				
 				var formValidate = $.osl.validate(formId);
 				console.log(formValidate);
 				
-				//폼 유효 값 체크
+				
 	    		if (!$("#"+formId).valid()) {
 	    			return;
 	    		}
@@ -231,19 +340,12 @@
 		});
 	};
 
-	/**
-	* function 명 	: sendManagerList
-	* function 설명	: 선택한 담당자/글작성범위 리스트를 전달한다.
-	* param : elemId 가져올 리스트 div id(#제외)
-	* param : divisionCheck div안에 _auth, _user로 구분되어 있는지 확인(true, false)
-	* param : passCheck 데이터 넘길 때 num, id외 필요한지 확인(필요 true, 필요 없음false)
-	* param : defaultCheck 넘길 리스트가 null일 때 현재 사용자 정보 넣을지 확인(필요 true, 필요 없음false)
-	*/
+	
     var sendManagerList = function(elemId, divisionCheck, passCheck, defaultCheck){
 		var targetId = '#' + elemId;
 		var dataList = [];
 
-		// 전달할 리스트 만들기
+		
 		if(divisionCheck==true)
 		{
 			var divList = $(targetId+"_auth").children('div');
@@ -303,10 +405,10 @@
 			});
 		}
 		
-		//DB에 담당자가 지정되어있지 않은 경우
-		//처음 담당자 등록하는 경우
+		
+		
 		if(defaultCheck==true && dataList.length==0){
-			//현재 사용자를 담당자로 지정
+			
 			var dataOne={};
 			dataOne.managerNum = '1';
 			dataOne.managerId = $.osl.user.userInfo.usrId;
@@ -322,13 +424,52 @@
 		return dataList;
     }
 	
-	/**
-	* function 명 	: callUserSettingPopup
-	* function 설명	: 게시판 담당자/글작성범위 목록 지정을 위한 팝업 호출
-	*/
+	
+    var addJsonList = function(elemId, defaultCheck){
+		var targetId = '#' + elemId;
+		var dataList = [];
+
+		var divList = $(targetId).children('div');
+		
+		$.each(divList, function(index, value){
+			var dataOne = {};
+			dataOne.managerNum = value.getAttribute("codenum");
+			dataOne.managerId = value.getAttribute("codeId");
+			dataOne.managerPrjId = value.getAttribute("codeprjid");
+			if(passCheck==true)
+			{
+				dataOne.managerNm = value.getAttribute("codenm");
+				dataOne.managerImg = value.getAttribute("codeimg");
+				dataOne.managerDept = value.getAttribute("codedept");
+				dataOne.managerPrjGrpId = value.getAttribute("codeprjgrpid");
+				dataOne.managerPrjNm = value.getAttribute("codeprjnm");
+			}
+			dataList.push(dataOne);
+		});
+		
+		
+		
+		if(defaultCheck==true && dataList.length==0){
+			
+			var dataOne={};
+			dataOne.managerNum = '1';
+			dataOne.managerId = $.osl.user.userInfo.usrId;
+			dataOne.managerNm = $.osl.user.userInfo.usrNm;
+			dataOne.managerPrjGrpId = $.osl.selPrjGrpId;
+			dataOne.managerPrjId = $.osl.selPrjId;
+			dataOne.managerImg = $.osl.user.userInfo.usrImgId;
+			dataOne.managerDept = $.osl.user.userInfo.deptName;
+			
+			dataList.push(dataOne);
+		}
+		
+		return dataList;
+    }
+	
+	
 	var callUserSettingPopup = function(opt){		
 
-		//담당자
+		
 		if(opt == 'admin')
 		{
 			var data = {
@@ -352,7 +493,7 @@
 					}]
 				};
 		}
-		//글 작성 범위
+		
 		else
 		{
 			var data = {
@@ -377,81 +518,78 @@
 		$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2102BadUsrListView.do',data,options);
 	}
 	
-	/**
-	* function 명 	: selectBadInfo
-	* function 설명	: 게시판 정보를 조회하여 팝업에 세팅한다.
-	*/
+	
     var selectBadInfo = function(){
 	
 		var data = {"menuId" : $("#menuId").val()};
 		
-		//AJAX 설정
+		
   		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2101BadInfoAjax.do'/>", "async": false}
 				, data);
 		
-		//AJAX 전송 성공 함수
+		
 		ajaxObj.setFnSuccess(function(data){
 			if(data.errorYn == "Y"){
 				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
+				
 				$.osl.layerPopupClose();
 			}else{
 				var info = data.badInfo;
 				
-				// 공통코드 해당 데이터 선택으로 세팅
+				
 				$("#stmTypeCd").attr("data-osl-value", info.stmTypeCd);
 				$("#stmDsTypeCd").attr("data-osl-value", info.stmDsTypeCd);
 				
-		    	// adm2001 팝업 공통코드 select 세팅
+		    	
 				var commonCodeArr = [
-					{mstCd: "STM00001", useYn: "Y", targetObj: "#stmTypeCd", comboType:"OS"}, // 게시판 유형 공통코드 가져오기
-					{mstCd: "STM00002", useYn: "Y", targetObj: "#stmDsTypeCd", comboType:"OS"}, 	// 게시물 공개 범위 공통코드 가져오기
+					{mstCd: "STM00001", useYn: "Y", targetObj: "#stmTypeCd", comboType:"OS"}, 
+					{mstCd: "STM00002", useYn: "Y", targetObj: "#stmDsTypeCd", comboType:"OS"}, 	
 				];
-		  		//공통코드 채우기
+		  		
 				$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 				
-				// 게시판 명, 옵션 세팅
-				// 게시판 명
+				
+				
 				$("#stmNm").attr("value", info.stmNm);
 
-				// 옵션 - 공지사항 사용
+				
 				if(info.stmNtcYnCd == "01")
 				{
 					$("#stmNtcYnCd").attr("checked", true);
 				}else{
 					$("#stmNtcYnCd").attr("checked", false);
 				}
-				// 옵션 - 댓글 사용
+				
 				if(info.stmCmtYnCd == "01")
 				{
 					$("#stmCmtYnCd").attr("checked", true);
 				}else{
 					$("#stmCmtYnCd").attr("checked", false);
 				}
-				// 옵션 - 비밀글 사용
+				
 				if(info.stmPwYnCd == "01")
 				{
 					$("#stmPwYnCd").attr("checked", true);
 				}else{
 					$("#stmPwYnCd").attr("checked", false);
 				}
-				// 옵션 - 태그 사용
+				
 				if(info.stmTagYnCd == "01")
 				{
 					$("#stmTagYnCd").attr("checked", true);
 				}else{
 					$("#stmTagYnCd").attr("checked", false);
 				}
-				// 게시판 유형에 따라 파일첨부 최대용량 라벨 변경
-				// 첨부파일 용량 제한 placeholder 변경
+				
+				
 				var typeCd = document.getElementById("stmTypeCd").value;
-				// 자료실인 경우 최대 파일 용량(총 합) 4GB
+				
 				if(typeCd == '02')
 				{
 					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.storage"));
 				}
-				// 영상인 경우 최대 파일 용량(총 합) 2GB
+				
 				else if(typeCd == '04')
 				{
 					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.movie"));
@@ -460,229 +598,423 @@
 				{
 					$("#stmFileStrgStr").text($.osl.lang("stm2101.label.maxFileStrg.normal"));
 				}
-				// 옵션 - 파일 첨부 사용
+				
 				if(info.stmFileCnt > 0)
 				{
 					$("#stmFileYnCd").attr("checked", true);
-					//파일 첨부 사용 시 첨부파일 개수 및 용량 제한 입력 div 보이기
+					
 					$("#stmFileOption").removeClass("kt-hide");
-					// 옵션 - 첨부파일 개수
+					
 					$("#stmFileCnt").attr("value", info.stmFileCnt);
-					// 옵션 - 첨부파일 용량 제한
+					
 					$("#stmFileStrg").attr("value", info.stmFileStrg);
 				}else{
-					//파일 첨부 사용 시 첨부파일 개수 및 용량 제한 입력 div 보이기
+					
 					$("#stmFileOption").addClass("kt-hide");
 				}
 				
 			}
 		});
 		
-		//AJAX 전송
+		
 		ajaxObj.send();
     }
 	
-	/**
-	* function 명 	: selectBadChargerList
-	* function 설명	: 게시판 담당자 정보를 조회하여 팝업에 세팅한다.
-	*/
+	
     var selectBadChargerList = function(){
 	
 		var data = {"menuId" : $("#menuId").val()};
 		
-		//AJAX 설정
+		
   		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2101BadChargerListAjax.do'/>"}
 				, data);
 		
-		//AJAX 전송 성공 함수
+		
 		ajaxObj.setFnSuccess(function(data){
 			if(data.errorYn == "Y"){
 				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
+				
 				$.osl.layerPopupClose();
 			}else{
 				var info = data.badChargerList;
-				
-				var listHtml = "";
-				
-				$("#stmAdmList").empty();
 				$.each(info, function(index, value){
-					if(value.stmAdminCd == "01")
-					{
-						listHtml = "<div class='kt-list__item kt-padding-t-0 kt-padding-b-5' codeNum='"+value.stmAdminCd+"' codeId='"+value.stmAdminId+"' codeNm='"+value.authGrpNm+"' codeDept='' codeImg='' codePrjGrpId = '"+value.prjGrpId+"' codePrjId='"+value.prjId+"' codePrjNm='"+value.prjNm+"'>";
-						listHtml += "<div class='col-12'><i class='fa flaticon-users-1 kt-icon-xl kt-margin-l-10 kt-margin-r-10'></i>";
-						listHtml += value.authGrpNm +" ("+value.prjNm+")</div>";
+					if(value.stmAdminCd == "01"){
+						value.managerNum = '01';
+						value.managerId = value.authGrpId;
+						value.managerPrjGrpId = value.prjGrpId;
+						value.managerPrjId = value.prjId;
+						value.managerPrjNm = $.osl.escapeHtml(value.prjNm);
+						value.managerNm = $.osl.escapeHtml(value.authGrpNm);
+						value.managerImg = "";
+						value.managerDept = "";
+						value.managerAdmin="Y";
 					}else{
-						listHtml = "<div class='kt-list__item kt-padding-t-0 kt-padding-b-5' codeNum='"+value.stmAdminCd+"' codeId='"+value.stmAdminId+"' codeNm='"+value.usrNm+"' codeDept='"+value.deptNm+"' codeImg='"+value.usrImgId+"' codePrjGrpId= ' codePrjId='' codePrjNm=''>";
-						listHtml += "<div class='col-4 openid' data-openid='"+value.stmAdminId+"'>"+$.osl.user.usrImgSet(value.usrImgId, value.usrNm)+"</div>";
-						if(value.deptNm == null)
-						{
-							listHtml += "<div class='col-7'></div>";
-						}
-						else
-						{
-							listHtml += "<div class='col-7'>"+value.deptNm+"</div>";
-						}
+						value.managerNum = '02';
+						value.managerId = value.authGrpId;
+						value.managerPrjGrpId = value.prjGrpId;
+						value.managerPrjId = value.prjId;
+						value.managerPrjNm = $.osl.escapeHtml(value.prjNm);
+						value.managerNm = $.osl.escapeHtml(value.authGrpNm);
+						value.managerImg = "";
+						value.managerDept = "";
+						value.managerAdmin="Y";
 					}
-					listHtml += "</div>";
-					
-					$("#stmAdmList").append(listHtml);
 				});
+
 				
-				//ori 정보 가지고 있기
+				drawList(info, "stmAdmList", false);
+				
 				oriAdmin = JSON.stringify(sendManagerList("stmAdmList", false, true, true));
 			}
 		});
 		
-		//AJAX 전송
+		
 		ajaxObj.send();
     }
 	
-	/**
-	* function 명 	: selectBadWriterList
-	* function 설명	: 게시판 글 작성자 범위 정보를 조회하여 팝업에 세팅한다.
-	*/
+	
     var selectBadWriterList = function(){
 	
 		var data = {"menuId" : $("#menuId").val()};
 		
-		//AJAX 설정
+		
   		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2101BadWriterListAjax.do'/>"}
 				, data);
 		
-  		//AJAX 전송 성공 함수
+  		
 		ajaxObj.setFnSuccess(function(data){
 			if(data.errorYn == "Y"){
 				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
+				
 				$.osl.layerPopupClose();
 			}else{
 				var info = data.badWriterList;
 				
-				var listHtml = "";
-				
-				$("#stmWtList").empty();
 				$.each(info, function(index, value){
-					if(value.stmWtCd == "01")
-					{
-						listHtml = "<div class='kt-list__item kt-padding-t-0 kt-padding-b-5' codeNum='"+value.stmWtCd+"' codeId='"+value.stmWtId+"' codeNm='"+$.osl.escapeHtml(value.authGrpNm)+"' codeDept='' codeImg=''  codePrjGrpId = '"+$.osl.escapeHtml(value.prjGrpId)+"' codePrjId='"+value.prjId+"' codePrjNm='"+$.osl.escapeHtml(value.prjNm)+"'>";
-						listHtml += "<div class='col-12'><i class='fa flaticon-users-1 kt-icon-xl kt-margin-l-10 kt-margin-r-10'></i>";
-						listHtml += $.osl.escapeHtml(value.authGrpNm) +" ("+$.osl.escapeHtml(value.prjNm)+")</div>";
+					if(value.stmWtCd == "01"){
+						value.managerNum = '01';
+						value.managerId = value.authGrpId;
+						value.managerPrjGrpId = value.prjGrpId;
+						value.managerPrjId = value.prjId;
+						value.managerPrjNm = $.osl.escapeHtml(value.prjNm);
+						value.managerNm = $.osl.escapeHtml(value.authGrpNm);
+						value.managerImg = "";
+						value.managerDept = "";
+						value.managerWriter="Y";
 					}else{
-						listHtml = "<div class='kt-list__item kt-padding-t-0 kt-padding-b-5' codeNum='"+value.stmWtCd+"' codeId='"+value.stmWtId+"' codeNm='"+$.osl.escapeHtml(value.usrNm)+"' codeDept='"+$.osl.escapeHtml(value.deptNm)+"' codeImg='"+value.usrImgId+"'codePrjGrpId= ' codePrjId='' codePrjNm=''>";
-						listHtml += "<div class='col-4 openid' data-openid='"+value.stmWtId+"'>"+$.osl.user.usrImgSet(value.usrImgId, value.usrNm)+"</div>";
-						if(value.deptNm == null)
-						{
-							listHtml += "<div class='col-7'></div>";
-						}
-						else
-						{
-							listHtml += "<div class='col-7'>"+$.osl.escapeHtml(value.deptNm)+"</div>";
-						}
+						value.managerNum = '02';
+						value.managerId = value.authGrpId;
+						value.managerPrjGrpId = value.prjGrpId;
+						value.managerPrjId = value.prjId;
+						value.managerPrjNm = $.osl.escapeHtml(value.prjNm);
+						value.managerNm = $.osl.escapeHtml(value.authGrpNm);
+						value.managerImg = "";
+						value.managerDept = "";
+						value.managerWriter="Y";
 					}
-					listHtml += "</div>";
-					
-					$("#stmWtList").append(listHtml);
 				});
+
 				
-				//ori 정보 가지고 있기
+				drawList(info, "stmWtList", false);
+				
 				oriWriter = JSON.stringify(sendManagerList("stmWtList", false, true, false));
 			}
 		});
 		
-		//AJAX 전송
+		
 		ajaxObj.send();
     }
 	
-    /**
-	* function 명 : drawList
-	* function 설명 : 지정 element에 데이터 출력(kt-list__item)
-	* param : setData 출력 데이터 정보
-	* param : elemId 그릴 element Id(#제외)
-    * param : managerCheck 통합 목록 중 권한그룹과 사용자 목록 나눠 그릴 것인지 확인(true, false)
-	*/
-	var drawList = function(setData, elemId, managerCheck){
-		var divId = '#' + elemId;
+    
+    var setGrpAndUsrList = function(){
+	
+		var adminList = addJsonList("stmAdmList", true);
+		var writerList = addJsonList("stmWtList", true);
+		var allList = [];
 		
-		var listHtml = "";
 		
-		$.each(setData, function(index, value){
-			listHtml = "<div class='kt-list__item kt-padding-t-0 kt-padding-b-5' codeNum='"+value.managerNum+"' codeId='"+value.managerId+"' codeNm='"+$.osl.escapeHtml(value.managerNm)+"' codeDept='"+$.osl.escapeHtml(value.managerDept)+"' codeImg='"+value.managerImg+"' codePrjGrpId='"+value.managerPrjGrpId+"' codePrjId='"+value.managerPrjId+"' codePrjNm='"+$.osl.escapeHtml(value.managerPrjNm)+"'>";
-			
-			if(managerCheck == true)
-			{
-				if(value.managerNum=="01")
-				{
-					listHtml += "<div class='col-8'><i class='fa flaticon-users-1 kt-icon-xl kt-margin-l-10 kt-margin-r-10'></i>";
-					listHtml += $.osl.escapeHtml(value.managerNm) + "(" +$.osl.escapeHtml(value.managerPrjNm) + ")</div>";
-					listHtml += "</div>";
-					
-					$(divId+"_auth").append(listHtml);
-				}
-				else
-				{
-					listHtml += "<div class='col-4 openid' data-openid='"+value.managerId+"'>"+$.osl.user.usrImgSet(value.managerImg, $.osl.escapeHtml(value.managerNm))+"</div>";
-					if($.osl.escapeHtml(value.managerDept) == null || $.osl.escapeHtml(value.managerDept)=="")
-					{
-						listHtml += "<div class='col-7'></div>";
-					}
-					else
-					{
-						listHtml += "<div class='col-7'>"+$.osl.escapeHtml(value.managerDept)+"</div>";
-					}
-					
-					listHtml += "</div>";
-
-					$(divId+"_user").append(listHtml);
-				}
-			}
-			else
-			{
-				if(value.managerNum=="01")
-				{
-					listHtml += "<div class='col-8'><i class='fa flaticon-users-1 kt-icon-xl kt-margin-l-10 kt-margin-r-10'></i>";
-					listHtml += $.osl.escapeHtml(value.managerNm) + "(" +$.osl.escapeHtml(value.managerPrjNm) + ")</div>";
-				}
-				else
-				{
-					listHtml += "<div class='col-4 openid' data-openid='"+value.managerId+"'>"+$.osl.user.usrImgSet(value.managerImg, $.osl.escapeHtml(value.managerNm))+"</div>";
-					if($.osl.escapeHtml(value.managerDept) == null || $.osl.escapeHtml(value.managerDept) == "" || $.osl.escapeHtml(value.managerDept) == "null")
-					{
-						listHtml += "<div class='col-7'></div>";
-					}
-					else
-					{
-						listHtml += "<div class='col-7'>"+$.osl.escapeHtml(value.managerDept)+"</div>";
-					}
-					
-				}
-				listHtml += "</div>";
+		
+    	var data = {
+				"menuId" : $("#menuId").val(),
+				"stmDsTypeCd" : $("#paramStmDsTypeCd").val(),
+				};
+		
+  		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2102BadGrpAndUsrListAjax.do'/>"}
+				, data);
+		
+  		
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
 				
-				$(divId).append(listHtml);
+				$.osl.layerPopupClose();
+			}else{
+
+				var infoGrp = data.badGrpList;
+				var infoUsr = data.badUsrList;
+				
+				var listHtml = "";
+				
+				
+				$("#searchSelect").html("");
+				$.each(infoGrp, function(idx, val){
+					
+					var innerHtml = "<option value='"+val.authGrpId+"' data-prj-id='"+val.prjId+"' data-prj-grp-id='"+val.prjGrpId+"'>"+$.osl.escapeHtml(val.authGrpNm)+" ("+$.osl.escapeHtml(val.prjNm)+")</option>";
+					$("#searchSelect").append(innerHtml);
+				});
+				
+				
+				
+				
+				
+				
+				$.each(infoGrp, function(index, value){
+					var passKey_admin = false;
+					var passKey_writer = false;
+					$.each(adminList, function(idx, items){
+						if((value.authGrpId != null && value.authGrpId != "") && (value.prjId != null && value.prjId != "")){
+							if(value.authGrpId.indexOf(items.managerId)>-1 && value.prjId.indexOf(items.managerPrjId)>-1){
+								passKey_admin = true;
+							}
+						}
+					});
+					$.each(writerList, function(idx, items){
+						if((value.authGrpId != null && value.authGrpId != "") && (value.prjId != null && value.prjId != "")){
+							if(value.authGrpId.indexOf(items.managerId)>-1 && value.prjId.indexOf(items.managerPrjId)>-1){
+								passKey_writer = true;
+							}
+						}
+					});
+					
+					var pushData = {};
+					pushData.managerNum = '01';
+					pushData.managerId = value.authGrpId;
+					pushData.managerPrjGrpId = value.prjGrpId;
+					pushData.managerPrjId = value.prjId;
+					pushData.managerPrjNm = $.osl.escapeHtml(value.prjNm);
+					pushData.managerNm = $.osl.escapeHtml(value.authGrpNm);
+					pushData.managerImg = "";
+					pushData.managerDept = "";
+					
+					
+					if(passKey_admin == true){
+						pushData.managerAdmin = 'Y';
+					}else 
+					{
+						pushData.managerAdmin = 'N';
+					}
+					
+					if(passKey_writer == true){
+						pushData.managerWriter = 'Y';
+					}else 
+					{
+						pushData.managerWriter = 'N';
+					}
+					allList.push(pushData);
+				});
+				
+				$.each(infoUsr, function(index, value){
+					var passKey_admin = false;
+					var passKey_writer = false;
+					$.each(adminList, function(idx, items){
+						if(value.usrId != null && value.usrId != ""){
+							if(value.usrId.indexOf(items.managerId)>-1){
+								passKey_admin = true;
+							}
+						}
+					});
+					$.each(writerList, function(idx, items){
+						if(value.usrId != null && value.usrId != ""){
+							if(value.usrId.indexOf(items.managerId)>-1){
+								passKey_writer = true;
+							}
+						}
+					});
+					
+					var pushData = {};
+					pushData.managerNum = '02';
+					pushData.managerId = value.usrId;
+					pushData.managerPrjGrpId = "";
+					pushData.managerPrjId = "";
+					pushData.managerPrjNm = "";
+					pushData.managerNm = value.usrNm;
+					pushData.managerImg = value.usrImgId;
+					pushData.managerDept = $.osl.escapeHtml(value.deptNm);
+					
+					
+					if(passKey_admin == true){
+						pushData.managerAdmin = 'Y';
+					}else 
+					{
+						pushData.managerAdmin = 'N';
+					}
+					
+					if(passKey_writer == true){
+						pushData.managerWriter = 'Y';
+					}else 
+					{
+						pushData.managerWriter = 'N';
+					}
+					allList.push(pushData);
+				});
+				
+				
+				drawList(allList, "stmGroupUsrList", false);
 			}
 		});
+  	
+		
+		ajaxObj.send();
 	}
 	
-    /**
-	* function 명 	: submitBadOption
-	* function 설명	: 게시판 속성 정보 수정 완료
-	*/
+    
+     var drawList = function(setData, elemId, managerCheck){
+        var formId = '#' + elemId;
+        
+        var listHtml = "";
+        var num = 0;
+        
+        $.each(setData, function(index, value){
+           num++;
+              
+           listHtml = "<div class='card kt-margin-b-10 flex-flow--row' codeNum='"+value.managerNum+"' codeId='"+value.managerId+"' codeNm='"+$.osl.escapeHtml(value.managerNm)+"' codeDept='"+$.osl.escapeHtml(value.managerDept)+"' codeImg='"+value.managerImg+"' codeprjid='"+value.managerPrjId+"' codeprjgrpid='"+value.managerPrjGrpId+"'  codeprjnm='"+$.osl.escapeHtml(value.managerPrjNm)+"'>"
+                       +"<div class='dropdown'>"
+                          +"<div class='btn osl-left-arrow-group dropdown-toggle' id='dropdownMenuButton"+num+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                             +"<i class='fas fa-arrow-alt-circle-left'></i>"
+                          +"</div>"      
+                          +"<div class='dropdown-menu osl-dropdown-menu--position' aria-labelledby='dropdownMenuButton"+num+"'>"
+                             +"<a class='dropdown-item'>담당자</a>"
+                             +"<a class='dropdown-item'>글 작성 범위</a>"
+                          +"</div>"
+                       +"</div>"
+                       +"<div class='osl-content-group'>"
+                       
+                       +"<div class='card-title left-user-group kt-margin-b-0'>";
+           
+           if(managerCheck == true){
+              
+              
+              
+              if(value.managerNum=='01'){
+                 listHtml += "<span class='groupuser-icon'>"
+                             +"<i class='fas fa-user-tag'></i>"
+                          +"</span>"
+                          +$.osl.escapeHtml(value.managerNm)
+                          +"<span class='badge badge-success osl-margin-left--auto'>권한그룹</span>"+
+                       +"</div>"
+                       
+                       
+                       +"<div class='osl-card__prjnm'>"
+                          +$.osl.escapeHtml(value.managerPrjNm)
+                       +"</div>"
+                       
+                    +"</div>"
+              }
+              
+              else{   
+
+                  var paramData = {
+                       html: "<span class='osl-user-card-flex'><span>"+value.managerNm +"</span><span>("+value.managerId+")</span></span>",
+                        imgSize: "sm",
+                       class:{
+                          cardBtn: "osl-bad__fit-content",
+                       }
+                    };
+                  
+                 listHtml += "<div class='' data-openid='"+value.managerId+"'>"+
+                                $.osl.user.usrImgSet(value.managerImg, paramData )+
+                          "</div>"+
+                          "<span class='badge badge-info osl-margin-left--auto'>사용자</span>"+
+                       "</div>";
+                       
+                 
+                 if(value.managerDept == null){
+                    listHtml += "<div class=''>-</div>";
+                 }
+                 else{
+                    listHtml += "<div class='osl-card__prjnm'>"+
+                                $.osl.escapeHtml(value.managerDept)+
+                             "</div>";
+                 }
+                 
+                 
+              }
+                 listHtml+="</div></div>";
+              
+              $(formId).append(listHtml);
+              
+              
+           
+           }else{
+              
+              
+              if(value.managerNum=='01'){
+                 listHtml += "<span class='groupuser-icon'>"+
+                             "<i class='fas fa-user-tag'></i>"+
+                          "</span>"+
+                          $.osl.escapeHtml(value.managerNm)+
+                          "<span class='badge badge-success osl-margin-left--auto'>권한그룹</span>"+
+                       "</div>"+
+                       
+                       
+                       "<div class='osl-card__prjnm'>"+
+                          $.osl.escapeHtml(value.managerPrjNm)+
+                       "</div>";
+                       
+                       
+                 
+              
+              }else{
+
+                  var paramData = {
+                       html: "<span class='osl-user-card-flex'><span>"+value.managerNm +"</span><span>("+value.managerId+")</span></span>",
+                        imgSize: "sm",
+                       class:{
+                          cardBtn: "osl-bad__fit-content",
+                       }
+                    };
+                  
+                 listHtml += "<div class='' data-openid='"+value.managerId+"'>"+
+                             $.osl.user.usrImgSet(value.managerImg, paramData)+
+                          "</div>"+
+                          "<span class='badge badge-info osl-margin-left--auto'>사용자</span>"+
+                       "</div>";
+                       
+                       
+                 if(value.managerDept == null){
+                    listHtml += "<div class='osl-card__prjnm'>-</div>";
+                 }else{
+                    listHtml += "<div class='osl-card__prjnm'>"+
+                                $.osl.escapeHtml(value.managerDept)+
+                             "</div>";
+                 }
+                 
+              }
+              listHtml += "</div></div>";
+              
+              $(formId).append(listHtml);
+           }
+        });
+     }
+	
+    
     var submitBadOption = function(){
-		//넘길 데이터 정리
-		//게시판 id
+		
+		
 		var menuId = $("#menuId").val();
-		//게시판 유형
+		
 		var stmTypeCd = $("#stmTypeCd").val();
-		//게시판 담당자
+		
 		var stmAdmList = JSON.stringify(sendManagerList("stmAdmList", false, false, true));
-		//게시판 글 작성 범위
+		
 		var stmWtList = JSON.stringify(sendManagerList("stmWtList", false, false, false));
-		//게시물 공개 범위
+		
 		var stmDsTypeCd = $("#stmDsTypeCd").val();
 		
-		//옵션
+		
 		var stmNtcYnCd = "02";
 		var stmCmtYnCd = "02";
 		var stmPwYnCd = "02";
@@ -713,13 +1045,13 @@
 		var stmFileCnt = $("#stmFileCnt").val();
 		var stmFileStrg = $("#stmFileStrg").val();
 		
-		//첨부파일을 사용하면
+		
 		if(stmFileYnCd == "01"){
-			//입력한 파일 갯수가 0이하일 때
+			
 			if(stmFileCnt <= 0)
 			{
-				//첨부파일 갯수를 0 이하로 설정한 경우
-				//첨부파일 갯수를 1로 자동 변경
+				
+				
 				stmFileCnt = 1;
 				$("#stmFileCnt").val(1);
 				$.osl.alert($.osl.lang("stm2101.formCheck.fileCntMessage"));
@@ -727,29 +1059,29 @@
 			}
 			else if(stmFileCnt > 10)
 			{
-				//첨부파일 갯수가 10개를 넘어가는지 확인
+				
 				$("#stmFileCnt").val(10);
 				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxCntMessage"), {type:'error'});
 				return false;
 			}
 			
-			//게시판 유형 최대 용량 파일을 넘기면 최대 값으로 수정
+			
 			var defaultStrg = 0;
-			//최대용량을 0 이하로 한 경우 defalult로 지정
+			
 			if(stmFileStrg <= 0)
 			{
-				//첨부파일 용량은 default로 지정
-				//자료실인 경우 최대 파일 용량(총합) 4GB
+				
+				
 				if(stmTypeCd == "02")
 				{
 					defaultStrg = 4096;
 				}
-				// 영상인 경우 최대 파일 용량(총 합) 2GB
+				
 				else if(stmTypeCd == "04")
 				{
 					defaultStrg = 2048;
 				}
-				// 그 외 500MB
+				
 				else
 				{
 					defaultStrg = 500;
@@ -758,12 +1090,12 @@
 				$.osl.alert($.osl.lang("stm2101.formCheck.fileMaxStrgMessage"));
 				return false;
 			}
-			//첨부파일 용량이 존재 할 경우
+			
 			else
 			{
-				//게시판 유형에 따라 파일 용량 최대 검사
-				//최대 용량을 넘길 때만 최대 용량 값으로 변경
-				//자료실인 경우 최대 파일 용량(총합) 4GB
+				
+				
+				
 				if(stmTypeCd == '02')
 				{
 					defaultStrg = 4096;
@@ -775,7 +1107,7 @@
 						return false;
 					}
 				}
-				// 영상인 경우 최대 파일 용량(총 합) 2GB
+				
 				else if(stmTypeCd == '04')
 				{
 					defaultStrg = 2048;
@@ -787,7 +1119,7 @@
 						return false;
 					}
 				}
-				// 그 외 500MB
+				
 				else
 				{
 					defaultStrg = 500;
@@ -811,7 +1143,7 @@
 
 		$.osl.confirm($.osl.lang("stm2101.update"),null,function(result){
 			if(result.value){
-				//AJAX 설정
+				
 				var data = {
 						"menuId" : menuId ,
 						"stmTypeCd" : stmTypeCd ,
@@ -830,46 +1162,46 @@
 						{"url":"<c:url value='/stm/stm2000/stm2100/updateStm2100BadTypeAjax.do'/>"}
 						, data);
 				
-		  		//AJAX 전송 성공 함수
+		  		
 				ajaxObj.setFnSuccess(function(data){
 					if(data.errorYn == "Y"){
 						$.osl.alert(data.message,{type: 'error'});
-						//모달 창 닫기
+						
 						$.osl.layerPopupClose();
 					}else{
 						$.osl.toastr(data.message,{type: 'success'});
-						//모달 창 닫기
+						
 						$.osl.layerPopupClose();
 						
-						//datatable 조회
+						
 		   				$("button[data-datatable-id=stm2100StmTable][data-datatable-action=select]").click();
 					}
 				});
 				
-				//AJAX 전송
+				
 				ajaxObj.send();
 			};
 		});
 	};
 	
 	return {
-        // public functions
+        
         init: function() {
         	documentSetting();
         },
-        setManager: function(temp, typeString){
-        	//세부 팝업에서 받은 temp를 가져와 담당자/글작성 목록을 세팅
-        	if(typeString == "admin")
-       		{
-        		$("#stmAdmList").empty();
-	        	drawList(JSON.parse(temp), "stmAdmList", false);
-       		}
-        	else
-       		{
-        		$("#stmWtList").empty();
-	        	drawList(JSON.parse(temp), "stmWtList", false);
-       		}
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     };
 }();
 

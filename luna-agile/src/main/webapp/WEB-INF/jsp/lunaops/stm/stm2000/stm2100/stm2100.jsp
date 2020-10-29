@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http:
 <jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
@@ -13,17 +13,17 @@
 		</div>
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-wrapper">
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="select" title="게시판 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-					<i class="fa fa-list"></i><span>조회</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="select" title="게시판 조회" data-title-lang-cd="stm2100.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="update" title="게시판 속성 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="2">
-					<i class="fa fa-edit"></i><span>수정</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="update" title="게시판 속성 수정" data-title-lang-cd="stm2100.actionBtn.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="2">
+					<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="detail" title="게시글 관리" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="detail" tabindex="3">
-					<i class="fa flaticon-settings-1"></i><span>관리</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="detail" title="게시글 관리" data-title-lang-cd="stm2100.actionBtn.managmentTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="detail" tabindex="3">
+					<i class="fa flaticon-settings-1"></i><span data-lang-cd="stm2100.button.detail">관리</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="summery" title="게시판 통계" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="summery" tabindex="4">
-					<i class="fa flaticon-information"></i><span>통계</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm2100StmTable" data-datatable-action="summery" title="게시판 통계" data-title-lang-cd="stm2100.actionBtn.summeryTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="summery" tabindex="4">
+					<i class="fa flaticon-information"></i><span data-lang-cd="stm2100.button.summery">통계</span>
 				</button>
 				<!-- 엑셀 출력 버튼 넣기 -->
 			</div>
@@ -63,10 +63,10 @@
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				 {field: 'stmTypeNm', title: $.osl.lang("stm2100.field.stmTypeNm"), textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
 				 {field: 'stmNm', title: $.osl.lang("stm2100.field.stmNm"), textAlign: 'left', width: 300, autoHide: false, search: true, 
-// 						template: function(row){
-// 							var returnStr = "<span class='stmNmTxt' style='word-break: break-word;'>"+row.stmNm+"</span>";
-// 							return returnStr;
-// 						}	 
+
+
+
+
 				 },
 				 {field: 'stmDsTypeNm', title: $.osl.lang("stm2100.field.stmDsTypeNm"), textAlign: 'left', width: 200},
 				 {field: 'cnt', title: $.osl.lang("stm2100.field.cnt"), textAlign: 'center', width: 150},
@@ -77,19 +77,19 @@
 				 },
 				 {field: 'delCnt', title: $.osl.lang("stm2100.field.delCnt"), textAlign: 'center', width: 150},
 			 ],
-// 			 rows:{
-// 				 afterTemplate: function(row, data, index){
-// 					$(".stmNmTxt").parents("span").addClass("osl-bad__width__100");
-// 					var titleRow = $("#stm2100StmTable>table>thead>tr").children("th");
-// 					$.each(titleRow, function(idx, item){
-// 						if(item.dataset.field=="stmNm"){
-// 							//item.classList.add("osl-bad__width__100");
-// 							//item.classList = ["osl-bad__width__100"];
-// 							console.log(item.classList);
-// 						}
-// 					}); 
-// 				}
-// 			 },
+
+
+
+
+
+
+
+
+
+
+
+
+
 			 actionBtn:{
 				"title" : $.osl.lang("stm2100.actionBtn.title"),
 				"width" : 120,
@@ -115,7 +115,9 @@
 							idKey: rowData.menuId,
 							modalTitle: "[ "+rowData.stmNm+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
 							closeConfirm: false,
+							modalSize: "xl",
 							autoHeight: false,
+							backdrop: "static",
 						};
 					
 					checkUser(rowData.menuId, rowData.stmDsTypeCd);
@@ -141,7 +143,7 @@
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
 							stmNm: rowData.stmNm,
-							//시스템 게시판에서 접근 시 라이센스 범위로 보기 위해 01로 지정
+							
 							stmDsTypeCd : "01",
 							stmRootYn : "Y",
 						};
@@ -208,34 +210,30 @@
 			 }
 		 });
 
-		 /*
-		 * function : checkUser
-		 * param : menuId, stmDsTypeCd
-		 * function 설명 : 담당자, 글작성범위에 해당하는지 사용자 체크
-		 */
+		 
 		 var checkUser = function(menuId, stmDsTypeCd){
 			 var data = {
 					 authGrpId : $.osl.selAuthGrpId,
 					 menuId : menuId,
 					 dsTypeCd : stmDsTypeCd,
 			 }
-			//ajax 설정
+			
 	    	var ajaxObj = new $.osl.ajaxRequestAction(
 	    			{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2100UserCheckAjax.do'/>", "async": false}
 					, data);
-			//ajax 전송 성공 함수
+			
 	    	ajaxObj.setFnSuccess(function(data){
 	    		if(data.errorYn == "Y"){
 					$.osl.alert(data.message,{type: 'error'});
-					//모달 창 닫기
+					
 					$.osl.layerPopupClose();
 				}else{
 					var result = data.result;
-					//시스템 게시판 관리로 접속하는 사람은 무조건 담당자(목록에 없어도)
+					
 					okManager = true;	
 					
-					//글작성 목록에 있으면 - 글 작성 범위에 해당하는 사람
-					//처음부터 글작성 목록이 비어있는경우 - 접근하는 사람 모두
+					
+					
 					if(result.resultWriter == "Y" || result.resultWriter == "B"){
 						okWriter = true;	
 					}else{
@@ -244,7 +242,7 @@
 				}
 			});
 			
-	    	//AJAX 전송
+	    	
 			ajaxObj.send();
 		 }
 	 };
