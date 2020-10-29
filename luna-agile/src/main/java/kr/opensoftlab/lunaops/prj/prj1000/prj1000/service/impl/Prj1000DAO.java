@@ -41,6 +41,28 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
+	public List selectPrj1000PrjAuthUsrList(Map paramMap) throws Exception {
+		return (List) list("prj1000DAO.selectPrj1000PrjAuthUsrList", paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1000PrjAuthUsrListCnt(Map paramMap) throws Exception {
+		return (int) select("prj1000DAO.selectPrj1000PrjAuthUsrListCnt", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception {
+		return (List) list("prj1000DAO.selectPrj2100PrjAuthNoneUsrList", paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return (int) select("prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
 	public Map selectPrj1000Info(Map paramMap) throws Exception {
 		 return (Map) select("prj1000DAO.selectPrj1000Info", paramMap);
     }
@@ -93,6 +115,8 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	public int updatePrj1000Ajax(Map paramMap) throws Exception{
 		return (int) update("prj1000DAO.updatePrj1000Ajax", paramMap);
 	}
+	
+	
 	
 	
 	@SuppressWarnings("rawtypes")
