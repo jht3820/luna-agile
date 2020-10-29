@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/oslops/top/header.jsp" %>
+<%@ include file="/WEB-INF/jsp/lunaops/top/header.jsp" %>
 
-<jsp:include page="/WEB-INF/jsp/oslops/top/aside.jsp" />
+<jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
 <link rel='stylesheet' href='<c:url value='/css/common/fileUpload.css'/>' type='text/css'>
 <link rel='stylesheet' href='<c:url value='/css/oslops/prs.css'/>' type='text/css'>
 <script src="<c:url value='/js/common/oslFile.js'/>"></script>
@@ -871,4 +871,4 @@ select[disabled]::-ms-value {color: #000;}
 	   multi_selector.addElement( document.getElementById( 'egovFileUpload' ) );
 	</script>
 </div>
-<jsp:include page="/WEB-INF/jsp/oslops/bottom/footer.jsp" />
+<jsp:include page="/WEB-INF/jsp/lunaops/bottom/footer.jsp" />

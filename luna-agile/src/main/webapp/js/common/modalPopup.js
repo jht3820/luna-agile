@@ -45,6 +45,12 @@ $(document).on('shown.bs.modal', '.modal', function () {
 
 //멀티 모달창의경우 모달창 닫힐때 스크롤바 생기는 오류 수정
 $(document).on('hidden.bs.modal', '.modal', function () {
+	//draggable 소멸
+	var draggie = $(this).data('draggabilly');
+	if(!$.osl.isNull(draggie)){
+		draggie.destroy();
+	}
+	
 	//열린 모달창이 존재하는 경우
 	if($('.modal:visible').length > 0){
 		//모달창 오픈 상태로 변경
@@ -112,7 +118,7 @@ $(document).on('hide.bs.modal', '.modal', function () {
  * @param data		: 모달창 ajax에 전달할 data
  * @param opts		: 모달창 옵션
  * @opt
- * 			modalSize		: 모달 창 크기 [xl, lg, md, sm]
+ * 			modalSize		: 모달 창 크기 [fs, xl, lg, md, sm] - (fs: full screen)
  * 			backdrop		: 모달 창 영역 외에 클릭으로 모달 창 닫기 여부 [true - default, false - 배경 마스크 제거 및 백드롭 중지, "static" - 배경 마스크 출력 및 백드롭 중지]
  * 			keyboard		: 키보드 ESC 버튼으로 모달 창 닫기 여부
  * 			showLoading		: 모달 창 오픈시 로딩화면 여부
@@ -121,6 +127,7 @@ $(document).on('hide.bs.modal', '.modal', function () {
  * 			idKey			: 모달 창을 오픈한 객체(같은 모달 중복 팝업 방지) 
  * 			focus			: open modal auto focusing
  * 			autoHeight		: 브라우저 높이 조절 시 자동으로 모달 사이즈 맞춤
+ * 			draggable		: 모달 창 이동 가능 여부 (F2키 누를 시 오픈된 모든 모달 창 위치 원래대로)
  * 			class			: header, body, footer에 추가 class 선언
  */
 var modal_popup = function(url, data, opts){
@@ -137,6 +144,7 @@ var modal_popup = function(url, data, opts){
 			idKeyDuple: false,
 			focus: false,
 			autoHeight: true,
+			draggable: true,
 			'class': {
 				/*
 				 * header css 상세 부여
@@ -199,8 +207,14 @@ var modal_popup = function(url, data, opts){
 		}
 	}
 	
+	//modal size full screen
+	var mainModalFrameCss = "";
+	if(options.modalSize != null && options.modalSize == "fs"){
+		mainModalFrameCss = modalSize;
+	}
+	
 	$("body").prepend(
-		'<div class="modal" id="'+layerBoxDivId+'" role="dialog" tabIndex="-1" aria-labelledby="'+layerBoxDivId+'" aria-hidden="true" data-backdrop="'+options.backdrop+'" data-keyboard="'+options.keyboard+'" data-closeconfirm="'+options.closeConfirm+'" data-idkeyduple="'+options.idKeyDuple+'" data-idkey="'+options.idKey+'" data-focus="'+options.focus+'">'
+		'<div class="modal '+mainModalFrameCss+'" id="'+layerBoxDivId+'" role="dialog" tabIndex="-1" aria-labelledby="'+layerBoxDivId+'" aria-hidden="true" data-backdrop="'+options.backdrop+'" data-keyboard="'+options.keyboard+'" data-closeconfirm="'+options.closeConfirm+'" data-idkeyduple="'+options.idKeyDuple+'" data-idkey="'+options.idKey+'" data-focus="'+options.focus+'" data-draggable="'+options.draggable+'">'
 			+'<div class="modal-dialog modal-dialog-centered '+modalSize+'" role="document">'
 				+'<div class="modal-content">'
 					+'<div class="modal-header clearfix '+classHeader+'">'
@@ -214,6 +228,17 @@ var modal_popup = function(url, data, opts){
 			+'</div>'
 		+'</div>'
 	);
+	
+	//draggable 활성화 체크
+	if(options.draggable){
+		var dragObj = new Draggabilly( '#'+layerBoxDivId, {
+			handle: '.modal-header'
+		});
+		$('#'+layerBoxDivId).data('draggabilly', dragObj);
+		
+		//modal-header에 css 추가
+		$('#'+layerBoxDivId+' .modal-header').addClass("osl-modal__cursor--move");
+	}
 	
 	//로딩 바
 	var loadingShowVal = options.showLoading;
