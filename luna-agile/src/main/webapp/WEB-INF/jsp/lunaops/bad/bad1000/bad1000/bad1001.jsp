@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <style>
 img {
@@ -442,8 +442,9 @@ var OSLBad1001Popup = function () {
 				}else{
 					titleStr += title;
 				}
+				console.log("paramRowData : ", paramRowData);
 				
-				if(setBad.badPw == '01'){
+				if(setBad.badPw != null && setBad.badPw != "" && paramRowData.stmPwYnCd=='01'){
 					titleStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
 				}
 				

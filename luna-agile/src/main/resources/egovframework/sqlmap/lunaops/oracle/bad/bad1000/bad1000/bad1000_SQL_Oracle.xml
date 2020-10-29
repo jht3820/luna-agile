@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap PUBLIC "-
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="bad1000DAO">
 	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
@@ -284,7 +284,7 @@
 	
     
     <select id="bad1000DAO.selectBad1000BadListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
-	    
+	    /*bad1000DAO.selectBad1000BoardListCount 게시글 목록 총 건수조회 */
 		SELECT
 			COUNT(Z.BAD_ID) AS CNT
 		FROM ( 
@@ -294,7 +294,7 @@
     
     
     <select id="bad1000DAO.selectBad1000BadList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000BadList 게시글 목록 조회 */
 		SELECT
 		    Z.*
 		FROM (
@@ -307,7 +307,7 @@
     
     
     <select id="bad1000DAO.selectBad1000BadPwInfo" parameterClass="java.util.Map"  resultClass="java.lang.String">
-	    
+	    /*bad1000DAO.bad1000DAO.selectBad1000BadPwInfo 게시글 비밀번호 일치여부 조회 */
 		SELECT
 			A.BAD_ID AS BAD_ID
 		FROM BAD1000 A
@@ -331,7 +331,7 @@
     
     
     <select id="bad1000DAO.selectBad1000BadInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectBad1000">
-	    
+	    /*bad1000DAO.bad1000DAO.selectBad1000BadInfo 게시글 상세 조회 */
 	    SELECT
 	    	A.LIC_GRP_ID AS LIC_GRP_ID
 	    	, A.PRJ_GRP_ID AS PRJ_GRP_ID
@@ -406,7 +406,7 @@
 	
 	
 	<select id="bad1000DAO.selectBad1000ForBadHstInfo" parameterClass="java.util.Map" resultClass="egovMap">
-		
+		/*bad1000DAO.selectBad1000ForBadHstInfo 게시글 이력 등록을 위한 게시글 정보 조회 */
 		SELECT
 			A.LIC_GRP_ID AS LIC_GRP_ID
 			, A.PRJ_GRP_ID AS PRJ_GRP_ID
@@ -442,7 +442,7 @@
 	
 	
     <select id="bad1000DAO.selectBad1000BadListTagList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000BadListTagList 게시글 목록태그 리스트 조회 */
 		SELECT
 			A.BAD_ID AS BAD_ID
 			, A.TAG_ID AS TAG_ID
@@ -466,7 +466,7 @@
 	
 	
     <select id="bad1000DAO.selectBad1000BadTagList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    
+	    /*bad1000DAO.bad1000DAO.selectBad1000BadTagList 게시글 태그 리스트 조회 */
 		SELECT
 			A.TAG_ID AS TAG_ID
 		FROM BAD1010 A
@@ -480,7 +480,7 @@
 	
 	
     <delete id="bad1000DAO.deleteBad1000BadTagList" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.bad1000DAO.deleteBad1000BadTagList 게시글 태그 리스트 조회 */
 		DELETE FROM BAD1010
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
@@ -492,7 +492,7 @@
     <insert id="bad1000DAO.insertBad1000BadInfo" parameterClass="java.util.Map">
 	    <selectKey resultClass="java.lang.String" keyProperty="newBadId">
 			<![CDATA[
-				 
+				/* bad1000DAO.insertBad1000BadInfo - 신규 게시글 등록(새로운 BAD_ID 따기)*/ 
 				SELECT	NVL( 
 				          SUBSTR(BAD_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'BAD' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -508,7 +508,7 @@
 				WHERE 1 = 1
 			]]>
 		</selectKey>
-	    
+	    /*bad1000DAO.bad1000DAO.insertBad1000BadInfo 게시글 등록하기 */
 		INSERT INTO BAD1000 (
 			LIC_GRP_ID
 			, PRJ_GRP_ID
@@ -585,7 +585,7 @@
 		
 	
     <insert id="bad1000DAO.insertBad1010BadTagInfo" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.bad1000DAO.insertBad1010BadTagInfo 게시글 태그 정보 등록하기 */
 		INSERT INTO BAD1010 (
 			LIC_GRP_ID
 			, PRJ_GRP_ID
@@ -617,7 +617,7 @@
 		
 	
     <update id="bad1000DAO.updateBad1000BadHit" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.bad1000DAO.updateBad1000BadHit 게시글 조회수 증가시키기 */
 		UPDATE BAD1000
 		SET BAD_HIT = BAD_HIT + 1
 		WHERE 1 = 1
@@ -638,7 +638,7 @@
 	
 	
     <update id="bad1000DAO.updateBad1000BadInfo" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.bad1000DAO.updateBad1000BadInfo 게시글 수정하기 */
 		UPDATE BAD1000
 		SET
 			BAD_TITLE = #badTitle#
@@ -671,17 +671,18 @@
 					</isEmpty>
 				</isEqual>
 			</isNotEmpty>
-			<isNotNull property="badPw">
-				<isNotEmpty property="badPw">
-					, BAD_PW = #badPw#
-				</isNotEmpty>
-				<isEmpty property = "badPw">
-					, BAD_PW = NULL
-				</isEmpty>
-			</isNotNull>
-			<isNull property="badPw">
-				, BAD_PW = NULL
-			</isNull>
+			<isNotEmpty property="notChangePw">
+				<isEqual property="notChangePw" compareValue="N">
+					<isNotNull property="badPw">
+						<isNotEmpty property="badPw">
+							, BAD_PW = #badPw#
+						</isNotEmpty>
+						<isEmpty property = "badPw">
+							, BAD_PW = NULL
+						</isEmpty>
+					</isNotNull>
+				</isEqual>
+			</isNotEmpty>
 			, BAD_CMT_YN = #badCmtYn#
 			, ATCH_FILE_ID = #atchFileId#
 			, FILE_SN = #fileSn#
@@ -706,7 +707,7 @@
 	
 	
     <update id="bad1000DAO.deleteBad1000BadInfo" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.bad1000DAO.deleteBad1000BadInfo 게시글 삭제하기 */
 		UPDATE BAD1000
 		SET
 			DEL_CD = '01'
@@ -734,7 +735,7 @@
 	
 	
     <update id="bad1000DAO.updateBad1000BadRestore" parameterClass="java.util.Map">
-	    
+	    /*bad1000DAO.updateBad1000BadRestore 게시글 복원하기 */
 		UPDATE BAD1000
 		SET
 			DEL_CD = '02'
@@ -763,7 +764,7 @@
 	
 	
     <select id="bad1000DAO.selectBad1000NtcCnt" parameterClass="java.util.Map" resultClass="java.lang.String">
-	    
+	    /*bad1000DAO.selectBad1000NtcCnt 현재 공지사항 수 */
 		SELECT
 			TO_CHAR(NVL(COUNT(A.BAD_ID), 0)) AS CNT
 		FROM BAD1000 A
@@ -781,7 +782,7 @@
 	
 	
     <select id="bad1000DAO.selectBad1000NtcCurrent" parameterClass="java.util.Map" resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000NtcCurrent 최신 공지 날짜 */
 	    SELECT
 	    	C.BAD_NTC_STDTM AS BAD_NTC_STDTM
 	    	, C.PRJ_GRP_ID AS PRJ_GRP_ID
@@ -817,7 +818,7 @@
 	
 	
 	<select id="bad1000DAO.selectBad1000WriteCntInfo" parameterClass="java.util.Map" resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000WriteCntInfo 작성 글 수/삭제된 글 수 */
 	    SELECT
 			C.BAD_CNT_ALL AS BAD_CNT_ALL
 		    , D.BAD_CNT_DEL AS BAD_CNT_DEL
@@ -842,7 +843,7 @@
 	
 	
 	<select id="bad1000DAO.selectBad1000HitMaxInfo" parameterClass="java.util.Map"  resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000HitMaxInfo 최다 조회 수, 해당 게시글번호, 게시글 ID */
 	    SELECT
 			ROWNUM RE_RN
 			, C.RN AS RN
@@ -879,7 +880,7 @@
 
 	
 	<select id="bad1000DAO.selectBad1000PwCnt" parameterClass="java.util.Map" resultClass="java.lang.String">
-	    
+	    /*bad1000DAO.selectBad1000PwCnt 게시판 내 비밀글 총 건수조회 */
 		SELECT
 			TO_CHAR(NVL(COUNT(A.BAD_ID), 0)) AS CNT
 		FROM BAD1000 A
@@ -892,7 +893,7 @@
     
 	
 	<select id="bad1000DAO.selectBad1000FileSummery" parameterClass="java.util.Map" resultClass="egovMap">
-	    
+	    /*bad1000DAO.selectBad1000FileSummery 게시판 내 전체 첨부파일수, 용량 */
 		SELECT
 			TO_CHAR(NVL(SUM(D.FILE_TOTAL_CNT),0)) AS FILE_TOTAL_CNT
 			, TO_CHAR(NVL(SUM(D.FILE_TOTAL_SIZE),0)) AS FILE_TOTAL_SIZE

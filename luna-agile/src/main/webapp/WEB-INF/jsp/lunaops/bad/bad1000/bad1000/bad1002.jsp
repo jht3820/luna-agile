@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <form class="kt-form" id="bad1002Info" autocomplete="off">
 	<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
 		<div class="kt-portlet__head kt-portlet__head--lg">
@@ -62,11 +62,11 @@
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon kt-padding-10 required' style="margin-top: auto; margin-bottom:auto; min-width:60px;"><span data-lang-cd="bad1002.label.password">PW</span></label>
+					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1002.label.password">PW</span></label>
 				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon kt-padding-10 required' style="margin-top: auto; margin-bottom:auto;  min-width:60px;"><span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span></label>
+					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span></label>
 				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
 			 			</div>
 				 	</div>
