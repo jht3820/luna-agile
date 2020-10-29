@@ -94,7 +94,7 @@ var OSLPrj1000Popup = function () {
 						var data = {type:"insert"};
 						var options = {
 								autoHeight: false,
-								modalSize: "md",
+								modalSize: "xl",
 								idKey: datatableId,
 								modalTitle: $.osl.lang("prj1002.title"),
 								closeConfirm: false,
@@ -195,14 +195,14 @@ var OSLPrj1000Popup = function () {
 												+'<h5 class="kt-font-boldest text-truncate" title="'+$.osl.escapeHtml(map.prjNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"> '+$.osl.escapeHtml(map.prjNm)+'</h5>'
 												+'<span class="text-muted text-truncate" title="'+$.osl.escapeHtml(map.prjDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.prjDesc)+'</span>'
 											+'</div>'
-											+'<div class="kt-padding-l-40 col-lg-8 col-md-8 col-sm-12">'
+											+'<div class="col-lg-8 col-md-8 col-sm-12">'
 												+'<div class="row">'
-													+'<div class="offset-lg-1 col-lg-5 col-md-5 col-sm-11">'
+													+'<div class="col-lg-6 col-md-6 col-sm-12">'
 														+'<div class="kt-pull-left kt-margin-r-25">'
 															+'<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>'+$.osl.lang("prj1000.startDate")+'</span></div>'
 															+'<h5><span class="badge badge-primary">'+$.osl.escapeHtml(map.startDt)+'</span></h5>'
 														+'</div>'
-														+'<div class="">'
+														+'<div class="kt-pull-left ">'
 															+'<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>'+$.osl.lang("prj1000.endDate")+'</span></div>'
 															+'<h5><span class="badge badge-danger">'+$.osl.escapeHtml(map.endDt)+'</span></h5>'
 														+'</div>'

@@ -109,8 +109,8 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="req1001SaveSubmit"><span data-lang-cd="req1001.complete">완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">Close</span></button>
+	<button type="button" class="btn btn-brand" id="req1001SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="req1001.complete">완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <script>
 "use strict";
@@ -132,7 +132,11 @@ var OSLReq1001Popup = function () {
 	
     // Private functions
     var documentSetting = function () {
-
+    	new KTScrolltop('frReq1001', {
+            offset: 300,
+            speed: 600
+        });
+    	
     	//프로젝트 목록 세팅
     	$("#reqPrjSelect").html($.osl.prjGrpAuthSelSetting(2,true));
 
@@ -140,7 +144,7 @@ var OSLReq1001Popup = function () {
     	var type = $("#type").val();
     	
     	//문구 세팅 
-    	$("#req1001SaveSubmit").text($.osl.lang("req1001."+type+".saveBtnString"));
+    	$("#req1001SaveSubmit > span").text($.osl.lang("req1001."+type+".saveBtnString"));
     	
     	//atchfileId
     	var atchFileId = $("#atchFileId").val();
