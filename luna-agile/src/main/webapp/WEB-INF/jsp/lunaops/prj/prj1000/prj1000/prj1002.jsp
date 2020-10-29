@@ -5,35 +5,45 @@
 	<input type="hidden" name="type" id="type" value="${param.type}">
 	<input type="hidden" name="startDt" id="startDt">
 	<input type="hidden" name="endDt" id="endDt">
-	<div class="kt-portlet">
-		<div class="kt-portlet__body">
-			<div class="form-group">
-				<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
-				<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjNm" id="prjNm" opttype="-1" required>
+	<div class="row">
+		<div class="col-lg-6 col-md-12 col-sm-12">
+			<div class="kt-portlet">
+				<div class="kt-portlet__body">
+					<div class="form-group">
+						<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
+						<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjNm" id="prjNm" opttype="-1" required>
+					</div>
+					<div class="form-group">
+						<label class="required" for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
+						<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" required>
+					</div>
+					<div class="form-group">
+						<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
+						<textarea class="form-control osl-min-h-px--130" name="prjDesc" id="prjDesc" opttype="-1"></textarea>
+					</div>
+					<div class="form-group">
+						<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
+						<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" required>
+					</div>
+					<div class="form-group">
+						<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
+						<select class="form-control kt-select2" id="useCd" name="useCd" opttype="-1">
+						</select>
+					</div>
+				</div>
 			</div>
-			<div class="form-group">
-				<label class="required" for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
-				<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" required>
-			</div>
-			<div class="form-group">
-				<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
-				<textarea class="form-control osl-min-h-px--130" name="prjDesc" id="prjDesc" opttype="-1"></textarea>
-			</div>
-			<div class="form-group">
-				<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
-				<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" required>
-			</div>
-			<div class="form-group">
-				<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
-				<select class="form-control kt-select2" id="useCd" name="useCd" opttype="-1">
-				</select>
+		</div>
+		<div class="col-lg-6 col-md-12 col-sm-12">
+			<div class="kt-portlet">
+				<div class="kt-portlet__body">
+				</div>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><span>완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><i class="fa fa-check-square"></i><span>완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <script>
 "use strict";
@@ -50,7 +60,7 @@ var OSLPrj1002Popup = function () {
     	var type = $("#type").val();
     	
     	//문구 세팅 
-    	$("#prj1002SaveSubmit").text($.osl.lang("prj1002."+type+".saveBtnString"));
+    	$("#prj1002SaveSubmit > span").text($.osl.lang("prj1002."+type+".saveBtnString"));
     	
     	var today = new Date().format("yyyy-MM-dd");
     	//프로젝트 그룹 기간 최초 오늘 날짜 세팅
