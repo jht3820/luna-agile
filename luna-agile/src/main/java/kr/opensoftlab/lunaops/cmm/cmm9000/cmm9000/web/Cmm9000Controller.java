@@ -138,8 +138,7 @@ public class Cmm9000Controller {
     		
     		if("01".equals(moveType)) {
 	    		
-	    		List<Map> prjList = prj1000Service.selectPrj1000PrjGrpAllList(paramMap);
-	    		
+	    		List<Map> prjList = prj1000Service.selectPrj1000AdminPrjList(paramMap);
 	    		
 	    		
 	    		for(Map prjInfo : prjList) {

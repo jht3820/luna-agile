@@ -94,6 +94,8 @@ public class Prj1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
+			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -122,21 +124,29 @@ public class Prj1000Controller {
 			paramMap.put("prjGrpCd", "01");
 			
 			
+			
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
+			
 			totCnt = prj1000Service.selectPrj1000PrjGrpListCnt(paramMap);
+
 			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
 			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
 			
+			
 			dataList = (List) prj1000Service.selectPrj1000PrjGrpList(paramMap);
 			
+        	
+			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
 			
 			metaMap.put("sort", sortDirection);
 			metaMap.put("field", sortFieldId);
@@ -165,20 +175,26 @@ public class Prj1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
+			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
+			
 			String paramPrjGrpId = (String) paramMap.get("paramPrjGrpId");
 			HttpSession ss = request.getSession();
+			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
 			}
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			
+			
 			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
 			String usrId = loginVo.getUsrId();
 			paramMap.put("usrId", usrId);
+			
 			
 			String sortFieldId = (String) paramMap.get("sortFieldId");
 			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
@@ -188,13 +204,18 @@ public class Prj1000Controller {
 			
 			paramMap.put("prjGrpCd", "01");
 			
+			
+			
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
+			
 			totCnt = prj1000Service.selectPrj1000PrjListCnt(paramMap);
 			
+			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
 			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
@@ -247,7 +268,9 @@ public class Prj1000Controller {
 			if("insert".equals(type)) {
 				paramMap.put("prjGrpCd", "01");
 				
+				
 				String prjGrpId = prj1000Service.insertPrj1000PrjGrpAjax(paramMap);
+				
 				
 				paramMap.put("prjId", prjGrpId);
 				paramMap.put("prjAuthTypeCd", "01");
@@ -269,4 +292,156 @@ public class Prj1000Controller {
 			throw new Exception(ex.getMessage());
 		}
 	}
+	
+	
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1000PrjAuthUsrListAjax.do")
+    public ModelAndView selectPrj1000PrjAuthUsrListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+    	
+    	try{
+    		
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			String paramPrjId = (String) paramMap.get("paramPrjId");
+			HttpSession ss = request.getSession();
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			
+			
+			int totCnt = 0;
+			List<Map> dataList = null;
+			Map<String, Object> metaMap = null;
+			
+			
+			totCnt = prj1000Service.selectPrj1000PrjAuthUsrListCnt(paramMap);
+
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+
+			
+			
+			dataList = (List) prj1000Service.selectPrj1000PrjAuthUsrList(paramMap);
+			
+        	
+			
+			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			model.addAttribute("data", dataList);
+			model.addAttribute("meta", metaMap);
+        	
+        	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+        	
+        	return new ModelAndView("jsonView");
+    	}
+    	catch(Exception ex){
+    		Log.error("selectPrj1000PrjAuthUsrListAjax()", ex);
+    		
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
+    
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @RequestMapping(value="/prj/prj1000/prj1000/selectPrj1000PrjAuthNoneUsrListAjax.do")
+    public ModelAndView selectPrj1000PrjAuthNoneUsrListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+    	
+    	try{
+    		
+    		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+    		
+    		
+    		
+    		String _pageNo_str = paramMap.get("pagination[page]");
+    		String _pageSize_str = paramMap.get("pagination[perpage]");
+    		
+    		
+    		String paramPrjId = (String) paramMap.get("paramPrjId");
+    		HttpSession ss = request.getSession();
+    		
+    		
+    		if(paramPrjId == null || "".equals(paramPrjId)) {
+    			paramPrjId = (String) ss.getAttribute("selPrjId");
+    		}
+    		paramMap.put("prjId", paramPrjId);
+    		
+    		
+    		String sortFieldId = (String) paramMap.get("sortFieldId");
+    		sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+    		String sortDirection = (String) paramMap.get("sortDirection");
+    		String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+    		paramMap.put("paramSortFieldId", paramSortFieldId);
+    		
+    		
+    		
+    		
+    		
+    		int totCnt = 0;
+    		List<Map> dataList = null;
+    		Map<String, Object> metaMap = null;
+    		
+			
+			totCnt = prj1000Service.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			
+			dataList = (List) prj1000Service.selectPrj2100PrjAuthNoneUsrList(paramMap);
+			
+			
+			
+			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+    		model.addAttribute("data", dataList);
+    		model.addAttribute("meta", metaMap);
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+    		
+    		return new ModelAndView("jsonView");
+    	}
+    	catch(Exception ex){
+    		Log.error("selectPrj1000PrjAuthNoneUsrListAjax()", ex);
+    		
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
 }
