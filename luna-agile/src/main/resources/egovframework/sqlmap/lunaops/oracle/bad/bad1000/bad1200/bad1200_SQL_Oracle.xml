@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!DOCTYPE sqlMap PUBLIC "-
 
 <sqlMap namespace="bad1200DAO">
 	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	
+    
     <insert id="bad1200DAO.insertBad1200BadInfo" parameterClass="java.util.Map">
 	    <selectKey resultClass="java.lang.String" keyProperty="newBadHstId">
 		    <![CDATA[
+					 
 					SELECT	NVL( 
 					          SUBSTR(BAD_HST_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_HST_ID, 12, 5)) + 1) , 5, '0')
 					      ,	'HST' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -16,8 +18,6 @@
 					      FROM	BAD1200 A
 					      WHERE 1 = 1
 					      AND LIC_GRP_ID = #licGrpId#
-					      AND PRJ_GRP_ID = #prjGrpId#
-						  AND PRJ_ID = #prjId#
 						  AND MENU_ID = #menuId#
 					      AND BAD_HST_ID LIKE 'HST' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
 					  )
