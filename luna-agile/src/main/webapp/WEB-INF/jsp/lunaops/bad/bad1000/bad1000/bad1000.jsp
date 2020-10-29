@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
@@ -157,11 +157,11 @@
 						
 						returnStr += $.osl.escapeHtml(row.badTitle);
 						
-						if(row.badCmtCnt > 0){
+						if(row.badCmtCnt > 0 && row.stmCmtYnCd == '01'){
 							returnStr += "<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10'>"+row.badCmtCnt+"</span>";
 						}
 						
-						if(row.badPw == "01"){
+						if(row.badPw == "01" && row.stmPwYnCd == '01'){
 							returnStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
 						}
 						
@@ -298,7 +298,7 @@
 							
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							if(rowData.badPw == "01"){
+							if(rowData.badPw == "01" && row.stmPwYnCd == '01'){
 								$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1004PwView.do', data, pwOptions);
 							}
 							else{

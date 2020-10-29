@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <form class="kt-form" id="bad1003Info">
 	<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
@@ -30,9 +30,9 @@
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
-							 <span data-lang-cd="bad1003.label.noticeCheck">공지사항 사용</span>
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.noticeCheck">공지사항 사용</span>
 				 	</div>
 			 		<!-- 공지사항 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
@@ -41,37 +41,37 @@
 					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange"/>
 				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
 				 		</div>
-				 		<div class="kt-margin-t-15">
+				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
-								 <span data-lang-cd="bad1003.label.noticeDateIgnore">공지 기간 무시</span>
 								<span></span>
 							</label>
+							<span data-lang-cd="bad1003.label.noticeDateIgnore">공지 기간 무시</span>
 				 		</div>
 				 	</div>
 				 	<!-- 비밀글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmPwYnCd" id="stmPwYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badPwYnCd" id="badPwYnCd">
-							 <span data-lang-cd="bad1003.label.secretCheck">비밀글 사용</span>
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.secretCheck">비밀글 사용</span>
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon  required' style="margin-top: auto; margin-bottom:auto; min-width:60px;"><span data-lang-cd="bad1003.label.password">PW</span></label>
+					 		<label class='input-group-addon ' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1003.label.password">PW</span></label>
 				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:60px;"><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
+					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
 				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-hide"  name="stmCmtYnCd" id="stmCmtYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badCmtYnCd" id="badCmtYnCd">
-							 <span data-lang-cd="bad1003.label.commentCheck">댓글 허용</span>
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.commentCheck">댓글 허용</span>
 				 	</div>
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
@@ -146,7 +146,6 @@ var OSLBad1003Popup = function () {
     	
     	$("#bad1003UpdateSubmit > span").text($.osl.lang("bad1003.button.updateSubmit"));
     	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
-    	
     	
     	
     	rowData = JSON.parse($("#paramRow").val());
@@ -425,7 +424,16 @@ var OSLBad1003Popup = function () {
     			
     			localData.badPw = "";
     		}
-
+    		
+			localData.notChangePw = "N";
+    		
+			
+     		
+     		if($("#stmPwYnCd").hasClass("kt-hide") && rowData.badPw!='01'){
+				
+				localData.notChangePw = "Y";
+     		}
+    		
     		
     		localData.tagList = JSON.stringify(tag);
     		
@@ -617,9 +625,9 @@ var OSLBad1003Popup = function () {
 					if(rowData.stmPwYnCd == "01"){
 						$("#stmPwYnCd").removeClass("kt-hide");
 						$("#pwOption").removeClass("kt-hide");
+						console.log(setBad);
 						
-						
-						if(setBad.badPwYn == "Y"){
+						if(setBad.badPw != null && setBad.badPw != "" ){
 							$("#badPwYnCd").attr("checked", true);
 							
 							$("#pwOption").removeClass("kt-hide");
