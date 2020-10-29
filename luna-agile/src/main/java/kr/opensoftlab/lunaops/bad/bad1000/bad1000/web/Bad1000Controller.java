@@ -78,7 +78,9 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("menuId", (String) ss.getAttribute("selMenuId"));
 			
+			
 			Map stmInfo = stm2100Service.selectStm2100BadInfo(paramMap);
+
 			
 			model.addAttribute("menuId", paramMap.get("menuId"));
 			model.addAttribute("stmInfo", stmInfo);
@@ -108,6 +110,8 @@ public class Bad1000Controller {
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			
 			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
@@ -217,9 +221,15 @@ public class Bad1000Controller {
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-
+			
+			
+			
+			
+			
 			Map bad1001Info = bad1000Service.selectBad1000BadInfo(paramMap);
 
+			
+			
 			List<FileVO> fileList = null;
 			
 			int fileCnt = 0;
@@ -446,10 +456,16 @@ public class Bad1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
+
+
+
+			
+			
 			bad1000Service.updateBad1000BadRestore(paramMap);
 			
 			
-			model.addAttribute("message","복원에 성공하였습니다.");
+			model.addAttribute("message", egovMessageSource.getMessage("bad1000.success.bad.restore"));
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
@@ -457,7 +473,7 @@ public class Bad1000Controller {
 			
 			
 			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
+			model.addAttribute("message", egovMessageSource.getMessage("bad1000.fail.bad.restore"));
 			return new ModelAndView("jsonView");
 		}
 	}

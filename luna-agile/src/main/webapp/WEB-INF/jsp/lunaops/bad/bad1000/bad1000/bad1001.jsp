@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <style>
 img {
@@ -384,6 +384,8 @@ var OSLBad1001Popup = function () {
 						selectBadInfo(false);
 						
 						selectCmtList();
+						
+						$.osl.toastr(data.message);
 					}	
 				});
 		    	
@@ -442,7 +444,6 @@ var OSLBad1001Popup = function () {
 				}else{
 					titleStr += title;
 				}
-				console.log("paramRowData : ", paramRowData);
 				
 				if(setBad.badPw != null && setBad.badPw != "" && paramRowData.stmPwYnCd=='01'){
 					titleStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
@@ -519,18 +520,30 @@ var OSLBad1001Popup = function () {
 					
 					
 					$("tag").click(function(){
-						var data = {
-							searchTargetId : "tagNm",
-							searchTargetData : $(this).attr("value"),
-						}
 						
-						$.osl.datatable.list["bad1000BadTable"].targetDt.setDataSourceParam("searchTargetId", "tagNm");
-						$.osl.datatable.list["bad1000BadTable"].targetDt.setDataSourceParam("searchTargetData", $(this).attr("value"));
+						
+
+
+
 						
 						
 						$.osl.layerPopupClose();
 						
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").children("a.dropdown-item.active").attr("class", "dropdown-item");
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").children("a.dropdown-item[data-field-id=tagNm]").attr("class", "dropdown-item active");
+						
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").parent().children(".btn.btn-secondary.dropdown-toggle").text($.osl.lang("bad1000.field.tagNm"));
+						
+						
+						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("style", "display:none;");
+						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("aria-hidden", "true");
+						
+						$("#searchData_bad1000BadTable").attr("disabled", "");
+						
+						$("#searchData_bad1000BadTable").val($(this).attr("value"));
+						
 						$("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
+						
 					});
 				}else{
 					$("#badTagOption").addClass("kt-hide");
