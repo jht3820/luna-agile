@@ -1,4 +1,12 @@
-
+/**
+ * 	function 명 	: modal_popup
+ *  function 설명	: 레이어 팝업을 호출한다.
+ *  @param url			: 호출 URL
+ *  @param data		: 1. json 형식 ex> {"key1" : "value1", "key2" : "value2"}
+ *  			  2. form serialize 형식 ex> $("#formObj").serialize(); => id=jht&pw=jht
+ *  @author 진주영
+ *  @sinc 2019-05-08
+ */
 var modalCount = 0;
 
 //모달창 닫기 이벤트 중복 방지
@@ -37,6 +45,12 @@ $(document).on('shown.bs.modal', '.modal', function () {
 
 //멀티 모달창의경우 모달창 닫힐때 스크롤바 생기는 오류 수정
 $(document).on('hidden.bs.modal', '.modal', function () {
+	//draggable 소멸
+	var draggie = $(this).data('draggabilly');
+	if(!$.osl.isNull(draggie)){
+		draggie.destroy();
+	}
+	
 	//열린 모달창이 존재하는 경우
 	if($('.modal:visible').length > 0){
 		//모달창 오픈 상태로 변경
@@ -98,7 +112,24 @@ $(document).on('hide.bs.modal', '.modal', function () {
 	//모달창 닫기 이벤트 중지
 	return false;
 });
-
+/**
+ * modal_popup - 모달창 오픈(팝업창 - 기존 레이어팝업)
+ * @param url		: 모달창 내용 ajax url
+ * @param data		: 모달창 ajax에 전달할 data
+ * @param opts		: 모달창 옵션
+ * @opt
+ * 			modalSize		: 모달 창 크기 [fs, xl, lg, md, sm] - (fs: full screen)
+ * 			backdrop		: 모달 창 영역 외에 클릭으로 모달 창 닫기 여부 [true - default, false - 배경 마스크 제거 및 백드롭 중지, "static" - 배경 마스크 출력 및 백드롭 중지]
+ * 			keyboard		: 키보드 ESC 버튼으로 모달 창 닫기 여부
+ * 			showLoading		: 모달 창 오픈시 로딩화면 여부
+ * 			closeConfirm	: 모달 창 닫기 클릭 했을때 닫을건지 경고창 여부
+ * 			idKeyDuple		: 같은 모달 창 중복 팝업 여부 (권장 하지 않음, 변수 중복 문제 등)
+ * 			idKey			: 모달 창을 오픈한 객체(같은 모달 중복 팝업 방지) 
+ * 			focus			: open modal auto focusing
+ * 			autoHeight		: 브라우저 높이 조절 시 자동으로 모달 사이즈 맞춤
+ * 			draggable		: 모달 창 이동 가능 여부 (F2키 누를 시 오픈된 모든 모달 창 위치 원래대로)
+ * 			class			: header, body, footer에 추가 class 선언
+ */
 var modal_popup = function(url, data, opts){
 	var options;
 	var opts = opts;
@@ -113,8 +144,16 @@ var modal_popup = function(url, data, opts){
 			idKeyDuple: false,
 			focus: false,
 			autoHeight: true,
+			draggable: true,
 			'class': {
-				
+				/*
+				 * header css 상세 부여
+				 * header: {
+				 * 		header: "",
+				 * 		headerTitle: "",
+				 * 		headerBtn: ""
+				 * }
+				 * */
 				"header": "",
 				"body": "",
 				"footer": ""
@@ -173,8 +212,9 @@ var modal_popup = function(url, data, opts){
 	if(options.modalSize != null && options.modalSize == "fs"){
 		mainModalFrameCss = modalSize;
 	}
+	
 	$("body").prepend(
-		'<div class="modal '+mainModalFrameCss+'" id="'+layerBoxDivId+'" role="dialog" tabIndex="-1" aria-labelledby="'+layerBoxDivId+'" aria-hidden="true" data-backdrop="'+options.backdrop+'" data-keyboard="'+options.keyboard+'" data-closeconfirm="'+options.closeConfirm+'" data-idkeyduple="'+options.idKeyDuple+'" data-idkey="'+options.idKey+'" data-focus="'+options.focus+'">'
+		'<div class="modal '+mainModalFrameCss+'" id="'+layerBoxDivId+'" role="dialog" tabIndex="-1" aria-labelledby="'+layerBoxDivId+'" aria-hidden="true" data-backdrop="'+options.backdrop+'" data-keyboard="'+options.keyboard+'" data-closeconfirm="'+options.closeConfirm+'" data-idkeyduple="'+options.idKeyDuple+'" data-idkey="'+options.idKey+'" data-focus="'+options.focus+'" data-draggable="'+options.draggable+'">'
 			+'<div class="modal-dialog modal-dialog-centered '+modalSize+'" role="document">'
 				+'<div class="modal-content">'
 					+'<div class="modal-header clearfix '+classHeader+'">'
@@ -188,6 +228,17 @@ var modal_popup = function(url, data, opts){
 			+'</div>'
 		+'</div>'
 	);
+	
+	//draggable 활성화 체크
+	if(options.draggable){
+		var dragObj = new Draggabilly( '#'+layerBoxDivId, {
+			handle: '.modal-header'
+		});
+		$('#'+layerBoxDivId).data('draggabilly', dragObj);
+		
+		//modal-header에 css 추가
+		$('#'+layerBoxDivId+' .modal-header').addClass("osl-modal__cursor--move");
+	}
 	
 	//로딩 바
 	var loadingShowVal = options.showLoading;
