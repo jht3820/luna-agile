@@ -503,6 +503,9 @@ label.required:after {
 	height:100%;
 	border-radius: 0;
 }
+.osl-modal__cursor--move {
+    cursor: move;
+}
 /* tree */
 .jstree-default .jstree-anchor {
     color: #2f2e38;

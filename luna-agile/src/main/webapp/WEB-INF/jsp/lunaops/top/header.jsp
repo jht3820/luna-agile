@@ -47,3 +47,5 @@
 		<!-- 언어 데이터 스크립트는 core보다 먼저 선언 -->
 		<script src="<c:url value='/js/osl/osl-lang.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/osl/osl-core.js'/>" type="text/javascript"></script>
+		<!-- Vanilla JS - DOM보다 먼저 선언 -->
+		<script src="<c:url value='/plugins/draggable/draggabilly.pkgd.js'/>" type="text/javascript"></script>
