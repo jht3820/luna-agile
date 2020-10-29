@@ -124,26 +124,8 @@ public class Prj1000Controller {
 			paramMap.put("prjGrpCd", "01");
 			
 			
-			
-			int totCnt = 0;
-			List<Map> dataList = null;
-			Map<String, Object> metaMap = null;
-			
-			
-			totCnt = prj1000Service.selectPrj1000PrjGrpListCnt(paramMap);
-
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-
-			
-			
-			dataList = (List) prj1000Service.selectPrj1000PrjGrpList(paramMap);
-			
-        	
+			/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -205,27 +187,8 @@ public class Prj1000Controller {
 			paramMap.put("prjGrpCd", "01");
 			
 			
-			
-			int totCnt = 0;
-			List<Map> dataList = null;
-			Map<String, Object> metaMap = null;
-			
-			
-			totCnt = prj1000Service.selectPrj1000PrjListCnt(paramMap);
-			
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-			
-			
-			
-			dataList = (List) prj1000Service.selectPrj1000PrjList(paramMap);
-			
-			List<Map> reqChartDataList = (List) req4100Service.selectReq4100ReqProTypeOrdList(paramMap);
-			
+			/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -269,13 +232,11 @@ public class Prj1000Controller {
 				paramMap.put("prjGrpCd", "01");
 				
 				
-				String prjGrpId = prj1000Service.insertPrj1000PrjGrpAjax(paramMap);
-				
-				
-				paramMap.put("prjId", prjGrpId);
 				paramMap.put("prjAuthTypeCd", "01");
 				paramMap.put("prjAuthTargetId", usrId);
-				prj1000Service.insertPrj1000PrjAuthInfo(paramMap);
+				
+				
+				prj1000Service.insertPrj1000PrjGrpAjax(paramMap);
 			}
 			
 			
@@ -327,26 +288,8 @@ public class Prj1000Controller {
 			
 			
 			
-			
-			int totCnt = 0;
-			List<Map> dataList = null;
-			Map<String, Object> metaMap = null;
-			
-			
-			totCnt = prj1000Service.selectPrj1000PrjAuthUsrListCnt(paramMap);
-
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-
-			
-			
-			dataList = (List) prj1000Service.selectPrj1000PrjAuthUsrList(paramMap);
-			
-        	
+			/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -403,26 +346,8 @@ public class Prj1000Controller {
     		
     		
     		
-    		
-    		int totCnt = 0;
-    		List<Map> dataList = null;
-    		Map<String, Object> metaMap = null;
-    		
-			
-			totCnt = prj1000Service.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
-			
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-			
-			
-			
-			dataList = (List) prj1000Service.selectPrj2100PrjAuthNoneUsrList(paramMap);
-			
-			
+    		/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			

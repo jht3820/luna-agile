@@ -48,22 +48,22 @@
 }
 
 .osl-d-flex{
-	display: -webkit-box !important;
-    display: -ms-flexbox !important;
-    display: flex !important;
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 .osl-flex-column{
-	-webkit-box-orient: vertical !important;
-    -webkit-box-direction: normal !important;
-    -ms-flex-direction: column !important;
-    flex-direction: column !important;
+	-webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 .osl-margin-r-auto{
-	margin-right: auto !important;
+	margin-right: auto;
 }
 .osl-flex-wrap{
-	-ms-flex-wrap: wrap !important;
-    flex-wrap: wrap !important;
+	-ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 .osl-flex-row-fluid{
 	-webkit-box-flex: 1;
@@ -132,7 +132,15 @@ input:-webkit-autofill,
 .osl-min-h-px--130 {
   min-height: 130px; 
 }
-
+.osl-min-h-px--410 {
+  min-height: 410px; 
+}
+.osl-min-h-px--220 {
+  min-height: 220px; 
+}
+.osl-min-h-px--335 {
+  min-height: 335px; 
+}
 
 .osl-font-lg {
   font-size: 1.1rem !important; 
@@ -286,6 +294,27 @@ select[id^=usrOpt_] {
 }
 .kt-media span{
 	background-color: #ebedf2;
+}
+
+
+.osl-auth-user--added {
+    opacity: 0.4;
+}
+.osl-auth-user--added > .kt-portlet {
+    background-color: #ccc;
+}
+.osl-textarea__resize--none{
+	resize:none;
+}
+.osl-drag-zone--over{
+	border:1px dashed #ccc;
+}
+.osl-card__data--empty {
+    display: flex;
+    flex: 1 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
 }
 
 @media (max-width: 1400px) and (min-width: 1025px){

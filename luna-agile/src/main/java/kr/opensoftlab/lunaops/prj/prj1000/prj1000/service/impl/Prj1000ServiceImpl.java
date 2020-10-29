@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -151,9 +152,41 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	}
 	
    	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1000PrjGrpAjax(Map paramMap) throws Exception{
-		return (String) prj1000DAO.insertPrj1000PrjGrpAjax(paramMap);
+		
+		
+		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+		
+		String prjGrpId = (String) prj1000DAO.insertPrj1000PrjGrpAjax(paramMap);
+
+		
+		paramMap.put("prjId", prjGrpId);
+		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String licGrpId = jsonObj.getString("licGrpId");
+				String usrId = jsonObj.getString("usrId");
+				
+				
+				if(!usrId.equals(prjAuthTargetId)) {
+					paramMap.put("licGrpId", licGrpId);
+					paramMap.put("prjAuthTargetId", usrId);
+					prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+				}
+			}
+		}
+		
+		
+		return prjGrpId;
 	}
    	
    	
@@ -412,7 +445,6 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 			    prj1100Service.insertPrj1100ProcessCopyInfo(processMapData);
 			}
 		}
-		
 		
 		
 		
