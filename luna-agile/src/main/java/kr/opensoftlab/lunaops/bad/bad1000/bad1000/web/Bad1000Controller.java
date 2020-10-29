@@ -27,17 +27,23 @@ import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
+
+
 @Controller
 public class Bad1000Controller {
+
+
 	
 	private static final Logger Log = Logger.getLogger(Bad1000Controller.class);
 
+	
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
 	
 	
 	@Resource(name = "bad1000Service")
 	private Bad1000Service bad1000Service;
+
 	
 	@Resource(name = "stm2100Service")
 	private Stm2100Service stm2100Service;
@@ -56,6 +62,7 @@ public class Bad1000Controller {
 			return "/bad/bad1000/bad1000/bad1000";
 	}
 	
+	
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "/bad/bad1000/bad1000/selectBad1000DsTypeGetAjax.do")
 	public ModelAndView selectBad1000DsTypeGetAjax(HttpServletRequest request, ModelMap model) throws Exception {
@@ -71,9 +78,7 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("menuId", (String) ss.getAttribute("selMenuId"));
 			
-			
 			Map stmInfo = stm2100Service.selectStm2100BadInfo(paramMap);
-
 			
 			model.addAttribute("menuId", paramMap.get("menuId"));
 			model.addAttribute("stmInfo", stmInfo);
@@ -103,8 +108,6 @@ public class Bad1000Controller {
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			
-			
 			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
@@ -214,10 +217,9 @@ public class Bad1000Controller {
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			
+
 			Map bad1001Info = bad1000Service.selectBad1000BadInfo(paramMap);
-			System.out.println("bad1001Info : "+ bad1001Info.entrySet());
-			
+
 			List<FileVO> fileList = null;
 			
 			int fileCnt = 0;
@@ -285,6 +287,7 @@ public class Bad1000Controller {
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+	
 			
 			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
 			
@@ -323,6 +326,8 @@ public class Bad1000Controller {
 			
 			fileMngService.insertFileDetail(_result);  
 			
+			
+			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
 		}
@@ -351,7 +356,10 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("usrId", loginVO.getUsrId());
 			
+			
+			
 			bad1000Service.insertBad1000Badinfo(paramMap);
+			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
@@ -379,6 +387,7 @@ public class Bad1000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 
+			
 			bad1000Service.updateBad1000BadInfo(paramMap);
 			
 			
@@ -436,12 +445,6 @@ public class Bad1000Controller {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			
 			
 			bad1000Service.updateBad1000BadRestore(paramMap);
 			

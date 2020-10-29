@@ -95,8 +95,6 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	}
 	
 	
-	
-	
 	@SuppressWarnings("rawtypes")
 	public void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception{
 		delete("prj1000DAO.deletePrj1000PrjGrpAjax", paramMap);
@@ -150,5 +148,11 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	@SuppressWarnings("rawtypes")
 	public String insertPrj1000PrjWizardAjax(Map paramMap) throws Exception{
 		return (String) insert("prj1000DAO.insertPrj1000PrjWizardAjax", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception{
+		return (String) insert("prj1000DAO.insertPrj1000PrjAuthInfo", paramMap);
 	}
 }

@@ -182,6 +182,12 @@ public class Req4100DAO extends ComOslitsAbstractDAO {
 	}
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Map> selectReq4100ReqProTypeOrdList(Map paramMap) throws Exception {
+		return (List<Map>) list("req4100DAO.selectReq4100ReqProTypeOrdList",paramMap);
+	}
+	
+	
 	@SuppressWarnings("rawtypes")
 	public Map selectReq4110ReqInfo(Map paramMap) throws Exception {
 		return (Map) select("req4100DAO.selectReq4110ReqInfo", paramMap);

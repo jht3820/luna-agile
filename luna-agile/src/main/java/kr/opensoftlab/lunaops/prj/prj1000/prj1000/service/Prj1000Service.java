@@ -74,4 +74,8 @@ public interface Prj1000Service {
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1000WizardProject(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception;
 }

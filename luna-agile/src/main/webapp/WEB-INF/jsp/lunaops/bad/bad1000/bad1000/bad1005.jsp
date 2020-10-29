@@ -4,14 +4,8 @@
 <form class="kt-form" id="bad1005Info">
 	<div class="kt-portlet kt-portlet--mobile">
 		<input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd}" /> 
-		<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
 		<input type="hidden" name="deleteDataList" id="deleteDataList" value='${param.deleteDataList }' /> 
 		<input type="hidden" name="menuRootYn" id="menuRootYn" value="${param.menuRootYn }" /> 
-		<input type="hidden" name="badId" id="badId" value="${param.badId }" /> 
-		<input type="hidden" name="atchFileId" id="atchFileId" value="${param.atchFileId }" /> 
-		<input type="hidden" name="badCmtId" id="badCmtId" value="${param.badCmtId }" /> 
-		<input type="hidden" name="badCmtPrjGrpId" id="badCmtPrjGrpId" value="${param.prjGrpId }" /> 
-		<input type="hidden" name="badCmtPrjId" id="badCmtPrjId" value="${param.prjId }" /> 
 		<div class="kt-portlet__body">
 			<div class="form-group">
 				<label class="required">삭제 유형</label>
@@ -71,12 +65,13 @@ var OSLBad1005Popup = function () {
     		
     		//메뉴에서 삭제를 누른 것이 아니라면(상세보기에서 게시글 삭제 클릭 시)
     		if(menuRootYn=="N"){
+    			var rowData = JSON.parse($("#deleteDataList").val());
     		 	//메뉴에서 접근을 안할 경우 사용할 deleteDataList
     		 	//seviceImple에서 JSONArray로 parse하므로 [] 형태로 감쌀것.
     		 	var delList = [{
-    		 		menuId : $("#menuId").val(),
-            		badId : $("#badId").val(),
-            		atchFileId : $("#atchFileId").val(),
+    		 		menuId : rowData.menuId,
+            		badId : rowData.badId,
+            		atchFileId : rowData.atchFileId,
     		 	}];
     		 	
 	    		$("#deleteDataList").val(JSON.stringify(delList));
