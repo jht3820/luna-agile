@@ -112,6 +112,7 @@ var modal_popup = function(url, data, opts){
 	
 	var defaultOptions = {
 			modalSize: 'lg',
+			fitScreen: true,
 			backdrop: true,
 			keyboard: true, 
 			showLoading: true,
@@ -181,10 +182,15 @@ var modal_popup = function(url, data, opts){
 		mainModalFrameCss = modalSize;
 	}
 	
+	
+	if(options.fitScreen){
+		modalContentClass = "osl-modal__screen--fit";
+	}
+	
 	$("body").prepend(
 		'<div class="modal '+mainModalFrameCss+'" id="'+layerBoxDivId+'" role="dialog" tabIndex="-1" aria-labelledby="'+layerBoxDivId+'" aria-hidden="true" data-backdrop="'+options.backdrop+'" data-keyboard="'+options.keyboard+'" data-closeconfirm="'+options.closeConfirm+'" data-idkeyduple="'+options.idKeyDuple+'" data-idkey="'+options.idKey+'" data-focus="'+options.focus+'" data-draggable="'+options.draggable+'">'
 			+'<div class="modal-dialog modal-dialog-centered '+modalSize+'" role="document">'
-				+'<div class="modal-content">'
+				+'<div class="modal-content '+modalContentClass+'">'
 					+'<div class="modal-header clearfix '+classHeader+'">'
 						+'<h5 class="modal-title kt-font-boldest '+classHeaderTitle+'">'+modalTitle+'</h5>'
 						+'<button type="button" class="close '+classHeaderBtn+'" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i></button>&nbsp;'
