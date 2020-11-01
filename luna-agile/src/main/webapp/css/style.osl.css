@@ -996,14 +996,6 @@ label.required:after {
 	border-radius: 4px;
 	padding: 15px;
 }
-.osl-bad-columns-2__left{
-	width: 50%;
-	padding: 5px;
-}
-.osl-bad-columns-2__right{
-	width: 50%;
-	padding: 5px;
-}
 .osl-card__prjnm{
 		padding: 10px 20px;
 	}
@@ -1096,6 +1088,37 @@ label.required:after {
 .osl-arrow-group--hide{
 	display: none;
 }
+.osl-max-height--260{
+	max-height: 260px;
+}
+
+.osl-min-height--150{
+	min-height: 150px;
+}
+.osl-display--inline-flex{
+	display: inline-flex;
+}
+.osl-font-size--1_5{
+	font-size: 1.5em;
+}
+.osl-border-b--dedede{
+	border: 1px solid #dedede;
+}
+.osl-line-height--32{
+	line-height: 32px;
+}
+.osl-margin-3{
+	margin: 3px;
+}
+.osl-height--240{
+	height: 240px;
+}
+.osl-height--480{
+	height: 480px;
+}
+.osl-font-xs{
+	font-size: 0.5rem;
+}
 @media (max-width: 1400px){
 	.osl-bad__width__100{
 		width:300px !important; 
@@ -1125,6 +1148,11 @@ label.required:after {
 	.osl-stm__portlet .flex-flow--row--reverse>.osl-left-arrow-group{
 		border-left: 1px solid #ebedf2;
 		border-right: none;
+	}
+	
+	/* 창 크기 1400이하인 경우 */
+	.osl-1400-desktop-padding-0{
+		padding: 0;
 	}
 }
 @media (max-width: 1024px){

@@ -19,7 +19,7 @@ img {
 	<div class="card">
 		<div class="card-header kt-font-bolder">
 			<!-- 제목 -->
-			<div class="kt-padding-t-10 kt-padding-b-15" name="badTitleDiv" id="badTitleDiv" style="font-size:1.5em; border-bottom: 1px solid #dedede;"></div>
+			<div class="kt-padding-t-10 kt-padding-b-15 osl-font-size--1_5 osl-border-b--dedede" name="badTitleDiv" id="badTitleDiv"></div>
 			<!-- 작성자, 작성일, 조회수 -->
 			<div class="osl-portlet__head-label kt-margin-t-10">
 				<div class="kt-padding-5 osl-padding-b-6__5" name="writerDiv" id="writerDiv"  data-badUsrId=''></div>
@@ -41,7 +41,7 @@ img {
 				</button>
 			</div>
 			<!-- 내용 -->
-			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20" style="min-height: 150px;" name="badContentDiv" id="badContentDiv"></div>
+			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20 osl-min-height--150" name="badContentDiv" id="badContentDiv"></div>
 			<!-- 첨부파일 목록 -->
 			<div class="form-group kt-margin-20 kt-hide" name="badFileOption" id="badFileOption">
 				<hr class="kt-margin-t-20 kt-margin-b-20">
@@ -65,9 +65,9 @@ img {
 	</div>
 	<!-- 댓글 리스트 -->
 	<div class="card kt-margin-t-10"  name="badCmtDiv" id="badCmtDiv">
-		<div class="card-header kt-font-bolder" style="line-height: 32px">
+		<div class="card-header kt-font-bolder osl-line-height--32">
 			<i class="fa flaticon-chat-1 kt-margin-r-5"></i><span data-lang-cd="bad1001.label.comment">댓글</span>
-			<div class="kt-portlet__head-toolbar" style="float:right; align-items:''; ">
+			<div class="kt-portlet__head-toolbar float-right">
 				<!-- 댓글 조회/삭제 -->
 				<div class="kt-widget__wrapper" name="badCmtBtnDiv" id="badCmtBtnDiv">
 					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1001CmtTable" data-datatable-action="select" title="댓글 조회" data-title-lang-cd="bad1001.actionBtn.selectComment" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
@@ -184,7 +184,7 @@ var OSLBad1001Popup = function () {
 						, search:true},
 				 {field: 'badCmtContent', title:$.osl.lang("bad1001.field.comment.content"), textAlign: 'left', width:740, autoHide: false, search:true,
 					template:function(row){
-						var returnStr = "<span class='cmtTxt' style='word-break: break-word;'>"+$.osl.escapeHtml(row.badCmtContent)+"</span>";
+						var returnStr = "<span class='cmtTxt text-break'>"+$.osl.escapeHtml(row.badCmtContent)+"</span>";
 						return returnStr;
 					}			
 				 },
@@ -515,7 +515,7 @@ var OSLBad1001Popup = function () {
 					$.each(tagList, function(idx, value){
 						// 태그 리스트 출력 작성하기
 						var innerHtml = "";
-	                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-padding-5' style='display: inline-flex; margin: 3px;' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
+	                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-padding-5 osl-display--inline-flex osl-margin-3' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
 	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5 kt-margin-r-5'>#"+$.osl.escapeHtml(value)+"</div></div></tag>";
 	                	
 	                	$("#tagListDiv").append(innerHtml);

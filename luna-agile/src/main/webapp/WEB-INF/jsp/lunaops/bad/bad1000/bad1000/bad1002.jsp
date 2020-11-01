@@ -17,9 +17,9 @@
 			<div class="kt-portlet__head-label col-6 row" name="writerDiv" id="writerDiv"></div>
 		</div>
 		<div class="kt-portlet__body">
-			<div class="row">
+			<div class="row kt-margin-0">
 				<!-- left -->
-				<div class="osl-bad-columns-2__left" name="leftDiv" id="leftDiv">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
 					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1002.label.title">제목</span></label>
 						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<!-- right -->
-				<div class="osl-bad-columns-2__right" name="rightDiv" id="rightDiv">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 osl-1400-desktop-padding-0" name="rightDiv" id="rightDiv">
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
@@ -42,8 +42,14 @@
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1002.label.noticeDate">공지 기간</span></label>
-					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
+					 		<div class="input-group">
+					 			<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
+					 			<div class="input-group-append">
+				 					<span class="input-group-text kt-bg-brand">
+				 						<i class="la la-calendar-check-o kt-font-light"></i>
+				 					</span>
+				 				</div>
+				 			</div>
 				 		</div>
 				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
@@ -61,13 +67,21 @@
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
-				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1002.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+				 		<div class="from-group row">
+					 		<label class='col-3 col-form-label kt-padding-r-0 input-group-addon required' >
+					 			<span data-lang-cd="bad1002.label.password">PW</span>
+					 		</label>
+					 		<div class="col-9">
+				 				<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+				 			</div>
 				 		</div>
-				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+				 		<div class="from-group row kt-margin-t-10">
+					 		<label class='col-3 col-form-label kt-padding-r-0 input-group-addon required'>
+					 			<span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span>
+					 		</label>
+					 		<div class="col-9">
+				 				<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+			 				</div>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
@@ -82,7 +96,7 @@
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
 							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attchFile">파일 첨부</span>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height:260px;" name="bad1002FileUpload" id="bad1002FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height--260" name="bad1002FileUpload" id="bad1002FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -416,7 +430,7 @@ var OSLBad1002Popup = function () {
            	                // 태그 중복 검사
            	                if (result.length == 0) { 
            	                	var innerHtml = "";
-           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
            	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
            	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>#"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
            	                	
@@ -447,7 +461,7 @@ var OSLBad1002Popup = function () {
        	                // 태그 중복 검사
        	                if (result.length == 0) { 
        	                	var innerHtml = "";
-       	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+       	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
        	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
        	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
        	                	
