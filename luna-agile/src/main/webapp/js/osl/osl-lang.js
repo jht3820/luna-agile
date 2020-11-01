@@ -386,7 +386,7 @@ var OSLCoreLangSetting = function () {
 				updateSubmit : "수정 완료",
 			}
 		},
-		stm2103:{
+		stm2102:{
 			summery:{
 				noticeCntY: "공지사항 수 : ${1} 건",
 				noticeCntN: "공지사항 수 : 없음",
@@ -980,7 +980,7 @@ var OSLCoreLangSetting = function () {
 				updateSubmit : "Update Setting",
 			}
 		},
-		stm2103:{
+		stm2102:{
 			summery:{
 				noticeCntY: "Notice Count : ${1}",
 				noticeCntN: "Notice Count : -",
