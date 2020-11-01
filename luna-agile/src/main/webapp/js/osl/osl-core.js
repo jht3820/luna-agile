@@ -104,6 +104,22 @@
 			var contentExist = $("#kt_content");
 			
 			
+			$(document).keydown(function(event) {
+				
+				if ( event.keyCode == 113 || event.which == 113 ) {
+					var modalList = $(".modal");
+					$.each(modalList, function(idx, map){
+						var dragObj = $(map).data("draggabilly");
+						
+						if(!$.osl.isNull(dragObj)){
+							
+							dragObj.setPosition(0,0);
+						}
+					});
+				}
+			});
+			
+			
 			if(!$.osl.isNull(headerExist) && headerExist.length > 0){
 				
 				$.osl.initHeaderClear();
@@ -185,52 +201,6 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
-					locale:Uppy.locales.ko_KR,
-					meta: {},
-					onBeforeUpload: $.noop,
-					onBeforeFileAdded: $.noop,
-				};
-				
-				
-				config = $.extend(true, defaultConfig, config);
-				
-				var targetObj = $("#"+targetId);
-				if(targetObj.length > 0){
-					rtnObject = Uppy.Core({
-						targetId: targetId,
-						autoProceed: config.autoProceed,
-						restrictions: {
-							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
-							maxNumberOfFiles: config.maxNumberOfFiles,
-							minNumberOfFiles: config.minNumberOfFiles,
-							allowedFileTypes: config.allowedFileTypes
-						},
-						locale:config.locale,
-						meta: config.meta,
-						onBeforeUpload: function(files){
-							return config.onBeforeUpload(files);
-						},
-						onBeforeFileAdded: function(currentFile, files){
-							
-							if(currentFile.source != "database" && config.fileReadonly){
-								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
-								return false;
-							}
-							return config.onBeforeFileAdded(currentFile, files);
-						},
-						debug: config.debug,
-						logger: config.logger,
-						fileDownload: config.fileDownload
-					});
-					
-					rtnObject.use(Uppy.Dashboard, config);
-					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
-				}
-				
-				return rtnObject;
-			},
-			
-			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -833,7 +803,7 @@
 			
 			
 			if($.osl.isNull(langId)){
-				return ""
+				return "";
 			}
 			
 			
@@ -857,6 +827,11 @@
 					}
 				});
 			}catch(e){
+			}
+			
+			
+			if($.osl.isNull(rtnLangStr)){
+				return "";
 			}
 			
 			
@@ -1077,7 +1052,7 @@
 		        			$.osl.user.usrOptData = usrOptData;
 		        		}
 		        		
-	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        	}
         			
         			if(!$.osl.isNull(data.langList)){
@@ -1922,8 +1897,8 @@
 											+'<span class="kt-input-icon__icon kt-input-icon__icon--right">'
 												+'<span><i class="la"></i></span>'
 											+'</span>'
-											+'<input type="hidden" name="searchStartDt" id="searchStartDt" data-datatable-id="'+elemId+'">'
-											+'<input type="hidden" name="searchEndDt" id="searchEndDt" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchStartDt" id="searchStartDt_'+elemId+'" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchEndDt" id="searchEndDt_'+elemId+'" data-datatable-id="'+elemId+'">'
 										+'</div>'
 										+'<div class="input-group-append">'
 											+'<button class="btn '+btnStyleStr+' osl-datatable-search__button" type="button" data-datatable-id="'+elemId+'">'
@@ -1995,8 +1970,8 @@
 								selectBtn[0].click();
 							}else{
 								
-								datatables[targetId].targetDt.setDataSourceParam("pagination.page",1);
-								datatables[targetId].targetDt.reload();
+								datatables.targetDt.setDataSourceParam("pagination.page",1);
+								datatables.targetDt.reload();
 							}
 						},
 						"select-input":function(targetObj){
@@ -2059,14 +2034,18 @@
 					
 					inputHandle: function(elemId, searchFieldId, searchType, searchCd){
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						var searchDataTarget = $(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]");
 						
-						$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						searchDataTarget.val('');
 						
-						$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						$.osl.date.datepicker(searchDataTarget,"destroy");
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val('');
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val('');
+						$.osl.date.daterangepicker(searchDataTarget,"destroy");
+						
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						
+						searchDataTarget.off('keypress');
 						
 						if(searchType == "select"){
 							
@@ -2075,7 +2054,7 @@
 							];
 
 			        		
-		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        			
 		        			
 		        			searchEvt.action["layout-clean"](elemId,searchType);
@@ -2104,13 +2083,13 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, selected){
+							$.osl.date.datepicker(searchDataTarget, {}, function(defaultConfig, selected){
 								var minDate = new Date(selected.date).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(selected.date).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2122,14 +2101,14 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, start, end, label){
+							$.osl.date.daterangepicker(searchDataTarget, {}, function(defaultConfig, start, end, label){
 								
 								var minDate = new Date(start).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(end).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2141,8 +2120,40 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,false);
 							
 							
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").off('keypress');
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").on('keypress', function(e) {
+							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
+							var fieldData = datatableInfo.getColumnByField(fieldId);
+							
+							
+							if($.osl.isNull(fieldData)){
+								if(datatableInfo.options.hasOwnProperty("searchColumns") && datatableInfo.options.searchColumns.length > 0){
+									$.each(datatableInfo.options.searchColumns, function(idx, map){
+										if(fieldId == map.field){
+											fieldData = map;
+											return false;
+										}
+									});
+								}
+							}
+							if(!$.osl.isNull(fieldData)){
+								
+								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
+									var keyCode = fieldData["searchKeyCode"];
+									var keyEvt = fieldData["searchKeyEvt"];
+									
+									
+									if(!$.osl.isNull(keyCode) && keyCode != 13 && typeof keyEvt == "function"){
+										
+										searchDataTarget.on('keypress', function(e) {
+											if (e.which == keyCode){
+												keyEvt(e, datatableInfo, searchDataTarget);
+											}
+										});
+									}
+								}
+							}	
+							
+							
+							searchDataTarget.on('keypress', function(e) {
 								if (e.which === 13){
 									var thisObj = $(this);
 									var thisObjIcon = thisObj.siblings("span").find("i.la");
@@ -2268,7 +2279,11 @@
 							
 							reloaded: $.noop,
 							
-							sort: $.noop
+							sort: $.noop,
+							
+							perpage: $.noop,
+							
+							gotoPage: $.noop
 						}
 					};
 					
@@ -2406,46 +2421,49 @@
 					}
 					
 					
-					targetConfig = $.extend(true, targetConfig, {
-						data:{
-							source:{
-								read:{
-									params: {
-										dtParamPrjGrpId: $.osl.selPrjGrpId,
-										dtParamPrjId: $.osl.selPrjId,
-										dtParamAuthGrpId: $.osl.selAuthGrpId,
-										searchTargetId: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
-										},
-										searchTargetType: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-										},
-										searchTargetData: function(){
-											var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-											var searchTargetData;
-											if(searchTargetType == "select"){
-												searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
+					if(targetConfig.data.type != 'local'){
+						
+						targetConfig = $.extend(true, targetConfig, {
+							data:{
+								source:{
+									read:{
+										params: {
+											dtParamPrjGrpId: $.osl.selPrjGrpId,
+											dtParamPrjId: $.osl.selPrjId,
+											dtParamAuthGrpId: $.osl.selAuthGrpId,
+											searchTargetId: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
+											},
+											searchTargetType: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+											},
+											searchTargetData: function(){
+												var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+												var searchTargetData;
+												if(searchTargetType == "select"){
+													searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
+												}
+												else if(searchTargetType == "all"){ 
+													searchTargetData = null;
+												}
+												else{
+													searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
+												}
+												
+												return searchTargetData;
+											},
+											searchStartDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt_"+targetId+"").val();
+											},
+											searchEndDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt_"+targetId+"").val();
 											}
-											else if(searchTargetType == "all"){ 
-												searchTargetData = null;
-											}
-											else{
-												searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
-											}
-											
-											return searchTargetData;
-										},
-										searchStartDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt").val();
-										},
-										searchEndDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt").val();
 										}
 									}
 								}
 							}
-						}
-					});
+						});
+					}
 
 					
 					if(searchColumns.length > 0){
@@ -2463,17 +2481,28 @@
 					
 					var datatableInfo = $(ktDatatableTarget).KTDatatable(targetConfig);
 					
+					
 					$(ktDatatableTarget).on("kt-datatable--on-ajax-done",function(evt,list){
 						targetConfig.callback.ajaxDone(evt.target, list, datatableInfo);
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-init",function(evt,config){
 						targetConfig.callback.initComplete(evt.target, config, datatableInfo);
 					});
 					
+					
 					$(ktDatatableTarget).on("kt-datatable--on-reloaded",function(evt,config){
 						targetConfig.callback.reloaded(evt.target, config, datatableInfo);
 					});
+					
+					$(ktDatatableTarget).on("kt-datatable--on-update-perpage",function(evt,args){
+						targetConfig.callback.perpage(evt.target, args, datatableInfo);
+					});
+					$(ktDatatableTarget).on("kt-datatable--on-goto-page",function(evt,args){
+						targetConfig.callback.gotoPage(evt.target, args, datatableInfo);
+					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-sort",function(evt,data){
 						
@@ -2544,7 +2573,7 @@
 				
 				$.fn.datepicker.dates['ko'] = $.osl.lang("date.datepicker");
 				
-				moment.defineLocale('fr', $.osl.lang("date.moment"));
+				moment.updateLocale('fr', $.osl.lang("date.moment"));
 			}
 			
 			,datepicker: function(targetObj, config, callback){
@@ -2791,7 +2820,7 @@
 				var returnStr = 
 					'<div class="kt-user-card-v2 btn '+cardBtn+'">'
 						+'<div class="kt-user-card-v2__pic kt-media '+imgSize+' kt-media--circle '+cardPic+'">'
-							+'<img class=" '+usrImg+'" src="'+usrImgId+'"/>'
+							+'<img class=" '+usrImg+'" src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 						+'</div>'
 						+'<div class="kt-user-card-v2__details '+cardDetail+'">'
 							+'<span class="kt-user-card-v2__name '+cardName+'">'+cardContent+'</span>'
@@ -2933,7 +2962,7 @@
 		this.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 		
 		
-		this.async = "true";
+		this.async = true;
 		
 		
 		this.cache = "true";
