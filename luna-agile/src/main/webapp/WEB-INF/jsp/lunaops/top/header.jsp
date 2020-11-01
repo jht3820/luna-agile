@@ -26,24 +26,21 @@
 		<link href="<c:url value='/plugins/custom/uppy/uppy.bundle.css'/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value='/plugins/custom/jstree/jstree.bundle.css'/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value='/plugins/apexcharts/apexcharts.css'/>" rel="stylesheet" type="text/css" />
+		<link href="<c:url value='/plugins/dragula/dragula.css'/>" rel="stylesheet" type="text/css" />
 		
 		<!--end::Page Vendors Styles -->
 
 		<!--begin::Global Theme Styles(used by all pages) -->
-		<link href="<c:url value='/plugins/global/plugins.bundle.css'/>" rel="stylesheet" type="text/css" />
-		<link href="<c:url value='/css/style.bundle.css'/>" rel="stylesheet" type="text/css" />
 
 		<!--end::Global Theme Styles -->
 
 		<!--begin::Layout Skins(used by all pages) -->
-		<link href="<c:url value='/css/skins/header/navy.css'/>" rel="stylesheet" type="text/css" />
 
 		<!--end::Layout Skins -->
 		<link rel="shortcut icon" href="<c:url value='/media/logos/favicon.ico'/>" />
 
 		<!-- OSL Custom Css -->
 		<link href="<c:url value='/css/style.osl.css'/>" rel="stylesheet" type="text/css" />
-		<script src="<c:url value='/plugins/global/plugins.bundle.js'/>" type="text/javascript"></script>
 		<!-- 언어 데이터 스크립트는 core보다 먼저 선언 -->
 		<script src="<c:url value='/js/osl/osl-lang.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/osl/osl-core.js'/>" type="text/javascript"></script>
