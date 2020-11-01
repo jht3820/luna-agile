@@ -1808,7 +1808,7 @@
 							});
 							
 							
-							$(row).off("click");
+							
 							$(row).click(function(event){
 								
 								if($(event.target.parentElement).hasClass("kt-checkbox") || $(event.target.parentElement).hasClass("kt-datatable__toggle-detail")){
@@ -2224,8 +2224,34 @@
 						},
 						rows:{
 							afterTemplate: function(row, data, index){
+
+								
+								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+									
+									if(config.rows.clickCheckbox == true){
+										
+										row.click(function(){
+											var targetRow = $(this).closest("tr");
+											var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+											
+											if(targetElem.is(":checked") == true){
+												targetElem.prop("checked", false);
+												datatables.targetDt.setInactive(targetElem);
+												
+												targetRow.removeClass("osl-datatable__row--selected");
+												targetRow.addClass("kt-datatable__row--even");
+											}else{
+												targetElem.prop("checked", true);
+												datatables.targetDt.setActive(targetElem);
+											}
+											
+										});
+									}
+								}
+								
 								btnEvt["info"](row);
-							}
+							},
+							clickCheckbox: false
 						},
 						sortable: true,
 						pagination: true,
