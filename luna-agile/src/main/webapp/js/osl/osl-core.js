@@ -2124,6 +2124,9 @@
 							var fieldData = datatableInfo.getColumnByField(fieldId);
 							
 							
+							var enterKeyPressFlag = true;
+							
+							
 							if($.osl.isNull(fieldData)){
 								if(datatableInfo.options.hasOwnProperty("searchColumns") && datatableInfo.options.searchColumns.length > 0){
 									$.each(datatableInfo.options.searchColumns, function(idx, map){
@@ -2141,27 +2144,42 @@
 									var keyEvt = fieldData["searchKeyEvt"];
 									
 									
-									if(!$.osl.isNull(keyCode) && keyCode != 13 && typeof keyEvt == "function"){
+									if(!$.osl.isNull(keyCode) && typeof keyEvt == "function"){
+										
+										if(keyCode == 13){
+											enterKeyPressFlag = false;
+										}
 										
 										searchDataTarget.on('keypress', function(e) {
 											if (e.which == keyCode){
-												keyEvt(e, datatableInfo, searchDataTarget);
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
+											}
+											
+											else if(keyCode == -1){
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
 											}
 										});
 									}
 								}
-							}	
-							
-							
-							searchDataTarget.on('keypress', function(e) {
-								if (e.which === 13){
-									var thisObj = $(this);
-									var thisObjIcon = thisObj.siblings("span").find("i.la");
-									
-									
-									searchEvt.action["select-input"](thisObjIcon);
-								}
-							});
+							}
+							if(enterKeyPressFlag){
+								
+								searchDataTarget.on('keypress', function(e) {
+									if (e.which === 13){
+										var thisObj = $(this);
+										var thisObjIcon = thisObj.siblings("span").find("i.la");
+										
+										
+										searchEvt.action["select-input"](thisObjIcon);
+									}
+								});
+							}
 						}
 					}
 				}
@@ -2535,13 +2553,13 @@
 								targetObj.off("click");
 								targetObj.click(function(event){
 									
-									event.cancelable = true;
-									event.stopPropagation();
-									event.preventDefault();
-									event.returnValue = false;
-									
-									
 									if(typeof map.onclick == "function"){
+										
+										event.cancelable = true;
+										event.stopPropagation();
+										event.preventDefault();
+										event.returnValue = false;
+										
 										var rowNum = $(this).parent("tr").data("row");
 										var rowData = null;
 										try{
