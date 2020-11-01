@@ -201,6 +201,52 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -2034,14 +2080,18 @@
 					
 					inputHandle: function(elemId, searchFieldId, searchType, searchCd){
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						var searchDataTarget = $(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]");
 						
-						$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						searchDataTarget.val('');
 						
-						$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						$.osl.date.datepicker(searchDataTarget,"destroy");
+						
+						$.osl.date.daterangepicker(searchDataTarget,"destroy");
 						
 						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
 						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						
+						searchDataTarget.off('keypress');
 						
 						if(searchType == "select"){
 							
@@ -2079,7 +2129,7 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, selected){
+							$.osl.date.datepicker(searchDataTarget, {}, function(defaultConfig, selected){
 								var minDate = new Date(selected.date).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(selected.date).format("yyyy-MM-dd 23:59:59");
 								
@@ -2097,7 +2147,7 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, start, end, label){
+							$.osl.date.daterangepicker(searchDataTarget, {}, function(defaultConfig, start, end, label){
 								
 								var minDate = new Date(start).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(end).format("yyyy-MM-dd 23:59:59");
@@ -2116,8 +2166,29 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,false);
 							
 							
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").off('keypress');
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").on('keypress', function(e) {
+							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
+							var fieldData = datatableInfo.getColumnByField(fieldId);
+							
+							if(!$.osl.isNull(fieldData)){
+								
+								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
+									var keyCode = fieldData["searchKeyCode"];
+									var keyEvt = fieldData["searchKeyEvt"];
+									
+									
+									if(!$.osl.isNull(keyCode) && keyCode != 13 && typeof keyEvt == "function"){
+										
+										searchDataTarget.on('keypress', function(e) {
+											if (e.which == keyCode){
+												keyEvt();
+											}
+										});
+									}
+								}
+							}	
+							
+							
+							searchDataTarget.on('keypress', function(e) {
 								if (e.which === 13){
 									var thisObj = $(this);
 									var thisObjIcon = thisObj.siblings("span").find("i.la");
@@ -3007,7 +3078,7 @@
 			    		obj.fnbeforeSend();
 			        },
 			        success: function(data, status, xhr) {
-			        	xhr: window.XMLHttpRequest ? 
+			        	xhr:window.XMLHttpRequest ? 
 						function() { return new window.XMLHttpRequest(); } : 
 						function() { 
 						    try { return new window.ActiveXObject("Microsoft.XMLHTTP"); } 
