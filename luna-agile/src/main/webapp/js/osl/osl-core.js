@@ -201,52 +201,6 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
-					locale:Uppy.locales.ko_KR,
-					meta: {},
-					onBeforeUpload: $.noop,
-					onBeforeFileAdded: $.noop,
-				};
-				
-				
-				config = $.extend(true, defaultConfig, config);
-				
-				var targetObj = $("#"+targetId);
-				if(targetObj.length > 0){
-					rtnObject = Uppy.Core({
-						targetId: targetId,
-						autoProceed: config.autoProceed,
-						restrictions: {
-							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
-							maxNumberOfFiles: config.maxNumberOfFiles,
-							minNumberOfFiles: config.minNumberOfFiles,
-							allowedFileTypes: config.allowedFileTypes
-						},
-						locale:config.locale,
-						meta: config.meta,
-						onBeforeUpload: function(files){
-							return config.onBeforeUpload(files);
-						},
-						onBeforeFileAdded: function(currentFile, files){
-							
-							if(currentFile.source != "database" && config.fileReadonly){
-								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
-								return false;
-							}
-							return config.onBeforeFileAdded(currentFile, files);
-						},
-						debug: config.debug,
-						logger: config.logger,
-						fileDownload: config.fileDownload
-					});
-					
-					rtnObject.use(Uppy.Dashboard, config);
-					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
-				}
-				
-				return rtnObject;
-			},
-			
-			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -2169,6 +2123,17 @@
 							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
 							var fieldData = datatableInfo.getColumnByField(fieldId);
 							
+							
+							if($.osl.isNull(fieldData)){
+								if(datatableInfo.options.hasOwnProperty("searchColumns") && datatableInfo.options.searchColumns.length > 0){
+									$.each(datatableInfo.options.searchColumns, function(idx, map){
+										if(fieldId == map.field){
+											fieldData = map;
+											return false;
+										}
+									});
+								}
+							}
 							if(!$.osl.isNull(fieldData)){
 								
 								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
@@ -2180,7 +2145,7 @@
 										
 										searchDataTarget.on('keypress', function(e) {
 											if (e.which == keyCode){
-												keyEvt();
+												keyEvt(e, datatableInfo, searchDataTarget);
 											}
 										});
 									}
@@ -3078,7 +3043,7 @@
 			    		obj.fnbeforeSend();
 			        },
 			        success: function(data, status, xhr) {
-			        	xhr:window.XMLHttpRequest ? 
+			        	xhr: window.XMLHttpRequest ? 
 						function() { return new window.XMLHttpRequest(); } : 
 						function() { 
 						    try { return new window.ActiveXObject("Microsoft.XMLHTTP"); } 

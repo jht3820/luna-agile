@@ -32,11 +32,8 @@ import kr.opensoftlab.sdf.util.RequestConvertor;
 @Controller
 public class Bad1000Controller {
 
-
-	
 	private static final Logger Log = Logger.getLogger(Bad1000Controller.class);
 
-	
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
 	
@@ -110,6 +107,12 @@ public class Bad1000Controller {
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			
+			if("tagNm".equals(paramMap.get("searchTargetId"))) {
+				
+				paramMap.put("searchTargetId", paramMap.get("searchTargetId").replace("#", ""));
+			}
 			
 			
 			
@@ -222,13 +225,7 @@ public class Bad1000Controller {
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
-			
-			
-			
-			
 			Map bad1001Info = bad1000Service.selectBad1000BadInfo(paramMap);
-
-			
 			
 			List<FileVO> fileList = null;
 			
@@ -250,10 +247,8 @@ public class Bad1000Controller {
 				}
 			}
 			
-			
 			List<String> bad1001TagList = bad1000Service.selectBad1000BadTagList(paramMap);
 
-			
 			model.addAttribute("bad1001Info", bad1001Info);
 			if(fileList != null) {
 				model.addAttribute("bad1001FileList", fileList);
@@ -262,7 +257,6 @@ public class Bad1000Controller {
 			if(bad1001TagList != null) {
 				model.addAttribute("bad1001Tag", bad1001TagList);
 			}
-			
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
@@ -298,12 +292,9 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 	
-			
 			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
 			
 			model.addAttribute("badInfo", stm2100Info); 
-						
-			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
 	
@@ -333,10 +324,7 @@ public class Bad1000Controller {
 			
 			List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,atchFileId,Integer.parseInt(fileSn),"Req");
 			
-			
 			fileMngService.insertFileDetail(_result);  
-			
-			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
@@ -455,12 +443,6 @@ public class Bad1000Controller {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-
-
-
-			
 			
 			bad1000Service.updateBad1000BadRestore(paramMap);
 			
