@@ -82,7 +82,7 @@
 					<c:if test="${param.type != 'insert' }">
 						<div class="osl-datatable-search" data-datatable-id="prj1002PrjAuthUsrTable"></div>
 					</c:if>
-					<div class="osl-d-flex osl-flex-wrap osl-min-h-px--335 kt-padding-t-10 kt-padding-b-10" id="prj1002PrjAuthUsrTableCard" data-datatable-id="prj1002PrjAuthUsrTable">
+					<div class="osl-d-flex osl-flex-wrap osl-min-h-px--300 kt-padding-t-10 kt-padding-b-10" id="prj1002PrjAuthUsrTableCard" data-datatable-id="prj1002PrjAuthUsrTable">
 						<div class="osl-card__data--empty"><span data-lang-cd="datatable.translate.records.noRecords">데이터가 없습니다.</span></div>
 					</div>
 					<div class="kt_datatable" id="prj1002PrjAuthUsrTable"></div>
@@ -138,26 +138,26 @@ var OSLPrj1002Popup = function () {
 	};
 	var formId = 'frPrj1002';
 	
-	
+	//form validate 주입
 	var formValidate = $.osl.validate(formId);
 	
-	
+	//type
 	var type = $("#type").val();
 	
-	
+	//배정 담당자 중복 체크
 	var prjAuthUsrIdList = [];
 	
-    
+    // Private functions
     var documentSetting = function () {
-    	
+    	//문구 세팅 
     	$("#prj1002SaveSubmit > span").text($.osl.lang("prj1002."+type+".saveBtnString"));
     	
     	var today = new Date().format("yyyy-MM-dd");
-    	
+    	//프로젝트 그룹 기간 최초 오늘 날짜 세팅
     	$("#startDt").val(today);
 		$("#endDt").val(today);
 		
-    	
+    	//datepicker 세팅
 		$.osl.date.daterangepicker($("#prjGrpRange"), {}, function(defaultConfig, start, end, label) {
 			var startDt = new Date(start._d).format("yyyy-MM-dd");
 			var endDt = new Date(end._d).format("yyyy-MM-dd");
@@ -166,54 +166,54 @@ var OSLPrj1002Popup = function () {
 			$("#endDt").val(endDt);
 		});
 
-    	
+    	// 팝업 공통코드 select 세팅
 		var commonCodeArr = [
-			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"} 
+			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"} // 사용유무
 		];
-		
+		//공통코드 채우기
 		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		
-		
+		//submit 동작
     	$("#prj1002SaveSubmit").click(function(){
 			var form = $('#'+formId);    		
         	
-    		
+    		//폼 유효 값 체크
     		if (!form.valid()) {
     			return;
     		}
     		$.osl.confirm($.osl.lang("prj1002."+type+".saveString"),null,function(result) {
     	        if (result.value) {
-    	        	
+    	        	//프로젝트 그룹 저장
     	        	saveFormAction();
     	        }
     		});
     	});
 		
-		
+		//데이터 테이블 세팅
     	datatableSetting();
 		
-    	
+    	//뷰 변경 이벤트
 		$(".btn-view-type").click(function(){
 			var datatableId = $(this).data("datatable-id");
 			var viewType = $(this).data("view-type");
 			
-			
+			//active 교체
 			$(".btn-view-type[data-datatable-id="+datatableId+"].active").removeClass("active");
 			$(this).addClass("active");
 			
 			currentViewType[datatableId] = viewType;
 			
-			
+			//뷰어 변경
 			fnViewerChange(datatableId);
 		});
     };
     
-    
+    //프로젝트 그룹 저장 (생성&수정)
     var saveFormAction = function() {
-    	
+    	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
     	
-    	
+    	//추가된 담당자 목록
     	var authUsrList = $.osl.datatable.list["prj1002PrjAuthUsrTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(authUsrList) && authUsrList.length > 0){
     		var usrIdList = [];
@@ -223,38 +223,38 @@ var OSLPrj1002Popup = function () {
     		fd.append("usrIdList",JSON.stringify(usrIdList));
     	}
     	
-    	
+    	//AJAX 설정
    		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj1000/prj1000/savePrj1002PrjGrpInfo.do'/>", "async": false,"contentType":false,"processData":false ,"cache":false},fd);
 
-   		
+   		//AJAX 전송 성공 함수
    		ajaxObj.setFnSuccess(function(data){
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
-   				
+   				//등록 성공
    				$.osl.toastr(data.message);
 
-   				
+   				//모달 창 닫기
    				$.osl.layerPopupClose();
    				
-   				
+   				//datatable 조회
    				$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=select]").click();
    			}
    		});
    		
-   		
+   		//AJAX 전송
    		ajaxObj.send();
     };
     
-    
+    //담당자 배정, 미 배정 목록
     var datatableSetting = function(){
     	var prjAuthUsrTableUrl = "";
     	
-    	
+    	//추가가 아닌경우
     	if(type != "insert"){
     		prjAuthUsrTableUrl = "/prj/prj1000/prj1000/selectPrj1000PrjAuthUsrListAjax.do";
     	}
-    	
+    	//사용자 배정 정보 datatable 세팅
 		$.osl.datatable.setting("prj1002PrjAuthUsrTable",{
 			data: {
 				type:'local',
@@ -305,11 +305,11 @@ var OSLPrj1002Popup = function () {
 					setTimeout(function(){
 						var list = datatableInfo.dataSet;
 						
-						
+						//초기화
 						$("#prj1002PrjAuthUsrTableCard").html("");
 						
 						$.each(list, function(idx, map){
-							
+							//카드 UI
 							var usrListStr = $( 
 								'<div class="col-lg-6 col-md-12 col-sm-12" data-usr-id="'+map.usrId+'" data-datatable-id="prj1002PrjAuthUsrTable">'
 									+'<div class="kt-portlet">'
@@ -336,11 +336,11 @@ var OSLPrj1002Popup = function () {
 							
 							usrListStr.data("usrInfo",map);
 							
-							
+							//로드된 데이터 CARD형식으로 추가
 							$("#prj1002PrjAuthUsrTableCard").append(usrListStr);
 						});
 
-						
+						//tooltips
 						KTApp.initTooltips();
 					},250);	
 				},
@@ -348,14 +348,14 @@ var OSLPrj1002Popup = function () {
 					setTimeout(function(){
 						var list = datatableInfo.dataSet;
 
-						
+						//초기화
 						$("#prj1002PrjAuthUsrTableCard").html("");
 						
 						if(list.length == 0){
 							$("#prj1002PrjAuthUsrTableCard").append('<div class="osl-card__data--empty"><span data-lang-cd="datatable.translate.records.noRecords">'+$.osl.lang("datatable.translate.records.noRecords")+'</span></div>');
 						}else{
 							$.each(list, function(idx, map){
-								
+								//카드 UI
 								var usrListStr = $( 
 									'<div class="col-lg-6 col-md-12 col-sm-12" data-usr-id="'+map.usrId+'" data-datatable-id="prj1002PrjAuthUsrTable">'
 										+'<div class="kt-portlet">'
@@ -382,11 +382,11 @@ var OSLPrj1002Popup = function () {
 								
 								usrListStr.data("usrInfo",map);
 								
-								
+								//로드된 데이터 CARD형식으로 추가
 								$("#prj1002PrjAuthUsrTableCard").append(usrListStr);
 							});
 
-							
+							//tooltips
 							KTApp.initTooltips();
 						}
 					},250);	
@@ -396,13 +396,13 @@ var OSLPrj1002Popup = function () {
 				"dblClick":function(rowData){
 					var rowDatas = [];
 					rowDatas.push(rowData);
-					
+					//사용자 배정 처리
 					fnAllUsrDelete(rowDatas);
 				},
-				
+				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
 					var rowDatas = rowData;
-					
+					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
 						return true;
@@ -410,7 +410,7 @@ var OSLPrj1002Popup = function () {
 					
 					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
-							
+							//사용자 배정 제외 처리
 							fnAllUsrDelete(rowDatas);
 						}
 					});
@@ -418,7 +418,7 @@ var OSLPrj1002Popup = function () {
 			}
 		});
 		
-		
+		//사용자 미 배정 정보 datatable 세팅
 		$.osl.datatable.setting("prj1002PrjAuthNoneUsrTable",{
 			data: {
 				source: {
@@ -478,16 +478,16 @@ var OSLPrj1002Popup = function () {
 			},
 			callback:{
 				ajaxDone: function(evt, list){
-					
+					//초기화
 					$("#prj1002PrjAuthNoneUsrTableCard").html("");
 					$.each(list, function(idx, map){
 						var userAddedClass = "";
-						
+						//추가된 담당자 목록에 존재하는경우 class 추가
 						if(prjAuthUsrIdList.indexOf(map.usrId) != -1){
 							userAddedClass = "osl-auth-user--added";
 						}
 						
-						
+						//카드 UI
 						var usrListStr = $( 
 							'<div class="col-lg-6 col-md-12 col-sm-12 '+userAddedClass+'" data-usr-id="'+map.usrId+'">'
 								+'<div class="kt-portlet">'
@@ -513,7 +513,7 @@ var OSLPrj1002Popup = function () {
 							+'</div>');
 						
 						usrListStr.data("usrInfo",map);
-						
+						//로드된 데이터 CARD형식으로 추가
 						$("#prj1002PrjAuthNoneUsrTableCard").append(usrListStr);
 					});
 				}
@@ -522,15 +522,15 @@ var OSLPrj1002Popup = function () {
 				"dblClick":function(rowData){
 					var rowDatas = [];
 					rowDatas.push(rowData);
-					
+					//사용자 배정 처리
 					fnAllUsrInsert(rowDatas);
 					
 				},
-				
+				//선택 사용자 배정 등록
 				"selAllUsrDelete": function(rowData, datatableId, type){
 					var rowDatas = rowData;
 					
-					
+					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
 						return true;
@@ -538,7 +538,7 @@ var OSLPrj1002Popup = function () {
 					
 					$.osl.confirm($.osl.lang("prj2100.allUsrInsert",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
-							
+							//사용자 배정 처리
 							fnAllUsrInsert(rowDatas);
 						}
 					});
@@ -546,50 +546,50 @@ var OSLPrj1002Popup = function () {
 			}
 		});
 		
-		
+		//출력 타입에 따라 목록 형태 표시
 		fnViewerChange("prj1002PrjAuthUsrTable");
 		fnViewerChange("prj1002PrjAuthNoneUsrTable");
 		
-		
+		//drag&drop 대상 elem
 		var dragLeft = document.getElementById("prj1002PrjAuthUsrTableCard");
 		var dragRight = document.getElementById("prj1002PrjAuthNoneUsrTableCard");
 		
-		
+		//card ui drag&drop
 		var dragDropObj = dragula([dragLeft, dragRight],{
-			
+			//복사 허용
 			copy: function (el, source) {
-				
+				//미 담당자 목록에서 담당자 목록으로만 복사
 				return source === document.getElementById("prj1002PrjAuthNoneUsrTableCard")
 			},
-			
+			//drag 허용
 			accepts: function (el, target) {
 			    return target !== document.getElementById("prj1002PrjAuthNoneUsrTableCard");
 			},
-			
+			//elem 이동시 class 추가
 			moves: function (el, source, handle, sibling) {
-				return !el.classList.contains('osl-auth-user--added');
+				return !el.classList.contains('osl-auth-user--added') && !el.classList.contains('osl-card__data--empty');
 			},
-			
+			//영역 벗어나는 경우 elem 되돌리기
 		    revertOnSpill: true,
-		    
+		    //영역 벗어나는 경우 삭제
 		    removeOnSpill: true,
 		    copySortSource : true
 		});
 		
-		
+		//elem copy로 생성 시
 		dragDropObj.on("cloned", function(clone, original, type){
-			
+			//data
 			$(clone).data("usrInfo", $(original).data("usrInfo"));
-		}).on("remove", function(el, container, source){	
-			
+		}).on("remove", function(el, container, source){	//elem 삭제 시
+			//출발지 ID
 			var fromId = source.getAttribute("id");
 			var fromDatatableId = $(source).data("datatable-id");
 			var fromDatatable = $.osl.datatable.list[fromDatatableId].targetDt;
 			
-			
+			//datatable에 해당 row 데이터
 			var usrInfo = $(el).data("usrInfo");
 			
-			
+			//dataSet에서 제거
 			var dataSet = fromDatatable.dataSet;
 			var originalDataSet = fromDatatable.originalDataSet;
 			
@@ -607,30 +607,30 @@ var OSLPrj1002Popup = function () {
 				fromDatatable.insertData();
 			}
 			
-			
+			//제거된 el에 class 제거
 			$("div[data-usr-id="+usrInfo.usrId+"].osl-auth-user--added").removeClass("osl-auth-user--added");
 			
-			
+			//중복체크 추가
 			prjAuthUsrIdList.splice(prjAuthUsrIdList.indexOf(usrInfo.usrId), 1);
 			
-			
+			//데이터테이블 재 조회
 			fromDatatable.reload();
-		}).on("drop", function(el, target, source, sibling){	
-			
+		}).on("drop", function(el, target, source, sibling){	//elem drop
+			//같은 위치인경우 동작 중지
 			if(target === source){
 				return true;
 			}
-			
+			//출발지 ID
 			var fromId = source.getAttribute("id");
-			
+			//도착지 ID
 			var toId = target.getAttribute("id");
 			var toDatatableId = $(target).data("datatable-id");
 			
-			
+			//datatable에 해당 row 데이터
 			var usrInfo = $(el).data("usrInfo");
 			var toDatatable = $.osl.datatable.list[toDatatableId].targetDt;
 			
-			
+			//dataSet에 추가
 			toDatatable.removeClass("kt-datatable--error");
 			if($.osl.isNull(toDatatable.dataSet)){
 				toDatatable.dataSet = [];
@@ -642,9 +642,9 @@ var OSLPrj1002Popup = function () {
 					return false;
 				}
 			}
-			
+			//dataset unshift index 구하기
 			if(toDatatable.dataSet.length > 0){
-				
+				//unshift
 				for(var i=toDatatable.dataSet.length;i>0;i--){
 					if(i == toDatatable.dataSet.length){
 						toDatatable.dataSet[i] = {};
@@ -652,19 +652,19 @@ var OSLPrj1002Popup = function () {
 					toDatatable.dataSet[i] = toDatatable.dataSet[i-1];
 				}
 			}
-			
+			//dataset unshift
 			toDatatable.dataSet[0] = usrInfo;
 			
 			toDatatable.originalDataSet.unshift(usrInfo);
 			toDatatable.insertData();
 			
-			
+			//추가된 el에 class 추가
 			$("#"+fromId+" > div[data-usr-id="+usrInfo.usrId+"]").addClass("osl-auth-user--added");
 			
-			
+			//중복체크 추가
 			prjAuthUsrIdList.push(usrInfo.usrId);
 			
-			
+			//데이터테이블 재 조회
 			toDatatable.reload();
 		}).on('over', function (el, container) {
 			container.className += ' osl-drag-zone--over';
@@ -674,25 +674,25 @@ var OSLPrj1002Popup = function () {
     };
 
 	var fnViewerChange = function(targetDatatableId){
-		
-		if(currentViewType[targetDatatableId] == "01"){	
+		//현재 viewType에 따라 show/hide
+		if(currentViewType[targetDatatableId] == "01"){	//카드 형식
 			$("#"+targetDatatableId+" .kt-datatable__table").css({visibility: "hidden", height: 0});
 			$("#"+targetDatatableId+"Card").show();
-		}else{	
+		}else{	//데이터테이블 형식
 			$("#"+targetDatatableId+" .kt-datatable__table").css({visibility: "visible",height: "auto"});
 			$("#"+targetDatatableId+"Card").hide();
 		}
 	};
 	
     return {
-        
+        // public functions
         init: function() {
         	documentSetting();
         }
     };
 }();
 
-
+// Initialization
 $.osl.ready(function(){
 	OSLPrj1002Popup.init();
 });
