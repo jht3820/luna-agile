@@ -87,7 +87,6 @@ public class AltibaseClobStringTypeHandler extends AbstractLobTypeHandler {
 	    } catch (IOException ie) {
 	    	SQLException sqle = new SQLException(ie.getMessage());
 	    	throw sqle;
-    	// 2011.10.10 보안점검 후속조치
 	    } finally {
 		    if (rd != null) {
 			try {
@@ -100,7 +99,6 @@ public class AltibaseClobStringTypeHandler extends AbstractLobTypeHandler {
 
 	    return read_data.toString();
 
-		//return lobHandler.getClobAsString(rs, index);
 	}
 
 	public Object valueOf(String s) {

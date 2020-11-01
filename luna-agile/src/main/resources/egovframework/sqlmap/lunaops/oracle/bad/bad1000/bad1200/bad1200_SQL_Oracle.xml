@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bad1200DAO">
+	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+    
+    <insert id="bad1200DAO.insertBad1200BadInfo" parameterClass="java.util.Map">
+	    <selectKey resultClass="java.lang.String" keyProperty="newBadHstId">
+		    <![CDATA[
+					 
+					SELECT	NVL( 
+					          SUBSTR(BAD_HST_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_HST_ID, 12, 5)) + 1) , 5, '0')
+					      ,	'HST' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+					  ) AS NEW_BAD_HST_ID 
+					FROM	(
+					      SELECT	MAX(BAD_HST_ID)  AS BAD_HST_ID
+					      FROM	BAD1200 A
+					      WHERE 1 = 1
+					      AND LIC_GRP_ID = #licGrpId#
+						  AND MENU_ID = #menuId#
+					      AND BAD_HST_ID LIKE 'HST' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					  )
+					WHERE 1 = 1
+			]]>
+		</selectKey>
+		INSERT INTO BAD1200 (
+			LIC_GRP_ID
+			, PRJ_GRP_ID
+			, PRJ_ID
+			, MENU_ID
+			, BAD_ID
+			, BAD_HST_ID
+			, BAD_HST_TYPE_CD
+			, BAD_HST_USR_ID
+			, BAD_HST_USR_NM
+			, BAD_HST_USR_DEPT_NM
+			, BAD_HST_USR_POSITION_NM
+			, BAD_HST_USR_DUTY_NM
+			, REG_DTM
+			, REG_USR_ID
+			, REG_USR_IP
+			, MODIFY_DTM
+			, MODIFY_USR_ID
+			, MODIFY_USR_IP
+		) VALUES (
+			#licGrpId#
+			, #prjGrpId#
+			, #prjId#
+			, #menuId#
+			, #badId#
+			, #newBadHstId#
+			, #badHstTypeCd#
+			, #usrId#
+			, #usrNm#
+			, #usrDeptNm#
+			, #usrPositionNm#
+			, #usrDutyNm#
+			, #regDtm#
+			, #regUsrId#
+			, #regUsrIp#
+			, SYSDATE
+			, #modifyUsrId#
+			, #modifyUsrIp#
+		) 
+    </insert>
+    
+</sqlMap>
