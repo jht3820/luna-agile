@@ -392,16 +392,12 @@ public class Cmm4000Controller {
     		}
     		
     		
-    		
-    		List<Map> prjList = (List)prj1000Service.selectPrj1000PrjGrpAllList(paramMap);
+    		List<Map> prjList = (List)prj1000Service.selectPrj1000AdminPrjList(paramMap);
 
     		
     		boolean prjChk = false;
-    		for(Map prjInfo : prjList){
-    			if("02".equals(String.valueOf(prjInfo.get("prjTypeCd")))){
-    				prjChk = true;
-    				break;
-    			}
+    		if(prjList != null && prjList.size() > 0) {
+    			prjChk = true;
     		}
     		
     		
@@ -510,25 +506,22 @@ public class Cmm4000Controller {
 		Map fstPrjMap = null;
 		
 		
-		for(Map<String,String> prjInfo : prjList){
+		if( loginVO.getPrjId() == null || loginVO.getPrjId().equals("") ){
+			fstPrjMap = prjList.get(0);
+		}else {
 			
-			String prjGrpCd = prjInfo.get("prjGrpCd");
-			String prjId = prjInfo.get("prjId");
-			if( loginVO.getPrjId() == null || loginVO.getPrjId().equals("") ){
-				if(prjGrpCd != null && "02".equals(prjGrpCd)){
-    				fstPrjMap = prjInfo;
-    				break;
-    			}
-			}else{
+			for(Map<String,String> prjInfo : prjList){
+				String prjId = prjInfo.get("prjId");
+				
 				if(loginVO.getPrjId().equals(prjId)){
 					fstPrjMap = prjInfo;
     				break;
 				}
-			}		
-				
-			
-			
+			}
 		}
+		
+		
+		fstPrjMap.put("usrId", loginVO.getUsrId());
 		
 		
 		
