@@ -8,18 +8,18 @@
 		<input type="hidden" name="menuRootYn" id="menuRootYn" value="${param.menuRootYn }" /> 
 		<div class="kt-portlet__body">
 			<div class="form-group">
-				<label class="required">삭제 유형</label>
-				<select class="form-control" style="display: inline-block;" name="delTypeCd" id="delTypeCd">
+				<label class="required"><span data-lang-cd="bad1005.label.deleteType">삭제 유형</span></label>
+				<select class="form-control kt-block-inline" name="delTypeCd" id="delTypeCd">
 				</select>
 			</div>
 			<div class="form-group">
-				<label>삭제 사유</label>
+				<label><span data-lang-cd="bad1005.label.deleteReason">삭제 사유</span></label>
 				<textarea class="kt-hide" name="delTxt" id="delTxt"></textarea>
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1005deleteSubmit">삭제</button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-brand" id="bad1005deleteSubmit"><span data-lang-cd="bad1005.button.submit">삭제</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -40,6 +40,11 @@ var OSLBad1005Popup = function () {
  	var menuRootYn = $("#menuRootYn").val();
  	
     var documentSetting = function () {
+    	
+    	//문구 세팅 
+    	$("#bad1005deleteSubmit > span").text($.osl.lang("bad1005.button.submit"));
+    	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+    	
 	   	//select box 세팅
 	   	var commonCodeArr=[
 	   		{mstCd: "BAD00001", useYn: "Y", comboType: "OS", targetObj: "#delTypeCd"}

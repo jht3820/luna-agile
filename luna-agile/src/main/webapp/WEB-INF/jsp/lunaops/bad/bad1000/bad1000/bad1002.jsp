@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <form class="kt-form" id="bad1002Info" autocomplete="off">
-	<div class="kt-portlet kt-portlet--mobile">
+	<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
 		<div class="kt-portlet__head kt-portlet__head--lg">
 			<input type="hidden" id="stmDsTypeCd" name="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 			<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
@@ -16,74 +16,87 @@
 			<input type="hidden" name="atchFileId" id="atchFileId" value="" /> 
 			<div class="kt-portlet__head-label col-6 row" name="writerDiv" id="writerDiv"></div>
 		</div>
-		<hr class="kt-margin-0">
 		<div class="kt-portlet__body">
-			<div class="row">
+			<div class="row kt-margin-0">
 				<!-- left -->
-				<div class="col-lg-6 kt-padding-5" name="leftDiv" id="leftDiv">
-					<div name="badTitleDiv" id="badTitleDiv" class="form-group">
-						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i>제목</label>
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
+					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
+						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1002.label.title">제목</span></label>
 						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
 					</div>
-					<div name="badContentDiv" id="badContentDiv" class="form-group">
-						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i>내용</label>
+					<div name="badContentDiv" id="badContentDiv" class="kt-margin-b-10">
+						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i><span data-lang-cd="bad1002.label.content">내용</span></label>
 						<textarea class="kt-hide" name="badContent" id="badContent" required></textarea>
 					</div>
 				</div>
 				<!-- right -->
-				<div class="col-lg-6 kt-padding-5" name="rightDiv" id="rightDiv">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 osl-1400-desktop-padding-0" name="rightDiv" id="rightDiv">
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
-							 공지사항 사용
 							<span></span>
 						</label>
+						<span data-lang-cd="bad1002.label.noticeCheck">공지사항 사용</span>
 				 	</div>
 			 		<!-- 공지사항 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
 				 		<div class="input-group kt-input-icon pull-right">
-					 		<label class="input-group-addon kt-margin-5 kt-padding-5">공지 기간</label>
-					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
+					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1002.label.noticeDate">공지 기간</span></label>
+					 		<div class="input-group">
+					 			<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
+					 			<div class="input-group-append">
+				 					<span class="input-group-text kt-bg-brand">
+				 						<i class="la la-calendar-check-o kt-font-light"></i>
+				 					</span>
+				 				</div>
+				 			</div>
 				 		</div>
-				 		<div class="kt-margin-t-15">
-					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
-								 공지 기간 무시
+				 		<div class="row kt-padding-t-10 kt-padding-l-15">
+					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
 								<span></span>
 							</label>
+							<span data-lang-cd="bad1002.label.noticeDateIgnore">공지기간 무시</span>
 				 		</div>
 				 	</div>
 				 	<!-- 비밀글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmPwYnCd" id="stmPwYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badPwYnCd" id="badPwYnCd">
-							 비밀글 사용
 							<span></span>
 						</label>
+						<span data-lang-cd="bad1002.label.secretCheck">비밀글 사용</span>
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
-				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon  required' style="margin-top: auto; margin-bottom:auto; min-width:60px;">PW</label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+				 		<div class="from-group row">
+					 		<label class='col-3 col-form-label kt-padding-r-0 input-group-addon required' >
+					 			<span data-lang-cd="bad1002.label.password">PW</span>
+					 		</label>
+					 		<div class="col-9">
+				 				<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+				 			</div>
 				 		</div>
-				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:60px;">PW 확인</label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+				 		<div class="from-group row kt-margin-t-10">
+					 		<label class='col-3 col-form-label kt-padding-r-0 input-group-addon required'>
+					 			<span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span>
+					 		</label>
+					 		<div class="col-9">
+				 				<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+			 				</div>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-hide"  name="stmCmtYnCd" id="stmCmtYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badCmtYnCd" id="badCmtYnCd">
-							 댓글 허용
 							<span></span>
 						</label>
+						<span data-lang-cd="bad1002.label.commentCheck">댓글 허용</span>
 				 	</div>
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-file-upload kt-margin-r-5"></i>파일 첨부
+							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attchFile">파일 첨부</span>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height:260px;" name="bad1002FileUpload" id="bad1002FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height--260" name="bad1002FileUpload" id="bad1002FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -91,13 +104,16 @@
 					<!-- 태그 -->
 					<div class="form-group row kt-margin-b-10 kt-hide" name="badTagOption" id="badTagOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-hashtag kt-margin-r-5"></i> 태그
+							<i class="fa fa-hashtag kt-margin-r-5"></i><span data-lang-cd="bad1002.label.tag">태그</span>
 						</div>
 						<div class="input-group kt-margin-t-10 kt-margin-l-20 kt-margin-r-10">
 							<div class="input-group-prepend">
 								<span class="input-group-text">#</span>
 							</div>
 							<input type="text" class="form-control col-5" name="tagWriter" id="tagWriter" maxlength="30" />
+							<div class="input-group-prepend">
+								<span class="input-group-button btn btn-brand" id="tagBtn" name="tagBtn"><span data-lang-cd="bad1002.button.submit">등록</span></span>
+							</div>
 						</div>
 						<!-- 태그 리스트 -->
 						<div class="kt-margin-t-20 kt-padding-l-15" name="tagListDiv" id="tagListDiv">
@@ -107,8 +123,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit">등록</button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit"><span data-lang-cd="bad1002.button.insertSubmit">등록</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -134,9 +150,13 @@ var OSLBad1002Popup = function () {
 	var fileUploadObj;
     var documentSetting = function () {
 		
+    	//문구 세팅 
+    	$("#bad1002InsertSubmit > span").text($.osl.lang("bad1002.button.insertSubmit"));
+    	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+    	
     	//게시판 옵션이 없을 경우 div 변경
     	if($("#paramStmOptionCnt").val() == "" || $("#paramStmOptionCnt").val()==0){
-    		$("#leftDiv").attr("class", "col-lg-12 kt-padding-5");
+    		$("#leftDiv").attr("style","width:100% !important");
     		$("#rightDiv").addClass("kt-hide");
     	}
     	var maxStrg = $("#paramStmFileStrg").val();
@@ -227,16 +247,6 @@ var OSLBad1002Popup = function () {
 				return;
 			}
     					
-//     		//Content가 valid 체크가 안되므로 별도 체크
-//     		var badContent = $("#badContent").val().replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, '').trim();
-    		
-//     		if( badContent == "" || badContent == null ){
-//     			$.osl.alert("내용을 입력하세요");
-//     			$("#badContent").val("");
-//     			$("#badContent").focus();
-//     			return;
-//     		}
-    		
      		var localData = {};
      		
      		// 기본 데이터 가져오기
@@ -299,50 +309,6 @@ var OSLBad1002Popup = function () {
           	        }
           		});
           		
-          		//태그
-           	   $("#tagWriter").on("keypress", function (e) {
-           	        var self = $(this);
-           	        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-           	        if (e.key == "Enter" || e.keyCode == 32) {
-           	            var tagValue = self.val();
-           	            // 값이 없으면 검사 안함
-           	            if (tagValue != "") {
-           	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-           	                var result = Object.values(tag).filter(function (word) {
-           	                    return word == tagValue;
-           	                })
-           	            
-           	                // 태그 중복 검사
-           	                if (result.length == 0) { 
-           	                	var innerHtml = "";
-           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
-           	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
-           	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
-           	                	
-           	                    $("#tagListDiv").append(innerHtml);
-           	                    tag.push(tagValue);
-           	                    self.val("");
-           	                } else {
-           	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
-           	                    $("#tagWriter").val("");
-           	                }
-           	            }
-           	         // SpaceBar 시 빈공간이 생기지 않도록 방지
-           	            e.preventDefault(); 
-           	        }
-           	    });
-           	   
-           		// 태그 삭제(document 대신...?)
-           	    $(document).off("click", ".tagify__tag__removeBtn").on("click", ".tagify__tag__removeBtn", function (e) {
-           	    	//상위 태그명 가져오기
-           	    	var tagText = $(this).parent().attr("value");
-           	    	//배열에서 일치하는 인덱스 번호 가져오기
-           	    	var idx = tag.indexOf(tagText);
-           	    	//가져온 인덱스 삭제하기
-           	    	tag.splice(idx, 1);
-           	    	//태그 지우기
-           	    	$(this).parent().remove();
-           	    });
      		}else{ //공지사항 옵션이 없는 경우 바로 등록
        			data = localData;
   	        	data.menuId = $("#menuId").val();
@@ -369,6 +335,7 @@ var OSLBad1002Popup = function () {
 		$("#writerDiv").empty();
 		var usrData = {
 				html: $.osl.user.userInfo.usrNm + " (" + $.osl.user.userInfo.usrId + ")",
+				imgSize: "sm",
 				class:{
 					cardBtn: "osl-width__fit-content"
 				}
@@ -381,7 +348,7 @@ var OSLBad1002Popup = function () {
 		
 		// body ------------------
 		//edit 세팅
-    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 420}));
+    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 380}));
     	$("#badContent").removeClass("kt-hide");
 		
     	if($("#paramStmOptionCnt").val()>0){
@@ -443,6 +410,85 @@ var OSLBad1002Popup = function () {
 			// 태그
 			if($("#paramStmTagYnCd").val() == "01"){
 				$("#badTagOption").removeClass("kt-hide");
+				
+          		//태그
+           	   $("#tagWriter").on("keypress", function (e) {
+           	        var self = $(this);
+      	            //#이 들어온 경우 제거
+       	            var tagValue = self.val().replace(/#/g,"");
+           	        self.val(tagValue);
+           	        
+           	        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
+           	        if (e.key == "Enter" || e.keyCode == 32) {
+           	            // 값이 없으면 검사 안함
+           	            if (tagValue != "") {
+           	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+           	                var result = Object.values(tag).filter(function (word) {
+           	                    return word == tagValue;
+           	                })
+           	            
+           	                // 태그 중복 검사
+           	                if (result.length == 0) { 
+           	                	var innerHtml = "";
+           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+           	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
+           	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>#"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
+           	                	
+           	                    $("#tagListDiv").append(innerHtml);
+           	                    tag.push(tagValue);
+           	                 	$("#tagWriter").val("");
+           	                } else {
+           	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
+           	                    $("#tagWriter").val("");
+           	                }
+           	            }
+           	        	 // SpaceBar 시 빈공간이 생기지 않도록 방지
+           	            e.preventDefault(); 
+           	        }
+           	    });
+	           	   
+           	 
+          	 	//태그 등록 버튼 클릭
+        		$("#tagBtn").click(function(e){
+        			var tagValue = $("#tagWriter").val();
+       	            // 값이 없으면 검사 안함
+       	            if (tagValue != "") {
+       	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+       	                var result = Object.values(tag).filter(function (word) {
+       	                    return word == tagValue;
+       	                })
+       	            
+       	                // 태그 중복 검사
+       	                if (result.length == 0) { 
+       	                	var innerHtml = "";
+       	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+       	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
+       	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
+       	                	
+       	                    $("#tagListDiv").append(innerHtml);
+       	                    tag.push(tagValue);
+       	                 	$("#tagWriter").val("");
+       	                } else {
+       	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
+       	                    $("#tagWriter").val("");
+       	                }
+       	            }
+       	        	 // SpaceBar 시 빈공간이 생기지 않도록 방지
+       	            e.preventDefault(); 
+        		});
+          	 	
+           	   // 태그 삭제(document 대신...?)
+           	    $(document).off("click", ".tagify__tag__removeBtn").on("click", ".tagify__tag__removeBtn", function (e) {
+           	    	//상위 태그명 가져오기
+           	    	var tagText = $(this).parent().attr("value");
+           	    	//배열에서 일치하는 인덱스 번호 가져오기
+           	    	var idx = tag.indexOf(tagText);
+           	    	//가져온 인덱스 삭제하기
+           	    	tag.splice(idx, 1);
+           	    	//태그 지우기
+           	    	$(this).parent().remove();
+           	    });
+           	   
 			}else{
 				$("#badTagOption").addClass("kt-hide");
 			}

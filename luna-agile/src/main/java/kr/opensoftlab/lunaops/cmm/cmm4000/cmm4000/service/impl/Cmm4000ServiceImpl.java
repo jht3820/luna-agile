@@ -160,19 +160,27 @@ public class Cmm4000ServiceImpl extends EgovAbstractServiceImpl implements Cmm40
 	}
 	
 	public LoginVO selectCmm4000LoginAction(LoginVO loginVO) throws Exception {
-
+		String paramUsrPw = loginVO.getUsrPw();
 		
-		String enUsrPw = EgovFileScrty.encryptPassword(loginVO.getUsrPw(), loginVO.getUsrId());
-		loginVO.setUsrPw(enUsrPw);
-
 		
 		LoginVO rtnLoginVO = cmm4000DAO.selectCmm4000LoginAction(loginVO);
 
+		System.out.println("#################### 1");
+		System.out.println(rtnLoginVO.getUsrId());
+		System.out.println(rtnLoginVO.getUsrPw());
+		
 		
 		if(rtnLoginVO==null){
 			rtnLoginVO = new LoginVO();
 			rtnLoginVO.setLoginStatus(NO_SEARCH_ID);
 		}else{
+			
+			String enUsrPw = EgovFileScrty.encryptPassword(paramUsrPw, rtnLoginVO.getUsrId());
+			loginVO.setUsrPw(enUsrPw);
+			
+			System.out.println("#################### 1");
+			System.out.println(enUsrPw);
+			
 			
 			if("01".equals(rtnLoginVO.getUseCd())){
 				

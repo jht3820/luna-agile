@@ -34,7 +34,7 @@
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="insert" title="신규 프로젝트 그룹 등록" data-title-lang-cd="prj1000.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 				<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" title="데이터 수정" data-title-lang-cd="prj1000.button.title.update" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="update" title="데이터 수정" data-title-lang-cd="prj1000.button.title.update" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
 				<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" title="데이터 삭제" data-title-lang-cd="prj1000.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
@@ -79,7 +79,7 @@ var OSLPrj1000Popup = function () {
 				],
 				actionBtn:{
 					"dblClick": true,
-					"update": false,
+					"update": true,
 					"delete": false,
 					"title": $.osl.lang("datatable.action.functionNm"),
 					"width": 100,
@@ -94,7 +94,19 @@ var OSLPrj1000Popup = function () {
 						var data = {type:"insert"};
 						var options = {
 								autoHeight: false,
-								modalSize: "md",
+								modalSize: "xl",
+								idKey: datatableId,
+								modalTitle: $.osl.lang("prj1002.title"),
+								closeConfirm: false,
+							};
+						
+						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1002View.do',data,options);
+					},
+					"update": function(rowData, row, datatableId, type, rowNum, elem){
+						var data = {type:"update"};
+						var options = {
+								autoHeight: false,
+								modalSize: "xl",
 								idKey: datatableId,
 								modalTitle: $.osl.lang("prj1002.title"),
 								closeConfirm: false,
@@ -166,7 +178,7 @@ var OSLPrj1000Popup = function () {
 								+'<div class="kt-portlet kt-portlet--mobile osl-prj-info-obj">'
 									+'<div class="kt-portlet__head kt-portlet__head--lg">'
 										+'<div class="kt-portlet__head-label">'
-											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="">&nbsp;<span></span></label>'
+											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'">&nbsp;<span></span></label>'
 											+'<h5 class="kt-font-boldest"><span class="badge badge-primary kt-margin-r-10">No. '+map.rn+'</span></h5>'
 											+'<div class="kt-media-group osl-margin-b-05">'
 												+prjGrpAuthList
@@ -195,14 +207,14 @@ var OSLPrj1000Popup = function () {
 												+'<h5 class="kt-font-boldest text-truncate" title="'+$.osl.escapeHtml(map.prjNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"> '+$.osl.escapeHtml(map.prjNm)+'</h5>'
 												+'<span class="text-muted text-truncate" title="'+$.osl.escapeHtml(map.prjDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.prjDesc)+'</span>'
 											+'</div>'
-											+'<div class="kt-padding-l-40 col-lg-8 col-md-8 col-sm-12">'
+											+'<div class="col-lg-8 col-md-8 col-sm-12">'
 												+'<div class="row">'
-													+'<div class="offset-lg-1 col-lg-5 col-md-5 col-sm-11">'
+													+'<div class="col-lg-6 col-md-6 col-sm-12">'
 														+'<div class="kt-pull-left kt-margin-r-25">'
 															+'<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>'+$.osl.lang("prj1000.startDate")+'</span></div>'
 															+'<h5><span class="badge badge-primary">'+$.osl.escapeHtml(map.startDt)+'</span></h5>'
 														+'</div>'
-														+'<div class="">'
+														+'<div class="kt-pull-left ">'
 															+'<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>'+$.osl.lang("prj1000.endDate")+'</span></div>'
 															+'<h5><span class="badge badge-danger">'+$.osl.escapeHtml(map.endDt)+'</span></h5>'
 														+'</div>'
@@ -270,6 +282,20 @@ var OSLPrj1000Popup = function () {
 						
 						//로드된 데이터 CARD형식으로 추가
 						$("#prj1000CardTable").html(prjGrpStr);
+						/* 
+						//data row active
+						$("input[name=prjGrpCheckbox]").click(function(){
+							var selRowChecked = this.checked;
+							var selRowNum = this.value;
+							
+							var targetObj = $("#prj1000PrjTable .kt-datatable__row[data-row="+selRowNum+"]");
+							$("#prj1000PrjTable .kt-datatable__row[data-row="+selRowNum+"] td.kt-datatable__cell--check input[type=checkbox]").click();
+							if(selRowChecked){
+								targetObj.addClass("kt-datatable__row--active");
+							}else{
+								targetObj.removeClass("kt-datatable__row--active");
+							}
+						}); */
 					}
 				}
 			};
