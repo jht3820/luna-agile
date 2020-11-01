@@ -535,6 +535,15 @@ label.required:after {
 .osl-modal__cursor--move {
     cursor: move;
 }
+.osl-div__cursor--grab{
+	cursor: grab;
+}
+.osl-hover--brand{
+	border: 1px solid transparent;
+}
+.osl-hover--brand:hover{
+	border: 1px solid #1cac81;
+}
 .modal .modal-content.osl-modal__screen--fit{
 	max-height: calc(100vh - 50px);
 }
