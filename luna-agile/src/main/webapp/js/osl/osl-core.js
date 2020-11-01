@@ -1,4 +1,9 @@
-
+/**
+ * UMD(Universal Module Definition - 범용 모듈 정의) 패턴 
+ * @param factory
+ * @since 2020.02.19
+ * @author 진주영
+ */
 
 ;(function (factory) {	
 	"use strict";
@@ -6,7 +11,7 @@
 	factory(jQuery);
 }(function ($, undefined) {	
 	"use strict";
-	
+	/* 기본 설정 */
 	
 	$.osl = {
 		name: "LUNA™OPS 2.0"	
@@ -18,7 +23,11 @@
 		,selPrjId: ''
 		,selAuthGrpId: ''
 		,isReady: false		
-		
+		/**
+		 *  function 명 	: $.osl.ready
+		 *  function 설명	: 코어 init 실행이 모두 완료된 경우 callback 실행
+		 *  @param callback: 코어 init 실행 이후 callback 함수
+		 **/
 		,ready: function(callback){
 			
 			if(typeof callback != "function"){
@@ -56,7 +65,10 @@
 				});
 			}
 		}
-		
+		/**
+		 *  function 명 	: $.osl.init
+		 *  function 설명	: 즐겨찾기, 메뉴, 프로젝트 및 권한 그룹 및 솔루션 초기 세팅
+		 **/
 		,init: function(){
 			
 			$.validator.addMethod("regex", function(value, element, regexpr) {
@@ -82,7 +94,7 @@
 			        return false;
 			    }
 			}, "이메일 형식이 아닙니다.");
-			
+			/* taostr options */
 			toastr.options = {
 					  "closeButton": true,
 					  "debug": false,
@@ -165,14 +177,22 @@
 			
 			return $.osl.deferred.promise();
 		}
-		
+		/**
+		 *  function 명 	: $.osl.file
+		 *  function 설명	: 파일 기본 객체
+		 **/
 		,file:{
-			
+			/**
+			 *  function 명 	: $.osl.file.uploadSet
+			 *  function 설명	: 해당 targetId element에 파일 업로드를 세팅한다.
+			 *  @param targetId: 파일 업로드 영역 대상 Id (# 제외)
+			 *  @param config: 
+			 **/
 			uploadSet: function(targetId, config){
 				var rtnObject = null;
 				
 				var defaultConfig = {
-					
+					/* 고정 옵션 - 변경 없음 */
 					proudlyDisplayPoweredByUppy: false,
 					inline: true,
 					browserBackButtonClose: true,
@@ -183,7 +203,7 @@
 						error: function(args){}
 					},
 					
-					
+					/* 동적 옵션 */
 					target: "#"+targetId,
 					width:'100%',
 					height:370,
@@ -192,15 +212,66 @@
 					showProgressDetails: true,
 					disableStatusBar:true,
 					hideCancelButton: true,
-					
+					/* 파일 다운로드, 읽기 전용 기능 */
 					fileDownload: false,
 					fileReadonly: false,
-					
+					/* core config */
 					autoProceed: false,
 					maxFileSize: 100,	
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			/**
+			 * function 명 	: $.osl.file.makeAtchfileId
+			 * function 설명	: atchFileId를 생성하고 해당 data를 반환한다.
+			 * 
+			 * @param	callback: atchFileId 생성 후 처리 함수
+			 */
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -216,7 +287,13 @@
 				ajaxObj.send();
 			},
 			
-			
+			/**
+			 * function 명 	: $.osl.file.fileListSetting
+			 * function 설명	: 조회된 파일목록 Json Data를 파일 업로드 객체에 세팅한다.
+			 * 
+			 * @param	paramFileList: 파일 목록 Json Data
+			 * @param	paramFileUploadObj: 파일 업로드 객체
+			 */
 			fileListSetting: function(paramFileList, paramFileUploadObj){
 				
 			    function dataUrlToBlob( uri ) {
@@ -241,7 +318,7 @@
 		    			atchFileId = map.atchFileId;
 		    			if(!$.osl.isNull(map.fileType) && map.fileType.indexOf("image") != -1){
 		    				try{
-				    			
+				    			/* 해당 파일 url -> blob 구하기 (image만)*/
 				    			var fileImage = new Image();
 				    			fileImage.src = "/cmm/fms/getImage.do?fileSn="+map.fileSn+"&atchFileId="+map.atchFileId;
 				    			
@@ -322,11 +399,14 @@
 		    							$.osl.file.fileDownload(atchFileId, fileSn);
 		    						}
 								},
-								
+								/* 마우스 hover이벤트 걸기 (파일 생성 후 DOM생성이 비동기로 되어있어서 파일 객체에 직접 이벤트 바인딩 */
 								"mouseenter": function(){
 									$("#"+paramFileUploadObj.opts.targetId+" .osl-uppy-DashboardItem-action--download").remove();
 									$("#"+$.escapeSelector("uppy_"+paramFileId)).append('<div class="osl-uppy-DashboardItem-action--download"><i class="fas fa-arrow-circle-down"></i></div>');
-									
+									/*
+									$("#"+paramFileUploadObj.opts.targetId+" .osl-uppy-DashboardItem-action--download").removeClass("osl-uppy-DashboardItem-action--download");
+									$("#"+$.escapeSelector("uppy_"+paramFileId)).addClass("osl-uppy-DashboardItem-action--download");
+									*/
 								},
 								"mouseleave": function(){
 									$("#"+$.escapeSelector("uppy_"+paramFileId)+" .osl-uppy-DashboardItem-action--download").remove();
@@ -336,7 +416,12 @@
 		    		}
 		    	}
 			},
-			
+			/**
+			 *  function 명 	: $.osl.file.fileDownload
+			 *  function 설명	: 파일 다운로드 함수
+			 *  @param paramAtchFileId: 파일 ID
+			 *  @param paramFileSn: 파일 Sn
+			 **/
 			fileDownload: function(paramAtchFileId, paramFileSn){
 				if(!$.osl.isNull(paramAtchFileId) && !$.osl.isNull(paramFileSn)){
 					var url = '/com/fms/FileDown.do?downAtchFileId='+paramAtchFileId+'&downFileSn='+paramFileSn;
@@ -351,18 +436,31 @@
 				}
 			}
 		}
-		
+		/**
+		 *  function 명 	: $.osl.tree
+		 *  function 설명	: 트리 기본 객체
+		 **/
 		,tree: {
-			
+			/* 노드 제어 함수 실행 시 로딩바가 출력되는 기준 개수 */
 			loadingNodeCnt:500,
-			
+			/**
+			 *  function 명 	: $.osl.tree.setting
+			 *  function 설명	: 요소에 트리 객체 세팅
+			 *  @param targetId: 요소 id (#id)
+			 *  @param config: 트리 설정 값
+			 **/
 			setting: function(targetId, config){
 				
 				var treeObj = null;
 				
 				var targetObj = $("#"+targetId);
 				if(targetObj.length > 0){
-					
+					/**
+					 * 자식 노드 전체 펼치기/접기
+					 * @param jstreeTarget: jstree 대상 (선언 객체)
+					 * @param childrenList: 자식 노드 목록
+					 * @param openClose: 접힘&펼침 (true - 펼침, false - 접힘)
+					 */
 					var nodeChildHandler = function(jstreeTarget, childrenList, openClose){
 						if($.osl.isNull(childrenList) || childrenList.length == 0){
 							return true;
@@ -483,15 +581,15 @@
 								url:"",
 								param:"",
 								key:"",
-								
+								/* 부모 key 값 */
 								pKey:"",
-								
+								/* 출력 text key */
 								labelKey: ""
 							},
 				            'plugins': ["contextmenu", "types", "search"],
 				            'core': {
 				                "themes" : {
-				                	
+				                	/* 노드 내용 영역 넘어가는 경우 줄임 */
 				                    "ellipsis": true,
 				                    "stripes": false
 				                },    
@@ -552,9 +650,9 @@
 				            	}
 				            },
 				            "callback":{
-				            	
+				            	/* tree 로딩 후 호출 */
 				            	"init": $.noop,
-				            	
+				            	/* tree node 선택(클릭) 시 호출 */
 								"onclick": $.noop
 							}
 				        };
@@ -599,7 +697,7 @@
 					}
 					
 					
-					
+					/* data 셋팅 */
 					var url = config.data.url;
 					var paramData = config.data.param;
 					
@@ -640,13 +738,13 @@
 								var pKey = config.data.pKey;
 								var labelKey = config.data.labelKey;
 								
-								
+								/* jsonArray => key:{jsonData} 변환*/
 								$.each(treeDataList, function(idx, map){
 									map["text"] = map[labelKey];
 									tmpMap[map[key]] = map;
 								});
 								
-								
+								/* 위에서 세팅된 목록 값으로 계층 데이터 구현하기 */
 								$.each(treeDataList, function(idx, map){
 									
 									if(tmpMap[map[pKey]] && map[key] != map[pKey]){
@@ -666,7 +764,7 @@
 								config.core.data = rtnTreeData;
 							}
 							
-							
+							/* context 셋팅*/
 							treeObj = targetObj.jstree(config);
 							
 							
@@ -699,7 +797,7 @@
 							
 							
 							if(searchTarget.length > 0){
-								
+								/* 검색  input 세팅 */
 								
 								searchTarget.empty();
 								
@@ -793,7 +891,11 @@
 			}
 		}
 		,langData: {}
-		
+		/**
+		 *  function 명 	: $.osl.lang
+		 *  function 설명	: 언어 코드
+		 *  @param langId: 언어 값 가져오려는 계층 코드 (예: file.error.downloadWait)
+		 **/
 		,lang: function(langId){
 			
 			var langData = this.langData;
@@ -844,7 +946,11 @@
 			
 			return rtnLangStr;
 		}
-		
+		/**
+		 *  function 명 	: $.osl.langConvert
+		 *  function 설명	: 대상 영역에 span 태그 문자열을 언어 코드에 맞게 변경한다.
+		 *  @param targetElem: 대상 영역 (대상 영역 하위의 span만 적용)  
+		 **/
 		,langConvert: function(targetElem){
 			
 			if($.osl.langCd == "ko"){
@@ -879,7 +985,10 @@
 				});
 			}
 		}
-		
+		/**
+		 *  function 명 	: $.osl.btnAuthVal
+		 *  function 설명	: 공통 버튼 권한 전역 변수
+		 **/
 		,btnAuthVal: {
 			btnAuthSelectYn:	"N"
 			,btnAuthInsertYn:	"N"
@@ -888,11 +997,25 @@
 			,btnAuthExcelYn:	"N"
 			,btnAuthPrintYn:	"N"
 		}
-		
+		/**
+		 *  function 명 	: $.osl.prjMenuList
+		 *  function 설명	: 메뉴 계층 데이터
+		 **/
 		,prjMenuList:{}
-		
+		/**
+		 *  function 명 	: $.osl.prjGrpAuthList
+		 *  function 설명	: 프로젝트 그룹, 프로젝트, 권한그룹 데이터
+		 **/
 		,prjGrpAuthList:{}
-		
+		/**
+		 *  function 명 	: $.osl.prjGrpAuthSelSetting
+		 *  function 설명	: 프로젝트 그룹, 프로젝트, 권한그룹 데이터를 select에 세팅
+		 *  @param depth: 출력 깊이
+		 *  		1: 프로젝트 그룹
+		 *  		2: 프로젝트 그룹(optGroup) > 프로젝트
+		 *  		3: 프로젝트(optGroup) > 권한 그룹
+		 *  @param paramSelFlag (Boolean): 현재 선택된 프로젝트 그룹, 프로젝트, 권한그룹 초기 선택지정 유무  (기본 - false)
+		 **/
 		,prjGrpAuthSelSetting: function(depth, paramSelFlag){
 			var rtnValue = '';
 			
@@ -976,7 +1099,10 @@
 				return rtnValue;
 			}
 		}
-		
+		/**
+		 *  function 명 	: $.osl.initHeaderClear
+		 *  function 설명	: 헤더 데이터 세팅에 필요한 영역 초기화
+		 **/
 		,initHeaderClear: function(){
 			
 			$("#globalsTopMenuUl > li.osl-menu-1depth").remove();
@@ -993,9 +1119,13 @@
 			
 			$("select[id^=usrOpt_]").empty();
 		}
-		
+		/**
+		 *  function 명 	: $.osl.initHeader
+		 *  function 설명	: 즐겨찾기, 메뉴, 프로젝트 및 권한그룹 등 top 데이터 세팅
+		 *  @param callBackFn : Header init 완료 후 실행 함수
+		 **/
 		,initHeader: function(callBackFn){
-			
+			/* 즐겨찾기 데이터 조회 */
 			
 			var ajaxObj = new $.osl.ajaxRequestAction(
 					{"url":"/cmm/cmm9000/cmm9000/selectCmm9000InitHeaderData.do", "loadingShow": false});
@@ -1590,11 +1720,22 @@
 			
 			ajaxObj.send();
 		}
-		
+		/**
+		 *  function 명 	: $.osl.datatable
+		 *  function 설명	: datatable 생성자
+		 **/
 		,datatable:{
-			
+			/**
+			 *  function 명 	: $.osl.datatable.list
+			 *  function 설명	: 페이지에 생성된 datatable 목록
+			 **/
 			list:{},
-			
+			/**
+			 *  function 명 	: $.osl.datatable.setting
+			 *  function 설명	: targetId div에 datatable를 생성한다.
+			 *  @param targetId: datatable 생성 타겟 요소 ID (# 제외) 
+			 *  @param config: datatable 설정 값
+			 **/
 			setting: function(targetId, config){
 				
 				if($.osl.isNull(targetId)){
@@ -1680,7 +1821,13 @@
 							KTApp.initTooltips();
 						}
 					},
-					
+					/**
+					 * 해당되는 버튼 동작 함수 - 사전 데이터 가공 작업
+					 * select -> 해당 datatable 페이지 1로 복귀하고 데이터 재 조회
+					 * insert -> config에 선언된 insert 함수 호출 (페이지 제어) 
+					 * update,delete -> config에 선언된 insert 함수 호출 (페이지 제어)
+					 * 				-> 선택된 데이터 Json 파라미터 값으로 전달
+					 */
 					action: {
 						"select": function(elem, datatableId) {
 							$(elem).off("click");
@@ -1863,7 +2010,14 @@
 					}
 				};
 				
-				
+				/**
+				 * 검색 영역 세팅
+				 * @desc 페이지 내에서 datatable config - columns 세팅 시 사용 값
+				 * search: true (검색 기능 사용 유무)
+				 * searchType:"select" (검색 종류 [select, date, daterange, text])
+				 * searchCd: "REQ00008" (검색 종류가 select인 경우 사용되는 공통 코드 마스터 코드 값)
+				 * searchField:"reqProTypeCd" (DB 조회 시 실제 검색 되는 컬럼 명)
+				 */
 				var searchEvt = {
 					init: function(elemId, searchColumns){
 						
@@ -1961,7 +2115,7 @@
 						$(".osl-datatable-search__select[data-datatable-id="+elemId+"]").hide();
 						$(".osl-datatable-search__input[data-datatable-id="+elemId+"]").show();
 					},
-					
+					/* 실제 동작 코드 */
 					action: {
 						"select":function(){
 							
@@ -2007,7 +2161,12 @@
 								$.osl.showLoadingBar(false,{target: targetId});
 							},300);
 						},
-						
+						/**
+						 * 검색 드롭다운 메뉴 변경 시 타입에 따라 input, select 세팅
+						 * @param type: [input, select]
+						 * @param disabled: 입력 상자 disabled 유무 (select 해당 없음)
+						 * @param readonly: 입력 상자 readonly 유무 (select 해당 없음)
+						 */
 						"layout-clean": function(elemId, type, disabled, readonly, laIcon){
 							
 							if(type == "select"){
@@ -2034,14 +2193,18 @@
 					
 					inputHandle: function(elemId, searchFieldId, searchType, searchCd){
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						var searchDataTarget = $(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]");
 						
-						$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						searchDataTarget.val('');
 						
-						$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						$.osl.date.datepicker(searchDataTarget,"destroy");
+						
+						$.osl.date.daterangepicker(searchDataTarget,"destroy");
 						
 						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
 						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						
+						searchDataTarget.off('keypress');
 						
 						if(searchType == "select"){
 							
@@ -2079,7 +2242,7 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, selected){
+							$.osl.date.datepicker(searchDataTarget, {}, function(defaultConfig, selected){
 								var minDate = new Date(selected.date).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(selected.date).format("yyyy-MM-dd 23:59:59");
 								
@@ -2097,7 +2260,7 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, start, end, label){
+							$.osl.date.daterangepicker(searchDataTarget, {}, function(defaultConfig, start, end, label){
 								
 								var minDate = new Date(start).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(end).format("yyyy-MM-dd 23:59:59");
@@ -2116,8 +2279,29 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,false);
 							
 							
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").off('keypress');
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").on('keypress', function(e) {
+							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
+							var fieldData = datatableInfo.getColumnByField(fieldId);
+							
+							if(!$.osl.isNull(fieldData)){
+								
+								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
+									var keyCode = fieldData["searchKeyCode"];
+									var keyEvt = fieldData["searchKeyEvt"];
+									
+									
+									if(!$.osl.isNull(keyCode) && keyCode != 13 && typeof keyEvt == "function"){
+										
+										searchDataTarget.on('keypress', function(e) {
+											if (e.which == keyCode){
+												keyEvt();
+											}
+										});
+									}
+								}
+							}	
+							
+							
+							searchDataTarget.on('keypress', function(e) {
 								if (e.which === 13){
 									var thisObj = $(this);
 									var thisObjIcon = thisObj.siblings("span").find("i.la");
@@ -2132,7 +2316,7 @@
 				
 				var ktDatatableTarget = $("#"+targetId);
 				if(ktDatatableTarget.length > 0){
-					
+					/* datatable 기본 설정 값 */
 					var datatableConfig = {
 						data: {
 							type: 'remote',
@@ -2236,22 +2420,22 @@
 							}
 						},
 						callback:{
-							
+							/* datatable 호출 완료 후 */
 							initComplete: $.noop,
-							
+							/* datatable 내부 ajax 호출 성공 시 */
 							ajaxDone: $.noop,
-							
+							/* datatable reload */
 							reloaded: $.noop,
-							
+							/* datatable sort*/
 							sort: $.noop,
-							
+							/* datatable page size change*/
 							perpage: $.noop,
-							
+							/* datatable page number change*/
 							gotoPage: $.noop
 						}
 					};
 					
-					
+					/* datatable 세팅 */
 					
 					var targetConfig = $.extend(true, {}, datatableConfig);
 						
@@ -2265,7 +2449,21 @@
 					if(targetConfig.hasOwnProperty("actionBtn")){
 						var actionBtnStr = '';
 						var actionBtnFlag = false;
+						/*
 						
+						if(targetConfig.actionFn.hasOwnProperty(btnAction)){
+							$(this).off("click");
+							$(this).click(function(event){
+								
+								event.cancelable = true;
+								event.stopPropagation();
+								event.preventDefault();
+								event.returnValue = false;
+								
+								targetConfig.actionFn[btnAction](btnDatatableId);
+							});
+						}
+						*/
 						
 						var ignoreActionBtn = ["autoHide", "title", "width", "lastPush"];
 						
@@ -2473,7 +2671,11 @@
 						if($.osl.isNull(datatableInfo.getColumnByField(data.field))){
 							$.osl.alert($.osl.lang("datatable.sort.fieldNotMatch"));
 						}else{
-							
+							/* 
+							 * sort 해당 컬럼에 sortField 있는지 체크, 있다면 대체
+							 * sort정보 데이터 테이블 파라미터에 대입 
+							 * 페이지 재 조회
+							 * */
 							var field = data.field;
 							var columnTarget = datatableInfo.getColumnByField(data.field);
 							if(columnTarget.hasOwnProperty("sortField")){
@@ -2532,14 +2734,24 @@
 			}
 		}
 		,date: {
-			
+			/**
+			 *  function 명 	: $.osl.date.init
+			 *  function 설명	: datepicker, datetimepicker 언어 처리
+			 **/
 			init: function(){
 				
 				$.fn.datepicker.dates['ko'] = $.osl.lang("date.datepicker");
 				
 				moment.updateLocale('fr', $.osl.lang("date.moment"));
 			}
-			
+			/**
+			 *  function 명 	: $.osl.date.datepicker
+			 *  function 설명	: 타겟 오브젝트에 datepicker 세팅
+			 *  @param targetObj : datepicker 대상 오브젝트
+			 *  @param config : datepicker 설정 값 (String == 'destroy'인 경우 해당 datepicker 제거)
+			 *  		예) $.osl.date.datepicker($(".osl-datatable-search__input > input#searchData"),"destroy")
+			 *  @param callback: 일자 선택시 반환 함수
+			 **/
 			,datepicker: function(targetObj, config, callback){
 				
 				if($.osl.isNull($(targetObj)) || $(targetObj).length == 0){
@@ -2577,7 +2789,14 @@
 					});
 				}
 			}
-			
+			/**
+			 *  function 명 	: $.osl.date.daterangepicker
+			 *  function 설명	: 타겟 오브젝트에 daterangepicker 세팅
+			 *  @param targetObj : daterangepicker 대상 오브젝트
+			 *  @param config : daterangepicker 설정 값 (String == 'destroy'인 경우 해당 daterangepicker 제거)
+			 *  		예) $.osl.date.daterangepicker($(".osl-datatable-search__input > input#searchData"),"destroy")
+			 *  @param callback: 일시 선택시 반환 함수
+			 **/
 			,daterangepicker: function(targetObj, config, callback){
 				
 				if($.osl.isNull($(targetObj)) || $(targetObj).length == 0){
@@ -2622,13 +2841,20 @@
 			}
 		}
 		
-		
+		/**
+		 *  function 명 	: $.osl.user
+		 *  function 설명	: 사용자 처리 기본 생성자 함수
+		 **/
 		,user: {
-			
+			/* 사용자 정보 */
 			userInfo:{}
-			
+			/* 사용자 설정 값 데이터 */
 			,usrOptData:{}
-			
+			/**
+			 *  function 명 	: $.osl.user.logout
+			 *  function 설명	: 로그아웃 처리
+			 * @param cookieName 쿠키이름
+			 */
 			,logout: function(){
 				$.osl.confirm($.osl.lang("common.logout.confirm"),{"confirmButtonText": $.osl.lang("common.logout.button")},function(result) {
 			        if (result.value) {
@@ -2638,7 +2864,11 @@
 			        }
 			    });
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.deleteCookie
+			 *  function 설명	: 비밀번호 만료일 alert이 로그인 시 한번만 나타나게 하기위해 생성한 쿠키를 삭제
+			 * @param cookieName 쿠키이름
+			 */
 			,deleteCookie: function(cookieName){
 				var expireDate = new Date();
 				  
@@ -2646,7 +2876,11 @@
 				expireDate.setDate( expireDate.getDate() - 1 );
 				document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString() + "; path=/";
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.pwChangeDay
+			 *  function 설명	: 사용자 비밀번호 만료일 체크
+			 * @param pwlimitDay 비밀번호 만료일
+			 */
 			,pwChangeDay: function(pwExpireDay){
 				
 				if( $.osl.user.isCookie("pwExpire") == false ){
@@ -2660,7 +2894,11 @@
 					}	
 				}
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.isCookie
+			 *  function 설명	:   쿠키의 유무 체크
+			 * @param cookieName 쿠키이름
+			 */
 			,isCookie: function(cookieName) {
 				cookieName = cookieName + '=';
 				var cookieData = document.cookie;
@@ -2672,13 +2910,22 @@
 				}
 				return exist;
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.setCookie
+			 *  function 설명	:  비밀번호 만료일 alert이 로그인 시 한번만 나타나게 하기위한 쿠키를 생성한다.
+			 * @param cookieName 쿠키이름
+			 * @param cookieValue 쿠키값
+			 */
 			,setCookie: function(cookieName, cookieValue) {   
 				var cDate = new Date();
 				cDate.setTime(cDate.getTime() + 1000*60*60*1); 
 				document.cookie = cookieName + "=" + cookieValue + "; path=/; expires=" + cDate.toGMTString() + ";";
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.usrOptChg
+			 *  function 설명	: 사용자 설정 값 변경 시 즉시 적용 함수
+			 * @param 사용자 설정 값
+			 */
 			,usrOptChg: function(thisTarget){
 				
 				var usrOptCd = thisTarget.value;
@@ -2714,7 +2961,11 @@
 				
 				ajaxObj.send();
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.usrOptLangChg
+			 *  function 설명	: 사용자 언어 코드 설정
+			 * @param 언어코드 Element 대상
+			 */
 			,usrOptLangChg: function(thisTarget){
 				
 				var usrOptCd = $(thisTarget).attr("value");
@@ -2738,7 +2989,23 @@
 					if( data.errorYn == "N" ){
 						
 						location.reload();
+						/*
 						
+						$("#usrCurrentLangCd > img").attr("src","/media/flags/"+subCdRef2);
+						$(thisTarget).children(".kt-nav__link-text").text(subCdRef1);
+						
+						
+						$.osl.langCd = subCd;
+						
+						
+						$("#usrLangCdList .kt-nav__item.active").removeClass("active");
+						$(thisTarget).parent(".kt-nav__item").addClass("active");
+						
+						
+						$.osl.initHeaderClear();
+						
+						$.osl.initHeader();
+						*/
 					}
 					
 					$.osl.toastr(data.message);
@@ -2748,7 +3015,35 @@
 				
 				ajaxObj.send();
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.usrImgSet
+			 *  function 설명	: 사용자 프로필 이미지와 사용자명을 세팅해서 반환한다.
+			 * @param paramUsrImgId 사용자 프로필 이미지 ID
+			 * @param paramData 사용자 명 또는 Json Object
+			 * 			json Object인경우
+			 * 			html: 사용자 이미지 우측에 출력하려는 내용 (화면에서 변수 넘길 시 $.osl.escapeHtml 처리 필수)
+			 * 			imgSize: 사용자 이미지 사이즈 (sm, md, lg, xl) - sm 기본
+			 * 			class:{
+			 * 				cardBtn: 최 상위 요소 class
+			 * 				cardPic: 사용자 이미지 상위 요소 class
+			 * 				usrImg: 사용자 이미지 class
+			 * 				cardDetail: 사용자 이미지 우측 내용 상위 요소 class
+			 * 				cardName: 우측 내용 class
+			 * 			}
+			 * 
+			 * 예제)
+			 * 	var paramData =	{
+			 * 		html: row.usrNm,
+			 * 		imgSize: md,
+			 * 		class: {
+			 * 			cardBtn: "",
+			 * 			cardPic: "",
+			 * 			usrImg: "",
+			 * 			cardDetail: "",
+			 * 			cardName: ""
+			 * 		}
+			 * 	}
+			 */
 			,usrImgSet: function(paramUsrImgId, paramData){
 				var usrImgId = $.osl.user.usrImgUrlVal(paramUsrImgId);
 				
@@ -2793,7 +3088,11 @@
 				
 				return returnStr;
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.usrImgUrlVal
+			 *  function 설명	: 사용자 프로필 이미지 Url 세팅
+			 * @param paramUsrImgId 사용자 프로필 이미지 ID
+			 */
 			,usrImgUrlVal: function(paramUsrImgId){
 				var usrImgId = '/cmm/fms/getImage.do?fileSn=0&atchFileId='+paramUsrImgId;
 				if($.osl.isNull(paramUsrImgId)){
@@ -2802,7 +3101,11 @@
 				
 				return usrImgId;
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.usrInfoPopup
+			 *  function 설명	: 사용자 정보 팝업
+			 * @param paramUsrId 사용자 ID
+			 */
 			,usrInfoPopup: function(paramUsrId){
 				var data = {paramUsrId: paramUsrId};
 				var options = {
@@ -2818,7 +3121,15 @@
 					};
 				$.osl.layerPopupOpen('/cmm/cmm8000/cmm8000/selectCmm8000View.do',data,options);
 			}
-			
+			/**
+			 *  function 명 	: $.osl.user.passwordValidate
+			 *  function 설명	: 사용자가 입력한 비밀번호 유효성 체크
+			 *  			  1. 비밀번호에 사용자 아이디 포함되었는지 체크
+			 *  			  2. 비밀번호에 같은 문자가 3자 이상 연속해서 사용되었는지 체크
+			 *  			  3. 비밀번호에 연속된 문자열(123, abc 등)이 3자 이상 포함되어있는지 체크
+			 * @param inUsrId 입력한 사용자 ID
+			 * @param inUsrPw 입력한 사용자 비밀번호
+			 */
 			,passwordValidate: function(inUsrId, inUsrPw){
 				
 				if($.osl.isNull(inUsrId)){
@@ -2853,7 +3164,11 @@
 				
 				return false;
 			}
-			
+			/**
+			 *  function 명 	: $.usrMyPagePopUp
+			 *  function 설명	: 사용자 개인정보 수정 팝업을 오픈한다.
+			 * @param usrId : 로그인한 사용자 아이디
+			 */
 			,usrMyPagePopUp:function(usrId){
 				
 				
@@ -2873,7 +3188,14 @@
 				$.osl.layerPopupOpen('/usr/usr1000/usr1000/selectUsr1000View.do',data,options);
 			}
 		}
-		
+		/**
+		 *  function 명 	: $.osl.goMenu
+		 *  function 설명	: 상단 메뉴 클릭시 메뉴페이지 이동
+		 * @param menuUrl 메뉴 URL
+		 * @param menuId 메뉴 ID
+		 * @param menuNm 메뉴명
+		 * @param menuTypeCd 메뉴 이동 타입
+		 */
 		,goMenu: function(menuUrl, menuId, menuNm, menuTypeCd){
 			if(menuTypeCd != null && menuTypeCd != "" && menuTypeCd == "03"){
 				var popupWidth = window.screen.availWidth;
@@ -2887,14 +3209,23 @@
 				document.hideMoveForm.submit();
 			}
 		}
-		
+		/**
+		 * function 명 	: $.osl.goPrjGrp
+		 * function 설명	: 프로젝트 그룹 선택 시 페이지 이동
+		 * @param prjGrpId 프로젝트 그룹 Id
+		 */
 		,goPrjGrp: function(prjGrpId){
 			document.hideMoveForm.moveType.value = "01";
 			document.hideMoveForm.prjGrpId.value = prjGrpId;
 			document.hideMoveForm.action= "/cmm/cmm9000/cmm9000/selectCmm9000PageChgView.do";
 			document.hideMoveForm.submit();
 		}
-		
+		/**
+		 * function 명 	: $.osl.goPrj
+		 * function 설명	: 프로젝트 선택 시 페이지 이동
+		 * @param prjGrpId 프로젝트 그룹 Id
+		 * @param prjId 프로젝트 Id
+		 */
 		,goPrj: function(prjGrpId, prjId){
 			document.hideMoveForm.moveType.value = "02";
 			document.hideMoveForm.prjGrpId.value = prjGrpId;
@@ -2902,7 +3233,13 @@
 			document.hideMoveForm.action= "/cmm/cmm9000/cmm9000/selectCmm9000PageChgView.do";
 			document.hideMoveForm.submit();
 		}
-		
+		/**
+		 * function 명 	: $.osl.goAuthGrp
+		 * function 설명	: 권한그룹 선택 시 페이지 이동
+		 * @param prjGrpId 프로젝트 그룹 Id
+		 * @param prjId 프로젝트 Id
+		 * @param authGrpId 권한 그룹 Id
+		 */
 		,goAuthGrp: function(prjGrpId, prjId, authGrpId){
 			document.hideMoveForm.moveType.value = "03";
 			document.hideMoveForm.prjGrpId.value = prjGrpId;
@@ -2913,8 +3250,86 @@
 		}
 	};
 	
-	
-	
+	/* osl 추가 메소드 */
+	/**
+	 *  function 명 	: $.osl.ajaxRequestAction
+	 *  function 설명	: AJAX 통신 공통 처리
+	 * - ajax통신 옵션은 property에서 배열로 처리
+	 * - 로딩 바 기본(통신 완료 퍼센트)
+	 * - AJAX통신 중 Background처리가 있는 경우 무조건 async = true(동기) 처리  예) 메일 전송 AJAX
+	 * property 옵션
+	 * - url
+	 * - dataType
+	 * - contentType
+	 * - async
+	 * - cache
+	 * - processData
+	 * data는 setData로 따로 설정 가능
+	 * 예제)
+	 * 1. 객체 선언과 동시에 옵션 세팅
+	 * var ajaxObj = new $.osl.ajaxRequestAction({
+			"url":"<c:url value='/req/req2000/req2000/insertReq2000ReqCommentInfoAjax.do'/>"
+			,"contentType":"application/x-www-form-urlencoded; charset=UTF-8"
+			,"datatype":"json"
+			,"async":false
+			,"cache":true
+			,"processData":true
+			});
+	 * 
+	 * 2. 객체 선언과 이후 옵션 세팅
+	 * 
+	 * var ajaxObj = new $.osl.ajaxRequestAction({
+			"url":"<c:url value='/req/req2000/req2000/insertReq2000ReqCommentInfoAjax.do'/>"
+			});
+		ajaxObj.setProperty({
+			"contentType":"application/x-www-form-urlencoded; charset=UTF-8"
+			,"datatype":"json"
+			,"async":false
+			,"cache":true
+			,"processData":true
+		});
+	 * 
+	 * 3. data 설정
+	 * ajaxObj.setData({"prjId" : prjId, "reqId" : reqId, "reqCmnt" : reqCmnt});
+	 * var ajaxObj = new $.osl.ajaxRequestAction({
+			"url":"<c:url value='/req/req2000/req2000/insertReq2000ReqCommentInfoAjax.do'/>"
+			,"contentType":"application/x-www-form-urlencoded; charset=UTF-8"
+			,"datatype":"json"
+			,"async":false
+			,"cache":true
+			,"processData":true}
+			,{"prjId" : prjId, "reqId" : reqId, "reqCmnt" : reqCmnt});
+	 * 3-1. 객체 선언과 동시에 data 설정
+	 * 
+	 * 4. AJAX 성공처리 함수 설정
+	 * 
+		ajaxObj.setFnSuccess(function(data){
+	    	
+	    	if(data.saveYN == 'N'){
+	    		$.osl.toastr(data.message);
+	    		return;
+	    	}
+	    	
+	    	gfnSetData2CommentsArea(data.reqCommentList, "reqCmntListDiv", "BRD");
+	    	
+	    	$("#reqCmnt").val("");
+	    	$.osl.toastr(data.message);
+		});
+	 * 
+	 * 5. AJAX 에러처리 함수 설정
+	 * ajaxObj.fnError(function(xhr, status, err){
+	 	
+	 	});
+	 * 
+	 * 6. AJAX 통신 준비, 통신 완료처리 4번과 동일
+	 * 
+	 * 7. AJAX 통신 시작
+	 * ajaxObj.send();
+	 * 
+	 * 		- 그 외 커스텀 추가 시 내용 삽입 - 
+	 * 2016-09-13			최초 작성			진주영
+	 * 2016-09-19			수정				진주영
+	 */
 	$.osl.ajaxRequestAction = function(property,data){
 		
 		this.url = this.data = this.mimeType = "";
@@ -3007,7 +3422,7 @@
 			    		obj.fnbeforeSend();
 			        },
 			        success: function(data, status, xhr) {
-			        	xhr: window.XMLHttpRequest ? 
+			        	xhr:window.XMLHttpRequest ? 
 						function() { return new window.XMLHttpRequest(); } : 
 						function() { 
 						    try { return new window.ActiveXObject("Microsoft.XMLHTTP"); } 
@@ -3065,7 +3480,18 @@
 		}
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.showLoadingBar
+	 *  function 설명	: loading 바를 show/hide 한다.
+	 * @param isShow: 로딩바호출 : true , 로딩바숨김 : false
+	 * @param config{
+	 * 			opacity			: 배경 투명도
+	 * 			overlayColor	: 배경 색상
+	 * 			type			: v2 (고정)
+	 * 			state			: 로딩바 이미지 색상 [brand, metal, light, dark, accent, focus, primary, success, info, waning, danger]
+	 * 			message			: 로딩 출력 문구
+	 * 			target			: 로딩바 표현 대상 (기본값 = 'page')
+	 */
 	$.osl.showLoadingBar = function(isShow, paramConfig){
 		var defaultConfig = {
 				opacity: 0.05,
@@ -3111,7 +3537,12 @@
 		}
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.isNull
+	 *  function 설명	:  널 체크
+	 * @param sValue
+	 * @returns {Boolean}
+	 */
 	$.osl.isNull = function(sValue)
 	{
 		if( typeof sValue == "undefined") {
@@ -3135,7 +3566,12 @@
 	    return false;
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.escapeHtml
+	 *  function 설명	: &<>'" 문자 치환
+	 * @param sValue
+	 * @returns {Replace String}
+	 */
 	$.osl.escapeHtml = function(sValue){
 		
 		if(typeof sValue == "number"){
@@ -3164,7 +3600,12 @@
 		}
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.unEscapeHtml
+	 *  function 설명	: (&amp;)|(&lt;)|(&gt;)|(&apos;)|(&quot;)문자 치환 => &<>'" 
+	 * @param sValue
+	 * @returns {Replace String}
+	 */
 	$.osl.unEscapeHtml = function(sValue){
 		
 		if(typeof sValue == "number"){
@@ -3187,7 +3628,23 @@
 		}
 	};
 
-	
+	/**
+	 *  function 명 	: $.osl.toastr
+	 *  function 설명	: toast 창을 팝업 한다.
+	 * @param msg: 내용
+	 * @param agument - typeof string: 제목
+	 * @param agument - typeof object: 
+	 * 					{
+	 * 						title: String					
+	 *  					,type: ['error', 'warning', 'info', 'success'] (default - success)
+	 * 					}
+	 * 
+	 * ex) 단순 내용, 타이틀 toast
+	 * $.osl.toastr("message","title");
+	 * 
+	 * ex) 타입 지정 toast
+	 * $.osl.toastr("message",{"title":"title", "type":"warning"});
+	 */
 	$.osl.toastr = function(msg, agument){
 		
 		var type = "success";
@@ -3228,7 +3685,18 @@
 		}
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.alert
+	 *  function 설명	: alert 창을 팝업 한다. (window.alert)
+	 * @param title			alert 제목
+	 * @param options		alert 옵션
+	 * 			text		alert 내용
+	 * 			type		경고창 type [error, warning, info, success, question]
+	 * 			position	[top, bottom, center, top-right, top-left, bottom-right, bottom-left]
+	 * 			showConfirmButton	경고 창 버튼 유무 (defatul-false)
+	 * 			timer		자동 close 시간
+	 * @param callbackFn	alert ok 버튼 클릭 시 발생하는 이벤트
+	 */
 	$.osl.alert = function(title, options, callbackFn){
 		var defaultConfig = {
 			title: title,
@@ -3252,7 +3720,16 @@
 		});;
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.confirm
+	 *  function 설명	: 버튼이 있는 alert 창을 팝업한다. (window.confirm)
+	 * @param msg			alert 내용
+	 * @param optoins		alert 옵션
+	 * 						-title					팝업 제목
+	 * 						-confirmButtonText		팝업 ok 버튼 문구
+	 * 						-type					경고창 type ['error', 'warning', 'info', 'success', 'question'] (default - warning)
+	 * @param callbackFn	
+	 */
 	$.osl.confirm = function(msg,options,callbackFn){
 		
 		if($.osl.isNull(msg)){
@@ -3290,7 +3767,25 @@
 	    });
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.validate
+	 *  function 설명	: 폼값 유효성 체크 validate rules, messages 자동 세팅
+	 * @param formId	: 대상 form Id
+	 * 속성에 유효성 조건 선언
+	 * 
+	 * @attribute
+	 * 		required	: 필수(싱글 선언 또는 true,required)
+	 * 		minlength	: 입력 글자 수 최소값
+	 * 		maxlength	: 입력 글자 수 최대값
+	 * 		regexstr	: 정규식 체크
+	 * 		regexalert	: 정규식 조건에 맞지 않는 경우 포함하는 문구 "영문,숫자 필수 포함, $@$!%*#?&"
+	 * 		equalTo		: 동일한 값 체크 #element_id 형식으로 입력 (ex. #in_usrPw)
+	 * 
+	 * ex)
+	 *  <input type="text" class="form-control" id="in_usrId" name="in_usrId" placeholder="(20자 까지 입력 가능)" minlength="3" maxlength="20" regexstr="^[a-z0-9_-]{5,20}$" regexalert="영문, 숫자, _-" required>
+	 *  
+	 *  @return validate 객체 반환 ( 반환 이후 페이지에서 .valid() 사용
+	 */
 	$.osl.validate = function(formId){
 		var formTarget = $("#"+formId);
 		
@@ -3393,7 +3888,12 @@
 					}
 				}
 			});
+			/*
 			
+			if(!$.osl.isNull($elemInfo.attr("multipleValid"))){
+				var targetValue = $elemInfo.val();
+			}
+			*/
 		});
 		
 		var v = formTarget.validate({
@@ -3416,7 +3916,14 @@
 		return v;
 	};
 	
-	
+	/**
+	 * Date Format Function
+	 * @param f
+	 * @param type = null or true
+	 * 		UTC로 저장된 컬럼인 경우 null
+	 * 		그 외 지역 시간으로 저장된 컬럼인 경우 true
+	 * @returns
+	 */
 	
 	Date.prototype.format = function(f,type) {
 	    if (!this.valueOf()) return " ";
@@ -3461,7 +3968,14 @@
 	String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
 	Number.prototype.zf = function(len){return this.toString().zf(len);};
 	
-	
+	/**
+	 * function 명 	: $.osl.showLoading 
+	 * function 설명	: Ajax로 트랜잭션시 사용할 loading 바를 show/hide 한다.
+	 * @param isShow: 로딩바호출 : true , 로딩바숨김 : false
+	 * @param data{
+	 * 			targetObj: 대상 $ : body (default)
+	 * 	
+	 */
 	$.osl.showLoading = function(isShow,data){
 		
 		var $targetObj = $("body");
@@ -3512,7 +4026,12 @@
 		}
 	};
 	
-	
+	/**
+	 *  function 명 	: $.osl.byteCalc
+	 *  function 설명	: byte 용량을 받아서 형 변환 후 리턴해주는 함수
+	 * @param bytes
+	 * @returns {String} 변환 값
+	 */
 	$.osl.byteCalc = function(bytes){
 		if(bytes < 0){
 			return 0+" bytes";
@@ -3526,13 +4045,32 @@
 	    return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
 	};
 	
-	
+	/**
+	 * 	function 명 	: $.osl.layerPopupOpen
+	 *  function 설명	: 레이어 팝업을 호출한다.
+	 * @param url		: 모달창 내용 ajax url
+	 * @param data		: 모달창 ajax에 전달할 data
+	 * @param opt		: 모달창 옵션
+	 * @opt
+	 * 			modalSize		: 모달 창 크기 [xl, lg, md, sm]
+	 * 			backdrop		: 모달 창 영역 외에 클릭으로 모달 창 닫기 여부 [true - default(static), false]
+	 * 			keyboard		: 키보드 ESC 버튼으로 모달 창 닫기 여부
+	 * 			showLoading		: 모달 창 오픈시 로딩화면 여부
+	 * 			closeConfirm	: 모달 창 닫기 클릭 했을때 닫을건지 경고창 여부
+	 * 			idKeyDuple		: 같은 모달 창 중복 팝업 여부 (권장 하지 않음, 변수 중복 문제 등)
+	 * 			idKey			: 모달 창을 오픈한 객체(같은 모달 중복 팝업 방지) 
+	 * 			focus			: open modal auto focusing
+	 * 			class			: header, body, footer에 추가 class 선언
+	 */
 	$.osl.layerPopupOpen = function(url, data, opt){
 		
 		return modal_popup(url, data, opt);
 	};
 	
-	
+	/**
+	 * 	function 명 	: $.osl.layerPopupClose
+	 *  function 설명	: 최상위 레이어 팝업을 닫는다.
+	 */
 	$.osl.layerPopupClose = function(){
 		
 		modalCloseFlag = true;
@@ -3540,7 +4078,10 @@
 	};
 
 	
-	
+	/**
+	 * 	function 명 	: $.favoritesEdit
+	 *  function 설명	: 즐겨찾기 아이콘 클릭 시 발생 이벤트
+	 */
 	$.osl.favoritesEdit = function(e, thisObj){
 		
 		e.preventDefault();
@@ -3685,7 +4226,32 @@
 	};
 	
 	
-	
+	/**
+	 * function명 	: $.osl.getMulticommonCodeDataForm [조회 조건 select Box 용]
+	 * function설명	: 트랜잭션을 여러번 날리는게 아닌 단일 트랜잭션으로 콤보 코드를 가지고 오는 용도로 사용, 콤보용 공통 코드 및 공통코드명 가져올때 사용
+	 * 				  공통코드 테이블을 참조하여 콤보데이터를 가지고 온다.
+	 * 				  Ex>
+	 * 					  1. json data 세팅
+	 *	 						mstCd: 공통코드 마스터 코드
+	 *	 						useYn: 사용구분 저장(Y: 사용중인 코드만, N: 비사용중인 코드만, 그 외: 전체)
+	 *	 						comboType: 공통코드 가져와 적용할 콤보타입 객체 배열 ( S:선택, A:전체(코드값 A 세팅한 조회조건용), N:전체, E:공백추가, OS:select 객체에 OS="" 값 설정할경우 값 적용,그 외:없음 )
+	 *	 						targetObj: 공통코드 적용할 select 객체 ID(*)
+	 * 					  2. 대분류 코드를 세팅할 selectBox 객체를 배열로 대분류 코드 순서와 일치하게 세팅하여 보낸다.
+	 * 					  3. 사용여부가 사용인지, 미사용인지 아니면 전체를 다 가지고 올지를 판단. (N: 사용하지 않는 것만, Y: 사용하는 것만, 그외: 전체)
+	 *            		  4. 콤보타입을 전체, 선택, 일반 바로 선택 가능한 상태에 대한 조건을 순서대로 배열로 보낸다. ["S", "A", "E", "JSON",""] S: 선택, A: 전체, E:공백추가 OS:선택 값 selected , JSON:반환 데이터를 json으로 리턴 , 그 외: 없음  
+	 *            			OS: 해당 select attr에 OS="01" 등과 같이 입력 -> option elements 생성 후 해당 value의 option을 selected한다.
+	 *            			JSON: 반환 데이터를 기타 사용 할 수 있도록 JSON OBJECT로 제공 
+	 *                    5. input box data-osl-value="" 지정 후 값 넣는 경우 해당 option selected
+	 * @param commonCodeArr		:	공통코드 조회 필요 데이터
+	 * var commonCodeArr = [
+			{mstCd: "ADM00003",useYn: "Y",targetObj: "#in_usrPositionCd"},
+			{mstCd: "ADM00004",useYn: "Y",targetObj: "#in_usrDutyCd"},
+			{mstCd: "CMM00001",useYn: "Y",targetObj: "#in_asideShowCd"},
+			{mstCd: "CMM00001",useYn: "Y",targetObj: "#in_useCd"}
+		]
+		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
+	 * @param isAsyncMode	:	동기, 비동기 모드( true: 비동기식 모드, false: 동기식 모드 )
+	 */
 	
 	$.osl.getMulticommonCodeDataForm = function(commonCodeArr , isAsyncMode){
 		
@@ -3782,7 +4348,17 @@
 		ajaxObj.send();
 	}
 	
-	
+	/**
+	 * function 명 	: $.osl.setDataFormElem
+	 * function 설명	: json데이터로 온 객체(Json 형식 단건 list 아님)를 키와 FORM 안의 ID값을 찾아
+	 * 				  자동으로 데이터를 세팅하는 메서드.
+	 * 				  부모 obj 안에 포함되어 있는 폼엘레먼트들도 type을 체크하여 라디오 버튼을 제외하고는 밸류를 세팅한다.
+	 * @param json 	: json info(단건)
+	 * @param formId : Form ID
+	 * @param matchKey (ArrayList) : 해당하는 Key값만 매치해서 값을 세팅한다.
+	 * 
+	 * 사용 예) $.osl.setDataFormElem($.osl.user.userInfo,"frReq1001", ["usrNm","email","telno","deptName","deptId"])
+	 */
 	$.osl.setDataFormElem = function(jsonObj, formId, matchKey){
 		if(jsonObj != null && Object.keys(jsonObj).length > 0){
 			var form = $("#"+formId);
@@ -3858,7 +4434,13 @@
 		}
 	}
 	
-	
+	/**
+	 * function 명 	: $.osl.editorSetting
+	 * function 설명	: targetId Elemenet에 summernote 생성
+	 * 
+	 * @param	targetId: summernote 사용 Object (#제외)
+	 * @param	config: 해당 form에 주입된 validate
+	 */
 	$.osl.editorSetting = function(targetId, config){
 		var targetObj = $("#"+targetId);
 		
@@ -3943,7 +4525,22 @@
 		return rtnEditObj;
 	}
 	
-	
+	/**
+	 * function 명 	: $.osl.formDataToJsonArray
+	 * function 설명	: 해당 폼에서 자동으로 폼값을 가져와 FormData()에 세팅 (객체 name값을 key값으로 사용, name없는 경우 id값으로 대체)
+	 * @attr
+	 * - input box -	title -> 항목 명
+	 *					value -> 항목 값
+	 *					id	  -> 항목 필드명
+	 *					type  -> 항목 타입
+	 *					modifyset	-> 01- 이력 저장 항목[기본값], 02- 이력 저장 안함
+	 *					opttarget	-> 01 - 기본 컬럼, 02 - 추가 항목, 03 - 배포계획, 04 - 기본 항목
+	 *					opttype		-> (-1) - 입력 값 그대로 전송, 01 - 기본값 , 02- 공통코드(cmmcode 속성 값 필요), 03- 사용자, 04- 배포계획
+	 *					cmmcode		-> 공통코드
+	 *					optFlowId		-> 작업흐름 Id
+	 * @param formId	값을 가져올 폼 Id
+
+	 */
 	$.osl.formDataToJsonArray = function(formId){
 		var fd = new FormData();
 		
@@ -3999,7 +4596,7 @@
 						modifySetCd = "01";
 					}
 					
-					
+					/* jsonData 세팅 */
 					
 					var eleTitle = element.title;
 					
@@ -4032,7 +4629,14 @@
 		return fd;
 	}
 	
-	
+	/**
+	 * function 명 	: $.osl.continueStrChk
+	 * function 설명	: 입력된 문자열에 연속된 문자(123, abc 등)가 있는지 체크한다.
+	 * 
+	 * @param	str: 입력 문자열
+	 * @param	limit: 연속된 문자열 자리수, 3입력시 123, abc등 3자리 연속된 문자열 체크
+	 * @returns 연속된 문자열 체크 결과(boolean)
+	 */
 	$.osl.continueStrChk = function(str, limit){
 		var char1, char2, char3, char4 = 0;
 
@@ -4048,7 +4652,21 @@
 		return true;
 	}
 	
-	
+	/**
+	 * function 명 	: $.osl.datetimeAgo
+	 * function 설명	: 현재 시간 기준으로 입력된 시간이 얼마나 경과됬는지를 반환한다.
+	 * 
+	 * @param	paramDatetime: 입력 문자열
+	 * @param	option: 반환 설정 값
+	 * 
+	 * 	returnTime: 반환 시간 기준 (입력된 기준 시간 값을 반환한다 m - 90분 전, s - 5100초 전)
+	 * 			(y - 연도, M - 월, d - 일, h - 시간, m - 분, s - 초)
+	 * 
+	 * 	fullTime: 전체 시간 반환 기준 (입력된 기준 시간이 0보다 큰 경우 전체 시간 값을 반환한다 M이 1개월 이상인경우 "yyyy-MM-dd HH:mm:ss"로 반환)
+	 * 			$.osl.datetimeAgo(timestamp, M) -> month : 1인 경우 "yyyy-MM-dd HH:mm:ss"로 반환
+	 * 			(y - 연도, M - 월, d - 일, h - 시간, m - 분, s - 초)
+	 * @returns 
+	 */
 	$.osl.datetimeAgo = function(paramDatetime, options){
 		var today = new Date();
 		var agoTime = new Date() - paramDatetime;
