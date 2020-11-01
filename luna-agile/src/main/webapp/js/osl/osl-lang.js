@@ -1,8 +1,11 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -166,7 +169,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -221,7 +224,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -344,15 +347,43 @@ var OSLCoreLangSetting = function () {
 				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
 			},
 			label:{
+				name: "게시판 명",
+				type : "유형",
+				dsType : "게시물 공개 범위",
+				option : "옵션",
+				noticeCheck : "공지사항 사용",
+				commentCheck : "댓글 사용",
+				secretCheck : "비밀글 사용",
+				attchFileCheck : "첨부파일 사용",
+				tagCheck : "태그 사용",
+				fileCount : "첨부파일 갯수",
+				maxFileCnt : "최대 갯수 : 10",
+				limitFileStrg : "첨부파일 용량 제한(MB)",
 				maxFileStrg:{
+					basic : "최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB",
 					normal: "최대 500MB",
 					movie: "최대 2048MB(2GB)",
 					storage: "최대 4096MB(4GB)"
-				}
+				},
+				admin : "담당자",
+				writer : "글 작성 범위",
+				nothing : "미배정 권한그룹 및 사용자",
+				user : "사용자",
+				authGrp : "권한그룹",
 			},
 			title:{
 				admin: "담당자 지정",
 				writer: "글 작성 범위 지정"
+			},
+			button : {
+				reset : "초기화",
+				equals : "담당자 동일",
+				all : "전체",
+				authNm : "권한그룹 명",
+				userId : "사용자 ID",
+				userName : "사용자 명",
+				search : "검색",
+				updateSubmit : "수정 완료",
 			}
 		},
 		stm2103:{
@@ -547,7 +578,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -655,7 +686,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
+			/* 추가된 datatable별로 언어 지정 */
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -733,7 +764,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -788,7 +819,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -910,15 +941,43 @@ var OSLCoreLangSetting = function () {
 				fileMaxStrgOutMessage : "Maximum storage is over.\nChange to maximum storage(${1}).",
 			},
 			label:{
+				name: "Board Name",
+				type : "Type",
+				dsType : "Disclosure Scope",
+				option : "Option",
+				noticeCheck : "Notice",
+				commentCheck : "Comment",
+				secretCheck : "Secret Post",
+				attchFileCheck : "Attchments",
+				tagCheck : "Tag",
+				fileCount : "Attchments Count",
+				maxFileCnt : "Max File Count : 10",
+				limitFileStrg : "Limit File Storage(MB)",
 				maxFileStrg:{
+					basic : "Max : [Storage] 4096MB [Movie] 2048MB [Normal/Gallery] 500MB",
 					normal: "Maximum 500MB",
 					movie: "Maximum 2048MB(2GB)",
 					storage: "Maximum 4096MB(4GB)"
-				}
+				},
+				admin : "Assign Admin",
+				writer : "Assign Writer",
+				nothing : "Others",
+				user : "User",
+				authGrp : "Authority",
 			},
 			title:{
-				admin: "Assign admin",
-				writer: "Assign writer"
+				admin: "Assign Admin",
+				writer: "Assign Writer"
+			},
+			button : {
+				reset : "Reset",
+				equals : "Equals Admin",
+				all : "All",
+				authNm : "Authority Group Name",
+				userId : "User ID",
+				userName : "User Name",
+				search : "Search",
+				updateSubmit : "Update Setting",
 			}
 		},
 		stm2103:{
@@ -1113,12 +1172,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -1127,7 +1186,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };
