@@ -3,6 +3,8 @@ package kr.opensoftlab.lunaops.com.vo;
 
 public class LoginVO extends DefaultVO{
     
+	
+	private String loginType;
     private String usrId;
     private String licGrpId;
     private String usrPw;
@@ -44,7 +46,14 @@ public class LoginVO extends DefaultVO{
     
     private int modMin;
     
-    public int getModMin() {
+    
+	public String getLoginType() {
+		return loginType;
+	}
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
+	}
+	public int getModMin() {
 		return modMin;
 	}
 	public void setModMin(int modMin) {
