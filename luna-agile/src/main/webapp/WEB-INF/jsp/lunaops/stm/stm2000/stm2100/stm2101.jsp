@@ -908,7 +908,7 @@
 				};
 		//AJAX 설정
   		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2102BadGrpAndUsrListAjax.do'/>"}
+				{"url":"<c:url value='/stm/stm2000/stm2100/selectStm2101BadGrpAndUsrListAjax.do'/>"}
 				, data);
 		
   		//AJAX 전송 성공 함수
