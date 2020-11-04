@@ -1,11 +1,8 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -169,7 +166,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -224,7 +221,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -578,7 +575,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -686,7 +683,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -764,7 +761,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -819,7 +816,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -1172,12 +1169,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -1186,7 +1183,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };

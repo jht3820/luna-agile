@@ -64,8 +64,10 @@ public class Stm2100Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+
 			
 			Map result = stm2100Service.selectStm2100UserCheck(paramMap);
+			
 			
 			int len = stm2100Service.selectStm2120BadWtList(paramMap).size();
 			if(len == 0) {
@@ -101,10 +103,13 @@ public class Stm2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+
 			
 			List<Map> stm2100List = stm2100Service.selectStm2100BadList(paramMap);
 			
+			
 			model.addAttribute("data", stm2100List);
+
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
@@ -200,14 +205,17 @@ public class Stm2100Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			
+			
 			List<Map> stm2120List = stm2100Service.selectStm2120BadWtList(paramMap);
 			
 			model.addAttribute("badWriterList", stm2120List); 
+			
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
@@ -267,9 +275,11 @@ public class Stm2100Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
 			
 			String str = paramMap.get("stmAdmList");
 			str = str.replace("managerNum", "stmAdminCd");
@@ -377,6 +387,7 @@ public class Stm2100Controller {
         	}else {
         		model.addAttribute("tagInfo", "N");
         	}
+			
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));

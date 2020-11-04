@@ -33,7 +33,7 @@
 			<input type="hidden" id="stmFileStrg" name="stmFileStrg"/>
 		</div>
 		<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper">
+			<div class="kt-portlet__head-wrapper" style="">
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="select" title="게시글 조회" data-title-lang-cd="bad1000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
@@ -90,19 +90,10 @@
 					{field: 'badContent', title:$.osl.lang("bad1000.field.badContent"), searchOrd: 2},
 					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 4},
 					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 5, 
-						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
-						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
-							// SpaceBar 시 빈공간이 생기지 않도록 방지
-                            e.preventDefault(); 
-							if(e.key=="Enter" || e.keyCode == 32){
-								//검색
-								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
-							}else{
-								var txt = $("#searchData_"+dataTableId).val() + e.key;
-								txt = txt.replace(/#/g,"");
-								$("#searchData_"+dataTableId).val(txt);
-							}
-						},		
+						searchKeyCode: "32",
+						searchKeyEvt : function(){
+							console.log("test");
+						},
 					}
 				]
 		 }else{
@@ -115,18 +106,16 @@
 					{field: 'delCd', title:$.osl.lang("bad1000.field.delCd"), searchOrd: 5, searchType:"select", searchCd: "CMM00001"},
 					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 6},
 					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 7,
-						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
+						searchKeyCode: "32", //spacebar 클릭 시 이벤트 실행
 						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
 							// SpaceBar 시 빈공간이 생기지 않도록 방지
                             e.preventDefault(); 
-							if(e.key=="Enter" || e.keyCode == 32){
-								//검색
-								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
-							}else{
-								var txt = $("#searchData_"+dataTableId).val() + e.key;
-								txt = txt.replace(/#/g,"");
-								$("#searchData_"+dataTableId).val(txt);
-							}
+							var txt = $("#searchData_"+dataTableId).val();
+							txt = txt.replace(/#/g,"");
+							$("#searchData_"+dataTableId).val(txt);
+							//검색
+							$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
+							//console.log(datatableInfo, searchDataTarget);
 						},		
 					},
 				];
@@ -231,12 +220,10 @@
 				}
 			],
 			searchColumns: searchAdd,
-			rows:{
-				clickCheckbox: true
-			},
 			actionBtn:{
 				"title" : $.osl.lang("bad1000.actionBtn.title"),
 				"width" : 200,
+				"click": true,
 				"dblClick" : true,
 			},
 			actionTooltip:{
@@ -413,7 +400,22 @@
 							$.osl.alert($.osl.lang("bad1000.notAuthority.deleteMessage"), {"type":"warning"});
 						}
 					}
-				}
+				},
+				"click": function(rowData, datatableId, type, rowNum, elem){
+					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
+					//그 안에 있는 체크박스를 체크
+					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
+					if(targetElem.is(":checked")==true){
+						targetElem.prop("checked", false);
+						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
+						//선택된것처럼 row 컬러가 그대로 남아있으므로
+						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
+						$(elem).closest("tr").addClass("kt-datatable__row--even");
+					}else{
+						targetElem.prop("checked", true);
+						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
+					}
+				},
 			 },
 			 theme: {
 				 actionBtn:{
