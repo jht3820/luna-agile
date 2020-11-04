@@ -1,193 +1,187 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/WEB-INF/jsp/lunaops/top/header.jsp" %>
+	<!--begin::Page Custom Styles(used by this page) -->
+	<link href="<c:url value='/css/login/login-v2.css'/>" rel="stylesheet" type="text/css" />
 
+	<!--end::Page Custom Styles -->
+	</head>
+	<!-- end::Head -->
+	<!-- begin::Body -->
+	<body class="kt-login-v2--enabled kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader-mobile--fixed kt-aside--enabled kt-aside--left kt-aside--fixed kt-aside--offcanvas-default kt-page--loading">
 
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-	<meta charset="UTF-8">
-	<!-- 모바일 viewprot 제거 -->
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-	<title>Open Soft Lab</title>
+		<!-- begin:: Page -->
+		<div class="kt-grid kt-grid--ver kt-grid--root">
+			<div class="kt-grid__item   kt-grid__item--fluid kt-grid  kt-grid kt-grid--hor kt-login-v2 osl-login" id="kt_login_v2">
+
+				<!--begin::Item-->
+				<div class="kt-grid__item  kt-grid--hor">
+
+					<!--begin::Heade-->
+					<div class="kt-login-v2__head">
+						<div class="kt-login-v2__logo">
+							<a href="#">
+								<img src="<c:url value='/media/logos/login_logo2.png'/>" alt="" />
+							</a>
+						</div>
+						<div class="kt-login-v2__signup">
+							<span>Don't have an account?</span>
+							<a href="#" class="kt-link kt-font-brand">Join</a>
+						</div>
+					</div>
+
+					<!--begin::Head-->
+				</div>
+
+				<!--end::Item-->
+
+				<!--begin::Item-->
+				<div class="kt-grid__item  kt-grid  kt-grid--ver  kt-grid__item--fluid">
+
+					<!--begin::Body-->
+					<div class="kt-login-v2__body osl-login-v2__body">
+					
+						<!--begin::Image-->
+						<div class="kt-login-v2__image osl-login__image">
+							<img src="/media/osl/main/login-main.png" />
+						</div>
+
+						<!--begin::Image-->
+
+						<!--begin::Wrapper-->
+						<div class="kt-login-v2__wrapper osl-login-v2__wrapper"> 
+							<div class="kt-login-v2__container osl-login-v2__container">
+								<div class="osl-login__text">LOGIN</div>
+								<form class="kt-login-v2__form kt-form" action="" autocomplete="off" name="kt_login_form" id="kt_login_form" method="post">
+									<div class="form-group osl-login-form-group osl-login-form-group__id">
+										<c:choose>
+											<c:when test="${loginType == 'email' }">
+												<label class="osl-login-form-control__label">Email</label>
+												<input class="form-control osl-login-form-control__input" type="text" name="email" id="email" label="사용자 이메일" regexstr="^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$" required>
+												<input type="hidden" name="usrId" id="usrId">
+											</c:when>
+											<c:otherwise>
+												<label class="osl-login-form-control__label">User Id</label>
+												<input class="form-control osl-login-form-control__input" type="text" name="usrId" id="usrId" autocomplete="off" label="사용자 아이디" regexstr="^[a-z0-9_-]{5,20}$" regexerrorstr="소문자,숫자, 특수 문자('_','-'), 5~20 글자까지 허용" required>
+												<input type="hidden" name="email" id="email">
+											</c:otherwise>
+										</c:choose>
+									</div>
+									<div class="form-group osl-login-form-group osl-login-form-group__password">
+										<label class="osl-login-form-control__label">Password</label>
+										<input class="form-control osl-login-form-control__input" type="password" name="usrPw" id="usrPw" autocomplete="off" label="비밀번호" required>
+									</div>
 	
-	<link rel="stylesheet" href="<c:url value='/css/common/common.css' />" type="text/css" />
+									<!--begin::Action-->
+									<div class="kt-login-v2__actions">
+										<a href="#" class="kt-link kt-link--brand" id="pwFindLink">
+											Forgot Password ?
+										</a>
+										<button type="submit" class="btn btn-brand btn-elevate btn-pill" id="kt_login_submit">Log In</button>
+									</div>
 	
-	<link rel="stylesheet" href="<c:url value='/css/oslops/login.css' />" type="text/css" />
-	<link rel="stylesheet" href="<c:url value='/css/oslops/cmm.css'/>" type="text/css" />
-	
-	<script src="<c:url value='/js/jquery/jquery-1.11.2.min.js'/>"></script>
+									<!--end::Action-->
+								</form>
+								<form id="kt_hidden_param_form">
+									<input type="hidden" name="loginType" id="loginType" value="<c:out value='${requestScope.loginType}'/>">
+									<input type="hidden" name="loginYn" id="loginYn" value="<c:out value='${requestScope.loginYn}'/>">
+									<input type="hidden" name="isPrjYn" id="isPrjYn" value="<c:out value='${requestScope.isPrjYn}'/>">
+									<input type="hidden" name="logoutYn" id="logoutYn" value="<c:out value='${requestScope.logoutYn}'/>">
+									<input type="hidden" name="message" id="message" value="<c:out value='${requestScope.message}'/>">
+									<input type="hidden" name="sessionYn" id="sessionYn" value="<c:out value='${requestScope.sessionYn}'/>">
+									<input type="hidden" name="iniYn" id="iniYn" value="<c:out value='${requestScope.iniYn}'/>">
+									<input type="hidden" name="exprYn" id="exprYn" value="<c:out value='${requestScope.exprYn}'/>">
+									<input type="hidden" name="loginSessionYn" id="loginSessionYn" value="<c:out value='${requestScope.loginSessionYn}'/>">
+									<input type="hidden" name="paramUsrId" id="paramUsrId" value="<c:out value='${requestScope.paramUsrId}'/>">
+									<input type="hidden" name="paramEmail" id="paramEmail" value="<c:out value='${requestScope.paramEmail}'/>">
+									<input type="hidden" name="paramUsrPw" id="paramUsrPw" value="<c:out value='${requestScope.paramUsrPw}'/>">
+									<input type="hidden" name="licGrpId" id="licGrpId" value="<c:out value='${requestScope.licGrpId}'/>">
+								</form>
+							</div>
+						</div>
 
-	<script src="<c:url value='/js/common/common.js'/>"></script>
-	<script src="<c:url value='/js/common/layerPopup.js'/>"></script>
-	<script src="<c:url value='/js/common/comOslops.js'/>"></script>
-	
-	<script>
-		$(function(){
-			//http:// -> https:// redirect
-			var currentUrl = window.location.href;
-			if(currentUrl.indexOf("http://") != -1){
-				var redirectUrl = currentUrl.substring(7, currentUrl.length);
-				//window.location.href = "https://"+redirectUrl;
-			}
-			
-			
-			/* 레이어 팝업 띄우기 */
-			$('.find').click(function() {
-				//레이어팝업 공통함수 이용 호출할 것.
-				layer_popup('/cmm/cmm4000/cmm4001/selectCmm4001View.do', 'idPwFind');
-				
-			});
-			
-			// 메인팝업 보기 쿠키가 없을 경우에만 팝업을 띄운다.
-			if(isCookie("mainPopViewCookie") == false){
-				// 로그인 화면 메인팝업 오픈
-				window.open("/cmm/cmm4000/cmm4000/selectCmm4000MainPopupView.do", "mainPopup", "width=800,height=453,left=0,top=0,location=no,menubar=no,status=noe,titlebar=no,toolbar=no", true);
-			}
-		});
+						<!--end::Wrapper-->
 
-		
-		// enter cross browsing ( 엔터키 처리 )
-		// Firefox에서 event객체를 처리하기 위해서는 argument로 event객체를 넘겨야함.
-		document.onkeypress = function(e){
+					</div>
 
-			var result = "";
-			var usrId = $("#usrId").val();
-			var usrPw = $("#usrPw").val();
-			 
-		      if(typeof(e) != "undefined"){
-		         result = e.which;
-		     } else {
-		         result = event.keyCode;
-		     }
-		     
-		      if(document.getElementsByClassName('pop_wrap').length){ // 팝업화면이 있으면 enter key 안먹이게 함
-		    	return;  
-		      }
-		      if( result == "13"){
-		    	  if( usrId != "" || usrPw ==""){
-		    		  $("#usrPw").focus();
-		    	  }
-		    	  if( usrId != "" && usrPw !=""){
-		    		  fnLoginAction();
-		    	  }
-		      }
-		}
-		
-		//최초 초기화
-		function fnInit(){
-			var loginYn = '${requestScope.loginYn}';
-			var isPrjYn = '${requestScope.isPrjYn}';
-			var logoutYn = '${requestScope.logoutYn}';
-			var message = '${requestScope.message}';
-			var sessionYn = '${requestScope.sessionYn}';
-			var iniYn  = '${requestScope.iniYn}';  
-			var exprYn  = '${requestScope.exprYn}'; 	// 비밀번호 만료여부
-			var loginSessionYn = '${requestScope.loginSessionYn}';
+					<!--begin::Body-->
+				</div>
 
-			if(iniYn == 'Y'){
-				
-				var data = { "usrId" : '${requestScope.usrId}'  };
-				gfnLayerPopupOpen('/cmm/cmm4000/cmm4002/selectCmm4002View.do', data , '550', '250','scroll');
-			}
-			
-			// 비빌번호 만료가 되었을 경우 팝업 띄워서 비밀번호 변경하도록
-			if(exprYn == "Y"){
-				jAlert('비밀번호 사용기간이 만료되었습니다. \n비밀번호를 변경해 주세요', '알림창', function(result) {
-					if (result) {
-						var data = { "usrId" : '${requestScope.usrId}' , "exprYn" : exprYn , "licGrpId" : '${requestScope.licGrpId}'};
-						gfnLayerPopupOpen('/cmm/cmm4000/cmm4002/selectCmm4002View.do', data , '550', '290','scroll');
-					}
-				});
-				return false;
-			}	
-			
-			//세션이 만료된 경우 세션 만료 메시지 띄움.
-			if(sessionYn == 'N'){
-				jAlert('${requestScope.message}','알림창');
-			}
-			
-			/* 로그인 여부, 라이선스 활성화 여부, 프로젝트 존재여부가 N일 경우 실패 이유 얼럿 */
-			if(loginYn == "N" || isPrjYn == "N"){
-				jAlert('${requestScope.message}','알림창');				
-			}
-			//로그아웃인 경우 alert창 안 띄우고 toast 메시지 처리
-			if(logoutYn == 'Y'){
-				toast.push('${requestScope.message}');
-			}
-			
-		
-			if(loginSessionYn == 'Y'){
-				if(confirm("${requestScope.message}")){
-					$('#loginSessionYn').val('${requestScope.loginSessionYn}');
-					$('#usrId').val('${requestScope.usrId}');
-					$('#usrPw').val('${requestScope.usrPw}');
-					fnLoginAction();
-				}
-			}
-			
-			$("#usrId").focus();	// 아이디 입력란 key focus
-		}
-		
-		//로그인 처리
-		function fnLoginAction(){
-			var strFormId = "loginFrm";
-			var strCheckObjArr = [ "usrId", "usrPw"];
-			var sCheckObjNmArr = [ "아이디", "비밀번호"];
-			if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-				return;	
-			}
-			
-			document.loginFrm.action = "<c:url value='/cmm/cmm4000/cmm4000/selectCmm4000LoginAction.do'/>";
-			document.loginFrm.submit();
-		}
-		
-		/*
-		 * 쿠키의 유무 체크
-		 * @param cookieName 쿠키이름
-		 */
-		function isCookie(cookieName) {
-			cookieName = cookieName + '=';
-			var cookieData = document.cookie;
-			var cIdx = cookieData.indexOf(cookieName);
-			var exist = false;	
-			
-			if(cIdx != -1 ){
-				exist = true;	
-			}
-			
-			return exist;
-		}
-		
-		
-	</script>
-</head>
+				<!--end::Item-->
 
-<body onload="fnInit();">
-	<div id="center">
-		<form id="loginFrm" name="loginFrm" method="post">
-			<input type="hidden" name="loginSessionYn" id="loginSessionYn" >
-			<input type="hidden" name="initPassYn" id="initPassYn" value="">
-			<input type="hidden" name="licGrpId" id="licGrpId" value="${requestScope.licGrpId}">
-			
-			<img class="logo" src="/images/login/login_logo_osl.png"/>
-			<input type="text" name="usrId" id="usrId" placeholder="Username" title="로그인" 
-			onkeyup="this.value=this.value.replace(/[^a-zA-Z-_0-9]/g,'');" maxlength="20"
-			>
-			<input type="password" name="usrPw" id="usrPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" style="margin-bottom:20px;" title="패스워드"
-			maxlength="200"
-			>
-			<a href="javascript:fnLoginAction();"><span class="login_button">Log In</span></a>	
-			<div class="join_find">
-					<c:if test="${not empty joinCheck and joinCheck eq 'Y'?true:false}">
-						<a href="<c:url value='/cmm/cmm3000/cmm3000/selectCmm3000View.do'/>" class="join">
-						<span>회원가입</span></a>
-						<span class="sbar"></span>
-						<span class="find">아이디/비밀번호 찾기</span>
-					</c:if>
+				<!--begin::Item-->
+				<div class="kt-grid__item">
+					<div class="kt-login-v2__footer">
+						<div class="kt-login-v2__link">
+							<!-- <a href="#" class="kt-link kt-font-brand">Privacy</a>
+							<a href="#" class="kt-link kt-font-brand">Legal</a> -->
+							<a href="#" class="kt-link kt-font-brand">Luna™OPS 2.0</a>
+						</div>
+						<div class="kt-login-v2__info">
+							Copyright ⓒ <a href="http://opensoftlab.kr" target="_blank" class="kt-link">Open Soft Lab Corp. </a> All Rights Reserved
+						</div>
+					</div>
+				</div>
+
+				<!--end::Item-->
 			</div>
-		</form>
-	</div>
-</body>
+		</div>
+
+		<!-- end:: Page -->
+
+		<!-- begin::Global Config(global config for global JS sciprts) -->
+		<script>
+			var KTAppOptions = {
+				"colors": {
+					"state": {
+						"brand": "#1cac81",
+						"metal": "#c4c5d6",
+						"light": "#ffffff",
+						"accent": "#00c5dc",
+						"primary": "#5867dd",
+						"success": "#34bfa3",
+						"info": "#36a3f7",
+						"warning": "#ffb822",
+						"danger": "#fd3995",
+						"focus": "#9816f4"
+					},
+					"base": {
+						"label": [
+							"#b9bdc1",
+							"#aeb2b7",
+							"#414b4c",
+							"#343d3e"
+						],
+						"shape": [
+							"#eef4f3",
+							"#e0e9e6",
+							"#80c3af",
+							"#41675c"
+						]
+					}
+				}
+			};
+		</script>
+
+		<!-- end::Global Config -->
+		
+		<!--begin::Global Theme Bundle(used by all pages) -->
+		<script src="<c:url value='/plugins/global/plugins.bundle.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/js/scripts.bundle.js'/>" type="text/javascript"></script>
+		<!-- 언어 데이터 스크립트는 core보다 먼저 선언 -->
+		<script src="<c:url value='/js/osl/osl-lang.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/js/osl/osl-core.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/js/common/modalPopup.js'/>" type="text/javascript"></script>
+		<!--end::Global Theme Bundle -->
+
+		<!--begin::Page Scripts(used by this page) -->
+		<script src="<c:url value='/js/login/login.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/plugins/jquery-loading/js/app.js'/>" type="text/javascript"></script>
+		
+		<!--end::Page Scripts -->
+	</body>
+
+	<!-- end::Body -->
 </html>

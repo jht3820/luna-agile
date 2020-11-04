@@ -230,17 +230,11 @@ public class Stm2100Controller {
 			return new ModelAndView("jsonView");
 		}
 	}
-	
-	
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102BadUsrListView.do")
-	public String selectStm2102BadUsrListView(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		return "/stm/stm2000/stm2100/stm2102";
-	}
 
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102BadGrpAndUsrListAjax.do")
-	public ModelAndView selectStm2102BadGrpAndUsrListAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2101BadGrpAndUsrListAjax.do")
+	public ModelAndView selectStm2101BadGrpAndUsrListAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -266,7 +260,7 @@ public class Stm2100Controller {
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
-			Log.error("selectStm2102BadGrpAndUsrListAjax()", ex);
+			Log.error("selectStm2101BadGrpAndUsrListAjax()", ex);
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
@@ -318,15 +312,15 @@ public class Stm2100Controller {
 	}
 	
 	
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2103View.do")
-	public String selectStm2103View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		return "/stm/stm2000/stm2100/stm2103";
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102View.do")
+	public String selectStm2102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/stm/stm2000/stm2100/stm2102";
 	}
 
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2103BadSummeryInfoAjax.do")
-	public ModelAndView selectStm2103BadSummeryInfoAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102BadSummeryInfoAjax.do")
+	public ModelAndView selectStm2102BadSummeryInfoAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -401,7 +395,7 @@ public class Stm2100Controller {
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
-			Log.error("selectStm2103BadSummeryInfoAjax()", ex);
+			Log.error("selectStm2102BadSummeryInfoAjax()", ex);
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));

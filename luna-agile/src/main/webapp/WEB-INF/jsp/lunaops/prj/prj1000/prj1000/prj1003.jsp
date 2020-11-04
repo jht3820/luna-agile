@@ -45,6 +45,9 @@ $(document).ready(function() {
 		//그룹 정보 숨김
 		$("#popupPrjForm .prjGrpNameSpan").hide();
 		
+		//프로젝트 유형 숨김
+		$("#popupPrjForm .prjTypeDiv").hide();
+		
 		// 프로젝트 약어 숨김
 		$("#popupPrjForm .popPrjAcrmDiv").hide();
 		
@@ -71,6 +74,9 @@ $(document).ready(function() {
 		
 		//그룹 정보 표시
 		$("#popupPrjForm .prjGrpNameSpan").show();
+		
+		//프로젝트 유형 표시
+		$("#popupPrjForm .prjTypeDiv").show();
 		
 		//프로젝트 약어 표시
 		$("#popupPrjForm .popPrjAcrmDiv").show();
@@ -194,6 +200,22 @@ $(document).ready(function() {
 			$("#prjAcrm").focus();
 		}
 	});
+	
+	/* 	
+	 *	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
+	 * 	1. 공통 대분류 코드를 순서대로 배열 담기(문자열)
+	 *	2. 사용구분 저장(Y: 사용중인 코드만, N: 비사용중인 코드만, 그 외: 전체)
+	 *	3. 공통코드 적용할 select 객체 직접 배열로 저장
+	 * 	4. 공통코드 가져와 적용할 콤보타입 객체 배열 ( S:선택, A:전체(코드값 A 세팅한 조회조건용), N:전체, E:공백추가,OS:선택 값 selected, 그 외:없음 )
+	 *	5. 동기 비동기모드 선택 (true:비동기 통신, false:동기 통신)
+	 *	마스터 코드 = REQ00001:요구사항 타입, REQ00002:중요도 
+	 */
+	var mstCdStrArr = "PRJ00013";
+	var strUseYn = 'Y';
+	var arrObj = [$("select[name=prjType]")];
+	var arrComboType = ["OS"];
+	getMulticommonCodeDataForm(mstCdStrArr, strUseYn, arrObj, arrComboType , false);
+	
 	/**
 	 * 프로젝트 생성관리 등록(insert) AJAX
 	 */
@@ -256,7 +278,6 @@ $(document).ready(function() {
 			<input type="hidden" id="useCd" name="useCd" value="01" />
 			<input type="hidden" id="prjGrpCd" name="prjGrpCd" value="01" />
 			<input type="hidden" name="ord" id="ord" value="1">
-			<input type="hidden" name="prjType" id="prjType" value="01">
 			<div class="pop_left prjGrpNameSpan">프로젝트 그룹</div>
 			<div class="pop_right prjGrpNameSpan">
 				<!--
@@ -279,6 +300,12 @@ $(document).ready(function() {
 				<span class="fl"><input type="text" id="startDt" name="startDt" class="calendar_input" readonly="readonly" title="개발 시작일" style="height: 32px;" /></span>
 				<span class="calendar_bar fl">~</span>
 				<span class="fl"><input type="text" id="endDt" name="endDt" class="calendar_input" readonly="readonly" title="개발 종료일" style="height: 32px;"/></span>
+			</div>
+			
+			<div class="pop_left prjTypeDiv">프로젝트 유형 <span class="required_info">&nbsp;*</span></div>
+			<div class="pop_right prjTypeDiv">
+				<select class="search_select" title="셀렉트 박스" id="prjType" name="prjType" style="height: 100%;">
+						</select>
 			</div>
 			<div class="pop_left popPrjAcrmDiv">프로젝트 약어<span class="required_info">&nbsp;*</span> </div>
 			<div class="pop_right popPrjAcrmDiv">

@@ -1,12 +1,30 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
+		fromValidate:{
+			messages: {
+				required: "필수 값 입니다.",
+				remote: "값을 수정해주세요.",
+				email: "유효한 이메일 주소를 입력해주세요.",
+				url: "유효한 URL을 입력해주세요.",
+				date: "유효한 날짜를 입력해주세요.",
+				dateISO: "유효한 날짜를 입력해주세요. (ISO)",
+				number: "유효한 번호를 입력해주세요.",
+				digits: "숫자만 입력 가능합니다.",
+				equalTo: "값을 다시 입력해주세요. (값이 동일하지 않음)",
+				maxlength: "{0}자 이하로 입력해주세요.",
+				minlength: "최소 {0}자 이상 입력해주세요.",
+				rangelength: "{0}에서 {1}자 사이에 값을 입력해주세요.",
+				range: "{0}에서 {1}사이의 값을 입력해주세요.",
+				max: "{0} 보다 작거나 같은 값을 입력해주세요..",
+				min: "{0} 보다 크거나 같은 값을 입력해주세요..",
+				step: "{0}의 배수를 입력해주세요.",
+				regexstr: "입력 값이 형식에 맞지 않습니다."
+			}
+		},
 		modal:{
 			close: "닫기"
 		},
@@ -52,6 +70,7 @@ var OSLCoreLangSetting = function () {
 				delete: "삭제"
 			},
 			action:{
+				functionNm: "기능 버튼",
 				update:{
 					nonSelect: "수정하려는 데이터를 선택해주세요",
 					manySelect: "1건의 데이터만 선택해주세요.</br> ${1}건의 데이터가 선택되었습니다."
@@ -147,7 +166,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -202,7 +221,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -217,6 +236,36 @@ var OSLCoreLangSetting = function () {
 				projectListMove: "프로젝트 목록 이동",
 				createProject: "신규 프로젝트 추가",
 				projectDetail: "상세 정보"
+			},
+			button:{
+				title:{
+					insert: "신규 프로젝트 그룹 등록"
+				}
+			}
+		},
+		prj1001:{
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			requestAll: "전체",
+			requestInProgress: "진행 중",
+			requestDone: "완료",
+			menu:{
+				modify: "수정",
+				trashMove: "휴지통 이동(삭제)",
+				projectDetail: "상세 정보"
+			}
+		},
+		prj1002:{
+			title: "신규 프로젝트 그룹 생성",
+			complete: "완료",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
 			}
 		},
 		prj2100:{
@@ -238,15 +287,135 @@ var OSLCoreLangSetting = function () {
 			reqDesc: "요청 내용",
 			attachments: "파일 첨부", 
 			complete: "완료",
+			insert:{
+				saveString: "신규 요구사항을 요청하시겠습니까?",
+				saveBtnString: "작성 완료"
+			},
+			update:{
+				saveString: "요구사항 정보를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
 		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.\n${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
+			field:{
+				stmTypeNm: "유형",
+				stmNm: "게시판명",
+				stmDsTypeNm: "공개범위",
+				cnt: "전체글 수",
+				badCnt: "유효글 수",
+				delCnt: "삭제글 수",
+			},
+			actionBtn:{
+				title : "수정 / 관리 / 통계",
+				updateBtn : "게시판 속성",
+				detailBtn : "게시글 관리",
+				summeryBtn : "통계보기",
+				selectTooltip : "게시판 조회",
+				updateTooltip : "게시판 속성 수정",
+				managmentTooltip : "게시글 관리",
+				summeryTooltip : "게시판 통계"
+			},
+			button:{
+				detail:"관리",
+				summery:"통계",
+			},
+			title:{
+				updateTitle : "게시판 속성",
+				detailTitle : "게시글 관리",
+				summeryTitle : "통계보기",
+			},
+			type:{
+				normal:"[일반]",
+				gallery:"[갤러리]",
+				movie:"[영상]",
+				storage:"[자료실]",
+			},
+		},
+		stm2101:{
+			update: "게시판 정보를 수정하시겠습니까?",
+			formCheck:{
+				fileCntMessage : "첨부파일 갯수는 최소 1부터 10까지 가능합니다\n첨부파일 갯수를 최솟값인 1로 변경합니다.",
+				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.",
+				fileMaxStrgMessage : "게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.",
+				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
+			},
+			label:{
+				name: "게시판 명",
+				type : "유형",
+				dsType : "게시물 공개 범위",
+				option : "옵션",
+				noticeCheck : "공지사항 사용",
+				commentCheck : "댓글 사용",
+				secretCheck : "비밀글 사용",
+				attchFileCheck : "첨부파일 사용",
+				tagCheck : "태그 사용",
+				fileCount : "첨부파일 갯수",
+				maxFileCnt : "최대 갯수 : 10",
+				limitFileStrg : "첨부파일 용량 제한(MB)",
+				maxFileStrg:{
+					basic : "최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB",
+					normal: "최대 500MB",
+					movie: "최대 2048MB(2GB)",
+					storage: "최대 4096MB(4GB)"
+				},
+				admin : "담당자",
+				writer : "글 작성 범위",
+				nothing : "미배정 권한그룹 및 사용자",
+				user : "사용자",
+				authGrp : "권한그룹",
+			},
+			title:{
+				admin: "담당자 지정",
+				writer: "글 작성 범위 지정"
+			},
+			button : {
+				reset : "초기화",
+				equals : "담당자 동일",
+				all : "전체",
+				authNm : "권한그룹 명",
+				userId : "사용자 ID",
+				userName : "사용자 명",
+				search : "검색",
+				updateSubmit : "수정 완료",
+			}
+		},
+		stm2102:{
+			summery:{
+				noticeCntY: "공지사항 수 : ${1} 건",
+				noticeCntN: "공지사항 수 : 없음",
+				ntcCurrentY: "최신 공지일 : ${1}",
+				ntcCurrentN: "최신 공지일 : 없음",
+				cmtAllCntY: "전체 댓글 수 : ${1} 건",
+				cmtAllCntN: "전체 댓글 수 : 없음",
+				cmtMaxInfoY: "최다 댓글 수 : ${1} 건",
+				cmtMaxInfoN: "최다 댓글 수 : 없음",
+				badAllCntY: "전체 게시글 수 : 등록 ${1} 건 / 삭제 ${2} 건",
+				badAllCntN: "전체 게시글 수 : 없음",
+				badHitInfoY: "최다 조회 수 : ${1} 회",
+				badHitInfoN: "최다 조회 수 : 없음",
+				badPwCntY: "비밀글 수 : ${1} 건",
+				badPwCntN: "비밀글 수 : 없음",
+				tagLabelY: "사용 TOP ${1} : #${2}",
+				tagLabelN: "사용 태그 없음",
+				fileAllCntY: "전체 첨부파일 수 : ${1} 건",
+				fileAllCntN: "전체 첨부파일 수 : 없음",
+				fileAllSizeY: "전체 첨부파일 크기 : ${1}",
+				fileAllSizeN: "전체 첨부파일 없음 : 없음",
+			},
+			label:{
+				notice : "공지사항",
+				comment : "댓글",
+				board : "게시글",
+				tag : "태그",
+				attchFile : "첨부파일",
+			}
 		},
 		bad1000:{
-			selectBadInfoCnt : "1건의 게시글만 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
+			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시글에 대한 권한이 없습니다.",
 					insertMessage : "게시글 등록 권한이 없습니다.",
@@ -256,33 +425,179 @@ var OSLCoreLangSetting = function () {
 			},
 			notWriter : {
 				deleteMessage : "본인이 작성한 게시글만 삭제 가능합니다.",
+			},
+			field:{
+				badContent: "내용",
+				badNtcCheck : "공지유무",
+				delCd:"삭제유무",
+				cmtContent:"댓글내용",
+				tagNm:"태그",
+				badTitle:"제목",
+				badHit: "조회수",
+				badFileCnt: "첨부파일 수",
+				badUsrId: "작성자",
+				badWtdtm: "작성일",
+			},
+			label:{
+				deleteBadge: "삭제",
+				noticeBadge: "공지",
+			},
+			button:{
+				dblClick : "상세",
+			},
+			actionBtn:{
+				title: "수정 / 삭제 / 상세",
+				updateBtn:"게시글 수정",
+				deleteBtn:"게시글 삭제",
+				dblClick:"게시글 상세보기",
+				selectTooltip:"게시글 조회",
+				insertTooltip:"게시글 추가",
+				updateTooltip:"게시글 수정",
+				deleteTooltip:"게시글 삭제",
+				detailTooltip:"게시글 상세",
+			},
+			title:{
+				passwordCheck:"비밀번호 확인",
+				boardCheck:{
+					oneStep: "[ NO.${1} ] 게시글",
+					twoStep: "[ NO.${1} ] 게시글 외 ${2} 건"
+				},
+				deleteReason: "삭제 사유",
 			}
 		},
 		bad1001:{
 			notAuthority : {
-				restoreMessage : "해당 댓글에 대한 복원 권한이 없습니다.",
+				updateMessage : "해당 게시글에 대한 수정 권한이 없습니다.",
+				restoreMessage : "해당 게시글에 대한 복원 권한이 없습니다.",
 				deleteMessage : "해당 게시글에 대한 삭제 권한이 없습니다.",
 				deleteCmtMessage : "해당 댓글에 대한 삭제 권한이 없습니다.",
 			},
 			notCmtWriter : {
 				deleteMessage : "본인이 작성한 댓글만 삭제 가능합니다.",
+			},
+			button:{
+				restore : "복구",
+				submit : "등록",
+			},
+			label:{
+				writeDate : "작성일시",
+				attchFile : "파일 첨부",
+				tag: "태그",
+				comment:"댓글",
+			},
+			field:{
+				comment:{
+					writer : "작성자",
+					content:"내용",
+					writeDate : "작성일"
+				}
+			},
+			actionBtn:{
+				title : "삭제",
+				updateTooltip : "게시글 수정",
+				deleteTooltip : "게시글 삭제",
+				restoreTooltip : "게시글 복구",
+				selectComment : "댓글 조회",
+				deleteComment : "댓글 삭제",
+			},
+			title:{
+				boardCheck:{
+					oneStep: "[ NO.${1} ] 게시글",
+				},
+				deleteReason: "삭제 사유",
 			}
 		},
 		bad1002:{
+			insert: "글 작성을 완료하시겠습니까?",
 			formCheck : {
 				fileCntMessage : "첨부파일 가능한 개수는 ${1}개입니다.",
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 				tagMatching : "태그값이 중복됩니다.",
+			},
+			label:{
+				title:"제목",
+				content:"내용",
+				noticeCheck:"공지사항 사용",
+				noticeDate:"공지 기간",
+				noticeDateIgnore:"공지 기간 무시",
+				secretCheck:"비밀글 사용",
+				password:"PW",
+				passwordCheck:"PW 확인",
+				commentCheck:"댓글 허용",
+				attchFile : "파일 첨부",
+				tag : "태그",
+			},
+			button:{
+				insertSubmit:"등록",
+				submit : "등록",
+			},
+		},
+		bad1003:{
+			update: "글 수정을 완료하시겠습니까?",
+			label:{
+				title:"제목",
+				content:"내용",
+				noticeCheck:"공지사항 사용",
+				noticeDate:"공지 기간",
+				noticeDateIgnore:"공지 기간 무시",
+				secretCheck:"비밀글 사용",
+				password:"PW",
+				passwordCheck:"PW 확인",
+				commentCheck:"댓글 허용",
+				attchFile : "파일 첨부",
+				tag : "태그",
+			},
+			button:{
+				deleteResetBtn:"삭제 초기화",
+				updateSubmit : "수정 완료",
+				submit : "등록",
 			}
 		},
 		bad1004:{
-			passwordMiss : "비밀번호가 틀렸습니다.\n다시입력하세요.",
+			passwordMiss : "비밀번호가 틀렸습니다.\n다시 입력하세요.",
+			title:{
+				detail:"게시글 상세보기",
+			},
+			text : "이 글은 비밀글입니다.\n비밀번호를 입력하세요.",
+			button:{
+				submit: "확인",
+			}
+		},
+		bad1005:{
+			label:{
+				deleteType : "삭제 유형",
+				deleteReason: "삭제 사유"
+			},
+			button:{
+				submit : "삭제",
+			}
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
+		fromValidate:{
+			messages: {
+				required: "This field is required.",
+				remote: "Please fix this field.",
+				email: "Please enter a valid email address.",
+				url: "Please enter a valid URL.",
+				date: "Please enter a valid date.",
+				dateISO: "Please enter a valid date (ISO).",
+				number: "Please enter a valid number.",
+				digits: "Please enter only digits.",
+				equalTo: "Please enter the same value again.",
+				maxlength: "Please enter no more than {0} characters.",
+				minlength: "Please enter at least {0} characters.",
+				rangelength: "Please enter a value between {0} and {1} characters long.",
+				range: "Please enter a value between {0} and {1}.",
+				max: "Please enter a value less than or equal to {0}.",
+				min: "Please enter a value greater than or equal to {0}.",
+				step: "Please enter a multiple of {0}.",
+				regexstr: "The input value does not fit the format."
+			}
+		},
 		modal:{
 			close: "Close"
 		},
@@ -324,6 +639,7 @@ var OSLCoreLangSetting = function () {
 				insert: "Insert",
 				update: "Update",
 				delete: "Delete",
+				trash: "Trash",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -332,6 +648,7 @@ var OSLCoreLangSetting = function () {
 				}
 			},
 			action:{
+				functionNm: "Function Button",
 				update:{
 					nonSelect: "Please select the data you want to modify",
 					manySelect: "Please select only one data. </br> ${1} data was selected."
@@ -366,7 +683,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -379,6 +696,15 @@ var OSLCoreLangSetting = function () {
 				reqUsrDeptNm: "Request Department Name",
 				reqUsrNum: "Request User Number",
 				reqKey: "Request Key",
+			},
+			prj1000PrjTable:{
+				prjNm: "Project Group Name",
+				startDt: "Start Date",
+				endDt: "End Date",
+				prjChildCnt: "Project Count",
+				reqAllCnt: "Request All",
+				reqInProgressCnt: "Request In Porgress",
+				reqDoneCnt: "Request Done",
 			}
 		},
 		date:{
@@ -435,7 +761,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -490,7 +816,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -505,6 +831,42 @@ var OSLCoreLangSetting = function () {
 				projectListMove: "Move Project List",
 				createProject: "Add New Prject",
 				projectDetail: "Details"
+			},
+			button:{
+				title:{
+					select: "Project Group Select",
+					insert: "New Project Group Insert",
+					update: "Project Group Update",
+					delete: "Project Group Delete",
+					trash: "Project Group Trash List",
+					card: "List View Card Type",
+					grid: "List View Grid Type"
+				}
+			}
+		},
+		prj1001:{
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			requestAll: "전체",
+			requestInProgress: "진행 중",
+			requestDone: "완료",
+			menu:{
+				modify: "수정",
+				trashMove: "휴지통 이동(삭제)",
+				projectDetail: "상세 정보"
+			}
+		},
+		prj1002:{
+			title: "New Project Group Insert",
+			complete: "Complete",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "Insert Action"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "Update Action"
 			}
 		},
 		prj2100:{
@@ -527,15 +889,292 @@ var OSLCoreLangSetting = function () {
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
+		},
+		stm2100:{
+			selectStmInfoCnt : "Please, select only 1 board.\n${1} boards have been selected." ,
+			notAuthority : {
+					basic : "You don’t have authority for that this board",
+			},
+			field:{
+				stmTypeNm: "Type",
+				stmNm: "Name",
+				stmDsTypeNm: "Disclosure Scope",
+				cnt: "Total Count",
+				badCnt: "Valid Count",
+				delCnt: "Deleted Count",
+			},
+			actionBtn:{
+				title : "U / M / S",
+				updateBtn : "Board Option",
+				detailBtn : "Post Management",
+				summeryBtn : "Board Summery",
+				selectTooltip : "Select Board",
+				updateTooltip : "Update Board Option",
+				managmentTooltip : "Management Post",
+				summeryTooltip : "Summery Board"
+			},
+			button:{
+				detail:"Management",
+				summery:"Summery",
+			},
+			title:{
+				updateTitle : "Board Setting",
+				detailTitle : "Board Management",
+				summeryTitle : "Board Summery",
+			},
+			type:{
+				normal:"[Normal]",
+				gallery:"[Gallery]",
+				movie:"[Movie]",
+				storage:"[Storage]",
+			},
+		},
+		stm2101:{
+			update: "Would you like to update this board setting?",
+			formCheck:{
+				fileCntMessage : "The number of attchments is 1 to 10.\nChange to minimum 1.",
+				fileMaxCntMessage : "The number of attachments is over.\nChange to maximum 10.",
+				fileMaxStrgMessage : "Change to maximum storage by board type.",
+				fileMaxStrgOutMessage : "Maximum storage is over.\nChange to maximum storage(${1}).",
+			},
+			label:{
+				name: "Board Name",
+				type : "Type",
+				dsType : "Disclosure Scope",
+				option : "Option",
+				noticeCheck : "Notice",
+				commentCheck : "Comment",
+				secretCheck : "Secret Post",
+				attchFileCheck : "Attchments",
+				tagCheck : "Tag",
+				fileCount : "Attchments Count",
+				maxFileCnt : "Max File Count : 10",
+				limitFileStrg : "Limit File Storage(MB)",
+				maxFileStrg:{
+					basic : "Max : [Storage] 4096MB [Movie] 2048MB [Normal/Gallery] 500MB",
+					normal: "Maximum 500MB",
+					movie: "Maximum 2048MB(2GB)",
+					storage: "Maximum 4096MB(4GB)"
+				},
+				admin : "Assign Admin",
+				writer : "Assign Writer",
+				nothing : "Others",
+				user : "User",
+				authGrp : "Authority",
+			},
+			title:{
+				admin: "Assign Admin",
+				writer: "Assign Writer"
+			},
+			button : {
+				reset : "Reset",
+				equals : "Equals Admin",
+				all : "All",
+				authNm : "Authority Group Name",
+				userId : "User ID",
+				userName : "User Name",
+				search : "Search",
+				updateSubmit : "Update Setting",
+			}
+		},
+		stm2102:{
+			summery:{
+				noticeCntY: "Notice Count : ${1}",
+				noticeCntN: "Notice Count : -",
+				ntcCurrentY: "Recent Notice Date : ${1}",
+				ntcCurrentN: "Recent Notice Date : -",
+				cmtAllCntY: "Total Comment : ${1}",
+				cmtAllCntN: "Total Comment : -",
+				cmtMaxInfoY: "Most Comment : ${1} 건",
+				cmtMaxInfoN: "Most Comment : -",
+				badAllCntY: " Total Post : Insert ${1} / Delete ${2}",
+				badAllCntN: "Total Post : -",
+				badHitInfoY: "Most Hit : ${1}",
+				badHitInfoN: "Most Hit : -",
+				badPwCntY: "Secret Post : ${1}",
+				badPwCntN: "Secret Post : -",
+				tagLabelY: "Hashtag TOP ${1} : #${2}",
+				tagLabelN: "No Hashtag",
+				fileAllCntY: "Total Attchments : ${1}",
+				fileAllCntN: "Total Attchments : -",
+				fileAllSizeY: "Total Attchments Storage : ${1}",
+				fileAllSizeN: "Total Attchments Storage : -",
+			},
+			label:{
+				notice : "Notice",
+				comment : "Comment",
+				board : "Post",
+				tag : "Tag",
+				attchFile : "Attchments",
+			}
+		},
+		bad1000:{
+			selectBadInfoCnt : "Please, select only 1 post.\n${1} posts have been selected" ,
+			notAuthority : {
+					basic : "You don’t have authority for that this post",
+					insertMessage : "You don’t have authority for insert the post.",
+					selectMessage : "You don’t have authority for read the post.",
+					updateMessage : "You don’t have authority for update the post.",
+					deleteMessage : "You don’t have authority for delete the post.",
+			},
+			notWriter : {
+				deleteMessage : "Only posts written by you can be deleted.",
+			},
+			field:{
+				badContent: "Content",
+				badNtcCheck : "Notice",
+				delCd:"Delete",
+				cmtContent:"Comment",
+				tagNm:"Tag",
+				badTitle:"Title",
+				badHit: "Hit",
+				badFileCnt: "Attchments Count",
+				badUsrId: "Writer",
+				badWtdtm: "Write Date",
+			},
+			label:{
+				deleteBadge: "Delete",
+				noticeBadge: "Notice",
+			},
+			button:{
+				dblClick : "Detail",
+			},
+			actionBtn:{
+				title: "Upd / Del / Det",
+				updateBtn:"Update Post",
+				deleteBtn:"Delete Post",
+				dblClick:"Detail Post",
+				selectTooltip:"Selete Posts",
+				insertTooltip:"Insert Post",
+				updateTooltip:"Update Post",
+				deleteTooltip:"Delete Post",
+				detailTooltip:"Detail Post",
+			},
+			title:{
+				passwordCheck:"Password Check",
+				boardCheck:{
+					oneStep: "[ NO.${1} ] Post",
+					twoStep: "[ NO.${1} ] Post and ${2} others."
+				},
+				deleteReason: "Delete Reason",
+			}
+		},
+		bad1001:{
+			notAuthority : {
+				updateMessage : "You don’t have authority for update the post.",
+				restoreMessage : "You don’t have authority for restore the post.",
+				deleteMessage : "You don’t have authority for delete the post.",
+				deleteCmtMessage : "You don’t have authority for delete the comment.",
+			},
+			notCmtWriter : {
+				deleteMessage : "Only comments written by you can be deleted.",
+			},
+			button:{
+				restore : "Restore",
+				submit : "Submit",
+			},
+			label:{
+				writeDate : "Date",
+				attchFile : "Attchments",
+				tag: "Tag",
+				comment:"Comment",
+			},
+			field:{
+				comment:{
+					writer : "Writer",
+					content:"Comment",
+					writeDate : "Date"
+				}
+			},
+			actionBtn:{
+				title : "Delete",
+				updateTooltip : "Update Post",
+				deleteTooltip : "Delete Post",
+				restoreTooltip : "Restore Post",
+				selectComment : "Select Comment",
+				deleteComment : "Delete Comment",
+			},
+			title:{
+				boardCheck:{
+					oneStep: "[ NO.${1} ] Post",
+				},
+				deleteReason: "Delete Reason",
+			}
+		},
+		bad1002:{
+			insert: "Would you like to finish writing?",
+			formCheck : {
+				fileCntMessage : "The number of attchments possible is ${1}.",
+				passwordMessage : "You must write password for secret post.",
+				passwordMatching : "The entered passwords are different.",
+				tagMatching : "The tag value is duplicated.",
+			},
+			label:{
+				title:"Title",
+				content:"Contnet",
+				noticeCheck:"Notice",
+				noticeDate:"Notice Date",
+				noticeDateIgnore:"Notice Date Ignore",
+				secretCheck:"Secret Post",
+				password:"PW",
+				passwordCheck:"PW Check",
+				commentCheck:"Allow Comment",
+				attchFile : "Attchments",
+				tag : "Tag",
+			},
+			button:{
+				insertSubmit:"Insert Submit",
+				submit : "Submit",
+			},
+		},
+		bad1003:{
+			update: "Would you like to finish update?",
+			label:{
+				title:"Title",
+				content:"Contnet",
+				noticeCheck:"Notice",
+				noticeDate:"Notice Date",
+				noticeDateIgnore:"Notice Date Ignore",
+				secretCheck:"Secret Post",
+				password:"PW",
+				passwordCheck:"PW Check",
+				commentCheck:"Allow Comment",
+				attchFile : "Attchments",
+				tag : "Tag",			
+			},
+			button:{
+				deleteResetBtn:"Delete Reset",
+				updateSubmit : "Update Finish",
+				submit : "Submit",
+			}
+		},
+		bad1004:{
+			passwordMiss : "It doesn’t match the password for this post.\nPlease try again.",
+			title:{
+				detail:"Detail Post",
+			},
+			text : "This is secret Post.\nYou must entered password.",
+			button:{
+				submit: "Submit",
+			}
+		},
+		bad1005:{
+			label:{
+				deleteType : "Delete Type",
+				deleteReason: "Delte Reason"
+			},
+			button:{
+				submit : "Delete",
+			}
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -544,7 +1183,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };

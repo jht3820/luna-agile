@@ -2,90 +2,82 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<style>
-.bad_box{
-	border: solid 1px #e1e1ef; 
-	border-radius: 4px;
-	padding: 15px;
-}
-</style>
 <form class="kt-form" id="bad1003Info">
-	<div class="kt-portlet kt-portlet--mobile">
+	<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
 		<div class="kt-portlet__head kt-portlet__head--lg">
 			<input type="hidden" id="stmDsTypeCd" name="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 			<input type="hidden" id="stmRootYn" name="stmRootYn" value='${param.stmRootYn}'/>
-			<input type="hidden" name="detailRootYn" id="detailRootYn" value="${param.detailRootYn }" /> 
 			<input type="hidden" name="paramRow" id="paramRow" value='${param.paramRow }' />
-			<input type="hidden" name="paramStmOptionCnt" id="paramStmOptionCnt" value="${param.stmOptionCnt }" /> 
 			
-			<div class="kt-portlet__head-label col-6 row" name="writerDiv" id="writerDiv"></div>
+			<div class="kt-portlet__head-label" name="writerDiv" id="writerDiv"></div>
 		</div>
-		<hr class="kt-margin-0">
+		<!-- <hr class="kt-margin-0"> -->
 		<div class="kt-portlet__body">
 			<div class="row">
 				<!-- left -->
-				<div class="col-lg-6 kt-padding-r-10">
-					<div name="badTitleDiv" id="badTitleDiv" class="form-group">
-						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i>제목</label>
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
+					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
+						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1003.label.title">제목</span></label>
 						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
 					</div>
-					<div name="badContentDiv" id="badContentDiv" class="form-group">
-						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i>내용</label>
+					<div name="badContentDiv" id="badContentDiv" class="kt-margin-b-10">
+						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i><span data-lang-cd="bad1003.label.content">내용</span></label>
 						<textarea class="kt-hide" name="badContent" id="badContent" required></textarea>
 					</div>
 				</div>
 				<!-- right -->
-				<div class="col-lg-6 kt-padding-l-10">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 osl-1400-desktop-padding-0" name="rightDiv" id="rightDiv">
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
-							 공지사항 사용
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.noticeCheck">공지사항 사용</span>
 				 	</div>
 			 		<!-- 공지사항 사용할 경우 표시해야하는 Div -->
-				 	<div class="kt-margin-l-35 form-group row kt-hide bad_box" name="ntcOption" id="ntcOption">
+				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
 				 		<div class="input-group kt-input-icon pull-right">
-					 		<label class="input-group-addon kt-margin-5 kt-padding-5">공지 기간</label>
+					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1003.label.noticeDate">공지 기간</span></label>
 					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange"/>
 				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
 				 		</div>
-				 		<div class="kt-margin-t-15">
-					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
-								 공지 기간 무시
+				 		<div class="row kt-padding-t-10 kt-padding-l-15">
+					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
 								<span></span>
 							</label>
+							<span data-lang-cd="bad1003.label.noticeDateIgnore">공지 기간 무시</span>
 				 		</div>
 				 	</div>
 				 	<!-- 비밀글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmPwYnCd" id="stmPwYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badPwYnCd" id="badPwYnCd">
-							 비밀글 사용
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.secretCheck">비밀글 사용</span>
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
-				 	<div class="kt-margin-l-35 form-group row kt-hide bad_box" name="pwOption" id="pwOption">
+				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon  required' style="margin-top: auto; margin-bottom:auto; min-width:60px;">PW</label>
+					 		<label class='input-group-addon ' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1003.label.password">PW</span></label>
 				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:60px;">PW 확인</label>
+					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
 				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
 				 	<div class="kt-padding-l-20 form-group row kt-hide"  name="stmCmtYnCd" id="stmCmtYnCd">
 				 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badCmtYnCd" id="badCmtYnCd">
-							 댓글 허용
 							<span></span>
 						</label>
+							<span data-lang-cd="bad1003.label.commentCheck">댓글 허용</span>
 				 	</div>
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-file-upload kt-margin-r-5"></i>파일 첨부
+							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attchFile">파일 첨부</span>
+							<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn"><span data-lang-cd="bad1003.button.deleteResetBtn">삭제 초기화</span></button>
 						</div>
 						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height: 260px;" name="bad1003FileUpload" id="bad1003FileUpload">
 							<div class='kt-uppy__dashboard'></div>
@@ -95,13 +87,16 @@
 					<!-- 태그 -->
 					<div class="form-group row kt-margin-b-10 kt-hide" name="badTagOption" id="badTagOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-hashtag kt-margin-r-5"></i> 태그
+							<i class="fa fa-hashtag kt-margin-r-5"></i><span data-lang-cd="bad1003.label.tag">태그</span>
 						</div>
 						<div class="input-group kt-margin-t-10 kt-margin-l-20 kt-margin-r-10">
 							<div class="input-group-prepend">
 								<span class="input-group-text">#</span>
 							</div>
 							<input type="text" class="form-control col-5" name="tagWriter" id="tagWriter" maxlength="30" />
+							<div class="input-group-prepend">
+								<span class="input-group-button btn btn-brand" id="tagBtn" name="tagBtn"><span data-lang-cd="bad1003.button.submit">등록</span></span>
+							</div>
 						</div>
 						<!-- 태그 리스트 -->
 						<div class="kt-margin-t-20 kt-padding-l-15" name="tagListDiv" id="tagListDiv">
@@ -111,8 +106,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1003UpdateSubmit">수정완료</button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-brand" id="bad1003UpdateSubmit"><span data-lang-cd="bad1003.button.updateSubmit">수정 완료</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -138,24 +133,19 @@ var OSLBad1003Popup = function () {
 	//목록에서 받아온 row data
 	var rowData;
 	
-	//출력 문구
-	var pageTypeData = {
-			"update":{
-				"saveString" : "글 수정을 완료하시겠습니까?",
-				"saveBtnString" : "수정 완료"
-			},
-			"common":{
-				"badTitleString" : "제목은 반드시 입력하셔야 합니다.",
-				"badContentString" : "내용은 반드시 입력하셔야 합니다."
-			}
-	};
-
+	//현재 게시글 첨부파일 개수와 용량
+	var currentBadFileCnt;
+	var currentBadFileStrg;
+	
+	//게시판 최대 첨부파일 개수와 용량
+	var maxCnt;
+	var maxStrg;
+	
     var documentSetting = function () {
-
-    	//문구 세팅
-    	$("#bad1003UpdateSubmit").text(pageTypeData["update"]["saveBtnString"]);
-    	$("#badTitle").text(pageTypeData["common"]["badTitleString"]);
-    	$("#badContent").text(pageTypeData["common"]["badContentString"]);
+    	
+    	//문구 세팅 
+    	$("#bad1003UpdateSubmit > span").text($.osl.lang("bad1003.button.updateSubmit"));
+    	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
     	
     	//목록에서 받은 rowData
     	rowData = JSON.parse($("#paramRow").val());
@@ -163,8 +153,9 @@ var OSLBad1003Popup = function () {
     	$("#paramRow").val('');
     	
     	//게시판 옵션이 없을 경우 div 변경
-    	if($("#paramStmOptionCnt").val()==0){
-    		$("#leftDiv").attr("class", "col-lg-12 kt-padding-5");
+    	if(rowData.stmOptionCnt == "" || rowData.stmOptionCnt==0){
+    		$("#leftDiv").removeClass("col-xl-6");
+    		$("#leftDiv").addClass("col-xl-12");
     		$("#rightDiv").addClass("kt-hide");
     	}else{
         	// 스위치 on/off 이벤트
@@ -189,15 +180,29 @@ var OSLBad1003Popup = function () {
         			$("#pwOption").addClass("kt-hide");
         		}
         	});
-
-        	//첨부파일
-    		var maxStrg = rowData.stmFileStrg;
+        	
+        	//첨부파일 - 게시판 속성에서 지정한 최대 개수 및 용량
+    		maxStrg = rowData.stmFileStrg;
     		if(maxStrg == null || maxStrg == ""){
     			maxStrg = 0;			
     		}
-    		var maxCnt = parseInt(rowData.stmFileCnt);
+    		maxCnt = parseInt(rowData.stmFileCnt);
     		if(maxStrg == null || maxStrg == ""){
     			maxCnt = 0;
+    		}
+    		//현재 게시판에서 가지고 있는 첨부파일 개수
+    		if(rowData.badFileCnt>maxCnt){
+    			currentBadFileCnt = rowData.badFileCnt;
+    		}else{
+    			//게시판 지정 최대 첨부파일 개수보다 작거나 같을 경우
+    			currentBadFileCnt = maxCnt;
+    		}
+    		//현재 첨부파일 용량
+    		if(rowData.badFileSize>maxStrg){
+    			currentBadFileStrg = rowData.badFileSize;
+    		}else{
+    			//게시판 지정 최대 첨부파일 개수보다 작거나 같을 경우
+    			currentBadFileStrg = maxStrg;
     		}
     		
     		//fileUploadObj.reset();
@@ -205,8 +210,8 @@ var OSLBad1003Popup = function () {
     		fileUploadObj = $.osl.file.uploadSet("bad1003FileUpload",{
     			url: '/bad/bad1000/bad1000/insertBad1002BadAtchFileInfo.do',
     			meta: {"atchFileId": rowData.atchFileId, "fileSn": 0},
-    			maxFileSize: maxStrg,
-    			maxNumberOfFiles: maxCnt,
+    			maxFileSize: currentBadFileStrg,
+    			maxNumberOfFiles: currentBadFileCnt,
     			height: 260,
     			
     			//파일 업로드 전 실행
@@ -241,17 +246,17 @@ var OSLBad1003Popup = function () {
     					});
     				}else{
     					//atchFileId가 있는 경우 - 기존 파일 존재
-	    				//database 파일 제외하기
-	    				$.each(files, function(idx, map){
-	    					if(map.source != "database"){
-	    						map.meta.atchFileId = rowData.atchFileId;
-	    						map.meta.source = map.source;
-	    						
-	    						var jsonTmp = {};
-	    						jsonTmp[map.id] = map;
-	    						uploadFiles = $.extend(uploadFiles, jsonTmp);
-	    					}
-	    				});
+        				//database 파일 제외하기
+        				$.each(files, function(idx, map){
+        					if(map.source != "database"){
+        						map.meta.atchFileId = rowData.atchFileId;
+        						map.meta.source = map.source;
+        						
+        						var jsonTmp = {};
+        						jsonTmp[map.id] = map;
+        						uploadFiles = $.extend(uploadFiles, jsonTmp);
+        					}
+        				});
     				}
 
     				//주의 : 아래 rtnValue 와 순서가 바뀌면 최근 수정한 파일만 저장된다.
@@ -286,6 +291,39 @@ var OSLBad1003Popup = function () {
     	   		file.source = "remove";
     	   		uploadRemoveFiles.push(file);
     	   		
+    	   		//파일 최대, 최소 개수 변경
+    	   		//현재 fileUploadObj에 지정된 최대 첨부파일 개수 및 용량 가져오기
+    	   		var optFileCnt = fileUploadObj.opts.restrictions.maxNumberOfFiles;
+    	   		var optFileStrg = fileUploadObj.opts.restrictions.maxFileSize;
+
+    	   		//현재 파일 개수가 게시판 속성 첨부파일 개수보다 클 경우
+    	   		if(optFileCnt > maxCnt){
+    	   			//파일 삭제할 때마다 업로드 가능 갯수 줄이기
+    	   			var changeFileCnt = optFileCnt - 1;
+	    	   		fileUploadObj.opts.restrictions.maxNumberOfFiles = changeFileCnt;
+    	   		}else{
+    	   			//게시판 속성 첨부파일 갯수으로 지정
+    	   			fileUploadObj.opts.restrictions.maxNumberOfFiles = maxCnt;
+    	   		}
+    	   		
+    	   		//현재 파일 용량이 게시판 속성 첨부파일 용량보다 클 경우
+    	   		if(optFileStrg > maxStrg){
+    	   			var changeFileStrg;
+    	   			var intervalStrg = optFileStrg - file.data.size;
+    	   			//삭제하고 남은 파일의 용량이 전체 용량보다 클 경우
+    	   			if(intervalStrg > maxStrg){
+    	   				//남아있는 파일의 용량합으로 지정
+    	   				changeFileStrg = intervalStrg;
+    	   			}else{
+    	   				//게시판 속성 첨부파일 용량으로 지정
+    	   				changeFileStrg = maxStrg*(1024*1024);
+    	   			}
+    	   			//첨부파일 최대 용량 변경
+	    	   		fileUploadObj.opts.restrictions.maxFileSize = changeFileStrg;
+    	   		}else{
+    	   			//게시판 속성 첨부파일 용량으로 지정
+    	   			fileUploadObj.opts.restrictions.maxFileSize = maxStrg*(1024*1024);
+    	   		}
     	   		//삭제 취소 버튼 활성화
     	   		$("#fileRemoveResetBtn").removeClass("d-none");
     		});
@@ -293,6 +331,10 @@ var OSLBad1003Popup = function () {
     	   	//삭제 초기화 버튼 클릭 시 삭제한 파일 다시 추가
     	   	$("#fileRemoveResetBtn").click(function(){
     	   		$("#fileRemoveResetBtn").addClass("d-none");
+    	   		
+    	   		//게시글이 가지고 있던 최대 파일 용량 및 개수로 fileUploadObj 변경
+    	   		fileUploadObj.opts.restrictions.maxFileSize = currentBadFileStrg*(1024*1024);
+    	   		fileUploadObj.opts.restrictions.maxNumberOfFiles = currentBadFileCnt;
     	   		
     	   		$.each(uploadRemoveFiles, function(idx, map){
     	   			fileUploadObj.addFile({
@@ -323,16 +365,6 @@ var OSLBad1003Popup = function () {
     			return;
     		}
     		
-    		//Content가 valid 체크가 안되므로 별도 체크
-    		var badContent = $("#badContent").val().replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, '').trim();;
-    		
-    		if( badContent == "" || badContent == null ){
-    			$.osl.alert("내용을 입력하세요");
-    			$("#badContent").val("");
-    			$("#badContent").focus();
-    			return;
-    		}
-    		
      		var localData = {};
      		
      		// 기본 데이터 가져오기
@@ -340,28 +372,39 @@ var OSLBad1003Popup = function () {
      		localData.badContent = $("#badContent").val();
 
      		//공지사항 사용할 경우
-    		if($("#badNtcYnCd").is(":checked")==true){
-    			//dateRange 기간 입력
-    			var stdtm = ($("#badNtcRange").val()).split(" - ")[0];
-    			var eddtm = ($("#badNtcRange").val()).split(" - ")[1];
-	    		
-    			localData.badNtcStdtm = stdtm;
-    			localData.badNtcEddtm = eddtm;
-    				
-    			//공지기간 무시 체크한 경우
-	    		if($("#badNtcTopYnCd").is(":checked")==true){
-	    			localData.badNtcType = '03';
-	    		}else{
-	    			localData.badNtcType = '02';
-	    		}
-			}else{
-				//공지사항 사용하다가 해제할 경우
-				localData.badNtcStdtm = "";
-    			localData.badNtcEddtm = "";
-    			localData.badNtcType = '01';
-			}
-    		
-    		//비밀글 사용할 경우
+     		if(rowData.stmNtcYnCd=='01'){
+	    		if($("#badNtcYnCd").is(":checked")==true){
+	    			//dateRange 기간 입력
+	    			var stdtm = ($("#badNtcRange").val()).split(" - ")[0];
+	    			var eddtm = ($("#badNtcRange").val()).split(" - ")[1];
+		    		
+	    			localData.badNtcStdtm = stdtm;
+	    			localData.badNtcEddtm = eddtm;
+	    				
+	    			//공지기간 무시 체크한 경우
+		    		if($("#badNtcTopYnCd").is(":checked")==true){
+		    			localData.badNtcType = '03';
+		    		}else{
+		    			localData.badNtcType = '02';
+		    		}
+				}else{
+					//공지사항 사용하다가 해제할 경우
+					localData.badNtcStdtm = "";
+	    			localData.badNtcEddtm = "";
+	    			localData.badNtcType = '01';
+				}
+    			//공지사항 옵션 수정 함
+    			localData.notChangeNtc = "N";
+     		}
+     		
+     		//게시판이 공지사항 기능 사용 안할 때
+     		//해당 게시글에 공지기능이 사용중일 때
+     		if($("#stmNtcYnCd").hasClass("kt-hide") && rowData.badNtcType!='01'){
+				//공지사항 옵션 수정 안함
+				localData.notChangeNtc = "Y";
+     		}
+
+     		//비밀글 사용할 경우
     		if($("#badPwYnCd").is(":checked")==true){
     			if($("#badPw").val() != null && $("#badPw").val() != ""){
     				if($("#badPw").val()==$("#badPwCheck").val()){
@@ -382,7 +425,16 @@ var OSLBad1003Popup = function () {
     			//비밀글로 사용하다가 사용 해제를 할 경우
     			localData.badPw = "";
     		}
-
+    		// 비밀글 옵션 수정 함
+			localData.notChangePw = "N";
+    		
+			//게시판이 비밀글 기능 사용 안할 때
+     		//해당 게시글에 비밀글이 사용중일 때
+     		if($("#stmPwYnCd").hasClass("kt-hide") && rowData.badPw!='01'){
+				//게시글 비밀번호 옵션 수정 안함
+				localData.notChangePw = "Y";
+     		}
+    		
     		//태그
     		localData.tagList = JSON.stringify(tag);
     		
@@ -394,14 +446,20 @@ var OSLBad1003Popup = function () {
     		}
     		
 			//동작
-    		$.osl.confirm(pageTypeData["update"]["saveString"],null,function(result) {
+    		$.osl.confirm($.osl.lang("bad1003.update"),null,function(result) {
     	        if (result.value) {
     	        	data = localData;
     	        	data.prjGrpId = rowData.prjGrpId;
     	        	data.prjId = rowData.prjId;
     	        	data.menuId = rowData.menuId;
     	        	data.badId = rowData.badId;
-    	        	fileUploadObj.upload();
+    	        	//게시판 옵션이 하나라도 있을 경우
+    	        	if(rowData.stmOptionCnt != "" || rowData.stmOptionCnt!=0){
+    	        		fileUploadObj.upload();
+    	        	}else{
+    	        		//하나도 없을 경우
+    	        		submitUpdateAction();
+    	        	}
     	        }
     		});
     	});
@@ -428,7 +486,7 @@ var OSLBad1003Popup = function () {
 	                	
 	                    $("#tagListDiv").append(innerHtml);
 	                    tag.push(tagValue);
-	                    self.val("");
+	                    $("#tagWriter").val("");
 	                } else {
 	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
 	                    $("#tagWriter").val("");
@@ -439,6 +497,35 @@ var OSLBad1003Popup = function () {
 	        }
 	    });
 	   
+	 //태그 등록 버튼 클릭
+		$("#tagBtn").click(function(e){
+			var tagValue = $("#tagWriter").val();
+	            // 값이 없으면 검사 안함
+	            if (tagValue != "") {
+	                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+	                var result = Object.values(tag).filter(function (word) {
+	                    return word == tagValue;
+	                })
+	            
+	                // 태그 중복 검사
+	                if (result.length == 0) { 
+	                	var innerHtml = "";
+	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
+	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
+	                	
+	                    $("#tagListDiv").append(innerHtml);
+	                    tag.push(tagValue);
+	                    $("#tagWriter").val("");
+	                } else {
+	                	$.osl.toastr($.osl.lang("bad1002.formCheck.tagMatching"), {"type" : "warning"});
+	                    $("#tagWriter").val("");
+	                }
+	            }
+	        	 // SpaceBar 시 빈공간이 생기지 않도록 방지
+	            e.preventDefault(); 
+		});
+	 
 		// 태그 삭제
 	    $(document).off("click", ".tagify__tag__removeBtn").on("click", ".tagify__tag__removeBtn", function (e) {
 	    	//상위 태그명 가져오기
@@ -482,21 +569,22 @@ var OSLBad1003Popup = function () {
 				var tagList = data.bad1001Tag;
 				var fileList = data.bad1001FileList;
 				var fileCnt = data.bad1001FileListCnt;
-
+				
 				// 가져온 데이터로 세팅하기
 				// head ------------------
 				// 작성자 정보 넣기
-				$("#writerDiv").html($.osl.user.usrImgSet(setBad.badUsrImgId, setBad.badUsrNm+"( "+setBad.badUsrId+" )"));
+				var usrData = {
+					html: setBad.badUsrNm + " (" + setBad.badUsrId + ")",
+					imgSize: "sm",
+					class:{
+						cardBtn: "osl-width__fit-content"
+					}
+				};
+				$("#writerDiv").html($.osl.user.usrImgSet(setBad.badUsrImgId, usrData));
 				//작성자 정보 상세 보기
-				$("#writerDiv").click(function(){
+				$("#writerDiv>.kt-user-card-v2.btn.osl-width__fit-content").children("div").click(function(){
 					$.osl.user.usrInfoPopup(setBad.badUsrId);
 				});
-				
-				// 작성일 정보 넣기
-				$("#writeDateDiv").text("작성일 : " + setBad.badWtdtm);
-				
-				// 조회수 정보 넣기
-				$("#hitDiv").text("조회수 : " + setBad.badHit);
 				
 				// body ------------------
 				// 제목 넣기
@@ -506,19 +594,17 @@ var OSLBad1003Popup = function () {
 				$("#badContent").val(setBad.badContent);
 				
 				//edit 세팅
-		    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 430}));
+		    	formEditList.push($.osl.editorSetting("badContent", {formValidate: formValidate, 'minHeight': 380}));
 				$("#badContent").removeClass("kt-hide");
 				
-				if($("#paramStmOptionCnt").val()>0){
+				if(rowData.stmOptionCnt>0){
 					// 게시판 속성 : 공지사항 기능을 사용하는 경우
-					console.log(rowData);
 					if(rowData.stmNtcYnCd == "01"){
 						$("#stmNtcYnCd").removeClass("kt-hide");
 						$.osl.date.daterangepicker("#badNtcRange");
 						
-						// 공지사항인지 확인
-						if(rowData.badNtcCheck=='01'){
-							//오늘 날짜가 공지사항 기간에 해당하는지 확인
+						// 공지사항 옵션 선택한 게시글인지 확인
+						if(setBad.badNtcCheck == "01"){
 							// 공지사항인 경우 스위치 on
 							$("#badNtcYnCd").attr("checked", true);
 							// 공지옵션 보이기
@@ -526,10 +612,14 @@ var OSLBad1003Popup = function () {
 							//공지기간 무시인 경우
 							if(rowData.badNtcType=='03'){
 								$("#badNtcTopYnCd").attr("checked", true);
-							}else{
-								//사용자가 입력한 공지 지정일이 있으므로
-								$("#badNtcRange").attr("value", setBad.badNtcStdtm + " - " + setBad.badNtcEddtm);
 							}
+							//사용자가 입력한 공지 지정일이 있으므로
+							$("#badNtcRange").val(setBad.badNtcStdtm + " - " + setBad.badNtcEddtm);
+						}else{
+							// 공지사항아니므로 스위치 off
+							$("#badNtcYnCd").attr("checked", false);
+							// 공지옵션 숨기기
+							$("#ntcOption").addClass("kt-hide");
 						}
 					}else{
 						$("#stmNtcYnCd").addClass("kt-hide");
@@ -539,9 +629,9 @@ var OSLBad1003Popup = function () {
 					if(rowData.stmPwYnCd == "01"){
 						$("#stmPwYnCd").removeClass("kt-hide");
 						$("#pwOption").removeClass("kt-hide");
-						
+						console.log(setBad);
 						// 비밀글인 경우 스위치 on
-						if(setBad.badPwYn == "Y"){
+						if(setBad.badPw != null && setBad.badPw != "" ){
 							$("#badPwYnCd").attr("checked", true);
 							// 비밀번호 입력창 보이기
 							$("#pwOption").removeClass("kt-hide");
@@ -625,22 +715,24 @@ var OSLBad1003Popup = function () {
 			return;
 		}
 		
-		//파일 목록 추가하기 (수정이력 관리)
-       	var uploadFileList = [];
-       	$.each(fileUploadObj.getFiles(), function(idx, map){
-       		if(map.source == "database"){
-       			return true;
-       		}
-       		uploadFileList.push(map);
-       	});
-       	uploadFileList = uploadFileList.concat(uploadRemoveFiles);
+		if(rowData.stmOptionCnt != null && rowData.stmOptionCnt != "" && rowData.stmOptionCnt >0){
+			//파일 목록 추가하기 (수정이력 관리)
+	       	var uploadFileList = [];
+	       	$.each(fileUploadObj.getFiles(), function(idx, map){
+	       		if(map.source == "database"){
+	       			return true;
+	       		}
+	       		uploadFileList.push(map);
+	       	});
+	       	uploadFileList = uploadFileList.concat(uploadRemoveFiles);
 
-       	//파일 정보
-       	data.fileHistory = JSON.stringify(uploadFileList);
-       	
-		//파일 목록 추가하기
-		data.atchFileId = rowData.atchFileId;
-		data.fileSn = 0;
+	       	//파일 정보
+	       	data.fileHistory = JSON.stringify(uploadFileList);
+	       	
+			//파일 목록 추가하기
+			data.atchFileId = rowData.atchFileId;
+			data.fileSn = 0;
+		}
 
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
@@ -657,40 +749,26 @@ var OSLBad1003Popup = function () {
 				//등록 성공
    				$.osl.toastr(data.message);
 
-   				//상세페이지가 아닌 목록화면에서 접근한 수정인지 확인
-				if($("#detailRootYn").val() == "N"){
-					var modalSize;
-					if($("#paramStmOptionCnt").val()>0){
-						modalSize = "xl";
-					}else{
-						modalSize = "sm";
-					}
-					//게시글 상세 팝업 호출
-					var data = {
-							stmTypeCd : $("#stmTypeCd").val(),
-							stmNm : $.osl.escapeHtml($("#stmNm").val()),
-							backPageYn: "N",
-							stmRootYn: $("#stmRootYn").val(),
-							paramRow : JSON.stringify(rowData),
-						};
-					var options = {
-							idKey: "bad1001_"+ rowData.badId,
-							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
-							closeConfirm: false,
-							autoHeight: false,
-							modalSize: modalSize,
-						};
-	   				//모달 창 닫기
-	   				$.osl.layerPopupClose();
-					//모달 창 열기
-	   				$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
-				}else{
-	   				//모달 창 닫기
-	   				$.osl.layerPopupClose();
-
-	 	   			//게시글 재조회
-	   				OSLBad1001Popup.reDraw($("#badId").val());
-				}
+				//게시글 상세 팝업 호출
+				var data = {
+						stmTypeCd : $("#stmTypeCd").val(),
+						stmNm : $.osl.escapeHtml($("#stmNm").val()),
+						backPageYn: "N",
+						stmRootYn: $("#stmRootYn").val(),
+						paramRow : JSON.stringify(rowData),
+						badHitYn : "ok", //값이 있을 경우 조회수 증가 안함
+					};
+				var options = {
+						idKey: "bad1001_"+ rowData.badId,
+						modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
+						closeConfirm: false,
+						autoHeight: false,
+						modalSize: "xl",
+					};
+   				//모달 창 닫기
+   				$.osl.layerPopupClose();
+				//모달 창 열기
+   				$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 			}
 		});
 		

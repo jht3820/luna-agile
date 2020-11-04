@@ -4,28 +4,22 @@
 <form class="kt-form" id="bad1005Info">
 	<div class="kt-portlet kt-portlet--mobile">
 		<input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd}" /> 
-		<input type="hidden" name="menuId" id="menuId" value="${param.menuId }" /> 
 		<input type="hidden" name="deleteDataList" id="deleteDataList" value='${param.deleteDataList }' /> 
 		<input type="hidden" name="menuRootYn" id="menuRootYn" value="${param.menuRootYn }" /> 
-		<input type="hidden" name="badId" id="badId" value="${param.badId }" /> 
-		<input type="hidden" name="atchFileId" id="atchFileId" value="${param.atchFileId }" /> 
-		<input type="hidden" name="badCmtId" id="badCmtId" value="${param.badCmtId }" /> 
-		<input type="hidden" name="badCmtPrjGrpId" id="badCmtPrjGrpId" value="${param.prjGrpId }" /> 
-		<input type="hidden" name="badCmtPrjId" id="badCmtPrjId" value="${param.prjId }" /> 
 		<div class="kt-portlet__body">
 			<div class="form-group">
-				<label class="required">삭제 유형</label>
-				<select class="form-control" style="display: inline-block;" name="delTypeCd" id="delTypeCd">
+				<label class="required"><span data-lang-cd="bad1005.label.deleteType">삭제 유형</span></label>
+				<select class="form-control kt-block-inline" name="delTypeCd" id="delTypeCd">
 				</select>
 			</div>
 			<div class="form-group">
-				<label>삭제 사유</label>
+				<label><span data-lang-cd="bad1005.label.deleteReason">삭제 사유</span></label>
 				<textarea class="kt-hide" name="delTxt" id="delTxt"></textarea>
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1005deleteSubmit">삭제</button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-brand" id="bad1005deleteSubmit"><span data-lang-cd="bad1005.button.submit">삭제</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -46,6 +40,11 @@ var OSLBad1005Popup = function () {
  	var menuRootYn = $("#menuRootYn").val();
  	
     var documentSetting = function () {
+    	
+    	//문구 세팅 
+    	$("#bad1005deleteSubmit > span").text($.osl.lang("bad1005.button.submit"));
+    	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+    	
 	   	//select box 세팅
 	   	var commonCodeArr=[
 	   		{mstCd: "BAD00001", useYn: "Y", comboType: "OS", targetObj: "#delTypeCd"}
@@ -71,12 +70,13 @@ var OSLBad1005Popup = function () {
     		
     		//메뉴에서 삭제를 누른 것이 아니라면(상세보기에서 게시글 삭제 클릭 시)
     		if(menuRootYn=="N"){
+    			var rowData = JSON.parse($("#deleteDataList").val());
     		 	//메뉴에서 접근을 안할 경우 사용할 deleteDataList
     		 	//seviceImple에서 JSONArray로 parse하므로 [] 형태로 감쌀것.
     		 	var delList = [{
-    		 		menuId : $("#menuId").val(),
-            		badId : $("#badId").val(),
-            		atchFileId : $("#atchFileId").val(),
+    		 		menuId : rowData.menuId,
+            		badId : rowData.badId,
+            		atchFileId : rowData.atchFileId,
     		 	}];
     		 	
 	    		$("#deleteDataList").val(JSON.stringify(delList));
