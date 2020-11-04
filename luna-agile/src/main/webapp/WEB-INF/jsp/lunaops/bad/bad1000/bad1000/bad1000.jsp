@@ -90,10 +90,19 @@
 					{field: 'badContent', title:$.osl.lang("bad1000.field.badContent"), searchOrd: 2},
 					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 4},
 					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 5, 
-						searchKeyCode: "32",
-						searchKeyEvt : function(){
-							console.log("test");
-						},
+						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
+						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
+							// SpaceBar 시 빈공간이 생기지 않도록 방지
+                            e.preventDefault(); 
+							if(e.key=="Enter" || e.keyCode == 32){
+								//검색
+								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
+							}else{
+								var txt = $("#searchData_"+dataTableId).val() + e.key;
+								txt = txt.replace(/#/g,"");
+								$("#searchData_"+dataTableId).val(txt);
+							}
+						},		
 					}
 				]
 		 }else{
@@ -106,16 +115,18 @@
 					{field: 'delCd', title:$.osl.lang("bad1000.field.delCd"), searchOrd: 5, searchType:"select", searchCd: "CMM00001"},
 					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 6},
 					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 7,
-						searchKeyCode: "32", //spacebar 클릭 시 이벤트 실행
+						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
 						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
 							// SpaceBar 시 빈공간이 생기지 않도록 방지
                             e.preventDefault(); 
-							var txt = $("#searchData_"+dataTableId).val();
-							txt = txt.replace(/#/g,"");
-							$("#searchData_"+dataTableId).val(txt);
-							//검색
-							$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
-							//console.log(datatableInfo, searchDataTarget);
+							if(e.key=="Enter" || e.keyCode == 32){
+								//검색
+								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
+							}else{
+								var txt = $("#searchData_"+dataTableId).val() + e.key;
+								txt = txt.replace(/#/g,"");
+								$("#searchData_"+dataTableId).val(txt);
+							}
 						},		
 					},
 				];
