@@ -580,7 +580,7 @@
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
 												<div class="osl-osl-uppy-file-sumnail">
-													<img src="" />
+													<img src="/media/KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069Kakao.jpg" />
 													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
@@ -623,7 +623,7 @@
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
 												<div class="osl-osl-uppy-file-sumnail">
-													<img src="" />
+													<img src="/media/KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069KakaoTalk_20200708_175918069Kakao.jpg" />
 													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
