@@ -5,7 +5,19 @@
 [![GitHub license](https://img.shields.io/github/license/jht3820/luna-agile)](https://github.com/jht3820/luna-agile/blob/master/LICENSE)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/jht3820/luna-agile)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jht3820/luna-agile?include_prereleases)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jht3820/luna-agile/CI)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jht3820/luna-agile/CI)  
+
+
+
+<br/>
+<br/>
+<br/>
+<p align="center"><img src="/assets/images/opensoftlab_logo.jpg"></p> 
+<br/>
+<br/>
+<br/>
+
+
 
 # 1. LUNA™ AGILE Introduction
 
