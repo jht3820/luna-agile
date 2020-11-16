@@ -2,4 +2,4 @@ theme: jekyll-theme-cayman
 
 title : Opensoftlab LUNA™ Agile
 teaser : "/assets/images/opensoftlab_logo.jpg"
-<center><img src="/assets/images/opensoftlab_logo.jpg" width="50%" height="50%"></center>
+<center><img data-action="zoom" src='{{ "/assets/images/opensoftlab_logo.jpg" | relative_url }}' alt='absolute'></center>
