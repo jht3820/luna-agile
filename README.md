@@ -7,18 +7,13 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jht3820/luna-agile?include_prereleases)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jht3820/luna-agile/CI)  
 
+  
+  
+  
 
-
-<br/>
-<br/>
-<br/>
-<p align="center"><img src="/assets/images/opensoftlab_logo.jpg"></p> 
-<br/>
-<br/>
-<br/>
-
-
-
+![opensoftlab_logo](https://user-images.githubusercontent.com/22164616/99226155-a06b7100-282c-11eb-9649-5bcdc839a1d6.jpg)  
+  
+  
 # 1. LUNA™ AGILE Introduction
 
 LUNA™ AGILE solves the problems of the existing waterfall water development business
