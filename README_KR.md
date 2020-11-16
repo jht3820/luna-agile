@@ -7,6 +7,13 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jht3820/luna-agile?include_prereleases)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jht3820/luna-agile/CI)
 
+<br/>
+<br/>
+<br/>
+<p align="center"><img src="/assets/images/opensoftlab_logo.jpg"></p> 
+<br/>
+<br/>
+<br/>
 
 # 1. LUNA™ AGILE 소개
 
