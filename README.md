@@ -51,15 +51,15 @@ After purchasing Keen Theme, set the script and css files to the following path.
 * css: /luna-agile/src/main/webapp/css
  
  
- # 3. LUNA™ AGILE installation
+# 3. LUNA™ AGILE installation
  
-  ### 3.1 Install LUNA™ AGILE DB on Cubrid
+### 3.1 Install LUNA™ AGILE DB on Cubrid
  
  -Install the installation scripts in the DB_install_script directory in order from No. 1.
  -Before creating the Cubrid function, compile the java file in the Cubrid Java Stored function folder and load it into Cubrid.
    After this, create a function.
    
- ### 3.2 LUNA™ AGILE DB access address and configuration
+### 3.2 LUNA™ AGILE DB access address and configuration
   ```
       /luna-agile/src/main/resources/egovframework/egovProps/globals.properties Change the settings as follows.
       
@@ -69,7 +69,7 @@ After purchasing Keen Theme, set the script and css files to the following path.
       Globals.lunaops.cubrid.password= Your DB password
    ```
    
- ### 3.3 LUNA™ AGILE created the first system administrator
+### 3.3 LUNA™ AGILE created the first system administrator
  ```
    /luna-agile/src/main/resources/egovframework/egovProps/globals.properties Change the settings as follows.
       
@@ -97,7 +97,7 @@ After purchasing Keen Theme, set the script and css files to the following path.
 -The basic authority provided by the system is the business manager, the business manager, and the general user. 
 
  
- # 5. Contributing
+# 5. Contributing
 
 Join the project, ask questions about the project, discuss the  [Google Group](https://groups.google.com/forum/#!forum/opensoftlab-github-group)
 
