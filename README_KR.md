@@ -44,4 +44,4 @@
 # 6. 라이센스 정보
 
 
-- LUNA™ AGILE는 GPL3.0 라이센스를 사용합니다. ([GPL3.0 라이센스 정보](https://www.olis.or.kr/license/Detailselect.do?lId=1072))
+- LUNA™ AGILE은 GPL3.0 라이선스에 따라 라이선스가 부여됩니다. 전체 라이센스 텍스트는 ([GPL3.0 라이센스 정보](https://www.olis.or.kr/license/Detailselect.do?lId=1072)) 를 참조하세요.
