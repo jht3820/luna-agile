@@ -37,7 +37,7 @@ Compatible with various open sources.
  
  -  It operates in accordance with the eGovFramework standard.
  
- ### 2.2 Keen Tneme download
+### 2.2 Keen Tneme download
  
 LUNA™ AGILE uses the Keen Theme, a Bootstrap Theme.
 
