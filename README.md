@@ -50,7 +50,8 @@ After purchasing Keen Theme, set the script and css files to the following path.
 * scripr: /luna-agile/src/main/webapp/js
 * css: /luna-agile/src/main/webapp/css
  
- 
+
+
 # 3. LUNA™ AGILE installation
  
 ### 3.1 Install LUNA™ AGILE DB on Cubrid
