@@ -37,7 +37,7 @@ Compatible with various open sources.
  
  -  It operates in accordance with the eGovFramework standard.
  
-### 2.2 Keen Tneme download
+ ### 2.2 Keen Tneme download
  
 LUNA™ AGILE uses the Keen Theme, a Bootstrap Theme.
 
@@ -53,7 +53,7 @@ After purchasing Keen Theme, set the script and css files to the following path.
  
  # 3. LUNA™ AGILE installation
  
- ### 3.1 Install LUNA™ AGILE DB on Cubrid
+  ### 3.1 Install LUNA™ AGILE DB on Cubrid
  
  -Install the installation scripts in the DB_install_script directory in order from No. 1.
  -Before creating the Cubrid function, compile the java file in the Cubrid Java Stored function folder and load it into Cubrid.
