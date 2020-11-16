@@ -36,8 +36,8 @@
 			</div>
 			<div class="col-lg-7 col-md-6 col-sm-6">
 				<div class="kt-align-right">
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" ><i class="fa flaticon2-indent-dots kt-font-brand"></i></button> -->
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard" onclick="location.href='/stm/stm2000/stm2100/selectStm2104View.do'"><i class="fa flaticon-squares-1 kt-font-brand"></i></button> -->
+<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" ><i class="fa flaticon2-indent-dots" style="color:#20c997;"></i></button> -->
+<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard" onclick="location.href='/stm/stm2000/stm2100/selectStm2104View.do'"><i class="fa flaticon-squares-1" style="color:#20c997;"></i></button> -->
 				</div>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 				 {field: 'stmTypeNm', title: $.osl.lang("stm2100.field.stmTypeNm"), textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
 				 {field: 'stmNm', title: $.osl.lang("stm2100.field.stmNm"), textAlign: 'left', width: 300, autoHide: false, search: true, 
 // 						template: function(row){
-// 							var returnStr = "<span class='stmNmTxt text-break'>"+row.stmNm+"</span>";
+// 							var returnStr = "<span class='stmNmTxt' style='word-break: break-word;'>"+row.stmNm+"</span>";
 // 							return returnStr;
 // 						}	 
 				 },

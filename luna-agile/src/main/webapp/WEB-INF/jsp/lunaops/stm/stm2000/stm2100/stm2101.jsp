@@ -45,40 +45,40 @@
 					<div class="form-group kt-margin-b-15">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm2101.label.option">옵션</span></label>
 						<div class="row kt-margin-10">
-							<div class="col-5">
-								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
-									<input type="checkbox" name="stmNtcYnCd" id="stmNtcYnCd">
-									<span></span>
+						<div class="col-5">
+							<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
+								<input type="checkbox" name="stmNtcYnCd" id="stmNtcYnCd">
+								<span></span>
+							</label>
+							<span data-lang-cd="stm2101.label.noticeCheck">공지사항 사용</span>
+						</div>
+						<div class="col-5">
+							<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
+									<input type="checkbox" name="stmCmtYnCd" id="stmCmtYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.noticeCheck">공지사항 사용</span>
+								<span data-lang-cd="stm2101.label.commentCheck">댓글 사용</span>
 							</div>
-							<div class="col-5">
-								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
-										<input type="checkbox" name="stmCmtYnCd" id="stmCmtYnCd"><span></span>
-									</label>
-									<span data-lang-cd="stm2101.label.commentCheck">댓글 사용</span>
-								</div>
-							</div>
+						</div>
 						<div class="row kt-margin-10">
-							<div class="col-5">
-								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
-									<input type="checkbox" name="stmPwYnCd" id="stmPwYnCd"><span></span>
+						<div class="col-5">
+							<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
+								<input type="checkbox" name="stmPwYnCd" id="stmPwYnCd"><span></span>
+							</label>
+							<span data-lang-cd="stm2101.label.secretCheck">비밀글 사용</span>
+						</div>
+						<div class="col-5">
+							<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
+									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.secretCheck">비밀글 사용</span>
-							</div>
-							<div class="col-5">
-								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
-									<input type="checkbox" name="stmTagYnCd" id="stmTagYnCd"><span></span>
-								</label>
-								<span data-lang-cd="stm2101.label.tagCheck">태그 사용</span>
+								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
 							</div>
 						</div>
 						<div class="row kt-margin-10">
 							<div class="col-5">
-								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
-									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
+								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
+									<input type="checkbox" name="stmTagYnCd" id="stmTagYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
+								<span data-lang-cd="stm2101.label.tagCheck">태그 사용</span>
 							</div>
 						</div>
 					</div>
@@ -86,12 +86,12 @@
 						<div class="form-group">
 							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm2101.label.fileCount">첨부파일 갯수</span></label>
 							<input type="text" class="form-control" name="stmFileCnt" id="stmFileCnt" regexstr="^0$|^[1-9]{1}$|^10$" maxlength="2" placeholder="최대 10개 파일" regexalert="최대 숫자 10" required />
-							<span class="kt-padding-5 float-right font-italic kt-font-inverse-metal kt-align-right osl-font-xs" data-lang-cd="stm2101.label.maxFileCnt">최대 개수 : 10</span>
+							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;" data-lang-cd="stm2101.label.maxFileCnt">최대 개수 : 10</span>
 						</div>
 						<div class="form-group">
 							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm2101.label.limitFileStrg">첨부파일 용량 제한(MB)</span></label>
 							<input type="text" class="form-control" name="stmFileStrg" id="stmFileStrg" regexstr="^0$|^[1-9]{1}[0-9]*$" maxlength="10" placeholder="최대 용량(합)"  regexalert="숫자만 가능" required />
-							<span class="kt-padding-5  float-right font-italic kt-font-inverse-metal kt-align-right osl-font-xs" name="stmFileStrgStr" id="stmFileStrgStr" data-lang-cd="stm2101.label.maxFileStrg.basic">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
+							<span class="kt-padding-5" style="font-size: 0.5rem; font-style: italic; color: gray; text-align: end; float: right;" name="stmFileStrgStr" id="stmFileStrgStr" data-lang-cd="stm2101.label.maxFileStrg.basic">최대 용량 : [자료실] 4GB(4096MB) [영상] 2GB(2048MB) [일반/갤러리] 500MB</span>
 						</div>
 					</div>
 				</div>
@@ -100,25 +100,25 @@
 					<div class="form-group kt-margin-b-10">
 						<div class="kt-margin-b-10">
 							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm2101.label.admin">담당자</span></label>
-							<span class="float-right">
+							<span style="float: right;">
 								<button type="button" class="btn btn-outline-success btn-sm" id="reset_admin" name="reset_admin" value=""><span data-lang-cd="stm2101.button.reset">초기화</span></button>
 							</span>
 						</div>
 						<div class="form-group kt-margin-b-10">
-							<div class="kt-list ps--active-y form-control kt-padding-10 overflow-auto osl-height--240" id="stmAdmList" name="stmAdmList" required>
+							<div class="kt-list ps--active-y form-control kt-padding-10" id="stmAdmList" name="stmAdmList" style="height: 240px; overflow: auto;" required>
 							</div>
 						</div>
 					</div>
 					<div class="form-group kt-margin-b-0">
 						<div class="kt-margin-b-10">
 							<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm2101.label.writer">글 작성 범위</span></label>
-							<span class="float-right">
+							<span style="float: right;">
 								<button type="button" class="btn btn-brand btn-sm" id="equalBtn" name="equalBtn" value=""><span data-lang-cd="stm2101.button.equals">담당자 동일</span></button>
 								<button type="button" class="btn btn-outline-success btn-sm" id="reset_wt" name="reset_wt" value=""><span data-lang-cd="stm2101.button.reset">초기화</span></button>
 							</span>
 						</div>
 						<div class="form-group kt-margin-b-10">
-							<div class="kt-list ps--active-y form-control kt-padding-10 osl-height--240 overflow-auto" id="stmWtList" name="stmWtList" required>
+							<div class="kt-list ps--active-y form-control kt-padding-10" id="stmWtList" name="stmWtList" style="height: 240px; overflow: auto;" required>
 							</div>
 						</div>
 					</div>
@@ -153,7 +153,7 @@
 						</div>
 					</div>
 					<!--사용자 표출영역-->
-					<div class="kt-list ps--active-y form-control kt-margin-t-10 kt-padding-10 overflow-auto osl-height--480" id="stmGroupUsrList" name="stmGroupUsrList" required>
+					<div class="kt-list ps--active-y form-control kt-margin-t-10 kt-padding-10" id="stmGroupUsrList" name="stmGroupUsrList" style="height:480px; overflow: auto;" required>
 					</div>
 				</div>
 			</div>
