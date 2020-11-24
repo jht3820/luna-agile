@@ -138,8 +138,8 @@ input:-webkit-autofill,
 .osl-min-h-px--220 {
   min-height: 220px; 
 }
-.osl-min-h-px--335 {
-  min-height: 335px; 
+.osl-min-h-px--300 {
+  min-height: 300px; 
 }
 /* 글자크기 */
 .osl-font-lg {
@@ -534,6 +534,15 @@ label.required:after {
 }
 .osl-modal__cursor--move {
     cursor: move;
+}
+.osl-div__cursor--grab{
+	cursor: grab;
+}
+.osl-hover--brand{
+	border: 1px solid transparent;
+}
+.osl-hover--brand:hover{
+	border: 1px solid #1cac81;
 }
 .modal .modal-content.osl-modal__screen--fit{
 	max-height: calc(100vh - 50px);
