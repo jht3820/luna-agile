@@ -39,7 +39,7 @@
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1003.label.noticeDate">공지 기간</span></label>
 					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange"/>
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
+				 			<span class="kt-input-icon__icon kt-input-icon__icon--right kt-bg-brand osl-height-38"><span><i class="la la-calendar-check-o kt-font-light"></i></span></span>
 				 		</div>
 				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
@@ -58,11 +58,11 @@
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon ' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1003.label.password">PW</span></label>
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70'><span data-lang-cd="bad1003.label.password">PW</span></label>
 				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
+					 		<label class='input-group-addon required mt-auto mb-auto osl-min-width-70'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
 				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
 			 			</div>
 				 	</div>
@@ -79,7 +79,7 @@
 							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attchFile">파일 첨부</span>
 							<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn"><span data-lang-cd="bad1003.button.deleteResetBtn">삭제 초기화</span></button>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height: 260px;" name="bad1003FileUpload" id="bad1003FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height-260" name="bad1003FileUpload" id="bad1003FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -480,7 +480,7 @@ var OSLBad1003Popup = function () {
 	                // 태그 중복 검사
 	                if (result.length == 0) { 
 	                	var innerHtml = "";
-	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
 	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
 	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
 	                	
@@ -510,7 +510,7 @@ var OSLBad1003Popup = function () {
 	                // 태그 중복 검사
 	                if (result.length == 0) { 
 	                	var innerHtml = "";
-	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
 	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
 	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
 	                	
@@ -684,7 +684,7 @@ var OSLBad1003Popup = function () {
 							$.each(tagList, function(idx, value){
 								// 태그 리스트 출력 작성하기
 								var innerHtml = "";
-			                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
+			                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
 			                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
 			                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(value)+"</div></div></tag>";
 			                	
