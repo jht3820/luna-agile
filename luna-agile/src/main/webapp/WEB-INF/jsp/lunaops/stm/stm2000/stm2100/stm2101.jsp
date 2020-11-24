@@ -68,17 +68,17 @@
 						</div>
 						<div class="col-5">
 							<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
-									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
-								</label>
-								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
-							</div>
+								<input type="checkbox" name="stmTagYnCd" id="stmTagYnCd"><span></span>
+							</label>
+							<span data-lang-cd="stm2101.label.tagCheck">태그 사용</span>
 						</div>
 						<div class="row kt-margin-10">
 							<div class="col-5">
 								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" style="vertical-align: text-top;">
-									<input type="checkbox" name="stmTagYnCd" id="stmTagYnCd"><span></span>
+									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.tagCheck">태그 사용</span>
+								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -127,7 +127,7 @@
 				<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
 					<!--검색 영역-->
 					<div class="row kt-margin-0">
-						<label><i class="fas fa-user-alt kt-margin-r-5"></i><span data-lang-cd="stm2101.label.nothing">미배정 권한그룹 및사용자</span></label>
+						<label><i class="fas fa-user-alt kt-margin-r-5"></i><span data-lang-cd="stm2101.label.nothing">미배정 권한그룹 및 사용자</span></label>
 						<input type="hidden" id="typeString" name="typeString" value="${param.typeString }"/>
 						<input type="hidden" id="dataList" name="dataList" value='${param.dataList}'/>
 					</div>
