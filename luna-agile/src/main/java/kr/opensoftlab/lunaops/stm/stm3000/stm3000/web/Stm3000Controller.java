@@ -1,9 +1,11 @@
 package kr.opensoftlab.lunaops.stm.stm3000.stm3000.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.ibm.icu.text.SimpleDateFormat;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovFileMngUtil;
@@ -97,6 +101,7 @@ public class Stm3000Controller {
     		
     		model.put("ldapUse", ldapUse);
 	    	model.put("type", paramMap.get("type"));
+	    	model.put("loginType", EgovProperties.getProperty("Globals.lunaops.loginAuth"));
 	    	
 	    	return "/stm/stm3000/stm3000/stm3001";
     		 
@@ -231,6 +236,8 @@ public class Stm3000Controller {
 			
         	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
 
+        	String loginAuth = EgovProperties.getProperty("Globals.lunaops.loginAuth");
+    		
     		
     		int idChkCnt = stm3000Service.selectCmm2000IdCheck(paramMap);
     		if(idChkCnt > 0){

@@ -6,6 +6,7 @@ var OSLLogin = function () {
 		var hiddenParamForm = $("#kt_hidden_param_form")[0];
 		
 		//requestScope에서 전달 받은 파라미터 값
+		var loginType = hiddenParamForm.loginType.value;
 		var loginYn = hiddenParamForm.loginYn.value;
 		var isPrjYn = hiddenParamForm.isPrjYn.value;
 		var logoutYn = hiddenParamForm.logoutYn.value;
@@ -15,6 +16,7 @@ var OSLLogin = function () {
 		var exprYn  = hiddenParamForm.exprYn.value; 	// 비밀번호 만료여부
 		var loginSessionYn = hiddenParamForm.loginSessionYn.value;
 		var paramUsrId = hiddenParamForm.paramUsrId.value;
+		var paramEmail = hiddenParamForm.paramEmail.value;
 		var paramUsrPw = hiddenParamForm.paramUsrPw.value;
 		var licGrpId = hiddenParamForm.licGrpId.value;
 
@@ -51,13 +53,32 @@ var OSLLogin = function () {
 		        if (result.value) {
 		        	$('#loginSessionYn').val(loginSessionYn);
 					$('#usrId').val(paramUsrId);
+					$('#email').val(paramEmail);
 					$('#usrPw').val(paramUsrPw);
 					$('#kt_login_submit').click();
 		        }
 		    });
 		}
 		
-		$("#usrId").focus();	// 아이디 입력란 key focus
+		//로그인 ID 대상
+		if(loginType == "email"){
+			$("#email").inputmask({
+	            mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+	            greedy: false,
+	            definitions: {
+	                '*': {
+	                    validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+	                    cardinality: 1,
+	                    casing: "lower"
+	                }
+	            }
+	        });
+			
+			$('#email').focus();
+		}else{
+			$('#usrId').focus();	// 아이디 입력란 key focus
+		}
+		
 		
 		var formId = 'kt_login_form';
 		$.osl.validate(formId);

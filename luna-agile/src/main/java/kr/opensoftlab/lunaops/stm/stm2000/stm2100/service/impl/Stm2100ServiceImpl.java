@@ -126,9 +126,11 @@ public class Stm2100ServiceImpl extends EgovAbstractServiceImpl implements Stm21
 		
 		listStr = paramMap.get("stmWtList");
 		
+		if(listStr.equals("[]")) {}
+		
 		
 		if(!"[]".equals(listStr)) {
-		jsonArray = (JSONArray) jsonParser.parse(listStr);
+			jsonArray = (JSONArray) jsonParser.parse(listStr);
 			for(int i=0; i<jsonArray.size(); i++)
 			{
 				jsonObj = (JSONObject) jsonArray.get(i);

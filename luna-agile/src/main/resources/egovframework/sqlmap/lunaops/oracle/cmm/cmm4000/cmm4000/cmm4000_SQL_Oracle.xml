@@ -6,6 +6,7 @@
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias  alias="loginVO" type="kr.opensoftlab.lunaops.com.vo.LoginVO"/>
 	
+	
 	<resultMap id="rtnLoginVO" class="kr.opensoftlab.lunaops.com.vo.LoginVO">
 		<result property="usrId" column="USR_ID"/>
 		<result property="licGrpId" column="LIC_GRP_ID"/>
@@ -35,6 +36,7 @@
 		
 	</resultMap>
 	
+	
 	<resultMap id="rtnLicVO" class="kr.opensoftlab.lunaops.com.vo.LicVO">
 		<result property="licGrpId" column="LIC_GRP_ID"/>
 		<result property="licNo" column="LIC_NO"/>
@@ -52,8 +54,10 @@
 		<result property="modifyUsrIp" column="MODIFY_USR_IP"/>
 	</resultMap>
 
+	
 	<select id="cmm4000DAO.selectCmm4000LoginAction" parameterClass="loginVO" resultMap="rtnLoginVO">
 		<![CDATA[ 
+			
 			SELECT	A.USR_ID
 				,	A.LIC_GRP_ID
 			    ,	A.USR_PW
@@ -81,14 +85,25 @@
 			    ,   NVL2(  A.INI_DTM , ROUND (  ( SYSDATE - A.INI_DTM ) * 1440 , 0 ) , 0 )  AS MOD_MIN
 			FROM	STM3000 A
 			WHERE	1=1
-			AND		USR_ID = #usrId#
-		
  		]]> 
+			<isNotEmpty property="loginType">
+				<isEqual property="loginType" compareValue="email">
+					AND		EMAIL = #email#
+				</isEqual>
+				<isNotEqual property="loginType" compareValue="email">
+					AND		USR_ID = #usrId#
+				</isNotEqual>
+			</isNotEmpty>			
+			<isEmpty property="loginType">
+				AND		USR_ID = #usrId#
+			</isEmpty>
 		ORDER BY A.LIC_GRP_ID
 	</select>	
 	
+	
 	<select id="cmm4000DAO.selectCmm4000SuperLoginAction" parameterClass="loginVO" resultMap="rtnLoginVO">
 		<![CDATA[ 
+			
 			SELECT	A.USR_ID
 				,	A.LIC_GRP_ID
 			    ,	A.USR_PW
@@ -115,8 +130,10 @@
 		ORDER BY A.LIC_GRP_ID
 	</select>	
 	
+	
 	<select id="cmm4000DAO.selectCmm4000LicInfo" parameterClass="loginVO" resultMap="rtnLicVO">
 		<![CDATA[ 
+			
 			 SELECT	LIC_GRP_ID
             	,	LIC_NO
                 ,	LIC_NM
@@ -141,8 +158,10 @@
  		]]> 
 	</select>
 
+	
 	<select id="cmm4000DAO.selectCmm4000PrjChk" parameterClass="loginVO" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT	CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END AS IS_PRJ_YN
             FROM	PRJ1000 A
             WHERE	1=1
@@ -152,8 +171,10 @@
  		]]> 
 	</select>
 
+    
     <select id="cmm4000DAO.selectCmm4000UsrPrjAuthList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+        	
         	SELECT	A.PRJ_ID
         		, 	A.AUTH_GRP_ID
         		,	A.USR_ID
@@ -174,8 +195,10 @@
         ]]> 
     </select>
     
+    
     <select id="cmm4000DAO.selectCmm4000UsrAuthList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+        	
         	SELECT	A.PRJ_ID
 						,	C.PRJ_GRP_ID
         		, 	A.AUTH_GRP_ID
@@ -196,8 +219,10 @@
         ]]> 
     </select>
     
+    
     <select id="cmm4000DAO.selectCmm4000MenuList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+        	
 			SELECT	LPAD('ㄴ', LVL*4, ' ') || B.MENU_NM AS MENU_LVL
 				,	B.MENU_NM
 			    ,	B.LIC_GRP_ID
@@ -260,9 +285,10 @@
 			START WITH B.MENU_ID = '000'
         ]]> 
     </select>    
-    
+    	
 	<select id="cmm4000DAO.selectCmm4000NameEmailChk" parameterClass="java.util.Map" resultClass="String">
 		<![CDATA[ 
+			
 			SELECT	A.USR_ID
 			FROM	STM3000 A
 			WHERE	1=1
@@ -271,8 +297,10 @@
  		]]> 
 	</select>
 	
+	
 	<select id="cmm4000DAO.selectCmm4000IdEmailChk" parameterClass="java.util.Map" resultClass="String">
 		<![CDATA[ 
+			
 			SELECT	A.USE_CD
 			FROM	STM3000 A
 			WHERE	1=1
@@ -309,8 +337,10 @@
 		  ]]>
 	</update>
 	
+	
 	<select id="cmm4000DAO.selectCmm4000RecentLoginDate" parameterClass="loginVO" resultClass="String">
 		<![CDATA[ 
+			
 			SELECT 
 		  		NVL2(A.REC_LOGIN_DTM , TO_CHAR(A.REC_LOGIN_DTM , 'YYYY-MM-DD HH24:MI:SS') , '') AS REC_LOGIN_DTM 
 		 	FROM 
@@ -321,8 +351,10 @@
 		  ]]>
 	</select>
 	
+	
 	<update id="cmm4000DAO.updateCmm4000RecentLoginDate" parameterClass="loginVO">
 		<![CDATA[ 
+			
 		   UPDATE STM3000 
 		  SET
             	REC_LOGIN_DTM   	= SYSDATE
@@ -331,8 +363,10 @@
 		  ]]>
 	</update>
 	
+	
 	<select id="cmm4000DAO.selectCmm4000LastLoginChk" parameterClass="loginVO" resultClass="String">
 		<![CDATA[ 
+			
 			SELECT 
              		CASE 
 			          	WHEN MONTHS_BETWEEN( SYSDATE, NVL(A.REC_LOGIN_DTM, SYSDATE) ) >= 3
@@ -347,6 +381,7 @@
 	
 	<select id="cmm4000DAO.selectCmm4000LoginMainMenuList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT 
 					* 
 			  FROM 
@@ -425,8 +460,10 @@
 	</select>
 	
 	
+	
 	<select id="cmm4000DAO.selectCmm4000LoginUsrInfo" parameterClass="loginVO" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT 
 		  				A.USR_ID
         			,	A.USR_NM
@@ -439,8 +476,10 @@
 		  ]]>
 	</select>
 
+	
 	<select id="cmm4000DAO.selectCmm4000CurtPwChk" parameterClass="java.util.Map" resultClass="int">
 		<![CDATA[ 
+			
 			SELECT	COUNT(*) 
 			FROM	STM3000 A
 			WHERE	1=1
