@@ -109,8 +109,8 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="req1001SaveSubmit"><span data-lang-cd="req1001.complete">완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">Close</span></button>
+	<button type="button" class="btn btn-brand" id="req1001SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="req1001.complete">완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <script>
 "use strict";
@@ -130,29 +130,21 @@ var OSLReq1001Popup = function () {
 	//수정 중 삭제한 파일Sn 목록
 	var uploadRemoveFiles = [];
 	
-	//type별 데이터
-	var pageTypeData = {
-			"insert":{
-				"saveString": "신규 요구사항을 요청하시겠습니까?",
-				"saveBtnString": "작성 완료"
-			},
-			"update":{
-				"saveString": "요구사항 정보를 수정하시겠습니까?",
-				"saveBtnString": "수정 완료"
-			}
-	};
-	
     // Private functions
     var documentSetting = function () {
-
+    	new KTScrolltop('frReq1001', {
+            offset: 300,
+            speed: 600
+        });
+    	
     	//프로젝트 목록 세팅
     	$("#reqPrjSelect").html($.osl.prjGrpAuthSelSetting(2,true));
 
     	//type
     	var type = $("#type").val();
     	
-    	//문구 세팅
-    	$("#req1001SaveSubmit").text(pageTypeData[type]["saveBtnString"]);
+    	//문구 세팅 
+    	$("#req1001SaveSubmit > span").text($.osl.lang("req1001."+type+".saveBtnString"));
     	
     	//atchfileId
     	var atchFileId = $("#atchFileId").val();
@@ -308,7 +300,7 @@ var OSLReq1001Popup = function () {
     		if (!form.valid()) {
     			return;
     		}
-    		$.osl.confirm(pageTypeData[type]["saveString"],null,function(result) {
+    		$.osl.confirm($.osl.lang("req1001."+type+".saveString"),null,function(result) {
     	        if (result.value) {
     	        	fileUploadObj.upload();
     	        }
