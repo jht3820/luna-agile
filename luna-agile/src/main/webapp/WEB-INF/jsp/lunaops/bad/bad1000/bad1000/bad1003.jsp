@@ -76,7 +76,7 @@
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attchFile">파일 첨부</span>
+							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attachFile">파일 첨부</span>
 							<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn"><span data-lang-cd="bad1003.button.deleteResetBtn">삭제 초기화</span></button>
 						</div>
 						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height-260" name="bad1003FileUpload" id="bad1003FileUpload">
@@ -106,8 +106,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1003UpdateSubmit"><span data-lang-cd="bad1003.button.updateSubmit">수정 완료</span></button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+			<button type="button" class="btn btn-brand" id="bad1003UpdateSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="bad1003.button.updateSubmit">수정 완료</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -149,6 +149,17 @@ var OSLBad1003Popup = function () {
     	$("#bad1003UpdateSubmit > span").text($.osl.lang("bad1003.button.updateSubmit"));
     	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
     	
+    	//palceholder 세팅
+		$("#badTitle").attr("placeholder",$.osl.lang("bad1002.placeholder.badTitle"));
+		$("#badContent").attr("placeholder",$.osl.lang("bad1002.placeholder.badContent"));
+		$("#badPw").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		$("#badPwCheck").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		
+		//regexerrorstr 세팅
+		$("#badPw").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
+		$("#badPwCheck").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
+    	
+		
     	//목록에서 받은 rowData
     	rowData = JSON.parse($("#paramRow").val());
     	//게시글 정보 비우기
@@ -634,8 +645,8 @@ var OSLBad1003Popup = function () {
 							pw="Y";
 							// 비밀번호는 비우기
 							$("#badPw").val("");
-							$("#badPw").attr("placeholder","공백인 경우 기존 비밀번호 사용");
-							$("#badPwCheck").attr("placeholder","공백인 경우 기존 비밀번호 사용");
+							$("#badPw").attr("placeholder",$.osl.lang("bad1002.placeholder.nullPassword"));
+							$("#badPwCheck").attr("placeholder",$.osl.lang("bad1002.placeholder.nullPassword"));
 						}else{
 							$("#badPwYnCd").attr("checked", false);
 							// 비밀번호 입력창 숨기기

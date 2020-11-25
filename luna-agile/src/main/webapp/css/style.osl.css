@@ -712,6 +712,9 @@ label.required:after {
 .osl-min-width-70{
 	min-width: 70px;
 }
+.osl-min-width-80{
+	min-width: 80px;
+}
 .osl-height-38{
 	height: 38px;
 }
@@ -1025,6 +1028,9 @@ label.required:after {
 	.osl-req-prepList__max-width{
 		max-width: 600px !important;
 	}
+}
+.osl-width-0{
+	width: 0;
 }
 /* stm2100, bad1000 */
 .osl-portlet__head-label{

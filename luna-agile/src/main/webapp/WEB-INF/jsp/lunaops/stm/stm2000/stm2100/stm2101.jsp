@@ -78,7 +78,7 @@
 								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
 									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
+								<span data-lang-cd="stm2101.label.attachFileCheck">첨부파일 사용</span>
 							</div>
 						</div>
 					</div>
@@ -161,8 +161,8 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="stm2101SaveSubmit"><span data-lang-cd="stm2101.button.updateSubmit">수정 완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+	<button type="button" class="btn btn-brand" id="stm2101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="stm2101.button.updateSubmit">수정 완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <!-- begin page script -->
 <script>

@@ -68,11 +68,11 @@
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
 				 	<div class="kt-margin-l-35 kt-margin-b-10  kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
 				 			<input type="password" class="form-control" name="badPw" id="badPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" required/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
 				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw" required/>
 			 			</div>
 				 	</div>
@@ -86,7 +86,7 @@
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attchFile">파일 첨부</span>
+							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attachFile">파일 첨부</span>
 						</div>
 						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height--260" name="bad1002FileUpload" id="bad1002FileUpload">
 							<div class='kt-uppy__dashboard'></div>
@@ -115,8 +115,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit"><span data-lang-cd="bad1002.button.insertSubmit">등록</span></button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="bad1002.button.insertSubmit">등록</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -145,6 +145,16 @@ var OSLBad1002Popup = function () {
     	//문구 세팅 
     	$("#bad1002InsertSubmit > span").text($.osl.lang("bad1002.button.insertSubmit"));
     	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+    	
+    	//palceholder 세팅
+		$("#badTitle").attr("placeholder",$.osl.lang("bad1002.placeholder.badTitle"));
+		$("#badContent").attr("placeholder",$.osl.lang("bad1002.placeholder.badContent"));
+		$("#badPw").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		$("#badPwCheck").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		
+		//regexerrorstr 세팅
+		$("#badPw").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
+		$("#badPwCheck").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
     	
     	//게시판 옵션이 없을 경우 div 변경
     	if($("#paramStmOptionCnt").val() == "" || $("#paramStmOptionCnt").val()==0){
