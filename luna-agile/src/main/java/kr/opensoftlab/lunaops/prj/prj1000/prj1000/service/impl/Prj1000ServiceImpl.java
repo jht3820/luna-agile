@@ -327,7 +327,9 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		req4100Vo.setSelPrjId((String)paramMap.get("prjId"));
 
 		
-		List<Map> prjReqList = req4100DAO.selectReq4100AllList(req4100Vo);
+		
+		paramMap.put("atchFileIdNotNull", "Y"); 
+		List<Map> prjReqList = req4100DAO.selectReq4100AllList(paramMap);
 		
 		
 		List<Map> prjDocList = prj3000DAO.selectPrj3000BaseMenuList(paramMap);
