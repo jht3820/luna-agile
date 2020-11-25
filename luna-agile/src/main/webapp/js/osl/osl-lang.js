@@ -1,8 +1,11 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -67,7 +70,10 @@ var OSLCoreLangSetting = function () {
 				select: "조회",
 				insert: "추가",
 				update: "수정",
-				delete: "삭제"
+				delete: "삭제",
+				redo: "복구",
+				recordDelete: "완전삭제",
+				prev: "돌아가기"
 			},
 			action:{
 				functionNm: "기능 버튼",
@@ -166,7 +172,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -221,7 +227,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "취소"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -235,12 +241,24 @@ var OSLCoreLangSetting = function () {
 				trashMove: "휴지통 이동(삭제)",
 				projectListMove: "프로젝트 목록 이동",
 				createProject: "신규 프로젝트 추가",
-				projectDetail: "상세 정보"
+				projectDetail: "상세 정보",
+				recordDelete: "완전 삭제",
+				projectRedo: "프로젝트 그룹 복구"
 			},
 			button:{
 				title:{
-					insert: "신규 프로젝트 그룹 등록"
+					insert: "신규 프로젝트 그룹 등록",
+					update: "프로젝트 그룹 수정",
+					delete: "프로젝트 그룹 휴지통 이동(삭제)",
+					trash: "프로젝트 그룹 휴지통 목록",
+					redo: "프로젝트 그룹 복구",
+					recordDelete: "프로젝트 그룹 완전 삭제",
+					prev: "프로젝트 목록으로 이동"
 				}
+			},
+			confirm:{
+				prjGrpRedo: "${1}건의 프로젝트 그룹을 복구하시겠습니까?",
+				prjGrpDelete: "${1}건의 프로젝트 그룹을 완전 삭제하시겠습니까?</br>삭제된 프로젝트 그룹은 복구 할 수 없습니다."
 			}
 		},
 		prj1001:{
@@ -261,12 +279,18 @@ var OSLCoreLangSetting = function () {
 			complete: "완료",
 			insert:{
 				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
-				saveBtnString: "등록 완료"
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
 			},
 			update:{
 				saveString: "프로젝트 그룹을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
 			}
+		},
+		prj1003:{
+			title: "프로젝트 그룹 상세정보"
 		},
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
@@ -320,6 +344,8 @@ var OSLCoreLangSetting = function () {
 				summeryTooltip : "게시판 통계"
 			},
 			button:{
+				card : "카드형",
+				grid : "그리드형",
 				detail:"관리",
 				summery:"통계",
 			},
@@ -334,6 +360,9 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
+			label :{
+				summery : "옵션 별 통계",
+			}
 		},
 		stm2101:{
 			update: "게시판 정보를 수정하시겠습니까?",
@@ -367,6 +396,7 @@ var OSLCoreLangSetting = function () {
 				nothing : "미배정 권한그룹 및 사용자",
 				user : "사용자",
 				authGrp : "권한그룹",
+				otherAdmin : "그 외 담당자",
 			},
 			title:{
 				admin: "담당자 지정",
@@ -399,7 +429,7 @@ var OSLCoreLangSetting = function () {
 				badHitInfoN: "최다 조회 수 : 없음",
 				badPwCntY: "비밀글 수 : ${1} 건",
 				badPwCntN: "비밀글 수 : 없음",
-				tagLabelY: "사용 TOP ${1} : #${2}",
+				tagLabelY: "사용 TOP ${1} : # ${2}",
 				tagLabelN: "사용 태그 없음",
 				fileAllCntY: "전체 첨부파일 수 : ${1} 건",
 				fileAllCntN: "전체 첨부파일 수 : 없음",
@@ -575,7 +605,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -683,7 +713,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
+			/* 추가된 datatable별로 언어 지정 */
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -761,7 +791,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -816,7 +846,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -914,6 +944,8 @@ var OSLCoreLangSetting = function () {
 				summeryTooltip : "Summery Board"
 			},
 			button:{
+				card : "Card",
+				grid : "Grid",
 				detail:"Management",
 				summery:"Summery",
 			},
@@ -961,6 +993,7 @@ var OSLCoreLangSetting = function () {
 				nothing : "Others",
 				user : "User",
 				authGrp : "Authority",
+				otherAdmin : "Others Assign Admin",
 			},
 			title:{
 				admin: "Assign Admin",
@@ -1169,12 +1202,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -1183,7 +1216,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };

@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -188,6 +187,44 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		
 		return prjGrpId;
 	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public int updatePrj1000PrjGrp(Map paramMap) throws Exception{
+		int rtnValue = 0;
+		
+		
+		paramMap.put("prjId", paramMap.get("paramPrjId"));
+		
+		
+		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+		rtnValue = (int) prj1000DAO.updatePrj1000(paramMap);
+
+		
+		paramMap.remove("prjAuthTargetId");
+		prj1000DAO.deletePrj1000PrjAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String licGrpId = jsonObj.getString("licGrpId");
+				String usrId = jsonObj.getString("usrId");
+				
+				paramMap.put("licGrpId", licGrpId);
+				paramMap.put("prjAuthTargetId", usrId);
+				prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+			}
+		}
+		
+		return rtnValue;
+	}
    	
    	
 	@SuppressWarnings({ "rawtypes" })
@@ -233,13 +270,52 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	@SuppressWarnings({ "rawtypes" })
 	public int updatePrj1000Ajax(Map paramMap) throws Exception{
 		
-		return prj1000DAO.updatePrj1000Ajax(paramMap);
+		return prj1000DAO.updatePrj1000(paramMap);
 	}
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception{
-		prj1000DAO.deletePrj1000PrjGrpAjax(paramMap);
+	public void deletePrj1000PrjAjax(Map paramMap) throws Exception{
+		String deleteDataList = (String) paramMap.get("deleteDataList");
+
+		
+		JSONArray jsonArray = new JSONArray(deleteDataList);
+		
+		
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			prj1000DAO.deletePrj1000PrjAjax(infoMap);
+			
+		}
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void updatePrj1000PrjGrpTrashListAjax(Map paramMap) throws Exception{
+		String deleteDataList = (String) paramMap.get("deleteDataList");
+		String delCd = (String) paramMap.get("delCd");
+		
+		
+		JSONArray jsonArray = new JSONArray(deleteDataList);
+		
+		
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			infoMap.put("delCd", delCd);
+			
+			
+			prj1000DAO.updatePrj1000PrjTrashMoveAjax(infoMap);
+		}
 	}
 	
 	

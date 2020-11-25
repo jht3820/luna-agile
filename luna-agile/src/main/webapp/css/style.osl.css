@@ -117,7 +117,15 @@ input:-webkit-autofill,
 .osl-valign-bottom--imp{
 	vertical-align: bottom !important;
 }
-
+.dropdown-menu > .dropdown-item{
+	cursor: pointer;
+}
+.dropdown-menu > li > a > i, .dropdown-menu > .dropdown-item > i {
+    width: 20px;
+}
+.dropdown-item{
+	color: #44425c;
+}
 /* 여백 */
 .osl-padding-r0{
 	padding-right: 0 !important;
@@ -129,11 +137,20 @@ input:-webkit-autofill,
 	margin-bottom: 0.5rem;
 }
 /* 높이값 */
+.osl-min-h-px--50 {
+  min-height: 50px; 
+}
 .osl-min-h-px--130 {
   min-height: 130px; 
 }
-.osl-min-h-px--410 {
-  min-height: 410px; 
+.osl-min-h-px--140 {
+  min-height: 140px; 
+}
+.osl-min-h-px--400 {
+  min-height: 400px; 
+}
+.osl-min-h-px--415 {
+  min-height: 415px; 
 }
 .osl-min-h-px--220 {
   min-height: 220px; 
@@ -353,6 +370,9 @@ select[id^=usrOpt_] {
 	padding-bottom:25px;
 }
 .input-group i{color:#fff;}
+.osl-datatable-search {
+    margin-bottom: 1rem;
+}
 /* datatable header boldest*/
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__head .kt-datatable__row > .kt-datatable__cell > span, .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__foot .kt-datatable__row > .kt-datatable__cell > span,
 .kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row-detail .kt-datatable__detail .kt-datatable__row > .kt-datatable__cell:first-child{
@@ -925,6 +945,17 @@ label.required:after {
 	    font-size: 0.85rem;
 	}
 }
+@media (max-width:767px){
+	.osl-mobile-padding-l-10{
+		padding-left: 10px !important;
+	}
+	.osl-mobile-padding-l-0{
+		padding-left: 0px !important;
+	}
+	.osl-mobile-text--left{
+		text-align: left !important;
+	}
+}
 @media (max-width:400px){
 	/*사용자 정보 - 모달 사용자 사진 숨김*/
 	.osl-user-info__modal_dislay--none{
@@ -1130,7 +1161,9 @@ label.required:after {
 .osl-font-xs{
 	font-size: 0.5rem;
 }
-
+.osl-flex-flow--column{
+	flex-flow: column;
+}
 @media (max-width: 1400px){
 	.osl-bad__width__100{
 		width:300px !important; 
