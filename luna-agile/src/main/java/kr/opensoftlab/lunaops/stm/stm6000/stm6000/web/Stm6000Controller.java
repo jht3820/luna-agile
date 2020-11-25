@@ -205,7 +205,7 @@ public class Stm6000Controller {
 	
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/stm/stm6000/stm6000/updateStm6000DpteInfoAjax.do")
+	@RequestMapping(value="/stm/stm6000/stm6000/updateStm6000DeptInfoAjax.do")
 	public ModelAndView updateStm6000DpteInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		
 		try{			

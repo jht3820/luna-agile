@@ -444,6 +444,64 @@ var OSLCoreLangSetting = function () {
 				attchFile : "첨부파일",
 			}
 		},
+		stm6000:{
+			button:{
+				selectTooltip: "조직 조회",
+				insertTooltip: "조직 추가",
+				updateTooltip: "조직 수정",
+				deleteTooltip: "조직 삭제"
+			},
+			label:{
+				upperDeptId : "상위 조직 ID",
+				upperDeptNm : "상위 조직 명",
+				deptId : "조직 ID",
+				deptNm : "조직 명",
+				deptOrd : "순번",
+				deptUseCd : "사용유무",
+				deptEtc : "비고",
+			},
+			title:{
+				deptList:"조직 목록",
+				deptInfo:"조직 정보"
+			},
+			message:{
+				alert:{
+					treeSelect:"왼쪽 트리에서 조직을 선택해주세요.",
+					notUsedDept:"미사용 조직에는 하위 조직을 추가할 수 없습니다.",
+					notRootDelete:"최상위 조직(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDept:"조직 삭제 시 선택한 조직 및 하위 조직이 모두 삭제됩니다. 선택한 조직을 삭제 하시겠습니까?"
+				}
+			},
+			modal:{
+				title:{
+					insertDept:"신규 조직 등록",
+					updateDept:"조직 수정"
+				}
+			}
+		},
+		stm6001:{
+			label:{
+				upperDeptId : "상위 조직 ID",
+				upperDeptNm : "상위 조직 명",
+				deptId : "조직 ID",
+				deptNm : "조직 명",
+				deptOrd : "순번",
+				deptUseCd : "사용유무",
+				deptEtc : "비고",
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				confirm:{
+					insert:"신규 조직을 등록하시겠습니까?",
+					update:"조직 정보를 수정하시겠습니까?"
+				}
+			}
+		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -1039,6 +1097,64 @@ var OSLCoreLangSetting = function () {
 				board : "Post",
 				tag : "Tag",
 				attchFile : "Attchments",
+			}
+		},
+		stm6000:{
+			button:{
+				selectTooltip: "Department Select",
+				insertTooltip: "Department Insert",
+				updateTooltip: "Department Update",
+				deleteTooltip: "Department Delete"
+			},
+			label:{
+				upperDeptId : "Upper department ID",
+				upperDeptNm : "Upper department Name",
+				deptId : "Department ID",
+				deptNm : "Department Name",
+				deptOrd : "Department Order",
+				deptUseCd : "Department Use",
+				deptEtc : "Department description"
+			},
+			title:{
+				deptList:"Department List",
+				deptInfo:"Department Information"
+			},
+			message:{
+				alert:{
+					treeSelect:"Select a department in the tree on the left.",
+					notUsedDept:"Sub-departments cannot be added to unused departments.",
+					notRootDelete:"The top-level department(ROOT) cannot be deleted."
+				},
+				confirm:{
+					deleteDept:"When deleting a department, the selected department and all sub-departments are deleted. Do you want to delete the selected department?"
+				}
+			},
+			modal:{
+				title:{
+					insertDept:"New department registration",
+					updateDept:"Department modification"
+				}
+			}
+		},
+		stm6001:{
+			label:{
+				upperDeptId : "Upper department ID",
+				upperDeptNm : "Upper department Name",
+				deptId : "Department ID",
+				deptNm : "Department Name",
+				deptOrd : "Department Order",
+				deptUseCd : "Department Use",
+				deptEtc : "Department description"
+			},
+			button:{
+				insert : "Complete",
+				update : "Update completed"
+			},
+			message:{
+				confirm:{
+					insert:"Would you like to register a new department?",
+					update:"Would you like to edit the department information?"
+				}
 			}
 		},
 		bad1000:{
