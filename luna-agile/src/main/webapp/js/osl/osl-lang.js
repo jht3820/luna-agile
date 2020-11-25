@@ -502,6 +502,49 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm9000: {
+			title : {
+				jenkinsManagement : "JENKINS 관리",
+				jobManagement : "JENKINS 관리"
+			},
+			button:{
+				jenkins:{
+					selectTooltip: "Jenkins 조회",
+					insertTooltip: "Jenkins 추가",
+					updateTooltip: "Jenkins 수정",
+					deleteTooltip: "Jenkins 삭제"
+				},
+				job:{
+					selectTooltip: "Job 조회",
+					insertTooltip: "Job 추가",
+					updateTooltip: "Job 수정",
+					deleteTooltip: "Job 삭제"	
+				}
+			},
+			field:{
+				jenkins:{
+					connectCheck: "접속 확인 결과",
+					jenkinsNm: "Jenkins 명",
+					jenkinsUrl: "Jenkins Url",
+					useNm: "사용 유무",
+					JenkinsUsrId: "Jenkins User Id"
+				}
+			},
+			actionBtn:{
+				jenkins:{
+					updateBtn:"Jenkins 수정",
+					deleteBtn:"Jenkins 삭제",
+					dblClickBtn:"Jenkins 상세보기"
+				}
+			},
+			modal:{
+				jeknins:{
+					insertJenkins:"신규 Jenkins 설정 등록",
+					updateJenkins:"Jenkins 설정 수정",
+					detailJenkins:"상세 정보"
+				}
+			}
+		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -1154,6 +1197,49 @@ var OSLCoreLangSetting = function () {
 				confirm:{
 					insert:"Would you like to register a new department?",
 					update:"Would you like to edit the department information?"
+				}
+			}
+		},
+		stm9000:{
+			title:{
+				jenkinsManagement : "JENKINS Management",
+				jobManagement : "JENKINS Management"
+			},
+			button:{
+				jenkins:{
+					selectTooltip: "Jenkins Select",
+					insertTooltip: "Jenkins Insert",
+					updateTooltip: "Jenkins Update",
+					deleteTooltip: "Jenkins Delete"					
+				},
+				job:{
+					selectTooltip: "Job Select",
+					insertTooltip: "Job Insert",
+					updateTooltip: "Job Update",
+					deleteTooltip: "Job Delete"	
+				}
+			},
+			field:{
+				jenkins:{
+					connectCheck: "Connection check result",
+					jenkinsNm: "Jenkins Name",
+					jenkinsUrl: "Jenkins Url",
+					useNm: "Jenkins Use",
+					JenkinsUsrId: "Jenkins User Id"
+				}
+			},
+			actionBtn:{
+				jenkins:{
+					updateBtn:"Jenkins Update",
+					deleteBtn:"Jenkins Delete",
+					dblClickBtn:"Jenkins Detail Info"
+				}
+			},
+			modal:{
+				jeknins:{
+					insertJenkins:"Register new Jenkins settings",
+					updateJenkins:"Modify Jenkins settings",
+					detailJenkins:"Detail Info"
 				}
 			}
 		},
