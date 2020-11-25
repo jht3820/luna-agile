@@ -231,10 +231,12 @@
 				}
 			],
 			searchColumns: searchAdd,
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
 				"title" : $.osl.lang("bad1000.actionBtn.title"),
 				"width" : 200,
-				"click": true,
 				"dblClick" : true,
 			},
 			actionTooltip:{
@@ -411,22 +413,7 @@
 							$.osl.alert($.osl.lang("bad1000.notAuthority.deleteMessage"), {"type":"warning"});
 						}
 					}
-				},
-				"click": function(rowData, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				},
+				}
 			 },
 			 theme: {
 				 actionBtn:{
