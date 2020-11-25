@@ -56,14 +56,14 @@
 							<span data-lang-cd="bad1003.label.secretCheck">비밀글 사용</span>
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
-				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
+				 	<div class="kt-margin-l-35 kt-margin-b-10  kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70'><span data-lang-cd="bad1003.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
+				 			<input type="password" class="form-control" name="badPw" id="badPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내"/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon required mt-auto mb-auto osl-min-width-70'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
+				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw"/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
@@ -141,6 +141,8 @@ var OSLBad1003Popup = function () {
 	var maxCnt;
 	var maxStrg;
 	
+	//비밀번호 기존 존재 여부
+	var pw;
     var documentSetting = function () {
     	
     	//문구 세팅 
@@ -406,20 +408,14 @@ var OSLBad1003Popup = function () {
 
      		//비밀글 사용할 경우
     		if($("#badPwYnCd").is(":checked")==true){
-    			if($("#badPw").val() != null && $("#badPw").val() != ""){
-    				if($("#badPw").val()==$("#badPwCheck").val()){
-        				localData.badPw = $("#badPw").val();
-        			}else{
-        				$.osl.alert($.osl.lang("bad1002.formCheck.passwordMatching"));
-        				$("#badPw").val("");
-        				$("#badPwCheck").val("");
-        				$("#badPw").focus();
-        				return false;
-        			}
-    			}else{
-    				$.osl.alert($.osl.lang("bad1002.formCheck.passwordMessage"));
-    				$("#badPw").focus();
-    				return false;
+    			if(pw!="Y"){
+    				//기존에 비밀번호가 있던 경우가 아니라면
+    				//잠금 사용했으나 비밀번호 미 입력 시
+    				if($("#badPw").val()==""){
+    					$.osl.alert($.osl.lang("bad1002.formCheck.passwordMessage"));
+    					$("#badPw").focus();
+   						return false;
+    				}
     			}
     		}else{
     			//비밀글로 사용하다가 사용 해제를 할 경우
@@ -629,15 +625,17 @@ var OSLBad1003Popup = function () {
 					if(rowData.stmPwYnCd == "01"){
 						$("#stmPwYnCd").removeClass("kt-hide");
 						$("#pwOption").removeClass("kt-hide");
-						console.log(setBad);
+						
 						// 비밀글인 경우 스위치 on
 						if(setBad.badPw != null && setBad.badPw != "" ){
 							$("#badPwYnCd").attr("checked", true);
 							// 비밀번호 입력창 보이기
 							$("#pwOption").removeClass("kt-hide");
-							// 기존 비밀번호 넣기
-							$("#badPw").val(setBad.badPw);
-							$("#badPwCheck").val(setBad.badPw);
+							pw="Y";
+							// 비밀번호는 비우기
+							$("#badPw").val("");
+							$("#badPw").attr("placeholder","공백인 경우 기존 비밀번호 사용");
+							$("#badPwCheck").attr("placeholder","공백인 경우 기존 비밀번호 사용");
 						}else{
 							$("#badPwYnCd").attr("checked", false);
 							// 비밀번호 입력창 숨기기

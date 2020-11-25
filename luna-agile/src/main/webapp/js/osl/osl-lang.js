@@ -320,6 +320,88 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		req4100:{
+			field:{
+				prjGrpNm: "프로젝트 그룹명",
+				prjNm: "프로젝트명",
+				reqOrd: "요청 번호",
+				reqProTypeNm: "처리유형",
+				reqNm: "요청 제목",
+				reqDtm: "요청일",
+				regDtm: "등록일",
+				reqUsrNm: "요청자",
+				reqUsrEmail: "요청자 e-mail",
+				reqUsrDeptNm: "요청자 조직",
+				reqUsrNum: "요청자 연락처",
+				reqKey: "요구사항 key"
+			},
+			actionBtn:{
+				title : "수정 / 삭제 / 상세",
+				updateBtn : "요구사항 수정",
+				deleteBtn : "요구사항 삭제",
+				detailBtn : "요구사항 상세",
+				selectTooltip : "요구사항 조회",
+				insertTooltip : "요구사항 추가",
+				updateTooltip : "요구사항 수정",
+				deleteTooltip : "요구사항 삭제",
+				detailTooltip : "요구사항 상세"
+			},
+			title:{
+				insertTitle : "신규 요구사항 등록",
+				updateTitle : "요구사항 수정",
+				detailTitle : "요구사항 확인"
+			},
+			alert:{
+				updateMsg : "접수 요청중인 요구사항만 수정 가능합니다.",
+			}
+		},
+		req4101:{
+			complete : "완료",
+			saveString :{
+				insertStr : "요구사항을 등록하시겠습니까?",
+				updateStr : "요구사항 수정을 완료하시겠습니까?",
+			},
+			label : {
+				reqUser : {
+					title : "요청자 정보",
+					usrNm : "요청자 이름",
+					email : "요청자 e-mail",
+					deptNm : "요청자 소속",
+					telNo : "요청자 연락처",
+				},
+				prjNm : "프로젝트",
+				reqDtm : "요청 일자",
+				reqNm : "요청 제목",
+				reqDesc : "요청 내용",
+				reqPw : "요구사항 잠금",
+				password : "PW",
+				passwordCheck : "PW 확인",
+				attchments : "파일 첨부",
+				requestDefaultOptNm : "접수 기본항목 입력"
+			},
+			button :{
+				deleteReset : "삭제 초기화",
+				insertBtn : "등록",
+				updateBtn : "수정 완료",
+			},
+			prepData : {
+				title : "선행처리 지식확인",
+				reqNm : "요구사항명",
+				result : "다음과 같은 연관 결과가 있습니다.",
+				notResult : "연관 결과가 없습니다.",
+				total : "총",
+				count : "건",
+				tooltip : {
+					selectTooltip : "선행지식 조회",
+					detailTooltip : "요구사항 상세",
+					card : "카드형",
+					grid : "그리드형",
+				},
+				button : {
+					detailBtn : "상세 조회",
+				}
+			}
+		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.\n${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
