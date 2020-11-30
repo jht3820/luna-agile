@@ -93,6 +93,12 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
+	public String insertPrj1000PrjAjax(Map paramMap) throws Exception{
+		return (String) insert("prj1000DAO.insertPrj1000PrjAjax", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
 	public void insertPrj1001OracleAjax(Map paramMap) throws Exception{
 		insert("prj1000DAO.insertPrj1001InfoAjax", paramMap);
 	}

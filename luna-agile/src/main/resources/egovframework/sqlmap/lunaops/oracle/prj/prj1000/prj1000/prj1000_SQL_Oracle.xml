@@ -223,6 +223,9 @@
 			SELECT
 					SUBT1.PRJ_ID
 		        ,	SUBT1.PRJ_GRP_ID
+		        ,	SUBT1.PRJ_GRP_NM
+				,	SUBT1.PRJ_GRP_START_DT
+				,	SUBT1.PRJ_GRP_END_DT
 		        ,	SUBT1.LIC_GRP_ID
 		        ,	SUBT1.PRJ_NM
 		        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
@@ -254,6 +257,9 @@
 				SELECT
 						A.PRJ_ID
 					,	A.PRJ_GRP_ID
+					,	C.PRJ_NM AS PRJ_GRP_NM
+					,	C.START_DT AS PRJ_GRP_START_DT
+					,	C.END_DT AS PRJ_GRP_END_DT
 					,	A.LIC_GRP_ID
 					,	A.PRJ_NM
 					,	A.START_DT 
@@ -293,6 +299,7 @@
 					      WHERE	1=1
 					      GROUP BY Z.PRJ_ID
 					) B ON (A.PRJ_ID = B.PRJ_ID)
+					INNER JOIN PRJ1000 C ON( C.PRJ_ID = A.PRJ_GRP_ID AND C.USE_CD = '01' AND C.DEL_CD = '02' )
 				WHERE 1=1
 					AND A.PRJ_GRP_ID = #prjGrpId#
 					AND A.LIC_GRP_ID = #licGrpId#
@@ -688,6 +695,43 @@
             ,	#prjTypeCd# 	,	#prjDevTypeCd#		,	#prjGrpCd#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+        )		
+		
+		]]>
+	</insert>
+	
+	
+	<insert id="prj1000DAO.insertPrj1000PrjAjax" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newPrjId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_PRJ_GRP_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PRJ_GRP_ID, 12, 5)) + 1) , 5, '0')
+						,	'PRJ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_PRJ_GRP_ID 
+			FROM	(
+			            SELECT	MAX(PRJ_ID)  AS NEW_PRJ_ID
+			            FROM	PRJ1000 A
+			            WHERE	1=1
+			            AND		A.PRJ_ID LIKE 'PRJ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+			            AND		A.PRJ_GRP_CD = '02'
+					)
+		]]>
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO PRJ1000
+			(
+                PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_NM			,	START_DT		,	END_DT
+            ,	ORD				,	PRJ_DESC		,	USE_CD			,	DEL_CD
+            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #newPrjId#		,	#prjGrpId#		,	#licGrpId#		,	#prjNm#    		,	REPLACE(#startDt#, '-', '')		,	REPLACE(#endDt#, '-', '')
+            ,	#ord#			,	#prjDesc#		,	#useCd#			,	'02'
+            ,	#prjTypeCd# 	,	#prjDevTypeCd#	,	#prjGrpCd#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
         )		
 		
 		]]>
