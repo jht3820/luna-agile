@@ -38,10 +38,10 @@
 				<i class="fa fa-edit"></i><span>수정</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1001PrjTable" data-datatable-action="delete" title="프로젝트 그룹 휴지통 이동(삭제)" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
-				<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<i class="fa fa-trash-alt"></i><span>휴지통 이동(삭제)</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 btn-elevate btn-elevate-air" name="prjTrashListMoveBtn" id="prjTrashListMoveBtn" data-datatable-id="prj1001PrjTable" title="프로젝트 휴지통 목록 이동" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
-				<i class="fa fa-trash"></i><span>휴지통 목록</span>
+				<i class="fa fa-trash"></i><i class="fa fa-list"></i><span>휴지통 목록</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1001PrjTable" data-datatable-action="prjRedo" title="프로젝트 복구" data-title-lang-cd="prj1000.button.title.redo" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" hidden>
 				<i class="fa fa-redo-alt"></i><span data-lang-cd="datatable.button.redo">복구</span>
@@ -191,6 +191,7 @@ var OSLPrj1001Popup = function () {
 					
 					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
 				},
+				//휴지통 이동(삭제)
 				"delete":function(rowDatas, datatableId, c, rowNum, elem){
 					//선택 프로젝트 그룹 휴지통으로 이동
 					var ajaxObj = new $.osl.ajaxRequestAction(
@@ -211,6 +212,23 @@ var OSLPrj1001Popup = function () {
 					
 					//AJAX 전송
 					ajaxObj.send();
+				},
+				//완전 삭제
+				"prjDelete": function(rowData, datatableId, type){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
+						return true;
+					}
+					
+					$.osl.confirm($.osl.lang("prj1001.confirm.prjDelete",rowDatas.length),{html:true}, function(result){
+						if (result.value) {
+							//선택 프로젝트 완전 삭제 처리
+							fnPrjDelete(rowDatas, datatableId);
+						}
+					});
 				},
 				//복구
 				"prjRedo": function(rowData, datatableId, type){
@@ -555,29 +573,53 @@ var OSLPrj1001Popup = function () {
 			$.osl.datatable.list["prj1001PrjTable"].targetDt.reload();
 		});
 		
-		//프로젝트 그룹 복구처리
-		var fnPrjRedoUpdate = function(redoDataList, datatableId){
-			//선택 프로젝트 그룹 휴지통으로 이동
-			var ajaxObj = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashRedoListAjax.do'/>"}
-					,{deleteDataList: JSON.stringify(redoDataList)});
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				if(data.errorYn == "Y"){
-	   				$.osl.alert(data.message,{type: 'error'});
-	   			}else{
-	   				//삭제 성공
-	   				$.osl.toastr(data.message);
-	   				
-	   				//datatable 조회
-	   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-	   			}
-			});
-			
-			//AJAX 전송
-			ajaxObj.send();
-		}
 	};
+	
+	//프로젝트 그룹 복구처리
+	var fnPrjRedoUpdate = function(redoDataList, datatableId){
+		//선택 프로젝트 그룹 휴지통으로 이동
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashRedoListAjax.do'/>"}
+				,{deleteDataList: JSON.stringify(redoDataList)});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//삭제 성공
+   				$.osl.toastr(data.message);
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
+	
+	//프로젝트 그룹 완전 삭제
+	var fnPrjDelete = function(deleteDataList, datatableId){
+		//선택 프로젝트 그룹 휴지통으로 이동
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1000/deletePrj1000PrjDeleteListAjax.do'/>"}
+				,{deleteDataList: JSON.stringify(deleteDataList)});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//삭제 성공
+   				$.osl.toastr(data.message);
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
 	
 	var fnViewerChange = function(){
 		//현재 viewType에 따라 show/hide

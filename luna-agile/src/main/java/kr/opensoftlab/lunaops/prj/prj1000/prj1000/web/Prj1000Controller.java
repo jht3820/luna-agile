@@ -588,6 +588,7 @@ public class Prj1000Controller {
 		}
 	}
 	
+	
 	@RequestMapping(value="/prj/prj1000/prj1000/deletePrj1000PrjGrpDeleteListAjax.do")
 	public ModelAndView deletePrj1000PrjGrpDeleteListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
@@ -605,6 +606,32 @@ public class Prj1000Controller {
 		}
 		catch(Exception e){
 			Log.error("deletePrj1000PrjGrpDeleteListAjax()", e);
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+			
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/prj/prj1000/prj1000/deletePrj1000PrjDeleteListAjax.do")
+	public ModelAndView deletePrj1000PrjDeleteListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			prj1000Service.deletePrj1001Ajax(paramMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception e){
+			Log.error("deletePrj1000PrjDeleteListAjax()", e);
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));

@@ -97,6 +97,12 @@ public class Req4100DAO  extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
+	public void deleteReq4100ReqList(Map paramMap) throws Exception{
+		delete("req4100DAO.deleteReq4100ReqList", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
 	public Map selectReq4100ReqUserInfo(Map paramMap) throws Exception {
 		return	(Map) select("req4100DAO.selectReq4100ReqUserInfo", paramMap);
 	}
