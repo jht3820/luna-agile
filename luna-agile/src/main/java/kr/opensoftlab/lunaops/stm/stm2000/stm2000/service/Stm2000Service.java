@@ -26,6 +26,10 @@ public interface Stm2000Service {
 	@SuppressWarnings("rawtypes")
 	void updateStm2000MenuInfo(Map paramMap) throws Exception;
 	
+
+	
+	@SuppressWarnings({ "rawtypes" })
+	void saveStm2000AuthGrpMenuAuthInfo(Map paramMap) throws Exception;
 	
 	
 	

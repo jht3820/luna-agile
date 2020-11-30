@@ -73,7 +73,7 @@
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div class="card w-500 kt-margin-t-10">
 					<div class="card-header kt-font-bolder">
-						<i class="fa flaticon-tool-1 kt-margin-r-5"></i><span data-lang-cd="stm2102.label.attchFile">첨부파일</span>
+						<i class="fa flaticon-tool-1 kt-margin-r-5"></i><span data-lang-cd="stm2102.label.attachFile">첨부파일</span>
 					</div>
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item kt-padding-l-35" name="fileAllCnt" id="fileAllCnt"></li>
@@ -193,7 +193,7 @@
 					$("#fileAllSize").text($.osl.lang("stm2102.summery.fileAllSizeY", $.osl.byteCalc(parseInt(fileSummery.fileTotalSize))));
 				}else{
 					$("#fileAllCnt").text($.osl.lang("stm2102.summery.fileAllCntN"));
-					$("#fileAllSize").text($.osl.lang("stm2102.summery.fileAllSizeN"));
+					$("#fileAllSize").text($.osl.lang("stm2102.summery.fileAllCntN"));
 				}
 			}
 	 	});

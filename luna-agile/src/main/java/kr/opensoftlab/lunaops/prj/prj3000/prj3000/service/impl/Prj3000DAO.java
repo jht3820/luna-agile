@@ -43,6 +43,12 @@ public class Prj3000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
+	public int deletePrj3000DocList(Map paramMap) throws Exception{
+		return delete("prj3000DAO.deletePrj3000DocList", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
 	public int updatePrj3000MenuInfo(Map paramMap) throws Exception{
 		return update("prj3000DAO.updatePrj3000MenuInfo", paramMap);
 	}

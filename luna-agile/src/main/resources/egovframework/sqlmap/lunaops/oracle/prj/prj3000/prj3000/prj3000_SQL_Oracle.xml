@@ -5,8 +5,10 @@
 
 	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 
+	
 	<select id="prj3000DAO.selectPrj3000BaseMenuList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 	 		SELECT T.* FROM (
       					SELECT	
 								LPAD('ㄴ', LVL*4, ' ') || A.DOC_NM AS DOC_LVL
@@ -44,8 +46,10 @@
  		]]> 
 	</select> 
 
+	
 	<select id="prj3000DAO.selectPrj3000MenuInfo" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT	B.LIC_GRP_ID
 				,	A.DOC_ID
 				,	A.PRJ_ID
@@ -86,9 +90,11 @@
 	</select>
 
 	 
+	
 	<insert id="prj3000DAO.insertPrj3000MenuInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
 						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -102,6 +108,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
@@ -123,9 +130,11 @@
 		]]>
 	</insert>
 	
+	
 	<insert id="prj3000DAO.insertPrj3000RootMenuInfo" parameterClass="java.util.Map">
 	<selectKey resultClass="java.lang.String" keyProperty="newDocId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
 						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -139,6 +148,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
@@ -158,8 +168,10 @@
 		]]>
 	</insert>
 	
+	
 	<delete id="prj3000DAO.deletePrj3000MenuInfo" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		DELETE
 		FROM	PRJ3000 A
 		WHERE	1=1
@@ -170,8 +182,22 @@
 	</delete>
 	
 	
+	<delete id="prj3000DAO.deletePrj3000DocList" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		DELETE
+		FROM	PRJ3000 A
+		WHERE	1=1
+		AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
+		AND		A.PRJ_ID	=	#prjId#
+	]]>
+	</delete>
+	
+	
+	
 	<update id="prj3000DAO.updatePrj3000MenuInfo" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		UPDATE	PRJ3000 A
         SET		DOC_FORM_FILE_SN	= #docFormFileSn#
             ,	DOC_FILE_SN			= #docFileSn#
@@ -191,8 +217,10 @@
 	]]>
 	</update>
 	
+	
 	<update id="prj3000DAO.updatePrj3000FileSnSelect" parameterClass="java.util.Map">
 	<![CDATA[
+		
 		UPDATE	PRJ3000 A
         SET		DOC_FORM_FILE_SN	= #docFileSn#
         	,	MODIFY_DTM      	= SYSDATE
@@ -205,8 +233,10 @@
 	]]>
 	</update>
 	
+	
 	<select id="prj3000DAO.selectPrj3000MenuTree" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT	LPAD('ㄴ', LVL*4, ' ') || A.DOC_NM AS DOC_LVL
 				,	A.DOC_NM
 			    ,	A.PRJ_ID
@@ -230,8 +260,10 @@
  		]]> 
 	</select>
 	
+	
 	<select id="prj3000DAO.selectPrj3000RootMenuList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT T.* FROM (
       					SELECT	
 								LPAD('ㄴ', LVL*4, ' ') || A.DOC_NM AS DOC_LVL
@@ -262,8 +294,10 @@
 	</select>
 	
 	
+	
 	<select id="prj3000DAO.selectPrj3000WizardMenuInfo" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT	A.DOC_ID
 				,	A.PRJ_ID
 				,	A.UPPER_DOC_ID
@@ -292,8 +326,10 @@
  		]]> 
 	</select>
 	
+	
 	<insert id="prj3000DAO.insertPrj3000ParamMenuInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
+			
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	

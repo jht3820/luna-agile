@@ -134,24 +134,41 @@ public class Cmm9000Controller {
     		
     		
     		String prjId = null;
+    		String prjTypeCd = "01";
+    		String prjDevTypeCd = "01";
+    		
+    		
+    		List<Map> prjList = prj1000Service.selectPrj1000AdminPrjList(paramMap);
     		
     		
     		if("01".equals(moveType)) {
-	    		
-	    		List<Map> prjList = prj1000Service.selectPrj1000AdminPrjList(paramMap);
-	    		
 	    		
 	    		for(Map prjInfo : prjList) {
 	    			String prjGrpId = (String) prjInfo.get("prjGrpId");
 	    			if(paramPrjGrpId.equals(prjGrpId)){
 	    				prjId = (String) prjInfo.get("prjId");
+	    				prjTypeCd = (String) prjInfo.get("prjTypeCd");
+	    				prjDevTypeCd = (String) prjInfo.get("prjDevTypeCd");
 	    				break;
 	    			}
 	    		}
     		}else {
     			prjId = paramPrjId;
+	    		
+	    		
+	    		for(Map prjInfo : prjList) {
+	    			String mapPrjId = (String) prjInfo.get("prjId");
+	    			if(paramPrjId.equals(mapPrjId)){
+	    				prjTypeCd = (String) prjInfo.get("prjTypeCd");
+	    				prjDevTypeCd = (String) prjInfo.get("prjDevTypeCd");
+	    				break;
+	    			}
+	    		}
     		}
     		
+    		System.out.println("#################1");
+    		System.out.println(prjTypeCd);
+    		System.out.println(prjDevTypeCd);
     		
     		if(prjId == null){
     			return "forward:/cmm/cmm4000/cmm4000/selectCmm4000LoginAfter.do";
@@ -197,6 +214,7 @@ public class Cmm9000Controller {
     		Map newMap = new HashMap<String, String>();
     		newMap.put("usrId", loginVO.getUsrId());
     		newMap.put("prjId", prjId);
+    		newMap.put("prjTypeCd", prjTypeCd);
     		newMap.put("authGrpId", authGrpId);
     		newMap.put("licGrpId", loginVO.getLicGrpId());
     		newMap.put("adminYn", loginVO.getAdmYn());
@@ -209,6 +227,8 @@ public class Cmm9000Controller {
     		
     		ss.setAttribute("selPrjGrpId", paramPrjGrpId);
     		ss.setAttribute("selPrjId", prjId);
+    		ss.setAttribute("selPrjTypeCd", prjTypeCd);
+    		ss.setAttribute("selPrjDevTypeCd", prjDevTypeCd);
     		ss.setAttribute("selAuthGrpId", authGrpId);
 
     		
@@ -429,6 +449,8 @@ public class Cmm9000Controller {
 	    		
 	    		
 	    		paramMap.put("authGrpId", (String)ss.getAttribute("selAuthGrpId"));
+	    		paramMap.put("prjTypeCd", (String)ss.getAttribute("selPrjTypeCd"));
+	    		paramMap.put("prjDevTypeCd", (String)ss.getAttribute("selPrjDevTypeCd"));
 	    		paramMap.put("adminYn", loginVO.getAdmYn());
 	    				
 	    		
