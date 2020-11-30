@@ -93,6 +93,12 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
+	public String insertPrj1000PrjAjax(Map paramMap) throws Exception{
+		return (String) insert("prj1000DAO.insertPrj1000PrjAjax", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
 	public void insertPrj1001OracleAjax(Map paramMap) throws Exception{
 		insert("prj1000DAO.insertPrj1001InfoAjax", paramMap);
 	}
@@ -112,16 +118,20 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public int updatePrj1000Ajax(Map paramMap) throws Exception{
-		return (int) update("prj1000DAO.updatePrj1000Ajax", paramMap);
+	public int updatePrj1000(Map paramMap) throws Exception{
+		return (int) update("prj1000DAO.updatePrj1000", paramMap);
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
+	public void deletePrj1000PrjAjax(Map paramMap) throws Exception{
+		delete("prj1000DAO.deletePrj1000PrjAjax", paramMap);
+	}
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception{
-		delete("prj1000DAO.deletePrj1000PrjGrpAjax", paramMap);
+	public void updatePrj1000PrjTrashMoveAjax(Map paramMap) throws Exception{
+		delete("prj1000DAO.updatePrj1000PrjTrashMoveAjax", paramMap);
 	}
 	
 	
@@ -178,5 +188,11 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	@SuppressWarnings("rawtypes")
 	public String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception{
 		return (String) insert("prj1000DAO.insertPrj1000PrjAuthInfo", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int deletePrj1000PrjAuthInfo(Map paramMap) throws Exception{
+		return (int) delete("prj1000DAO.deletePrj1000PrjAuthInfo", paramMap);
 	}
 }
