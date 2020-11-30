@@ -109,24 +109,48 @@
 			</div>
 		</div>
 		<div class="col-lg-6 col-md-12 col-sm-12">
-			<div class="kt-portlet">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>담당자 목록
-						</h5>
-					</div>
-					<div class="kt-portlet__head-toolbar">
-						<div class="kt-portlet__head-wrapper">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span>조회</span>
-							</button>
+			<div class="row">
+				<div class="kt-portlet">
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-label">
+							<h5 class="kt-font-boldest kt-font-brand">
+								<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 담당 목록
+							</h5>
+						</div>
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-wrapper">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+									<i class="fa fa-list"></i><span>조회</span>
+								</button>
+							</div>
 						</div>
 					</div>
+					<div class="kt-portlet__body kt-padding-10">
+						<div class="osl-datatable-search" data-datatable-id="prj1003PrjAuthUsrTable"></div>
+						<div class="kt_datatable" id="prj1003PrjAuthUsrTable"></div>
+					</div>
 				</div>
-				<div class="kt-portlet__body osl-min-h-px--400 kt-padding-10">
-					<div class="osl-datatable-search" data-datatable-id="prj1003PrjAuthUsrTable"></div>
-					<div class="kt_datatable" id="prj1003PrjAuthUsrTable"></div>
+			</div>
+			<div class="row">
+				<div class="kt-portlet">
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-label">
+							<h5 class="kt-font-boldest kt-font-brand">
+								<i class="fa fa-th-large kt-margin-r-5"></i>담당 대상 목록
+							</h5>
+						</div>
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-wrapper">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+									<i class="fa fa-list"></i><span>조회</span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="kt-portlet__body kt-padding-10">
+						<div class="osl-datatable-search" data-datatable-id="prj1003PrjAuthUsrTable"></div>
+						<div class="kt_datatable" id="prj1003PrjAuthUsrTable"></div>
+					</div>
 				</div>
 			</div>
 		</div>

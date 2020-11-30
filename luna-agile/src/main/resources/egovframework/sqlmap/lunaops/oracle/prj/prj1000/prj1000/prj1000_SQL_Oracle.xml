@@ -794,48 +794,6 @@
 	]]>
 	</delete>
 	
-		
-	
-	<parameterMap id="deletePrj1001InfoParam" 	class="java.util.Map">
-		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjId"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-	</parameterMap>
-	
-	<procedure id="prj1000DAO.deletePrj1001Ajax" parameterMap="deletePrj1001InfoParam" >
-		{ CALL SP_PRJ1000_PRJ_INFO_DELETE(?,?,?,?) }
-	</procedure>
-	
-	
-	<parameterMap id="insertPrj1001InfoParam" 	class="java.util.Map">
-		<parameter property="prjGrpCd"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN" nullValue="02"/>
-	
-		<parameter property="prjGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjNm"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="startDt"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="endDt"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		
-		<parameter property="ord"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN" nullValue="0"/>
-		<parameter property="prjDesc"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="useCd"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjType"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjAcrm"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="regUsrId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="regUsrIp"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-
-		<parameter property="modifyUsrId"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="modifyUsrIp"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="NEW_PRJ_ID"		javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-	</parameterMap>
-	
-	<procedure id="prj1000DAO.insertPrj1001InfoAjax" parameterMap="insertPrj1001InfoParam" >
-		{ CALL SP_PRJ1000_PRJ_INFO_INSERT(?,	?,?,?,?,?		,?,?,?,?,?,?,?		,?,?,?,?,?) }
-	</procedure>
-	
 	
 	<select id="prj1000DAO.selectPrj1000ProjectGroupListAjax" parameterClass="java.util.Map" resultClass="egovMap">
 			

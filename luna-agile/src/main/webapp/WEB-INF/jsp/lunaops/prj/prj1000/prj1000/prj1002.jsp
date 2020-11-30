@@ -55,7 +55,7 @@
 				<div class="kt-portlet__head kt-portlet__head--lg">
 					<div class="kt-portlet__head-label">
 						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>담당자 목록
+							<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 담당 목록
 						</h5>
 					</div>
 					<div class="kt-portlet__head-toolbar">
@@ -82,7 +82,7 @@
 				<div class="kt-portlet__head kt-portlet__head--lg">
 					<div class="kt-portlet__head-label">
 						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>미 담당자 목록
+							<i class="fa fa-th-large kt-margin-r-5"></i>담당 대상 목록
 						</h5>
 					</div>
 					<div class="kt-portlet__head-toolbar">

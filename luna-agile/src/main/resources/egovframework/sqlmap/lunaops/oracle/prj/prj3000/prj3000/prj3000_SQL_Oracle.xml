@@ -182,6 +182,18 @@
 	</delete>
 	
 	
+	<delete id="prj3000DAO.deletePrj3000DocList" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		DELETE
+		FROM	PRJ3000 A
+		WHERE	1=1
+		AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
+		AND		A.PRJ_ID	=	#prjId#
+	]]>
+	</delete>
+	
+	
 	
 	<update id="prj3000DAO.updatePrj3000MenuInfo" parameterClass="java.util.Map">
 	<![CDATA[

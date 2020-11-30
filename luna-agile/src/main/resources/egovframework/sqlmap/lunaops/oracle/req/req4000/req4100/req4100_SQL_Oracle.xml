@@ -547,6 +547,15 @@
 		AND	A.PRJ_ID = #prjId#
 		AND 	A.REQ_ID = #reqId#
 	</delete>
+		
+	
+	<delete id="req4100DAO.deleteReq4100ReqList" parameterClass="java.util.Map">
+		
+		DELETE	
+		FROM	REQ4100 A
+		WHERE	1=1
+		AND	A.PRJ_ID = #prjId#
+	</delete>
 	
 	
 	<update id="req4100DAO.updateReq1001ReqSubInfo" parameterClass="java.util.Map">

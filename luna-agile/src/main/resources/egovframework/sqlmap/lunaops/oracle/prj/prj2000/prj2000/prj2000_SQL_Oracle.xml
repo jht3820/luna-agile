@@ -441,8 +441,10 @@
         WHERE	1=1
         AND		A.LIC_GRP_ID = #licGrpId#
         AND		A.PRJ_ID = #prjId#
-        AND		A.AUTH_GRP_ID = #authGrpId#
 	]]>
+		<isNotEmpty property="authGrpId">
+			AND		A.AUTH_GRP_ID = #authGrpId#
+		</isNotEmpty>
 	</delete>
 	
 	
@@ -453,8 +455,10 @@
 		FROM	PRJ2001 A
 		WHERE	1=1
         AND		A.PRJ_ID = #prjId#
-        AND		A.AUTH_GRP_ID = #authGrpId#
 	]]>
+		<isNotEmpty property="authGrpId">
+			AND		A.AUTH_GRP_ID = #authGrpId#
+		</isNotEmpty>
 	</delete>
 	
 	
@@ -466,8 +470,10 @@
         WHERE	1=1
         AND		A.LIC_GRP_ID = #licGrpId#
         AND		A.PRJ_ID = #prjId#
-        AND		A.AUTH_GRP_ID = #authGrpId#
 	]]>
+		<isNotEmpty property="authGrpId">
+			AND		A.AUTH_GRP_ID = #authGrpId#
+		</isNotEmpty>
 	</delete>
 	
 	
