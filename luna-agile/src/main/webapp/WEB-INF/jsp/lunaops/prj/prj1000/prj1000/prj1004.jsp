@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <form class="kt-form" id="frPrj1004">
 	<input type="hidden" name="type" id="type" value="${param.type}">
 	<input type="hidden" name="paramPrjGrpId" id="paramPrjGrpId" value="${param.paramPrjGrpId}">
@@ -141,32 +141,32 @@
 var OSLPrj1004Popup = function () {
 	var formId = 'frPrj1004';
 	
-	
+	//form validate 주입
 	var formValidate = $.osl.validate(formId);
 	
-	
+	//type
 	var type = $("#type").val();
 	
-	
+	//배정 담당자 중복 체크
 	var prjAuthUsrIdList = [];
 	
-	
+	//수정시 배정담당자 원본 데이터
 	var prjAuthOriginalData = [];
 	
-	
+	//수정인경우 대상 프로젝트ID
 	var paramPrjId = $("#paramPrjId").val();
 	
-    
+    // Private functions
     var documentSetting = function () {
-    	
+    	//문구 세팅 
     	$("#prj1004SaveSubmit > span").text($.osl.lang("prj1004."+type+".saveBtnString"));
     	
     	var today = new Date().format("yyyy-MM-dd");
-    	
+    	//프로젝트 기간 최초 오늘 날짜 세팅
     	$("#startDt").val(today);
 		$("#endDt").val(today);
 		
-    	
+    	//datepicker 세팅
 		$.osl.date.daterangepicker($("#prjRange"), {}, function(defaultConfig, start, end, label) {
 			var startDt = new Date(start._d).format("yyyy-MM-dd");
 			var endDt = new Date(end._d).format("yyyy-MM-dd");
@@ -175,52 +175,52 @@ var OSLPrj1004Popup = function () {
 			$("#endDt").val(endDt);
 		});
 
-    	
+    	// 팝업 공통코드 select 세팅
 		var commonCodeArr = [
-			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"}, 
-			{mstCd: "PRJ00013", useYn: "Y",targetObj: "#prjTypeCd", comboType:"OS"}, 
-			{mstCd: "PRJ00014", useYn: "Y",targetObj: "#prjDevTypeCd", comboType:"OS"} 
+			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"}, // 사용유무
+			{mstCd: "PRJ00013", useYn: "Y",targetObj: "#prjTypeCd", comboType:"OS"}, // 프로젝트 유형
+			{mstCd: "PRJ00014", useYn: "Y",targetObj: "#prjDevTypeCd", comboType:"OS"} // 개발 방법론
 		];
-		
+		//공통코드 채우기
 		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		
-		
+		// 프로젝트 약어 입력 keyup 이벤트
 		$("#prjAcrm").keyup(function(e){
 			 var inputVal = $("#prjAcrm").val();
-			 
+			 // 입력된 값을 대문자로 변환
 		 	$("#prjAcrm").val(inputVal.toUpperCase());
 		});
 		
-		
+		//submit 동작
     	$("#prj1004SaveSubmit").click(function(){
 			var form = $('#'+formId);    		
         	
-    		
+    		//폼 유효 값 체크
     		if (!form.valid()) {
     			return;
     		}
     		$.osl.confirm($.osl.lang("prj1004."+type+".saveString"),null,function(result) {
     	        if (result.value) {
-    	        	
+    	        	//프로젝트 저장
     	        	saveFormAction();
     	        }
     		});
     	});
 		
-		
+		//수정인경우 프로젝트 정보 조회
 		if(type == "update"){
 			fnPrjGrpInfoSelect();
 		}
-		
+		//데이터 테이블 세팅
     	datatableSetting();
     };
     
-    
+    //프로젝트 저장 (생성&수정)
     var saveFormAction = function() {
-    	
+    	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
     	/* 
-    	
+    	//추가된 담당자 목록
     	var authUsrList = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(authUsrList) && authUsrList.length > 0){
     		var usrIdList = [];
@@ -230,32 +230,36 @@ var OSLPrj1004Popup = function () {
     		fd.append("usrIdList",JSON.stringify(usrIdList));
     	}
     	 */
-    	
-   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj1000/prj1000/savePrj1004PrjGrpInfo.do'/>", "async": false,"contentType":false,"processData":false ,"cache":false},fd);
-
-   		
+    	//AJAX 설정
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj1000/prj1000/savePrj1004PrjGrpInfo.do'/>", "async": true,"contentType":false,"processData":false ,"cache":false, "loadingShow": false},fd);
+    	 $.osl.showLoadingBar(true,{target: "#frPrj1004", message: "프로젝트를 생성중입니다.</br>잠시만 기다려주세요."});
+   		//AJAX 전송 성공 함수
    		ajaxObj.setFnSuccess(function(data){
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
-   				
+   				//등록 성공
    				$.osl.toastr(data.message);
-
    				
+   				//모달 창 닫기
+   				//$.osl.layerPopupClose();
    				
-   				
-   				
-   				
+   				//datatable 조회
+   				//$("button[data-datatable-id=prj1001PrjTable][data-datatable-action=select]").click();
    			}
    		});
    		
+   		ajaxObj.setFnComplete(function(data){
+   			$.osl.showLoadingBar(false,{target: "#frPrj1004"});
+   		});
    		
+   		//AJAX 전송
    		ajaxObj.send();
     };
     
-    
+    //담당자 배정, 미 배정 목록
     var datatableSetting = function(){
-    	
+    	//사용자 배정 정보 datatable 세팅
 		$.osl.datatable.setting("prj1004PrjAuthUsrTable",{
 			data: {
 				type:'local',
@@ -304,25 +308,25 @@ var OSLPrj1004Popup = function () {
 			},
 			actionFn:{
 				"select": function(datatableId, elem){
-					
+					//검색 대상 가져오기
 					var searchTypeTarget = $(".osl-datatable-search__dropdown[data-datatable-id="+datatableId+"] > .dropdown-item.active");
 					
-					
+					//검색 값
 					var searchData = $("#searchData_"+datatableId);
 
-					
+					//대상 정보 가져오기
 					var searchFieldId = searchTypeTarget.data("field-id");
 					var searchType = searchTypeTarget.data("opt-type");
 					var searchCd = $(this).data("opt-mst-cd");
 					
-					
+					//입력된 검색값 초기화
 					$.osl.datatable.list[datatableId].targetDt.setDataSourceQuery({});
 					
-					
+					//전체가 아닌경우 해당 타입으로 검색
 					if(searchType != "all"){
 						var searchDataValue = searchData.val();
 						
-						
+						//공통코드인경우 select값 가져오기
 						if(searchType == "select"){
 							searchDataValue = $("#searchSelect_"+datatableId).val();
 						}
@@ -335,38 +339,38 @@ var OSLPrj1004Popup = function () {
 				"reset": function(rowData, datatableId, type, rownum, elem){
 					var datatable = $.osl.datatable.list[datatableId].targetDt;
 					
-					
+					//데이터 초기화
 					datatable.dataSet = [];
 					datatable.originalDataSet = [];
 					prjAuthUsrIdList = [];
 					
-					
+					//원본데이터 있는경우
 					if(prjAuthOriginalData.length > 0){
 						$.each(prjAuthOriginalData, function(idx, map){
-			   				
+			   				//담당자 배정 목록 추가
 			   				datatable.dataSet.push(map);
 							datatable.originalDataSet.push(map);
 							
-							
+							//중복체크 추가
 							prjAuthUsrIdList.push(map.usrId);
 		   				});
 					}
 					
-					
+					//데이터 추가
 					datatable.insertData();
-					
+					//데이터테이블 재 조회
 					datatable.reload();
 				},
 				"dblClick":function(rowData){
 					var rowDatas = [];
 					rowDatas.push(rowData);
-					
+					//사용자 배정 처리
 					fnAllUsrDelete(rowDatas);
 				},
-				
+				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
 					var rowDatas = rowData;
-					
+					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
 						return true;
@@ -374,7 +378,7 @@ var OSLPrj1004Popup = function () {
 					
 					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
-							
+							//사용자 배정 제외 처리
 							fnAllUsrDelete(rowDatas);
 						}
 					});
@@ -382,7 +386,7 @@ var OSLPrj1004Popup = function () {
 			}
 		});
 		
-		
+		//사용자 미 배정 정보 datatable 세팅
 		$.osl.datatable.setting("prj1004PrjAuthNoneUsrTable",{
 			data: {
 				source: {
@@ -445,14 +449,14 @@ var OSLPrj1004Popup = function () {
 					var rowDatas = [];
 					rowDatas.push(rowData);
 					
-					
+					//사용자 배정 처리
 					fnAllUsrInsert(rowDatas);
 				},
-				
+				//선택 사용자 배정 등록
 				"selAllUsrDelete": function(rowData, datatableId, type){
 					var rowDatas = rowData;
 					
-					
+					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
 						return true;
@@ -460,7 +464,7 @@ var OSLPrj1004Popup = function () {
 					
 					$.osl.confirm($.osl.lang("prj2100.allUsrInsert",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
-							
+							//사용자 배정 처리
 							fnAllUsrInsert(rowDatas);
 						}
 					});
@@ -468,24 +472,24 @@ var OSLPrj1004Popup = function () {
 			}
 		});
 	};
-	
+	//담당자 배정 등록
 	var fnAllUsrInsert = function(selDatas){
 		if(selDatas != null && selDatas.length > 0){
-			
+			//대상 데이터 테이블
 			var datatable = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt;
 			
-			
+			//dataSet 비어있는 경우 초기화
 			if($.osl.isNull(datatable.dataSet)){
 				datatable.dataSet = [];
 				datatable.originalDataSet = [];
 			}
 			
-			
+			//이미 추가된 사용자 목록
 			var usrIdDupleList = 0;
 			
-			
+			//데이터 테이블에 담당자 배정 추가
 			$.each(selDatas, function(idx, map){
-				
+				//이미 추가된 사용자 목록 추가
 				if(prjAuthUsrIdList.indexOf(map.usrId) != -1){
 					usrIdDupleList++;
 					return true;
@@ -494,25 +498,25 @@ var OSLPrj1004Popup = function () {
 				datatable.dataSet.push(map);
 				datatable.originalDataSet.push(map);
 				
-				
+				//중복체크 추가
 				prjAuthUsrIdList.push(map.usrId);
 			});
 			
-			
+			//출력 메시지 세팅
 			var toastrMsg = "";
 			var toastrType = "success";
 			if(selDatas.length > usrIdDupleList){
 				toastrMsg += $.osl.lang("prj1004.insert.saveMsg",(selDatas.length-usrIdDupleList));
 			}
 			if(usrIdDupleList > 0){
-				
+				//이미 추가된 메시지 있는 경우 </br>
 				if(toastrMsg.length > 0){
 					toastrMsg += "</br>";
 				}
 				toastrMsg += $.osl.lang("prj1004.insert.saveDupleMsg",usrIdDupleList);
 				toastrType = "warning";
 			}
-			
+			//모든 사용자가 배정되있는 경우
 			if(usrIdDupleList == selDatas.length){
 				toastrMsg = $.osl.lang("prj1004.insert.saveAllDupleMsg",usrIdDupleList);
 				toastrType = "error";
@@ -520,54 +524,54 @@ var OSLPrj1004Popup = function () {
 			
 			$.osl.toastr(toastrMsg,{type: toastrType});
 			
-			
+			//데이터 추가
 			datatable.insertData();
-			
+			//데이터테이블 재 조회
 			datatable.reload();
 		 }
 	};
 	
-	
+	//담당자 배정 제외
 	var fnAllUsrDelete = function(selDatas){
 		if(selDatas != null && selDatas.length > 0){
-			
+			//대상 데이터 테이블
 			var datatable = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt;
 			
-			
+			//dataSet에서 제거
 			var dataSet = datatable.dataSet;
 			var originalDataSet = datatable.originalDataSet;
 			
 			if(!$.osl.isNull(dataSet)){
-				
+				//선택 데이터
 				$.each(selDatas, function(idx, map){
 					$.each(originalDataSet, function(dataIdx, dataMap){
 						if($.osl.isNull(dataMap)){
 							return true;
 						}
-						
+						//해당 사용자 배정 제외
 						else if(map.usrId == dataMap.usrId){
 							originalDataSet.splice(dataIdx, 1);
 							
-							
+							//중복체크 목록 제외
 							prjAuthUsrIdList.splice(prjAuthUsrIdList.indexOf(map.usrId), 1);
 							return false;
 						}
 					});
 				});
 				
-				
+				//데이터테이블 재 조회
 				datatable.reload();
 			}
 		}
 	};
 	
-	
+	//프로젝트 정보 조회
 	var fnPrjGrpInfoSelect = function(){
-		
+		//프로젝트 정보 조회
 		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/prj/prj1000/prj1000/selectPrj1000PrjGrpInfoAjax.do'/>"}
 				,{prjId: paramPrjId});
-		
+		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
 			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
@@ -576,46 +580,46 @@ var OSLPrj1004Popup = function () {
    				
    				$.osl.setDataFormElem(prjInfo, formId, ["prjNm","useCd","ord","prjDesc","startDt","endDt"]);
    				
-   				
+   				//시작일 - 종료일 입력
    				$("#prjGrpRange").data("daterangepicker").setStartDate(prjInfo.startDt);
    				$("#prjGrpRange").data("daterangepicker").setEndDate(prjInfo.endDt);
    				
    				if(data.prjAuthList.length > 0){
-   					
+   					//원본 데이터 저장
 					prjAuthOriginalData = data.prjAuthList;
    						 
-	   				
+	   				//대상 데이터 테이블
 	   				var datatable = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt;
 	   			
 	   				$.each(data.prjAuthList, function(idx, map){
-		   				
+		   				//담당자 배정 목록 추가
 		   				datatable.dataSet.push(map);
 						datatable.originalDataSet.push(map);
 						
-						
+						//중복체크 추가
 						prjAuthUsrIdList.push(map.usrId);
 	   				});
 					
-					
+					//데이터 추가
 					datatable.insertData();
-					
+					//데이터테이블 재 조회
 					datatable.reload();
    				}
    			}
 		});
 		
-		
+		//AJAX 전송
 		ajaxObj.send();
 	};
 	return {
-        
+        // public functions
         init: function() {
         	documentSetting();
         }
     };
 }();
 
-
+// Initialization
 $.osl.ready(function(){
 	OSLPrj1004Popup.init();
 });

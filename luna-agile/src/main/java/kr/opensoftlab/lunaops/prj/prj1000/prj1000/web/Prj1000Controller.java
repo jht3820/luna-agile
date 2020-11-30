@@ -200,6 +200,7 @@ public class Prj1000Controller {
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
 			}
+			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			
 			

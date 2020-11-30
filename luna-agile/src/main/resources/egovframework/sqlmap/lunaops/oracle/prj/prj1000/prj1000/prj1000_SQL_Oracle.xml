@@ -705,9 +705,9 @@
 		<selectKey resultClass="java.lang.String" keyProperty="newPrjId">
 		<![CDATA[
 			SELECT	NVL( 
-							SUBSTR(NEW_PRJ_GRP_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PRJ_GRP_ID, 12, 5)) + 1) , 5, '0')
+							SUBSTR(NEW_PRJ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PRJ_ID, 12, 5)) + 1) , 5, '0')
 						,	'PRJ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-            		) AS NEW_PRJ_GRP_ID 
+            		) AS NEW_PRJ_ID 
 			FROM	(
 			            SELECT	MAX(PRJ_ID)  AS NEW_PRJ_ID
 			            FROM	PRJ1000 A
@@ -723,13 +723,13 @@
 			(
                 PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_NM			,	START_DT		,	END_DT
             ,	ORD				,	PRJ_DESC		,	USE_CD			,	DEL_CD
-            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
+            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_ACRM		,	PRJ_GRP_CD		,	PRJ_BG_COLOR	,	PRJ_COLOR
             ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
             ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
         )VALUES(
                 #newPrjId#		,	#prjGrpId#		,	#licGrpId#		,	#prjNm#    		,	REPLACE(#startDt#, '-', '')		,	REPLACE(#endDt#, '-', '')
             ,	#ord#			,	#prjDesc#		,	#useCd#			,	'02'
-            ,	#prjTypeCd# 	,	#prjDevTypeCd#	,	#prjGrpCd#
+            ,	#prjTypeCd# 	,	#prjDevTypeCd#	,	#prjAcrm#		,	#prjGrpCd#		,	#prjBgColor#	,	#prjColor#
             ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
             ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
         )		
@@ -908,6 +908,8 @@
       			, B.PRJ_ID
 				, B.PRJ_NM
 				, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
+				, B.PRJ_TYPE_CD
+				, B.PRJ_DEV_TYPE_CD
 			FROM
 						(
 							SELECT DISTINCT Z.PRJ_ID
