@@ -74,7 +74,6 @@
 		<!-- end::Global Config -->
 
 		<!--begin::Global Theme Bundle(used by all pages) -->
-		<script src="<c:url value='/js/scripts.bundle.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/common/modalPopup.js'/>" type="text/javascript"></script>
 		<!--end::Global Theme Bundle -->
 
