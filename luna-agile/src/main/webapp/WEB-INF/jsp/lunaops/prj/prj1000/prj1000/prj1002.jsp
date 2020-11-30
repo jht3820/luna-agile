@@ -14,7 +14,7 @@
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="form-group">
 								<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjNm" id="prjNm" opttype="-1" required>
+								<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjNm" id="prjNm" opttype="-1" maxlength="100" required>
 							</div>
 						</div>
 						<div class="col-lg-6 col-md-12 col-sm-12">
@@ -35,7 +35,7 @@
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<div class="form-group">
 								<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
-								<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" required>
+								<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" maxlength="3" required>
 							</div>
 						</div>
 					</div>
@@ -43,7 +43,7 @@
 				<div class="col-lg-6 col-md-12 col-sm-12">
 					<div class="form-group">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
-						<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="prjDesc" id="prjDesc" opttype="-1"></textarea>
+						<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="prjDesc" id="prjDesc" opttype="-1" maxlength="2000"></textarea>
 					</div>
 				</div>
 			</div>

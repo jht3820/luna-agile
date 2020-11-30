@@ -170,6 +170,65 @@ var OSLPrj1001Popup = function () {
 				"delete": "프로젝트 삭제"
 			},
 			actionFn:{
+				"insert":function(datatableId, type, rowNum){
+					//프로젝트 그룹 정보
+					var prjGrpInfo = $.osl.prjGrpAuthList[$.osl.selPrjGrpId]["prjGrpInfo"];
+					
+					var data = {
+							type:"insert",
+							paramPrjGrpId: $.osl.selPrjGrpId,
+							prjGrpNm: prjGrpInfo.prjNm,
+							prjGrpStartDt: prjGrpInfo.startDt,
+							prjGrpEndDt: prjGrpInfo.endDt
+					};
+					var options = {
+							autoHeight: false,
+							modalSize: "xl",
+							idKey: datatableId,
+							modalTitle: $.osl.lang("prj1004.title"),
+							closeConfirm: false,
+						};
+					
+					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
+				},
+				"delete":function(rowDatas, datatableId, c, rowNum, elem){
+					//선택 프로젝트 그룹 휴지통으로 이동
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashListAjax.do'/>"}
+							,{deleteDataList: JSON.stringify(rowDatas)});
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						if(data.errorYn == "Y"){
+			   				$.osl.alert(data.message,{type: 'error'});
+			   			}else{
+			   				//삭제 성공
+			   				$.osl.toastr(data.message);
+			   				
+			   				//datatable 조회
+			   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+			   			}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+				},
+				//복구
+				"prjRedo": function(rowData, datatableId, type){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
+						return true;
+					}
+					
+					$.osl.confirm($.osl.lang("prj1001.confirm.prjRedo",rowDatas.length),{html:true}, function(result){
+						if (result.value) {
+							//선택 프로젝트 그룹 복구 처리
+							fnPrjRedoUpdate(rowDatas, datatableId);
+						}
+					});
+				},
 			},
 			theme:{
 				actionBtnIcon:{
@@ -264,11 +323,11 @@ var OSLPrj1001Popup = function () {
 						var prjGrpDelCdMenuList = {
 								//휴지통 목록 (삭제)
 								"01":[
-									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpRedo"><i class="fa fa fa-redo-alt kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectRedo")+'</div>',
+									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjRedo"><i class="fa fa fa-redo-alt kt-font-primary"></i>'+$.osl.lang("prj1001.menu.projectRedo")+'</div>',
 									'<div class="dropdown-divider"></div>',
-									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpDelete"><i class="fa fa-times-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.recordDelete")+'</div>',
+									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpDelete"><i class="fa fa-times-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.recordDelete")+'</div>',
 									'<div class="dropdown-divider"></div>',
-									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
+									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.projectDetail")+'</div>'
 								],
 								//일반 목록 (미 삭제)
 								"02":[
@@ -299,7 +358,7 @@ var OSLPrj1001Popup = function () {
 												+'<button type="button" class="btn btn-outline-primary btn-bold btn-font-sm btn-elevate btn-elevate-air"  data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">'
 													+'<i class="fa fa-bars osl-padding-r0"></i>'
 												+'</button>'
-												+'<div class="dropdown-menu dropdown-menu-right">'
+												+'<div class="dropdown-menu dropdown-menu-right" data-datatable-rownum="'+idx+'">'
 													+prjGrpDelCdMenuList[map.delCd].join('')
 												+'</div>'
 											+'</div>'
@@ -492,6 +551,29 @@ var OSLPrj1001Popup = function () {
 			//데이터 테이블 조회
 			$.osl.datatable.list["prj1001PrjTable"].targetDt.reload();
 		});
+		
+		//프로젝트 그룹 복구처리
+		var fnPrjRedoUpdate = function(redoDataList, datatableId){
+			//선택 프로젝트 그룹 휴지통으로 이동
+			var ajaxObj = new $.osl.ajaxRequestAction(
+					{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashRedoListAjax.do'/>"}
+					,{deleteDataList: JSON.stringify(redoDataList)});
+			//AJAX 전송 성공 함수
+			ajaxObj.setFnSuccess(function(data){
+				if(data.errorYn == "Y"){
+	   				$.osl.alert(data.message,{type: 'error'});
+	   			}else{
+	   				//삭제 성공
+	   				$.osl.toastr(data.message);
+	   				
+	   				//datatable 조회
+	   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+	   			}
+			});
+			
+			//AJAX 전송
+			ajaxObj.send();
+		}
 	};
 	
 	var fnViewerChange = function(){
