@@ -351,7 +351,10 @@ var OSLPrj1001Popup = function () {
 									+'<div class="kt-portlet__head kt-portlet__head--lg">'
 										+'<div class="kt-portlet__head-label">'
 											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" name="prjCheckbox" id="prjCheckbox_'+map.prjId+'" data-datatable-id="prj1001PrjTable">&nbsp;<span></span></label>'
-											+'<h5 class="kt-font-boldest"><span class="badge '+rnClass+' kt-margin-r-10">'+rnStr+'</span></h5>'
+											+'<h5 class="kt-font-boldest">'
+												+'<span class="badge '+rnClass+' kt-margin-r-10">'+rnStr+'</span>'
+												+'<span class="badge badge-primary kt-margin-r-10">'+$.osl.escapeHtml(map.prjTypeNm)+'</span>'
+											+'</h5>'
 										+'</div>'
 										+'<div class="kt-portlet__head-toolbar">'
 											+'<div class="kt-portlet__head-wrapper">'
@@ -487,7 +490,7 @@ var OSLPrj1001Popup = function () {
 						chartOption.series = series;
 						
 						var targetElem = document.querySelector("#chart_"+loopPrjId);
-						if(!$.osl.isNull(targetElem) && targetElem.length > 0){
+						if(!$.osl.isNull(targetElem) && targetElem){
 							targetElem.innerText = "";
 							var chart = new ApexCharts(document.querySelector("#chart_"+loopPrjId), chartOption);
 							chart.render();

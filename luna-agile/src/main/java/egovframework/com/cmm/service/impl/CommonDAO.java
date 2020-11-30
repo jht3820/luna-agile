@@ -36,7 +36,6 @@ public class CommonDAO extends EgovComAbstractDAO {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Map> selectDynamicComboBoxAjax(Map<String, String> paramMap) {
-		// TODO Auto-generated method stub
 		
 		String conditionColSize = paramMap.get("conditionColSize");
 		StringBuffer condBuffer = new StringBuffer();
