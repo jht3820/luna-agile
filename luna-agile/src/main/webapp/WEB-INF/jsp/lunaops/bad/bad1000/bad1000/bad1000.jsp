@@ -218,7 +218,9 @@
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
 						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 1000 * 60){
+						if(agoTime < 0){
+							return $.osl.lang("date.agoTime.s", 0) + $.osl.lang("date.agoTime.suffixAgo");	
+						}else if(agoTime < 1000 * 60){
 							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
 						}else if(agoTime < 1000 * 60 * 60){
 							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
@@ -309,7 +311,6 @@
 					var options = {
 							idKey: "bad1001_"+ rowData.badId,
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
-							
 							closeConfirm: false,
 							autoHeight: false,
 							modalSize: "xl",
@@ -328,7 +329,7 @@
 							//작성자는 비밀번호 없이도 게시글 확인 가능
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							if(rowData.badPw == "01" && row.stmPwYnCd == '01'){
+							if(rowData.badPw == "01" && rowData.stmPwYnCd == '01'){
 								$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1004PwView.do', data, pwOptions);
 							}
 							else{

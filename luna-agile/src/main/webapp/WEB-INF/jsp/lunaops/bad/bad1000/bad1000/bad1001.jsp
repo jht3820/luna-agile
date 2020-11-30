@@ -2,12 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<style>
-img {
-  max-width: 100%;
-}
-</style>
-
 <input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd}" /> 
 <input type="hidden" name="stmDsTypeCd" id="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 <input type="hidden" name="stmNm" id="stmNm" value='${param.stmNm}'/>
@@ -41,12 +35,12 @@ img {
 				</button>
 			</div>
 			<!-- 내용 -->
-			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20 osl-min-height--150" name="badContentDiv" id="badContentDiv"></div>
+			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20 osl-min-height--150 osl-max-width--100-p" name="badContentDiv" id="badContentDiv"></div>
 			<!-- 첨부파일 목록 -->
 			<div class="form-group kt-margin-20 kt-hide" name="badFileOption" id="badFileOption">
 				<hr class="kt-margin-t-20 kt-margin-b-20">
 				<div class="kt-font-bolder kt-padding-l-5">
-					<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1001.label.attchFile">파일 첨부</span>
+					<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1001.label.attachFile">파일 첨부</span>
 				</div>
 				<div class="kt-margin-t-10 kt-uppy fileReadonly" name="fileListDiv" id="fileListDiv">
 					<div class="kt-uppy__dashboard"></div>
@@ -100,6 +94,9 @@ img {
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -193,8 +190,7 @@ var OSLBad1001Popup = function () {
 						var paramDatetime = new Date(row.badCmtDtm);
 						var agoTime = new Date() - paramDatetime;
 						if(agoTime < 0){
-							//실시간 댓글 - agoTime이 (-) 가 되는 경우 발생
-							return "0초 전";
+							return $.osl.lang("date.agoTime.s", 0) + $.osl.lang("date.agoTime.suffixAgo");	
 						}else if(agoTime < 1000 * 60){
 							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
 						}else if(agoTime < 1000 * 60 * 60){
@@ -208,6 +204,9 @@ var OSLBad1001Popup = function () {
 				 }
 			 ],
 			 layout:{ "header" : false },
+			 rows:{
+				clickCheckbox: true
+			},
 			 actionBtn:{
 				 "title": $.osl.lang("bad1001.actionBtn.title"),
 				 "update": false,
@@ -255,22 +254,7 @@ var OSLBad1001Popup = function () {
 					 		$.osl.alert($.osl.lang("bad1001.notCmtWriter.deleteMessage"), {"type":"warning"});
 					 	}
 					 }
-				 },
-				 "click": function(row, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				}
+				 }
 			 },
 			 theme:{
 				 actionBtn:{
@@ -542,12 +526,11 @@ var OSLBad1001Popup = function () {
 						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("style", "display:none;");
 						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("aria-hidden", "true");
 						//input 보이기
-						$("#searchData_bad1000BadTable").attr("disabled", "");
+						$("#searchData_bad1000BadTable").removeAttr("disabled");
 						//input에 태그 검색 값 넣기
 						$("#searchData_bad1000BadTable").val($(this).attr("value"));
 						//검색
-						$("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
-						
+		    			$(".osl-datatable-search__button[data-datatable-id=bad1000BadTable]").click();	
 					});
 				}else{
 					$("#badTagOption").addClass("kt-hide");

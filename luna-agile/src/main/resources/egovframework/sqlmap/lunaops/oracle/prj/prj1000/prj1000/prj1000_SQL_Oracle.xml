@@ -19,6 +19,7 @@
 		        ,	SUBT1.ORD
 		        ,	SUBT1.PRJ_DESC
 		        ,	SUBT1.USE_CD
+		        ,	SUBT1.DEL_CD
 		        ,	SUBT1.PRJ_TYPE_CD
 		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
 		        ,	SUBT1.PRJ_DEV_TYPE_CD
@@ -48,6 +49,7 @@
 					,	A.ORD
 					,	A.PRJ_DESC
 					,	A.USE_CD
+					,	A.DEL_CD
 					,	A.PRJ_TYPE_CD
 					,	A.PRJ_DEV_TYPE_CD
 					,	A.PRJ_ACRM
@@ -98,6 +100,9 @@
 			</isNotEmpty>
 			<isNotEmpty property="useCd">
 				AND SUBT1.USE_CD = #useCd#
+			</isNotEmpty>
+			<isNotEmpty property="delCd">
+				AND SUBT1.DEL_CD = #delCd#
 			</isNotEmpty>
 			<isNotEmpty property="searchTargetData">
 				<isNotEmpty property="searchTargetId">
@@ -150,6 +155,7 @@
 	        ,	SUBT1.ORD
 	        ,	SUBT1.PRJ_DESC
 	        ,	SUBT1.USE_CD
+	        ,	SUBT1.DEL_CD
 	        ,	SUBT1.PRJ_TYPE_CD
 	        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
 	        ,	SUBT1.PRJ_DEV_TYPE_CD
@@ -174,6 +180,7 @@
 				,	A.ORD
 				,	A.PRJ_DESC
 				,	A.USE_CD
+				,	A.DEL_CD
 				,	A.PRJ_TYPE_CD
 				,	A.PRJ_DEV_TYPE_CD
 				,	A.PRJ_ACRM
@@ -223,6 +230,7 @@
 		        ,	SUBT1.ORD
 		        ,	SUBT1.PRJ_DESC
 		        ,	SUBT1.USE_CD
+		        ,	SUBT1.DEL_CD
 		        ,	SUBT1.PRJ_TYPE_CD
 		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
 		        ,	SUBT1.PRJ_DEV_TYPE_CD
@@ -253,6 +261,7 @@
 					,	A.ORD
 					,	A.PRJ_DESC
 					,	A.USE_CD
+					,	A.DEL_CD
 					,	A.PRJ_TYPE_CD
 					,	A.PRJ_DEV_TYPE_CD
 					,	A.PRJ_ACRM
@@ -290,8 +299,11 @@
 					AND A.USE_CD = '01'
 			) SUBT1
 			WHERE 1=1
-			<isNotEmpty property="useCd">
+				<isNotEmpty property="useCd">
 					AND SUBT1.USE_CD = #useCd#
+				</isNotEmpty>
+				<isNotEmpty property="delCd">
+					AND SUBT1.DEL_CD = #delCd#
 				</isNotEmpty>
 				<isNotEmpty property="searchTargetData">
 					<isNotEmpty property="searchTargetId">
@@ -483,7 +495,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpAllList" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjGrpAllList - 프로젝트 그룹 전체 목록 */
+		
 		SELECT T1.*
 		FROM
 		(
@@ -494,7 +506,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpList" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjGrpList - 프로젝트 그룹 목록 조회 */
+		
 		SELECT T1.*
 		FROM
 		(
@@ -506,18 +518,18 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		/* prj1000DAO.selectPrj1000PrjGrpListCnt - 프로젝트 그룹 목록 수 조회 */
+		
 		SELECT
 			COUNT(*)
 		FROM
 		(
-			<include refid="selectPrj1000PrjList"/>
+			<include refid="selectPrj1000PrjGrpList"/>
 		) T1
 	</select>
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjList" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjList - 프로젝트 목록 조회 */
+		
 		SELECT T1.*
 		FROM
 		(
@@ -529,7 +541,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		/* prj1000DAO.selectPrj1000PrjListCnt - 프로젝트 목록 수 조회*/
+		
 		SELECT
 			COUNT(*)
 		FROM
@@ -540,7 +552,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjAuthUsrList" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjAuthUsrList - 프로젝트 담당자 조회 */
+		
 		SELECT T1.*
 		FROM
 		(
@@ -552,7 +564,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjAuthUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		/* prj1000DAO.selectPrj1000PrjAuthUsrListCnt - 프로젝트 담당자 수 조회 */
+		
 		SELECT
 			COUNT(*)
 		FROM
@@ -563,7 +575,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj2100PrjAuthNoneUsrList - 프로젝트 미 담당자 조회 */
+		
 		SELECT T1.*
 		FROM
 		(
@@ -575,7 +587,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		/* prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt - 프로젝트 미 담당자 수 조회  */
+		
 		SELECT
 			COUNT(*)
 		FROM
@@ -586,7 +598,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000Info" parameterClass="java.util.Map" resultClass="egovMap">
-			/* prj1000DAO.selectPrj1000Info - 프로젝트 그룹 단건 조회 */
+			
             SELECT T1.*
 			FROM
 			(
@@ -606,7 +618,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1001PrjGrpAuthList" parameterClass="java.util.Map" resultClass="egovMap">
-			/* prj1000DAO.selectPrj1001PrjGrpAuthList - 프로젝트 그룹 담당자 조회 */
+			
 			SELECT A.PRJ_ID, A.PRJ_AUTH_TYPE_CD, A.PRJ_AUTH_TARGET_ID, B.USR_NM, B.USR_IMG_ID, B.EMAIL
 			FROM PRJ1001 A
 			INNER JOIN STM3000 B ON (B.USR_ID = A.PRJ_AUTH_TARGET_ID AND B.LIC_GRP_ID = #licGrpId# AND B.USE_CD = '01' AND B.BLOCK = '01')
@@ -625,7 +637,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjGrpExistCheck - 프로젝트 그룹 존재하는지 체크 */
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -635,7 +647,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpIdExistCheck" parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1000DAO.selectPrj1000PrjGrpIdExistCheck - 프로젝트 그룹 존재하는지 체크 */
+		
 			SELECT *
 			FROM PRJ1000 A
 			WHERE 1=1
@@ -661,17 +673,19 @@
 					)
 		]]>
 		</selectKey>
-		/* prj1000DAO.insertPrj1000PrjGrpAjax - 프로젝트 그룹 생성 */
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
                 PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_NM			,	START_DT		,	END_DT
-            ,	ORD				,	PRJ_DESC		,	USE_CD			,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
+            ,	ORD				,	PRJ_DESC		,	USE_CD			,	DEL_CD
+            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
             ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
             ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
         )VALUES(
                 #newPrjGrpId#	,	NULL		,	#licGrpId#		,	#prjNm#    		,	REPLACE(#startDt#, '-', '')		,	REPLACE(#endDt#, '-', '')
-            ,	#ord#			,	#prjDesc#	,	#useCd#			,	#prjTypeCd# 	,	#prjDevTypeCd#		,	#prjGrpCd#
+            ,	#ord#			,	#prjDesc#	,	#useCd#			,	'02'
+            ,	#prjTypeCd# 	,	#prjDevTypeCd#		,	#prjGrpCd#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
         )		
@@ -679,9 +693,10 @@
 		]]>
 	</insert>
 	
-	<update id="prj1000DAO.updatePrj1000Ajax" parameterClass="java.util.Map">
+	
+	<update id="prj1000DAO.updatePrj1000" parameterClass="java.util.Map">
 	<![CDATA[
-		/* prj1000DAO.updatePrj1000Ajax -프로젝트 생성관리 수정(update) AJAX */
+		
 		UPDATE	PRJ1000 A
         SET		PRJ_NM			= #prjNm#
         	,	START_DT		= REPLACE(#startDt#, '-', '')
@@ -709,15 +724,29 @@
 	</update>
 	
 	
-	<delete id="prj1000DAO.deletePrj1000PrjGrpAjax" parameterClass="java.util.Map">
+	<delete id="prj1000DAO.deletePrj1000PrjAjax" parameterClass="java.util.Map">
 	<![CDATA[
-		/* prj1000DAO.deletePrj1000PrjGrpAjax - 프로젝트 그룹 제거(delete)*/
+		
 		DELETE	
 		FROM	PRJ1000 A
         WHERE	1=1
 		AND		A.LIC_GRP_ID 	= #licGrpId#
         AND		A.PRJ_ID		= #prjId#
-        AND		A.PRJ_GRP_CD	= '01'
+	]]>
+	</delete>
+	
+	
+	<delete id="prj1000DAO.updatePrj1000PrjTrashMoveAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		UPDATE	PRJ1000 A SET
+			A.DEL_CD = #delCd#
+			,	MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+        WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_ID		= #prjId#
 	]]>
 	</delete>
 	
@@ -765,7 +794,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000ProjectGroupListAjax" parameterClass="java.util.Map" resultClass="egovMap">
-			/* prj1000DAO.selectPrj1000ProjectGroupListAjax - 라이선스 그룹에 속해있는 모든 프로젝트를 가져온다. */
+			
 			SELECT Z.*, CONNECT_BY_ISLEAF AS LEAF
 	     	FROM(
 		      		SELECT  
@@ -793,11 +822,11 @@
 		       				PRJ1000 A
 		       		WHERE 	1=1
 		    		AND 	A.LIC_GRP_ID =  #licGrpId#
-		    		AND 	A.USE_CD = '01'	/* 사용유무가 사용인 프로젝트만 조회 */
+		    		AND 	A.USE_CD = '01'	
 		    		
 		    		<isNotEmpty property="pageType">
 			    		<isEqual property="pageType" compareValue="systemAdmin">
-				    		AND A.PRJ_GRP_CD = '01' /* 프로젝트 그룹만 조회 */
+				    		AND A.PRJ_GRP_CD = '01' 
 				   	 	</isEqual>
 					</isNotEmpty>	
 	     	) Z
@@ -807,7 +836,7 @@
 	</select>
 	
 	<select id="prj1000DAO.selectPrj1000ProjectAcronymCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
-			/* prj1000DAO.selectPrj1000ProjectAcronymCount - 프로젝트 약어 갯수 조회 */
+			
       		SELECT  
       				COUNT(1) AS CNT 
        		FROM 
@@ -819,7 +848,7 @@
 	</select>
 	
 	<update id="prj1000DAO.updatePrj1000UserProjectId" parameterClass="java.util.Map" >
-			/* prj1000DAO.updatePrj1000UserProjectId - 사용자 정보 프로젝트 변경 */
+			
       		UPDATE	STM3000 SET  PRJ_ID = NULL
        		WHERE 	1=1
     		AND 	LIC_GRP_ID =  #licGrpId#
@@ -829,7 +858,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000AdminPrjList" parameterClass="java.util.Map" resultClass="egovMap">
-			/* prj1000DAO.selectPrj1000AdminPrjList - 관리 권한 있는 프로젝트 목록 검색 */
+			
       		SELECT
       			B.PRJ_GRP_ID
       			, B.PRJ_ID
@@ -868,7 +897,7 @@
                 )
 		]]>
 		</selectKey>
-		/* prj1000DAO.insertPrj1000PrjWizardAjax - 프로젝트 마법사 생성 */
+		
 		<![CDATA[
 			INSERT INTO PRJ1000
 			(
@@ -889,7 +918,7 @@
 	
 	
 	<insert id="prj1000DAO.insertPrj1000PrjAuthInfo" parameterClass="java.util.Map">
-		/* prj1000DAO.insertPrj1000PrjAuthInfo - 프로젝트 담당자 추가 */
+		
 		<![CDATA[
 			INSERT INTO PRJ1001
 			(
@@ -903,4 +932,21 @@
 	        )		
 		]]>
 	</insert>
+	
+	
+	<delete id="prj1000DAO.deletePrj1000PrjAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE	
+			FROM	PRJ1001 A
+	        WHERE	1=1
+	        AND		A.PRJ_ID		= #prjId#	
+		]]>
+		<isNotEmpty property="prjAuthTypeCd">
+			AND A.PRJ_AUTH_TYPE_CD = #prjAuthTypeCd#
+		</isNotEmpty>
+		<isNotEmpty property="prjAuthTargetId">
+			AND A.PRJ_AUTH_TARGET_ID = #prjAuthTargetId#
+		</isNotEmpty>
+	</delete>
 </sqlMap>
