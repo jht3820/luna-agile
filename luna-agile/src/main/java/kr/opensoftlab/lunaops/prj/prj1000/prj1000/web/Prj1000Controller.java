@@ -74,9 +74,54 @@ public class Prj1000Controller {
     }
 	
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1001View.do")
 	public String selectPrj1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			String paramPrjGrpId = (String) paramMap.get("paramPrjGrpId");
+			HttpSession ss = request.getSession();
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			String usrId = loginVo.getUsrId();
+			paramMap.put("usrId", usrId);
+			paramMap.put("prjGrpCd", "01");
+			paramMap.put("prjAuthTypeCd", "01");
+			paramMap.put("prjId", paramPrjGrpId);
+			
+			
+			Map prjInfo = prj1000Service.selectPrj1000GrpInfo(paramMap);
+			model.addAttribute("prjInfo", prjInfo);
+		}catch(Exception e) {
+			model.addAttribute("prjInfo", null);
+		}
+		
 		return "/prj/prj1000/prj1000/prj1001";
+	}
+	
+	
+	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1000PrjListView.do")
+	public String selectPrj1000PrjListView(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		String paramPrjGrpId = "";
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			paramPrjGrpId = (String) paramMap.get("paramPrjGrpId");
+		}catch(Exception e) {
+			
+		}
+		return "redirect:/prj/prj1000/prj1000/selectPrj1001View.do?paramPrjGrpId="+paramPrjGrpId;
 	}
 	
 	
@@ -95,6 +140,12 @@ public class Prj1000Controller {
 	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1004View.do")
 	public String selectPrj1004View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/prj/prj1000/prj1000/prj1004";
+	}
+	
+	
+	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1005View.do")
+	public String selectPrj1005View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/prj/prj1000/prj1000/prj1005";
 	}
 	
 	
@@ -355,7 +406,7 @@ public class Prj1000Controller {
 				paramMap.put("prjAuthTargetId", usrId);
 				
 				
-				
+				prj1000Service.updatePrj1000PrjGrp(paramMap);
 			}else {
 				
 				model.addAttribute("errorYn", "Y");

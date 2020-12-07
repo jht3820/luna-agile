@@ -217,9 +217,12 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 
 		
 		paramMap.remove("prjAuthTargetId");
+		paramMap.remove("prjAuthTypeCd");
 		prj1000DAO.deletePrj1000PrjAuthInfo(paramMap);
 		
 		
+		paramMap.put("prjAuthTargetId", prjAuthTargetId);
+		paramMap.put("prjAuthTypeCd", "01");
 		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
 		
 		

@@ -21,42 +21,42 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="prjGrpNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
-									<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjGrpNm" id="prjGrpNm" opttype="-1" readonly="readonly" value='<c:out value="${param.prjGrpNm}"/>' required>
+									<label for="prjGrpNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjGrpNm" id="prjGrpNm" opttype="-1" readonly="readonly" value='<c:out value="${param.prjGrpNm}"/>' >
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
-									<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" value='<c:out value="${param.prjGrpStartDt}"/> ~ <c:out value="${param.prjGrpEndDt}"/>'required>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-6 col-md-12 col-sm-12">
-								<div class="form-group">
-									<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 명</span></label>
-									<input type="text" class="form-control" placeholder="프로젝트 명" name="prjNm" id="prjNm" opttype="-1" maxlength="100" required>
-								</div>
-							</div>
-							<div class="col-lg-6 col-md-12 col-sm-12">
-								<div class="form-group">
-									<label class="required" for="prjRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 기간</span></label>
-									<input type="text" class="form-control" placeholder="프로젝트 기간" name="prjRange" id="prjRange" readonly="readonly" required>
+									<label for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" value='<c:out value="${param.prjGrpStartDt}"/> ~ <c:out value="${param.prjGrpEndDt}"/>'>
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="prjTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 유형</label>
+									<label for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 명</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 명" name="prjNm" id="prjNm" opttype="-1" maxlength="100" >
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 기간</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 기간" name="prjRange" id="prjRange" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 유형</label>
 									<select class="form-control kt-select2" id="prjTypeCd" name="prjTypeCd" readonly="readonly" opttype="-1">
 									</select>
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="prjDevTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 개발 방법론</label>
+									<label for="prjDevTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 개발 방법론</label>
 									<select class="form-control kt-select2" id="prjDevTypeCd" name="prjDevTypeCd" readonly="readonly" opttype="-1">
 									</select>
 								</div>
@@ -67,8 +67,8 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="prjAcrm"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 약어</span></label>
-									<input type="text" class="form-control" placeholder="프로젝트 약어" name="prjAcrm" id="prjAcrm" opttype="-1" maxlength="10" regexstr="^(?=.*?[A-Z])(?=.*?[0-9])|[A-Z]{3,10}$" regexerrorstr="영문 대문자 또는 영문 대문자, 숫자 조합으로 3~10자만 허용" required>
+									<label for="prjAcrm"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 약어</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 약어" name="prjAcrm" id="prjAcrm" opttype="-1" maxlength="10" regexstr="^(?=.*?[A-Z])(?=.*?[0-9])|[A-Z]{3,10}$" regexerrorstr="영문 대문자 또는 영문 대문자, 숫자 조합으로 3~10자만 허용" >
 								</div>
 							</div>
 							<div class="col-lg-3 col-md-6 col-sm-12">
@@ -87,15 +87,15 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
+									<label><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
 									<select class="form-control kt-select2" id="useCd" name="useCd" readonly="readonly" opttype="-1">
 									</select>
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="form-group">
-									<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
-									<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" maxlength="3" required>
+									<label for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
+									<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" maxlength="3" >
 								</div>
 							</div>
 						</div>
@@ -243,6 +243,17 @@ var OSLPrj1004Popup = function () {
     		});
     	});
 
+		//프로젝트 유형에 따른 개발방법론 출력 여부
+		$('#prjTypeCd').on('select2:select', function (e) {
+			var data = e.params.data;
+			//운영 선택시 개발방법론 hide
+			if(data.id == "02"){
+				$('#prjDevTypeCd').parent("div.form-group").attr("hidden","hidden");
+			}else{
+				$('#prjDevTypeCd').parent("div.form-group").removeAttr("hidden");
+			}
+		});
+		
 		//데이터 테이블 세팅
     	datatableSetting();
 		
@@ -632,8 +643,15 @@ var OSLPrj1004Popup = function () {
    				var prjInfo = data.prjInfo;
    				
    				$.osl.setDataFormElem(prjInfo, formId, ["prjNm","useCd","ord","prjDesc","startDt","endDt", "prjAcrm", "prjBgColor", "prjColor"]);
-   				$("#prjTypeCd").val(data.prjInfo.prjTypeCd).trigger('change.select2');
-   				$("#prjDevTypeCd").val(data.prjInfo.prjDevTypeCd).trigger('change.select2');
+   				$("#prjTypeCd").val(prjInfo.prjTypeCd).trigger('change.select2');
+   				$("#prjDevTypeCd").val(prjInfo.prjDevTypeCd).trigger('change.select2');
+   				
+   				//프로젝트 유형이 "운영"인경우 개발방법론 숨기기
+   				if(prjInfo.prjTypeCd == "02"){
+   					$('#prjDevTypeCd').parent("div.form-group").attr("hidden","hidden");
+   				}else{
+   					$('#prjDevTypeCd').parent("div.form-group").removeAttr("hidden");
+   				}
    				
    				//시작일 - 종료일 입력
    				$("#prjRange").data("daterangepicker").setStartDate(prjInfo.startDt);
