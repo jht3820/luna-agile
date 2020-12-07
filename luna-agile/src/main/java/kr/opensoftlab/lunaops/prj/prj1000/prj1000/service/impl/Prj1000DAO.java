@@ -63,9 +63,15 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public Map selectPrj1000Info(Map paramMap) throws Exception {
-		 return (Map) select("prj1000DAO.selectPrj1000Info", paramMap);
+	public Map selectPrj1000GrpInfo(Map paramMap) throws Exception {
+		 return (Map) select("prj1000DAO.selectPrj1000GrpInfo", paramMap);
     }
+	
+	
+	@SuppressWarnings("rawtypes")
+	public Map selectPrj1000Info(Map paramMap) throws Exception {
+		return (Map) select("prj1000DAO.selectPrj1000Info", paramMap);
+	}
 	
 	
 	@SuppressWarnings("rawtypes")
