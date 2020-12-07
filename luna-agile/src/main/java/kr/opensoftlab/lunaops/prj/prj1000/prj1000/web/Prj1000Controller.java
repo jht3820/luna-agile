@@ -458,7 +458,6 @@ public class Prj1000Controller {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @RequestMapping(value="/prj/prj1000/prj1000/selectPrj1000PrjAuthNoneUsrListAjax.do")
     public ModelAndView selectPrj1000PrjAuthNoneUsrListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	
     	try{
     		
     		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -653,6 +652,53 @@ public class Prj1000Controller {
 			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
 			String usrId = loginVo.getUsrId();
 			paramMap.put("usrId", usrId);
+			paramMap.put("prjGrpCd", "01");
+			paramMap.put("prjAuthTypeCd", "01");
+			
+			
+			Map prjInfo = prj1000Service.selectPrj1000GrpInfo(paramMap);
+			model.addAttribute("prjInfo", prjInfo);
+			
+			
+			
+			int totCnt = prj1000Service.selectPrj1000PrjAuthUsrListCnt(paramMap);
+			
+			paramMap.put("firstIndex", "0");
+			paramMap.put("lastIndex", String.valueOf(totCnt));
+			
+			
+			List<Map> prjAuthList = prj1000Service.selectPrj1000PrjAuthUsrList(paramMap);
+			model.addAttribute("prjAuthList", prjAuthList);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception e){
+			Log.error("selectPrj1000PrjGrpInfoAjax()", e);
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/prj/prj1000/prj1000/selectPrj1000PrjInfoAjax.do")
+	public ModelAndView selectPrj1000PrjInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			HttpSession ss = request.getSession();
+			
+			
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			String usrId = loginVo.getUsrId();
+			paramMap.put("usrId", usrId);
+			paramMap.put("prjGrpCd", "02");
 			
 			
 			Map prjInfo = prj1000Service.selectPrj1000Info(paramMap);
@@ -676,7 +722,7 @@ public class Prj1000Controller {
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception e){
-			Log.error("selectPrj1000PrjGrpInfoAjax()", e);
+			Log.error("selectPrj1000PrjInfoAjax()", e);
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));

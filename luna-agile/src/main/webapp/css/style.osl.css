@@ -149,6 +149,9 @@ input:-webkit-autofill,
 .osl-min-h-px--140 {
   min-height: 140px; 
 }
+.osl-min-h-px--250 {
+  min-height: 250px; 
+}
 .osl-min-h-px--400 {
   min-height: 400px; 
 }
@@ -343,6 +346,10 @@ select[id^=usrOpt_] {
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
+}
+tr.kt-datatable__row.osl-datatable__row-assign--none {
+    text-decoration: line-through;
+	background-color: #e7e6ee !important;
 }
 /* @media */
 @media (max-width: 1400px) and (min-width: 1025px){
@@ -1400,7 +1407,7 @@ label.required:after {
 .modal-footer [data-ktwizard-type="action-submit"] {
   display: none; }
  /*******************end :: wizard*******************/
-.osl-hidden-select{
+ .osl-hidden-select{
 	width: 97%;
 	max-height: 200px;
 	overflow-y: auto;
@@ -1414,8 +1421,9 @@ label.required:after {
 .osl-hidden-select .osl-hidden-option{
 	height: 30px;
 	line-height: 30px;
+	cursor: pointer;
 }
-.osl-hidden-select li:hover{
+.osl-hidden-option:hover{
 	background-color: #1cac81;
 	color: #fff;
 }
@@ -1425,7 +1433,7 @@ label.required:after {
 .osl-tag-div{
 	overflow: hidden;
 	height: fit-content;
-	min-height: calc(1.5em + 1.3rem + 2px);
+	margin-top: 10px;
 }
 .osl-tagify__tag__removeBtn:hover{
 	border-radius:5px;

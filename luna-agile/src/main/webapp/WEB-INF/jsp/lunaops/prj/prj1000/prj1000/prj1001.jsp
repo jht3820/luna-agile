@@ -191,6 +191,28 @@ var OSLPrj1001Popup = function () {
 					
 					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
 				},
+				"update": function(rowData, datatableId, type, rowNum, elem){
+					//프로젝트 그룹 정보
+					var prjGrpInfo = $.osl.prjGrpAuthList[rowData.prjGrpId]["prjGrpInfo"];
+					
+					var data = {
+							type:"update",
+							paramPrjGrpId: rowData.prjGrpId,
+							paramPrjId: rowData.prjId,
+							prjGrpNm: prjGrpInfo.prjNm,
+							prjGrpStartDt: prjGrpInfo.startDt,
+							prjGrpEndDt: prjGrpInfo.endDt
+					};
+					var options = {
+							autoHeight: false,
+							modalSize: "xl",
+							idKey: datatableId,
+							modalTitle: $.osl.lang("prj1004.title"),
+							closeConfirm: false,
+						};
+					
+					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
+				},
 				//휴지통 이동(삭제)
 				"delete":function(rowDatas, datatableId, c, rowNum, elem){
 					//선택 프로젝트 그룹 휴지통으로 이동
@@ -439,9 +461,9 @@ var OSLPrj1001Popup = function () {
 											+'</div>'
 										+'</div>'
 									+'</div>'
-										+'<div class="kt-portlet__foot kt-portlet__foot--sm osl-padding-none">'
+										/* +'<div class="kt-portlet__foot kt-portlet__foot--sm osl-padding-none">'
 											+'<div class="osl-chart--project" id="chart_'+map.prjId+'">등록된 요구사항이 없습니다.</div>'
-										+'</div>'
+										+'</div>' */
 								+'</div>'
 							+'</div>';
 							rowCnt++;
@@ -453,7 +475,6 @@ var OSLPrj1001Popup = function () {
 					
 					//로드된 데이터 CARD형식으로 추가
 					$("#prj1001CardTable").html(prjGrpStr);
-					
 					//프로젝트 요구사항 차트 데이터 세팅
 					$.each(Object.keys(chartDataMap), function(idx, loopPrjId){
 						//요구사항 목록

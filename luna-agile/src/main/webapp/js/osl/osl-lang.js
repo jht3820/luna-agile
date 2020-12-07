@@ -521,6 +521,56 @@ var OSLCoreLangSetting = function () {
 				submit : "확인",
 			}
 		},
+		spr1100:{
+			title : {
+				sprint : "스프린트 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			field:{
+				sprTypeNm : "상태",
+				sprNm : "스프린트명",
+				sprStdtm : "시작일",
+				sprEddtm : "종료일",
+				sprDesc : "스프린트 설명",
+				sprDtm :"기간",
+				reqNm : "요구사항 명",
+				reqOrd : "순번",
+				reqProTypeNm : "처리유형",
+				reqDtm :"요청일",
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					sprSelect : "스프린트 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "스프린트 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
+			}
+		},
+		spr2000:{
+			button:{
+				detailBtn : "상세",
+			},
+			actionBtn:{
+				selectTooltip : "회의록 조회",
+				insertTooltip : "회의록 추가",
+				updateTooltip : "회의록 수정",
+				deleteTooltip : "회의록 삭제",
+				detailTooltip : "회의록 상세",
+			}
+		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.<br/> ${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
