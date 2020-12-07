@@ -151,6 +151,7 @@ var OSLPrj1000Popup = function () {
 						//AJAX 전송
 						ajaxObj.send();
 					},
+					//상세정보
 					"dblClick":function(rowData, datatableId, type, rowNum, elem){
 						var data = {
 								paramPrjId: rowData.prjId
@@ -199,21 +200,43 @@ var OSLPrj1000Popup = function () {
 							}
 						});
 					},
-					//상세정보
-					"detail": function(rowData, datatableId, type){
+					//프로젝트 생성
+					"prjInsert": function(rowData, datatableId, type){
+						var prjGrpInfo = rowData[0];
 						var data = {
-							paramPrjId: rowData[0].prjId
+								type:"insert",
+								paramPrjGrpId: prjGrpInfo.prjId,
+								prjGrpNm: prjGrpInfo.prjNm,
+								prjGrpStartDt: prjGrpInfo.startDt,
+								prjGrpEndDt: prjGrpInfo.endDt
 						};
-						
 						var options = {
 								autoHeight: false,
 								modalSize: "xl",
-								idKey: datatableId+"_detail",
-								modalTitle: $.osl.lang("prj1003.title"),
+								idKey: datatableId,
+								modalTitle: $.osl.lang("prj1004.title"),
 								closeConfirm: false,
 							};
-						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1003View.do',data,options);
-					}
+						
+						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
+					},
+					//프로젝트 목록 이동
+					"prjListMove": function(rowData, datatableId, type){
+						var prjGrpInfo = rowData[0];
+						
+						//form 생성
+						var newForm = $("<form></form>");
+						newForm.attr("name","prjListMoveForm");
+						newForm.attr("method","post");
+						newForm.attr("action","/prj/prj1000/prj1000/selectPrj1000PrjListView.do");
+						newForm.attr("target","_self");
+						newForm.appendTo("body");
+						
+						//프로젝트 그룹 ID input 생성
+						var input = $('<input type="hidden" name="paramPrjGrpId" id="paramPrjGrpId" value="'+prjGrpInfo.prjId+'">');
+						newForm.append(input);
+						newForm.submit();
+					},
 				},
 				theme:{
 					actionBtnIcon:{
@@ -282,17 +305,17 @@ var OSLPrj1000Popup = function () {
 										'<div class="dropdown-divider"></div>',
 										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpDelete"><i class="fa fa-times-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.recordDelete")+'</div>',
 										'<div class="dropdown-divider"></div>',
-										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
 									],
 									//일반 목록 (미 삭제)
 									"02":[
 										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-primary"></i>'+$.osl.lang("prj1000.menu.modify")+'</div>',
 										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-primary"></i>'+$.osl.lang("prj1000.menu.trashMove")+'</div>',
-										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown"><i class="fa fa-list-alt kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectListMove")+'</div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjListMove"><i class="fa fa-list-alt kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectListMove")+'</div>',
 										'<div class="dropdown-divider"></div>',
-										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown"><i class="fa fa-plus kt-font-primary"></i>'+$.osl.lang("prj1000.menu.createProject")+'</div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjInsert"><i class="fa fa-plus kt-font-primary"></i>'+$.osl.lang("prj1000.menu.createProject")+'</div>',
 										'<div class="dropdown-divider"></div>',
-										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="detail"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
 									]
 							};
 							

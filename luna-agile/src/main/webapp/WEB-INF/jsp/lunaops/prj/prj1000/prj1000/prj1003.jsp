@@ -179,68 +179,16 @@ var OSLPrj1003Popup = function () {
 				{field: 'usrId', title: '사용자 ID', searchOrd: 1}
 			],
 			actionBtn:{
-				"title": "제외",
 				"update": false,
 				"delete": false,
-				"dblClick": true,
 			},
 			actionTooltip:{
-				"dblClick": "담당자 배정 제외"
 			},
 			theme:{
 				actionBtnIcon:{
 					"dblClick": "fa fa-arrow-alt-circle-right",
 				}
 			},
-			actionFn:{
-				"reset": function(rowData, datatableId, type, rownum, elem){
-					var datatable = $.osl.datatable.list[datatableId].targetDt;
-					
-					//데이터 초기화
-					datatable.dataSet = [];
-					datatable.originalDataSet = [];
-					prjAuthUsrIdList = [];
-					
-					//원본데이터 있는경우
-					if(prjAuthOriginalData.length > 0){
-						$.each(prjAuthOriginalData, function(idx, map){
-			   				//담당자 배정 목록 추가
-			   				datatable.dataSet.push(map);
-							datatable.originalDataSet.push(map);
-							
-							//중복체크 추가
-							prjAuthUsrIdList.push(map.usrId);
-		   				});
-					}
-					
-					//데이터 추가
-					datatable.insertData();
-					//데이터테이블 재 조회
-					datatable.reload();
-				},
-				"dblClick":function(rowData){
-					var rowDatas = [];
-					rowDatas.push(rowData);
-					//사용자 배정 처리
-					fnAllUsrDelete(rowDatas);
-				},
-				//선택 사용자 배정 제외
-				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
-					var rowDatas = rowData;
-					//선택 레코드 없는 경우
-					if(rowDatas.length == 0){
-						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
-						return true;
-					}
-					
-					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
-						if (result.value) {
-							//사용자 배정 제외 처리
-							fnAllUsrDelete(rowDatas);
-						}
-					});
-				}
-			}
 		});
     	
 		//데이터 테이블 세팅

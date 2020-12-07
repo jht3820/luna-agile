@@ -1486,9 +1486,14 @@
 		        					$("#submenu-authGrp-sel").html('<i class="kt-menu__link-icon fa fa-user-tie"></i>'+$.osl.escapeHtml(map.authGrpNm));
 		        				}
 		        				
-	        					if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
-	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				
+	        					if(!prjOrdList[map.prjGrpId]["prjList"].hasOwnProperty(map.prjId)){
+	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId] = {};
 	        					}
+	        					
+		        				if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
+		        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				}
 	        					
 	        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"][map.authGrpId] = map;
 
