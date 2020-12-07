@@ -112,6 +112,12 @@ public class Bad1000Controller {
 			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
 			
+			if("tagNm".equals(paramMap.get("searchTargetId"))) {
+				
+				paramMap.put("searchTargetId", paramMap.get("searchTargetId").replace("#", ""));
+			}
+			
+			
 			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");

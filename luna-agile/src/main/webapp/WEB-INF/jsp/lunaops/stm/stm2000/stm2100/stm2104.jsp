@@ -45,8 +45,8 @@
 			</div>
 			<div class="col-lg-7 col-md-6 col-sm-6">
 				<div class="kt-align-right">
-					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" onclick="location.href='/stm/stm2000/stm2100/selectStm2100View.do'"><i class="fa flaticon2-indent-dots" style="color:#20c997;"></i></button>
-					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard"><i class="fa flaticon-squares-1" style="color:#20c997;"></i></button>
+					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" onclick="location.href='/stm/stm2000/stm2100/selectStm2100View.do'"><i class="fa flaticon2-indent-dots kt-font-brand"></i></button>
+					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard"><i class="fa flaticon-squares-1 kt-font-brand"></i></button>
 				</div>
 			</div>
 		</div>

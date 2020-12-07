@@ -100,6 +100,7 @@ public class Cmm4000Controller {
     @RequestMapping(value="/cmm/cmm4000/cmm4000/selectCmm4000View.do")
     public String selectCmm4000View(Model model) throws Exception {
 		model.addAttribute("joinCheck", EgovProperties.getProperty("Globals.lunaops.userJoin"));
+		model.addAttribute("loginType", EgovProperties.getProperty("Globals.lunaops.loginAuth"));
     	return "/cmm/cmm4000/cmm4000/cmm4000";
     }
     	
@@ -126,6 +127,7 @@ public class Cmm4000Controller {
     		model.addAttribute("logoutYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("cmm4000.success.logout"));
 			model.addAttribute("joinCheck", EgovProperties.getProperty("Globals.lunaops.userJoin"));
+			model.addAttribute("loginType", EgovProperties.getProperty("Globals.lunaops.loginAuth"));
         	return "/cmm/cmm4000/cmm4000/cmm4000";
         	
     	}catch(Exception ex){
@@ -150,6 +152,7 @@ public class Cmm4000Controller {
     		
     		String strUsrIp = request.getRemoteAddr();
     		loginVO.setModifyUsrIp(strUsrIp);
+    		loginVO.setLoginType(EgovProperties.getProperty("Globals.lunaops.loginAuth"));
     		
     		
     		LoginVO rtnLoginVO = null;
@@ -157,7 +160,6 @@ public class Cmm4000Controller {
     		
     		String ldapUse = EgovProperties.getProperty("Globals.lunaops.ldap");
     		if(ldapUse != null && "Y".equals(ldapUse)) {
-    			
     			rtnLoginVO = cmm4000Service.selectCmm4000LdapLoginAction(loginVO);
     		}
     		else {
@@ -280,7 +282,7 @@ public class Cmm4000Controller {
     				
     				break;
     		}
-    		
+    		model.addAttribute("loginType", EgovProperties.getProperty("Globals.lunaops.loginAuth"));
     		return returnPage;
     	}catch(Exception ex){
     		Log.error("selectCmm4000LoginAction()", ex);
@@ -529,6 +531,8 @@ public class Cmm4000Controller {
 		
 		ss.setAttribute("selPrjId", fstPrjMap.get("prjId"));
 		ss.setAttribute("selPrjGrpId", fstPrjMap.get("prjGrpId"));
+		ss.setAttribute("selPrjTypeCd", fstPrjMap.get("prjTypeCd"));
+		ss.setAttribute("selPrjDecTypeCd", fstPrjMap.get("prjDevTypeCd"));
 		
 		return authList;
 		

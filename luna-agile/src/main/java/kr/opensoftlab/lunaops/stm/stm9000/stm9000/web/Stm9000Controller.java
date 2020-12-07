@@ -19,6 +19,7 @@ import kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9001VO;
 import kr.opensoftlab.sdf.jenkins.JenkinsClient;
 import kr.opensoftlab.sdf.util.CommonScrty;
 import kr.opensoftlab.sdf.util.OslAgileConstant;
+import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.ReqHistoryMngUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
@@ -40,7 +41,6 @@ import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-
 
 
 @Controller
@@ -94,12 +94,75 @@ public class Stm9000Controller {
 	private JenkinsClient jenkinsClient;
 	
 	
-
-	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000JobView.do")
+	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000View.do")
 	public String selectStm9000JobView( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/stm/stm9000/stm9000/stm9000";
 	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000JenkinsListAjax.do")
+	public ModelAndView selectStm9000JenkinsListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			int totCnt = stm9000Service.selectStm9000JenkinsListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			List stm9000JenkinList = stm9000Service.selectStm9000JenkinsList(paramMap);
+			
+			
+			
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			model.addAttribute("data", stm9000JenkinList);
+			model.addAttribute("meta", metaMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+						
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm9000JenkinsListAjax()", ex);
+			
+			
+    		model.addAttribute("errorYn", "Y");
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	
+	
 	
 	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9001JenkinsDetailView.do")
 	public String selectStm9001JenkinsDetailView( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
@@ -195,71 +258,6 @@ public class Stm9000Controller {
 		return "/stm/stm9000/stm9000/stm9004";
 	}
 	
-	
-	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000JenkinsListAjax.do")
-	public ModelAndView selectStm9000JenkinsListAjax(@ModelAttribute("stm9000VO") Stm9000VO stm9000VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			String _pageNo_str = paramMap.get("pageNo");
-			String _pageSize_str = paramMap.get("pageSize");
-
-			int _pageNo = 1;
-			int _pageSize = OslAgileConstant.pageSize;
-
-			if(_pageNo_str != null && !"".equals(_pageNo_str)){
-				_pageNo = Integer.parseInt(_pageNo_str)+1;  
-			}
-			if(_pageSize_str != null && !"".equals(_pageSize_str)){
-				_pageSize = Integer.parseInt(_pageSize_str);  
-			}
-
-			
-			stm9000VO.setPageIndex(_pageNo);
-			stm9000VO.setPageSize(_pageSize);
-			stm9000VO.setPageUnit(_pageSize);
-
-
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(stm9000VO);  
-
-			List<Stm9000VO> stm9000List = null;
-
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-
-			stm9000VO.setLoginUsrId(loginVO.getUsrId());
-			stm9000VO.setLicGrpId(loginVO.getLicGrpId());
-
-			
-			int totCnt = 0;
-			stm9000List =   stm9000Service.selectStm9000JenkinsList(stm9000VO);
-
-
-			
-			totCnt =  stm9000Service.selectStm9000JenkinsListCnt(stm9000VO);
-			paginationInfo.setTotalRecordCount(totCnt);
-
-			model.addAttribute("list", stm9000List);
-
-			
-			Map<String, Integer> pageMap = new HashMap<String, Integer>();
-			pageMap.put("pageNo",stm9000VO.getPageIndex());
-			pageMap.put("listCount", stm9000List.size());
-			pageMap.put("totalPages", paginationInfo.getTotalPageCount());
-			pageMap.put("totalElements", totCnt);
-			pageMap.put("pageSize", _pageSize);
-
-			model.addAttribute("page", pageMap);
-
-			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("selectStm9000JenkinsListAjax()", ex);
-			throw new Exception(ex.getMessage());
-		}
-	}
 	
 	
 	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000JobListAjax.do")

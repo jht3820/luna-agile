@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="prj1200DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+   	<resultMap id="resultMapSelectPrj1200" class="egovMap">
+		<result property="rn"  					column="RN"/>
+		<result property="prjSetId"				column="PRJ_SET_ID"/>
+		<result property="prjSetTarget"			column="PRJ_SET_TARGET"/>
+		<result property="prjSetTargetNm"			column="PRJ_SET_TARGET_NM"/>
+		<result property="prjSetNm"				column="PRJ_SET_NM"/>
+		<result property="prjSetDesc"			column="PRJ_SET_DESC"/>
+		<result property="defaultVal"			column="DEFAULT_VAL"/>
+		<result property="valType"				column="VAL_TYPE"/>
+		<result property="mstCd"				column="MST_CD"/>
+		<result property="ord"					column="ORD"/>
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="prjSetId"				column="PRJ_SET_ID"/>
+		<result property="prjSetVal"			column="PRJ_SET_VAL"/>
+		<result property="prjSetValNm"			column="PRJ_SET_VAL_NM"/>
+		<result property="useCd"				column="USE_CD"/>
+		<result property="useCdNm"				column="USE_CD_NM"/>
+		<result property="regDtmDay"			column="REG_DTM_DAY"/>
+		<result property="regDtm"				column="REG_DTM"/>
+		<result property="regUsrId"				column="REG_USR_ID"/>
+		<result property="regUsrIp"				column="REG_USR_IP"/>
+		<result property="modifyDtm"			column="MODIFY_DTM"/>
+		<result property="modifyDtmDay"			column="MODIFY_DTM_DAY"/>
+		<result property="modifyUsrId"			column="MODIFY_USR_ID"/>
+		<result property="modifyUsrNm"			column="MODIFY_USR_NM"/>
+		<result property="modifyUsrIp"			column="MODIFY_USR_IP"/>
+    </resultMap>
+    
+    <sql id = "selectPrj1200List">
+    	SELECT T1.*, ROWNUM RN
+		FROM
+		(
+			SELECT 
+					A.PRJ_SET_ID
+					,	A.PRJ_SET_TARGET
+					,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00017', A.PRJ_SET_TARGET, '1') AS PRJ_SET_TARGET_NM
+					,	A.PRJ_SET_NM
+					,	A.PRJ_SET_DESC
+					,	A.DEFAULT_VAL
+					,	CASE WHEN A.VAL_TYPE='03' THEN SF_STM4001_COM_CD_INFO(#licGrpId#, A.MST_CD, NVL(B.PRJ_SET_VAL, A.DEFAULT_VAL), '1') ELSE NVL(B.PRJ_SET_VAL, A.DEFAULT_VAL) END AS PRJ_SET_VAL_NM
+					,	A.VAL_TYPE
+					,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00015', A.VAL_TYPE, '1') AS VAL_TYPE_NM
+					,	A.MST_CD
+					,	A.ORD
+					,	NVL(B.USE_CD, A.USE_CD) AS USE_CD
+					,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', NVL(B.USE_CD, A.USE_CD), '1') AS USE_CD_NM
+					,	TO_CHAR(NVL(B.REG_DTM, A.REG_DTM), 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	TO_CHAR(NVL(B.REG_DTM, A.REG_DTM), 'YYYY-MM-DD') AS REG_DTM_DAY
+				    ,	NVL(B.REG_USR_ID, A.REG_USR_ID) AS REG_USR_ID
+				    ,	NVL(B.REG_USR_IP, A.REG_USR_IP) AS REG_USR_IP
+				    ,	TO_CHAR(NVL(B.MODIFY_DTM, A.MODIFY_DTM), 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	TO_CHAR(NVL(B.MODIFY_DTM, A.MODIFY_DTM), 'YYYY-MM-DD') AS MODIFY_DTM_DAY
+				    ,	NVL(B.MODIFY_USR_ID, A.MODIFY_USR_ID) AS MODIFY_USR_ID
+				    ,	SF_STM3000_USR_INFO( NVL(B.MODIFY_USR_ID, A.MODIFY_USR_ID) , '1') AS MODIFY_USR_NM
+				    ,	NVL(B.MODIFY_USR_IP, A.MODIFY_USR_IP) AS MODIFY_USR_IP
+					
+					,	B.LIC_GRP_ID
+					,	B.PRJ_GRP_ID
+					,	SF_PRJ1000_GRP_NM(B.PRJ_GRP_ID) AS PRJ_GRP_NM
+					,	B.PRJ_ID
+					,	NVL(B.PRJ_SET_VAL, A.DEFAULT_VAL) AS PRJ_SET_VAL
+					
+		    FROM (SELECT * FROM PRJ1200) A
+		    LEFT JOIN PRJ1201 B ON ( A.PRJ_SET_ID = B.PRJ_SET_ID AND B.PRJ_ID = #prjId# )
+		    WHERE 1=1
+		    <isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="prjSetTarget">
+						AND	A.PRJ_SET_TARGET = #searchTargetData#
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjSetNm">
+						AND	A.PRJ_SET_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.ORD
+			</isEmpty>
+		) T1 WHERE 1 = 1
+    </sql>
+    
+    
+    <select id="prj1200DAO.selectPrj1200PrjList" parameterClass="java.util.Map" resultMap="resultMapSelectPrj1200">
+	    
+		SELECT *
+		FROM
+			(
+					<include refid="selectPrj1200List"/>
+	    	) Z
+	    	WHERE 1=1 
+	    	AND 	Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="prj1200DAO.selectPrj1200PrjListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectPrj1200List"/>
+						) A
+    </select>
+    
+    
+	<select id="prj1200DAO.selectPrjSet1200Info" parameterClass="java.util.Map" resultClass="egovMap">
+			
+            SELECT T1.*
+			FROM
+			(
+				<include refid="selectPrj1200List"/>
+	    	) T1
+	    	WHERE 		1=1
+				AND		T1.PRJ_SET_ID = #prjSetId#
+			ORDER BY T1.ORD ASC
+	</select>
+    
+    
+	<update id="prj1200DAO.insertPrj1200PrjSetAjax" parameterClass="java.util.Map">
+		
+		<![CDATA[
+		INSERT INTO PRJ1201
+			(
+                PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_SET_ID			,	PRJ_SET_VAL	,	USE_CD
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #prjId#			,	#prjGrpId#		,	#licGrpId#		,	#prjSetId#    		,	#prjSetVal#	,	#useCd#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+        )		
+		
+		]]>
+	</update>
+	
+	
+	<update id="prj1200DAO.updatePrj1200PrjSetAjax" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		UPDATE	PRJ1201 A
+        SET		PRJ_SET_VAL		= #prjSetVal#
+            ,	USE_CD			= #useCd#
+            ,	MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+        WHERE	1=1
+        AND		A.PRJ_SET_ID 	= #prjSetId#
+        AND		A.PRJ_ID		= #prjId#
+	]]>
+	</update>
+</sqlMap>

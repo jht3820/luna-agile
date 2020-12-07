@@ -4,7 +4,9 @@
 <sqlMap namespace="stm2100DAO">
 	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 
+    
     <select id="stm2100DAO.selectStm2100BadList" parameterClass="java.util.Map"  resultClass="egovMap">
+     /* stm2100DAO.selectStm2100BadList 시스템 게시판 목록 조회 */
 		SELECT
 			C.LIC_GRP_ID AS LIC_GRP_ID
 			, C.MENU_ID AS MENU_ID
@@ -46,7 +48,33 @@
 		ORDER BY MENU_ID DESC
 	</select>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <select id="stm2100DAO.selectStm2100BadInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2100BadInfo 시스템 게시판 상세 조회 */
 		SELECT 
 		    A.STM_TYPE_CD AS STM_TYPE_CD
 		    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00001', A.STM_TYPE_CD, '1') AS STM_TYPE_NM
@@ -65,7 +93,9 @@
 		AND A.MENU_ID = #menuId#
     </select>
     
+    
 	<update id="stm2100DAO.updateStm2100BadOptions" parameterClass="java.util.Map">
+		/* stm2100DAO.updateStm2100BadOptions 게시판 정보 수정 */
 		UPDATE 
 			STM2100
 		SET 
@@ -85,7 +115,9 @@
 		AND MENU_ID = #menuId#
 	</update>
     
+    
     <select id="stm2100DAO.selectStm2110BadAdmList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2110BadAdmList 시스템 게시판 담당자 조회 */
 		SELECT T1.*
 		FROM
 		(
@@ -121,9 +153,11 @@
 		ORDER BY T1.STM_ADMIN_CD ASC, T1.STM_ADMIN_ID ASC, T1.DEPT_NM ASC
     </select>
     
+	
 	<insert id="stm2100DAO.insertStm2110BadAdmin" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
 			<![CDATA[
+				/* stm2100DAO.insertStm2110BadAdmin - 신규 담당자 등록(새로운 LBL_ID 따기)*/ 
 				SELECT	NVL( 
 				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -135,6 +169,7 @@
 				  )
 			]]>
 		</selectKey>
+		/* stm2100DAO.insertStm2100BadAdmin 게시판 담당자 추가 */
 		INSERT INTO STM2110
 		(
 			LIC_GRP_ID
@@ -154,8 +189,8 @@
 			#licGrpId#
 			, #menuId#
 		    , #lblId#
-		    , #stmAdminCd#
-		    , #stmAdminId#
+		    , #codeNum#
+		    , #id#
 		    , #prjGrpId#
 		    , #prjId#
 		    , SYSDATE
@@ -167,14 +202,18 @@
 		)
 	</insert>
         
+    
 	<delete id="stm2100DAO.deleteStm2110BadAdmin" parameterClass="java.util.Map">
+		/* stm2100DAO.deleteStm2110BadAdmin 게시판 담당자 삭제 */
 		DELETE FROM STM2110 
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
 		AND MENU_ID = #menuId#
 	</delete>
 	
+    
     <select id="stm2100DAO.selectStm2120BadWtList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2120BadWtList 시스템 게시판 글 작성 범위 조회 */
 		SELECT T1.*
 		FROM
 		(
@@ -210,9 +249,11 @@
 		ORDER BY T1.STM_WT_CD ASC, T1.STM_WT_ID ASC, T1.DEPT_NM ASC
     </select>
     
+    
 	<insert id="stm2100DAO.insertStm2120BadWriter" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
 			<![CDATA[
+				/* stm2100DAO.insertStm2120BadWriter - 신규 글작성범위 등록(새로운 LBL_ID 따기)*/ 
 				SELECT	NVL( 
 				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -224,6 +265,7 @@
 				  )
 			]]>
 		</selectKey>
+		/* stm2100DAO.insertStm2120BadWriter 게시판 글작성범위 추가 */
 		INSERT INTO STM2120
 		(
 			LIC_GRP_ID
@@ -243,8 +285,8 @@
 			#licGrpId#
 			, #menuId#
 		    , #lblId#
-		    , #stmWtCd#
-		    , #stmWtId#
+		    , #codeNum#
+		    , #id#
 		    , #prjGrpId#
 		    , #prjId#
 		    , SYSDATE
@@ -256,14 +298,18 @@
 		)
 	</insert>
 	
+	
 	<delete id="stm2100DAO.deleteStm2120BadWriter" parameterClass="java.util.Map">
+		/* stm2100DAO.deleteStm2120BadWriter 게시판 글작성범위 삭제 */
 		DELETE FROM STM2120
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
 		AND MENU_ID = #menuId#
 	</delete>
 	
+     
     <select id="stm2100DAO.selectStm2100BadGrpList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2100BadGrpList 전체 권한 그룹 목록 조회 */
 		SELECT
 			A.AUTH_GRP_NM AS AUTH_GRP_NM
 			, A.AUTH_GRP_ID AS AUTH_GRP_ID
@@ -276,10 +322,13 @@
 		WHERE 1 = 1
 		AND A.USE_CD = '01'
 		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.PRJ_ID != 'ROOTSYSTEM_PRJ'
 		AND A.PRJ_ID IS NOT NULL
 	</select>
 
+    
     <select id="stm2100DAO.selectStm2100BadUsrList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /* stm2100DAO.selectStm2100BadUsrList 전체 사용자 목록 조회 */
 	    SELECT
 			A.USR_ID AS USR_ID
 			, A.USR_NM AS USR_NM
@@ -293,7 +342,9 @@
 		ORDER BY USR_NM ASC
 	</select>
 	
+	
     <select id="stm2100DAO.selectStm2100AdminCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+	    /* stm2100DAO.selectStm2100AdminCheck 접근 권한 조회 - 담당자 */
 		SELECT
 			NVL2(A.LBL_ID, 'Y', 'N') AS YN
 		FROM STM2110 A
@@ -305,7 +356,9 @@
 		)
 	</select>
 	
+	
     <select id="stm2100DAO.selectStm2100WriterCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+	    /* stm2100DAO.selectStm2100WriterCheck 접근 권한 조회 - 글작성범위 */
 		SELECT
 			NVL2(A.LBL_ID, 'Y', 'N') AS YN
 		FROM STM2120 A
