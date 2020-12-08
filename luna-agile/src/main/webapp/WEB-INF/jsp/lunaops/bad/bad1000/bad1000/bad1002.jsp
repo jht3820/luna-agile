@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+\<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <form class="kt-form" id="bad1002Info" autocomplete="off">
@@ -17,9 +17,9 @@
 			<div class="kt-portlet__head-label col-6 row" name="writerDiv" id="writerDiv"></div>
 		</div>
 		<div class="kt-portlet__body">
-			<div class="row">
+			<div class="row kt-margin-0">
 				<!-- left -->
-				<div class="osl-bad-columns-2__left" name="leftDiv" id="leftDiv">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
 					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1002.label.title">제목</span></label>
 						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<!-- right -->
-				<div class="osl-bad-columns-2__right" name="rightDiv" id="rightDiv">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 osl-1400-desktop-padding-0" name="rightDiv" id="rightDiv">
 					<!-- 공지사항 스위치 -->
 					<div class="kt-padding-l-20 form-group row kt-margin-b-10 kt-hide"  name="stmNtcYnCd" id="stmNtcYnCd">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcYnCd" id="badNtcYnCd">
@@ -42,8 +42,14 @@
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1002.label.noticeDate">공지 기간</span></label>
-					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right" style="height:38px; background-color: #20c997;"><span><i class="la la-calendar-check-o" style="color: #ffffff;"></i></span></span>
+					 		<div class="input-group">
+					 			<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
+					 			<div class="input-group-append">
+				 					<span class="input-group-text kt-bg-brand">
+				 						<i class="la la-calendar-check-o kt-font-light"></i>
+				 					</span>
+				 				</div>
+				 			</div>
 				 		</div>
 				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
@@ -60,14 +66,14 @@
 						<span data-lang-cd="bad1002.label.secretCheck">비밀글 사용</span>
 				 	</div>
 				 	<!-- 비밀글 사용할 경우 표시해야하는 Div -->
-				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="pwOption" id="pwOption">
+				 	<div class="kt-margin-l-35 kt-margin-b-10  kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto; min-width:70px;"><span data-lang-cd="bad1002.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw" regexstr="^[a-z0-9]{4,12}$"/> 
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
+				 			<input type="password" class="form-control" name="badPw" id="badPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" required/> 
 				 		</div>
 				 		<div class="input-group">
-					 		<label class='input-group-addon required' style="margin-top: auto; margin-bottom:auto;  min-width:70px;"><span data-lang-cd="bad1002.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$"/>
+					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
+				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw" required/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
@@ -80,9 +86,9 @@
 				 	<!-- 파일첨부 -->
 					<div class="form-group row kt-hide" name="badFileOption" id="badFileOption">
 						<div class="col-4 kt-font-bolder kt-padding-l-20">
-							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attchFile">파일 첨부</span>
+							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1002.label.attachFile">파일 첨부</span>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy" style="max-height:260px;" name="bad1002FileUpload" id="bad1002FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height--260" name="bad1002FileUpload" id="bad1002FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -109,8 +115,8 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit"><span data-lang-cd="bad1002.button.insertSubmit">등록</span></button>
-			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+			<button type="button" class="btn btn-brand" id="bad1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="bad1002.button.insertSubmit">등록</span></button>
+			<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 		</div>
 	</div>
 </form>
@@ -139,6 +145,16 @@ var OSLBad1002Popup = function () {
     	//문구 세팅 
     	$("#bad1002InsertSubmit > span").text($.osl.lang("bad1002.button.insertSubmit"));
     	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+    	
+    	//palceholder 세팅
+		$("#badTitle").attr("placeholder",$.osl.lang("bad1002.placeholder.badTitle"));
+		$("#badContent").attr("placeholder",$.osl.lang("bad1002.placeholder.badContent"));
+		$("#badPw").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		$("#badPwCheck").attr("placeholder",$.osl.lang("bad1002.placeholder.password"));
+		
+		//regexerrorstr 세팅
+		$("#badPw").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
+		$("#badPwCheck").attr("regexerrorstr", $.osl.lang("bad1002.regex.password"));
     	
     	//게시판 옵션이 없을 경우 div 변경
     	if($("#paramStmOptionCnt").val() == "" || $("#paramStmOptionCnt").val()==0){
@@ -187,7 +203,7 @@ var OSLBad1002Popup = function () {
 	    				rtnValue = uploadFiles;
 	    				
 						//게시글 등록
-						submitInsertAction(data);
+						submitInsertAction();
 					}
 				});
 			},
@@ -302,7 +318,7 @@ var OSLBad1002Popup = function () {
 	   			//게시글 등록
 	   			$.osl.confirm($.osl.lang("bad1002.insert"),null,function(result){
 	   				if(result.value){
-						submitInsertAction(data);
+						submitInsertAction();
 	   				}
 	   			});
      		}
@@ -398,7 +414,7 @@ var OSLBad1002Popup = function () {
 				$("#badTagOption").removeClass("kt-hide");
 				
           		//태그
-           	   $("#tagWriter").on("keypress", function (e) {
+           	   $("#tagWriter").on("propertychange paste input", function (e) {
            	        var self = $(this);
       	            //#이 들어온 경우 제거
        	            var tagValue = self.val().replace(/#/g,"");
@@ -416,7 +432,7 @@ var OSLBad1002Popup = function () {
            	                // 태그 중복 검사
            	                if (result.length == 0) { 
            	                	var innerHtml = "";
-           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+           	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
            	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
            	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>#"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
            	                	
@@ -447,7 +463,7 @@ var OSLBad1002Popup = function () {
        	                // 태그 중복 검사
        	                if (result.length == 0) { 
        	                	var innerHtml = "";
-       	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5' style='display: inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
+       	                	innerHtml += "<tag title='"+$.osl.escapeHtml(tagValue)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-margin-5 kt-padding-5 osl-display--inline-flex' role='tag' value='"+$.osl.escapeHtml(tagValue)+"'>";
        	                	innerHtml += "<x class='tagify__tag__removeBtn kt-margin-l-10' role='button' aria-label='remove tag'></x>";
        	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5'>"+$.osl.escapeHtml(tagValue)+"</div></div></tag>";
        	                	

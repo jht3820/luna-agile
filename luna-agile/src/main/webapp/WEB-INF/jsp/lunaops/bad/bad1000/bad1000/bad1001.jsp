@@ -40,7 +40,7 @@
 			<div class="form-group kt-margin-20 kt-hide" name="badFileOption" id="badFileOption">
 				<hr class="kt-margin-t-20 kt-margin-b-20">
 				<div class="kt-font-bolder kt-padding-l-5">
-					<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1001.label.attchFile">파일 첨부</span>
+					<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1001.label.attachFile">파일 첨부</span>
 				</div>
 				<div class="kt-margin-t-10 kt-uppy fileReadonly" name="fileListDiv" id="fileListDiv">
 					<div class="kt-uppy__dashboard"></div>
@@ -94,6 +94,9 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -185,23 +188,15 @@ var OSLBad1001Popup = function () {
 				 {field: 'badCmtDtm', title: $.osl.lang("bad1001.field.comment.writeDate"), textAlign: 'center', width: 100, search:true, searchType:"daterange",
 					 template: function(row){
 						var paramDatetime = new Date(row.badCmtDtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 0){
-							//실시간 댓글 - agoTime이 (-) 가 되는 경우 발생
-							return "0초 전";
-						}else if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yy.MM.dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yy.MM.dd"});
+		                return agoTimeStr.agoString;
 					},	
 				 }
 			 ],
 			 layout:{ "header" : false },
+			 rows:{
+				clickCheckbox: true
+			},
 			 actionBtn:{
 				 "title": $.osl.lang("bad1001.actionBtn.title"),
 				 "update": false,
@@ -249,22 +244,7 @@ var OSLBad1001Popup = function () {
 					 		$.osl.alert($.osl.lang("bad1001.notCmtWriter.deleteMessage"), {"type":"warning"});
 					 	}
 					 }
-				 },
-				 "click": function(row, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				}
+				 }
 			 },
 			 theme:{
 				 actionBtn:{
@@ -536,12 +516,11 @@ var OSLBad1001Popup = function () {
 						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("style", "display:none;");
 						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("aria-hidden", "true");
 						//input 보이기
-						$("#searchData_bad1000BadTable").attr("disabled", "");
+						$("#searchData_bad1000BadTable").removeAttr("disabled");
 						//input에 태그 검색 값 넣기
 						$("#searchData_bad1000BadTable").val($(this).attr("value"));
 						//검색
-						$("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
-						
+		    			$(".osl-datatable-search__button[data-datatable-id=bad1000BadTable]").click();	
 					});
 				}else{
 					$("#badTagOption").addClass("kt-hide");

@@ -207,7 +207,10 @@ public class Prj2000Controller {
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
 			
-			/
+			
+			List<Map> prj2000List = prj2000Service.selectPrj2000PrjAuthGrpPageList(paramMap);
+			
+			
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -521,8 +524,15 @@ public class Prj2000Controller {
         				
         				
         				menuIdMap.get(menuId).put("authGrpId", authGrpId);
-        				menuIdMap.get(menuId).put("mainMenuId", mainMenuId);
         				menuIdMap.get(menuId).put("menuId", menuId);
+        				
+        				String mainYn = "N";
+        				
+        				if(menuId.equals(mainMenuId)) {
+        					mainYn = "Y";
+        				}
+        				
+        				menuIdMap.get(menuId).put("mainYn", mainYn);
         			}
         			
         			

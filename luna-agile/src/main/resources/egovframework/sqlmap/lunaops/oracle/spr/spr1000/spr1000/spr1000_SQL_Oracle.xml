@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="spr1000DAO">
+
+	
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	
+	<sql id="selectSpr1000List">
+		SELECT 
+			ROWNUM RN
+			, T1.SPR_ID AS SPR_ID
+			, T1.SPR_NM AS SPR_NM
+			, T1.SPR_TYPE_CD AS SPR_TYPE_CD
+			, T1.SPR_TYPE_NM AS SPR_TYPE_NM
+			, T1.SPR_STDTM AS SPR_STDTM
+			, T1.SPR_EDDTM AS SPR_EDDTM
+		FROM
+		(
+			SELECT 
+					A.SPR_ID AS SPR_ID
+					, A.SPR_NM AS SPR_NM
+					, A.SPR_DESC AS SPR_DESC
+					, A.SPR_TYPE_CD AS SPR_TYPE_CD
+					, SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'SPR00001', A.SPR_TYPE_CD, '1') AS SPR_TYPE_NM
+					, TO_CHAR(A.SPR_STDTM, 'YYYY-MM-DD HH24:MI:SS') AS SPR_STDTM
+					, TO_CHAR(A.SPR_EDDTM, 'YYYY-MM-DD HH24:MI:SS') AS SPR_EDDTM
+					, TO_CHAR(A.SPR_STDTM, 'YYYY-MM-DD') AS SPR_STDTM_DAY
+           			, TO_CHAR(A.SPR_EDDTM, 'YYYY-MM-DD') AS SPR_EDDTM_DAY
+		    FROM SPR1000 A
+		    WHERE 1=1
+		    AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY A.SPR_ID DESC
+		</isEmpty> 
+		) T1 
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="sprNm">
+					AND	T1.SPR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.SPR_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprTypeCd">
+					AND	T1.SPR_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_DATE(T1.SPR_STDTM_DAY, 'YYYY-MM-DD') &gt;= TO_DATE(SUBSTR(#searchStartDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_DATE(T1.SPR_EDDTM_DAY, 'YYYY-MM-DD') &lt;=  TO_DATE(SUBSTR(#searchEndDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+    </select>
+    
+    
+    <select id="spr1000DAO.selectSpr1000SprList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+	
+</sqlMap>
