@@ -15,8 +15,8 @@
 			, T1.SPR_NM AS SPR_NM
 			, T1.SPR_TYPE_CD AS SPR_TYPE_CD
 			, T1.SPR_TYPE_NM AS SPR_TYPE_NM
-			, T1.SPR_STDTM AS SPR_STDTM
-			, T1.SPR_EDDTM AS SPR_EDDTM
+			, T1.SPR_ST_DT AS SPR_ST_DT
+			, T1.SPR_ED_DT AS SPR_ED_DT
 		FROM
 		(
 			SELECT 
@@ -25,10 +25,8 @@
 					, A.SPR_DESC AS SPR_DESC
 					, A.SPR_TYPE_CD AS SPR_TYPE_CD
 					, SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'SPR00001', A.SPR_TYPE_CD, '1') AS SPR_TYPE_NM
-					, TO_CHAR(A.SPR_STDTM, 'YYYY-MM-DD HH24:MI:SS') AS SPR_STDTM
-					, TO_CHAR(A.SPR_EDDTM, 'YYYY-MM-DD HH24:MI:SS') AS SPR_EDDTM
-					, TO_CHAR(A.SPR_STDTM, 'YYYY-MM-DD') AS SPR_STDTM_DAY
-           			, TO_CHAR(A.SPR_EDDTM, 'YYYY-MM-DD') AS SPR_EDDTM_DAY
+					, TO_CHAR(A.SPR_ST_DT, 'YYYY-MM-DD') AS SPR_ST_DT
+           			, TO_CHAR(A.SPR_ED_DT, 'YYYY-MM-DD') AS SPR_ED_DT
 		    FROM SPR1000 A
 		    WHERE 1=1
 		    AND A.LIC_GRP_ID = #licGrpId#
@@ -65,10 +63,10 @@
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="sprDtm">
 					<isNotEmpty property="searchStartDt">
-						AND	TO_DATE(T1.SPR_STDTM_DAY, 'YYYY-MM-DD') &gt;= TO_DATE(SUBSTR(#searchStartDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+						AND	TO_DATE(T1.SPR_ST_DT, 'YYYY-MM-DD') &gt;= TO_DATE(SUBSTR(#searchStartDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
 					</isNotEmpty>
 					<isNotEmpty property="searchEndDt">
-						AND	TO_DATE(T1.SPR_EDDTM_DAY, 'YYYY-MM-DD') &lt;=  TO_DATE(SUBSTR(#searchEndDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+						AND	TO_DATE(T1.SPR_ED_DT, 'YYYY-MM-DD') &lt;=  TO_DATE(SUBSTR(#searchEndDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
 					</isNotEmpty>
 				</isEqual>
 			</isNotEmpty>
