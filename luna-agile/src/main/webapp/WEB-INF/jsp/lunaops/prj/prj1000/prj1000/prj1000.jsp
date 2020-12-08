@@ -109,7 +109,7 @@ var OSLPrj1000Popup = function () {
 								autoHeight: false,
 								modalSize: "xl",
 								idKey: datatableId,
-								modalTitle: $.osl.lang("prj1002.title"),
+								modalTitle: $.osl.lang("prj1002.insert.title"),
 								closeConfirm: false,
 							};
 						
@@ -124,7 +124,7 @@ var OSLPrj1000Popup = function () {
 								autoHeight: false,
 								modalSize: "xl",
 								idKey: datatableId,
-								modalTitle: $.osl.lang("prj1002.title"),
+								modalTitle: $.osl.lang("prj1002.update.title"),
 								closeConfirm: false,
 							};
 						
@@ -214,7 +214,7 @@ var OSLPrj1000Popup = function () {
 								autoHeight: false,
 								modalSize: "xl",
 								idKey: datatableId,
-								modalTitle: $.osl.lang("prj1004.title"),
+								modalTitle: $.osl.lang("prj1004.insert.title"),
 								closeConfirm: false,
 							};
 						
