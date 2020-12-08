@@ -105,7 +105,7 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><i class="fa fa-check-square"></i><span>완료</span></button>
+	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><i class="fa fa-save"></i><span>완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <script>
