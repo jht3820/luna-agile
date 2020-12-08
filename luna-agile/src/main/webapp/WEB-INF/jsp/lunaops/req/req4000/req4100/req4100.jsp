@@ -74,23 +74,8 @@ var OSLReq4100Popup = function () {
 				{field: 'reqDtm', title: $.osl.lang("req4100.field.reqDtm"), textAlign: 'center', width: 100, search: true, searchType:"date"},
 				{field: 'regDtm', title: $.osl.lang("req4100.field.regDtm"), textAlign: 'center', width: 100, search: true, searchType:"date",
 					template: function (row) {
-						/* 
 						var paramDatetime = new Date(row.regDtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 0){
-							return $.osl.lang("date.agoTime.s", 0) + $.osl.lang("date.agoTime.suffixAgo");	
-						}else if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yyyy-MM-dd");
-						}
-						 */
-						var paramDatetime = new Date(row.regDtm);
-		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "M", returnFormat: "yyyy-MM-dd"});
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				},
@@ -283,7 +268,6 @@ var OSLReq4100Popup = function () {
 								$.osl.alert($.osl.lang("req4100.alert.LockData"));
 							}else{
 								//단건 복사인 경우
-								console.log("rowDatas[0] : ", rowDatas[0]);
 								data ={
 									type:"copy",
 									//rowDatas : JSON.stringify(rowDatas),
