@@ -188,18 +188,8 @@ var OSLBad1001Popup = function () {
 				 {field: 'badCmtDtm', title: $.osl.lang("bad1001.field.comment.writeDate"), textAlign: 'center', width: 100, search:true, searchType:"daterange",
 					 template: function(row){
 						var paramDatetime = new Date(row.badCmtDtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 0){
-							return $.osl.lang("date.agoTime.s", 0) + $.osl.lang("date.agoTime.suffixAgo");	
-						}else if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yy.MM.dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yy.MM.dd"});
+		                return agoTimeStr.agoString;
 					},	
 				 }
 			 ],
