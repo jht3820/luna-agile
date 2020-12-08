@@ -547,6 +547,15 @@
 		AND	A.PRJ_ID = #prjId#
 		AND 	A.REQ_ID = #reqId#
 	</delete>
+		
+	
+	<delete id="req4100DAO.deleteReq4100ReqList" parameterClass="java.util.Map">
+		
+		DELETE	
+		FROM	REQ4100 A
+		WHERE	1=1
+		AND	A.PRJ_ID = #prjId#
+	</delete>
 	
 	
 	<update id="req4100DAO.updateReq1001ReqSubInfo" parameterClass="java.util.Map">
@@ -746,8 +755,41 @@
     </update>
     
     
-    <select id="req4100DAO.selectReq4100ReqProTypeOrdList" parameterClass="java.util.Map" resultClass="egovMap">
+    <select id="req4100DAO.selectReq4100ReqProTypeOrdList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
+	    SELECT
+	    	SUBT1.PRJ_GRP_ID 
+			, SUBT1.PRJ_ID
+			, SUBT1.REQ_ID
+			, SUBT1.REQ_NM
+			, SUBT1.REQ_ORD
+			, SUBT1.REQ_PRO_TYPE
+			, (SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = 'REQ00008' AND SUB_CD = SUBT1.REQ_PRO_TYPE) AS REQ_PRO_TYPE_NM
+			, SUBT1.REQ_DTM
+			, SUBT1.REG_DTM
+	    FROM
+	    (
+	    	SELECT
+				A.PRJ_GRP_ID 
+				, A.PRJ_ID
+				, A.REQ_ID
+				, A.REQ_NM
+				, A.REQ_ORD
+				, A.REQ_PRO_TYPE
+				, A.REQ_DTM
+				, A.REG_DTM
+			FROM REQ4100 A
+			INNER JOIN
+			(
+			      SELECT	Z.USR_ID, Z.PRJ_ID
+			      FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
+			      WHERE	1=1
+			      GROUP BY  Z.USR_ID, Z.PRJ_ID
+			) B ON (A.PRJ_ID = B.PRJ_ID)
+			WHERE 1=1
+			AND A.PRJ_GRP_ID = #prjGrpId#
+	    ) SUBT1
+	    ORDER BY PRJ_ID, TO_NUMBER(REGEXP_REPLACE(REQ_ORD, '[^0-9]')) NULLS LAST, REQ_DTM DESC, REG_DTM DESC
     </select>
     
 </sqlMap>

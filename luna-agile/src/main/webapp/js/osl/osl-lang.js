@@ -207,7 +207,9 @@ var OSLCoreLangSetting = function () {
 			},
 			error:{
 				sessionInvalid:"세션이 만료되어 로그인 페이지로 이동합니다.",
-				nonAuth:"해당 요청의 권한이 없습니다."
+				nonAuth:"해당 요청의 권한이 없습니다.",
+				popup:"팝업 페이지에서 오류가 발생했습니다.",
+				modalDuple: "해당 기능 팝업은 중복으로 동작 할 수 없습니다."
 			},
 			menu:{
 				top: "최상위",
@@ -225,6 +227,9 @@ var OSLCoreLangSetting = function () {
 				title: "알림",
 				ok: "확인",
 				cancel: "취소"
+			},
+			modal:{
+				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
 		/* 페이지 언어 */
@@ -271,7 +276,13 @@ var OSLCoreLangSetting = function () {
 			menu:{
 				modify: "수정",
 				trashMove: "휴지통 이동(삭제)",
-				projectDetail: "상세 정보"
+				projectDetail: "상세 정보",
+				recordDelete: "완전 삭제",
+				projectRedo: "프로젝트 복구"
+			},
+			confirm:{
+				prjRedo: "${1}건의 프로젝트를 복구하시겠습니까?",
+				prjDelete: "${1}건의 프로젝트를 완전 삭제하시겠습니까?</br>삭제된 프로젝트는 복구 할 수 없습니다."
 			}
 		},
 		prj1002:{
@@ -290,7 +301,52 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		prj1003:{
-			title: "프로젝트 그룹 상세정보"
+			title: "프로젝트 그룹 상세정보",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
+			},
+			update:{
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		prj1004:{
+			title: "신규 프로젝트 생성",
+			complete: "완료",
+			insert:{
+				saveString: "신규 프로젝트를 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
+			},
+			update:{
+				saveString: "프로젝트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		prj1201:{
+			title: "프로젝트 설정 수정",
+			complete: "완료",
+			update:{
+				saveString: "프로젝트 설정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			actionBtn : {
+				updateBtn : "프로젝트 설정 수정"
+			},
+			label : {
+				prjSetNm: "설정명",
+				prjSetDesc: "설정 설명",
+				prjSetTarget: "설정 대상",
+				valType: "설정 값 타입",
+				prjSetVal: "설정값",
+				useCd: "사용유무"
+			}
 		},
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
@@ -463,6 +519,56 @@ var OSLCoreLangSetting = function () {
 			text: "잠긴 요구사항입니다.<br/> 비밀번호를 입력하세요.",
 			button:{
 				submit : "확인",
+			}
+		},
+		spr1100:{
+			title : {
+				sprint : "스프린트 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			field:{
+				sprTypeNm : "상태",
+				sprNm : "스프린트명",
+				sprStdtm : "시작일",
+				sprEddtm : "종료일",
+				sprDesc : "스프린트 설명",
+				sprDtm :"기간",
+				reqNm : "요구사항 명",
+				reqOrd : "순번",
+				reqProTypeNm : "처리유형",
+				reqDtm :"요청일",
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					sprSelect : "스프린트 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "스프린트 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
+			}
+		},
+		spr2000:{
+			button:{
+				detailBtn : "상세",
+			},
+			actionBtn:{
+				selectTooltip : "회의록 조회",
+				insertTooltip : "회의록 추가",
+				updateTooltip : "회의록 수정",
+				deleteTooltip : "회의록 삭제",
+				detailTooltip : "회의록 상세",
 			}
 		},
 		stm2100:{
@@ -990,6 +1096,14 @@ var OSLCoreLangSetting = function () {
 				reqAllCnt: "Request All",
 				reqInProgressCnt: "Request In Porgress",
 				reqDoneCnt: "Request Done",
+			},
+			prj1200PrjTable:{
+				prjSetTargetNm: "Setting Target",
+				prjSetNm: "Setting Name",
+				prjSetDesc : "Setting Desciption",
+				prjSetValNm:"Setting Value",
+				modifyDtmDay:"Modify Date",
+				modifyUsrNm:"Final Modifier",
 			}
 		},
 		date:{
@@ -1152,6 +1266,25 @@ var OSLCoreLangSetting = function () {
 			update:{
 				saveString: "프로젝트 그룹을 수정하시겠습니까?",
 				saveBtnString: "Update Action"
+			}
+		},
+		prj1201:{
+			title: "Project Setting Modify",
+			complete: "Complete",
+			update:{
+				saveString: "프로젝트 설정을 수정하시겠습니까?",
+				saveBtnString: "Update Action",
+			},
+			actionBtn : {
+				updateBtn : "Project Setting Update"
+			},
+			label : {
+				prjSetNm: "Setting Name",
+				prjSetDesc: "Setting description",
+				prjSetTarget: "Setting Target",
+				valType: "Value Type",
+				prjSetVal: "Setting Value",
+				useCd: "Setting Use"
 			}
 		},
 		prj2100:{

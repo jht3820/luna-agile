@@ -97,7 +97,7 @@ var OSLCmm8000Popup = function () {
     	
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/usr/usr1000/usr1000/selectUsr1000UsrInfoAjxa.do'/>", "async": false}
+				{"url":"<c:url value='/usr/usr1000/usr1000/selectUsr1000UsrInfoAjax.do'/>"}
 				,{"usrId": paramUsrId});
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){

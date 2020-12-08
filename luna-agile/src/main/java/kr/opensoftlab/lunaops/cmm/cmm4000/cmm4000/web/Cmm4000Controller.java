@@ -531,6 +531,8 @@ public class Cmm4000Controller {
 		
 		ss.setAttribute("selPrjId", fstPrjMap.get("prjId"));
 		ss.setAttribute("selPrjGrpId", fstPrjMap.get("prjGrpId"));
+		ss.setAttribute("selPrjTypeCd", fstPrjMap.get("prjTypeCd"));
+		ss.setAttribute("selPrjDecTypeCd", fstPrjMap.get("prjDevTypeCd"));
 		
 		return authList;
 		
