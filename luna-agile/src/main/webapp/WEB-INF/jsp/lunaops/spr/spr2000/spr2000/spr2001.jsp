@@ -9,13 +9,13 @@
 	<div class="kt-portlet">
 		<div class="kt-portlet__body">
 		<div class="form-group">
-			<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">스프린트명</span></label>
+			<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.sprNm">스프린트명</span></label>
 			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly" required>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label class="required"><i class="fa fa-user-friends kt-margin-r-5"></i>참여 인원</label>
+					<label class="required"><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptMem">참여 인원</span></label>
 					<select class="form-control kt-select2 select2-hidden-accessible" id="rptMemSelect" name="rptMemSelect" multiple="" data-select2-id="rptMemSelect" tabindex="-1" aria-hidden="true"></select>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>회의록 제목</label>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptNm">회의록 제목</span></label>
 					<input type="text" class="form-control" id="rptNm" name="rptNm" placeholder="제목" maxlength="80" required>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>회의록 내용</label>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptDesc">회의록 내용</span></label>
 					<textarea class="form-control kt-hide" name="rptDesc" id="rptDesc" required></textarea>
 				</div>
 			</div>
@@ -39,13 +39,12 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="spr2001SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="">완료</span></button>
+	<button type="button" class="btn btn-brand" id="spr2001SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="spr2001.submit">완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
 "use strict";
-var k;
 var OSLSpr2001Popup = function () {
 	var formId = 'frSpr2001';
 	
@@ -74,19 +73,10 @@ var OSLSpr2001Popup = function () {
 		});
     	
     	//문구 세팅 
-    	//$("#spr2001SaveSubmit > span").text($.osl.lang("spr2001.button."+type+"Btn"));
+    	$("#spr2001SaveSubmit > span").text($.osl.lang("spr2001.button."+type+"Btn"));
     	
-    	/* 
-    	//palceholder 세팅
-    	$("#sprGroupNm").attr("placeholder",$.osl.lang("spr2001.placeholder.selectGroup"));
-		$("#sprDtm").attr("placeholder",$.osl.lang("spr2001.placeholder.sprDtm"));
-		$("#sprNm").attr("placeholder",$.osl.lang("spr2001.placeholder.sprNm"));
-		 */
-		 /* 
-		//regexerrorstr 세팅
-		$("#sprPw").attr("regexerrorstr", $.osl.lang("spr2001.regex.password"));
-		$("#sprPwCheck").attr("regexerrorstr", $.osl.lang("spr2001.regex.password"));
-		 */
+    	//placeholder 세팅
+    	$("#rptNm").attr("placeholder",$.osl.lang("spr2001.placeholder.rptNm"));
     	
     	//등록인경우
     	if(type == "insert"){
@@ -121,7 +111,6 @@ var OSLSpr2001Popup = function () {
     	        	if(type=="insert"){
     	        		submitInsertAction();
     	        	}else{
-    	        		console.log("수정");
     	        		submitUpdateAction();
     	        	}
     	        }
@@ -140,17 +129,8 @@ var OSLSpr2001Popup = function () {
     	var usrNm = state.element.attributes.getNamedItem("data-usr-nm").value;
     	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
     	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
-   	    /* 
-    	var usrData = {
-				html: usrNm + " (" + usrId + ")",
-				imgSize: "sm",
-				class:{
-					cardBtn: "osl-width__fit-content"
-				}
-		};
-    	 */
+
     	var $state = $(
-    			//$.osl.user.usrImgSet(usrImgId, usrData);
     			'<div class="kt-user-card-v2 btn" data-usr-id="'+ usrId +'">'
 				+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
 					+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
@@ -176,17 +156,8 @@ var OSLSpr2001Popup = function () {
     	var usrNm = state.element.attributes.getNamedItem("data-usr-nm").value;
     	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
     	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
-   	   /*  
-    	var usrData = {
-				html: usrNm,
-				imgSize: "sm",
-				class:{
-					cardBtn: "osl-width__fit-content osl-display--inline-flex"
-				}
-		};
-    	 */
+
     	var $state = $(
-    			//$.osl.user.usrImgSet(usrImgId, usrData);
     			'<div class="kt-user-card-v2 d-inline-block" data-usr-id="'+ usrId +'">'
 					+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'
 						+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
@@ -272,7 +243,7 @@ var OSLSpr2001Popup = function () {
 
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectReq2000ReqInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000SprInfoAjax.do'/>", "async":"true"}
 				,data);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){

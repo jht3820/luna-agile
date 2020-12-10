@@ -9,13 +9,13 @@
 	<div class="kt-portlet">
 		<div class="kt-portlet__body">
 		<div class="form-group">
-			<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">스프린트명</span></label>
+			<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.sprNm">스프린트명</span></label>
 			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly">
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label><i class="fa fa-user-friends kt-margin-r-5"></i>참여 인원</label>
+					<label><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptMem">참여 인원</span></label>
 					<div class="form-control osl-select2-view" id="rptMemSelect" name="rptMemSelect"></div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label><i class="fa fa-edit kt-margin-r-5"></i>회의록 제목</label>
+					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptNm">회의록 제목</span></label>
 					<input type="text" class="form-control" id="rptNm" name="rptNm" readonly="readonly">
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
-					<label><i class="fa fa-edit kt-margin-r-5"></i>회의록 내용</label>
+					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptDesc">회의록 내용</span></label>
 					<textarea class="form-control kt-hide" name="rptDesc" id="rptDesc" readonly="readonly"></textarea>
 				</div>
 			</div>

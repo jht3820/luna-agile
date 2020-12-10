@@ -25,7 +25,7 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000SprTable" data-datatable-action="select" title="스프린트 조회" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000SprTable" data-datatable-action="select" title="스프린트 조회" data-title-lang-cd="spr1100.actionBtn.title.sprSelect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
 					</div>
@@ -45,7 +45,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
 					<h5 class="kt-font-boldest kt-font-brand">
-						<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="">회의록 목록</span>
+						<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="spr2000.title">회의록 목록</span>
 					</h5>
 				</div>
 				<div class="kt-portlet__head-toolbar">
@@ -95,16 +95,16 @@ var OSLSpr1100Popup = function () {
 				}
 			},
 			columns:[
-				{field: 'sprTypeNm', title: $.osl.lang("spr1100.field.sprTypeNm"), textAlign: 'center', width: 80, search: true, searchType:"select", searchCd: "SPR00001", searchField:"sprTypeCd", sortable: true, sortField:"sprTypeCd"},
-				{field: 'sprNm', title: $.osl.lang("spr1100.field.sprNm"), textAlign: 'left', width: 240, autoHide: false, search: true, sortField: "sprNm"},
-				{field: 'sprStDt', title: $.osl.lang("spr1100.field.sprStdtm"), textAlign: 'center', width: 120, sortField: "sprStDt",
+				{field: 'sprTypeNm', title: '상태', textAlign: 'center', width: 80, search: true, searchType:"select", searchCd: "SPR00001", searchField:"sprTypeCd", sortable: true, sortField:"sprTypeCd"},
+				{field: 'sprNm', title: '스프린트명', textAlign: 'left', width: 240, autoHide: false, search: true, sortField: "sprNm"},
+				{field: 'sprStDt', title: '시작일', textAlign: 'center', width: 120, sortField: "sprStDt",
 					template: function (row) {
 						var paramDatetime = new Date(row.sprStDt);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				},
-				{field: 'sprEdDt', title:$.osl.lang("spr1100.field.sprEddtm"), textAlign: 'center', width: 120, sortField: "sprEdDt",
+				{field: 'sprEdDt', title:'종료일', textAlign: 'center', width: 120, sortField: "sprEdDt",
 					template: function (row) {
 						var paramDatetime = new Date(row.sprEdDt);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
@@ -113,8 +113,8 @@ var OSLSpr1100Popup = function () {
 				},
 			],
 			searchColumns:[
-				{field: 'sprDesc', title: $.osl.lang("spr1100.field.sprDesc"), searchOrd: 3},
-				{field: 'sprDtm', title: $.osl.lang("spr1100.field.sprDtm"), searchOrd:4, searchType:"daterange"}
+				{field: 'sprDesc', title: '스프린트 설명', searchOrd: 3},
+				{field: 'sprDtm', title: '기간', searchOrd:4, searchType:"daterange"}
 			],
 			actionBtn:{
 				"title" : $.osl.lang("spr1100.actionBtn.title.selectBtn"),
@@ -180,7 +180,7 @@ var OSLSpr1100Popup = function () {
 			columns:[
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'rptNm', title: '회의록 제목', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
+				{field: 'rptNm', title: '회의록명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
 				{field: 'rptMemCnt', title: '참여자 수', textAlign: 'center', width: 80},
 				{field: 'rptUsrId', title: '작성자', textAlign: 'left', width: 120,
 					template: function (row) {
@@ -213,19 +213,19 @@ var OSLSpr1100Popup = function () {
 				clickCheckbox: true
 			},
 			actionBtn:{
-				"title":"수정 / 삭제 / 상세",
+				"title": $.osl.lang("spr2000.actionBtn.title"),
 				"dblClick": true,
 			},
 			actionTooltip:{
-				"update": "회의록 수정",
-				"delete" : "회의록 삭제",
-				"dblClick" : "회의록 상세"
+				"update": $.osl.lang("spr2000.actionBtn.updateTooltip"),
+				"delete" : $.osl.lang("spr2000.actionBtn.deleteTooltip"),
+				"dblClick" : $.osl.lang("spr2000.actionBtn.detailTooltip")
 			},
 			actionFn:{
 				"insert":function(rowData){
 					if($("#sprId").val() == null || $("#sprId").val() == ""){
 						//스프린트를 선택하지 않았으면
-						$.osl.alert("스프린트를 선택하세요");
+						$.osl.alert($.osl.lang("spr2000.message.selectMsg"));
 						return false;
 					}
 					var data = {
@@ -235,7 +235,7 @@ var OSLSpr1100Popup = function () {
 					};
 					var options = {
 						idKey: "spr2001_insert",
-						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 등록")+" ]",
+						modalTitle: "[ "+$.osl.lang("spr2000.title.insertTitle")+" ]",
 						closeConfirm: true,
 						autoHeight: false,
 						modalSize: "xl",
@@ -250,7 +250,7 @@ var OSLSpr1100Popup = function () {
 						};
 						var options = {
 							idKey: "spr2001_update",
-							modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 수정")+" ]",
+							modalTitle: "[ "+$.osl.lang("spr2000.title.updateTitle")+" ]",
 							closeConfirm: true,
 							autoHeight: false,
 							modalSize: "xl",
@@ -273,6 +273,7 @@ var OSLSpr1100Popup = function () {
 							$.osl.layerPopupClose();
 						}else{
 							$.osl.toastr(data.message);
+							selectBtnClick();
 						}
 			    	});
 			    	//AJAX 전송
@@ -286,7 +287,7 @@ var OSLSpr1100Popup = function () {
 						};
 					var options = {
 						idKey: "spr2001_detail",
-						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 상세")+" ]",
+						modalTitle: "[ "+$.osl.lang("spr2000.title.detailTitle")+" ]",
 						closeConfirm: true,
 						autoHeight: false,
 						modalSize: "xl",
