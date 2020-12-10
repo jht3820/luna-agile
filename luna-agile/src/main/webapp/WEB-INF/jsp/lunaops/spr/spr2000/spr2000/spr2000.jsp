@@ -45,7 +45,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
 					<h5 class="kt-font-boldest kt-font-brand">
-						<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="spr2000.title">회의록 목록</span>
+						<i class="fa fa-th-large kt-margin-r-5"></i><span id="sprNmStr"></span><span data-lang-cd="spr2000.title">회의록 목록</span>
 					</h5>
 				</div>
 				<div class="kt-portlet__head-toolbar">
@@ -78,7 +78,7 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLSpr1100Popup = function () {
+var OSLSpr2000Popup = function () {
 	//스프린트 데이터 테이블
 	var sprDatatableId = "spr1000SprTable";
 	//회의록 목록 테이블
@@ -157,12 +157,14 @@ var OSLSpr1100Popup = function () {
 						//검색한 경우 기존에 선택 항목 초기화
 						$("#sprId").val("");
 						$("#sprNm").val("");
+						$("#sprNmStr").text("");
 						selectBtnClick();
 					}
 				},
 				"click": function(rowData){
 					$("#sprId").val(rowData.sprId);
 					$("#sprNm").val(rowData.sprNm);
+					$("#sprNmStr").text(rowData.sprNm + " ");
 					selectBtnClick();
 				}
 			}
@@ -181,10 +183,18 @@ var OSLSpr1100Popup = function () {
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
 				{field: 'rptNm', title: '회의록명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
-				{field: 'rptMemCnt', title: '참여자 수', textAlign: 'center', width: 80},
+				{field: 'rptMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
+					template:function(row){
+						if(row.rptMemCnt == null || row.rptMemCnt == ""){
+							return 0;
+						}else{
+							return row.rptMemCnt;
+						}
+					}
+				},
 				{field: 'rptUsrId', title: '작성자', textAlign: 'left', width: 120,
 					template: function (row) {
-						if(row.usrId == null){
+						if(row.rptUsrId == null){
 							return "";
 						}else{
 							var usrData = {
@@ -315,12 +325,11 @@ var OSLSpr1100Popup = function () {
         reload: function() {
         	selectBtnClick();
         }
-        
     };
 }();
 
 $.osl.ready(function(){
-	OSLSpr1100Popup.init();
+	OSLSpr2000Popup.init();
 });
 </script>
 <!-- end script -->

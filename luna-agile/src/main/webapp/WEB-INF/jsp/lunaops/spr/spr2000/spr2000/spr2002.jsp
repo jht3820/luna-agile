@@ -15,8 +15,11 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptMem">참여 인원</span></label>
-					<div class="form-control osl-select2-view" id="rptMemSelect" name="rptMemSelect"></div>
+					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
+						<span data-lang-cd="spr2001.label.rptMem">참여 인원</span>
+						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10' id='memCnt' name='memCnt'>0</span>
+					</label>
+					<div class="form-control osl-select2-view border-0" id="rptMemSelect" name="rptMemSelect"></div>
 				</div>
 			</div>
 		</div>
@@ -73,7 +76,7 @@ var OSLSpr2002Popup = function () {
 
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectReq2000ReqInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000RptInfoAjax.do'/>", "async":"true"}
 				,data);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
@@ -91,28 +94,38 @@ var OSLSpr2002Popup = function () {
 				
 				var str = "";
 				var lastCount =  rptMemList.length;
+				if(lastCount>0){
+					$("#memCnt").text(lastCount);
+				}
 				//참여인원 태그 형으로 넣기
 				if(rptMemList != null && rptMemList.length > 0){
 					$.each(rptMemList, function(idx, value){
-						//참여인원 수가 8명 이하일 때만 태그형
-						if(lastCount <=8){
+						//참여인원 수가 11명 이하일 때만 태그형
+						if(lastCount <12){
 							str += '<div class="kt-user-card-v2 btn rptMemInfo osl-outline--secondary osl-width__fit-content kt-padding-5 float-left kt-margin-5" data-user="'+value.usrId+'">'
 										+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-											+'<img src="/cmm/fms/getImage.do?fileSn=0&atchFileId='+value.usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+											+'<img src="'+$.osl.user.usrImgUrlVal(value.usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 										+'</div>'
 										+'<div class="kt-user-card-v2__details">'
 											+'<span class="kt-user-card-v2__name ">'+value.usrNm+' ('+value.usrId+')</span>'
 										+'</div>'
 									+'</div>';
 						}else{
-							//참여인원 수가 9명 이상일 땐 사진형
-							 str += "<a href='#' class='rptMemInfo kt-media kt-media--xs kt-media--circle' tabindex='0' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.usrNm)+"' data-original-title='"+$.osl.escapeHtml(value.usrNm)+"' data-user='"+value.usrId+"'><img src='/cmm/fms/getImage.do?fileSn=0&atchFileId="+value.usrImgId+"'></a>";
+							//참여인원 수가 12명 이상일 땐 사진형
+							 str += "<a href='#' class='rptMemInfo kt-media kt-media--sm kt-media--circle' tabindex='0' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.usrNm)+"' data-original-title='"+$.osl.escapeHtml(value.usrNm)+"' data-user='"+value.usrId+"'><img src='"+$.osl.user.usrImgUrlVal(value.usrImgId)+"'></a>";
 						}
 					});
 				}
-				if(lastCount > 8){
-					$("#rptMemSelect").attr("class", "kt-media-group");
+				
+				if(lastCount >= 12){
+					$("#rptMemSelect").removeClass("osl-select2-view");
+					$("#rptMemSelect").addClass("kt-media-group");
+				}else if(lastCount == 0){
+					$("#rptMemSelect").removeClass("form-control");
+					$("#rptMemSelect").removeClass("osl-select2-view");
+					$("#rptMemSelect").addClass("border-1");
 				}
+				
 				$("#rptMemSelect").append(str);
 				
 				//툴팁 적용
@@ -120,7 +133,6 @@ var OSLSpr2002Popup = function () {
 				
 				//참여인원 아이콘 클릭 시
 				$(".rptMemInfo").click(function(){
-					k = $(this);
 					$.osl.user.usrInfoPopup($(this).data("user"));
 				});
 				
