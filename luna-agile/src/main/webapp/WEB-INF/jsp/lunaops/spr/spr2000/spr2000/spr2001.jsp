@@ -16,7 +16,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-user-friends kt-margin-r-5"></i>참여 인원</label>
-					<select class="form-control kt-select2 select2-hidden-accessible" id="rptMemSelect" name="param" multiple="" data-select2-id="rptMemSelect" tabindex="-1" aria-hidden="true"></select>
+					<select class="form-control kt-select2 select2-hidden-accessible" id="rptMemSelect" name="rptMemSelect" multiple="" data-select2-id="rptMemSelect" tabindex="-1" aria-hidden="true"></select>
 				</div>
 			</div>
 		</div>
@@ -68,11 +68,10 @@ var OSLSpr2001Popup = function () {
 
     	//kt-select2 설정
 		$('#rptMemSelect').select2({
+			placeholder : $.osl.lang("common.name.select"),
 			templateResult: optionFormatState,
 			templateSelection : tagFormatState
 		});
-    	
-    	selectUsrList();
     	
     	//문구 세팅 
     	//$("#spr2001SaveSubmit > span").text($.osl.lang("spr2001.button."+type+"Btn"));
@@ -93,7 +92,10 @@ var OSLSpr2001Popup = function () {
     	if(type == "insert"){
     		//선택한 스프린트 id에 해당하는 이름으로 지정
     		$("#sprNm").val($("#paramSprNm").val());
-    		
+
+    		//사용자 리스트 세팅
+        	selectUsrList();
+        	
     		//edit 세팅
     		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, 'maxHeight': 190}));
 	    	//edit 세팅하고 나서 textarea 보이기
@@ -101,7 +103,7 @@ var OSLSpr2001Popup = function () {
     	
     	}else{
     		//수정
-    		//스프린트 회의록 정보 조회
+    		//스프린트 회의록 정보 조회 및 세팅
     		selectSprRptInfo();
     	}
     	
@@ -113,16 +115,14 @@ var OSLSpr2001Popup = function () {
     		if (!form.valid()) {
     			return false;
     		}
-			
-			//
     		
     		$.osl.confirm($.osl.lang("spr2001.saveString."+type+"Str"),null,function(result) {
     	        if (result.value) {
     	        	if(type=="insert"){
-    	        		console.log("등록");
     	        		submitInsertAction();
     	        	}else{
     	        		console.log("수정");
+    	        		submitUpdateAction();
     	        	}
     	        }
     		});
@@ -151,13 +151,13 @@ var OSLSpr2001Popup = function () {
     	 */
     	var $state = $(
     			//$.osl.user.usrImgSet(usrImgId, usrData);
-    			'<div class="kt-user-card-v2 d-inline-block" data-usr-id="'+ usrId +'">'
+    			'<div class="kt-user-card-v2 btn" data-usr-id="'+ usrId +'">'
 				+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
 					+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 				+'</div>'
 				+'<div class="kt-user-card-v2__details float-left">'
-					+'<span class="kt-user-card-v2__name>'+usrNm+'</span>'
-					+'<span class="kt-user-card-v2__email">'+usrEmail+'</span>'
+					+'<span class="kt-user-card-v2__name float-left">'+usrNm+'</span>'
+					+'<span class="kt-user-card-v2__email float-left kt-margin-l-10 osl-line-height-rem-1_5">'+usrEmail+'</span>'
 				+'</div>'
 			+'</div>'
    	    );
@@ -170,7 +170,7 @@ var OSLSpr2001Popup = function () {
      */
     var tagFormatState = function(state){
     	if (!state.id) {
-    	    return state.text;
+    	    return state.id;
    	 	}
     	var usrId = state.id;
     	var usrNm = state.element.attributes.getNamedItem("data-usr-nm").value;
@@ -192,7 +192,7 @@ var OSLSpr2001Popup = function () {
 						+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 					+'</div>'
 					+'<div class="kt-user-card-v2__details float-left">'
-						+'<span class="kt-user-card-v2__name>'+usrNm+'</span>'
+						+'<span class="kt-user-card-v2__name">'+usrNm+'</span>'
 						+'<span class="kt-user-card-v2__email">'+usrEmail+'</span>'
 					+'</div>'
 				+'</div>'
@@ -203,8 +203,9 @@ var OSLSpr2001Popup = function () {
     
     /**
     * kt-select2 사용자 세팅
+    * param : selectUsrList 이미 선택된 사용자 리스트
     */
-	var selectUsrList = function(){
+	var selectUsrList = function(selectedUsrList){
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2001RptUsrListAjax.do'/>", "async":"true"});
@@ -227,13 +228,28 @@ var OSLSpr2001Popup = function () {
 							}
 					};
 					
-					var str;
-					if(idx==0){
-						str = '<option value="">'+$.osl.lang("common.name.select")+'</option>';
+					var str = '';
+					if(selectedUsrList != null && selectedUsrList.length>0){
+						//수정 시 이미 등록된 참여인원인지 확인
+						var check = false;
+						$.each(selectedUsrList, function(index, item){
+							if(item.usrId === value.usrId){
+								check = true;
+							}
+						});
+						if(check){
+							str = '<option selected="selected" value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
+									+ value.usrNm
+								+ '</option>';
+						}else{
+							str = '<option value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
+									+ value.usrNm
+								+ '</option>';
+						}
 					}else{
 						str = '<option value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
-								+ value.usrNm
-							+ '</option>';
+									+ value.usrNm
+								+ '</option>';
 					}
 					
 					$("#rptMemSelect").append(str);
@@ -253,7 +269,7 @@ var OSLSpr2001Popup = function () {
     			rptId :  $("#rptId").val(),
     			sprId :  $("#sprId").val(),
     	};
-    	return false;
+
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/spr/spr2000/spr2000/selectReq2000ReqInfoAjax.do'/>", "async":"true"}
@@ -267,9 +283,16 @@ var OSLSpr2001Popup = function () {
 				$.osl.layerPopupClose();
 			}else{
 				//수정할때 호출
-		    	$.osl.setDataFormElem(data.sprInfoMap,"frSpr2001");
-				
-		    	//$("#sprPrjSelect").val($.osl.escapeHtml(data.sprInfoMap.prjId)).trigger('change.select2');
+		    	$.osl.setDataFormElem(data.rptInfo,"frSpr2001");
+		
+				//참여 인원 정보 넣기
+				var rptMemList = data.rptMemList;
+				selectUsrList(rptMemList);
+								
+	    		//edit 세팅
+	    		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, 'maxHeight': 190}));
+	    		//edit 세팅하고 나서 textarea 보이기
+		    	$("#rptDesc").removeClass("kt-hide");
 			}
 		});
 		
@@ -313,6 +336,9 @@ var OSLSpr2001Popup = function () {
 
    				//모달 창 닫기
    				$.osl.layerPopupClose();
+   				
+   				//전체 목록 재조회
+   				OSLSpr1100Popup.reload();
    			}
    		});
    		
@@ -333,8 +359,10 @@ var OSLSpr2001Popup = function () {
 
        	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
-       	
-       	return false;
+
+       	//회의 참여자 목록 가져오기
+		addUsrList(true);
+       	fd.append("idList", JSON.stringify(usrList));
 
        	//AJAX 설정
    		var ajaxObj = new $.osl.ajaxRequestAction(
@@ -352,6 +380,9 @@ var OSLSpr2001Popup = function () {
 
    				//모달 창 닫기
    				$.osl.layerPopupClose();
+   				
+   				//전체 목록 재조회
+   				OSLSpr1100Popup.reload();
    			}
    		});
    		
