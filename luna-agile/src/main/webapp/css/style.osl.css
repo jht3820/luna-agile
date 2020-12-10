@@ -357,6 +357,11 @@ tr.kt-datatable__row.osl-datatable__row-assign--none {
 		display:none;
 	}	
 }
+@media (max-width: 900px){
+	.osl-widget-info__item .osl-widget-info__item-icon{
+		display:none;
+	}	
+}
 .osl-widget-info__item-icon > img {
     width: 100%;
 }
