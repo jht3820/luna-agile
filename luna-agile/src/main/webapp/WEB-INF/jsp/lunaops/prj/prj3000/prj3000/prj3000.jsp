@@ -3,235 +3,7 @@
 <jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
-		
-<style>
-/*첨부파일  - 첨부 파일 전체 영역*/
-	.osl-show-uppy{
-		width: 100%; 
-		height:370px; 
-		border-radius:5px;
-		background-color:#f7f8fa; 
-		border: 1px solid #ebedf2;
-	}
-	/*첨부파일  - 파일 개수*/
-	.osl-uppy-title{
-		height:50px; 
-		line-height:50px; 
-		padding: 0 15px; 
-		color:#aeb2b7; 
-		font-size:1rem; 
-		font-weight:500; 
-		border-bottom:1px solid #eaeaea; 
-		background-color:#fafafa; 
-		text-align:center;
-	}
-	/*첨부파일  - 파일 전체 영역*/
-	.osl-uppy-body{
-		padding: 10px 0; 
-		overflow-y: auto; 
-		height:318px;
-	}
-	/*첨부파일  - 각 파일*/
-	.osl-uppy-file{
-		margin:5px 15px; 
-		width: calc(25% - 30px); 
-		height:190px; 
-		float:left;
-	}
-	/*첨부파일  - 썸네일 전체 사이즈*/
-	.osl-osl-uppy-file-sumnail{
-		width:100%; 
-		height:120px; 
-		background-color:rgb(131, 137, 153); 
-		border-radius:3px;
-		position:relative; 
-		overflow: hidden;
-		cursor: pointer;
-		position: relative;
-	}
-	/*첨부파일  - 썸네일 hover*/
-	.osl-osl-uppy-file-sumnail:hover .osl-uppy-DashboardItem-action--download{
-		display:block;
-	}
-	/*첨부파일  - 썸네일 hover시 다운로드 모양*/
-	.osl-uppy-DashboardItem-action--download{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: #0006;
-		text-align:center;
-		color: white;
-		font-size: 4rem;
-		line-height: 120px;
-		display: none;
-	}
-	/*첨부파일  - 썸네일 뒤쪽 컬러 배경*/
-	.osl-osl-uppy-file-sumnail-bg{
-		width:58px;
-		height: 76px;
-		background-color:#fff; 
-		position:absolute; 
-		top:50%; 
-		left:50%; 
-		transform: translate(-50%, -50%); 
-		-webkit-transform: translate(-50%, -50%); 
-		border-radius:3px;
-	}
-	/*첨부파일  - 파일명 파일 용량 영역*/
-	.osl-uppy-file-info-group{
-		padding-right:5px;
-		padding-top: 9px;
-	}
-	/*첨부파일  - 파일명*/
-	.osl-uppy-file-name{
-		font-size:12px; 
-		line-height: 1.3; 
-		font-weight: 500; 
-		margin-bottom: 4px; 
-		word-break: break-all; 
-		color:#333;
-	}
-	/*첨부파일  - 파일용량*/
-	.osl-uppy-file-volume{
-		font-size:11px; 
-		line-height: 1.3; 
-		font-weight: 400; 
-		color: #757575
-	}
-	/*첨부파일  - icon svg path사이즈*/
-	.osl-uppy-iconFile{
-		width:38px; 
-		height: 38px; 
-		position:absolute; 
-		top:50%; 
-		left:50%; 
-		transform: translate(-50%, -50%); 
-		-webkit-transform: translate(-50%, -50%); 
-		border-radius:3px;	
-	}
-	/*첨부파일  - image 배경색*/
-	.osl-uppy-image-bg{
-		background-color: #686DE0;
-	}
-	/*첨부파일  - audio 배경색*/
-	.osl-uppy-audio-bg{
-		background-color: #049BCF;
-	}
-	/*첨부파일  - video 배경색*/
-	.osl-uppy-video-bg{
-		background-color: #19AF67;
-	}
-	/*첨부파일  - pdf 배경색*/
-	.osl-uppy-pdf-bg{
-		background-color: #E2514A;
-	}
-	/*첨부파일  - archive 배경색*/
-	.osl-uppy-archive-bg{
-		background-color: #00C469;
-	}
-	/*첨부파일  - file 배경색*/
-	.osl-uppy-file-bg{
-		background-color: #A7AFB7;
-	}
-	/*첨부파일  - text 배경색*/
-	.osl-uppy-text-bg{
-		background-color: #5A5E69;
-	}
-	/*첨부파일  - 실제 이미지*/
-	.osl-osl-uppy-file-sumnail>img{
-		width:100%;
-		height: 100%;
-	}
-	 
-	/*osl-uppy-file--fullsize 한줄 라인으로 전체 변환*/
-	/*첨부파일  - 각 파일*/
-	.osl-uppy-file--fullsize.osl-uppy-file{
-		padding:10px 0 10px 10px;
-		width: 100%;
-		height: 70px;
-		border-bottom: 1px solid #eaeaea;
-		margin: 0;
-	}
-	/*osl-uppy-file--fullsize 한줄 라인일때 맨마지막 박스 border값 제거*/
-	.osl-uppy-file--fullsize:last-child{
-		border-bottom:0;
-	}
-	/*첨부파일  - 썸네일 전체 사이즈*/
-	.osl-uppy-file--fullsize .osl-osl-uppy-file-sumnail{
-		width: 50px;
-		height: 50px;
-		float: left;
-	}
 	
-	/*첨부파일  - 썸네일 hover시 다운로드 모양*/
-	.osl-uppy-file--fullsize .osl-uppy-DashboardItem-action--download{
-		font-size: 3rem;
-		line-height: 52px;
-	}
-	/*첨부파일  - 썸네일 뒤쪽 컬러 배경*/
-	.osl-uppy-file--fullsize .osl-osl-uppy-file-sumnail-bg{
-		width: 28.62px;
-		height: 37.5px;
-	}
-	
-	/*첨부파일  - icon svg path사이즈*/
-	.osl-uppy-file--fullsize .osl-uppy-iconFile{
-		width: 25px;
-		height: 25px;
-	}
-	/*첨부파일  - 파일명 파일 용량 영역*/
-	.osl-uppy-file--fullsize .osl-uppy-file-info-group{
-		float: left;
-		padding-left: 12px;
-		padding-right: 8px;
-	}
-	.osl-uppy__btn{
-		line-height: 50px;
-		font-size: 1.5rem;
-		opacity: 0.6;
-		cursor: pointer;
-	}
-	.osl-uppy__left{
-		float: left;
-	}
-	.osl-uppy__left-btn:before{
-		content: "\f359";
-	}
-	.osl-uppy__right{
-		float: right;
-	}
-	.osl-uppy__right-btn:before{
-		content: "\f35a";
-	}
-	.osl-uppy__left-btn:before,.osl-uppy__right-btn:before{
-		font-family:'Font Awesome 5 Free';
-		color: #1cac81;
-		font-weight: 900;
-	}
-	.osl-uppy__btn:hover{
-		opacity:1;
-	}
-	.chosen{
-		border: 1px solid #1cac81 !important;
-		box-sizing: border-box;
-	}
-	@media (max-width: 767px) {
-		.osl-mobile-margin-t-20{
-			margin-top: 20px;		
-		}
-		.osl-uppy__left-btn:before{
-			content: "\f35b";
-		}
-		.osl-uppy__right-btn:before{
-			content: "\f358";
-		}
-		.osl-uppy__left{
-			float: right;
-		}
-	}
-</style>
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
@@ -263,11 +35,9 @@
 									</button>
 								</div>
 								<div class="kt-portlet__head-group">
-									<div class="kt-portlet__head-group">
-										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a>
-										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a>
-										<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-									</div>
+									<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a>
+									<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a>
+									<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 								</div>
 							</div>
 							<!-- end:: 산출물 메뉴 목록 button -->
@@ -279,8 +49,7 @@
 									<div class="osl-tree-search" data-tree-id="stm6000DeptTree"></div>
 								</div>
 							</div>
-							<div class="kt-separator kt-separator--space-sm kt-separator--border-solid"></div>
-							<div class="row">
+							<div class="row kt-margin-t-20">
 								<div class="col-12">
 									<div class="osl-tree kt-scroll" data-height="410" id="stm6000DeptTree"></div>
 								</div>
@@ -418,8 +187,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-pdf-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-pdf-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#E2514A" fill-rule="nonzero">
@@ -427,7 +196,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -443,8 +212,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-archive-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-archive-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#00C469" fill-rule="nonzero">
@@ -452,7 +221,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -468,8 +237,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-file-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-file-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#A7AFB7" fill-rule="nonzero">
@@ -478,7 +247,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -494,8 +263,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-text-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-text-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#5A5E69" fill-rule="nonzero">
@@ -503,7 +272,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -519,9 +288,9 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail">
+												<div class="osl-uppy-file-sumnail">
 													<img src="" />
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -537,8 +306,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-text-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-text-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#5A5E69" fill-rule="nonzero">
@@ -546,7 +315,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -562,9 +331,9 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail">
+												<div class="osl-uppy-file-sumnail">
 													<img src="" />
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -580,8 +349,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-text-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-text-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#5A5E69" fill-rule="nonzero">
@@ -589,7 +358,7 @@
 															</g>
 														</svg>
 													</span>
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -605,9 +374,9 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail">
+												<div class="osl-uppy-file-sumnail">
 													<img src="" />
-													<div class="osl-uppy-DashboardItem-action--download" aria-label="파일 다운로드">
+													<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">
 														<i class="fas fa-arrow-circle-down"></i>
 													</div>
 												</div>
@@ -645,8 +414,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__left-btn osl-uppy__left kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-image-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-image-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#686DE0" fill-rule="nonzero">
@@ -668,8 +437,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__left-btn osl-uppy__left kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-audio-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-audio-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#049BCF" fill-rule="nonzero">
@@ -690,8 +459,8 @@
 											<div class="osl-uppy-file osl-uppy-file--fullsize">
 												<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__left-btn osl-uppy__left kt-margin-r-10">
 												</div>
-												<div class="osl-osl-uppy-file-sumnail osl-uppy-video-bg">
-													<div class="osl-osl-uppy-file-sumnail-bg"></div>
+												<div class="osl-uppy-file-sumnail osl-uppy-video-bg">
+													<div class="osl-uppy-file-sumnail-bg"></div>
 													<span class="osl-uppy-iconFile">
 														<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">
 															<g fill="#19AF67" fill-rule="nonzero">
