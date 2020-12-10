@@ -3,9 +3,9 @@
 	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
 	*/
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +172,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -286,9 +286,9 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		prj1002:{
-			title: "신규 프로젝트 그룹 생성",
 			complete: "완료",
 			insert:{
+				title: "신규 프로젝트 그룹 생성",
 				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 				saveMsg: "${1}명의 사용자가 배정되었습니다.",
@@ -296,6 +296,7 @@ var OSLCoreLangSetting = function () {
 				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
 			},
 			update:{
+				title: "프로젝트 그룹 수정",
 				saveString: "프로젝트 그룹을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
 			}
@@ -315,9 +316,9 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		prj1004:{
-			title: "신규 프로젝트 생성",
 			complete: "완료",
 			insert:{
+				title: "신규 프로젝트 생성",
 				saveString: "신규 프로젝트를 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 				saveMsg: "${1}명의 사용자가 배정되었습니다.",
@@ -325,6 +326,7 @@ var OSLCoreLangSetting = function () {
 				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
 			},
 			update:{
+				title: "프로젝트 수정",
 				saveString: "프로젝트를 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
 			}
@@ -519,6 +521,19 @@ var OSLCoreLangSetting = function () {
 			text: "잠긴 요구사항입니다.<br/> 비밀번호를 입력하세요.",
 			button:{
 				submit : "확인",
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
 			}
 		},
 		spr1100:{
@@ -966,7 +981,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1160,7 +1175,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -1845,12 +1860,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -1859,7 +1874,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };
