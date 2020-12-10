@@ -104,6 +104,22 @@
 			var contentExist = $("#kt_content");
 			
 			
+			$(document).keydown(function(event) {
+				
+				if ( event.keyCode == 113 || event.which == 113 ) {
+					var modalList = $(".modal");
+					$.each(modalList, function(idx, map){
+						var dragObj = $(map).data("draggabilly");
+						
+						if(!$.osl.isNull(dragObj)){
+							
+							dragObj.setPosition(0,0);
+						}
+					});
+				}
+			});
+			
+			
 			if(!$.osl.isNull(headerExist) && headerExist.length > 0){
 				
 				$.osl.initHeaderClear();
@@ -833,7 +849,7 @@
 			
 			
 			if($.osl.isNull(langId)){
-				return ""
+				return "";
 			}
 			
 			
@@ -857,6 +873,11 @@
 					}
 				});
 			}catch(e){
+			}
+			
+			
+			if($.osl.isNull(rtnLangStr)){
+				return "";
 			}
 			
 			
@@ -885,7 +906,7 @@
 					if($.osl.isNull(langStr)){
 						return true;
 					}
-					$(map).text(langStr);
+					$(map).html(langStr);
 				});
 			}
 			
@@ -1077,7 +1098,7 @@
 		        			$.osl.user.usrOptData = usrOptData;
 		        		}
 		        		
-	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        	}
         			
         			if(!$.osl.isNull(data.langList)){
@@ -1465,9 +1486,14 @@
 		        					$("#submenu-authGrp-sel").html('<i class="kt-menu__link-icon fa fa-user-tie"></i>'+$.osl.escapeHtml(map.authGrpNm));
 		        				}
 		        				
-	        					if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
-	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				
+	        					if(!prjOrdList[map.prjGrpId]["prjList"].hasOwnProperty(map.prjId)){
+	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId] = {};
 	        					}
+	        					
+		        				if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
+		        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				}
 	        					
 	        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"][map.authGrpId] = map;
 
@@ -1660,7 +1686,8 @@
 											
 											$.each(selRecords, function(idx, map){
 												var rowIdx = $(map).data("row");
-												rowData.push(datatables.targetDt.dataSet[rowIdx]);
+												var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+												rowData.push(tmp_rowData);
 											});
 											
 											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "list", rowData.length, this);
@@ -1692,10 +1719,10 @@
 											event.stopPropagation();
 											event.preventDefault();
 											event.returnValue = false;
+
+											var tmp_rowData = datatables.targetDt.dataSet[btnRowNum];
 											
-											var rowData = datatables.targetDt.dataSet[btnRowNum];
-											
-											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "info", btnRowNum, this);
+											targetConfig.actionFn[btnAction](tmp_rowData, btnDatatableId, "info", btnRowNum, this);
 										});
 									}
 								}
@@ -1707,41 +1734,54 @@
 					},
 					
 					action: {
-						"select": function(elem, datatableId) {
+						"select": function(elem, datatableId, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
 								
-								datatables.targetDt.setDataSourceParam("pagination.page",1);
-								datatables.targetDt.reload();
+								if(datatables.config.actionFn.hasOwnProperty("select")){
+									
+									datatables.config.actionFn["select"](datatableId, elem);
+								}
+								
+								else{
+									datatables.targetDt.setDataSourceParam("pagination.page",1);
+									datatables.targetDt.reload();
+								}
 							});
 						},
-						"insert": function(elem, datatableId, type, rowNum) {
+						"insert": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								
 								datatables.config.actionFn["insert"](datatableId, type, rowNum,elem);
 							});
 						},
-						"update": function(elem, datatableId, type, rowNum) {
+						"update": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData;
 								
@@ -1761,6 +1801,7 @@
 									}
 									else{
 										var rowIdx = datatables.targetDt.getSelectedRecords().data("row");
+										
 										rowData = datatables.targetDt.dataSet[rowIdx];
 									}
 								}
@@ -1774,15 +1815,16 @@
 								
 							});
 						},
-						"delete": function(elem, datatableId, type, rowNum) {
+						"delete": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData = [];
 								
@@ -1798,7 +1840,9 @@
 									else{
 										$.each(selRecords, function(idx, map){
 											var rowIdx = $(map).data("row");
-											rowData.push(datatables.targetDt.dataSet[rowIdx]);
+											var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+											
+											rowData.push(tmp_rowData);
 										});
 									}
 								}
@@ -1816,15 +1860,17 @@
 								
 							});
 						},
-						"click": function(elem, datatableId, type, rowNum, row){
+						"click": function(elem, datatableId, type, rowNum, row, bubleFlag){
 							
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
@@ -1833,17 +1879,19 @@
 							});
 							
 							
-							$(row).off("click");
+							
 							$(row).click(function(event){
 								
 								if($(event.target.parentElement).hasClass("kt-checkbox") || $(event.target.parentElement).hasClass("kt-datatable__toggle-detail")){
 									return true;
 								}
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								
 								$(".kt_datatable[id="+datatableId+"] tr.kt-datatable__row.osl-datatable__row--selected").removeClass("osl-datatable__row--selected");
@@ -1855,15 +1903,16 @@
 								datatables.config.actionFn["click"](rowData, datatableId, type, rowNum, elem);
 							});
 						},
-						"dblClick": function(elem, datatableId, type, rowNum, row){
+						"dblClick": function(elem, datatableId, type, rowNum, row, bubleFlag){
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
 								
@@ -1873,12 +1922,13 @@
 							
 							$(row).off("dblclick");
 							$(row).on('dblclick', function (event) {
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
 								
@@ -1907,8 +1957,8 @@
 							
 							
 							var searchTargetHtml = 
-								'<div class="form-group">'
-									+'<div class="input-group">'
+								
+									'<div class="input-group">'
 										+'<div class="input-group-prepend">'
 											+'<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">'+$.osl.lang("datatable.search.allTitle")+'</button>'
 											+'<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="'+elemId+'">'
@@ -1922,15 +1972,15 @@
 											+'<span class="kt-input-icon__icon kt-input-icon__icon--right">'
 												+'<span><i class="la"></i></span>'
 											+'</span>'
-											+'<input type="hidden" name="searchStartDt" id="searchStartDt" data-datatable-id="'+elemId+'">'
-											+'<input type="hidden" name="searchEndDt" id="searchEndDt" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchStartDt" id="searchStartDt_'+elemId+'" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchEndDt" id="searchEndDt_'+elemId+'" data-datatable-id="'+elemId+'">'
 										+'</div>'
 										+'<div class="input-group-append">'
 											+'<button class="btn '+btnStyleStr+' osl-datatable-search__button" type="button" data-datatable-id="'+elemId+'">'
 												+'<i class="fa fa-search"></i><span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>'
 											+'</button>'
 										+'</div>'
-									+'</div>'
+									
 								+'</div>';
 							
 							
@@ -1990,13 +2040,14 @@
 					action: {
 						"select":function(){
 							
-							var selectBtn = $("button[data-datatable-id="+targetId+"][data-datatable-action=select]");
-							if(selectBtn.length > 0){
-								selectBtn[0].click();
-							}else{
+							if(datatables.config.actionFn.hasOwnProperty("select")){
 								
-								datatables[targetId].targetDt.setDataSourceParam("pagination.page",1);
-								datatables[targetId].targetDt.reload();
+								datatables.config.actionFn["select"](datatables.targetDt[0].id, datatables.targetDt[0]);
+							}
+							
+							else{
+								datatables.targetDt.setDataSourceParam("pagination.page",1);
+								datatables.targetDt.reload();
 							}
 						},
 						"select-input":function(targetObj){
@@ -2059,14 +2110,18 @@
 					
 					inputHandle: function(elemId, searchFieldId, searchType, searchCd){
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						var searchDataTarget = $(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]");
 						
-						$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						searchDataTarget.val('');
 						
-						$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						$.osl.date.datepicker(searchDataTarget,"destroy");
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val('');
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val('');
+						$.osl.date.daterangepicker(searchDataTarget,"destroy");
+						
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						
+						searchDataTarget.off('keypress');
 						
 						if(searchType == "select"){
 							
@@ -2075,7 +2130,7 @@
 							];
 
 			        		
-		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        			
 		        			
 		        			searchEvt.action["layout-clean"](elemId,searchType);
@@ -2104,13 +2159,13 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, selected){
+							$.osl.date.datepicker(searchDataTarget, {}, function(defaultConfig, selected){
 								var minDate = new Date(selected.date).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(selected.date).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2122,14 +2177,14 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, start, end, label){
+							$.osl.date.daterangepicker(searchDataTarget, {}, function(defaultConfig, start, end, label){
 								
 								var minDate = new Date(start).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(end).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2141,16 +2196,66 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,false);
 							
 							
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").off('keypress');
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").on('keypress', function(e) {
-								if (e.which === 13){
-									var thisObj = $(this);
-									var thisObjIcon = thisObj.siblings("span").find("i.la");
-									
-									
-									searchEvt.action["select-input"](thisObjIcon);
+							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
+							var fieldData = datatableInfo.getColumnByField(fieldId);
+							
+							
+							var enterKeyPressFlag = true;
+							
+							
+							if($.osl.isNull(fieldData)){
+								if(datatableInfo.options.hasOwnProperty("searchColumns") && datatableInfo.options.searchColumns.length > 0){
+									$.each(datatableInfo.options.searchColumns, function(idx, map){
+										if(fieldId == map.field){
+											fieldData = map;
+											return false;
+										}
+									});
 								}
-							});
+							}
+							if(!$.osl.isNull(fieldData)){
+								
+								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
+									var keyCode = fieldData["searchKeyCode"];
+									var keyEvt = fieldData["searchKeyEvt"];
+									
+									
+									if(!$.osl.isNull(keyCode) && typeof keyEvt == "function"){
+										
+										if(keyCode == 13){
+											enterKeyPressFlag = false;
+										}
+										
+										searchDataTarget.on('keypress', function(e) {
+											if (e.which == keyCode){
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
+											}
+											
+											else if(keyCode == -1){
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
+											}
+										});
+									}
+								}
+							}
+							if(enterKeyPressFlag){
+								
+								searchDataTarget.on('keypress', function(e) {
+									if (e.which === 13){
+										var thisObj = $(this);
+										var thisObjIcon = thisObj.siblings("span").find("i.la");
+										
+										
+										searchEvt.action["select-input"](thisObjIcon);
+									}
+								});
+							}
 						}
 					}
 				}
@@ -2169,7 +2274,7 @@
 						},
 						layout: {
 							scroll: false,
-							footer: false,
+							footer: false
 						},
 						translate:{
 							records:{
@@ -2194,15 +2299,44 @@
 							}
 						},
 						rows:{
+							beforeTemplate: function (row, data, index){
+								
+							},
 							afterTemplate: function(row, data, index){
+								
+								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+									
+									if(config.rows.clickCheckbox == true){
+										
+										row.click(function(){
+											var targetRow = $(this).closest("tr");
+											var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+											
+											if(targetElem.is(":checked") == true){
+												targetElem.prop("checked", false);
+												datatables.targetDt.setInactive(targetElem);
+												
+												targetRow.removeClass("osl-datatable__row--selected");
+												targetRow.addClass("kt-datatable__row--even");
+											}else{
+												targetElem.prop("checked", true);
+												datatables.targetDt.setActive(targetElem);
+											}
+											
+										});
+									}
+								}
+								
 								btnEvt["info"](row);
-							}
+							},
+							clickCheckbox: false
 						},
 						sortable: true,
 						pagination: true,
 						search: false,
 						columns: [],
 						searchColumns: [],
+						cardUiTarget: null,
 						actionBtn:{
 							"autoHide": false,
 							"title": "Actions",
@@ -2268,7 +2402,11 @@
 							
 							reloaded: $.noop,
 							
-							sort: $.noop
+							sort: $.noop,
+							
+							perpage: $.noop,
+							
+							gotoPage: $.noop
 						}
 					};
 					
@@ -2406,46 +2544,57 @@
 					}
 					
 					
-					targetConfig = $.extend(true, targetConfig, {
-						data:{
-							source:{
-								read:{
-									params: {
-										dtParamPrjGrpId: $.osl.selPrjGrpId,
-										dtParamPrjId: $.osl.selPrjId,
-										dtParamAuthGrpId: $.osl.selAuthGrpId,
-										searchTargetId: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
-										},
-										searchTargetType: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-										},
-										searchTargetData: function(){
-											var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-											var searchTargetData;
-											if(searchTargetType == "select"){
-												searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
-											}
-											else if(searchTargetType == "all"){ 
-												searchTargetData = null;
-											}
-											else{
-												searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
-											}
+					if(targetConfig.data.type != 'local'){
+						
+						targetConfig = $.extend(true, targetConfig, {
+							data:{
+								source:{
+									read:{
+										params: {
 											
-											return searchTargetData;
-										},
-										searchStartDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt").val();
-										},
-										searchEndDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt").val();
+											dtParamPrjGrpId: $.osl.selPrjGrpId,
+											dtParamPrjId: $.osl.selPrjId,
+											dtParamAuthGrpId: $.osl.selAuthGrpId,
+											
+											
+											searchTargetId: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
+											},
+											
+											searchTargetType: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+											},
+											
+											
+											searchTargetData: function(){
+												var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+												var searchTargetData;
+												if(searchTargetType == "select"){
+													searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
+												}
+												else if(searchTargetType == "all"){ 
+													searchTargetData = null;
+												}
+												else{
+													searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
+												}
+												
+												return searchTargetData;
+											},
+											
+											searchStartDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt_"+targetId+"").val();
+											},
+											
+											searchEndDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt_"+targetId+"").val();
+											}
 										}
 									}
 								}
 							}
-						}
-					});
+						});
+					}
 
 					
 					if(searchColumns.length > 0){
@@ -2463,17 +2612,152 @@
 					
 					var datatableInfo = $(ktDatatableTarget).KTDatatable(targetConfig);
 					
+					
 					$(ktDatatableTarget).on("kt-datatable--on-ajax-done",function(evt,list){
 						targetConfig.callback.ajaxDone(evt.target, list, datatableInfo);
+						
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							var targetUIs = targetConfig.cardUiTarget;
+							if(targetUIs.length > 0){
+								
+								$.each(targetUIs, function(idx, targetUI){
+									
+									var dropdownItems = $(targetUI).find(".dropdown-item[data-datatable-id="+targetId+"][data-datatable-expans=dropdown]");
+									$.each(dropdownItems, function(itemIdx, item){
+										
+										var btnAction = $(this).data("datatable-action");
+										
+										
+										var rownum = $(this).data("datatable-rownum");
+										
+										
+										if($.osl.isNull(rownum)){
+											rownum = $(this).parent(".dropdown-menu").data("datatable-rownum");
+										}
+										
+										
+										if($.osl.isNull(rownum)){
+											rownum = $(this).parents("[data-datatable-rownum]").data("datatable-rownum");
+										}
+										
+										
+										if($.osl.isNull(rownum)){
+											return true;
+										}
+										
+										
+										if(!$.osl.isNull(btnAction)){
+											
+											if(btnEvt.action.hasOwnProperty(btnAction)){
+												var rowData = datatables.targetDt.dataSet[rownum];
+												btnEvt.action[btnAction](this, targetId, "info", rownum, false);
+											}else{
+												
+												if(targetConfig.actionFn.hasOwnProperty(btnAction)){
+													$(this).off("click");
+													$(this).click(function(event){
+														
+														event.cancelable = true;
+														event.stopPropagation();
+														event.preventDefault();
+														event.returnValue = false;
+														
+														var rowData = datatables.targetDt.dataSet[rownum];
+														var rowDatas = [];
+														rowDatas.push(rowData);
+														
+														targetConfig.actionFn[btnAction](rowDatas, targetId, "info", this);
+													});
+												}
+											}
+										}
+									});
+									
+									
+									$(targetUI).find("input[type=checkbox][data-datatable-id="+targetId+"]").click(function(){
+										var rowNum = this.value;
+										var targetRow = datatableInfo.row("[data-row="+rowNum+"]").nodes();
+										
+										var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+										
+										if(targetElem.length > 0){
+											if(targetElem.is(":checked") == true){
+												targetElem.prop("checked", false);
+												datatableInfo.setInactive(targetElem);
+												
+												targetRow.removeClass("osl-datatable__row--selected");
+												targetRow.addClass("kt-datatable__row--even");
+											}else{
+												targetElem.prop("checked", true);
+												datatableInfo.setActive(targetElem);
+											}
+										}
+									});
+								});
+							}
+						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-init",function(evt,config){
 						targetConfig.callback.initComplete(evt.target, config, datatableInfo);
+						
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							
+							var datatableBody = datatableInfo.tableBody;
+							var datatableChkbox = $(datatableBody).find("label.kt-checkbox").children("input[type=checkbox]");
+							
+							
+							if(datatableChkbox.length > 0){
+								datatableChkbox.change(function(){
+									var rowNum = $(this).parents("tr.kt-datatable__row").data("row");
+									var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox][data-datatable-id="+targetId+"][value="+rowNum+"]");
+									if(targetElem.length > 0){
+										if(targetElem.is(":checked") == true){
+											targetElem.prop("checked", false);
+										}else{
+											targetElem.prop("checked", true);
+										}
+									}
+								});
+							}
+							
+							
+							var datatableHead = datatableInfo.tableHead;
+							var datatableChkbox = $(datatableHead).find("label.kt-checkbox.kt-checkbox--all").children("input[type=checkbox]");
+							
+							datatableChkbox.change(function(){
+								var rowNum = $(this).parents("tr.kt-datatable__row").data("row");
+								var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox][data-datatable-id="+targetId+"]");
+								
+								if(targetElem.length > 0){
+									if($(this).is(":checked") == true){
+										targetElem.prop("checked", true);
+									}else{
+										targetElem.prop("checked", false);
+									}
+								}
+							});
+						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-reloaded",function(evt,config){
 						targetConfig.callback.reloaded(evt.target, config, datatableInfo);
 					});
+					
+					
+					$(ktDatatableTarget).on("kt-datatable--on-update-perpage",function(evt,args){
+						targetConfig.callback.perpage(evt.target, args, datatableInfo);
+					});
+					
+					
+					$(ktDatatableTarget).on("kt-datatable--on-goto-page",function(evt,args){
+						targetConfig.callback.gotoPage(evt.target, args, datatableInfo);
+					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-sort",function(evt,data){
 						
@@ -2489,11 +2773,14 @@
 							datatableInfo.setDataSourceParam("sortFieldId",field);
 							datatableInfo.setDataSourceParam("sortDirection",data.sort);
 							
+							
 							datatableInfo.reload();
+							
 							
 							targetConfig.callback.sort(evt.target, data, datatableInfo);
 						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-layout-updated",function(evt,config){
 						
@@ -2506,13 +2793,14 @@
 								targetObj.off("click");
 								targetObj.click(function(event){
 									
-									event.cancelable = true;
-									event.stopPropagation();
-									event.preventDefault();
-									event.returnValue = false;
-									
-									
 									if(typeof map.onclick == "function"){
+										
+										event.cancelable = true;
+										event.stopPropagation();
+										event.preventDefault();
+										event.returnValue = false;
+										
+										
 										var rowNum = $(this).parent("tr").data("row");
 										var rowData = null;
 										try{
@@ -2521,6 +2809,7 @@
 											
 											console.log(e);
 										}
+										
 										
 										map.onclick(rowData, event);
 									}
@@ -2536,6 +2825,8 @@
 					
 					$.osl.datatable.list[targetId] = datatables;
 				}
+				
+				return datatables;
 			}
 		}
 		,date: {
@@ -2544,7 +2835,7 @@
 				
 				$.fn.datepicker.dates['ko'] = $.osl.lang("date.datepicker");
 				
-				moment.defineLocale('fr', $.osl.lang("date.moment"));
+				moment.updateLocale('fr', $.osl.lang("date.moment"));
 			}
 			
 			,datepicker: function(targetObj, config, callback){
@@ -2586,6 +2877,7 @@
 			}
 			
 			,daterangepicker: function(targetObj, config, callback){
+				var datePickerObj = null;
 				
 				if($.osl.isNull($(targetObj)) || $(targetObj).length == 0){
 					return true;
@@ -2603,7 +2895,7 @@
 					}
 				}else{
 					var minYear = moment().subtract(10, 'year').format('YYYY');
-					var maxYear = moment().format('YYYY');
+					var maxYear = moment().subtract(-10, 'year').format('YYYY');
 					
 					var defaultConfig = {
 				            buttonClasses: 'btn btn-sm',
@@ -2620,12 +2912,13 @@
 					defaultConfig = $.extend(true, defaultConfig, config);
 					
 					
-					$(targetObj).daterangepicker(defaultConfig,
+					datePickerObj = $(targetObj).daterangepicker(defaultConfig,
 						function(start, end, label) {
 							callback(defaultConfig, start, end, label);
 						}
 					);
 				}
+				return datePickerObj;
 			}
 		}
 		
@@ -2791,7 +3084,7 @@
 				var returnStr = 
 					'<div class="kt-user-card-v2 btn '+cardBtn+'">'
 						+'<div class="kt-user-card-v2__pic kt-media '+imgSize+' kt-media--circle '+cardPic+'">'
-							+'<img class=" '+usrImg+'" src="'+usrImgId+'"/>'
+							+'<img class=" '+usrImg+'" src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 						+'</div>'
 						+'<div class="kt-user-card-v2__details '+cardDetail+'">'
 							+'<span class="kt-user-card-v2__name '+cardName+'">'+cardContent+'</span>'
@@ -2933,7 +3226,7 @@
 		this.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 		
 		
-		this.async = "true";
+		this.async = true;
 		
 		
 		this.cache = "true";
@@ -3031,7 +3324,7 @@
 			        error: function(xhr, status, err){
 			        	
 			        	if(xhr.status == '999'){
-			        		$.osl.alert($.osl.lang("common.alert.title"),$.osl.lang("common.error.sessionInvalid"),"error",
+			        		$.osl.alert($.osl.lang("common.error.sessionInvalid"),"error",
 			        				function(){
 					        			document.location.href="/cmm/cmm4000/cmm4000/selectCmm4000View.do";
 					        		}
@@ -3042,7 +3335,7 @@
 				    		 },3000);
 			        		return;
 			        	}else if(xhr.status == '998'){
-			        		$.osl.alert($.osl.lang("common.alert.title"),$.osl.lang("common.error.nonAuth"),"error");
+			        		$.osl.alert($.osl.lang("common.error.nonAuth"),"error");
 			        		if(tmp_loadingShow){
 			        			$.osl.showLoadingBar(false);
 			        		}
@@ -4062,6 +4355,11 @@
 		
 		var formatDate = new Date(paramDatetime).format("yyyy-MM-dd HH:mm:ss");
 		
+		
+		if(options.hasOwnProperty("returnFormat")){
+			formatDate = new Date(paramDatetime).format(options.returnFormat);
+		}
+		
 		if(!$.osl.isNull(agoTime) && agoTime > 0){
 			agoTime = agoTime/1000;
 			
@@ -4090,28 +4388,40 @@
 
 			
 			var suffixAgo = $.osl.lang("date.agoTime.suffixAgo");
-			var agoString;
-			$.each(agoTimeArr, function(idx, map){
-				
-				if(!$.osl.isNull(options) && options.hasOwnProperty("fullTime")){
-					if(agoTimeStr[idx] == options.fullTime && map > 0){
-						agoString = formatDate;
-						return false;
-					}
-				
-				}else if(!$.osl.isNull(options) && options.hasOwnProperty("returnTime")){
-					if(agoTimeStr[idx] == options.returnTime){
-						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
-						return false;
-					}
-				}else{
-					
-					if(map > 0){
-						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
-						return false;
-					}
+			var agoString = formatDate;
+			
+			
+			if(!$.osl.isNull(options) && options.hasOwnProperty("returnTime")){
+				var searchIdx = agoTimeStr.indexOf(options.returnTime);
+				if(searchIdx > 0 && agoTimeArr[searchIdx] > 0){
+					agoString = $.osl.lang("date.agoTime."+agoTimeStr[searchIdx],agoTimeArr[searchIdx])+" "+suffixAgo;
 				}
-			});
+			}else{
+				$.each(agoTimeArr, function(idx, map){
+					if(map > 0){
+						
+						if(!$.osl.isNull(options) && options.hasOwnProperty("fullTime")){
+							var searchIdx = agoTimeStr.indexOf(options.fullTime);
+							
+							
+							if(!$.osl.isNull(searchIdx) && searchIdx >= 0){
+								
+								if(searchIdx >= idx){
+									agoString = formatDate;
+									return false;
+								}else{ 
+									agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
+									return false;
+								}
+							}
+						}
+						
+						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
+						return false;
+					}
+				});
+			}
+		
 			
 			return {
 				sec: secAgo,
@@ -4124,7 +4434,16 @@
 				agoString: agoString
 			};
 		}
-		return formatDate;
+		return {
+			sec: 0,
+			min: 0,
+			hour: 0,
+			day: 0,
+			month: 0,
+			year: 0,
+			formatDate: formatDate,
+			agoString: formatDate
+		};
 	}
 }));
 

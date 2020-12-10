@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="spr2100DAO">
+
+	
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+   	<resultMap id="resultMapSelectSpr2100" class="egovMap">
+		<result property="sprId"				column="SPR_ID"/>
+		<result property="sprNm"			column="SPR_NM"/>
+		<result property="mmrId"				column="MMR_ID"/>
+		<result property="mmrNm"			column="MMR_NM"/>
+		<result property="mmrDesc"			column="MMR_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="mmrDtm"			column="MMR_DTM"/>
+		<result property="mmrUsrId"			column="USR_ID"/>
+		<result property="mmrUsrImgId"	column="USR_IMG_ID"/>
+    </resultMap>
+
+	
+	
+	<sql id="selectSpr2100List">
+		SELECT 
+			ROWNUM RN
+			, T1.SPR_ID AS SPR_ID
+			, T1.MMR_ID AS MMR_ID
+			, T1.MMR_NM AS MMR_NM
+			, T1.MMR_DTM AS MMR_DTM
+			, T1.USR_ID AS MMR_USR_ID
+			, T1.USR_NM AS MMR_USR_NM
+			, T1.USR_IMG_ID AS MMR_USR_IMG_ID
+			, Y.SPR_NM AS SPR_NM
+		FROM
+		(
+			SELECT 
+					A.SPR_ID AS SPR_ID
+					, A.MMR_ID AS MMR_ID
+					, A.MMR_NM AS MMR_NM
+					, A.MMR_DESC AS MMR_DESC
+					, TO_CHAR(A.MMR_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MMR_DTM
+					, A.USR_ID AS USR_ID
+					, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
+					, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
+		    FROM SPR2100 A
+		    WHERE 1=1
+		    AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND A.SPR_ID = #sprId#
+			ORDER BY A.MMR_ID DESC
+		) T1 LEFT JOIN SPR1000 Y
+		ON T1.SPR_ID = Y.SPR_ID
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="mmrNm">
+					AND	T1.MMR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mmrDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.MMR_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mmrUsrId">
+					AND	T1.USR_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mmrDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_CHAR(T1.MMR_DTM, 'YYYY-MM-DD') &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_CHAR(T1.MMR_DTM, 'YYYY-MM-DD') &lt;=  TO_DATE(#searchEndDt#, 'YYYY-MM-DD')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<select id="spr2100DAO.selectSpr2100MmrListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr2100List"/>
+		) Z
+    </select>
+    
+    
+    <select id="spr2100DAO.selectSpr2100MmrList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectSpr2100List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="spr2100DAO.selectSpr2100MmrInfo" parameterClass="java.util.Map" resultMap="resultMapSelectSpr2100">
+     	
+    	SELECT
+    		A.SPR_ID AS SPR_ID
+    		, B.SPR_NM AS SPR_NM
+			, A.MMR_ID AS MMR_ID
+			, A.MMR_NM AS MMR_NM
+			, A.MMR_DESC AS MMR_DESC
+			, TO_CHAR(A.MMR_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MMR_DTM
+			, A.USR_ID AS USR_ID
+			, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
+			, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
+    	FROM SPR2100 A 
+    	LEFT JOIN SPR1000 B
+    	ON A.SPR_ID = B.SPR_ID
+    	WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+	    AND A.PRJ_GRP_ID = #prjGrpId#
+		AND A.PRJ_ID = #prjId#
+		AND A.SPR_ID = #sprId#
+		AND A.MMR_ID = #mmrId#
+    </select>
+    
+    
+    <insert id="spr2100DAO.insertSpr2100MmrInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newMmrId">
+			<![CDATA[
+				 
+				SELECT	NVL( 
+								SUBSTR(NEW_MMR_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_MMR_ID, 12, 5)) + 1) , 5, '0')
+							,	'MMR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+	            		) AS NEW_MMR_ID 
+				FROM	(
+				            SELECT	MAX(MMR_ID)  AS NEW_MMR_ID
+				            FROM	SPR2100 A
+				            WHERE	1 = 1
+				            AND A.LIC_GRP_ID = #licGrpId#
+						    AND A.PRJ_GRP_ID = #prjGrpId#
+							AND A.PRJ_ID = #prjId#
+							AND A.SPR_ID = #sprId#
+				            AND A.MMR_ID LIKE 'MMR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+						)
+			]]>
+		</selectKey>
+		<![CDATA[ 
+			 
+			INSERT INTO SPR2100
+			(
+			       LIC_GRP_ID,			PRJ_GRP_ID,			PRJ_ID
+			       ,SPR_ID,				MMR_ID,					MMR_NM
+			       ,MMR_DESC,		MMR_DTM,				USR_ID
+				   ,REG_DTM,			REG_USR_ID,			REG_USR_IP
+			       ,MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+			)                    
+			VALUES
+			(
+					#licGrpId#,			#prjGrpId#,				#prjId#
+			       ,#sprId#,				#newMmrId#,			#mmrNm#
+			       ,#mmrDesc#,		SYSDATE,				#mmrUsrId#
+				   ,SYSDATE,			#regUsrId#,				#regUsrIp#
+			       ,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+    <update id="spr2100DAO.updateSpr2100MmrInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			UPDATE SPR2100 A
+			SET  MMR_NM = #mmrNm#
+			       ,MMR_DESC = #mmrDesc#
+			       ,MODIFY_DTM = SYSDATE
+			       ,MODIFY_USR_ID = #modifyUsrId#
+			       ,MODIFY_USR_IP = #modifyUsrIp#
+	    	WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND A.SPR_ID = #sprId#
+			AND A.MMR_ID = #mmrId#
+		]]>
+	</update>
+
+	
+    <delete id="spr2100DAO.deleteSpr2100MmrInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			DELETE FROM SPR2100 A
+			WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND A.SPR_ID = #sprId#
+			AND A.MMR_ID = #mmrId#
+		]]>
+	</delete>
+</sqlMap>

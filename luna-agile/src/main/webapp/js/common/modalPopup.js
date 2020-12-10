@@ -54,6 +54,12 @@ $(document).on('hidden.bs.modal', '.modal', function () {
 	
 	
 	modalCount = modalCount - 1;
+	
+	
+	var mainModalCnt = $(".modal[id^=lpx]").length;
+	if(mainModalCnt == 0){
+		$(".modal").remove();
+	}
 });
 
 
