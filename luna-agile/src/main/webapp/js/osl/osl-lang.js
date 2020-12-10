@@ -3,9 +3,9 @@
 	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
 	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +172,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -600,6 +600,44 @@ var OSLCoreLangSetting = function () {
 				rptNM : "제목",
 			}
 		},
+		spr2100:{
+			title :"회고록 목록",
+			button:{
+				detailBtn : "상세",
+			},
+			actionBtn:{
+				title : "수정 / 삭제 / 상세",
+				selectTooltip : "회고록 조회",
+				insertTooltip : "회고록 추가",
+				updateTooltip : "회고록 수정",
+				deleteTooltip : "회고록 삭제",
+				detailTooltip : "회고록 상세",
+			},
+			message : {
+				selectMsg : "스프린트를 선택하세요.",
+			},
+			title : {
+				insertTitle : "스프린트 회고록 등록",
+				updateTitle : "스프린트 회고록 수정",
+				detailTitle : "스프린트 회고록 상세",
+			}
+		},
+		spr2101:{
+			submit: "완료",
+			label : {
+				sprNm : "스프린트명",
+				mmrMem: "참여 인원",
+				mmrNm :"회고록 제목",
+				mmrDesc : "회고록 내용",
+			},
+			button : {
+				insertBtn : "등록",
+				updateBtn : "수정 완료",
+			},
+			placeholder:{
+				mmrNM : "제목",
+			}
+		},
 		stm2100:{
 			selectStmInfoCnt : "1건의 게시판만 선택하세요.<br/> ${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
@@ -995,7 +1033,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1136,7 +1174,7 @@ var OSLCoreLangSetting = function () {
 			},
 			spr1000SprTable:{
 				sprTypeNm : "Type",
-				sprNm : "Sprint Name",
+				sprNm : "Sprint Title",
 				sprStdtm : "Start Date",
 				sprEddtm : "End Date",
 				sprDesc : "Sprint Desciption",
@@ -1159,6 +1197,12 @@ var OSLCoreLangSetting = function () {
 				rptMemCnt : "Metting Member",
 				rptUsrId : "Writer",
 				rptDtm : "Write Date",
+			},
+			spr2100RptTable:{
+				sprNm:"Sprint Title",
+				mmrNm:"Memoirs Title",
+				mmrUsrId : "Wirter",
+				mmrDtm :"Write Date",
 			}
 		},
 		date:{
@@ -1215,7 +1259,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -1900,12 +1944,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -1914,7 +1958,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };

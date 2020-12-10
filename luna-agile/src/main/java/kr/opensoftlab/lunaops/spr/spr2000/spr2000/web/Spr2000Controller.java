@@ -215,8 +215,8 @@ public class Spr2000Controller {
 	
 	
 	@SuppressWarnings({ "rawtypes"})
-	@RequestMapping(value = "/spr/spr2000/spr2000/selectSpr2000SprInfoAjax.do")
-	public ModelAndView selectSpr2000SprInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/spr/spr2000/spr2000/selectSpr2000RptInfoAjax.do")
+	public ModelAndView selectSpr2000RptInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -239,7 +239,7 @@ public class Spr2000Controller {
 			
 			return new ModelAndView("jsonView");
 		} catch (Exception ex) {
-			Log.error("selectSpr2000SprInfoAjax()", ex);
+			Log.error("selectSpr2000RptInfoAjax()", ex);
 			
 			
 			model.addAttribute("errorYn", "Y");
