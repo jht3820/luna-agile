@@ -3,58 +3,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <form class="kt-form" id="frSpr2002" autocomplete="off">
 	<input type="hidden" name="type" id="type" value="<c:out value='${param.type}'/>">
-	<input type="hidden" name="mmtId" id="mmtId" value="<c:out value='${param.mmtId}'/>">
+	<input type="hidden" name="rptId" id="rptId" value="<c:out value='${param.rptId}'/>">
 	<input type="hidden" name="sprId" id="sprId" value="<c:out value='${param.sprId}'/>">
 	<input type="hidden" name="paramSprNm" id="paramSprNm" value="<c:out value='${param.sprNm}'/>">
 	<div class="kt-portlet">
 		<div class="kt-portlet__body">
-		<div class="form-group kt-margin-b-0">
+		<div class="form-group">
 			<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.sprNm">스프린트명</span></label>
 			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly">
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="kt-portlet kt-portlet--collapsed osl-remove__box-shadow" id="spr2002MeetingMemberList">
-					<div class="kt-portlet__head kt-padding-0 border-0">
-						<div class="kt-portlet__head-label">
-							<i class="fa fa-user-friends kt-margin-r-5"></i>
-							<span data-lang-cd="spr2001.label.mmtMem">참여 인원</span>
-							<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-5 kt-padding-10' id='memCnt' name='memCnt'>0</span>
-						</div>
-						<div class="kt-portlet__head-toolbar">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="fa fa-chevron-down"></i></a>
-							</div>
-						</div>
-					</div>
-					<div class="kt-portlet__body kt-padding-5 osl-outline--secondary-t-1">
-						<div class="row">
-							<div class="form-control osl-select2-view border-0" id="mmtMemSelect" name="mmtMemSelect"></div>
-						</div>
-					</div>
+				<div class="form-group">
+					<label><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptMem">참여 인원</span></label>
+					<div class="form-control osl-select2-view" id="rptMemSelect" name="rptMemSelect"></div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.mmtNm">회의록 제목</span></label>
-					<input type="text" class="form-control" id="mmtNm" name="mmtNm" readonly="readonly">
+					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptNm">회의록 제목</span></label>
+					<input type="text" class="form-control" id="rptNm" name="rptNm" readonly="readonly">
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
-					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.mmtDesc">회의록 내용</span></label>
-					<textarea class="form-control kt-hide" name="mmtDesc" id="mmtDesc" readonly="readonly"></textarea>
+					<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptDesc">회의록 내용</span></label>
+					<textarea class="form-control kt-hide" name="rptDesc" id="rptDesc" readonly="readonly"></textarea>
 				</div>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span class="osl-resize__display--show" data-lang-cd="modal.close">Close</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -72,26 +57,23 @@ var OSLSpr2002Popup = function () {
 	// Private functions
     var documentSetting = function () {
     	
-    	//Portlet 세팅
-    	new KTPortlet('spr2002MeetingMemberList', $.osl.lang("portlet"));
-    	
 		//회의록 정보 가져오기 및 세팅
-    	selectSprMmtInfo();
+    	selectSprRptInfo();
     	
 	};
 	
     /**
 	 * 	스프린트 회의록 정보 조회
 	 */
-	 var selectSprMmtInfo = function() {
+	 var selectSprRptInfo = function() {
     	var data = {
-    			mmtId :  $("#mmtId").val(),
+    			rptId :  $("#rptId").val(),
     			sprId :  $("#sprId").val(),
     	};
 
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000MmtInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/spr/spr2000/spr2000/selectReq2000ReqInfoAjax.do'/>", "async":"true"}
 				,data);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
@@ -102,44 +84,48 @@ var OSLSpr2002Popup = function () {
 				$.osl.layerPopupClose();
 			}else{
 				//수정할때 호출
-		    	$.osl.setDataFormElem(data.mmtInfo,"frSpr2002");
+		    	$.osl.setDataFormElem(data.rptInfo,"frSpr2002");
 		
 				//참여 인원 정보 넣기
-				var mmtMemList = data.mmtMemList;
+				var rptMemList = data.rptMemList;
 				
 				var str = "";
-				var lastCount =  mmtMemList.length;
-				if(lastCount>0){
-					$("#memCnt").text(lastCount);
-				}
-				
-				//참여인원 태그 형으로 넣기mmtMemInfo
-				if(!$.osl.isNull(mmtMemList)){
-					$.each(mmtMemList, function(idx, value){
-						str += '<div class="kt-user-card-v2 d-inline-block mmtMemInfo osl-outline--secondary kt-padding-5 kt-margin-l-5 kt-margin-r-5" data-user="'+ value.usrId +'">'
-									+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'
-										+'<img src="'+$.osl.user.usrImgUrlVal(value.usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
-									+'</div>'
-									+'<div class="kt-user-card-v2__details float-left">'
-										+'<span class="kt-user-card-v2__name">'+value.usrNm+'</span>'
-										+'<span class="kt-user-card-v2__email">'+value.usrEmail+'</span>'
-									+'</div>'
-								+'</div>';
+				var lastCount =  rptMemList.length;
+				//참여인원 태그 형으로 넣기
+				if(rptMemList != null && rptMemList.length > 0){
+					$.each(rptMemList, function(idx, value){
+						//참여인원 수가 8명 이하일 때만 태그형
+						if(lastCount <=8){
+							str += '<div class="kt-user-card-v2 btn rptMemInfo osl-outline--secondary osl-width__fit-content kt-padding-5 float-left kt-margin-5" data-user="'+value.usrId+'">'
+										+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
+											+'<img src="/cmm/fms/getImage.do?fileSn=0&atchFileId='+value.usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+										+'</div>'
+										+'<div class="kt-user-card-v2__details">'
+											+'<span class="kt-user-card-v2__name ">'+value.usrNm+' ('+value.usrId+')</span>'
+										+'</div>'
+									+'</div>';
+						}else{
+							//참여인원 수가 9명 이상일 땐 사진형
+							 str += "<a href='#' class='rptMemInfo kt-media kt-media--xs kt-media--circle' tabindex='0' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.usrNm)+"' data-original-title='"+$.osl.escapeHtml(value.usrNm)+"' data-user='"+value.usrId+"'><img src='/cmm/fms/getImage.do?fileSn=0&atchFileId="+value.usrImgId+"'></a>";
+						}
 					});
 				}
-				
-				$("#mmtMemSelect").append(str);
+				if(lastCount > 8){
+					$("#rptMemSelect").attr("class", "kt-media-group");
+				}
+				$("#rptMemSelect").append(str);
 				
 				//툴팁 적용
-				//KTApp.initTooltips();
+				KTApp.initTooltips();
 				
 				//참여인원 아이콘 클릭 시
-				$(".mmtMemInfo").click(function(){
+				$(".rptMemInfo").click(function(){
+					k = $(this);
 					$.osl.user.usrInfoPopup($(this).data("user"));
 				});
 				
 				//edit 세팅
-	    		formEditList.push($.osl.editorSetting("mmtDesc", {
+	    		formEditList.push($.osl.editorSetting("rptDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,
 	    			disableDragAndDrop: true,
@@ -148,7 +134,7 @@ var OSLSpr2002Popup = function () {
 	    		}));
 	    		
 		    	//edit 세팅하고 나서 textarea 보이기
-		    	$("#mmtDesc").removeClass("kt-hide");
+		    	$("#rptDesc").removeClass("kt-hide");
 			}
 		});
 		

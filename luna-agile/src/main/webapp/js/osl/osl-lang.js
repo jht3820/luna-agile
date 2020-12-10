@@ -546,18 +546,6 @@ var OSLCoreLangSetting = function () {
 				removeBtn: "제외",
 				addBtn:"배정"
 			},
-			field:{
-				sprTypeNm : "상태",
-				sprNm : "스프린트명",
-				sprStdtm : "시작일",
-				sprEddtm : "종료일",
-				sprDesc : "스프린트 설명",
-				sprDtm :"기간",
-				reqNm : "요구사항 명",
-				reqOrd : "순번",
-				reqProTypeNm : "처리유형",
-				reqDtm :"요청일",
-			},
 			actionBtn :{
 				title :{
 					selectBtn : "선택",
@@ -575,15 +563,41 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		spr2000:{
+			title :"회의록 목록",
 			button:{
 				detailBtn : "상세",
 			},
 			actionBtn:{
+				title : "수정 / 삭제 / 상세",
 				selectTooltip : "회의록 조회",
 				insertTooltip : "회의록 추가",
 				updateTooltip : "회의록 수정",
 				deleteTooltip : "회의록 삭제",
 				detailTooltip : "회의록 상세",
+			},
+			message : {
+				selectMsg : "스프린트를 선택하세요.",
+			},
+			title : {
+				insertTitle : "스프린트 회의록 등록",
+				updateTitle : "스프린트 회의록 수정",
+				detailTitle : "스프린트 회의록 상세",
+			}
+		},
+		spr2001:{
+			submit: "완료",
+			label : {
+				sprNm : "스프린트명",
+				rptMem: "참여 인원",
+				rptNm :"회의록 제목",
+				rptDesc : "회의록 내용",
+			},
+			button : {
+				insertBtn : "등록",
+				updateBtn : "수정 완료",
+			},
+			placeholder:{
+				rptNM : "제목",
 			}
 		},
 		stm2100:{
@@ -1119,6 +1133,32 @@ var OSLCoreLangSetting = function () {
 				prjSetValNm:"Setting Value",
 				modifyDtmDay:"Modify Date",
 				modifyUsrNm:"Final Modifier",
+			},
+			spr1000SprTable:{
+				sprTypeNm : "Type",
+				sprNm : "Sprint Name",
+				sprStdtm : "Start Date",
+				sprEddtm : "End Date",
+				sprDesc : "Sprint Desciption",
+				sprDtm :"Date Range",
+			},
+			spr1100AssTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
+			},
+			spr1100NonTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
+			},
+			spr2000RptTable:{
+				rptNm : "Metting Log Title",
+				rptMemCnt : "Metting Member",
+				rptUsrId : "Writer",
+				rptDtm : "Write Date",
 			}
 		},
 		date:{
