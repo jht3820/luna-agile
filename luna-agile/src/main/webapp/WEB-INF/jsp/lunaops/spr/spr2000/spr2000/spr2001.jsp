@@ -243,7 +243,7 @@ var OSLSpr2001Popup = function () {
 
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000SprInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000RptInfoAjax.do'/>", "async":"true"}
 				,data);
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){

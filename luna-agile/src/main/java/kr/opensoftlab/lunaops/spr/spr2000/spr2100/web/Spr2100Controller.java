@@ -46,8 +46,8 @@ public class Spr2100Controller {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2000MmrListAjax.do")
-	public ModelAndView selectSpr2000MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2100MmrListAjax.do")
+	public ModelAndView selectSpr2100MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -114,7 +114,7 @@ public class Spr2100Controller {
 			
 			return new ModelAndView("jsonView");
 		} catch (Exception ex) {
-			Log.error("selectSpr2000MmrListAjax()", ex);
+			Log.error("selectSpr2100MmrListAjax()", ex);
 			
 			
 			model.addAttribute("errorYn", "Y");
@@ -130,8 +130,8 @@ public class Spr2100Controller {
 	}
 	
 	
-	@RequestMapping(value = "/spr/spr2000/spr2100/insertSpr2100MmrInfoAjax.do")
-	public ModelAndView insertSpr2100MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/spr/spr2000/spr2100/insertSpr2101MmrInfoAjax.do")
+	public ModelAndView insertSpr2101MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -156,6 +156,107 @@ public class Spr2100Controller {
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
+			return new ModelAndView("jsonView");
+		}
+	}
+
+	
+	@RequestMapping(value="/spr/spr2000/spr2100/selectSpr2102View.do")
+	public String selectSpr2102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			return "/spr/spr2000/spr2100/spr2102";
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes"})
+	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2100MmrInfoAjax.do")
+	public ModelAndView selectSpr2100MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
+			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			Map mmrInfo = spr2100Service.selectSpr2100MmrInfo(paramMap);
+			model.addAttribute("mmrInfo", mmrInfo);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("selectSpr2100MmrInfoAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
+			return new ModelAndView("jsonView");
+		}
+	}
+
+	
+	@RequestMapping(value = "/spr/spr2000/spr2100/updateSpr2101MmrInfoAjax.do")
+	public ModelAndView updateSpr2101MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
+			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			spr2100Service.updateSpr2100MmrInfo(paramMap);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("updateSpr2101MmrInfoAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value = "/spr/spr2000/spr2100/deleteSpr2100MmrListAjax.do")
+	public ModelAndView deleteSpr2100MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
+			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			spr2100Service.deleteSpr2100MmrList(paramMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("deleteSpr2100MmrListAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
 			return new ModelAndView("jsonView");
 		}
 	}

@@ -825,7 +825,7 @@ label.required:after {
 /*osl-uppy-file--fullsize 한줄 라인으로 전체 변환*/
 /*첨부파일  - 각 파일*/
 .osl-uppy-file--fullsize.osl-uppy-file{
-	padding:10px 0 10px 10px;
+	padding:10px 20px;
 	width: 100%;
 	height: 70px;
 	border-bottom: 1px solid #eaeaea;

@@ -32,7 +32,7 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 	EgovMessageSource egovMessageSource;
 
 	
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Map<String, String> selectSpr2000JsonToMap(Map paramMap){
 		Map rtnMap = new HashMap();
 		for( Object key : paramMap.keySet() ) {
@@ -107,7 +107,7 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 	}
 	
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public void updateSpr2000RptInfo(Map paramMap) throws Exception {
 		
 		Map<String, String> convertParamMap = selectSpr2000JsonToMap(paramMap);
