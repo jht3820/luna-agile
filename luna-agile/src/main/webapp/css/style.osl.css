@@ -1259,6 +1259,9 @@ label.required:after {
 .osl-outline--brand-b{
 	border-bottom: 2px solid #1cac81;
 }
+.osl-outline--secondary{
+	border: 1px solid #e1e1ef;
+}
 .osl-outline--secondary-b{
 	border-bottom: 2px solid #e1e1ef;
 }
@@ -1645,7 +1648,6 @@ label.required:after {
   display: none; }
  /*******************end :: wizard*******************/
 
-
 .select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice{
 	display: flex;
 	padding: 5px 10px;
@@ -1654,8 +1656,26 @@ label.required:after {
 .select2.select2-container.select2-container--default{
 	width: 100% !important;
 }
+.osl-select2-view{
+	display: inline-table;
+	padding: 5px 10px;
+	align-items: center;
+	width: 100% !important;
+    text-decoration: inherit;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.4rem;
+    left: auto;
+    right: 1.85rem;
+    height : auto;
+}
 @media (min-width: 767px){
 	.select2-selection__rendered{
+		max-height: 57px;
+		overflow-y: auto !important;
+	}
+	.osl-select2-view{
 		max-height: 57px;
 		overflow-y: auto !important;
 	}

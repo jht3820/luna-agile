@@ -184,14 +184,18 @@ var OSLSpr1100Popup = function () {
 				{field: 'rptMemCnt', title: '참여자 수', textAlign: 'center', width: 80},
 				{field: 'rptUsrId', title: '작성자', textAlign: 'left', width: 120,
 					template: function (row) {
-						var usrData = {
-								html: row.rptUsrNm,
-								imgSize: "sm",
-								class:{
-									cardBtn: "osl-width__fit-content"
-								}
-						};
-						return $.osl.user.usrImgSet(row.rptUsrImgId, usrData);
+						if(row.usrId == null){
+							return "";
+						}else{
+							var usrData = {
+									html: row.rptUsrNm,
+									imgSize: "sm",
+									class:{
+										cardBtn: "osl-width__fit-content"
+									}
+							};
+							return $.osl.user.usrImgSet(row.rptUsrImgId, usrData);
+						}
 					},
 					onclick: function(row){
 						$.osl.user.usrInfoPopup(row.rptUsrId);
@@ -209,6 +213,7 @@ var OSLSpr1100Popup = function () {
 				clickCheckbox: true
 			},
 			actionBtn:{
+				"title":"수정 / 삭제 / 상세",
 				"dblClick": true,
 			},
 			actionTooltip:{
@@ -244,7 +249,7 @@ var OSLSpr1100Popup = function () {
 							sprId : rowData.sprId
 						};
 						var options = {
-							idKey: "spr2001_insert",
+							idKey: "spr2001_update",
 							modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 수정")+" ]",
 							closeConfirm: true,
 							autoHeight: false,
@@ -280,8 +285,8 @@ var OSLSpr1100Popup = function () {
 							sprId : rowData.sprId
 						};
 					var options = {
-						idKey: "spr2001_insert",
-						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 수정")+" ]",
+						idKey: "spr2001_detail",
+						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회의록 상세")+" ]",
 						closeConfirm: true,
 						autoHeight: false,
 						modalSize: "xl",
@@ -305,6 +310,9 @@ var OSLSpr1100Popup = function () {
         // public functions
         init: function() {
         	documentSetting();
+        },
+        reload: function() {
+        	selectBtnClick();
         }
         
     };
