@@ -15,7 +15,10 @@
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label class="required"><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr2001.label.rptMem">참여 인원</span></label>
+					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
+						<span data-lang-cd="spr2001.label.rptMem">참여 인원</span>
+						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
+					</label>
 					<select class="form-control kt-select2 select2-hidden-accessible" id="rptMemSelect" name="rptMemSelect" multiple="" data-select2-id="rptMemSelect" tabindex="-1" aria-hidden="true"></select>
 				</div>
 			</div>
@@ -64,30 +67,46 @@ var OSLSpr2001Popup = function () {
     var documentSetting = function () {
     	
     	type = $("#type").val();
-
+    	
     	//kt-select2 설정
 		$('#rptMemSelect').select2({
-			placeholder : $.osl.lang("common.name.select"),
+			placeholder : $.osl.lang("spr2001.placeholder.select2") + "("+$.osl.lang("spr2001.message.select2")+")",
 			templateResult: optionFormatState,
-			templateSelection : tagFormatState
+			templateSelection : tagFormatState,
+			dropdownParent: $("#frSpr2001"),
 		});
-    	
+
+		//select2 클릭 이벤트
+		$('#rptMemSelect').on('select2:close', function (evt) {
+	        var count = $(this).select2('data').length;
+	        if(count==0){
+				$("#memCnt").text("0");
+	        	$("#memCnt").addClass("kt-hide");
+	        }
+	        else{
+	        	$("#memCnt").text(count);
+	        	$("#memCnt").removeClass("kt-hide");
+	        }
+		});
+		
     	//문구 세팅 
     	$("#spr2001SaveSubmit > span").text($.osl.lang("spr2001.button."+type+"Btn"));
     	
     	//placeholder 세팅
-    	$("#rptNm").attr("placeholder",$.osl.lang("spr2001.placeholder.rptNm"));
-    	
+    	$("#rptNm").attr("placeholder", $.osl.lang("spr2001.placeholder.rptNm"));
+
     	//등록인경우
     	if(type == "insert"){
     		//선택한 스프린트 id에 해당하는 이름으로 지정
     		$("#sprNm").val($("#paramSprNm").val());
 
+    		$("#memCnt").text(0);
+    		
     		//사용자 리스트 세팅
         	selectUsrList();
         	
     		//edit 세팅
-    		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, 'maxHeight': 190}));
+    		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
 	    	//edit 세팅하고 나서 textarea 보이기
 	    	$("#rptDesc").removeClass("kt-hide");
     	
@@ -130,10 +149,10 @@ var OSLSpr2001Popup = function () {
     	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
     	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
 
-    	var $state = $(
-    			'<div class="kt-user-card-v2 btn" data-usr-id="'+ usrId +'">'
+    	var state = $(
+    			'<div class="kt-user-card-v2 btn" data-usr-id="'+ usrId +'">' 
 				+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-					+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+					+'<img src="'+$.osl.user.usrImgUrlVal(usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 				+'</div>'
 				+'<div class="kt-user-card-v2__details float-left">'
 					+'<span class="kt-user-card-v2__name float-left">'+usrNm+'</span>'
@@ -142,7 +161,7 @@ var OSLSpr2001Popup = function () {
 			+'</div>'
    	    );
     	
-   	    return $state;
+    	return state;
     };
     
     /**
@@ -157,10 +176,10 @@ var OSLSpr2001Popup = function () {
     	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
     	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
 
-    	var $state = $(
+    	var state = $(
     			'<div class="kt-user-card-v2 d-inline-block" data-usr-id="'+ usrId +'">'
 					+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'
-						+'<img src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+						+'<img src="'+$.osl.user.usrImgUrlVal(usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 					+'</div>'
 					+'<div class="kt-user-card-v2__details float-left">'
 						+'<span class="kt-user-card-v2__name">'+usrNm+'</span>'
@@ -168,8 +187,8 @@ var OSLSpr2001Popup = function () {
 					+'</div>'
 				+'</div>'
    	    );
-
-   	    return $state;
+    	
+   	    return state;
     };
     
     /**
@@ -201,6 +220,10 @@ var OSLSpr2001Popup = function () {
 					
 					var str = '';
 					if(selectedUsrList != null && selectedUsrList.length>0){
+						//등록된 참여 인원이 있으므로
+						$("#memCnt").text(selectedUsrList.length);
+	        			$("#memCnt").removeClass("kt-hide");
+	        	
 						//수정 시 이미 등록된 참여인원인지 확인
 						var check = false;
 						$.each(selectedUsrList, function(index, item){
@@ -225,7 +248,6 @@ var OSLSpr2001Popup = function () {
 					
 					$("#rptMemSelect").append(str);
 				});
-
 			}
 		});
 		//AJAX 전송
@@ -261,7 +283,7 @@ var OSLSpr2001Popup = function () {
 				selectUsrList(rptMemList);
 								
 	    		//edit 세팅
-	    		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, 'maxHeight': 190}));
+	    		formEditList.push($.osl.editorSetting("rptDesc", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
 	    		//edit 세팅하고 나서 textarea 보이기
 		    	$("#rptDesc").removeClass("kt-hide");
 			}
@@ -353,7 +375,7 @@ var OSLSpr2001Popup = function () {
    				$.osl.layerPopupClose();
    				
    				//전체 목록 재조회
-   				OSLSpr1100Popup.reload();
+   				OSLSpr2000Popup.reload();
    			}
    		});
    		
@@ -380,8 +402,8 @@ var OSLSpr2001Popup = function () {
 			}
 		}
 	};
-	
-    return {
+
+	return {
         // public functions
         init: function() {
         	documentSetting();

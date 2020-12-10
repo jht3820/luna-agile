@@ -264,6 +264,13 @@ var OSLCoreLangSetting = function () {
 			confirm:{
 				prjGrpRedo: "${1}건의 프로젝트 그룹을 복구하시겠습니까?",
 				prjGrpDelete: "${1}건의 프로젝트 그룹을 완전 삭제하시겠습니까?</br>삭제된 프로젝트 그룹은 복구 할 수 없습니다."
+			},
+			datatable:{
+				action:{
+					dblClick: "상세 정보",
+					update: "프로젝트 그룹 수정",
+					delete: "프로젝트 그룹 삭제"
+				}
 			}
 		},
 		prj1001:{
@@ -562,6 +569,45 @@ var OSLCoreLangSetting = function () {
 				},
 			}
 		},
+		spr1000:{
+			nonSelect: "스프린트를 선택해주세요.",
+			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
+			sprTypeStartMsg: "시작 중인 스프린트만 종료 할 수 있습니다.", 
+			startDate: "시작일",
+			endDate: "종료일",
+			completedRatio: "진척률",
+			projectCnt: "등록 프로젝트",
+			requestAll: "전체 요구사항",
+			requestInProgress: "진행 중",
+			requestDone: "최종 완료",
+			menu:{
+				update: "스프린트 수정",
+				delete: "스프린트 삭제",
+				sprintStart: "스프린트 시작",
+				sprintEnd: "스프린트 종료",
+				sprintDetail: "스프린트 상세정보",
+				sprintMeetList: "스프린트  회의록 목록",
+				sprintResultList: "스프린트 회고록 목록",
+				sprintReport: "보고서 출력"
+			},
+			button:{
+				title:{
+					sprStart: "시작",
+					sprEnd: "종료"
+				}
+			},
+			confirm:{
+				prjGrpRedo: "${1}건의 프로젝트 그룹을 복구하시겠습니까?",
+				prjGrpDelete: "${1}건의 프로젝트 그룹을 완전 삭제하시겠습니까?</br>삭제된 프로젝트 그룹은 복구 할 수 없습니다."
+			},
+			datatable:{
+				action:{
+					update: "스프린트 수정",
+					delete: "스프린트 삭제",
+					dblClick: "스프린트 상세 정보"
+				}
+			}
+		},
 		spr2000:{
 			title :"회의록 목록",
 			button:{
@@ -597,7 +643,11 @@ var OSLCoreLangSetting = function () {
 				updateBtn : "수정 완료",
 			},
 			placeholder:{
-				rptNM : "제목",
+				rptNm : "제목",
+				select2 : "선택 또는 입력"
+			},
+			message : {
+				select2 : "없을 경우 작성자가 자동으로 추가됩니다."
 			}
 		},
 		spr2100:{
@@ -1193,8 +1243,8 @@ var OSLCoreLangSetting = function () {
 				reqDtm : "Request Date",
 			},
 			spr2000RptTable:{
-				rptNm : "Metting Log Title",
-				rptMemCnt : "Metting Member",
+				rptNm : "Meeting Log Title",
+				rptMemCnt : "Meeting Members",
 				rptUsrId : "Writer",
 				rptDtm : "Write Date",
 			},
@@ -1452,7 +1502,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		req4101:{
-			complete : "Submit",
+			complete : "Complete",
 			saveString :{
 				insertStr : "Would you like to register your requirements?",
 				updateStr : "Would you like to modify your requirements?",
@@ -1550,6 +1600,111 @@ var OSLCoreLangSetting = function () {
 			text: "This is secret request.<br/> You must entered password.",
 			button:{
 				submit : "Submit",
+			}
+		},
+		spr1100:{
+			title : {
+				sprint : "Sprint List",
+				assignment : "Assignment Request List",
+				unassigned : "Unassigned Request List",
+			},
+			button:{
+				removeBtn: "Remove",
+				addBtn:"Add"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "Select",
+					removeBtn :"Remove",
+					addBtn :"Add",
+					sprSelect : "Select Sprint",
+					assSelect : "Select Assignment Request",
+					nonSelect : "Select Unassigned Request",
+				},
+				tooltip :{
+					clickToolTip : "Select Sprint",
+					removeToolTip :"Remove Request",
+					addToolTip :"Add Request",
+				},
+			}
+		},
+		spr2000:{
+			title :"Meeting Log List",
+			button:{
+				detailBtn : "Detail",
+			},
+			actionBtn:{
+				title : "Upd / Del / Det",
+				selectTooltip : "Select Meeting Log",
+				insertTooltip : "Insert Meeting Log",
+				updateTooltip : "Update Meeting Log",
+				deleteTooltip : "Delete Meeting Log",
+				detailTooltip : "Detail Meeting Log",
+			},
+			message : {
+				selectMsg : "Please, select 1 sprint.",
+			},
+			title : {
+				insertTitle : "Insert Meeting Log",
+				updateTitle : "Update Meeting Log",
+				detailTitle : "Detail Meeting Log",
+			}
+		},
+		spr2001:{
+			submit: "Complete",
+			label : {
+				sprNm : "Sprint Title",
+				rptMem: "Meeting Members",
+				rptNm :"Title",
+				rptDesc : "Desciption",
+			},
+			button : {
+				insertBtn : "Insert Meeting Log",
+				updateBtn : "Update Meeting Log",
+			},
+			placeholder:{
+				rptNm : "Title",
+				select2 : "Click or Search Text"
+			},
+			message : {
+				select2 : "If not, the writer is automatically added."
+			}
+		},
+		spr2100:{
+			title :"Memoris List",
+			button:{
+				detailBtn : "Detail",
+			},
+			actionBtn:{
+				title : "Upd / Del / Det",
+				selectTooltip : "Select Memoris",
+				insertTooltip : "Insert Memoris",
+				updateTooltip : "Update Memoris",
+				deleteTooltip : "Delete Memoris",
+				detailTooltip : "Detail Memoris",
+			},
+			message : {
+				selectMsg : "Please, select 1 sprint.",
+			},
+			title : {
+				insertTitle : "Insert Memoris",
+				updateTitle : "Update Memoris",
+				detailTitle : "Detail Memoris",
+			}
+		},
+		spr2101:{
+			submit: "Complete",
+			label : {
+				sprNm : "Sprint Title",
+				mmrNm :"Title",
+				mmrDesc : "Desciption",
+			},
+			button : {
+				insertBtn : "Insert Memoris",
+				updateBtn : "Update Memoris",
+			},
+			placeholder:{
+				mmrNM : "Title",
 			}
 		},
 		stm2100:{

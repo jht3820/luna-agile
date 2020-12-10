@@ -9,77 +9,87 @@
 	
 	
 	<sql id="selectSpr1100AssList">
-		SELECT 
+		SELECT
 			ROWNUM RN
-			, A.REQ_ID AS REQ_ID
-			, A.REQ_NM AS REQ_NM
-			, A.REQ_ORD AS REQ_ORD
-			, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
-			, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
-			, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
-			, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
-	    FROM REQ4100 A JOIN SPR1100 B
-	    ON (A.REQ_ID = B.REQ_ID AND A.PRJ_ID = B.PRJ_ID AND A.PRJ_GRP_ID = B.PRJ_GRP_ID AND B.LIC_GRP_ID = #licGrpId#)
-	    WHERE 1=1
-	    AND A.PRJ_GRP_ID = #prjGrpId#
-		AND A.PRJ_ID = #prjId#
-		AND B.SPR_ID = #sprId#
-		<isNotEmpty property="paramSortFieldId">
-			<isNotEmpty property="sortDirection">
-				ORDER BY $paramSortFieldId$
-				<isEqual property="sortDirection" compareValue="desc">
-					DESC
-				</isEqual>
-				<isEqual property="sortDirection" compareValue="asc">
-					ASC
-				</isEqual>
+			, T1.*
+		FROM (
+			SELECT 
+				A.REQ_ID AS REQ_ID
+				, A.REQ_NM AS REQ_NM
+				, A.REQ_ORD AS REQ_ORD
+				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
+				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+		    FROM REQ4100 A JOIN SPR1100 B
+		    ON (A.REQ_ID = B.REQ_ID AND A.PRJ_ID = B.PRJ_ID AND A.PRJ_GRP_ID = B.PRJ_GRP_ID AND B.LIC_GRP_ID = #licGrpId#)
+		    WHERE 1=1
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND B.SPR_ID = #sprId#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
 			</isNotEmpty>
-		</isNotEmpty>
-		<isEmpty property="paramSortFieldId">
-			ORDER BY A.REQ_DTM DESC
-		</isEmpty> 
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.REQ_DTM DESC
+			</isEmpty> 
+		) T1
+		WHERE 1 = 1
 	</sql>
 	
 	
 	<sql id="selectSpr1100NonAssList">
-		SELECT 
+		SELECT
 			ROWNUM RN
-			, A.REQ_ID AS REQ_ID
-			, A.REQ_NM AS REQ_NM
-			, A.REQ_ORD AS REQ_ORD
-			, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
-			, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
-			, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
-			, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
-	    FROM REQ4100 A 
-	    WHERE 1=1
-	    AND A.PRJ_GRP_ID = #prjGrpId#
-		AND A.PRJ_ID = #prjId#
-		AND NOT EXISTS (
-			SELECT 
-				B.REQ_ID AS REQ_ID
-			FROM SPR1100 B
-            WHERE 1 = 1
-            AND B.LIC_GRP_ID = #licGrpId#
-            AND B.PRJ_GRP_ID = A.PRJ_GRP_ID
-            AND B.PRJ_ID = A.PRJ_ID
-            AND B.SPR_ID = #sprId#
-            AND B.REQ_ID = A.REQ_ID
-		)
-		<isNotEmpty property="paramSortFieldId">
-			<isNotEmpty property="sortDirection">
-				ORDER BY $paramSortFieldId$
-				<isEqual property="sortDirection" compareValue="desc">
-					DESC
-				</isEqual>
-				<isEqual property="sortDirection" compareValue="asc">
-					ASC
-				</isEqual>
+			, T1.*
+		FROM (
+			SELECT
+				 A.REQ_ID AS REQ_ID
+				, A.REQ_NM AS REQ_NM
+				, A.REQ_ORD AS REQ_ORD
+				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
+				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+		    FROM REQ4100 A 
+		    WHERE 1=1
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND NOT EXISTS (
+				SELECT 
+					B.REQ_ID AS REQ_ID
+				FROM SPR1100 B
+	            WHERE 1 = 1
+	            AND B.LIC_GRP_ID = #licGrpId#
+	            AND B.PRJ_GRP_ID = A.PRJ_GRP_ID
+	            AND B.PRJ_ID = A.PRJ_ID
+	            AND B.SPR_ID = #sprId#
+	            AND B.REQ_ID = A.REQ_ID
+			)
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
 			</isNotEmpty>
-		</isNotEmpty>
-		<isEmpty property="paramSortFieldId">
-			ORDER BY A.REQ_DTM DESC
-		</isEmpty> 
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.REQ_DTM DESC
+			</isEmpty> 
+		) T1
+		WHERE 1 = 1
 	</sql>
 	
 	
