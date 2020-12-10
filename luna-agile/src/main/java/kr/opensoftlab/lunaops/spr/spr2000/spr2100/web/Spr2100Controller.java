@@ -46,8 +46,8 @@ public class Spr2100Controller {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2100MmrListAjax.do")
-	public ModelAndView selectSpr2100MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2000MmrListAjax.do")
+	public ModelAndView selectSpr2000MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -56,25 +56,8 @@ public class Spr2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
-			
-			
-			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
-				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
-				paramPrjId = (String) ss.getAttribute("selPrjId");
-			}
-			
-			paramMap.put("prjGrpId", paramPrjGrpId);
-			paramMap.put("prjId", paramPrjId);
+			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
+			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
 			
 			String sortFieldId = (String) paramMap.get("sortFieldId");
@@ -96,7 +79,7 @@ public class Spr2100Controller {
 			String sprId = (String) paramMap.get("sprId");
 			
 			
-			Map<String, Object> metaMap = null;
+			Map<String, Object> pageMap = null;
 			
 			
 			if(sprId != null && !sprId.isEmpty()) {
@@ -111,21 +94,19 @@ public class Spr2100Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				spr2100List = spr2100Service.selectSpr2100MmrList(paramMap);
-			}
-			
-			if(totCnt != 0) {
+
 				
-				metaMap.put("sort", sortDirection);
-				metaMap.put("field",sortFieldId);
+				pageMap.put("sort", sortDirection);
+				pageMap.put("field",sortFieldId);
 			}
 			
 			
 			model.addAttribute("data", spr2100List);
-			model.addAttribute("meta", metaMap);
+			model.addAttribute("meta", pageMap);
 
 			
 			model.addAttribute("errorYn", "N");
@@ -133,7 +114,7 @@ public class Spr2100Controller {
 			
 			return new ModelAndView("jsonView");
 		} catch (Exception ex) {
-			Log.error("selectSpr2100MmrListAjax()", ex);
+			Log.error("selectSpr2000MmrListAjax()", ex);
 			
 			
 			model.addAttribute("errorYn", "Y");
@@ -149,8 +130,8 @@ public class Spr2100Controller {
 	}
 	
 	
-	@RequestMapping(value = "/spr/spr2000/spr2100/insertSpr2101MmrInfoAjax.do")
-	public ModelAndView insertSpr2101MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/spr/spr2000/spr2100/insertSpr2100MmrInfoAjax.do")
+	public ModelAndView insertSpr2100MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -159,26 +140,8 @@ public class Spr2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
-			
-			
-			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
-				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
-				paramPrjId = (String) ss.getAttribute("selPrjId");
-			}
-			
-			paramMap.put("prjGrpId", paramPrjGrpId);
-			paramMap.put("prjId", paramPrjId);
+			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
+			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			
 			spr2100Service.insertSpr2100MmrInfo(paramMap);
 
@@ -193,160 +156,6 @@ public class Spr2100Controller {
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
-			return new ModelAndView("jsonView");
-		}
-	}
-
-	
-	@RequestMapping(value="/spr/spr2000/spr2100/selectSpr2102View.do")
-	public String selectSpr2102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-			return "/spr/spr2000/spr2100/spr2102";
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes"})
-	@RequestMapping(value = "/spr/spr2000/spr2100/selectSpr2100MmrInfoAjax.do")
-	public ModelAndView selectSpr2100MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
-		try {
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("licGrpId", loginVO.getLicGrpId());
-						
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
-			
-			
-			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
-				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
-				paramPrjId = (String) ss.getAttribute("selPrjId");
-			}
-			
-			paramMap.put("prjGrpId", paramPrjGrpId);
-			paramMap.put("prjId", paramPrjId);
-			
-			Map mmrInfo = spr2100Service.selectSpr2100MmrInfo(paramMap);
-			model.addAttribute("mmrInfo", mmrInfo);
-
-			
-			model.addAttribute("errorYn", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
-			
-			return new ModelAndView("jsonView");
-		} catch (Exception ex) {
-			Log.error("selectSpr2100MmrInfoAjax()", ex);
-			
-			
-			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
-			return new ModelAndView("jsonView");
-		}
-	}
-
-	
-	@RequestMapping(value = "/spr/spr2000/spr2100/updateSpr2101MmrInfoAjax.do")
-	public ModelAndView updateSpr2101MmrInfoAjax(HttpServletRequest request, ModelMap model) throws Exception {
-		try {
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("licGrpId", loginVO.getLicGrpId());
-									
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
-			
-			
-			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
-				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
-				paramPrjId = (String) ss.getAttribute("selPrjId");
-			}
-			
-			paramMap.put("prjGrpId", paramPrjGrpId);
-			paramMap.put("prjId", paramPrjId);
-			
-			spr2100Service.updateSpr2100MmrInfo(paramMap);
-
-			
-			model.addAttribute("errorYn", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-			
-			return new ModelAndView("jsonView");
-		} catch (Exception ex) {
-			Log.error("updateSpr2101MmrInfoAjax()", ex);
-			
-			
-			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@RequestMapping(value = "/spr/spr2000/spr2100/deleteSpr2100MmrListAjax.do")
-	public ModelAndView deleteSpr2100MmrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
-		try {
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
-			
-			
-			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
-				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
-				paramPrjId = (String) ss.getAttribute("selPrjId");
-			}
-			
-			paramMap.put("prjGrpId", paramPrjGrpId);
-			paramMap.put("prjId", paramPrjId);
-			
-			spr2100Service.deleteSpr2100MmrList(paramMap);
-			
-			
-			model.addAttribute("errorYn", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
-			
-			return new ModelAndView("jsonView");
-		} catch (Exception ex) {
-			Log.error("deleteSpr2100MmrListAjax()", ex);
-			
-			
-			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
 			return new ModelAndView("jsonView");
 		}
 	}
