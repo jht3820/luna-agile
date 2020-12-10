@@ -1,4 +1,7 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
 	
 	var lang = {};
@@ -67,7 +70,10 @@ var OSLCoreLangSetting = function () {
 				select: "조회",
 				insert: "추가",
 				update: "수정",
-				delete: "삭제"
+				delete: "삭제",
+				redo: "복구",
+				recordDelete: "완전삭제",
+				prev: "돌아가기"
 			},
 			action:{
 				functionNm: "기능 버튼",
@@ -201,7 +207,9 @@ var OSLCoreLangSetting = function () {
 			},
 			error:{
 				sessionInvalid:"세션이 만료되어 로그인 페이지로 이동합니다.",
-				nonAuth:"해당 요청의 권한이 없습니다."
+				nonAuth:"해당 요청의 권한이 없습니다.",
+				popup:"팝업 페이지에서 오류가 발생했습니다.",
+				modalDuple: "해당 기능 팝업은 중복으로 동작 할 수 없습니다."
 			},
 			menu:{
 				top: "최상위",
@@ -219,9 +227,12 @@ var OSLCoreLangSetting = function () {
 				title: "알림",
 				ok: "확인",
 				cancel: "취소"
+			},
+			modal:{
+				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -235,12 +246,24 @@ var OSLCoreLangSetting = function () {
 				trashMove: "휴지통 이동(삭제)",
 				projectListMove: "프로젝트 목록 이동",
 				createProject: "신규 프로젝트 추가",
-				projectDetail: "상세 정보"
+				projectDetail: "상세 정보",
+				recordDelete: "완전 삭제",
+				projectRedo: "프로젝트 그룹 복구"
 			},
 			button:{
 				title:{
-					insert: "신규 프로젝트 그룹 등록"
+					insert: "신규 프로젝트 그룹 등록",
+					update: "프로젝트 그룹 수정",
+					delete: "프로젝트 그룹 휴지통 이동(삭제)",
+					trash: "프로젝트 그룹 휴지통 목록",
+					redo: "프로젝트 그룹 복구",
+					recordDelete: "프로젝트 그룹 완전 삭제",
+					prev: "프로젝트 목록으로 이동"
 				}
+			},
+			confirm:{
+				prjGrpRedo: "${1}건의 프로젝트 그룹을 복구하시겠습니까?",
+				prjGrpDelete: "${1}건의 프로젝트 그룹을 완전 삭제하시겠습니까?</br>삭제된 프로젝트 그룹은 복구 할 수 없습니다."
 			}
 		},
 		prj1001:{
@@ -253,19 +276,78 @@ var OSLCoreLangSetting = function () {
 			menu:{
 				modify: "수정",
 				trashMove: "휴지통 이동(삭제)",
-				projectDetail: "상세 정보"
+				projectDetail: "상세 정보",
+				recordDelete: "완전 삭제",
+				projectRedo: "프로젝트 복구"
+			},
+			confirm:{
+				prjRedo: "${1}건의 프로젝트를 복구하시겠습니까?",
+				prjDelete: "${1}건의 프로젝트를 완전 삭제하시겠습니까?</br>삭제된 프로젝트는 복구 할 수 없습니다."
 			}
 		},
 		prj1002:{
-			title: "신규 프로젝트 그룹 생성",
 			complete: "완료",
 			insert:{
+				title: "신규 프로젝트 그룹 생성",
 				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
-				saveBtnString: "등록 완료"
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
+			},
+			update:{
+				title: "프로젝트 그룹 수정",
+				saveString: "프로젝트 그룹을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		prj1003:{
+			title: "프로젝트 그룹 상세정보",
+			insert:{
+				saveString: "신규 프로젝트 그룹을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
 			},
 			update:{
 				saveString: "프로젝트 그룹을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			}
+		},
+		prj1004:{
+			complete: "완료",
+			insert:{
+				title: "신규 프로젝트 생성",
+				saveString: "신규 프로젝트를 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+				saveMsg: "${1}명의 사용자가 배정되었습니다.",
+				saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+				saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)"
+			},
+			update:{
+				title: "프로젝트 수정",
+				saveString: "프로젝트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		prj1201:{
+			title: "프로젝트 설정 수정",
+			complete: "완료",
+			update:{
+				saveString: "프로젝트 설정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			actionBtn : {
+				updateBtn : "프로젝트 설정 수정"
+			},
+			label : {
+				prjSetNm: "설정명",
+				prjSetDesc: "설정 설명",
+				prjSetTarget: "설정 대상",
+				valType: "설정 값 타입",
+				prjSetVal: "설정값",
+				useCd: "사용유무"
 			}
 		},
 		prj2100:{
@@ -296,8 +378,216 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		req4100:{
+			button:{
+				copyBtn : "복사"
+			},
+			field:{
+				prjGrpNm: "프로젝트 그룹명",
+				prjNm: "프로젝트명",
+				reqOrd: "요청 번호",
+				reqProTypeNm: "처리유형",
+				reqNm: "요청 제목",
+				reqDtm: "요청일",
+				regDtm: "등록일",
+				reqUsrNm: "요청자",
+				reqUsrEmail: "요청자 e-mail",
+				reqUsrDeptNm: "요청자 조직",
+				reqUsrNum: "요청자 연락처",
+				reqKey: "요구사항 key"
+			},
+			actionBtn:{
+				title : "수정 / 삭제 / 상세 / 복사",
+				updateBtn : "요구사항 수정",
+				deleteBtn : "요구사항 삭제",
+				detailBtn : "요구사항 상세",
+				copyBtn : "요구사항 복사",
+				selectTooltip : "요구사항 조회",
+				insertTooltip : "요구사항 추가",
+				updateTooltip : "요구사항 수정",
+				deleteTooltip : "요구사항 삭제",
+				detailTooltip : "요구사항 상세",
+				copyTooltip : "요구사항 복사"
+			},
+			title:{
+				insertTitle : "신규 요구사항 등록",
+				updateTitle : "요구사항 수정",
+				detailTitle : "요구사항 확인"
+			},
+			alert:{
+				updateMsg : "접수 요청중인 요구사항만 수정 가능합니다.",
+				multiPwMsg : "패스워드 확인이 필요한 요구사항이 ${1}건 있습니다.<br/> 잠금된 요구사항을 제외 후 삭제 또는 잠금 요구사항은 단건 삭제하세요.",
+				selectData : "데이터를 선택하세요",
+				LockData : "잠긴 요구사항은 복사할 수 없습니다.",
+				selectCopyData : "복사는 1건에 대해서만 가능합니다. 현재 ${1}건 선택되었습니다.",
+			}
+		},
+		req4101:{
+			complete : "완료",
+			saveString :{
+				insertStr : "요구사항을 등록하시겠습니까?",
+				updateStr : "요구사항 수정을 완료하시겠습니까?",
+			},
+			label : {
+				reqUser : {
+					title : "요청자 정보",
+					usrNm : "요청자 이름",
+					email : "요청자 e-mail",
+					deptNm : "요청자 소속",
+					telNo : "요청자 연락처",
+				},
+				group:{
+					groupReqInfo : "그룹 요구사항 정보",
+					groupReq : "그룹 요구 사항",
+					groupReqDesc : "그룹 요구사항 내용",
+				},
+				prjNm : "프로젝트",
+				reqDtm : "요청일",
+				reqNm : "요청 제목",
+				reqDesc : "요청 내용",
+				reqPw : "요구사항 잠금",
+				password : "PW",
+				passwordCheck : "PW 확인",
+				attachments : "파일 첨부",
+				requestDefaultOptNm : "접수 기본항목 입력"
+			},
+			placeholder:{
+				usrNm : "요청자 이름",
+				email : "요청자 e-mail",
+				deptNm : "요청자 소속",
+				tel : "요청자 연락처",
+				selectGroup : "그룹 요구사항을 선택하세요.",
+				reqDtm : "요청일",
+				reqNm : "요청 제목",
+				password : "알파벳, 숫자 4-12자 이내",
+				nullPassword : "공백인 경우 기존 비밀번호 사용",
+			},
+			regex:{
+				password : "알파벳, 숫자 4-12자 이내",
+			},
+			modalTitle : {
+				userSearch : "요청자 검색"
+			},
+			button :{
+				deleteResetBtn : "삭제 초기화",
+				insertBtn : "등록",
+				updateBtn : "수정 완료",
+				copyBtn : "복사 완료",
+				searchBtn : "검색",
+			},
+			prepData : {
+				title : "선행처리 지식확인",
+				reqNm : "요구사항명",
+				result : "다음과 같은 연관 결과가 있습니다.",
+				notResult : "연관 결과가 없습니다.",
+				total : "총",
+				count : "건",
+				tooltip : {
+					selectTooltip : "선행지식 조회",
+					detailTooltip : "요구사항 상세",
+					card : "카드형",
+					grid : "그리드형",
+				},
+				button : {
+					detailBtn : "상세 조회",
+				},
+				field:{
+					reqProTypeNm : "처리 유형",
+					reqOrd : "순번",
+					prjNm : "프로젝트명",
+					reqNm : "요구사항명",
+					reqDtm : "요청일"
+				}
+			},
+			formCheck:{
+				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
+				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
+			},
+		},
+		req4103:{
+			field: {
+				usrNm : "사용자명",
+				usrId : "아이디",
+				email : "이메일",
+				tel : "연락처",
+				deptName: "소속",
+			},
+			actionBtn : {
+				title : "선택",
+				clickBtn : "선택",
+			},
+		},
+		req4104:{
+			text: "잠긴 요구사항입니다.<br/> 비밀번호를 입력하세요.",
+			button:{
+				submit : "확인",
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		spr1100:{
+			title : {
+				sprint : "스프린트 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			field:{
+				sprTypeNm : "상태",
+				sprNm : "스프린트명",
+				sprStdtm : "시작일",
+				sprEddtm : "종료일",
+				sprDesc : "스프린트 설명",
+				sprDtm :"기간",
+				reqNm : "요구사항 명",
+				reqOrd : "순번",
+				reqProTypeNm : "처리유형",
+				reqDtm :"요청일",
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					sprSelect : "스프린트 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "스프린트 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
+			}
+		},
+		spr2000:{
+			button:{
+				detailBtn : "상세",
+			},
+			actionBtn:{
+				selectTooltip : "회의록 조회",
+				insertTooltip : "회의록 추가",
+				updateTooltip : "회의록 수정",
+				deleteTooltip : "회의록 삭제",
+				detailTooltip : "회의록 상세",
+			}
+		},
 		stm2100:{
-			selectStmInfoCnt : "1건의 게시판만 선택하세요.\n${1}건의 게시판이 선택되었습니다." ,
+			selectStmInfoCnt : "1건의 게시판만 선택하세요.<br/> ${1}건의 게시판이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
@@ -320,6 +610,8 @@ var OSLCoreLangSetting = function () {
 				summeryTooltip : "게시판 통계"
 			},
 			button:{
+				card : "카드형",
+				grid : "그리드형",
 				detail:"관리",
 				summery:"통계",
 			},
@@ -334,14 +626,17 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
+			label :{
+				summery : "옵션 별 통계",
+			}
 		},
 		stm2101:{
 			update: "게시판 정보를 수정하시겠습니까?",
 			formCheck:{
-				fileCntMessage : "첨부파일 갯수는 최소 1부터 10까지 가능합니다\n첨부파일 갯수를 최솟값인 1로 변경합니다.",
-				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.\n최대 수로 적용됩니다.",
-				fileMaxStrgMessage : "게시판 유형에 따라\n최대 첨부파일 용량으로 지정됩니다.",
-				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다\n최대용량(${1})으로 변경됩니다.",
+				fileCntMessage : "첨부파일 갯수는 최소 1부터 10까지 가능합니다<br/> 첨부파일 갯수를 최솟값인 1로 변경합니다.",
+				fileMaxCntMessage : "첨부파일 가능한 갯수를 초과합니다.<br/> 최대 수로 적용됩니다.",
+				fileMaxStrgMessage : "게시판 유형에 따라<br/> 최대 첨부파일 용량으로 지정됩니다.",
+				fileMaxStrgOutMessage : "최대 첨부파일 용량을 초과합니다<br/> 최대용량(${1})으로 변경됩니다.",
 			},
 			label:{
 				name: "게시판 명",
@@ -351,7 +646,7 @@ var OSLCoreLangSetting = function () {
 				noticeCheck : "공지사항 사용",
 				commentCheck : "댓글 사용",
 				secretCheck : "비밀글 사용",
-				attchFileCheck : "첨부파일 사용",
+				attachFileCheck : "첨부파일 사용",
 				tagCheck : "태그 사용",
 				fileCount : "첨부파일 갯수",
 				maxFileCnt : "최대 갯수 : 10",
@@ -367,6 +662,7 @@ var OSLCoreLangSetting = function () {
 				nothing : "미배정 권한그룹 및 사용자",
 				user : "사용자",
 				authGrp : "권한그룹",
+				otherAdmin : "그 외 담당자",
 			},
 			title:{
 				admin: "담당자 지정",
@@ -399,7 +695,7 @@ var OSLCoreLangSetting = function () {
 				badHitInfoN: "최다 조회 수 : 없음",
 				badPwCntY: "비밀글 수 : ${1} 건",
 				badPwCntN: "비밀글 수 : 없음",
-				tagLabelY: "사용 TOP ${1} : #${2}",
+				tagLabelY: "사용 TOP ${1} : # ${2}",
 				tagLabelN: "사용 태그 없음",
 				fileAllCntY: "전체 첨부파일 수 : ${1} 건",
 				fileAllCntN: "전체 첨부파일 수 : 없음",
@@ -411,11 +707,112 @@ var OSLCoreLangSetting = function () {
 				comment : "댓글",
 				board : "게시글",
 				tag : "태그",
-				attchFile : "첨부파일",
+				attachFile : "첨부파일",
+			}
+		},
+		stm6000:{
+			button:{
+				selectTooltip: "조직 조회",
+				insertTooltip: "조직 추가",
+				updateTooltip: "조직 수정",
+				deleteTooltip: "조직 삭제"
+			},
+			label:{
+				upperDeptId : "상위 조직 ID",
+				upperDeptNm : "상위 조직 명",
+				deptId : "조직 ID",
+				deptNm : "조직 명",
+				deptOrd : "순번",
+				deptUseCd : "사용유무",
+				deptEtc : "비고",
+			},
+			title:{
+				deptList:"조직 목록",
+				deptInfo:"조직 정보"
+			},
+			message:{
+				alert:{
+					treeSelect:"왼쪽 트리에서 조직을 선택해주세요.",
+					notUsedDept:"미사용 조직에는 하위 조직을 추가할 수 없습니다.",
+					notRootDelete:"최상위 조직(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDept:"조직 삭제 시 선택한 조직 및 하위 조직이 모두 삭제됩니다. 선택한 조직을 삭제 하시겠습니까?"
+				}
+			},
+			modal:{
+				title:{
+					insertDept:"신규 조직 등록",
+					updateDept:"조직 수정"
+				}
+			}
+		},
+		stm6001:{
+			label:{
+				upperDeptId : "상위 조직 ID",
+				upperDeptNm : "상위 조직 명",
+				deptId : "조직 ID",
+				deptNm : "조직 명",
+				deptOrd : "순번",
+				deptUseCd : "사용유무",
+				deptEtc : "비고",
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				confirm:{
+					insert:"신규 조직을 등록하시겠습니까?",
+					update:"조직 정보를 수정하시겠습니까?"
+				}
+			}
+		},
+		stm9000: {
+			title : {
+				jenkinsManagement : "JENKINS 관리",
+				jobManagement : "JENKINS 관리"
+			},
+			button:{
+				jenkins:{
+					selectTooltip: "Jenkins 조회",
+					insertTooltip: "Jenkins 추가",
+					updateTooltip: "Jenkins 수정",
+					deleteTooltip: "Jenkins 삭제"
+				},
+				job:{
+					selectTooltip: "Job 조회",
+					insertTooltip: "Job 추가",
+					updateTooltip: "Job 수정",
+					deleteTooltip: "Job 삭제"	
+				}
+			},
+			field:{
+				jenkins:{
+					connectCheck: "접속 확인 결과",
+					jenkinsNm: "Jenkins 명",
+					jenkinsUrl: "Jenkins Url",
+					useNm: "사용 유무",
+					JenkinsUsrId: "Jenkins User Id"
+				}
+			},
+			actionBtn:{
+				jenkins:{
+					updateBtn:"Jenkins 수정",
+					deleteBtn:"Jenkins 삭제",
+					dblClickBtn:"Jenkins 상세보기"
+				}
+			},
+			modal:{
+				jeknins:{
+					insertJenkins:"신규 Jenkins 설정 등록",
+					updateJenkins:"Jenkins 설정 수정",
+					detailJenkins:"상세 정보"
+				}
 			}
 		},
 		bad1000:{
-			selectBadInfoCnt : "1건의 게시글을 선택하세요.\n${1}건의 게시글이 선택되었습니다." ,
+			selectBadInfoCnt : "1건의 게시글을 선택하세요.<br/> ${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
 					basic : "해당 게시글에 대한 권한이 없습니다.",
 					insertMessage : "게시글 등록 권한이 없습니다.",
@@ -481,7 +878,7 @@ var OSLCoreLangSetting = function () {
 			},
 			label:{
 				writeDate : "작성일시",
-				attchFile : "파일 첨부",
+				attachFile : "파일 첨부",
 				tag: "태그",
 				comment:"댓글",
 			},
@@ -525,12 +922,21 @@ var OSLCoreLangSetting = function () {
 				password:"PW",
 				passwordCheck:"PW 확인",
 				commentCheck:"댓글 허용",
-				attchFile : "파일 첨부",
+				attachFile : "파일 첨부",
 				tag : "태그",
 			},
 			button:{
 				insertSubmit:"등록",
 				submit : "등록",
+			},
+			placeholder:{
+				badTitle : "제목",
+				badContent : "내용",
+				password : "알파벳, 숫자 4-12자 이내",
+				nullPassword : "공백인 경우 기존 비밀번호 사용",
+			},
+			regex:{
+				password : "알파벳, 숫자 4-12자 이내",
 			},
 		},
 		bad1003:{
@@ -545,7 +951,7 @@ var OSLCoreLangSetting = function () {
 				password:"PW",
 				passwordCheck:"PW 확인",
 				commentCheck:"댓글 허용",
-				attchFile : "파일 첨부",
+				attachFile : "파일 첨부",
 				tag : "태그",
 			},
 			button:{
@@ -555,11 +961,11 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		bad1004:{
-			passwordMiss : "비밀번호가 틀렸습니다.\n다시 입력하세요.",
+			passwordMiss : "비밀번호가 틀렸습니다.<br/> 다시 입력하세요.",
 			title:{
 				detail:"게시글 상세보기",
 			},
-			text : "이 글은 비밀글입니다.\n비밀번호를 입력하세요.",
+			text : "이 글은 비밀글입니다.<br/> 비밀번호를 입력하세요.",
 			button:{
 				submit: "확인",
 			}
@@ -683,7 +1089,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
+			/* 추가된 datatable별로 언어 지정 */
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -705,6 +1111,14 @@ var OSLCoreLangSetting = function () {
 				reqAllCnt: "Request All",
 				reqInProgressCnt: "Request In Porgress",
 				reqDoneCnt: "Request Done",
+			},
+			prj1200PrjTable:{
+				prjSetTargetNm: "Setting Target",
+				prjSetNm: "Setting Name",
+				prjSetDesc : "Setting Desciption",
+				prjSetValNm:"Setting Value",
+				modifyDtmDay:"Modify Date",
+				modifyUsrNm:"Final Modifier",
 			}
 		},
 		date:{
@@ -816,7 +1230,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
+		/* 페이지 언어 */
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -869,6 +1283,25 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "Update Action"
 			}
 		},
+		prj1201:{
+			title: "Project Setting Modify",
+			complete: "Complete",
+			update:{
+				saveString: "프로젝트 설정을 수정하시겠습니까?",
+				saveBtnString: "Update Action",
+			},
+			actionBtn : {
+				updateBtn : "Project Setting Update"
+			},
+			label : {
+				prjSetNm: "Setting Name",
+				prjSetDesc: "Setting description",
+				prjSetTarget: "Setting Target",
+				valType: "Value Type",
+				prjSetVal: "Setting Value",
+				useCd: "Setting Use"
+			}
+		},
 		prj2100:{
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
@@ -890,8 +1323,153 @@ var OSLCoreLangSetting = function () {
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
 		},
+		req4100:{
+			button:{
+				copyBtn : "Copy"
+			},
+			field:{
+				prjGrpNm: "Project Group Name",
+				prjNm: "Project Name",
+				reqOrd: "Request Number",
+				reqProTypeNm: "Processing Status",
+				reqNm: "Title",
+				reqDtm: "Request Date",
+				regDtm: "Write Date",
+				reqUsrNm: "Requester",
+				reqUsrEmail: "Requester E-mail",
+				reqUsrDeptNm: "Requester Department",
+				reqUsrNum: "Requester Contact",
+				reqKey: "Request Key"
+			},
+			actionBtn:{
+				title : "Udp / Del / Det / Cop",
+				updateBtn : "Request Update",
+				deleteBtn : "Request Delete",
+				detailBtn : "Request Detail",
+				copyBtn : "Request Copy",
+				selectTooltip : "Select Request",
+				insertTooltip : "Insert Request",
+				updateTooltip : "Update Request",
+				deleteTooltip : "Delete Request",
+				detailTooltip : "Detail Request",
+				copyTooltip : "Copy Request"
+			},
+			title:{
+				insertTitle : "Insert New Request",
+				updateTitle : "Update Request",
+				detailTitle : "Detail Request"
+			},
+			alert:{
+				updateMsg : "You can only modify requirements whose processing status is being requested.",
+				multiPwMsg : "There are ${1} requirements that require password verification.<br/> You can delete locked requirements after excluding them, or you can delete locked requirements as a single item.",
+				selectData : "Choose your data.",
+				LockData : "Locked requirements cannot be copied.",
+				selectCopyData : "Copying is only possible for 1 copy. Currently ${1} are selected.",
+			}
+		},
+		req4101:{
+			complete : "Submit",
+			saveString :{
+				insertStr : "Would you like to register your requirements?",
+				updateStr : "Would you like to modify your requirements?",
+			},
+			label : {
+				reqUser : {
+					title : "Requester Information",
+					usrNm : "Name",
+					email : "E-mail",
+					deptNm : "Department",
+					telNo : "Contact",
+				},
+				group:{
+					groupReqInfo : "Group Request Information",
+					groupReq : "Group Request",
+					groupReqDesc : "Group Request Content",
+				},
+				prjNm : "Project",
+				reqDtm : "Request Date",
+				reqNm : "Title",
+				reqDesc : "Content",
+				reqPw : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+				attachments : "Attachments",
+				requestDefaultOptNm : "Enter basic items for application"
+			},
+			placeholder:{
+				usrNm : "Name",
+				email : "E-mail",
+				deptNm : "Department",
+				tel : "Contact",
+				selectGroup : "Select Group Request",
+				reqDtm : "Request Date",
+				reqNm : "Title",
+				password : "4 to 12 letters of alphabet and number combination.",
+				nullPassword : "If blank, the old password is used.",
+			},
+			regex:{
+				password : "4 to 12 letters of alphabet and number combination.",
+			},
+			modalTitle : {
+				userSearch : "User Search"
+			},
+			button :{
+				deleteResetBtn : "Delete Reset",
+				insertBtn : "Insert Request",
+				updateBtn : "Update Request",
+				copyBtn : "Copy Request",
+				searchBtn : "Search"				
+			},
+			prepData : {
+				title : "Previous Knowledge",
+				reqNm : "Title",
+				result : "Have the following concatenation result : ",
+				notResult : "No Result",
+				total : "Total",
+				count : "Request",
+				tooltip : {
+					selectTooltip : "Select Previous Knowledge",
+					detailTooltip : "Detail Request",
+					card : "Card",
+					grid : "Grid",
+				},
+				button : {
+					detailBtn : "Detail",
+				},
+				field:{
+					reqProTypeNm : "Processing Status",
+					reqOrd : "Request Number",
+					prjNm : "Project Name",
+					reqNm : "Title",
+					reqDtm : "Request Date"
+				}
+			},
+			formCheck:{
+				passwordMessage : "You must write password for secret request.",
+				passwordMatching : "The entered passwords are different.",
+			},
+		},
+		req4103:{
+			field: {
+				usrNm : "User Name",
+				usrId : "Id",
+				email : "E-mail",
+				tel : "Contact",
+				deptName: "Department",
+			},
+			actionBtn : {
+				title : "Select",
+				clickBtn : "Select",
+			},
+		},
+		req4104:{
+			text: "This is secret request.<br/> You must entered password.",
+			button:{
+				submit : "Submit",
+			}
+		},
 		stm2100:{
-			selectStmInfoCnt : "Please, select only 1 board.\n${1} boards have been selected." ,
+			selectStmInfoCnt : "Please, select only 1 board.<br/> ${1} boards have been selected." ,
 			notAuthority : {
 					basic : "You don’t have authority for that this board",
 			},
@@ -904,7 +1482,7 @@ var OSLCoreLangSetting = function () {
 				delCnt: "Deleted Count",
 			},
 			actionBtn:{
-				title : "U / M / S",
+				title : "Upd / Mng / Set",
 				updateBtn : "Board Option",
 				detailBtn : "Post Management",
 				summeryBtn : "Board Summery",
@@ -914,6 +1492,8 @@ var OSLCoreLangSetting = function () {
 				summeryTooltip : "Summery Board"
 			},
 			button:{
+				card : "Card",
+				grid : "Grid",
 				detail:"Management",
 				summery:"Summery",
 			},
@@ -932,10 +1512,10 @@ var OSLCoreLangSetting = function () {
 		stm2101:{
 			update: "Would you like to update this board setting?",
 			formCheck:{
-				fileCntMessage : "The number of attchments is 1 to 10.\nChange to minimum 1.",
-				fileMaxCntMessage : "The number of attachments is over.\nChange to maximum 10.",
+				fileCntMessage : "The number of attachments is 1 to 10.<br/> Change to minimum 1.",
+				fileMaxCntMessage : "The number of attachments is over.<br/> Change to maximum 10.",
 				fileMaxStrgMessage : "Change to maximum storage by board type.",
-				fileMaxStrgOutMessage : "Maximum storage is over.\nChange to maximum storage(${1}).",
+				fileMaxStrgOutMessage : "Maximum storage is over.<br/> Change to maximum storage(${1}).",
 			},
 			label:{
 				name: "Board Name",
@@ -945,9 +1525,9 @@ var OSLCoreLangSetting = function () {
 				noticeCheck : "Notice",
 				commentCheck : "Comment",
 				secretCheck : "Secret Post",
-				attchFileCheck : "Attchments",
+				attachFileCheck : "Attachments",
 				tagCheck : "Tag",
-				fileCount : "Attchments Count",
+				fileCount : "Attachments Count",
 				maxFileCnt : "Max File Count : 10",
 				limitFileStrg : "Limit File Storage(MB)",
 				maxFileStrg:{
@@ -961,6 +1541,7 @@ var OSLCoreLangSetting = function () {
 				nothing : "Others",
 				user : "User",
 				authGrp : "Authority",
+				otherAdmin : "Others Assign Admin",
 			},
 			title:{
 				admin: "Assign Admin",
@@ -995,21 +1576,122 @@ var OSLCoreLangSetting = function () {
 				badPwCntN: "Secret Post : -",
 				tagLabelY: "Hashtag TOP ${1} : #${2}",
 				tagLabelN: "No Hashtag",
-				fileAllCntY: "Total Attchments : ${1}",
-				fileAllCntN: "Total Attchments : -",
-				fileAllSizeY: "Total Attchments Storage : ${1}",
-				fileAllSizeN: "Total Attchments Storage : -",
+				fileAllCntY: "Total Attachments : ${1}",
+				fileAllCntN: "Total Attachments : -",
+				fileAllSizeY: "Total Attachments Storage : ${1}",
+				fileAllSizeN: "Total Attachments Storage : -",
 			},
 			label:{
 				notice : "Notice",
 				comment : "Comment",
 				board : "Post",
 				tag : "Tag",
-				attchFile : "Attchments",
+				attachFile : "Attachments",
+			}
+		},
+		stm6000:{
+			button:{
+				selectTooltip: "Department Select",
+				insertTooltip: "Department Insert",
+				updateTooltip: "Department Update",
+				deleteTooltip: "Department Delete"
+			},
+			label:{
+				upperDeptId : "Upper department ID",
+				upperDeptNm : "Upper department Name",
+				deptId : "Department ID",
+				deptNm : "Department Name",
+				deptOrd : "Department Order",
+				deptUseCd : "Department Use",
+				deptEtc : "Department description"
+			},
+			title:{
+				deptList:"Department List",
+				deptInfo:"Department Information"
+			},
+			message:{
+				alert:{
+					treeSelect:"Select a department in the tree on the left.",
+					notUsedDept:"Sub-departments cannot be added to unused departments.",
+					notRootDelete:"The top-level department(ROOT) cannot be deleted."
+				},
+				confirm:{
+					deleteDept:"When deleting a department, the selected department and all sub-departments are deleted. Do you want to delete the selected department?"
+				}
+			},
+			modal:{
+				title:{
+					insertDept:"New department registration",
+					updateDept:"Department modification"
+				}
+			}
+		},
+		stm6001:{
+			label:{
+				upperDeptId : "Upper department ID",
+				upperDeptNm : "Upper department Name",
+				deptId : "Department ID",
+				deptNm : "Department Name",
+				deptOrd : "Department Order",
+				deptUseCd : "Department Use",
+				deptEtc : "Department description"
+			},
+			button:{
+				insert : "Complete",
+				update : "Update completed"
+			},
+			message:{
+				confirm:{
+					insert:"Would you like to register a new department?",
+					update:"Would you like to edit the department information?"
+				}
+			}
+		},
+		stm9000:{
+			title:{
+				jenkinsManagement : "JENKINS Management",
+				jobManagement : "JENKINS Management"
+			},
+			button:{
+				jenkins:{
+					selectTooltip: "Jenkins Select",
+					insertTooltip: "Jenkins Insert",
+					updateTooltip: "Jenkins Update",
+					deleteTooltip: "Jenkins Delete"					
+				},
+				job:{
+					selectTooltip: "Job Select",
+					insertTooltip: "Job Insert",
+					updateTooltip: "Job Update",
+					deleteTooltip: "Job Delete"	
+				}
+			},
+			field:{
+				jenkins:{
+					connectCheck: "Connection check result",
+					jenkinsNm: "Jenkins Name",
+					jenkinsUrl: "Jenkins Url",
+					useNm: "Jenkins Use",
+					JenkinsUsrId: "Jenkins User Id"
+				}
+			},
+			actionBtn:{
+				jenkins:{
+					updateBtn:"Jenkins Update",
+					deleteBtn:"Jenkins Delete",
+					dblClickBtn:"Jenkins Detail Info"
+				}
+			},
+			modal:{
+				jeknins:{
+					insertJenkins:"Register new Jenkins settings",
+					updateJenkins:"Modify Jenkins settings",
+					detailJenkins:"Detail Info"
+				}
 			}
 		},
 		bad1000:{
-			selectBadInfoCnt : "Please, select only 1 post.\n${1} posts have been selected" ,
+			selectBadInfoCnt : "Please, select only 1 post.<br/> ${1} posts have been selected" ,
 			notAuthority : {
 					basic : "You don’t have authority for that this post",
 					insertMessage : "You don’t have authority for insert the post.",
@@ -1028,7 +1710,7 @@ var OSLCoreLangSetting = function () {
 				tagNm:"Tag",
 				badTitle:"Title",
 				badHit: "Hit",
-				badFileCnt: "Attchments Count",
+				badFileCnt: "Attachments Count",
 				badUsrId: "Writer",
 				badWtdtm: "Write Date",
 			},
@@ -1075,7 +1757,7 @@ var OSLCoreLangSetting = function () {
 			},
 			label:{
 				writeDate : "Date",
-				attchFile : "Attchments",
+				attachFile : "Attachments",
 				tag: "Tag",
 				comment:"Comment",
 			},
@@ -1104,7 +1786,7 @@ var OSLCoreLangSetting = function () {
 		bad1002:{
 			insert: "Would you like to finish writing?",
 			formCheck : {
-				fileCntMessage : "The number of attchments possible is ${1}.",
+				fileCntMessage : "The number of attachments possible is ${1}.",
 				passwordMessage : "You must write password for secret post.",
 				passwordMatching : "The entered passwords are different.",
 				tagMatching : "The tag value is duplicated.",
@@ -1119,12 +1801,21 @@ var OSLCoreLangSetting = function () {
 				password:"PW",
 				passwordCheck:"PW Check",
 				commentCheck:"Allow Comment",
-				attchFile : "Attchments",
+				attachFile : "Attachments",
 				tag : "Tag",
 			},
 			button:{
 				insertSubmit:"Insert Submit",
 				submit : "Submit",
+			},
+			placeholder:{
+				badTitle : "Title",
+				badContent : "Content",
+				password : "4 to 12 letters of alphabet and number combination.",
+				nullPassword : "If blank, the old password is used.",
+			},
+			regex:{
+				password : "4 to 12 letters of alphabet and number combination.",
 			},
 		},
 		bad1003:{
@@ -1139,21 +1830,21 @@ var OSLCoreLangSetting = function () {
 				password:"PW",
 				passwordCheck:"PW Check",
 				commentCheck:"Allow Comment",
-				attchFile : "Attchments",
+				attachFile : "Attachments",
 				tag : "Tag",			
 			},
 			button:{
 				deleteResetBtn:"Delete Reset",
-				updateSubmit : "Update Finish",
+				updateSubmit : "Update Request",
 				submit : "Submit",
 			}
 		},
 		bad1004:{
-			passwordMiss : "It doesn’t match the password for this post.\nPlease try again.",
+			passwordMiss : "It doesn’t match the password for this post.<br/> Please try again.",
 			title:{
 				detail:"Detail Post",
 			},
-			text : "This is secret Post.\nYou must entered password.",
+			text : "This is secret post.<br/> You must entered password.",
 			button:{
 				submit: "Submit",
 			}

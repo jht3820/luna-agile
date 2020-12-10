@@ -33,7 +33,7 @@
 			<input type="hidden" id="stmFileStrg" name="stmFileStrg"/>
 		</div>
 		<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper" style="">
+			<div class="kt-portlet__head-wrapper">
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="select" title="게시글 조회" data-title-lang-cd="bad1000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
@@ -217,24 +217,18 @@
 				{field: 'badWtdtm', title:$.osl.lang("bad1000.field.badWtdtm"), textAlign: 'center', width: 150, search: true, searchType:"daterange",
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yyyy-MM-dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+		                return agoTimeStr.agoString;
 					},	
 				}
 			],
 			searchColumns: searchAdd,
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
 				"title" : $.osl.lang("bad1000.actionBtn.title"),
 				"width" : 200,
-				"click": true,
 				"dblClick" : true,
 			},
 			actionTooltip:{
@@ -307,7 +301,6 @@
 					var options = {
 							idKey: "bad1001_"+ rowData.badId,
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
-							
 							closeConfirm: false,
 							autoHeight: false,
 							modalSize: "xl",
@@ -326,7 +319,7 @@
 							//작성자는 비밀번호 없이도 게시글 확인 가능
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							if(rowData.badPw == "01" && row.stmPwYnCd == '01'){
+							if(rowData.badPw == "01" && rowData.stmPwYnCd == '01'){
 								$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1004PwView.do', data, pwOptions);
 							}
 							else{
@@ -411,22 +404,7 @@
 							$.osl.alert($.osl.lang("bad1000.notAuthority.deleteMessage"), {"type":"warning"});
 						}
 					}
-				},
-				"click": function(rowData, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				},
+				}
 			 },
 			 theme: {
 				 actionBtn:{

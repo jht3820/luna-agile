@@ -54,7 +54,8 @@ public class Req6000ServiceImpl  extends EgovAbstractServiceImpl implements Req6
 	public void insertReq6000ModifyHistoryList(Map paramMap) throws Exception{
 
 		
-		Map reqInfoMap = (Map) req4100DAO.selectPrj1104ReqInfoAjax(paramMap);
+		
+		Map reqInfoMap = (Map) req4100DAO.selectReq4100ReqInfo(paramMap);
 		
 		
 		List<Map> addOptList = (List<Map>) prj1100DAO.selectPrj1102ReqOptList(paramMap);

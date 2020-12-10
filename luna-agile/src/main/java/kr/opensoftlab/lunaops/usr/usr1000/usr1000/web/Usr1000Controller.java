@@ -86,8 +86,8 @@ public class Usr1000Controller {
 	
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/usr/usr1000/usr1000/selectUsr1000UsrInfoAjxa.do")
-    public ModelAndView selectUsr1000UsrInfoAjxa(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/usr/usr1000/usr1000/selectUsr1000UsrInfoAjax.do")
+    public ModelAndView selectUsr1000UsrInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
     	try{
     		
     		Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
@@ -123,7 +123,7 @@ public class Usr1000Controller {
         	return new ModelAndView("jsonView");
     	}
     	catch(Exception ex){
-    		Log.error("selectUsr1000UsrInfoAjxa()", ex);
+    		Log.error("selectUsr1000UsrInfoAjax()", ex);
     		
     		model.addAttribute("errorYn", "Y");
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));

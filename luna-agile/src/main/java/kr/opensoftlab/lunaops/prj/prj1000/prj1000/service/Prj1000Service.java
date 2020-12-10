@@ -39,6 +39,10 @@ public interface Prj1000Service {
 	
 	@SuppressWarnings("rawtypes")
 	int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	Map selectPrj1000GrpInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -59,12 +63,18 @@ public interface Prj1000Service {
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1000PrjGrpAjax(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	String insertPrj1000PrjAjax(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int updatePrj1000PrjGrp(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1001Ajax(Map paramMap) throws Exception;
-	
-	
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -72,7 +82,11 @@ public interface Prj1000Service {
 	
 	
 	@SuppressWarnings("rawtypes")
-	void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception;
+	void deletePrj1000PrjAjax(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void updatePrj1000PrjGrpTrashListAjax(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")

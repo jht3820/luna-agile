@@ -3,16 +3,28 @@ package kr.opensoftlab.lunaops.stm.stm9000.stm9000.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
-import kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9000VO;
-import kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9001VO;
-
 import org.springframework.stereotype.Repository;
 
+import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
+import kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9001VO;
 
 
 @Repository("stm9000DAO")
 public class Stm9000DAO extends ComOslitsAbstractDAO {
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm9000JenkinsList(Map paramMap) throws Exception {
+		return (List<Map>) list("stm9000DAO.selectStm9000JenkinsList", paramMap);
+	}
+	
+	
+	public int selectStm9000JenkinsListCnt(Map paramMap) throws Exception {
+		return (Integer) select("stm9000DAO.selectStm9000JenkinsListCnt", paramMap);
+	}
+	
+	
+	
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -28,19 +40,8 @@ public class Stm9000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<Stm9000VO> selectStm9000JenkinsList(Stm9000VO stm9000VO) throws Exception {
-		return (List) list("stm9000DAO.selectStm9000JenkinsList", stm9000VO);
-	}
-	
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Stm9001VO> selectStm9000JobList(Stm9001VO jen1100VO) throws Exception {
 		return (List) list("stm9000DAO.selectStm9000JobList", jen1100VO);
-	}
-	
-	
-	public int selectStm9000JenkinsListCnt(Stm9000VO stm9000VO) throws Exception {
-		return (Integer) select("stm9000DAO.selectStm9000JenkinsListCnt", stm9000VO);
 	}
 	
 	
