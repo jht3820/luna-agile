@@ -3,6 +3,48 @@
 <jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
+<c:if test="${not empty prjInfo}">
+	<form class="kt-form" id="frPrj1001">
+		<input type="hidden" name="paramPrjGrpId" id="paramPrjGrpId" value="${prjInfo.prjId}"/>
+	</form>
+	<div class="kt-portlet kt-portlet--mobile">
+		<div class="kt-portlet__head kt-portlet__head--lg">
+			<div class="kt-portlet__head-label">
+				<h4 class="kt-font-boldest kt-font-brand">
+					<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 정보
+				</h4>
+			</div>
+		</div>
+		<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
+			<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12">
+				<h5 class="kt-font-boldest text-truncate" title="<c:out value="${prjInfo.prjNm}"/>" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"><c:out value="${prjInfo.prjNm}"/></h5>
+				<span class="text-muted text-truncate" title="<c:out value="${prjInfo.prjDesc}"/>" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"><c:out value="${prjInfo.prjDesc}"/></span>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-12">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12">
+						<div class="kt-pull-left kt-margin-r-25">
+							<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>시작일</span></div>
+							<h5><span class="badge badge-primary"><c:out value="${prjInfo.startDt}"/></span></h5>
+						</div>
+						<div class="kt-pull-left ">
+							<div class="kt-padding-b-5"><i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i><span>종료일</span></div>
+							<h5><span class="badge badge-danger"><c:out value="${prjInfo.endDt}"/></span></h5>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12">
+						<div class="osl-progress">
+							<div class="kt-padding-b-5"><i class="fa fa-chart-line kt-font-brand kt-margin-r-5"></i><span>진척률</span></div>
+							<div class="progress osl-prj-group-md">
+								<div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">78%</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</c:if>
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
@@ -60,6 +102,9 @@
 <script>
 "use strict";
 var OSLPrj1001Popup = function () {
+	//프로젝트 그룹 ID
+	var paramPrjGrpId = $("#paramPrjGrpId").val();
+	
 	//01 - 카드형, 02 - 그리드
 	var currentViewType = "01";
 	//차트 기본 옵션
@@ -140,7 +185,7 @@ var OSLPrj1001Popup = function () {
 					read: {
 						url: "/prj/prj1000/prj1000/selectPrj1001ListAjaxView.do",
 						params:{
-							paramPrjGrpId: $.osl.selPrjGrpId,
+							paramPrjGrpId: paramPrjGrpId,
 							delCd: "02"
 						}
 					}
@@ -164,19 +209,19 @@ var OSLPrj1001Popup = function () {
 				"delete": false,
 				"title": "기능 버튼",
 				"width": 100,
+				"dblClick": true
 			},
 			actionTooltip:{
-				"update": "프로젝트 수정",
-				"delete": "프로젝트 삭제"
+				"dblClick": "상세 정보",
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum){
 					//프로젝트 그룹 정보
-					var prjGrpInfo = $.osl.prjGrpAuthList[$.osl.selPrjGrpId]["prjGrpInfo"];
+					var prjGrpInfo = $.osl.prjGrpAuthList[paramPrjGrpId]["prjGrpInfo"];
 					
 					var data = {
 							type:"insert",
-							paramPrjGrpId: $.osl.selPrjGrpId,
+							paramPrjGrpId: paramPrjGrpId,
 							prjGrpNm: prjGrpInfo.prjNm,
 							prjGrpStartDt: prjGrpInfo.startDt,
 							prjGrpEndDt: prjGrpInfo.endDt
@@ -185,7 +230,29 @@ var OSLPrj1001Popup = function () {
 							autoHeight: false,
 							modalSize: "xl",
 							idKey: datatableId,
-							modalTitle: $.osl.lang("prj1004.title"),
+							modalTitle: $.osl.lang("prj1004.insert.title"),
+							closeConfirm: false,
+						};
+					
+					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
+				},
+				"update": function(rowData, datatableId, type, rowNum, elem){
+					//프로젝트 그룹 정보
+					var prjGrpInfo = $.osl.prjGrpAuthList[rowData.prjGrpId]["prjGrpInfo"];
+					
+					var data = {
+							type:"update",
+							paramPrjGrpId: rowData.prjGrpId,
+							paramPrjId: rowData.prjId,
+							prjGrpNm: prjGrpInfo.prjNm,
+							prjGrpStartDt: prjGrpInfo.startDt,
+							prjGrpEndDt: prjGrpInfo.endDt
+					};
+					var options = {
+							autoHeight: false,
+							modalSize: "xl",
+							idKey: datatableId,
+							modalTitle: $.osl.lang("prj1004.update.title"),
 							closeConfirm: false,
 						};
 					
@@ -246,6 +313,22 @@ var OSLPrj1001Popup = function () {
 							fnPrjRedoUpdate(rowDatas, datatableId);
 						}
 					});
+				},
+				//상세정보
+				"dblClick":function(rowData, datatableId, type, rowNum, elem){
+					var data = {
+							paramPrjGrpId: rowData.prjGrpId,
+							paramPrjId: rowData.prjId
+						};
+						
+					var options = {
+							autoHeight: false,
+							modalSize: "xl",
+							idKey: datatableId+"_detail",
+							modalTitle: $.osl.lang("prj1005.title"),
+							closeConfirm: false,
+						};
+					$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1005View.do',data,options);
 				},
 			},
 			theme:{
@@ -345,14 +428,14 @@ var OSLPrj1001Popup = function () {
 									'<div class="dropdown-divider"></div>',
 									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpDelete"><i class="fa fa-times-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.recordDelete")+'</div>',
 									'<div class="dropdown-divider"></div>',
-									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.projectDetail")+'</div>'
+									'<div class="dropdown-item" href="#" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.projectDetail")+'</div>'
 								],
 								//일반 목록 (미 삭제)
 								"02":[
-									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit"></i>'+$.osl.lang("prj1001.menu.modify")+'</div>',
-									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash"></i>'+$.osl.lang("prj1001.menu.trashMove")+'</div>',
+									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-primary"></i>'+$.osl.lang("prj1001.menu.modify")+'</div>',
+									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-primary"></i>'+$.osl.lang("prj1001.menu.trashMove")+'</div>',
 									'<div class="dropdown-divider"></div>',
-									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="detail"><i class="fa fa-info-circle"></i>'+$.osl.lang("prj1001.menu.projectDetail")+'</div>',
+									'<div class="dropdown-item" data-datatable-id="prj1001PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1001.menu.projectDetail")+'</div>',
 								]
 						};
 						
@@ -439,9 +522,9 @@ var OSLPrj1001Popup = function () {
 											+'</div>'
 										+'</div>'
 									+'</div>'
-										+'<div class="kt-portlet__foot kt-portlet__foot--sm osl-padding-none">'
+										/* +'<div class="kt-portlet__foot kt-portlet__foot--sm osl-padding-none">'
 											+'<div class="osl-chart--project" id="chart_'+map.prjId+'">등록된 요구사항이 없습니다.</div>'
-										+'</div>'
+										+'</div>' */
 								+'</div>'
 							+'</div>';
 							rowCnt++;
@@ -453,7 +536,6 @@ var OSLPrj1001Popup = function () {
 					
 					//로드된 데이터 CARD형식으로 추가
 					$("#prj1001CardTable").html(prjGrpStr);
-					
 					//프로젝트 요구사항 차트 데이터 세팅
 					$.each(Object.keys(chartDataMap), function(idx, loopPrjId){
 						//요구사항 목록

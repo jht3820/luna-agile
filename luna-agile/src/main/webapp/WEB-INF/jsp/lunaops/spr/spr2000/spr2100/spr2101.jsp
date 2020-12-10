@@ -10,13 +10,13 @@
 		<div class="kt-portlet__body">
 		<div class="form-group">
 			<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2101.label.sprNm">스프린트명</span></label>
-			<input type="text" class="form-control" name="sprNm" id="sprNm" autocomplete="off" readonly="readonly" required>
+			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly" required>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2101.label.mmrNm">회고록 제목</span></label>
-					<input type="text" class="form-control" id="mmrNm" name="mmrNm" autocomplete="off" placeholder="제목" maxlength="80" required>
+					<input type="text" class="form-control" id="mmrNm" name="mmrNm" placeholder="제목" maxlength="80" required>
 				</div>
 			</div>
 		</div>
@@ -24,15 +24,15 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2101.label.mmrDesc">회고록 내용</span></label>
-					<textarea class="form-control kt-hide" name="mmrDesc" id="mmrDesc"autocomplete="off"  required></textarea>
+					<textarea class="form-control kt-hide" name="mmrDesc" id="mmrDesc" required></textarea>
 				</div>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="spr2101SaveSubmit"><i class="fa fa-save"></i><span class="osl-resize__display--show" data-lang-cd="spr2101.submit">완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span class="osl-resize__display--show" data-lang-cd="modal.close">Close</span></button>
+	<button type="button" class="btn btn-brand" id="spr2101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="spr2101.submit">완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>

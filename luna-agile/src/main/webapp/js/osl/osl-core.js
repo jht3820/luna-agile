@@ -1486,9 +1486,14 @@
 		        					$("#submenu-authGrp-sel").html('<i class="kt-menu__link-icon fa fa-user-tie"></i>'+$.osl.escapeHtml(map.authGrpNm));
 		        				}
 		        				
-	        					if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
-	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				
+	        					if(!prjOrdList[map.prjGrpId]["prjList"].hasOwnProperty(map.prjId)){
+	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId] = {};
 	        					}
+	        					
+		        				if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
+		        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				}
 	        					
 	        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"][map.authGrpId] = map;
 
@@ -1681,7 +1686,8 @@
 											
 											$.each(selRecords, function(idx, map){
 												var rowIdx = $(map).data("row");
-												rowData.push(datatables.targetDt.dataSet[rowIdx]);
+												var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+												rowData.push(tmp_rowData);
 											});
 											
 											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "list", rowData.length, this);
@@ -1713,10 +1719,10 @@
 											event.stopPropagation();
 											event.preventDefault();
 											event.returnValue = false;
+
+											var tmp_rowData = datatables.targetDt.dataSet[btnRowNum];
 											
-											var rowData = datatables.targetDt.dataSet[btnRowNum];
-											
-											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "info", btnRowNum, this);
+											targetConfig.actionFn[btnAction](tmp_rowData, btnDatatableId, "info", btnRowNum, this);
 										});
 									}
 								}
@@ -1795,6 +1801,7 @@
 									}
 									else{
 										var rowIdx = datatables.targetDt.getSelectedRecords().data("row");
+										
 										rowData = datatables.targetDt.dataSet[rowIdx];
 									}
 								}
@@ -1833,7 +1840,9 @@
 									else{
 										$.each(selRecords, function(idx, map){
 											var rowIdx = $(map).data("row");
-											rowData.push(datatables.targetDt.dataSet[rowIdx]);
+											var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+											
+											rowData.push(tmp_rowData);
 										});
 									}
 								}
@@ -2290,8 +2299,10 @@
 							}
 						},
 						rows:{
+							beforeTemplate: function (row, data, index){
+								
+							},
 							afterTemplate: function(row, data, index){
-
 								
 								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
 									
@@ -2814,6 +2825,8 @@
 					
 					$.osl.datatable.list[targetId] = datatables;
 				}
+				
+				return datatables;
 			}
 		}
 		,date: {

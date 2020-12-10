@@ -72,8 +72,18 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			
@@ -125,8 +135,18 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			
@@ -182,7 +202,22 @@ public class Req4100Controller {
 			
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-
+			
+			
+			HttpSession ss = request.getSession();
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
 			String atchFileId = (String) paramMap.get("atchFileId");
 			String fileSn = (String) paramMap.get("fileSn");
 			
@@ -213,7 +248,22 @@ public class Req4100Controller {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-
+			
+			
+			HttpSession ss = request.getSession();
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
 			
 			Object insertKey = req4100Service.saveReq4100ReqInfo(paramMap);
 			paramMap.put("reqId", (String)insertKey);
@@ -250,8 +300,18 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			
@@ -301,6 +361,21 @@ public class Req4100Controller {
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
 			
+			HttpSession ss = request.getSession();
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			
 			req4100Service.saveReq4100ReqInfo(paramMap);
 			
 			
@@ -344,11 +419,24 @@ public class Req4100Controller {
     	try{
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-        	
+			
+			
 			HttpSession ss = request.getSession();
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+		
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 
 			String reqAuth = req4100Service.selectReq4100UserCheck(paramMap);
 			model.addAttribute("reqAuth", reqAuth);
@@ -376,9 +464,23 @@ public class Req4100Controller {
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
         	
+        	
 			HttpSession ss = request.getSession();
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
 			
         	
         	Map reqInfoMap = (Map) req4100Service.selectReq4100ReqInfo(paramMap);        	
@@ -431,9 +533,23 @@ public class Req4100Controller {
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
         	
+        	
 			HttpSession ss = request.getSession();
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
+						
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
 
 			req4100Service.deleteReq4100ReqList(paramMap);
 			
@@ -465,9 +581,22 @@ public class Req4100Controller {
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
         	
+        	
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 
 			String resultPwCheck = req4100Service.selectReq4100ReqPwCheck(paramMap);
 			model.addAttribute("resultPwCheck", resultPwCheck);
@@ -494,9 +623,22 @@ public class Req4100Controller {
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
         	
+        	
 			HttpSession ss = request.getSession();
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			String reqId = req4100Service.insertReq4100ReqCopy(paramMap);

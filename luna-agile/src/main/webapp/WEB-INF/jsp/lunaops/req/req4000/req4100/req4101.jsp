@@ -538,7 +538,6 @@ var OSLReq4101Popup = function () {
 					   	//현재 창에서 모달 찾기
 	   					$.each($(".modal.show"), function(idx, modalPop){
 	   						//팝업된 모달 창 중에서 찾고자 하는 idkey를 가진 모달창 선택
-	   						console.log(modalPop.getAttribute("data-idkey"));
 	   						if(modalPop.getAttribute("data-idkey") == "req4100ReqTable"){
 	   							//모달 크기 키우고 그전 모달 크기 class 제거
 	   							$(modalPop.children).addClass("modal-xl");
