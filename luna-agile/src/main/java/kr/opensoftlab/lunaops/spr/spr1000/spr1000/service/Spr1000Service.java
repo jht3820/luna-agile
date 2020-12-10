@@ -28,38 +28,4 @@ public interface Spr1000Service {
 	
 	@SuppressWarnings({ "rawtypes" })
 	Map  selectSpr1000SprInfo(Map paramMap) throws Exception;
-
-	
-	@SuppressWarnings("rawtypes")
-	int selectSpr1000SprReqListCnt(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings({"rawtypes" })
-	List<Map> selectSpr1000SprReqList(Map paramMap) throws Exception;
-
-	
-	@SuppressWarnings("rawtypes")
-	int selectSpr1000SprReqNotEndListCnt(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings({"rawtypes" })
-	int updateSpr1003SprStart(Map paramMap) throws Exception;
-	
-
-	
-	@SuppressWarnings({"rawtypes" })
-	int updateSpr1003SprEnd(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	Map  selectSpr1000SprInfoStat(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	public List<Map> selectSpr1000ChartInfo(Map<String, String> paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	public List<Map> selectSpr1000VelocityChartInfo(Map<String, String> paramMap) throws Exception;
-	
 }
