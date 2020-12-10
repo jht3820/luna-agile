@@ -25,17 +25,17 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000SprTable" data-datatable-action="select" title="스프린트 조회" data-title-lang-cd="spr1100.actionBtn.title.sprSelect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000SprTable" data-datatable-action="select" title="스프린트 조회" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
 					</div>
 				</div>
 			</div>
-			<div class="kt-portlet__body">
+			<div class="kt-portelt__body">
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-l-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
-				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
+				<div class="kt_datatable" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -45,7 +45,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
 					<h5 class="kt-font-boldest kt-font-brand">
-						<i class="fa fa-th-large kt-margin-r-5"></i><span id="sprNmStr"></span><span data-lang-cd="spr2100.title">회고록 목록</span>
+						<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="">회고록 목록</span>
 					</h5>
 				</div>
 				<div class="kt-portlet__head-toolbar">
@@ -68,10 +68,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="kt-portlet__body">
-				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-l-25">
-					<div class="osl-datatable-search" data-datatable-id="spr2100RptTable"></div>
-				</div>
+			<div class="kt-portelt__body">
+				<div class="osl-datatable-search" data-datatable-id="spr2100RptTable"></div>
 				<div class="kt_datatable" id="spr2100RptTable"></div>
 			</div>
 		</div> <!-- 회고록 목록 끝 -->
@@ -80,7 +78,7 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLSpr2100Popup = function () {
+var OSLSpr1100Popup = function () {
 	//스프린트 데이터 테이블
 	var sprDatatableId = "spr1000SprTable";
 	//회고록 목록 테이블
@@ -97,16 +95,16 @@ var OSLSpr2100Popup = function () {
 				}
 			},
 			columns:[
-				{field: 'sprTypeNm', title: '상태', textAlign: 'center', width: 80, search: true, searchType:"select", searchCd: "SPR00001", searchField:"sprTypeCd", sortable: true, sortField:"sprTypeCd"},
-				{field: 'sprNm', title: '스프린트명', textAlign: 'left', width: 240, autoHide: false, search: true, sortField: "sprNm"},
-				{field: 'sprStDt', title: '시작일', textAlign: 'center', width: 120, sortField: "sprStDt",
+				{field: 'sprTypeNm', title: $.osl.lang("spr1100.field.sprTypeNm"), textAlign: 'center', width: 80, search: true, searchType:"select", searchCd: "SPR00001", searchField:"sprTypeCd", sortable: true, sortField:"sprTypeCd"},
+				{field: 'sprNm', title: $.osl.lang("spr1100.field.sprNm"), textAlign: 'left', width: 240, autoHide: false, search: true, sortField: "sprNm"},
+				{field: 'sprStDt', title: $.osl.lang("spr1100.field.sprStdtm"), textAlign: 'center', width: 120, sortField: "sprStDt",
 					template: function (row) {
 						var paramDatetime = new Date(row.sprStDt);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				},
-				{field: 'sprEdDt', title:'종료일', textAlign: 'center', width: 120, sortField: "sprEdDt",
+				{field: 'sprEdDt', title:$.osl.lang("spr1100.field.sprEddtm"), textAlign: 'center', width: 120, sortField: "sprEdDt",
 					template: function (row) {
 						var paramDatetime = new Date(row.sprEdDt);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
@@ -115,8 +113,8 @@ var OSLSpr2100Popup = function () {
 				},
 			],
 			searchColumns:[
-				{field: 'sprDesc', title: '스프린트 설명', searchOrd: 3},
-				{field: 'sprDtm', title: '기간', searchOrd:4, searchType:"daterange"}
+				{field: 'sprDesc', title: $.osl.lang("spr1100.field.sprDesc"), searchOrd: 3},
+				{field: 'sprDtm', title: $.osl.lang("spr1100.field.sprDtm"), searchOrd:4, searchType:"daterange"}
 			],
 			actionBtn:{
 				"title" : $.osl.lang("spr1100.actionBtn.title.selectBtn"),
@@ -159,27 +157,13 @@ var OSLSpr2100Popup = function () {
 						//검색한 경우 기존에 선택 항목 초기화
 						$("#sprId").val("");
 						$("#sprNm").val("");
-						$("#sprNmStr").text("");
 						selectBtnClick();
-						
-						//회고록 테이블도 초기화
-						//검색바 초기화
-						searchReset(mmrDatatableId);
-						//데이터 테이블 재조회
-						$("button[data-datatable-id="+mmrDatatableId+"][data-datatable-action=select]").click();
-						
 					}
 				},
 				"click": function(rowData){
 					$("#sprId").val(rowData.sprId);
 					$("#sprNm").val(rowData.sprNm);
-					$("#sprNmStr").text(rowData.sprNm + " ");
 					selectBtnClick();
-					
-					//검색바 초기화
-					searchReset(mmrDatatableId);
-					//데이터 테이블 재조회
-					$("button[data-datatable-id="+mmrDatatableId+"][data-datatable-action=select]").click();
 				}
 			}
 		});
@@ -189,21 +173,19 @@ var OSLSpr2100Popup = function () {
 			data:{
 				source:{
 					read:{
-						url: "/spr/spr2000/spr2100/selectSpr2100MmrListAjax.do"
+						url: "/spr/spr2000/spr2100/selectSpr2100RptListAjax.do"
 					}
 				},
 			},
 			columns:[
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'mmrNm', title: '회고록 제목', textAlign: 'left', width: 80, search:true},
-				{field: 'mmrUsrNm', title: '작성자', textAlign: 'left', width: 80, search:true,
+				{field: 'sprNm', title: '스프린트명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
+				{field: 'mmrNm', title: '회고록 제목', textAlign: 'left', width: 80},
+				{field: 'mmrUsrId', title: '작성자', textAlign: 'left', width: 80,
 					template: function (row) {
-						if($.osl.isNull(row.mmrUsrNm)){
-							row.mmrUsrNm = "-";
-						}
 						var usrData = {
-								html: row.mmrUsrNm,
+								html: row.mmrUsrId + " (" + row.mmrUsrNm + ")",
 								imgSize: "sm",
 								class:{
 									cardBtn: "osl-width__fit-content"
@@ -212,14 +194,10 @@ var OSLSpr2100Popup = function () {
 						return $.osl.user.usrImgSet(row.mmrUsrImgId, usrData);
 					},
 					onclick: function(row){
-						if($.osl.isNull(row.mmrUsrId)){
-							$.osl.alert("없는 회원입니다.");
-						}else{
-							$.osl.user.usrInfoPopup(row.mmrUsrId);
-						}
+						$.osl.user.usrInfoPopup(row.badUsrId);
 					}	
 				},
-				{field: 'mmrDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm", search:true, searchType:"daterange",
+				{field: 'mmrDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm",
 					template: function (row) {
 						var paramDatetime = new Date(row.mmrDtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
@@ -227,20 +205,22 @@ var OSLSpr2100Popup = function () {
 					}
 				}
 			],
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
-				"title": $.osl.lang("spr2100.actionBtn.title"),
 				"dblClick": true,
 			},
 			actionTooltip:{
-				"update": $.osl.lang("spr2100.actionBtn.updateTooltip"),
-				"delete" : $.osl.lang("spr2100.actionBtn.deleteTooltip"),
-				"dblClick" : $.osl.lang("spr2100.actionBtn.detailTooltip")
+				"update": "회고록 수정",
+				"delete" : "회고록 삭제",
+				"dblClick" : "회고록 상세"
 			},
 			actionFn:{
 				"insert":function(rowData){
-					if($.osl.isNull($("#sprId").val())){
+					if($("#sprId").val() == null || $("#sprId").val() == ""){
 						//스프린트를 선택하지 않았으면
-						$.osl.alert($.osl.lang("spr2100.message.selectMsg"));
+						$.osl.alert("스프린트를 선택하세요");
 						return false;
 					}
 					var data = {
@@ -249,13 +229,13 @@ var OSLSpr2100Popup = function () {
 						sprNm : $("#sprNm").val(),
 					};
 					var options = {
-						idKey: "spr2101_insert",
-						modalTitle: "[ "+$.osl.lang("spr2100.title.insertTitle")+" ]",
+						idKey: "spr2001_insert",
+						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회고록 등록")+" ]",
 						closeConfirm: true,
 						autoHeight: false,
 						modalSize: "xl",
 					};
-					$.osl.layerPopupOpen('/spr/spr2000/spr2100/saveSpr2101MmrView.do',data,options);
+					$.osl.layerPopupOpen('/spr/spr2000/spr2100/saveSpr2001RptView.do',data,options);
 				},
 				"update":function(rowData){
 					var data = {
@@ -264,13 +244,13 @@ var OSLSpr2100Popup = function () {
 							sprId : rowData.sprId
 						};
 						var options = {
-							idKey: "spr2101_update",
-							modalTitle: "[ "+$.osl.lang("spr2100.title.updateTitle")+" ]",
+							idKey: "spr2001_insert",
+							modalTitle: "[ "+$.osl.escapeHtml("스프린트 회고록 수정")+" ]",
 							closeConfirm: true,
 							autoHeight: false,
 							modalSize: "xl",
 						};
-						$.osl.layerPopupOpen('/spr/spr2000/spr2100/saveSpr2101MmrView.do',data,options);
+						$.osl.layerPopupOpen('/spr/spr2000/spr2100/saveSpr2001RptView.do',data,options);
 				},
 				"delete":function(rowData){
 					var data = {
@@ -278,7 +258,7 @@ var OSLSpr2100Popup = function () {
 					};
 					//AJAX 설정
 			    	var ajaxObj = new $.osl.ajaxRequestAction(
-			    			{"url":"<c:url value='/spr/spr2000/spr2100/deleteSpr2100MmrListAjax.do'/>"}
+			    			{"url":"<c:url value='/spr/spr2000/spr2100/deleteSpr2100RptListAjax.do'/>"}
 			    				, data);
 					//AJAX 전송 성공 함수
 			    	ajaxObj.setFnSuccess(function(data){
@@ -288,7 +268,6 @@ var OSLSpr2100Popup = function () {
 							$.osl.layerPopupClose();
 						}else{
 							$.osl.toastr(data.message);
-							selectBtnClick();
 						}
 			    	});
 			    	//AJAX 전송
@@ -301,13 +280,13 @@ var OSLSpr2100Popup = function () {
 							sprId : rowData.sprId
 						};
 					var options = {
-						idKey: "spr2101_detail",
-						modalTitle: "[ "+$.osl.lang("spr2100.title.detailTitle")+" ]",
+						idKey: "spr2001_insert",
+						modalTitle: "[ "+$.osl.escapeHtml("스프린트 회고록 수정")+" ]",
 						closeConfirm: true,
 						autoHeight: false,
 						modalSize: "xl",
 					};
-					$.osl.layerPopupOpen('/spr/spr2000/spr2100/selectSpr2102View.do',data,options);
+					$.osl.layerPopupOpen('/spr/spr2000/spr2100/selectSpr2002View.do',data,options);
 				}
 			},
 		});
@@ -322,51 +301,17 @@ var OSLSpr2100Popup = function () {
 		$("button[data-datatable-id="+mmrDatatableId+"][data-datatable-action=select]").click();
 	};
 	
-	/**
-	* searchReset : 검색바 초기화
-	* param : datatableId 초기화 시킬 검색바의 데이터 테이블 아이디
-	*/
-	var searchReset = function(datatableId){
-		//드롭다운 메뉴 선택 활성화 취소 및 재선택
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item.active").attr("class", "dropdown-item");
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").attr("class", "dropdown-item active");
-		
-		//검색 메뉴 명 가져오기
-		var searchBarMenuStr = $(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").text();
-		
-		//검색 메뉴 버튼 변경
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").parent().children(".btn.btn-secondary.dropdown-toggle").text(searchBarMenuStr);
-		
-		//select 감추기
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("style", "display:none;");
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("aria-hidden", "true");
-		
-		//input 보이기
-		$("#searchData_"+datatableId).removeAttr("readonly");
-		//그려진 캘린터 아이콘이 있는 경우 지우기
-		$("#searchData_"+datatableId).parent().children("span").children().children().removeClass("la-calendar");
-		
-		//input에 검색 값 비우기
-		$("#searchData_"+datatableId).val("");
-
-		//전체 검색 막기
-		//input disabled
-		$("#searchData_"+datatableId).attr("disabled","disabled");
-	};
-	
 	return {
         // public functions
         init: function() {
         	documentSetting();
-        },
-		reload: function() {
-    		selectBtnClick();
-    	}
+        }
+        
     };
 }();
 
 $.osl.ready(function(){
-	OSLSpr2100Popup.init();
+	OSLSpr1100Popup.init();
 });
 </script>
 <!-- end script -->
