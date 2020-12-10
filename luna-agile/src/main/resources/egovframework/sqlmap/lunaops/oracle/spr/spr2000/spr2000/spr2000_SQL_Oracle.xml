@@ -233,8 +233,7 @@
 	<select id="spr2000DAO.selectSpr2001RptMemList" parameterClass="java.util.Map" resultClass="egovMap">
 		 
 		SELECT
-			A.USR_NO AS USR_NO
-			, A.USR_ID AS USR_ID
+			A.USR_ID AS USR_ID
 			, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
 			, SF_STM3000_USR_INFO(A.USR_ID, '2')  AS USR_EMAIL
 			, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG__ID
@@ -253,16 +252,14 @@
 		INSERT INTO SPR2001
 		(
 			LIC_GRP_ID,		PRJ_GRP_ID,		PRJ_ID
-			,SPR_ID,				RPT_ID,				USR_NO
-			,USR_ID
+			,SPR_ID,				RPT_ID,				USR_ID
 		    ,REG_DTM,			REG_USR_ID,			REG_USR_IP
 	        ,MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
 		)
 		VALUES 
 		(
 			#licGrpId#,			#prjGrpId#,				#prjId#
-	       ,#sprId#,				#rptId#,					#usrNo#
-	       ,#usrId#
+	       ,#sprId#,				#rptId#,					#usrId#
 		   ,SYSDATE,			#regUsrId#,				#regUsrIp#
 	       ,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
 		)
