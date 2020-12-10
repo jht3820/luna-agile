@@ -136,7 +136,7 @@ input:-webkit-autofill,
 .osl-margin-b-05{
 	margin-bottom: 0.5rem;
 }
-/* 높이값 */
+/* 높이값 세로값 */
 .osl-min-h-px--50 {
   min-height: 50px; 
 }
@@ -168,8 +168,8 @@ input:-webkit-autofill,
   min-height: 365px; 
 }
 @media(min-width: 1400px){
-	.osl-h-px--460 {
-	  height: 460px; 
+	.osl-h-px--500 {
+	  height: 500px; 
 	}
 }
 /* 글자크기 */
@@ -1407,37 +1407,24 @@ label.required:after {
 .modal-footer [data-ktwizard-type="action-submit"] {
   display: none; }
  /*******************end :: wizard*******************/
- .osl-hidden-select{
-	width: 97%;
-	max-height: 200px;
-	overflow-y: auto;
-	border: 1px solid #e4eaf2;
-   	-webkit-box-shadow: 0 0 35px 0 rgba(154,161,171,.15);
-  	box-shadow: 0 0 35px 0 rgba(154,161,171,.15);
-   	background-color: #fff;
-   	z-index:99;
-   	padding: 10px 0;
+
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice{
+	display: flex;
+	padding: 5px 10px;
+	align-items: center;
 }
-.osl-hidden-select .osl-hidden-option{
-	height: 30px;
-	line-height: 30px;
-	cursor: pointer;
+.select2.select2-container.select2-container--default{
+	width: 100% !important;
 }
-.osl-hidden-option:hover{
-	background-color: #1cac81;
-	color: #fff;
+@media (min-width: 767px){
+	.select2-selection__rendered{
+		max-height: 57px;
+		overflow-y: auto !important;
+	}
 }
-.osl-list-style--none{
-	list-style: none;
- }
-.osl-tag-div{
-	overflow: hidden;
-	height: fit-content;
-	margin-top: 10px;
-}
-.osl-tagify__tag__removeBtn:hover{
-	border-radius:5px;
-	background-color: #1cac81;
+.osl-line-height-rem-1_5{
+	line-height: 1.5rem !important;
 }
 @media (max-width: 1400px){
 	.osl-bad__width__100{
