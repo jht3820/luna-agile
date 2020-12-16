@@ -10,13 +10,13 @@
    	<resultMap id="resultMapSelectSpr2000" class="egovMap">
 		<result property="sprId"				column="SPR_ID"/>
 		<result property="sprNm"			column="SPR_NM"/>
-		<result property="rptId"				column="RPT_ID"/>
-		<result property="rptNm"			column="RPT_NM"/>
-		<result property="rptDesc"			column="RPT_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
-		<result property="rptDtm"			column="RPT_DTM"/>
-		<result property="rptUsrId"			column="USR_ID"/>
-		<result property="rptUsrNm"			column="USR_NM"/>
-		<result property="rptUsrImgId"	column="USR_IMG_ID"/>
+		<result property="mmtId"				column="MMT_ID"/>
+		<result property="mmtNm"			column="MMT_NM"/>
+		<result property="mmtDesc"			column="MMT_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="mmtDtm"			column="MMT_DTM"/>
+		<result property="mmtUsrId"			column="USR_ID"/>
+		<result property="mmtUsrNm"			column="USR_NM"/>
+		<result property="mmtUsrImgId"	column="USR_IMG_ID"/>
     </resultMap>
 
 	
@@ -25,81 +25,81 @@
 		SELECT 
 			ROWNUM RN
 			, T1.SPR_ID AS SPR_ID
-			, T1.RPT_ID AS RPT_ID
-			, T1.RPT_NM AS RPT_NM
-			, T1.RPT_DTM AS RPT_DTM
-			, T1.USR_ID AS RPT_USR_ID
-			, T1.USR_NM AS RPT_USR_NM
-			, T1.USR_IMG_ID AS RPT_USR_IMG_ID
-			, T1.RPT_MEM_CNT AS RPT_MEM_CNT
+			, T1.MMT_ID AS MMT_ID
+			, T1.MMT_NM AS MMT_NM
+			, T1.MMT_DTM AS MMT_DTM
+			, T1.USR_ID AS MMT_USR_ID
+			, T1.USR_NM AS MMT_USR_NM
+			, T1.USR_IMG_ID AS MMT_USR_IMG_ID
+			, T1.MMT_MEM_CNT AS MMT_MEM_CNT
 			, Y.SPR_NM AS SPR_NM
 		FROM
 		(
 			SELECT 
 					A.SPR_ID AS SPR_ID
-					, A.RPT_ID AS RPT_ID
-					, A.RPT_NM AS RPT_NM
-					, A.RPT_DESC AS RPT_DESC
-					, TO_CHAR(A.RPT_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RPT_DTM
+					, A.MMT_ID AS MMT_ID
+					, A.MMT_NM AS MMT_NM
+					, A.MMT_DESC AS MMT_DESC
+					, TO_CHAR(A.MMT_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MMT_DTM
 					, A.USR_ID AS USR_ID
 					, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
 					, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
-					, RPT_MEM_CNT AS RPT_MEM_CNT
+					, MMT_MEM_CNT AS MMT_MEM_CNT
 		    FROM SPR2000 A
 		    LEFT JOIN (
 		    	SELECT
-		    		B.RPT_ID AS RPT_ID
-		    		, COUNT( B.RPT_ID ) AS RPT_MEM_CNT
+		    		B.MMT_ID AS MMT_ID
+		    		, COUNT( B.MMT_ID ) AS MMT_MEM_CNT
 		    	FROM SPR2001 B
 		    	WHERE 1 = 1
 		    	AND B.LIC_GRP_ID = #licGrpId#
 			    AND B.PRJ_GRP_ID = #prjGrpId#
 				AND B.PRJ_ID = #prjId#
 				AND B.SPR_ID = #sprId#
-				GROUP BY B.RPT_ID
+				GROUP BY B.MMT_ID
 		    )  C
-		    ON ( A.RPT_ID = C.RPT_ID )
+		    ON ( A.MMT_ID = C.MMT_ID )
 		    WHERE 1=1
 		    AND A.LIC_GRP_ID = #licGrpId#
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			ORDER BY A.RPT_ID DESC
+			ORDER BY A.MMT_ID DESC
 		) T1 LEFT JOIN SPR1000 Y
 		ON T1.SPR_ID = Y.SPR_ID
 		WHERE 1 = 1
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
-				<isEqual property="searchTargetId" compareValue="rptNm">
-					AND	T1.RPT_NM LIKE '%'|| #searchTargetData# ||'%'
+				<isEqual property="searchTargetId" compareValue="mmtNm">
+					AND	T1.MMT_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptDesc">
+				<isEqual property="searchTargetId" compareValue="mmtDesc">
 				<![CDATA[
-					AND	REGEXP_REPLACE(T1.RPT_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+					AND	REGEXP_REPLACE(T1.MMT_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
 				]]>
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptUsrId">
+				<isEqual property="searchTargetId" compareValue="mmtUsrId">
 					AND	T1.USR_ID LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptDtm">
+				<isEqual property="searchTargetId" compareValue="mmtDtm">
 					<isNotEmpty property="searchStartDt">
-						AND	TO_CHAR(T1.RPT_DTM, 'YYYY-MM-DD') &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD')
+						AND	TO_CHAR(T1.MMT_DTM, 'YYYY-MM-DD') &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD')
 					</isNotEmpty>
 					<isNotEmpty property="searchEndDt">
-						AND	TO_CHAR(T1.RPT_DTM, 'YYYY-MM-DD') &lt;=  TO_DATE(#searchEndDt#, 'YYYY-MM-DD')
+						AND	TO_CHAR(T1.MMT_DTM, 'YYYY-MM-DD') &lt;=  TO_DATE(#searchEndDt#, 'YYYY-MM-DD')
 					</isNotEmpty>
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptMemId">
+				<isEqual property="searchTargetId" compareValue="mmtMemId">
 						AND EXISTS (
 							SELECT
-								Y.RPT_ID
+								Y.MMT_ID
 							FROM SPR2001 Y
 							WHERE 1 = 1
 							AND Y.LIC_GRP_ID = #licGrpId#
 						    AND Y.PRJ_GRP_ID = #prjGrpId#
 							AND Y.PRJ_ID = #prjId#
 							AND Y.SPR_ID = #sprId#
-							AND Y.RPT_ID = T1.RPT_ID
+							AND Y.MMT_ID = T1.MMT_ID
 							WHERE 1 = 1
 							AND SF_STM3000_USR_INFO(Y.USR_ID, '1') LIKE '%'|| #searchTargetData# ||'%'
 						)
@@ -109,7 +109,7 @@
 	</sql>
 	
 	
-	<select id="spr2000DAO.selectSpr2000RptListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	<select id="spr2000DAO.selectSpr2000MmtListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
 	    
 		SELECT
 			COUNT(*) AS CNT
@@ -119,7 +119,7 @@
     </select>
     
     
-    <select id="spr2000DAO.selectSpr2000RptList" parameterClass="java.util.Map"  resultClass="egovMap">
+    <select id="spr2000DAO.selectSpr2000MmtList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
 		SELECT 
 			Z.*
@@ -131,15 +131,15 @@
     </select>
     
     
-    <select id="spr2000DAO.selectSpr2000RptInfo" parameterClass="java.util.Map" resultMap="resultMapSelectSpr2000">
+    <select id="spr2000DAO.selectSpr2000MmtInfo" parameterClass="java.util.Map" resultMap="resultMapSelectSpr2000">
      	
     	SELECT
     		A.SPR_ID AS SPR_ID
     		, B.SPR_NM AS SPR_NM
-			, A.RPT_ID AS RPT_ID
-			, A.RPT_NM AS RPT_NM
-			, A.RPT_DESC AS RPT_DESC
-			, TO_CHAR(A.RPT_DTM, 'YYYY-MM-DD HH24:MI:SS') AS RPT_DTM
+			, A.MMT_ID AS MMT_ID
+			, A.MMT_NM AS MMT_NM
+			, A.MMT_DESC AS MMT_DESC
+			, TO_CHAR(A.MMT_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MMT_DTM
 			, A.USR_ID AS USR_ID
 			, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
 			, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
@@ -151,27 +151,27 @@
 	    AND A.PRJ_GRP_ID = #prjGrpId#
 		AND A.PRJ_ID = #prjId#
 		AND A.SPR_ID = #sprId#
-		AND A.RPT_ID = #rptId#
+		AND A.MMT_ID = #mmtId#
     </select>
     
     
-    <insert id="spr2000DAO.insertSpr2000RptInfo" parameterClass="java.util.Map">
-		<selectKey resultClass="java.lang.String" keyProperty="newRptId">
+    <insert id="spr2000DAO.insertSpr2000MmtInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newMmtId">
 			<![CDATA[
 				 
 				SELECT	NVL( 
-								SUBSTR(NEW_RPT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_RPT_ID, 12, 5)) + 1) , 5, '0')
-							,	'RPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-	            		) AS NEW_RPT_ID 
+								SUBSTR(NEW_MMT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_MMT_ID, 12, 5)) + 1) , 5, '0')
+							,	'MMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+	            		) AS NEW_MMT_ID 
 				FROM	(
-				            SELECT	MAX(RPT_ID)  AS NEW_RPT_ID
+				            SELECT	MAX(MMT_ID)  AS NEW_MMT_ID
 				            FROM	SPR2000 A
 				            WHERE	1 = 1
 				            AND A.LIC_GRP_ID = #licGrpId#
 						    AND A.PRJ_GRP_ID = #prjGrpId#
 							AND A.PRJ_ID = #prjId#
 							AND A.SPR_ID = #sprId#
-				            AND A.RPT_ID LIKE 'RPT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+				            AND A.MMT_ID LIKE 'MMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
 						)
 			]]>
 		</selectKey>
@@ -180,16 +180,16 @@
 			INSERT INTO SPR2000
 			(
 			       LIC_GRP_ID,			PRJ_GRP_ID,			PRJ_ID
-			       ,SPR_ID,				RPT_ID,					RPT_NM
-			       ,RPT_DESC,			RPT_DTM,				USR_ID
+			       ,SPR_ID,				MMT_ID,					MMT_NM
+			       ,MMT_DESC,			MMT_DTM,				USR_ID
 				   ,REG_DTM,			REG_USR_ID,			REG_USR_IP
 			       ,MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
 			)                    
 			VALUES
 			(
 					#licGrpId#,			#prjGrpId#,				#prjId#
-			       ,#sprId#,				#newRptId#,			#rptNm#
-			       ,#rptDesc#,			SYSDATE,				#rptUsrId#
+			       ,#sprId#,				#newMmtId#,			#mmtNm#
+			       ,#mmtDesc#,			SYSDATE,				#mmtUsrId#
 				   ,SYSDATE,			#regUsrId#,				#regUsrIp#
 			       ,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
 			)
@@ -197,12 +197,12 @@
 	</insert>
 	
 	
-    <update id="spr2000DAO.updateSpr2000RptInfo" parameterClass="java.util.Map">
+    <update id="spr2000DAO.updateSpr2000MmtInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
 			 
 			UPDATE SPR2000 A
-			SET  RPT_NM = #rptNm#
-			       ,RPT_DESC = #rptDesc#
+			SET  MMT_NM = #mmtNm#
+			       ,MMT_DESC = #mmtDesc#
 			       ,MODIFY_DTM = SYSDATE
 			       ,MODIFY_USR_ID = #modifyUsrId#
 			       ,MODIFY_USR_IP = #modifyUsrIp#
@@ -211,12 +211,12 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			AND A.RPT_ID = #rptId#
+			AND A.MMT_ID = #mmtId#
 		]]>
 	</update>
 
 	
-    <delete id="spr2000DAO.deleteSpr2000RptInfo" parameterClass="java.util.Map">
+    <delete id="spr2000DAO.deleteSpr2000MmtInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
 			 
 			DELETE FROM SPR2000 A
@@ -225,12 +225,14 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			AND A.RPT_ID = #rptId#
 		]]>
+		<isNotEmpty property="reqId">
+				AND A.REQ_ID = #reqId#
+		</isNotEmpty>
 	</delete>
 	
 	
-	<select id="spr2000DAO.selectSpr2001RptMemList" parameterClass="java.util.Map" resultClass="egovMap">
+	<select id="spr2000DAO.selectSpr2001MmtMemList" parameterClass="java.util.Map" resultClass="egovMap">
 		 
 		SELECT
 			A.USR_ID AS USR_ID
@@ -243,38 +245,42 @@
 	    AND A.PRJ_GRP_ID = #prjGrpId#
 		AND A.PRJ_ID = #prjId#
 		AND A.SPR_ID = #sprId#
-		AND A.RPT_ID = #rptId#
+		AND A.MMT_ID = #mmtId#
 	</select>
 
 	
-	<insert id="spr2000DAO.insertSpr2001RptMemList" parameterClass="java.util.Map">
+	<insert id="spr2000DAO.insertSpr2001MmtMemList" parameterClass="java.util.Map">
 		 
 		INSERT INTO SPR2001
 		(
 			LIC_GRP_ID,		PRJ_GRP_ID,		PRJ_ID
-			,SPR_ID,				RPT_ID,				USR_ID
+			,SPR_ID,				MMT_ID,				USR_ID
 		    ,REG_DTM,			REG_USR_ID,			REG_USR_IP
 	        ,MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
 		)
 		VALUES 
 		(
 			#licGrpId#,			#prjGrpId#,				#prjId#
-	       ,#sprId#,				#rptId#,					#usrId#
+	       ,#sprId#,				#mmtId#,					#usrId#
 		   ,SYSDATE,			#regUsrId#,				#regUsrIp#
 	       ,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
 		)
 	</insert>
 
 	
-	<delete id="spr2000DAO.deleteSpr2001RptMemList" parameterClass="java.util.Map">
+	<delete id="spr2000DAO.deleteSpr2001MmtMemList" parameterClass="java.util.Map">
 		 
 		DELETE FROM SPR2001 A
 		WHERE 1 = 1
 		AND A.LIC_GRP_ID = #licGrpId#
 	    AND A.PRJ_GRP_ID = #prjGrpId#
 		AND A.PRJ_ID = #prjId#
-		AND A.SPR_ID = #sprId#
-		AND A.RPT_ID = #rptId#
+		<isNotEmpty property="sprId">
+				AND A.SPR_ID = #sprId#
+		</isNotEmpty>
+		<isNotEmpty property="reqId">
+				AND A.REQ_ID = #reqId#
+		</isNotEmpty>
 	</delete>
 	
 </sqlMap>

@@ -194,7 +194,9 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			AND A.MMR_ID = #mmrId#
 		]]>
+		<isNotEmpty property="mmrId">
+				AND A.MMR_ID = #mmrId#
+		</isNotEmpty>
 	</delete>
 </sqlMap>
