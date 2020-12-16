@@ -39,6 +39,7 @@
 				, SF_STM4001_COM_CD_INFO("#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
 			FROM DPL1000 A
 			WHERE 1 = 1
+			AND DPL_DEL_CD = '02'
 			AND A.PRJ_ID = #prjId#
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
@@ -138,8 +139,6 @@
 		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
-	
-	
 	
 	
    	<resultMap id="resultMapSelectDpl1000" class="dpl1000VO">
@@ -432,16 +431,6 @@
 			) T1
 			WHERE T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
-	
-	   
-    <select id="dpl1000DAO.selectDpl1000ListCnt" parameterClass="dpl1000VO"  resultClass="java.lang.Integer">
-	    
-	    SELECT
-			COUNT(*)
-		FROM	(
-			<include refid="dpl1000DAO.selectDpl1000BaseList"/>
-		) T1
-    </select>
 
 	
 	<select id="dpl1000DAO.selectDpl1000DeployVerInfo" parameterClass="java.util.Map" resultClass="egovMap">

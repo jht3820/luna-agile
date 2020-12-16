@@ -47,6 +47,7 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
+						<div class="osl-datatable-search kt-margin-b-0 kt-margin-r-10" data-datatable-id="spr1100AssTable"></div>
 						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1100AssTable" data-datatable-action="select" title="요구사항 배정 조회" data-title-lang-cd="spr1100.actionBtn.title.assSelect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
@@ -69,6 +70,7 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
+						<div class="osl-datatable-search kt-margin-b-0 kt-margin-r-10" data-datatable-id="spr1100NonTable"></div>
 						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1100NonTable" data-datatable-action="select" title="요구사항 미배정 조회" data-title-lang-cd="spr1100.actionBtn.title.nonSelect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
@@ -202,7 +204,7 @@ var OSLSpr1100Popup = function () {
 			},
 			columns:[
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm",
+				{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm", search:true,
 					template: function(row){
 						var resultStr = $.osl.escapeHtml(row.reqNm);
 						//비밀번호가 있는 경우
@@ -213,7 +215,7 @@ var OSLSpr1100Popup = function () {
 					}	
 				},
 				{field: 'reqOrd', title: '순번', textAlign: 'left', width: 80},
-				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 80, sortField: "reqProTypeCd"},
+				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 80, sortField: "reqProTypeCd", search:true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortable: true, sortField:"reqProTypeCd"},
 				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 120, sortField: "reqDtm",
 					template: function (row) {
 						var paramDatetime = new Date(row.reqDtm);

@@ -59,31 +59,31 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 	
 	
 	@SuppressWarnings("rawtypes")
-	public int  selectSpr2000RptListCnt(Map paramMap) throws Exception {
-		return  spr2000DAO.selectSpr2000RptListCnt(paramMap);
+	public int  selectSpr2000MmtListCnt(Map paramMap) throws Exception {
+		return  spr2000DAO.selectSpr2000MmtListCnt(paramMap);
 	} 
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public List<Map> selectSpr2000RptList(Map paramMap) throws Exception {
-		return  spr2000DAO.selectSpr2000RptList(paramMap);
+	public List<Map> selectSpr2000MmtList(Map paramMap) throws Exception {
+		return  spr2000DAO.selectSpr2000MmtList(paramMap);
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public Map  selectSpr2000RptInfo(Map paramMap) throws Exception {
-		return  spr2000DAO.selectSpr2000RptInfo(paramMap);
+	public Map  selectSpr2000MmtInfo(Map paramMap) throws Exception {
+		return  spr2000DAO.selectSpr2000MmtInfo(paramMap);
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes"})
-	public void  insertSpr2000RptInfo(Map paramMap) throws Exception {
+	public void  insertSpr2000MmtInfo(Map paramMap) throws Exception {
 		
 		Map<String, String> convertParamMap = selectSpr2000JsonToMap(paramMap);
 		
 		
-		String rptId = spr2000DAO.insertSpr2000RptInfo(convertParamMap);
-		convertParamMap.put("rptId", rptId);
+		String mmtId = spr2000DAO.insertSpr2000MmtInfo(convertParamMap);
+		convertParamMap.put("mmtId", mmtId);
 		
 		
 		
@@ -100,7 +100,7 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 				for(int i=0; i<usrId.length; i++) {
 					convertParamMap.put("usrId", usrId[i]);
 					convertParamMap.put("usrNo", Integer.toString(i));
-					spr2000DAO.insertSpr2001RptMemList(convertParamMap);
+					spr2000DAO.insertSpr2001MmtMemList(convertParamMap);
 				}
 			}
 		}
@@ -108,15 +108,15 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public void updateSpr2000RptInfo(Map paramMap) throws Exception {
+	public void updateSpr2000MmtInfo(Map paramMap) throws Exception {
 		
 		Map<String, String> convertParamMap = selectSpr2000JsonToMap(paramMap);
 		
 		
-		spr2000DAO.updateSpr2000RptInfo(convertParamMap);
+		spr2000DAO.updateSpr2000MmtInfo(convertParamMap);
 		
 		
-		spr2000DAO.deleteSpr2001RptMemList(convertParamMap);
+		spr2000DAO.deleteSpr2001MmtMemList(convertParamMap);
 		
 		
 		
@@ -133,7 +133,7 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 				for(int i=0; i<usrId.length; i++) {
 					convertParamMap.put("usrId", usrId[i]);
 					convertParamMap.put("usrNo", Integer.toString(i));
-					spr2000DAO.insertSpr2001RptMemList(convertParamMap);
+					spr2000DAO.insertSpr2001MmtMemList(convertParamMap);
 				}
 			}
 		}
@@ -141,7 +141,7 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void deleteSpr2000RptList(Map paramMap) throws Exception {
+	public void deleteSpr2000MmtList(Map paramMap) throws Exception {
 		String deleteDataList = (String) paramMap.get("dataList");
 		
 		
@@ -161,28 +161,28 @@ public class Spr2000ServiceImpl extends EgovAbstractServiceImpl implements Spr20
 			infoMap.put("prjId", paramMap.get("prjId"));
 			
 			
-			spr2000DAO.deleteSpr2000RptInfo(infoMap);
+			spr2000DAO.deleteSpr2000MmtInfo(infoMap);
 			
 			
-			spr2000DAO.deleteSpr2001RptMemList(infoMap);
+			spr2000DAO.deleteSpr2001MmtMemList(infoMap);
 		}
 	}
 
 	
 	@SuppressWarnings({ "rawtypes" })
-	public List<Map>  selectSpr2001RptMemList(Map paramMap) throws Exception {
-		return  spr2000DAO.selectSpr2001RptMemList(paramMap);
+	public List<Map>  selectSpr2001MmtMemList(Map paramMap) throws Exception {
+		return  spr2000DAO.selectSpr2001MmtMemList(paramMap);
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public void insertSpr2001RptMemList(Map paramMap) throws Exception {
-		spr2000DAO.insertSpr2001RptMemList(paramMap);
+	public void insertSpr2001MmtMemList(Map paramMap) throws Exception {
+		spr2000DAO.insertSpr2001MmtMemList(paramMap);
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public void deleteSpr2001RptMemList(Map paramMap) throws Exception {
-		spr2000DAO.deleteSpr2001RptMemList(paramMap);
+	public void deleteSpr2001MmtMemList(Map paramMap) throws Exception {
+		spr2000DAO.deleteSpr2001MmtMemList(paramMap);
 	}
 }
