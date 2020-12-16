@@ -127,6 +127,7 @@
 					,	A.REQ_USR_NUM
 					,	SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
 					,	A.REQ_NM
+					,	A.REQ_DESC
 					,	NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
 					,	A.REQ_CHARGER_ID
 					,	SF_STM3000_USR_INFO(A.REQ_CHARGER_ID, 1) AS REQ_CHARGER_NM
@@ -221,9 +222,6 @@
 						<isNotEmpty property="searchEndDt">
 							AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
 						</isNotEmpty>
-					</isEqual>
-					<isEqual property="searchTargetId" compareValue="reqUsrNum">
-							AND	T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>

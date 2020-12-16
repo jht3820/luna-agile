@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-l-25">
+				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
 				<div class="kt_datatable" id="spr1000SprTable"></div>
@@ -69,7 +69,9 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="osl-datatable-search" data-datatable-id="spr2000MmtTable"></div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
+					<div class="osl-datatable-search" data-datatable-id="spr2000MmtTable"></div>
+				</div>
 				<div class="kt_datatable" id="spr2000MmtTable"></div>
 			</div>
 		</div> <!-- 회의록 목록 끝 -->
@@ -182,7 +184,7 @@ var OSLSpr2000Popup = function () {
 			columns:[
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'mmtNm', title: '회의록명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
+				{field: 'mmtNm', title: '회의록명', textAlign: 'left', width: 400, autoHide: false, sortField: "reqNm", search:true},
 				{field: 'mmtMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
 					template:function(row){
 						if(row.mmtMemCnt == null || row.mmtMemCnt == ""){
@@ -192,7 +194,7 @@ var OSLSpr2000Popup = function () {
 						}
 					}
 				},
-				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120,
+				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120, search:true,
 					template: function (row) {
 						if(row.mmtUsrId == null){
 							return "";
@@ -211,13 +213,18 @@ var OSLSpr2000Popup = function () {
 						$.osl.user.usrInfoPopup(row.mmtUsrId);
 					}	
 				},
-				{field: 'mmtDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm",
+				{field: 'mmtDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm", search:true, searchType:"daterange",
 					template: function (row) {
 						var paramDatetime = new Date(row.mmtDtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				}
+			],
+			searchColumns:[
+				{field: 'mmtMemId', title: '참여인원ID', searchOrd: 3},
+				{field: 'mmtMemNm', title: '참여인원명', searchOrd: 4},
+				{field: 'mmtMemEmail', title: '참여인원 이메일', searchOrd: 5},
 			],
 			rows:{
 				clickCheckbox: true
