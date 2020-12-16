@@ -167,6 +167,9 @@ input:-webkit-autofill,
 .osl-min-h-px--365 {
   min-height: 365px; 
 }
+.osl-min-h-px--700 {
+  min-height: 700px; 
+}
 @media(min-width: 1400px){
 	.osl-h-px--500 {
 	  height: 500px; 
@@ -1267,6 +1270,9 @@ label.required:after {
 .osl-outline--secondary{
 	border: 1px solid #e1e1ef;
 }
+.osl-outline--secondary-t-1{
+	border-top: 1px solid #e1e1ef;
+}
 .osl-outline--secondary-b{
 	border-bottom: 2px solid #e1e1ef;
 }
@@ -1425,7 +1431,15 @@ label.required:after {
 .osl-calendar .datepicker{
 	width: 100% !important;
 }
-
+@media(min-width:800px){
+	.osl-desktop-max-w-285{
+		max-width: 285px;
+	}
+}
+.osl-portlet__body-style--none{
+	background-color: transparent;
+	box-shadow: none;
+}
 .osl-calendar-group-list__leftList{
     border: 1px solid #ebedf2;
     margin-top: 30px;
@@ -1695,6 +1709,10 @@ label.required:after {
     left: auto;
     right: 1.85rem;
     height : auto;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true],.select2-container--default .select2-results__option.select2-results__option--highlighted{
+	background: #d9ede7;
 }
 @media (min-width: 767px){
 	.select2-selection__rendered{
