@@ -8,18 +8,32 @@
 	<input type="hidden" name="paramSprNm" id="paramSprNm" value="<c:out value='${param.sprNm}'/>">
 	<div class="kt-portlet">
 		<div class="kt-portlet__body">
-		<div class="form-group">
+		<div class="form-group kt-margin-b-0">
 			<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.sprNm">스프린트명</span></label>
 			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly">
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
-						<span data-lang-cd="spr2001.label.rptMem">참여 인원</span>
-						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10' id='memCnt' name='memCnt'>0</span>
-					</label>
-					<div class="form-control osl-select2-view border-0" id="rptMemSelect" name="rptMemSelect"></div>
+				<div class="kt-portlet kt-portlet--collapsed osl-remove__box-shadow" id="spr2002MeetingMemberList">
+					<div class="kt-portlet__head kt-padding-0 border-0">
+						<div class="kt-portlet__head-label">
+							<i class="fa fa-user-friends kt-margin-r-5"></i>
+							<span data-lang-cd="spr2001.label.rptMem">참여 인원</span>
+							<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-5 kt-padding-10' id='memCnt' name='memCnt'>0</span>
+						</div>
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-group">
+								<div class="kt-portlet__head-group">
+									<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="kt-portlet__body kt-padding-5 osl-outline--secondary-t-1">
+						<div class="row">
+							<div class="form-control osl-select2-view border-0" id="rptMemSelect" name="rptMemSelect"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -60,6 +74,9 @@ var OSLSpr2002Popup = function () {
 	// Private functions
     var documentSetting = function () {
     	
+    	//Portlet 세팅
+    	new KTPortlet('spr2002MeetingMemberList', $.osl.lang("portlet"));
+    	
 		//회의록 정보 가져오기 및 세팅
     	selectSprRptInfo();
     	
@@ -97,39 +114,26 @@ var OSLSpr2002Popup = function () {
 				if(lastCount>0){
 					$("#memCnt").text(lastCount);
 				}
-				//참여인원 태그 형으로 넣기
+				
+				//참여인원 태그 형으로 넣기rptMemInfo
 				if(rptMemList != null && rptMemList.length > 0){
 					$.each(rptMemList, function(idx, value){
-						//참여인원 수가 11명 이하일 때만 태그형
-						if(lastCount <12){
-							str += '<div class="kt-user-card-v2 btn rptMemInfo osl-outline--secondary osl-width__fit-content kt-padding-5 float-left kt-margin-5" data-user="'+value.usrId+'">'
-										+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-											+'<img src="'+$.osl.user.usrImgUrlVal(value.usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
-										+'</div>'
-										+'<div class="kt-user-card-v2__details">'
-											+'<span class="kt-user-card-v2__name ">'+value.usrNm+' ('+value.usrId+')</span>'
-										+'</div>'
-									+'</div>';
-						}else{
-							//참여인원 수가 12명 이상일 땐 사진형
-							 str += "<a href='#' class='rptMemInfo kt-media kt-media--sm kt-media--circle' tabindex='0' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.usrNm)+"' data-original-title='"+$.osl.escapeHtml(value.usrNm)+"' data-user='"+value.usrId+"'><img src='"+$.osl.user.usrImgUrlVal(value.usrImgId)+"'></a>";
-						}
+						str += '<div class="kt-user-card-v2 d-inline-block rptMemInfo osl-outline--secondary kt-padding-5 kt-margin-l-5 kt-margin-r-5" data-user="'+ value.usrId +'">'
+									+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'
+										+'<img src="'+$.osl.user.usrImgUrlVal(value.usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+									+'</div>'
+									+'<div class="kt-user-card-v2__details float-left">'
+										+'<span class="kt-user-card-v2__name">'+value.usrNm+'</span>'
+										+'<span class="kt-user-card-v2__email">'+value.usrEmail+'</span>'
+									+'</div>'
+								+'</div>';
 					});
-				}
-				
-				if(lastCount >= 12){
-					$("#rptMemSelect").removeClass("osl-select2-view");
-					$("#rptMemSelect").addClass("kt-media-group");
-				}else if(lastCount == 0){
-					$("#rptMemSelect").removeClass("form-control");
-					$("#rptMemSelect").removeClass("osl-select2-view");
-					$("#rptMemSelect").addClass("border-1");
 				}
 				
 				$("#rptMemSelect").append(str);
 				
 				//툴팁 적용
-				KTApp.initTooltips();
+				//KTApp.initTooltips();
 				
 				//참여인원 아이콘 클릭 시
 				$(".rptMemInfo").click(function(){

@@ -16,7 +16,7 @@
 <div class="row">
 	<div class="col-lg-5 col-md-12 col-sm-12 col-12">
 		<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
-			<div class="kt-portlet__head kt-portlet__head--lg border-0">
+			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
 					<h5 class="kt-font-boldest kt-font-brand">
 						<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="spr1100.title.sprint">스프린트 목록</span>
@@ -276,7 +276,7 @@ var OSLSpr1100Popup = function () {
 			columns:[
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'reqNm', title: $.osl.lang("spr1100.field.reqNm"), textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm",
+				{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm",
 					template: function(row){
 						var resultStr = $.osl.escapeHtml(row.reqNm);
 						//비밀번호가 있는 경우
@@ -286,9 +286,9 @@ var OSLSpr1100Popup = function () {
 						return resultStr;
 					}	
 				},
-				{field: 'reqOrd', title: $.osl.lang("spr1100.field.reqOrd"), textAlign: 'left', width: 80},
-				{field: 'reqProTypeNm', title:$.osl.lang("spr1100.field.reqProTypeNm"), textAlign: 'left', width: 80, sortField: "reqProTypeCd"},
-				{field: 'reqDtm', title: $.osl.lang("spr1100.field.reqDtm"), textAlign: 'center', width: 120, sortField: "reqDtm",
+				{field: 'reqOrd', title: '순번', textAlign: 'left', width: 80},
+				{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 80, sortField: "reqProTypeCd"},
+				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 120, sortField: "reqDtm",
 					template: function (row) {
 						var paramDatetime = new Date(row.reqDtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
