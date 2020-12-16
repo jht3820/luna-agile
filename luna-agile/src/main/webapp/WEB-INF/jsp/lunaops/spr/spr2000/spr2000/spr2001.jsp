@@ -71,9 +71,15 @@ var OSLSpr2001Popup = function () {
     	//kt-select2 설정
 		$('#mmtMemSelect').select2({
 			placeholder : $.osl.lang("spr2001.placeholder.select2") + "("+$.osl.lang("spr2001.message.select2")+")",
+			//option list 렌더링
 			templateResult: optionFormatState,
+			//tag 렌더링
 			templateSelection : tagFormatState,
+			//검색
+	        matcher: matchCustom,
+			//드롭다운 위치 지정
 			dropdownParent: $("#frSpr2001"),
+			//스크롤 충돌 방지
 			ftScrollUse: false,
 		});
 
@@ -191,6 +197,41 @@ var OSLSpr2001Popup = function () {
     	
    	    return state;
     };
+    
+    /**
+     * kt-select2 검색 세팅
+     * param : selectUsrList 이미 선택된 사용자 리스트
+     */
+    var matchCustom = function(params, data){
+    	//검색 값이 빈 값인경우 전체 출력
+         if ($.trim(params.term) === '') {
+           return data;
+         }
+        
+         //기본 텍스트값이 없는 경우 빈 값 출력
+         if (typeof data.text === 'undefined') {
+           return null;
+         }
+         
+         //이메일 값 조회
+         var usrEmail = $(data.element).data("usr-email");
+
+         //id문자열에 검색어 있으면 출력
+         if (data.id.indexOf(params.term) > -1) {
+           return data;
+         }
+         //text문자열에 검색어 있으면 출력
+         else if (data.text.indexOf(params.term) > -1) {
+           return data;
+         }
+         //email문자열에 검색어 있으면 출력
+         else if (usrEmail.indexOf(params.term) > -1) {
+           return data;
+         }
+
+         //검색어에 해당안되는 데이터 출력 안함
+         return null;
+    }
     
     /**
     * kt-select2 사용자 세팅

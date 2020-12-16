@@ -9,6 +9,23 @@ import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1100.vo.Dpl1100VO;
 
 public interface Dpl1100Service {
 
+    
+	@SuppressWarnings("rawtypes")
+	public int  selectDpl1100ReqListCnt(Map paramMap) throws Exception; 
+	
+	
+	@SuppressWarnings("rawtypes" )
+	public List<Map> selectDpl1100ReqList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void insertDpl1100ReqList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void deleteDpl1100ReqList(Map paramMap) throws Exception;
+	
+	
 	
 	@SuppressWarnings("rawtypes")
 	List<Map> selectDpl1100ExistDplList(Dpl1100VO dpl1100VO) throws Exception;
@@ -32,15 +49,15 @@ public interface Dpl1100Service {
 
 	
 	@SuppressWarnings("rawtypes")
-	List selectDpl1100ReqDplList(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	void insertDpl1100ReqDplInfo(Map paramMap) throws Exception;
+	void insertDpl1100ReqDplList(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")
-	void deleteDpl1100ReqDplInfo(Map paramMap) throws Exception;
+	void deleteDpl1100ReqDplList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectDpl1100ReqDplList(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")

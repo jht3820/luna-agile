@@ -1715,7 +1715,7 @@ label.required:after {
 	background: #d9ede7;
 }
 @media (min-width: 767px){
-	.select2-selection__rendered{
+	.select2-selection.select2-selection--multiple > .select2-selection__rendered{
 		min-height: 57px;
 		max-height: 114px;
 		overflow-y: auto !important;

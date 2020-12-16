@@ -100,8 +100,35 @@
 							AND Y.PRJ_ID = #prjId#
 							AND Y.SPR_ID = #sprId#
 							AND Y.MMT_ID = T1.MMT_ID
-							WHERE 1 = 1
 							AND SF_STM3000_USR_INFO(Y.USR_ID, '1') LIKE '%'|| #searchTargetData# ||'%'
+						)
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mmtMemNm">
+						AND EXISTS (
+							SELECT
+								Y.MMT_ID
+							FROM SPR2001 Y
+							WHERE 1 = 1
+							AND Y.LIC_GRP_ID = #licGrpId#
+						    AND Y.PRJ_GRP_ID = #prjGrpId#
+							AND Y.PRJ_ID = #prjId#
+							AND Y.SPR_ID = #sprId#
+							AND Y.MMT_ID = T1.MMT_ID
+							AND SF_STM3000_USR_INFO(Y.USR_ID, '1') LIKE '%'|| #searchTargetData# ||'%'
+						)
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="mmtMemEmail">
+						AND EXISTS (
+							SELECT
+								Y.MMT_ID
+							FROM SPR2001 Y
+							WHERE 1 = 1
+							AND Y.LIC_GRP_ID = #licGrpId#
+						    AND Y.PRJ_GRP_ID = #prjGrpId#
+							AND Y.PRJ_ID = #prjId#
+							AND Y.SPR_ID = #sprId#
+							AND Y.MMT_ID = T1.MMT_ID
+							AND SF_STM3000_USR_INFO(Y.USR_ID, '2') LIKE '%'|| #searchTargetData# ||'%'
 						)
 				</isEqual>
 			</isNotEmpty>
