@@ -400,6 +400,11 @@ var OSLCoreLangSetting = function () {
 			reqDtm: "요청 일자",
 			reqNm: "요청 제목",
 			reqDesc: "요청 내용",
+			reqPw: {
+				title : "요구사항 잠금",
+				password : "PW",
+				passwordCheck :"PW 확인"
+			},
 			attachments: "파일 첨부", 
 			complete: "완료",
 			insert:{
@@ -409,7 +414,11 @@ var OSLCoreLangSetting = function () {
 			update:{
 				saveString: "요구사항 정보를 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
-			}
+			},
+			formCheck:{
+				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
+				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
+			},
 		},
 		req4100:{
 			button:{
@@ -514,13 +523,6 @@ var OSLCoreLangSetting = function () {
 				button : {
 					detailBtn : "상세 조회",
 				},
-				field:{
-					reqProTypeNm : "처리 유형",
-					reqOrd : "순번",
-					prjNm : "프로젝트명",
-					reqNm : "요구사항명",
-					reqDtm : "요청일"
-				}
 			},
 			formCheck:{
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
@@ -886,30 +888,20 @@ var OSLCoreLangSetting = function () {
 		},
 		stm9000: {
 			title : {
-				jenkinsManagement : "JENKINS 관리",
-				jobManagement : "JENKINS 관리"
+				jenkinsManagement : "JENKINS 관리"
 			},
 			button:{
+				common:{
+					selectConnection:"선택 접속 확인",
+					allConnection:"전체 접속 확인"
+				},
 				jenkins:{
 					selectTooltip: "Jenkins 조회",
 					insertTooltip: "Jenkins 추가",
 					updateTooltip: "Jenkins 수정",
-					deleteTooltip: "Jenkins 삭제"
-				},
-				job:{
-					selectTooltip: "Job 조회",
-					insertTooltip: "Job 추가",
-					updateTooltip: "Job 수정",
-					deleteTooltip: "Job 삭제"	
-				}
-			},
-			field:{
-				jenkins:{
-					connectCheck: "접속 확인 결과",
-					jenkinsNm: "Jenkins 명",
-					jenkinsUrl: "Jenkins Url",
-					useNm: "사용 유무",
-					JenkinsUsrId: "Jenkins User Id"
+					deleteTooltip: "Jenkins 삭제",
+					selectConnectionTooltip: "선택 Jenkins 접속 확인",
+					allConnectionTooltip: "전체 Jenkins 접속 확인"
 				}
 			},
 			actionBtn:{
@@ -924,6 +916,113 @@ var OSLCoreLangSetting = function () {
 					insertJenkins:"신규 Jenkins 설정 등록",
 					updateJenkins:"Jenkins 설정 수정",
 					detailJenkins:"상세 정보"
+				}
+			},
+			message:{
+				jenkins:{
+					nonSelect:"접속 확인할 Jenkins를 선택해주세요.",
+					connectSuccess:" 접속 성공"
+				}
+			}
+		},
+		stm9001:{
+			label:{
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUseCd : "사용여부",
+				jenkinsDesc : "JENKINS 설명",
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				confirm:{
+					insert:"신규 JENKINS를 등록하시겠습니까?",
+					update:"JENKINS 정보를 수정하시겠습니까?"
+				}
+			}
+		},
+		stm9002:{
+			label:{
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUseCd : "사용여부",
+				jenkinsDesc : "JENKINS 설명",
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				confirm:{
+					insert:"신규 JENKINS를 등록하시겠습니까?",
+					update:"JENKINS 정보를 수정하시겠습니까?"
+				}
+			}
+		},
+		stm9100: {
+			title : {
+				jobManagement : "JOB 관리"
+			},
+			button:{
+				common:{
+					selectConnection:"선택 접속 확인",
+					allConnection:"전체 접속 확인"
+				},
+				job:{
+					selectTooltip: "Job 조회",
+					insertTooltip: "Job 추가",
+					updateTooltip: "Job 수정",
+					deleteTooltip: "Job 삭제"	,
+					selectConnectionTooltip: "선택 Job 접속 확인",
+					allConnectionTooltip: "전체 Job 접속 확인"
+				}
+			},
+			actionBtn:{
+				job:{
+					updateBtn:"Job 수정",
+					deleteBtn:"Job 삭제",
+					dblClickBtn:"Job 상세보기"
+				}
+			},
+			modal:{
+				job:{
+					insertJob:"신규 Job 설정 등록",
+					updateJob:"Job 설정 수정",
+					detailJob:"상세 정보"
+				}
+			},
+			message:{
+				job:{
+					nonSelect:"Job 정보를 추가 할 Jenkins를 선택해주세요."
+				}
+			}
+		},
+		stm9101:{
+			label:{
+				jenkins : "JENKINS",
+				job : "JOB",
+				jobRestoreId : "원복 JOB ID",
+				tokenKey: "TOKEN KEY",
+				jobParameter: "JOB 매개변수",
+				jobTypeCd : "JOB TYPE",
+				jobUseCd : "사용 유무",
+				jobDesc : "JOB 설명"
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				noExistJenkins : "JENKINS 등록이 필요합니다.",
+				confirm:{
+					insert:"신규 JOB을 등록하시겠습니까?",
+					update:"JOB 정보를 수정하시겠습니까?"
 				}
 			}
 		},
@@ -1260,6 +1359,13 @@ var OSLCoreLangSetting = function () {
 				reqUsrNum: "Requester Contact",
 				reqKey: "Request Key"
 			},
+			prepListTable:{
+				reqProTypeNm : "Processing Status",
+				reqOrd : "Request Number",
+				prjNm : "Project Name",
+				reqNm : "Title",
+				reqDtm : "Request Date"
+			},
 			req4103ReqTable:{
 				usrNm : "User Name",
 				usrId : "Id",
@@ -1304,13 +1410,22 @@ var OSLCoreLangSetting = function () {
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
 			},
-			stm2100StmTable:{
-				stmTypeNm: "Type",
-				stmNm: "Name",
-				stmDsTypeNm: "Disclosure Scope",
-				cnt: "Total Count",
-				badCnt: "Valid Count",
-				delCnt: "Deleted Count",
+			stm9000JenkinsTable:{
+				result : "Connection check",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins Url",
+				jenUsrId: "Jenkins User Id",
+				useNm:"Jenkins Use",
+				jenDesc:"Jenkins Description"
+			},
+			stm9100JobTable:{
+				jenNm:"Jenkins Name",
+				jobTypeNm:"Job Type",
+				jobId:"Job Id",
+				jobRestoreId:"Restore Job Id",
+				jobParameter:"Job Parameter",
+				useNm:"Job Use",
+				jobDesc:"Job Description"
 			}
 		},
 		date:{
@@ -1533,6 +1648,11 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
@@ -1540,6 +1660,10 @@ var OSLCoreLangSetting = function () {
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
+			formCheck:{
+				passwordMessage : "You must write password for secret request.",
+				passwordMatching : "The entered passwords are different.",
+			},
 		},
 		req4100:{
 			button:{
@@ -1644,13 +1768,6 @@ var OSLCoreLangSetting = function () {
 				button : {
 					detailBtn : "Detail",
 				},
-				field:{
-					reqProTypeNm : "Processing Status",
-					reqOrd : "Request Number",
-					prjNm : "Project Name",
-					reqNm : "Title",
-					reqDtm : "Request Date"
-				}
 			},
 			formCheck:{
 				passwordMessage : "You must write password for secret request.",
@@ -1963,26 +2080,25 @@ var OSLCoreLangSetting = function () {
 				jobManagement : "JENKINS Management"
 			},
 			button:{
+				common:{
+					selectConnection:"Select connection check",
+					allConnection:"Check all connections"
+				},
 				jenkins:{
 					selectTooltip: "Jenkins Select",
 					insertTooltip: "Jenkins Insert",
 					updateTooltip: "Jenkins Update",
-					deleteTooltip: "Jenkins Delete"					
+					deleteTooltip: "Jenkins Delete",
+					selectConnectionTooltip: "Selected Jenkins connection check",
+					allConnectionTooltip: "All Jenkins connection check"
 				},
 				job:{
 					selectTooltip: "Job Select",
 					insertTooltip: "Job Insert",
 					updateTooltip: "Job Update",
-					deleteTooltip: "Job Delete"	
-				}
-			},
-			field:{
-				jenkins:{
-					connectCheck: "Connection check result",
-					jenkinsNm: "Jenkins Name",
-					jenkinsUrl: "Jenkins Url",
-					useNm: "Jenkins Use",
-					JenkinsUsrId: "Jenkins User Id"
+					deleteTooltip: "Job Delete",
+					selectConnectionTooltip: "Selected Job connection check",
+					allConnectionTooltip: "All Job connection check"
 				}
 			},
 			actionBtn:{
@@ -1990,6 +2106,11 @@ var OSLCoreLangSetting = function () {
 					updateBtn:"Jenkins Update",
 					deleteBtn:"Jenkins Delete",
 					dblClickBtn:"Jenkins Detail Info"
+				},
+				job:{
+					updateBtn:"Job Update",
+					deleteBtn:"Job Delete",
+					dblClickBtn:"Job Detail Info"
 				}
 			},
 			modal:{
@@ -1997,6 +2118,31 @@ var OSLCoreLangSetting = function () {
 					insertJenkins:"Register new Jenkins settings",
 					updateJenkins:"Modify Jenkins settings",
 					detailJenkins:"Detail Info"
+				},
+				job:{
+					insertJob:"Register new Job settings",
+					updateJob:"Modify Job settings",
+					detailJob:"Detail Info"
+				}
+			}
+		},
+		stm9001:{
+			label:{
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUseCd : "JENKINS Use",
+				jenkinsDesc : "JENKINS Description",
+			},
+			button:{
+				insert : "Complete",
+				update : "Update completed"
+			},
+			message:{
+				confirm:{
+					insert:"Would you like to register a new jenkins?",
+					update:"Would you like to edit the jenkins information?"
 				}
 			}
 		},
