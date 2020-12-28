@@ -980,6 +980,14 @@ label.required:after {
 .osl-max-height-260{
 	max-height: 260px;
 }
+/* 색상값 */
+.osl-color--blue{
+	color:#5867dd;
+}
+.osl-color--red{
+	color:#fd397a;
+}
+
 /* @media */
 @media (min-width: 1025px) {
 	/* 로고 배경 색상 제거 */
