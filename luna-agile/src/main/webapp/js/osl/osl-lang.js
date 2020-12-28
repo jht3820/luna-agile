@@ -233,6 +233,32 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		/* 페이지 언어 */
+		dpl1100:{
+			title : {
+				deploy : "배포계획 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					dplSelect : "배포계획 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "배포계획 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
+			}
+		},
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -543,32 +569,6 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
-		spr1100:{
-			title : {
-				sprint : "스프린트 목록",
-				assignment : "요구사항 배정 목록",
-				unassigned : "요구사항 미배정 목록",
-			},
-			button:{
-				removeBtn: "제외",
-				addBtn:"배정"
-			},
-			actionBtn :{
-				title :{
-					selectBtn : "선택",
-					removeBtn :"제외",
-					addBtn :"배정",
-					sprSelect : "스프린트 조회",
-					assSelect : "요구사항 배정 조회",
-					nonSelect : "요구사항 미배정 조회",
-				},
-				tooltip :{
-					clickToolTip : "스프린트 선택",
-					removeToolTip :"요구사항 배정 제외",
-					addToolTip :"요구사항 배정",
-				},
-			}
-		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
 			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
@@ -606,6 +606,32 @@ var OSLCoreLangSetting = function () {
 					delete: "스프린트 삭제",
 					dblClick: "스프린트 상세 정보"
 				}
+			}
+		},
+		spr1100:{
+			title : {
+				sprint : "스프린트 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					sprSelect : "스프린트 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "스프린트 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
 			}
 		},
 		spr2000:{
@@ -1192,6 +1218,14 @@ var OSLCoreLangSetting = function () {
 				allTitle: "All"
 			},
 			/* 추가된 datatable별로 언어 지정 */
+			dpl1000DplTable:{
+				dplStsNm:"Deploy Status",
+				dplNm:"Deploy Title",
+				dplDt:"Deploy Date",
+				dplVer:"Deploy Version",
+				dplTypeNm:"Deploy Type",
+				dplDesc:"Deploy Desciption",
+			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -1204,6 +1238,18 @@ var OSLCoreLangSetting = function () {
 				reqUsrDeptNm: "Request Department Name",
 				reqUsrNum: "Request User Number",
 				reqKey: "Request Key",
+			},
+			req1100AssTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
+			},
+			req1100NonTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
 			},
 			prj1000PrjTable:{
 				prjNm: "Project Group Name",
@@ -1229,18 +1275,6 @@ var OSLCoreLangSetting = function () {
 				sprEddtm : "End Date",
 				sprDesc : "Sprint Desciption",
 				sprDtm :"Date Range",
-			},
-			spr1100AssTable:{
-				reqNm: "Request Name",
-				reqOrd : "Request Number",
-				reqProTypeNm :"Processing Status",
-				reqDtm : "Request Date",
-			},
-			spr1100NonTable:{
-				reqNm: "Request Name",
-				reqOrd : "Request Number",
-				reqProTypeNm :"Processing Status",
-				reqDtm : "Request Date",
 			},
 			spr2000RptTable:{
 				rptNm : "Meeting Log Title",
@@ -1365,6 +1399,32 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		/* 페이지 언어 */
+		dpl1100:{
+			title : {
+				deploy : "Deploy List",
+				assignment : "Assignment Request List",
+				unassigned : "Unassigned Request List",
+			},
+			button:{
+				removeBtn: "Remove",
+				addBtn:"Add"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "Select",
+					removeBtn :"Remove",
+					addBtn :"Add",
+					dplSelect : "Select Deploy List",
+					assSelect : "Select Assignment Request",
+					nonSelect : "Select Unassigned Request",
+				},
+				tooltip :{
+					clickToolTip : "Select Sprint",
+					removeToolTip :"Remove Request",
+					addToolTip :"Add Request",
+				},
+			}
+		},
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
