@@ -106,6 +106,7 @@
 					}
 				]
 		 }else{
+			 //시스템게시판 메뉴로 들어오는 경우
 			//insert에 필요한 stmInfo 체크해야 하므로
 			 checkStmInfo = true;
 			 //검색항목 추가
@@ -169,7 +170,7 @@
 				 		return row.badNum;
 				 	}
 				 },
-				 {field: 'badTitle', title: $.osl.lang("bad1000.field.badTitle"), textAlign: 'left', width: 400, autoHide: false, search: true,
+				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true,
 					template: function(row){
 						var returnStr = "";
 						// 삭제된 게시글인 경우
@@ -197,9 +198,9 @@
 						return returnStr;
 					}, 
 				 },
-				 {field: 'badHit', title: $.osl.lang("bad1000.field.badHit"), textAlign: 'center', width: 100},
-				 {field: 'badFileCnt', title: $.osl.lang("bad1000.field.badFileCnt"), textAlign: 'center', width: 100},
-				 {field: 'badUsrId', title: $.osl.lang("bad1000.field.badUsrId"), textAlign: 'left', width: 180,
+				 {field: 'badHit', title: '조회수', textAlign: 'center', width: 100},
+				 {field: 'badFileCnt', title: '첨부파일 수', textAlign: 'center', width: 100},
+				 {field: 'badUsrId', title: '작성자', textAlign: 'left', width: 180,
 					template: function (row) {
 						var usrData = {
 								html: row.badUsrNm + " (" + row.badUsrId + ")",
@@ -214,7 +215,7 @@
 						$.osl.user.usrInfoPopup(row.badUsrId);
 					}
 					, autoHide: false, search: true },
-				{field: 'badWtdtm', title:$.osl.lang("bad1000.field.badWtdtm"), textAlign: 'center', width: 150, search: true, searchType:"daterange",
+				{field: 'badWtdtm', title:'작성일', textAlign: 'center', width: 150, search: true, searchType:"daterange",
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
@@ -296,6 +297,7 @@
 							stmNm : $.osl.escapeHtml($("#stmNm").val()),
 							paramRow : JSON.stringify(rowData),
 							backPageYn: "N",
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmRootYn: $("#stmRootYn").val(),
 						};
 					var options = {
@@ -341,7 +343,7 @@
 						rowData.stmFileStrg = $("#stmFileStrg").val();
 					}
 					var data = {
-							stmDsTypeCd: $("#stmDstypeCd").val(),
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmNm: $.osl.escapeHtml($("#stmNm").val()),
 							stmRootYn: $("#stmRootYn").val(),
 							paramRow : JSON.stringify(rowData),
