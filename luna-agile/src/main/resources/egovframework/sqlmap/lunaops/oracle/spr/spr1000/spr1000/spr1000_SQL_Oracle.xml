@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="spr1000DAO">
+
+	
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	
+	<sql id="selectSpr1000List">
+		SELECT 
+			ROWNUM RN
+			, T1.LIC_GRP_ID
+			, T1.PRJ_GRP_ID
+			, T1.PRJ_ID
+			, T1.SPR_ID AS SPR_ID
+			, T1.SPR_NM AS SPR_NM
+			, T1.SPR_DESC
+			, T1.SPR_TYPE_CD AS SPR_TYPE_CD
+			, SF_STM4001_COM_CD_INFO(T1.LIC_GRP_ID, 'SPR00001', T1.SPR_TYPE_CD, '1') AS SPR_TYPE_NM
+			, T1.SPR_ST_DT AS SPR_ST_DT
+			, T1.SPR_ED_DT AS SPR_ED_DT
+			, T1.ORD
+			, T1.USE_CD
+			, SF_STM4001_COM_CD_INFO(T1.LIC_GRP_ID, 'CMM00001', T1.USE_CD, '1') AS USE_NM
+			, T1.DEL_CD
+			, T1.REQ_ALL_CNT
+			, T1.REQ_DONE_CNT
+			, T1.REQ_PROGRESS_CNT
+		FROM
+		(
+			SELECT
+				A.LIC_GRP_ID
+				, A.PRJ_GRP_ID
+				, A.PRJ_ID
+				, A.SPR_ID AS SPR_ID
+				, A.SPR_NM AS SPR_NM
+				, A.SPR_DESC AS SPR_DESC
+				, A.SPR_TYPE_CD AS SPR_TYPE_CD
+				, TO_CHAR(A.SPR_ST_DT, 'YYYY-MM-DD') AS SPR_ST_DT
+          		, TO_CHAR(A.SPR_ED_DT, 'YYYY-MM-DD') AS SPR_ED_DT
+          		, ORD
+          		, USE_CD
+          		, DEL_CD
+          		, (SELECT COUNT(*) FROM SPR1100 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND PRJ_GRP_ID = A.PRJ_GRP_ID AND PRJ_ID = A.PRJ_ID AND SPR_ID = A.SPR_ID) AS REQ_ALL_CNT
+				,
+		        (
+					SELECT COUNT(*)
+		            FROM SPR1100 Z INNER JOIN REQ4100 Y ON(Z.PRJ_ID = Y.PRJ_ID AND Z.REQ_ID = Y.REQ_ID AND Y.REQ_PRO_TYPE = '04')
+		            WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.PRJ_GRP_ID = A.PRJ_GRP_ID AND Z.PRJ_ID = A.PRJ_ID AND Z.SPR_ID = A.SPR_ID
+		        ) AS REQ_DONE_CNT
+		        ,
+		        (
+		          	SELECT COUNT(*)
+		            FROM SPR1100 Z INNER JOIN REQ4100 Y ON(Z.PRJ_ID = Y.PRJ_ID AND Z.REQ_ID = Y.REQ_ID AND Y.REQ_PRO_TYPE = '02')
+		            WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.PRJ_GRP_ID = A.PRJ_GRP_ID AND Z.PRJ_ID = A.PRJ_ID AND Z.SPR_ID = A.SPR_ID
+		        ) AS REQ_PROGRESS_CNT
+		    FROM SPR1000 A
+		    WHERE 1=1
+		    AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			<isNotEmpty property="useCd">
+				AND A.USE_CD = #useCd#
+			</isNotEmpty>
+			<isNotEmpty property="delCd">
+				AND A.DEL_CD = #delCd#
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY A.ORD DESC
+		</isEmpty> 
+		) T1 
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="sprNm">
+					AND	T1.SPR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.SPR_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprTypeCd">
+					AND	T1.SPR_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_DATE(T1.SPR_ST_DT, 'YYYY-MM-DD') &gt;= TO_DATE(SUBSTR(#searchStartDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_DATE(T1.SPR_ED_DT, 'YYYY-MM-DD') &lt;=  TO_DATE(SUBSTR(#searchEndDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    /*spr1000DAO.selectSpr1000SprListCnt 스프린트 목록 총 건수조회 */
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+    </select>
+    
+    
+    <select id="spr1000DAO.selectSpr1000SprList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    /*spr1000DAO.selectSpr1000SprList 스프린트 목록 조회 */
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+	
+	<insert id="spr1000DAO.insertSpr1000SprInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newSprId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_SPR_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_SPR_ID, 12, 5)) + 1) , 5, '0')
+						,	'SPR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_SPR_ID
+			FROM	(
+			            SELECT	MAX(SPR_ID)  AS NEW_SPR_ID
+			            FROM	SPR1000 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.PRJ_GRP_ID = #prjGrpId#
+			            AND		A.PRJ_ID = #prjId#
+			            AND		A.SPR_ID LIKE 'SPR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		/* spr1000DAO.insertSpr1000SprInfo - 스프린트 생성 */
+		<![CDATA[
+			INSERT INTO SPR1000
+			(
+                LIC_GRP_ID		,	PRJ_GRP_ID		,	PRJ_ID
+            ,	SPR_ID			,	SPR_NM			,	SPR_DESC
+            ,	SPR_TYPE_CD		,	SPR_ST_DT		,	SPR_ED_DT
+            ,	ORD				,	USE_CD			,	DEL_CD
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #licGrpId#		,	#prjGrpId#		,	#prjId#
+            ,	#newSprId#		,	#sprNm#			,	#sprDesc#
+            ,	#sprTypeCd#		,	REPLACE(#sprStDt#, '-', '')		,	REPLACE(#sprEdDt#, '-', '')
+            ,	#ord#			,	#useCd#			,	'02'
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+        )		
+		]]>
+	</insert>
+	
+	
+	<update id="spr1000DAO.updateSpr1000Info" parameterClass="java.util.Map">
+	<![CDATA[
+		/* spr1000DAO.updateSpr1000Info -스프린트 수정(update)*/
+		UPDATE	SPR1000 A
+        SET		MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+	]]>
+			<isNotEmpty property="sprNm">
+				,	SPR_NM		= #sprNm#     			
+     		</isNotEmpty>
+			<isNotEmpty property="sprDesc">
+				,	SPR_DESC		= #sprDesc#     			
+     		</isNotEmpty>
+			<isNotEmpty property="startDt">
+				,	SPR_ST_DT		= REPLACE(#startDt#, '-', '')
+     		</isNotEmpty>
+			<isNotEmpty property="endDt">
+				,	SPR_ED_DT		= REPLACE(#endDt#, '-', '')
+     		</isNotEmpty>
+			<isNotEmpty property="ord">
+				,	ORD		= #ord#
+     		</isNotEmpty>
+			<isNotEmpty property="useCd">
+				,	USE_CD		= #useCd#
+     		</isNotEmpty>
+     		<isNotEmpty property="sprTypeCd">
+				,	SPR_TYPE_CD		= #sprTypeCd#
+     		</isNotEmpty>
+     <![CDATA[
+        WHERE	1=1
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_GRP_ID	= #prjGrpId#
+        AND		A.PRJ_ID		= #prjId#
+        AND		A.SPR_ID		= #sprId#
+	]]>
+	</update>
+	
+	
+	<update id="spr1000DAO.deleteSpr1000SprInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		/* spr1000DAO.deleteSpr1000SprInfo - 스프린트 삭제 (삭제 유무 변경) */
+		UPDATE	SPR1000 A SET
+			A.DEL_CD = #delCd#
+			,	MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+        WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_GRP_ID	= #prjGrpId#
+        AND		A.PRJ_ID		= #prjId#
+        AND		A.SPR_ID		= #sprId#
+	]]>
+	</update>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		/* spr1000DAO.selectSpr1000SprInfo - 스프린트 단건 조회 */
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectSpr1000List"/>
+    	) T1
+    	WHERE 1=1
+		<isNotEmpty property="sprId">
+			AND		T1.SPR_ID = #sprId#
+		</isNotEmpty>
+	</select>
+</sqlMap>

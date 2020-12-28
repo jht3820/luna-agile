@@ -165,6 +165,12 @@ public class Prj3000ServiceImpl extends EgovAbstractServiceImpl implements Prj30
 			}
 		}
 	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int deletePrj3000DocList(Map paramMap) throws Exception{
+		return prj3000DAO.deletePrj3000DocList(paramMap);
+	}
 	
 	
 	@SuppressWarnings("rawtypes")

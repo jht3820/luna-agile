@@ -16,6 +16,16 @@ public interface Dpl1000Service {
 
 	
 	@SuppressWarnings("rawtypes")
+	public int selectDpl1000ListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	public List<Map> selectDpl1000List(Map paramMap) throws Exception;
+
+	
+	
+	
+	@SuppressWarnings("rawtypes")
 	List selectDpl1000DeployNmList(Map inputMap) throws Exception;
 	
 	

@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.service.impl.FileManageDAO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1100.service.Prj1100Service;
@@ -28,7 +28,7 @@ import kr.opensoftlab.lunaops.prj.prj2000.prj2100.service.impl.Prj2100DAO;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.impl.Prj3000DAO;
 import kr.opensoftlab.lunaops.req.req2000.req2000.service.impl.Req2000DAO;
 import kr.opensoftlab.lunaops.req.req4000.req4100.service.impl.Req4100DAO;
-import kr.opensoftlab.lunaops.req.req4000.req4100.vo.Req4100VO;
+import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.impl.Stm2000DAO;
 
 
@@ -71,6 +71,10 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
     @Resource(name = "prj1100Service")
     private Prj1100Service prj1100Service;
     
+    
+    @Resource(name = "stm2000Service")
+    private Stm2000Service stm2000Service;
+    
 	@Resource(name = "FileManageDAO")
 	private FileManageDAO fileMngDAO;
 	
@@ -104,6 +108,35 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	public int selectPrj1000PrjListCnt(Map paramMap) throws Exception {
 		return prj1000DAO.selectPrj1000PrjListCnt(paramMap);
 	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1000PrjAuthUsrList(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthUsrList(paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1000PrjAuthUsrListCnt(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthUsrListCnt(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj2100PrjAuthNoneUsrList(paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public Map selectPrj1000GrpInfo(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000GrpInfo(paramMap) ;
+    }
+	
     
    	@SuppressWarnings("rawtypes")
    	public Map selectPrj1000Info(Map paramMap) throws Exception {
@@ -129,47 +162,203 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	}
 	
    	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1000PrjGrpAjax(Map paramMap) throws Exception{
-		return (String) prj1000DAO.insertPrj1000PrjGrpAjax(paramMap);
+		
+		
+		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+		
+		String prjGrpId = (String) prj1000DAO.insertPrj1000PrjGrpAjax(paramMap);
+
+		
+		paramMap.put("prjId", prjGrpId);
+		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String licGrpId = jsonObj.getString("licGrpId");
+				String usrId = jsonObj.getString("usrId");
+				String authTypeCd = jsonObj.getString("authTypeCd");
+				
+				
+				if(!usrId.equals(prjAuthTargetId)) {
+					paramMap.put("licGrpId", licGrpId);
+					paramMap.put("prjAuthTargetId", usrId);
+					paramMap.put("prjAuthTypeCd", authTypeCd);
+					prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+				}
+			}
+		}
+		
+		
+		return prjGrpId;
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public int updatePrj1000PrjGrp(Map paramMap) throws Exception{
+		int rtnValue = 0;
+		
+		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+				
+		
+		paramMap.put("prjId", paramMap.get("paramPrjId"));
+		
+		
+		
+		rtnValue = (int) prj1000DAO.updatePrj1000(paramMap);
+
+		
+		paramMap.remove("prjAuthTargetId");
+		paramMap.remove("prjAuthTypeCd");
+		prj1000DAO.deletePrj1000PrjAuthInfo(paramMap);
+		
+		
+		paramMap.put("prjAuthTargetId", prjAuthTargetId);
+		paramMap.put("prjAuthTypeCd", "01");
+		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String licGrpId = jsonObj.getString("licGrpId");
+				String usrId = jsonObj.getString("usrId");
+				String authTypeCd = jsonObj.getString("authTypeCd");
+				
+				
+				if(!usrId.equals(prjAuthTargetId)) {
+					paramMap.put("licGrpId", licGrpId);
+					paramMap.put("prjAuthTargetId", usrId);
+					paramMap.put("prjAuthTypeCd", authTypeCd);
+					prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+				}
+			}
+		}
+		
+		return rtnValue;
 	}
    	
+
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1000PrjAjax(Map paramMap) throws Exception{
+		return prj1000DAO.insertPrj1000PrjAjax(paramMap);
+	}
+	
    	
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1001Ajax(Map paramMap) throws Exception{
 		
+		String licGrpId = (String) paramMap.get("licGrpId");
+		String regUsrId = (String) paramMap.get("regUsrId");
+		String regUsrIp = (String) paramMap.get("regUsrIp");
+		String modifyUsrId = (String) paramMap.get("modifyUsrId");
+		String modifyUsrIp = (String) paramMap.get("modifyUsrIp");
+		String prjNm = (String) paramMap.get("prjNm");
 		
-		
-		String dbType = EgovProperties.getProperty("Globals.DbType");
+		Map regModiMap = new HashMap();
+		regModiMap.put("licGrpId", licGrpId);
+		regModiMap.put("regUsrId", regUsrId);
+		regModiMap.put("regUsrIp", regUsrIp);
+		regModiMap.put("modifyUsrId", modifyUsrId);
+		regModiMap.put("modifyUsrIp", modifyUsrIp);
 		
 		
 		String prjId = "";
 		
 		
-		if("oracle".equals(dbType.toLowerCase())){
+		prjId = prj1000DAO.insertPrj1000PrjAjax(paramMap);
+		paramMap.put("prjId", prjId);
+		
+		
+
+		
+		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+		
+		
+		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
 			
-			prj1000DAO.insertPrj1001OracleAjax(paramMap);
+			JSONArray jsonArray = new JSONArray(usrIdList);
 			
 			
-			if("-1".equals(paramMap.get("ERR_CODE"))){
-				throw new Exception((String) paramMap.get("ERR_MSG"));
-			
-			}else{
-				prjId = (String) paramMap.get("NEW_PRJ_ID");
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String usrId = jsonObj.getString("usrId");
+				String authTypeCd = jsonObj.getString("authTypeCd");
+				
+				
+				if(!usrId.equals(prjAuthTargetId)) {
+					paramMap.put("licGrpId", licGrpId);
+					paramMap.put("prjAuthTargetId", usrId);
+					paramMap.put("prjAuthTypeCd", authTypeCd);
+					prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+				}
 			}
-			
-		
-		}else if("cubrid".equals(dbType.toLowerCase())){
-			
-			Map rtnMap = (Map)prj1000DAO.insertPrj1001CubridAjax(paramMap);
-			prjId = (String) rtnMap.get("newPrjId");
-			
-		
-		}else if("mariadb".equals(dbType.toLowerCase())){
-			
-			
-			prj1000DAO.insertPrj1001MariadbAjax(paramMap);
 		}
+		
+		
+		
+		List<Map> rootAuthGrpList = stm2000DAO.selectStm2000StmAuthGrpNoPagingList(paramMap);
+		
+		
+		if(rootAuthGrpList == null || rootAuthGrpList.size() == 0) {
+			throw new UserDefineException();
+		}
+		
+		
+		for(Map rootAuthGrpInfo: rootAuthGrpList) {
+			String authGrpId = (String) rootAuthGrpInfo.get("authGrpId");
+			
+			
+		    rootAuthGrpInfo.remove("prjId");
+		    rootAuthGrpInfo.put("prjId", prjId);
+		    rootAuthGrpInfo.put("selPrjId", prjId);
+		    rootAuthGrpInfo.put("orginAuthGrpId", authGrpId);
+		    rootAuthGrpInfo.put("authGrpUseCd", rootAuthGrpInfo.get("useCd"));
+		    rootAuthGrpInfo.put("authGrpOrd", rootAuthGrpInfo.get("ord"));
+		    rootAuthGrpInfo.putAll(regModiMap);
+		    
+		    
+		    prj2000DAO.insertPrj2000AuthGrpInfoAjax(rootAuthGrpInfo);
+		}
+		
+		
+	    Map newMap = new HashMap<>();
+	    newMap.put("prjId",prjId);
+	    newMap.put("authGrpId",rootAuthGrpList.get(0).get("authGrpId"));
+	    newMap.putAll(regModiMap);
+	    newMap.put("usrId", regUsrId);
+	    
+	    
+	    prj2000DAO.insertPrj2000PrjUsrAuthListAjax(newMap);
+	    
+	    
+	    stm2000DAO.insertStm2001MenuRootAuthList(paramMap);
+	    
+	    
+	    
+	    
+	    paramMap.put("docNm", prjNm);
+	    prj3000DAO.insertPrj3000RootMenuInfo(paramMap);
+	    
 		
 		return prjId;
 	}
@@ -178,96 +367,159 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	@SuppressWarnings({ "rawtypes" })
 	public int updatePrj1000Ajax(Map paramMap) throws Exception{
 		
-		return prj1000DAO.updatePrj1000Ajax(paramMap);
+		return prj1000DAO.updatePrj1000(paramMap);
 	}
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception{
-		prj1000DAO.deletePrj1000PrjGrpAjax(paramMap);
+	public void deletePrj1000PrjAjax(Map paramMap) throws Exception{
+		String deleteDataList = (String) paramMap.get("deleteDataList");
+
+		
+		JSONArray jsonArray = new JSONArray(deleteDataList);
+		
+		
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			prj1000DAO.deletePrj1000PrjAjax(infoMap);
+			
+		}
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void updatePrj1000PrjGrpTrashListAjax(Map paramMap) throws Exception{
+		String deleteDataList = (String) paramMap.get("deleteDataList");
+		String delCd = (String) paramMap.get("delCd");
+		
+		
+		JSONArray jsonArray = new JSONArray(deleteDataList);
+		
+		
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			infoMap.put("delCd", delCd);
+			
+			
+			prj1000DAO.updatePrj1000PrjTrashMoveAjax(infoMap);
+		}
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked"})
 	public void deletePrj1001Ajax(Map paramMap) throws Exception{
-		
-		
-		Req4100VO req4100Vo = new Req4100VO();
-		req4100Vo.setSelPrjId((String)paramMap.get("prjId"));
+		String deleteDataList = (String) paramMap.get("deleteDataList");
 
 		
-		List<Map> prjReqList = req4100DAO.selectReq4100AllList(req4100Vo);
-		
-		
-		List<Map> prjDocList = prj3000DAO.selectPrj3000BaseMenuList(paramMap);
-		
-		
-		List<Map> prjFlwOptList = prj1100Service.selectPrj1102FlwOptExistFileIdList(paramMap);
-		
-		prj1000DAO.updatePrj1000UserProjectId(paramMap);
-		
-		
-		
-		String dbType = EgovProperties.getProperty("Globals.DbType");
-		
-		
-		if("oracle".equals(dbType.toLowerCase())){
-			
-			prj1000DAO.deletePrj1001OracleAjax(paramMap);
-		
-		}else if("cubrid".equals(dbType.toLowerCase())){
-			
-			prj1000DAO.deletePrj1001CubridAjax(paramMap);
-		
-		}else if("mariadb".equals(dbType.toLowerCase())){
-			
-			prj1000DAO.deletePrj1001MariadbAjax(paramMap);
-		}
+		JSONArray jsonArray = new JSONArray(deleteDataList);
 		
 		
 		List<String> atchFileIdList = new ArrayList<String>();
-		
-		
-		if(prjReqList.size() > 0){
-			for(Map prjReqInfo : prjReqList){
-				String atchFileId = (String) prjReqInfo.get("atchFileId");
 				
-				
-				if(atchFileId != null && !"".equals(atchFileId)){
-					atchFileIdList.add(atchFileId);
+		
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			paramMap.put("atchFileIdNotNull", "Y"); 
+			List<Map> prjReqList = req4100DAO.selectReq4100AllList(infoMap);
+			
+			
+			List<Map> prjDocList = prj3000DAO.selectPrj3000BaseMenuList(infoMap);
+			
+			
+			List<Map> prjFlwOptList = prj1100Service.selectPrj1102FlwOptExistFileIdList(infoMap);
+			
+			prj1000DAO.updatePrj1000UserProjectId(infoMap);
+			
+			
+			
+			
+			prj2000DAO.deletePrj2000AuthGrpInfoAjax(infoMap);
+			
+			
+			prj2000DAO.deletePrj2000MenuUsrAuthListAjax(infoMap);
+			
+			
+			prj2000DAO.deletePrj2000AuthPrjUsrListAjax(infoMap);
+			
+			
+			prj1000DAO.deletePrj1000PrjAjax(infoMap);
+			
+			
+			prj1000DAO.deletePrj1000PrjAuthInfo(infoMap);
+			
+			
+			prj3000DAO.deletePrj3000DocList(infoMap);
+			
+			
+			req4100DAO.deleteReq4100ReqList(infoMap);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			if(prjReqList.size() > 0){
+				for(Map prjReqInfo : prjReqList){
+					String atchFileId = (String) prjReqInfo.get("atchFileId");
+					
+					
+					if(atchFileId != null && !"".equals(atchFileId)){
+						atchFileIdList.add(atchFileId);
+					}
 				}
 			}
-		}
-		
-		
-		if(prjDocList.size() > 0){
-			for(Map prjDocInfo : prjDocList){
-				
-				String docFormFileId = (String) prjDocInfo.get("docFormFileId");
-				
-				
-				String docAtchFileId = (String) prjDocInfo.get("docAtchFileId");
-				
-				
-				if(docFormFileId != null && !"".equals(docFormFileId)){
-					atchFileIdList.add(docFormFileId);
-				}
-				
-				
-				if(docAtchFileId != null && !"".equals(docAtchFileId)){
-					atchFileIdList.add(docAtchFileId);
+			
+			
+			if(prjDocList.size() > 0){
+				for(Map prjDocInfo : prjDocList){
+					
+					String docFormFileId = (String) prjDocInfo.get("docFormFileId");
+					
+					
+					String docAtchFileId = (String) prjDocInfo.get("docAtchFileId");
+					
+					
+					if(docFormFileId != null && !"".equals(docFormFileId)){
+						atchFileIdList.add(docFormFileId);
+					}
+					
+					
+					if(docAtchFileId != null && !"".equals(docAtchFileId)){
+						atchFileIdList.add(docAtchFileId);
+					}
 				}
 			}
-		}
-		
-		
-		if(prjFlwOptList.size() > 0){
-			for(Map prjFlwOptInfo : prjFlwOptList){
-				String itemValue = (String) prjFlwOptInfo.get("itemValue");
-				
-				
-				if(itemValue != null && !"".equals(itemValue)){
-					atchFileIdList.add(itemValue);
+			
+			
+			if(prjFlwOptList.size() > 0){
+				for(Map prjFlwOptInfo : prjFlwOptList){
+					String itemValue = (String) prjFlwOptInfo.get("itemValue");
+					
+					
+					if(itemValue != null && !"".equals(itemValue)){
+						atchFileIdList.add(itemValue);
+					}
 				}
 			}
 		}
@@ -330,8 +582,7 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1000WizardProject(Map paramMap) throws Exception {
-    	
-		String dbType = EgovProperties.getProperty("Globals.DbType");
+		
 		
 		String licGrpId = (String) paramMap.get("licGrpId");
 		String regUsrId = (String) paramMap.get("regUsrId");
@@ -346,18 +597,27 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		regModiMap.put("modifyUsrId", modifyUsrId);
 		regModiMap.put("modifyUsrIp", modifyUsrIp);
 		
+		
+		
 		String wizardData = (String) paramMap.get("wizardData");
 		
 		JSONObject wizardJsonData = new JSONObject(wizardData);
 		
+		
+		
 		JSONObject projectJson = wizardJsonData.getJSONObject("project");
 		
+		
 		Map projectMapData = new Gson().fromJson(projectJson.toString(), HashMap.class);
+		
 		
 		projectMapData.putAll(regModiMap);
 		
 		
+		
 		String newPrjId = prj1000DAO.insertPrj1000PrjWizardAjax(projectMapData);
+		
+		
 		
 		
 		if(wizardJsonData.has("process")){
@@ -379,7 +639,6 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 			    prj1100Service.insertPrj1100ProcessCopyInfo(processMapData);
 			}
 		}
-		
 		
 		
 		
@@ -416,19 +675,7 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		    	prjAuthGrpSystemInfo.put("authGrpId",newAuthGrpId);
 		    	prjAuthGrpSystemInfo.putAll(regModiMap);
     			
-				
-				if("oracle".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListOracle(prjAuthGrpSystemInfo);
-				
-				}else if("cubrid".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListCubrid(prjAuthGrpSystemInfo);
-				
-				}else if("mariadb".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListMariaDB(prjAuthGrpSystemInfo);
-				}
+		    	stm2000Service.saveStm2000AuthGrpMenuAuthInfo(prjAuthGrpSystemInfo);
 		    }
 		    
 		    Map newMap = new HashMap<>();
@@ -491,6 +738,8 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		}
 		
 		
+		
+		
 		if(wizardJsonData.has("class")){
 			String clsPrjId = wizardJsonData.getString("class");
 			
@@ -540,6 +789,12 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		}
 		
 		return newPrjId;
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception{
+		return prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
 	}
 }
 

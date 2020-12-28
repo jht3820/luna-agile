@@ -74,7 +74,6 @@
 		<!-- end::Global Config -->
 
 		<!--begin::Global Theme Bundle(used by all pages) -->
-		<script src="<c:url value='/js/scripts.bundle.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/common/modalPopup.js'/>" type="text/javascript"></script>
 		<!--end::Global Theme Bundle -->
 
@@ -85,6 +84,8 @@
 		<script src="<c:url value='/js/lang/summernote/summernote-ko-KR.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/custom/jstree/jstree.bundle.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/apexcharts/apexcharts.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/plugins/dragula/dragula.min.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/plugins/sortable/Sortable.js'/>" type="text/javascript"></script>
 		<!--end::Page Vendors -->
 
 		<iframe id="fileDownFrame" name="fileDownFrame" src="/com/fms/FileDown.do" style="width:0;height:0;display:none;"></iframe>

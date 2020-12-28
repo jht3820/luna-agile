@@ -14,17 +14,21 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.prj.prj2000.prj2000.service.Prj2000Service;
 import kr.opensoftlab.lunaops.prj.prj2000.prj2000.vo.Prj2000VO;
+import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 
 
 
 @Service("prj2000Service")
 public class Prj2000ServiceImpl extends EgovAbstractServiceImpl implements Prj2000Service {
 
+    
+    @Resource(name = "stm2000Service")
+    private Stm2000Service stm2000Service;
+    
 	
     @Resource(name="prj2000DAO")
     private Prj2000DAO prj2000DAO;
@@ -115,35 +119,13 @@ public class Prj2000ServiceImpl extends EgovAbstractServiceImpl implements Prj20
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void savePrj2000AuthGrpMenuAuthListAjax(List paramList) throws Exception{
 		
-		
-		
-		String dbType = EgovProperties.getProperty("Globals.DbType");
-		
 		for(Map paramMap : (List<Map>)paramList){
 			
 			String strStatus = (String) paramMap.get("status");
 			
 			
 			if("U".equals(strStatus)){
-				
-				if("oracle".equals(dbType.toLowerCase())){
-					
-					prj2000DAO.savePrj2000AuthGrpMenuAuthListOracleAjax(paramMap);
-					
-					if("-1".equals(paramMap.get("ERR_CODE"))){
-						throw new UserDefineException((String) paramMap.get("ERR_MSG"));
-					}
-					
-				
-				}else if("cubrid".equals(dbType.toLowerCase())){
-					
-					prj2000DAO.savePrj2000AuthGrpMenuAuthListCubridAjax(paramMap);
-					
-				
-				}else if("mariadb".equals(dbType.toLowerCase())){
-					
-					prj2000DAO.savePrj2000AuthGrpMenuAuthListMariaDBAjax(paramMap);
-				}
+				stm2000Service.saveStm2000AuthGrpMenuAuthInfo(paramMap);
 			}
 
 		}

@@ -4,7 +4,9 @@
 <sqlMap namespace="bad1100DAO">
 	<typeAlias alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 		
+    
     <select id="bad1100DAO.selectBad1100CmtListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
 		SELECT
 			COUNT(A.BAD_CMT_ID) AS CNT
 		FROM BAD1100 A
@@ -37,7 +39,9 @@
 		AND A.BAD_ID = #badId#
     </select>
     
+    
     <select id="bad1100DAO.selectBad1100CmtList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT
 			C.RN AS RN
 			, C.LIC_GRP_ID AS LIC_GRP_ID
@@ -118,9 +122,11 @@
 		ORDER BY RN ASC
     </select>	
     
+	
     <insert id="bad1100DAO.insertBad1100CmtInfo" parameterClass="java.util.Map">
 	    <selectKey resultClass="java.lang.String" keyProperty="newBadCmtId">
 			<![CDATA[
+				 
 				SELECT	NVL( 
 				          SUBSTR(BAD_CMT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(BAD_CMT_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'CMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -130,14 +136,13 @@
 				      FROM	BAD1100 A
 				      WHERE	 1 = 1
 				      AND LIC_GRP_ID = #licGrpId#
-				      AND PRJ_GRP_ID = #prjGrpId#
-					  AND PRJ_ID = #prjId#
 					  AND MENU_ID = #menuId#
 					  AND BAD_CMT_ID LIKE 'CMT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
 				  )
 				WHERE 1 = 1
 			]]>
 		</selectKey>
+	    
 		INSERT INTO BAD1100 (
 			LIC_GRP_ID
 			, PRJ_GRP_ID
@@ -177,7 +182,9 @@
 		)
 	</insert>
 	
+	
     <update id="bad1100DAO.deleteBad1100CmtInfo" parameterClass="java.util.Map">
+	    
 		UPDATE BAD1100
 		SET
 			DEL_CD = '01'
@@ -208,7 +215,9 @@
 		</isNotEmpty>
 	</update>
 	
+	
     <delete id="bad1100DAO.deleteBad1100CmtDelInfo" parameterClass="java.util.Map">
+	    
 		DELETE FROM BAD1100
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
@@ -231,7 +240,9 @@
 		</isNotEmpty>
 	</delete>
 	
+	
     <update id="bad1100DAO.updateBad1100CmtRestore" parameterClass="java.util.Map">
+	    
 		UPDATE BAD1100
 		SET
 			DEL_CD = '02'
@@ -262,7 +273,10 @@
 		</isNotEmpty>
 	</update>
 	
+	
+	
 	<select id="bad1100DAO.selectBad1100CmtAllCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
 		SELECT
 			COUNT(A.BAD_CMT_ID) AS CNT
 		FROM BAD1100 A
@@ -272,7 +286,9 @@
 		AND A.DEL_CD = '02'
     </select>
 
+	
 	<select id="bad1100DAO.selectBad1100CmtMaxInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 	    SELECT
 	    	ROWNUM RE_RN
 			, C.RN AS RN
