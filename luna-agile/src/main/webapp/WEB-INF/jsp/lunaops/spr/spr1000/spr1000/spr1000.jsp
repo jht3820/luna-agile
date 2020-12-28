@@ -41,22 +41,22 @@
 		<!-- begin :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
 		<div class="col-lg-9 col-md-12 col-sm-12 text-right osl-mobile-text--left kt-padding-r-0">
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="select" title="스프린트 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="5">
-				<i class="fa fa-list"></i><span>조회</span>
+				<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="insert" title="스프린트 관리 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="6">
-				<i class="fa fa-plus"></i><span>등록</span>
+				<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">등록</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="update" title="스프린트 관리 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="7">
-				<i class="fa fa-edit"></i><span>수정</span>
+				<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="delete" title="스프린트 관리 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="8">
-				<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="sprStart" title="스프린트 관리 시작" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="excel" tabindex="">
-				<i class="fas fa-play-circle"></i><span>시작</span>
+				<i class="fas fa-play-circle"></i><span data-lang-cd="spr1000.button.sprStart">시작</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="sprEnd" title="스프린트 관리 종료" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="print" tabindex="">
-				<i class="fas fa-stop-circle"></i><span>종료</span>
+				<i class="fas fa-stop-circle"></i><span data-lang-cd="spr1000.button.sprEnd">종료</span>
 			</button>
 		</div>
 		<!-- end :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
@@ -65,9 +65,7 @@
 <!-- end :: head -->
 </div>
 <!-- begin :: 카드형 -->
-<div id="spr1000CardTable">
-	
-</div>
+<div id="spr1000CardTable"></div>
 <!-- end :: 카드형 -->
 <!-- begin :: 데이터테이블형 -->
 <div class="kt_datatable osl-datatable-footer__divide" id="spr1000Table"></div>
@@ -82,10 +80,10 @@ var OSLSpr1000Popup = function () {
 	
 		// begin:: 그룹 요구사항 관리 데이터테이블
 		$.osl.datatable.setting("spr1000Table",{
+			cardUiTarget: $("#spr1000CardTable"),
 			data: {
 				source: {
 					read: {
-						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
 						url: "/spr/spr1000/spr1000/selectSpr1000SprListAjax.do"
 					}
 				},
@@ -96,16 +94,17 @@ var OSLSpr1000Popup = function () {
 				{field: 'sprTypeNm', title: '상태 ', textAlign: 'center', width: 100},
 				{field: 'sprNm', title: '스프린트 이름', textAlign: 'center', width: 300},
 				{field: 'sprDesc', title: '스프린트 설명', textAlign: 'center', width: 150},
-				{field: 'sprStDt', title: '시작일', textAlign: 'center', width: 150},
-				{field: 'sprEdDt', title: '종료일', textAlign: 'center', width: 150},
+				{field: 'sprStDt', title: '시작일', textAlign: 'center', width: 150, search: true, searchType:"date"},
+				{field: 'sprEdDt', title: '종료일', textAlign: 'center', width: 150, search: true, searchType:"date"},
+				{field: 'useNm', title: '사용 유무', textAlign: 'center', width: 100, search: true, searchType:"select", searchCd: "CMM00001", searchField:"useCd", sortField: "useCd"},
 			],
 			actionBtn:{
 				"dblClick": true
 			},
 			actionTooltip:{
-				"update": "수정",
-				"delete": "삭제",
-				"dblClick": "상세보기"
+				"update": $.osl.lang("spr1000.datatable.action.update"),
+				"delete": $.osl.lang("spr1000.datatable.action.delete"),
+				"dblClick": $.osl.lang("spr1000.datatable.action.dblClick")
 			},
 			actionFn:{
 				"insert":function(datatableId){
@@ -120,8 +119,13 @@ var OSLSpr1000Popup = function () {
 					
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1002View.do',data,options);
 				},
-				"update":function(datatableId){
-					var data = {type:"update"};
+				"update":function(rowData, datatableId, type, rowNum, elem){
+					var data = {
+							type:"update"
+							,paramPrjGrpId: rowData.prjGrpId
+							,paramPrjId: rowData.prjId
+							,paramSprId: rowData.sprId
+						};
 					var options = {
 							autoHeight: false,
 							modalSize: "md",
@@ -132,7 +136,29 @@ var OSLSpr1000Popup = function () {
 					
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1002View.do',data,options);
 				},
-				"dblClick":function(rowData, datatableId, type, rowNum, elem){
+				//스프린트 삭제
+				"delete":function(rowDatas, datatableId, type, rowNum, elem){
+					//선택 프로젝트 그룹 휴지통으로 이동
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/spr/spr1000/spr1000/deleteSpr1000SprList.do'/>"}
+							,{deleteDataList: JSON.stringify(rowDatas)});
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						if(data.errorYn == "Y"){
+			   				$.osl.alert(data.message,{type: 'error'});
+			   			}else{
+			   				//삭제 성공
+			   				$.osl.toastr(data.message);
+			   				
+			   				//datatable 조회
+			   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+			   			}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+				},
+				"dblClick": function(rowData, datatableId, type, rowNum, elem){
 					var data = {
 						};
 					
@@ -145,20 +171,60 @@ var OSLSpr1000Popup = function () {
 						};
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1001View.do',data,options);
 				},
-				"sprStart":function(rowData){
+				//스프린트 시작
+				"sprStart": function(rowData, datatableId, type){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					
+					//스프린트 상태
+					var sprInfo = rowData[0];
+					
+					//대기가 아닌 경우 시작 불가능
+					if(sprInfo.sprTypeCd != "01" || sprInfo.useCd != "01"){
+						$.osl.alert($.osl.lang("spr1000.sprTypeWaitMsg"));
+						return true;
+					}
+					
 					var data = {
+							paramPrjGrpId: sprInfo.prjGrpId
+							,paramPrjId: sprInfo.prjId
+							,paramSprId: sprInfo.sprId
 						};
 					var options = {
 							modalTitle: "스프린트 시작",
 							autoHeight: false,
-							modalSize: 'xl',
-							class:{
-								body:"osl-spr1003"
-							}
+							modalSize: "xl",
+							idKey: datatableId,
+							closeConfirm: false,
+							ftScrollUse: false
 						};
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1003View.do',data,options);
+					
+					
 				},
 				"sprEnd":function(rowData){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					
+					//스프린트 상태
+					var sprInfo = rowData[0];
+					
+					//시작 중이 아닌 경우 시작 불가능
+					if(sprInfo.sprTypeCd != "02"){
+						$.osl.alert($.osl.lang("spr1000.sprTypeStartMsg"));
+						return true;
+					}
+					
 					var data = {
 						};
 					var options = {
@@ -179,28 +245,39 @@ var OSLSpr1000Popup = function () {
 				},
 				ajaxDone: function(evt, list){
 					var sprintStr = '';
+					var rowCnt = 0;
 					$.each(list, function(idx, map){
 						//스프린트 상태에 따라 값
-						var sprTypeClass = "badge-primary";
+						var sprTypeClass = "kt-media--primary";
+						var sprTypeNm = map.sprTypeNm;
+						
 						if(map.sprTypeCd == "02"){
-							sprTypeClass = "badge-danger";
+							sprTypeClass = "kt-media--danger";
 						}else if(map.sprTypeCd == "03"){
-							sprTypeClass = "badge-warning";
+							sprTypeClass = "kt-media--warning";
+						}
+						//상태가 대기이고 사용 유무가 아니오인경우
+						else if(map.useCd == "02"){
+							sprTypeClass = "kt-media--dark";
+							sprTypeNm = "미 사용";
+						}
+						
+						if(rowCnt == 0){
+							sprintStr += '<div class="row">';
 						}
 						
 						//카드 UI
 						sprintStr +=
-							'<div class="row">'
-							+'<div class="col-lg-12 col-md-12 col-sm-12">'
+							'<div class="col-lg-6 col-md-12 col-sm-12">'
 								//<!-- begin :: 카드 -->
 								+'<div class="kt-portlet kt-portlet--mobile">'
 									//<!-- begin :: 카드 상단 영역-->
 									+'<div class="kt-portlet__head kt-portlet__head--lg">'
 										//<!-- begin :: 스프린트 이름-->'
 										+'<div class="kt-portlet__head-label">'
-											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'" data-datatable-id="prj1000PrjTable">&nbsp;<span></span></label>'
+											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" data-datatable-id="spr1000Table">&nbsp;<span></span></label>'
 											+'<h5 class="kt-font-boldest"><span class="badge badge-primary kt-margin-r-10">No. '+map.rn+'</span></h5>'
-											+'<h5 class="kt-font-boldest"><span class="badge '+sprTypeClass+' kt-margin-r-10">'+map.sprTypeNm+'</span></h5>'
+											+'<h5><span class="badge badge-primary" title="스프린트 기간" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"><i class="far fa-calendar-alt kt-margin-r-10"></i>'+map.sprStDt+' ~ '+map.sprEdDt+'</span></h5>'
 										+'</div>'
 										//<!-- end :: 스프린트 이름-->
 										//<!-- begin :: dropdown 버튼 -->
@@ -209,19 +286,19 @@ var OSLSpr1000Popup = function () {
 												+'<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
 													+'<i class="fa fa-bars osl-padding-r0"></i>'
 												+'</button>'
-												+'<div class="dropdown-menu dropdown-menu-right">'
-													+'<div class="dropdown-item" id=""><i class="fa fa-edit kt-font-brand"></i>스프린트 수정</div>'
-													+'<div class="dropdown-item" id=""><i class="fa fa-trash kt-font-brand"></i>스프린트 삭제</div>'
+												+'<div class="dropdown-menu dropdown-menu-right" data-datatable-rownum="'+idx+'">'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-brand"></i>'+$.osl.lang("spr1000.menu.update")+'</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-brand"></i>'+$.osl.lang("spr1000.menu.delete")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-play-circle kt-font-brand"></i>스프린트 시작</div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-stop-circle kt-font-brand"></i>스프린트 종료</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="sprStart"><i class="fas fa-play-circle kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintStart")+'</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="sprEnd"><i class="fas fa-stop-circle kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintEnd")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-clipboard-list kt-font-brand"></i>스프린트 상세정보</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-clipboard-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintDetail")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>스프린트 회의록 목록</div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>스프린트 회고록 목록</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintMeetList")+'</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintResultList")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>보고서 출력</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintReport")+'</div>'
 													
 												+'</div>'
 											+'</div>'
@@ -230,110 +307,58 @@ var OSLSpr1000Popup = function () {
 									+'</div>'
 									
 									+'<div class="kt-portlet__body">'
-										+'<div class="row">'
-											//<!-- begin :: 스프린트 설명 -->
-											+'<div class="kt-padding-l-50 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 osl-mobile-padding-l-10">'
+										+'<div class="osl-d-flex kt-padding-l-15 osl-align-items-center">'
+											+'<div class="kt-media kt-media--xl kt-media--circle '+sprTypeClass+' osl-margin-r-2rm">'
+												+'<span>'+sprTypeNm+'</span>'
+											+'</div>'
+											+'<div class="osl-d-flex osl-flex-column osl-margin-r-auto">'
 												+'<h5 class="kt-font-boldest text-truncate" title="'+$.osl.escapeHtml(map.sprNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"> '+$.osl.escapeHtml(map.sprNm)+'</h5>'
 												+'<span class="text-muted text-truncate" title="'+$.osl.escapeHtml(map.sprDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.sprDesc)+'</span>'
 											+'</div>'
-											//<!-- end :: 스프린트 설명 -->
-											//<!-- begin :: 시작일,종료일,진척률 영역 -->
-											+'<div class="col-lg-8 col-md-8 col-sm-12">'
-												+'<div class="row">'
-													//<!-- begin :: 시작일,종료일 -->
-													+'<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">'
-														+'<div class="kt-pull-left kt-margin-r-25">'
-															+'<div class="kt-padding-b-5">'
-																+'<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>'
-																+'<span>시작일</span>'
-															+'</div>'
-															+'<h5><span class="badge badge-primary">'+map.sprStDt+'</span></h5>'
-														+'</div>'
-														+'<div class="kt-pull-left">'
-															+'<div class="kt-padding-b-5">'
-																+'<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>'
-																+'<span>종료일</span>'
-															+'</div>'
-															+'<h5>'
-																+'<span class="badge badge-danger">'+map.sprEdDt+'</span>'
-															+'</h5>'
-														+'</div>'
-													+'</div>'
-													//<!-- end :: 시작일,종료일 -->
-													+'<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">'
-														+'<div class="osl-chart--sprint"></div>'
-													+'</div>'
-												+'</div>'
-											+'</div>'
-											//<!-- begin :: 시작일,종료일,진척률 영역 -->
 										+'</div>'
-										//<!-- end :: 카드  상단 영역 -->
-										
-										//<!-- begin :: 카드  하단 영역 -->	
-										+'<div class="row border-top kt-margin-t-20 kt-padding-t-20">'
-											//<!-- end :: 요구사항 개수 표출 영역 -->
-											+'<div class="col-lg-4 col-md-5 col-sm-12 col-12">'
-												+'<div class="osl-widget">'
-													+'<div class="osl-widget-info__item">'
-														+'<div class="osl-widget-info__item-icon">'
-															+'<img src="/media/osl/icon/reqAll.png">'
-														+'</div>'
-														+'<div class="osl-widget-info__item-info">'
-															+'<a href="#" class="osl-widget-info__item-title">전체 요구사항</a>'								
-															+'<div class="osl-widget-info__item-desc"><span>'+map.reqAllCnt+'</span></div>'
-														+'</div>'
-													+'</div>'
-													+'<div class="osl-widget-info__item">'
-														+'<div class="osl-widget-info__item-icon">'
-															+'<img src="/media/osl/icon/reqInProgress.png">'
-														+'</div>'
-														+'<div class="osl-widget-info__item-info">'
-															+'<a href="#" class="osl-widget-info__item-title">진행중 요구사항</a>'
-															+'<div class="osl-widget-info__item-desc"><span>'+map.reqProgressCnt+'</span></div>'
-														+'</div>'
+										+'<div class="osl-d-flex osl-flex-wrap border-top kt-margin-t-20 kt-padding-t-10">'
+											+'<div class="osl-widget osl-flex-row-fluid osl-flex-wrap">'
+												+'<div class="osl-widget-info__item osl-flex-row-fluid">'
+													+'<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqAll.png"></div>'
+													+'<div class="osl-widget-info__item-info">'
+														+'<a href="#" class="osl-widget-info__item-title">'+$.osl.lang("prj1001.requestAll")+'</a>'
+														+'<div class="osl-widget-info__item-desc">'+$.osl.escapeHtml(map.reqAllCnt)+'</div>'
 													+'</div>'
 												+'</div>'
-												+'<div class="osl-widget">'
-													+'<div class="osl-widget-info__item">'
-														+'<div class="osl-widget-info__item-icon">'
-															+'<img src="/media/osl/icon/reqDone.png">'
-														+'</div>'
-														+'<div class="osl-widget-info__item-info">'
-															+'<a href="#" class="osl-widget-info__item-title">완료 요구사항</a>'
-															+'<div class="osl-widget-info__item-desc"><span>'+map.reqDoneCnt+'</span></div>'
-														+'</div>'
+												+'<div class="osl-widget-info__item osl-flex-row-fluid">'
+													+'<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqInProgress.png"></div>'
+													+'<div class="osl-widget-info__item-info">'
+														+'<a href="#" class="osl-widget-info__item-title">'+$.osl.lang("prj1001.requestInProgress")+'</a>'
+														+'<div class="osl-widget-info__item-desc">'+$.osl.escapeHtml(map.reqProgressCnt)+'</div>'
 													+'</div>'
-													+'<div class="osl-widget-info__item">'
-														+'<div class="osl-widget-info__item-icon">'
-															+'<img src="/media/osl/icon/reqDone.png">'
-														+'</div>'
-														+'<div class="osl-widget-info__item-info">'
-															+'<a href="#" class="osl-widget-info__item-title">완료 요구사항</a>'
-															+'<div class="osl-widget-info__item-desc"><span>50</span></div>'
-														+'</div>'
+												+'</div>'
+												+'<div class="osl-widget-info__item osl-flex-row-fluid">'
+													+'<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqDone.png"></div>'
+													+'<div class="osl-widget-info__item-info">'
+														+'<a href="#" class="osl-widget-info__item-title">'+$.osl.lang("prj1001.requestDone")+'</a>'
+														+'<div class="osl-widget-info__item-desc">'+$.osl.escapeHtml(map.reqDoneCnt)+'</div>'
+													+'</div>'
+												+'</div>'
+												+'<div class="osl-widget-info__item osl-flex-row-fluid">'
+													+'<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqDone.png"></div>'
+													+'<div class="osl-widget-info__item-info">'
+														+'<a href="#" class="osl-widget-info__item-title">'+$.osl.lang("prj1001.requestDone")+'</a>'
+														+'<div class="osl-widget-info__item-desc">'+$.osl.escapeHtml(map.reqDoneCnt)+'</div>'
 													+'</div>'
 												+'</div>'
 											+'</div>'
-											//<!-- end :: 요구사항 개수 표출 영역 -->
-											//<!-- begin :: 차트 영역 -->
-											+'<div class="col-lg-8 col-md-7 col-sm-12 col-12">'
-												+'<div class="row kt-padding-r-20 h-100">'
-													+'<div class="col-lg-6 col-md-6 col-sm-12 col-12">'
-														+'<div class="border kt-margin-r-10 h-100">차트1</div>'
-													+'</div>'
-													+'<div class="col-lg-6 col-md-6 col-sm-12 col-12">'
-														+'<div class="border kt-margin-l-10 h-100">차트2</div>'
-													+'</div>'
-												+'</div>'
-											+'</div>'
-											//<!-- end :: 차트 영역 -->
 										+'</div>'
 									+'</div>'
 									//<!-- end :: 카드 하단 영역 -->
 								+'</div>'
 								//<!-- end :: 카드 -->
-							+'</div>'
-						+'</div>';
+							+'</div>';
+						
+						rowCnt++;
+						if(rowCnt == 2){
+							sprintStr += '</div>';
+							rowCnt = 0;
+						}
 					});
 					
 					//로드된 데이터 CARD형식으로 추가

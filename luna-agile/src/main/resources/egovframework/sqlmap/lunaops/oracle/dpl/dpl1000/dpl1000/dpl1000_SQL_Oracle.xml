@@ -3,7 +3,7 @@
 
 <sqlMap namespace="dpl1000DAO">
 
-	<!--  in / out class define  -->
+	
 	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	<typeAlias alias="dpl1000VO"	type="kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.vo.Dpl1000VO"/>
 	<typeAlias alias="dpl1300VO"	type="kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.vo.Dpl1300VO"/>
@@ -11,7 +11,121 @@
 	<typeAlias alias="ChangeVO"	type="kr.opensoftlab.sdf.jenkins.vo.ChangeVO"/>
 	<typeAlias alias="ChangePathsVO"	type="kr.opensoftlab.sdf.jenkins.vo.ChangePathsVO"/>
 	
-	<!-- Map Define -->
+	
+	
+	<sql id="selectDpl1000List">
+		SELECT
+			ROWNUM RN
+			, T1.*
+		FROM(
+			SELECT
+				 A.PRJ_ID AS PRJ_ID
+				, A.DPL_ID AS DPL_ID
+				, A.DPL_NM AS DPL_NM
+				, A.DPL_VER AS DPL_VER
+				, A.DPL_USR_ID AS DPL_USR_ID
+				, SF_STM3000_USR_INFO(A.DPL_USR_ID, '1')  AS DPL_USR_NM
+				, SF_STM3000_USR_INFO(A.DPL_USR_ID, '6')  AS DPL_USR_IMG_ID
+				, TO_CHAR(A.DPL_DT, 'YYYY-MM-DD') AS DPL_DT
+				, A.DPL_DESC AS DPL_DESC
+				, A.DPL_STS_CD AS DPL_STS_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00001', A.DPL_STS_CD, '1') AS DPL_STS_NM
+				, A.DPL_TYPE_CD AS DPL_TYPE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', A.DPL_TYPE_CD, '1') AS DPL_TYPE_NM
+				, A.DPL_AUTO_AFTER_CD AS DPL_AUTO_AFTER_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00004', A.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
+				, TO_CHAR(A.DPL_AUTO_DTM, 'YYYY-MM-DD HH24:MI:SS') AS DPL_AUTO_DTM
+				, A.DPL_RESTORE_CD AS DPL_RESTORE_CD
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
+			FROM DPL1000 A
+			WHERE 1 = 1
+			AND DPL_DEL_CD = '02'
+			AND A.PRJ_ID = #prjId#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty> 
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.DPL_ID
+			</isEmpty> 
+		) T1
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="dplNm">
+					AND	T1.DPL_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplVer">
+					AND	T1.DPL_VER LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplDesc">
+				<![CDATA[
+					AND	T1.DPL_DESC LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplDt">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_DATE(#searchStartDt#, 'YYYY-MM-DD') &gt;= TO_CHAR(T1.DPL_DT, 'YYYY-MM-DD')  
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_DATE(#searchEndDt#, 'YYYY-MM-DD') &lt;= TO_CHAR(T1.DPL_DT, 'YYYY-MM-DD')   
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplStsCd">
+					AND	T1.DPL_STS_CD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplTypeCd">
+					AND	T1.DPL_TYPE_CD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplAutoAfterCd">
+					AND	T1.DPL_AUTO_AFTER_CD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplAutoDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_DATE(#searchStartDt#, 'YYYY-MM-DD') &gt;= TO_CHAR(T1.DPL_AUTO_DTM, 'YYYY-MM-DD')  
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_DATE(#searchEndDt#, 'YYYY-MM-DD') &lt;= TO_CHAR(T1.DPL_AUTO_DTM, 'YYYY-MM-DD')   
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplRestoreCd">
+					AND	T1.DPL_RESTORE_CD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<select id="dpl1000DAO.selectDpl1000ListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectDpl1000List"/>
+		) Z
+    </select>
+    
+     
+    <select id="dpl1000DAO.selectDpl1000List" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectDpl1000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+	
+	
    	<resultMap id="resultMapSelectDpl1000" class="dpl1000VO">
 		<result property="rn"  				column="RN"/>
 		<result property="prjId"  			column="PRJ_ID"/>
@@ -43,9 +157,9 @@
 		<result property="signTxt"			column="SIGN_TXT" />
 		<result property="signRejectTxt"	column="SIGN_REJECT_TXT" />
 		<result property="regDtm"           column="REG_DTM" />  
-		<result property="regUsrId"         column="REG_USR_ID" /> 
-		<result property="regUsrIp"         column="REG_USR_IP" /> 
-		<result property="modifyDtm"        column="MODIFY_DTM" /> 
+		<result property="regUsrId"         column="REG_USR_ID" />  
+		<result property="regUsrIp"         column="REG_USR_IP" />  
+		<result property="modifyDtm"        column="MODIFY_DTM" />  
 		<result property="modifyUsrId"      column="MODIFY_USR_ID" />  
 		<result property="modifyUsrIp"      column="MODIFY_USR_IP" />  
     </resultMap>
@@ -56,15 +170,15 @@
 		<result property="dplId"  			column="DPL_ID"/>
 		<result property="dplNm" column="DPL_NM" />
 		<result property="jenId"              column="JEN_ID" />  
-		<result property="jenUsrId"              column="JEN_USR_ID" /> 
-		<result property="jenUsrTok"              column="JEN_USR_TOK" /> 
+		<result property="jenUsrId"              column="JEN_USR_ID" />  
+		<result property="jenUsrTok"              column="JEN_USR_TOK" />  
 		<result property="jenNm"              column="JEN_NM" />  
-		<result property="jenUrl"             column="JEN_URL" /> 
+		<result property="jenUrl"             column="JEN_URL" />  
 		<result property="jobId"              column="JOB_ID" />  
-		<result property="jobRestoreId"       column="JOB_RESTORE_ID" /> 
+		<result property="jobRestoreId"       column="JOB_RESTORE_ID" />  
 		<result property="jobTok"				column="JOB_TOK" /> 
-		<result property="jobTypeCd"          column="JOB_TYPE_CD" />
-		<result property="jobTypeNm"          column="JOB_TYPE_NM" />
+		<result property="jobTypeCd"          column="JOB_TYPE_CD" /> 
+		<result property="jobTypeNm"          column="JOB_TYPE_NM" /> 
 		<result property="jobStartOrd"        column="JOB_START_ORD" />
 		<result property="bldNum" column="BLD_NUM" />
 		<result property="bldResult"		 column="BLD_RESULT" />
@@ -77,9 +191,9 @@
 		<result property="useCd"              column="USE_CD" />  
 		<result property="useNm"              column="USE_NM" /> 
 		<result property="regDtm"           column="REG_DTM" />  
-		<result property="regUsrId"         column="REG_USR_ID" /> 
-		<result property="regUsrIp"         column="REG_USR_IP" /> 
-		<result property="modifyDtm"        column="MODIFY_DTM" /> 
+		<result property="regUsrId"         column="REG_USR_ID" />  
+		<result property="regUsrIp"         column="REG_USR_IP" />  
+		<result property="modifyDtm"        column="MODIFY_DTM" />  
 		<result property="modifyUsrId"      column="MODIFY_USR_ID" />  
 		<result property="modifyUsrIp"      column="MODIFY_USR_IP" />  
     </resultMap>
@@ -141,19 +255,19 @@
                 , B.SIGN_USR_ID
                 , SF_STM3000_USR_INFO(B.SIGN_USR_ID, 1) SIGN_USR_NM
                 , SF_STM3000_USR_INFO(B.SIGN_USR_ID, 6) SIGN_USR_IMG
-                , REGEXP_REPLACE (A.DPL_SIGN_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS DPL_SIGN_TXT      
-                , REGEXP_REPLACE (B.SIGN_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS SIGN_TXT              
-                , REGEXP_REPLACE (B.SIGN_REJECT_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS SIGN_REJECT_TXT 
+                , REGEXP_REPLACE (A.DPL_SIGN_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS DPL_SIGN_TXT             
+                , REGEXP_REPLACE (B.SIGN_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS SIGN_TXT                  
+                , REGEXP_REPLACE (B.SIGN_REJECT_TXT ,'</br>|<br>|<br/>|</BR>|<BR>|<BR/>' , '\n' ) AS SIGN_REJECT_TXT          
                 , B.SIGN_DTM
                 , B.SIGN_REG_USR_ID
 				, SF_STM3000_USR_INFO(B.SIGN_REG_USR_ID, 1) SIGN_REG_USR_NM
                 , SF_STM3000_USR_INFO(B.SIGN_REG_USR_ID, 6) SIGN_REG_USR_IMG
-				, A.REG_DTM                 
-	            , A.REG_USR_ID              
-	            , A.REG_USR_IP              
-	            , A.MODIFY_DTM              
-	            , A.MODIFY_USR_ID           
-	            , A.MODIFY_USR_IP             
+				, A.REG_DTM                  
+	            , A.REG_USR_ID               
+	            , A.REG_USR_IP               
+	            , A.MODIFY_DTM               
+	            , A.MODIFY_USR_ID            
+	            , A.MODIFY_USR_IP                
 			FROM DPL1000 A, DPL1200 B
 			WHERE 1=1
 				AND	A.PRJ_ID = #prjId#
@@ -162,7 +276,7 @@
 	            AND A.DPL_ID = B.DPL_ID(+)
 	            AND B.SIGN_DTM = (
                 			SELECT 
-						            	/*+ INDEX_DESC (Z IDX_PRJ_DPL_SIGN_DTM ) */  SIGN_DTM 
+						            	  SIGN_DTM 
 						      FROM 
 						      			DPL1200 Z 
 							   WHERE 	1=1
@@ -198,6 +312,7 @@
 		</isNotEmpty>
 	</isNotEmpty>
 	</sql>
+	
 	
 	<sql id="dpl1000DAO.selectDpl1300JobList">
 		SELECT ROWNUM RN
@@ -241,7 +356,7 @@
 		       WHERE 1=1
 		       AND Y.BLD_SEQ = (
 		                   SELECT
-		                               /*+ INDEX_DESC (Z PK_DPL1400 ) */  BLD_SEQ
+		                                 BLD_SEQ
 		                     FROM
 		                               DPL1400 Z
 		                      WHERE 	1=1
@@ -281,7 +396,9 @@
 			ORDER BY A.JOB_START_ORD
 	</sql>
 	
+	
 	<select id="dpl1000DAO.selectDpl1000DeployVerNormalList" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			SELECT 
 				T1.*
 			FROM ( 
@@ -289,7 +406,9 @@
 			) T1
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1000DeployVerInfoList" parameterClass="dpl1000VO" resultMap="resultMapSelectDpl1000">
+			
 			SELECT 
 				T1.*
 			FROM ( 
@@ -297,17 +416,11 @@
 			) T1
 			WHERE T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
-	
-    <select id="dpl1000DAO.selectDpl1000ListCnt" parameterClass="dpl1000VO"  resultClass="java.lang.Integer">
-	    SELECT
-			COUNT(*)
-		FROM	(
-			<include refid="dpl1000DAO.selectDpl1000BaseList"/>
-		) T1
-    </select>
 
+	
 	<select id="dpl1000DAO.selectDpl1000DeployVerInfo" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[ 
+			
 			SELECT 
 			T1.*
 			FROM (
@@ -320,11 +433,15 @@
 		]]>
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1300DeployJobList" parameterClass="java.util.Map" resultClass="egovMap">
+			
 			<include refid="dpl1000DAO.selectDpl1300JobList"/>
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1300dplJobGridList" parameterClass="dpl1300VO" resultMap="resultMapSelectDpl1300">
+			
 			SELECT 
 				T1.*
 			FROM ( 
@@ -333,7 +450,9 @@
 			WHERE T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
+	   
     <select id="dpl1000DAO.selectDpl1300dplJobGridListCnt" parameterClass="dpl1300VO"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 			COUNT(*)
 		FROM	(
@@ -341,8 +460,10 @@
 		) T1
     </select>
     
+	
 	<select id="dpl1000DAO.selectDpl1000ReqCount" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 				SELECT
 					A.REQ_ID
 				FROM
@@ -354,9 +475,11 @@
 		]]>
 	</select>
 	
+	
 	<insert id="dpl1000DAO.insertDpl1000DeployVerInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newDplId">
 		<![CDATA[
+			 
 			SELECT   NVL(
                 SUBSTR(NEW_DPL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DPL_ID, 12, 5)) + 1) , 5, '0')
             ,   'DPL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -371,6 +494,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			
 			INSERT INTO DPL1000
 			(
 				PRJ_ID					,DPL_ID							,DPL_NM
@@ -393,7 +517,9 @@
 		]]>
 	</insert>
 	
+	
 	<update id="dpl1000DAO.deleteDpl1000DeployVerInfo" parameterClass="java.util.Map" >
+			
 			UPDATE DPL1000 A
 				SET	A.DPL_DEL_CD = '01'
         	WHERE	1=1
@@ -401,7 +527,9 @@
         	AND		A.DPL_ID = #dplId#
 	</update>
 
+	
 	<update id="dpl1000DAO.updateDpl1000DeployVerInfo" parameterClass="java.util.Map">
+		
 		UPDATE DPL1000
 		SET    DPL_NM 			= #dplNm#		 
 			 , DPL_VER			= #dplVer#
@@ -423,7 +551,9 @@
 			AND DPL_ID = #dplId#
 	</update>
 
+	
 	<update id="dpl1000DAO.updateDpl1000DplStsCdInfo" parameterClass="java.util.Map">
+		
 		UPDATE DPL1000
 		SET    
 			  DPL_STS_CD		= #dplStsCd#
@@ -435,7 +565,9 @@
 			AND DPL_ID = #dplId#
 	</update>
 	
+	
 	<update id="dpl1000DAO.updateRefReq4100Info" parameterClass="java.util.Map">
+		
 		UPDATE REQ4100 
 			SET  DPL_ID = NULL
 		WHERE  PRJ_ID = #prjId#			
@@ -443,6 +575,7 @@
 	</update>
 	
 	<select id="dpl1000DAO.selectDpl1000ExcelList" parameterClass="dpl1000VO" resultClass="egovMap">
+		
 		
 		<include refid="dpl1000DAO.selectDpl1000BaseList"/>		
 	</select>
@@ -484,6 +617,7 @@
 	</sql>
 	
 	<select id="dpl1000DAO.selectDpl1000BuildInfoList" parameterClass="dpl1000VO" resultMap="resultMapSelectDpl1000">
+			
 			SELECT 
 				A.*
 			FROM ( 
@@ -492,7 +626,9 @@
 			WHERE A.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
+	   
     <select id="dpl1000DAO.selectDpl1000BuildInfoListCnt" parameterClass="dpl1000VO"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 			COUNT(*)
 		FROM	(
@@ -500,8 +636,10 @@
 		) A
     </select>
 	
+	
 	<insert id="dpl1000DAO.insertDpl1300DeployJobInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
+			
 			INSERT INTO DPL1300
 			(
 				PRJ_ID					,DPL_ID							,JEN_ID
@@ -519,8 +657,10 @@
 	</insert>
 	
 	
+	
 	<select id="dpl1000DAO.selectDpl1400DplJobBuildInfo" parameterClass="java.util.Map" resultMap="resultMapSelectDpl1400">
 		<![CDATA[
+			
 			SELECT
 				A.PRJ_ID
 				,A.DPL_ID
@@ -553,7 +693,7 @@
                    WHERE 1=1
                    AND Y.BLD_SEQ = (
                                SELECT
-                                           /*+ INDEX_DESC (Z PK_DPL1400 ) */  BLD_SEQ
+                                             BLD_SEQ
                                  FROM
                                            DPL1400 Z
                                   WHERE 	1=1
@@ -571,7 +711,7 @@
 				AND A.JOB_ID = #jobId#
 				AND A.BLD_SEQ = (
                			SELECT 
-					            	/*+ INDEX_DESC (Z PK_DPL1400 ) */  BLD_SEQ
+					            	  BLD_SEQ
 					      FROM 
 					      			DPL1400 Z 
 						   WHERE 	1=1
@@ -584,8 +724,10 @@
 		]]>
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1400DplSelBuildInfoAjax" parameterClass="java.util.Map" resultMap="resultMapSelectDpl1400">
 		<![CDATA[
+			
 			SELECT
 				A.PRJ_ID
 					,A.DPL_ID
@@ -622,7 +764,9 @@
 	</select>
 	
 	
+	
 	<delete id="dpl1000DAO.deleteDpl1300DplJobList" parameterClass="java.util.Map">
+		
 		DELETE FROM	DPL1300 A
 		WHERE	1=1
 			AND PRJ_ID = #prjId#
@@ -630,9 +774,11 @@
 	</delete>
 	
 	
+	
 	<insert id="dpl1000DAO.insertDpl1400DeployJobBuildLogInfo" parameterClass="BuildVO">
 		<selectKey resultClass="java.lang.Integer" keyProperty="bldSeq">
 		<![CDATA[
+			 
 			SELECT NVL(MAX(BLD_SEQ)+1,1) AS NEW_BLD_SEQ
 			FROM DPL1400 A
 			WHERE 1=1
@@ -643,6 +789,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			
 			INSERT INTO DPL1400
 			(
 				PRJ_ID					,DPL_ID						,JEN_ID					,JOB_ID
@@ -661,8 +808,10 @@
 		]]>
 	</insert>
 	
+	
     <select id="dpl1000DAO.selectDpl1000DplHistoryList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 				SELECT *
 				FROM
 				(
@@ -709,7 +858,9 @@
 		]]>
 	</select>
 	
+    
     <select id="dpl1000DAO.selectDpl1400DplBldNumList" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		SELECT *
 		FROM
 		(
@@ -749,12 +900,14 @@
 		) T2
 		WHERE 1=1
 		<![CDATA[
-		AND RN <= 100 /* 100건까지 */
+		AND RN <= 100 
 		]]>
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1500NewChgId" parameterClass="java.util.Map" resultClass="java.lang.String">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_CHG_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_CHG_ID, 12, 5)) + 1) , 5, '0')
 						,	'CHG' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -770,8 +923,10 @@
 		]]>
 	</select>
 	
+	
 	<insert id="dpl1000DAO.insertDpl1500ModifyHistoryInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
+			
 			INSERT INTO DPL1500 A
 	        (
 	        	PRJ_ID					,DPL_ID				,CHG_ID					,CHG_NUM
@@ -789,8 +944,10 @@
 		]]>
 	</insert>
 	
+	
 	<select id="dpl1000DAO.selectDpl1500ModifyHistoryList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			 
 			SELECT 'MOD' AS TYPE ,
 				A.PRJ_ID					,A.DPL_ID					,A.CHG_ID			,A.CHG_NUM
 	            ,A.CHG_TYPE_CD				
@@ -824,8 +981,10 @@
 	
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1000AllDplList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			 
 			SELECT *
 			FROM (
 				SELECT
@@ -849,12 +1008,12 @@
 	                , B.SIGN_TXT
 	                , B.SIGN_DTM
 	                , B.SIGN_REG_USR_ID
-					, A.REG_DTM                 
-		            , A.REG_USR_ID              
-		            , A.REG_USR_IP              
-		            , A.MODIFY_DTM              
-		            , A.MODIFY_USR_ID           
-		            , A.MODIFY_USR_IP             
+					, A.REG_DTM                  
+		            , A.REG_USR_ID               
+		            , A.REG_USR_IP               
+		            , A.MODIFY_DTM               
+		            , A.MODIFY_USR_ID            
+		            , A.MODIFY_USR_IP               
 	                , TO_DATE(TO_CHAR(A.DPL_DT,'YYYY-MM-DD') || ' ' || TO_CHAR(A.DPL_AUTO_DTM,'HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') AS DPL_ST_DTM
 				FROM DPL1000 A, DPL1200 B, PRJ1000 C
 				WHERE 1=1
@@ -867,7 +1026,7 @@
 		            AND C.PRJ_ID = A.PRJ_ID
 		            AND B.SIGN_DTM = (
 	                			SELECT 
-							            	/*+ INDEX_DESC (Z IDX_PRJ_DPL_SIGN_DTM ) */  SIGN_DTM 
+							            	  SIGN_DTM 
 							      FROM 
 							      			DPL1200 Z 
 								   WHERE 	1=1
@@ -883,8 +1042,10 @@
 	
 	</select>
 	
+	
 	<insert id="dpl1000DAO.insertDpl1600DeployBuildChgLogInfo" parameterClass="ChangeVO">
 		<![CDATA[ 
+			
 			INSERT INTO DPL1600
 			(
 				PRJ_ID					,DPL_ID						,JEN_ID					,JOB_ID
@@ -903,8 +1064,10 @@
 		]]>
 	</insert>
 	
+	
 	<insert id="dpl1000DAO.insertDpl1600DeployBuildChgPathLogInfo" parameterClass="ChangePathsVO">
 		<![CDATA[ 
+			
 			INSERT INTO DPL1700
 			(
 				PRJ_ID					,DPL_ID						,JEN_ID					,JOB_ID
@@ -921,8 +1084,10 @@
 		]]>
 	</insert>
 	
+	
 	<select id="dpl1000DAO.selectDpl1600SvnChangeLogsList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 			SELECT 
 				A.PRJ_ID
 				, A.DPL_ID
@@ -951,8 +1116,10 @@
 		]]>
 	</select>
 	
+	
 	<select id="dpl1000DAO.selectDpl1700SvnChangePathList" parameterClass="java.util.Map" resultClass="egovMap">
 		<![CDATA[
+			
 			SELECT 
 				A.PRJ_ID
 				, A.DPL_ID

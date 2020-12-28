@@ -167,6 +167,9 @@ input:-webkit-autofill,
 .osl-min-h-px--365 {
   min-height: 365px; 
 }
+.osl-min-h-px--700 {
+  min-height: 700px; 
+}
 @media(min-width: 1400px){
 	.osl-h-px--500 {
 	  height: 500px; 
@@ -353,6 +356,11 @@ tr.kt-datatable__row.osl-datatable__row-assign--none {
 }
 /* @media */
 @media (max-width: 1400px) and (min-width: 1025px){
+	.osl-widget-info__item .osl-widget-info__item-icon{
+		display:none;
+	}	
+}
+@media (max-width: 900px){
 	.osl-widget-info__item .osl-widget-info__item-icon{
 		display:none;
 	}	
@@ -820,7 +828,7 @@ label.required:after {
 /*osl-uppy-file--fullsize 한줄 라인으로 전체 변환*/
 /*첨부파일  - 각 파일*/
 .osl-uppy-file--fullsize.osl-uppy-file{
-	padding:10px 0 10px 10px;
+	padding:10px 20px;
 	width: 100%;
 	height: 70px;
 	border-bottom: 1px solid #eaeaea;
@@ -1262,6 +1270,9 @@ label.required:after {
 .osl-outline--secondary{
 	border: 1px solid #e1e1ef;
 }
+.osl-outline--secondary-t-1{
+	border-top: 1px solid #e1e1ef;
+}
 .osl-outline--secondary-b{
 	border-bottom: 2px solid #e1e1ef;
 }
@@ -1411,6 +1422,35 @@ label.required:after {
 }
 .osl-stm__portlet .flex-flow--row{
 	flex-flow: row !important;
+}
+
+.osl-desktop-flex-flow--row{
+	flex-flow: row !important;
+}
+/*변경 금지 좌측 캘린더 사이즈 변경*/
+.osl-calendar .datepicker{
+	width: 100% !important;
+}
+@media(min-width:800px){
+	.osl-desktop-max-w-285{
+		max-width: 285px;
+	}
+}
+.osl-portlet__body-style--none{
+	background-color: transparent;
+	box-shadow: none;
+}
+.osl-calendar-group-list__leftList{
+    border: 1px solid #ebedf2;
+    margin-top: 30px;
+    padding: 5px;
+}
+
+@media (max-width:768px){
+	
+	.osl-mobile-flex-flow--row{
+		flex-flow: column !important;
+	}
 }
 /*flex 우측 정렬*/
 .osl-margin-left--auto{
@@ -1670,13 +1710,19 @@ label.required:after {
     right: 1.85rem;
     height : auto;
 }
+
+.select2-container--default .select2-results__option[aria-selected=true],.select2-container--default .select2-results__option.select2-results__option--highlighted{
+	background: #d9ede7;
+}
 @media (min-width: 767px){
-	.select2-selection__rendered{
-		max-height: 57px;
+	.select2-selection.select2-selection--multiple > .select2-selection__rendered{
+		min-height: 57px;
+		max-height: 114px;
 		overflow-y: auto !important;
 	}
 	.osl-select2-view{
-		max-height: 57px;
+		min-height: 57px;
+		max-height: 114px;
 		overflow-y: auto !important;
 	}
 }
@@ -1743,6 +1789,16 @@ label.required:after {
 		padding-left:10px !important;
 		padding-right:10px !important;
 	}
+}
+@media (min-width: 769px){
+	.osl-mobile-769-padding-l-20{
+		padding-left: 20px !important;
+	}	
+}
+@media (max-width: 768px){
+	.osl-mobile-768-margin-t-20{
+		margin-top: 20px !important;
+	}	
 }
 @media (max-width: 430px){
 	.osl-portlet__head-label > div:nth-child(2),.osl-portlet__head-label > div:last-child{
