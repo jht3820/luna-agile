@@ -416,18 +416,8 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "복사"
 			},
 			field:{
+				/*외부 주입 search bar 인 경우 사용*/
 				prjGrpNm: "프로젝트 그룹명",
-				prjNm: "프로젝트명",
-				reqOrd: "요청 번호",
-				reqProTypeNm: "처리유형",
-				reqNm: "요청 제목",
-				reqDtm: "요청일",
-				regDtm: "등록일",
-				reqUsrNm: "요청자",
-				reqUsrEmail: "요청자 e-mail",
-				reqUsrDeptNm: "요청자 조직",
-				reqUsrNum: "요청자 연락처",
-				reqKey: "요구사항 key"
 			},
 			actionBtn:{
 				title : "수정 / 삭제 / 상세 / 복사",
@@ -539,11 +529,8 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
+				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
 				usrNm : "사용자명",
-				usrId : "아이디",
-				email : "이메일",
-				tel : "연락처",
-				deptName: "소속",
 			},
 			actionBtn : {
 				title : "선택",
@@ -719,6 +706,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
+			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -951,21 +939,18 @@ var OSLCoreLangSetting = function () {
 			notWriter : {
 				deleteMessage : "본인이 작성한 게시글만 삭제 가능합니다.",
 			},
+			label:{
+				deleteBadge: "삭제",
+				noticeBadge: "공지",
+			},
 			field:{
+				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+				tagNm:"태그",
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
 				cmtContent:"댓글내용",
-				tagNm:"태그",
-				badTitle:"제목",
-				badHit: "조회수",
-				badFileCnt: "첨부파일 수",
-				badUsrId: "작성자",
-				badWtdtm: "작성일",
-			},
-			label:{
-				deleteBadge: "삭제",
-				noticeBadge: "공지",
 			},
 			button:{
 				dblClick : "상세",
@@ -1009,13 +994,6 @@ var OSLCoreLangSetting = function () {
 				attachFile : "파일 첨부",
 				tag: "태그",
 				comment:"댓글",
-			},
-			field:{
-				comment:{
-					writer : "작성자",
-					content:"내용",
-					writeDate : "작성일"
-				}
 			},
 			actionBtn:{
 				title : "삭제",
@@ -1218,6 +1196,23 @@ var OSLCoreLangSetting = function () {
 				allTitle: "All"
 			},
 			/* 추가된 datatable별로 언어 지정 */
+			bad1000BadTable:{
+				badContent: "Content",
+				badNtcCheck : "Notice",
+				delCd:"Delete",
+				cmtContent:"Comment",
+				tagNm:"Tag",
+				badTitle:"Title",
+				badHit: "Hit",
+				badFileCnt: "Attachments Count",
+				badUsrId: "Writer",
+				badWtdtm: "Write Date",
+			},
+			bad1001CmtTable:{
+				writer : "Writer",
+				content:"Comment",
+				writeDate : "Date"
+			},
 			dpl1000DplTable:{
 				dplStsNm:"Deploy Status",
 				dplNm:"Deploy Title",
@@ -1250,6 +1245,27 @@ var OSLCoreLangSetting = function () {
 				reqOrd : "Request Number",
 				reqProTypeNm :"Processing Status",
 				reqDtm : "Request Date",
+			},
+			req4100ReqTable:{
+				prjGrpNm: "Project Group Name",
+				prjNm: "Project Name",
+				reqOrd: "Request Number",
+				reqProTypeNm: "Processing Status",
+				reqNm: "Title",
+				reqDtm: "Request Date",
+				regDtm: "Write Date",
+				reqUsrNm: "Requester",
+				reqUsrEmail: "Requester E-mail",
+				reqUsrDeptNm: "Requester Department",
+				reqUsrNum: "Requester Contact",
+				reqKey: "Request Key"
+			},
+			req4103ReqTable:{
+				usrNm : "User Name",
+				usrId : "Id",
+				email : "E-mail",
+				tel : "Contact",
+				deptName: "Department",
 			},
 			prj1000PrjTable:{
 				prjNm: "Project Group Name",
@@ -1287,6 +1303,14 @@ var OSLCoreLangSetting = function () {
 				mmrNm:"Memoirs Title",
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
+			},
+			stm2100StmTable:{
+				stmTypeNm: "Type",
+				stmNm: "Name",
+				stmDsTypeNm: "Disclosure Scope",
+				cnt: "Total Count",
+				badCnt: "Valid Count",
+				delCnt: "Deleted Count",
 			}
 		},
 		date:{
@@ -1522,18 +1546,8 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "Copy"
 			},
 			field:{
+				/*외부 주입 search bar에서 사용*/
 				prjGrpNm: "Project Group Name",
-				prjNm: "Project Name",
-				reqOrd: "Request Number",
-				reqProTypeNm: "Processing Status",
-				reqNm: "Title",
-				reqDtm: "Request Date",
-				regDtm: "Write Date",
-				reqUsrNm: "Requester",
-				reqUsrEmail: "Requester E-mail",
-				reqUsrDeptNm: "Requester Department",
-				reqUsrNum: "Requester Contact",
-				reqKey: "Request Key"
 			},
 			actionBtn:{
 				title : "Udp / Del / Det / Cop",
@@ -1645,11 +1659,8 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
+				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
 				usrNm : "User Name",
-				usrId : "Id",
-				email : "E-mail",
-				tel : "Contact",
-				deptName: "Department",
 			},
 			actionBtn : {
 				title : "Select",
@@ -2001,21 +2012,17 @@ var OSLCoreLangSetting = function () {
 			notWriter : {
 				deleteMessage : "Only posts written by you can be deleted.",
 			},
-			field:{
+			label:{
+				deleteBadge: "Delete",
+				noticeBadge: "Notice",
+			},
+			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+				tagNm:"Tag",
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
 				cmtContent:"Comment",
-				tagNm:"Tag",
-				badTitle:"Title",
-				badHit: "Hit",
-				badFileCnt: "Attachments Count",
-				badUsrId: "Writer",
-				badWtdtm: "Write Date",
-			},
-			label:{
-				deleteBadge: "Delete",
-				noticeBadge: "Notice",
 			},
 			button:{
 				dblClick : "Detail",
@@ -2059,13 +2066,6 @@ var OSLCoreLangSetting = function () {
 				attachFile : "Attachments",
 				tag: "Tag",
 				comment:"Comment",
-			},
-			field:{
-				comment:{
-					writer : "Writer",
-					content:"Comment",
-					writeDate : "Date"
-				}
 			},
 			actionBtn:{
 				title : "Delete",

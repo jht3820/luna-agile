@@ -664,7 +664,7 @@ var OSLReq4101Popup = function () {
 	    	$("#reqDtm").val(new Date().format("yyyy-MM-dd"));
 	    	
 	    	//edit 세팅
-	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 	    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 	    		toolbar: false,
     			disableResizeEditor: false,
@@ -832,7 +832,7 @@ var OSLReq4101Popup = function () {
 				}
 		    	
 		    	//edit 세팅
-		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,

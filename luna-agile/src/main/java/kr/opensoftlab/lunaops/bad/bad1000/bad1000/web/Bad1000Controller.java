@@ -74,9 +74,26 @@ public class Bad1000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("menuId", (String) ss.getAttribute("selMenuId"));
+			
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			Map stmInfo = stm2100Service.selectStm2100BadInfo(paramMap);
@@ -108,13 +125,30 @@ public class Bad1000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
 			
 			
 			if("tagNm".equals(paramMap.get("searchTargetId"))) {
 				
-				paramMap.put("searchTargetId", paramMap.get("searchTargetId").replace("#", ""));
+				paramMap.put("searchTargetData", paramMap.get("searchTargetData").replace("#", ""));
 			}
 			
 			
@@ -374,7 +408,7 @@ public class Bad1000Controller {
 			
 			
 			
-			bad1000Service.insertBad1000Badinfo(paramMap);
+			bad1000Service.insertBad1000BadInfo(paramMap);
 			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
