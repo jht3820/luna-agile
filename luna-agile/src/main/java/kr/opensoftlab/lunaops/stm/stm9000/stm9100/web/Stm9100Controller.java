@@ -368,6 +368,10 @@ public class Stm9100Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			HttpSession ss = request.getSession();
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVo.getLicGrpId());
+			
 			
 			stm9100Service.deleteStm9100JobInfo(paramMap);
 			

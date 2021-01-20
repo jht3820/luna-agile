@@ -80,8 +80,8 @@ public class Stm9000Controller {
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9003View.do")
-	public String selectStm9003View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9002View.do")
+	public String selectStm9002View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -130,7 +130,7 @@ public class Stm9000Controller {
 		}catch(Exception e){
 			Log.error(e);
 		}
-		return "/stm/stm9000/stm9000/stm9003";
+		return "/stm/stm9000/stm9000/stm9002";
 	}
 	
 	
@@ -508,6 +508,111 @@ public class Stm9000Controller {
 	
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9003JenkinsDetailInfoAjax.do")
+	public ModelAndView selectStm9003JenkinsDetailInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+
+		try{
+
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			Map jenMap = stm9000Service.selectStm9000JenkinsInfo(paramMap);
+			
+			String jenId = (String)jenMap.get("jenId");
+			String jenUsrId = (String)jenMap.get("jenUsrId");
+			String tokenId = (String)jenMap.get("jenUsrTok");
+			String jenUrl = (String)jenMap.get("jenUrl");
+			String useNm = (String)jenMap.get("useNm");
+			
+			
+			String salt = EgovProperties.getProperty("Globals.lunaops.salt");
+			
+			
+			String deTokenId = CommonScrty.decryptedAria(tokenId, salt);
+			
+			
+			if(deTokenId == null || "".equals(deTokenId)){
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.notTokenKey"));
+				return new ModelAndView("jsonView");
+			}
+			
+			
+			jenkinsClient.setUser(jenUsrId);
+			jenkinsClient.setPassword(deTokenId);
+			
+			String url = jenUrl+"/api/json";
+			String content = "";
+
+			
+			content = jenkinsClient.excuteHttpClientJenkins(url);
+
+			Map jenkinsMap = jenkinsClient.getJenkinsParser(content);
+			jenkinsMap.put("jenId", jenId);
+			jenkinsMap.put("jenUsrId", jenUsrId);
+			jenkinsMap.put("useNm", useNm);
+			
+			List jobList =  (List)jenkinsMap.get("jobs");
+
+			
+			model.addAttribute("jenkinsInfo", jenkinsMap);
+			model.addAttribute("jobList", jobList);
+			model.addAttribute("resultCode", JENKINS_OK);
+			
+			
+			paramMap.put("jenId", jenId);
+			
+			
+			List<Map> dbJobList = stm9100Service.selectStm9100JobNormalList(paramMap);
+			
+			model.addAttribute("dbJobList", dbJobList);
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			
+			Log.error("selectStm9003JenkinsDetailInfoAjax()", ex);
+			
+			
+			
+			if(ex instanceof HttpResponseException){
+				int responseCode = ((HttpResponseException) ex).getStatusCode(); 
+				
+				if(responseCode == 401) {
+					model.addAttribute("resultCode", JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.user.authentication"));
+				
+				}else if(responseCode == 404) {
+					model.addAttribute("resultCode", JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.serverData"));
+				}
+			
+			}else if(ex instanceof HttpHostConnectException){
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+			
+			}else if( ex instanceof ParseException){
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.result.parsing.error"));
+			
+			}else if( ex instanceof IllegalArgumentException){
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.unauthorized.url"));
+			
+			}else if(ex instanceof UserDefineException){
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", ex.getMessage());
+			}else{
+				model.addAttribute("resultCode", JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+			}
+			
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/stm/stm9000/stm9000/selectStm9000URLConnect.do")
 	public ModelAndView selectStm9000URLConnect(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
@@ -549,12 +654,18 @@ public class Stm9000Controller {
 			model.addAttribute("jobList", jobList);
 			model.addAttribute("resultCode", JENKINS_OK);
 			
+			
+			
+			
+			
 			List<Map> jobRestoreList = stm9100Service.selectStm9100JobNormalList(paramMap);
 			
 			model.addAttribute("jobRestoreList", jobRestoreList);
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
+			
+			Log.error("selectStm9000URLConnect()", ex);
 			
 			
 			

@@ -105,10 +105,12 @@ public class Stm9100ServiceImpl extends EgovAbstractServiceImpl implements Stm91
 			
 			
 			Map delJobInfoMap = new Gson().fromJson(jsonObj.toJSONString(), new HashMap().getClass());
-		
+			delJobInfoMap.put("licGrpId", paramMap.get("licGrpId"));
+			
 			
 			stm9100DAO.deleteStm9100JobInfo(delJobInfoMap);
-			stm9100DAO.updateJen9100JenkinsJobRestoreInfo(paramMap);
+			
+			stm9100DAO.updateJen9100JenkinsJobRestoreInfo(delJobInfoMap);
 		}
 	}
     
