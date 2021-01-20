@@ -35,7 +35,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.mmtDesc">회의록 내용</span></label>
-					<textarea class="form-control kt-hide" name="mmtDesc" id="mmtDesc" required></textarea>
+					<textarea class="kt-hide" name="mmtDesc" id="mmtDesc" required></textarea>
 				</div>
 			</div>
 		</div>
@@ -113,7 +113,7 @@ var OSLSpr2001Popup = function () {
         	selectUsrList();
         	
     		//edit 세팅
-    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
+    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate, 'minHeight': 190, disableResizeEditor: false}));
 	    	//edit 세팅하고 나서 textarea 보이기
 	    	$("#mmtDesc").removeClass("kt-hide");
     	
@@ -325,7 +325,7 @@ var OSLSpr2001Popup = function () {
 				selectUsrList(mmtMemList);
 								
 	    		//edit 세팅
-	    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
+	    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate, 'minHeight': 190, disableResizeEditor: false}));
 	    		//edit 세팅하고 나서 textarea 보이기
 		    	$("#mmtDesc").removeClass("kt-hide");
 			}
