@@ -170,6 +170,9 @@ input:-webkit-autofill,
 .osl-min-h-px--590 {
   min-height: 590px !important; 
 }
+.osl-min-h-px--620 {
+  min-height: 620px; 
+}
 .osl-min-h-px--700 {
   min-height: 700px; 
 }
@@ -221,6 +224,14 @@ input:-webkit-autofill,
 
 .toast .toast-message {
     font-size: 1rem;
+}
+#toast-container > div{
+	min-width: 300px;
+    width: auto;
+}
+.osl-toastr-center {
+    top: 50%;
+    left: 40%;
 }
 
 .osl-favorites--active:before{
