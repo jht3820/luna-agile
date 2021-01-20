@@ -3,9 +3,9 @@
 	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
 	*/
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +172,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -233,6 +233,76 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		/* 페이지 언어 */
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "받은 메시지",
+				send: "보낸 메시지",
+				alone: "나에게 보낸 메시지"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "메시지 조회",
+					insertBtn : "메시지 보내기",
+					reInsertBtn : "메시지 답장",
+					checkBtn : "메시지 읽음 처리",
+					deleteBtn : "메시지 삭제",
+					dblClickBtn :"메시지 상세 조회"
+				},
+				reInsertBtn : "답장",
+				checkBtn : "읽음",
+			},
+			/*검색 바 메뉴 추가한 경우 */
+			field: {
+				sendUsrId : "보낸 사람 ID",
+				sendUsrEmail : "보낸 사람 e-mail",
+				usrNm : "받는 사람",
+				usrId : "받는 사람 ID",
+				usrEmail :"받는 사람 e-mail",
+				armContent : "내용"
+			},
+			actionBtn : {
+				title : "삭제 / 상세 / 답장",
+				insertTitle : "메시지 쓰기",
+				reInsertTitle :"메시지 답장",
+				dblClickTitle : "메시지 상세",
+			},
+			alert :{
+				message : {
+					selectMessage : "답장할 메시지를 선택하세요.",
+					selectOneMessage : "1개의 메시지만 선택하세요.<br/>${1}개의 메시지가 선택되었습니다.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "받는 사람",
+				title : "제목",
+				content : "내용",
+				attachments: "파일 첨부", 
+			},
+			placeholder :{
+				title : "제목",
+				content : "내용",
+				select2 : "선택 또는 입력"
+			},
+			message :{
+				inputToUser : "받는 사람을 입력하세요.",
+				send : "메시지를 보내시겠습니까?",
+			},
+			button : {
+				submit : "보내기"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "첨부 파일", 
+			},
+			button : {
+				reSend : "답장"
+			},
+			title :"메시지 답장"
+		},
 		dpl1100:{
 			title : {
 				deploy : "배포계획 목록",
@@ -1211,7 +1281,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1320,6 +1390,11 @@ var OSLCoreLangSetting = function () {
 				allTitle: "All"
 			},
 			/* 추가된 datatable별로 언어 지정 */
+			cmm16000CmmTable:{
+				sendUsrNm : "From User Name",
+				armTitle : "Title",
+				sendDtm : "Date",
+			},
 			bad1000BadTable:{
 				badContent: "Content",
 				badNtcCheck : "Notice",
@@ -1507,7 +1582,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -1563,6 +1638,76 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		/* 페이지 언어 */
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "Received Message",
+				send: "Sent Message",
+				alone: "Sent To Me"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "Select Message",
+					insertBtn : "Send Message",
+					reInsertBtn : "Reply Message",
+					checkBtn : "Read Check Message",
+					deleteBtn : "Delete Message",
+					dblClickBtn :"Detail Message"
+				},
+				reInsertBtn : "Reply",
+				checkBtn : "Read Check"
+			},
+			/*검색 바 메뉴 추가한 경우 */
+			field: {
+				sendUsrId : "From User Id",
+				sendUsrEmail : "From User E-mail",
+				usrNm : "To User Name",
+				usrId : "To User Id",
+				usrEmail :"To User E-mail",
+				armContent : "Content"
+			},
+			actionBtn : {
+				title : "Del / Det / Rep",
+				insertTitle : "Write Message",
+				reInsertTitle :"Reply Message",
+				dblClickTitle : "Detail Message",
+			},
+			alert :{
+				message : {
+					selectMessage : "Select a message to reply to.",
+					selectOneMessage : "Please select only 1 message.<br/>${1} messages have been selected.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "To",
+				title : "Title",
+				content : "Content",
+				attachments: "Attachments", 
+			},
+			placeholder :{
+				title : "Title",
+				content : "Content",
+				select2 : "Click or Search Text"
+			},
+			message :{
+				inputToUser : "Please enter the recipient.",
+				send : "Would you like to send a message?",
+			},
+			button : {
+				submit : "Send"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "Attachments", 
+			},
+			button : {
+				reSend : "Reply"
+			},
+			title :"Reply Message"
+		},
 		dpl1100:{
 			title : {
 				deploy : "Deploy List",
@@ -2354,12 +2499,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2368,7 +2513,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };

@@ -1,429 +1,441 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
-<jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
-<jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
-<div class="kt-portlet kt-portlet--mobile">
-	<div class="kt-portlet__head kt-portlet__head--lg">
-		<div class="kt-portlet__head-label">
-			<h4 class="kt-font-boldest kt-font-brand">
-				<i class="fa fa-th-large kt-margin-r-5"></i><c:out value="${sessionScope.selMenuNm}"/>
-			</h4>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-4 col-4">
-		<div class="kt-portlet kt-portlet--mobile">
-			<div class="kt-portlet__head kt-portlet__head--lg">
-				<div class="kt-portlet__head-label">
-					<h5 class="kt-font-boldest kt-font-brand">
-						<i class="fa flaticon2-send-1kt-margin-r-5"></i><span data-lang-cd="">MESSAGE</span>
-					</h5>
-				</div>
-			</div>
-			<div class="kt-portlet__body">
-				<div id="menuTypeGet">
-					<h5>
-						<i class="fa flaticon2-new-email kt-margin-r-5"></i>
-						<span data-lang-cd="">받은 메시지</span>
-						<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10 kt-hide' id="notReadGetCnt" name="notReadGetCnt">0</span>
-					</h5>
-				</div>
-				<div id="menuTypeSend">
-					<h5>
-						<i class="fa flaticon2-mail-1  kt-padding-t-5 kt-margin-r-5"></i>
-						<span data-lang-cd="">보낸 메시지</span>
-					</h5>
-				</div>
-				<div id="menuTypeAlone">
-					<h5>
-						<i class="fa flaticon2-writing kt-margin-r-5"></i>
-						<span data-lang-cd="">나에게 보낸 메시지</span>
-						<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10 kt-hide' id="notReadAloneCnt" name="notReadAloneCnt">0</span>
-					</h5>
+<form class="kt-form" id="frCmm16001" autocomplete="off">
+	<input type="hidden" name="atchFileId" id="atchFileId" value="<c:out value='${param.atchFileId}'/>">
+	<input type="hidden" name="type" id="type" value="<c:out value='${param.type}'/>">
+	<input type="hidden" name="reSendUsrId" id="reSendUsrId" value="<c:out value='${param.reSendUsrId}'/>">
+	<div class="kt-portlet">
+		<div class="kt-portlet__body">
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="form-group">
+					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
+						<span data-lang-cd="cmm16001.label.to">받는 사람</span>
+						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
+					</label>
+					<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-lg-9 col-md-8 col-sm-8 col-8">
-		<div class="kt-portlet kt-portlet--mobile">
-			<div class="kt-portlet__head kt-portlet__head--lg">
-				<div class="kt-portlet__head-label">
-					<div class="osl-datatable-search kt-margin-b-0" data-datatable-id="cmm16000CmmTable"></div>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="form-group">
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.title">제목</span></label>
+					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" required>
 				</div>
-				<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
-					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="select" title="메시지 조회" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
-						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="insert" title="메시지 보내기" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
-							<i class="fa flaticon2-mail-1"></i><span data-lang-cd="datatable.button.insert">쓰기</span>
-						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="reInsert" title="메시지 답장" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="reInsert" tabindex="3">
-							<i class="fa flaticon2-chat-2"></i><span data-lang-cd="datatable.button.insert">답장</span>
-						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="check" title="메시지 읽음 처리" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="check" tabindex="4">
-							<i class="fa flaticon2-check-mark"></i><span data-lang-cd="">읽음</span>
-						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="delete" title="메시지 삭제" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
-							<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
-						</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="form-group">
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.content">내용</span></label>
+					<textarea class="kt-hide" name="armContent" id="armContent" placeholder="내용" required></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="form-group form-group-last">
+					<label>
+						<i class="fa fa-file-upload kt-margin-r-5"></i>
+						<span data-lang-cd="cmm16001.label.attachments">파일 첨부</span> 
+					</label>
+					<div class="kt-uppy osl-max-height-260" id="arm1001FileUpload">
+						<div class="kt-uppy__dashboard"></div>
+						<div class="kt-uppy__progress"></div>
 					</div>
 				</div>
 			</div>
-			<div class="kt-portlet__body">
-				<div class="kt_datatable" id="cmm16000CmmTable"></div>
-			</div>
 		</div>
 	</div>
+</form>
+<div class="modal-footer">
+	<button type="button" class="btn btn-brand" id="arm1001InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="cmm16001.button.submit">보내기</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLCmm16000Popup = function () {
-	var datatableId = "cmm16000CmmTable";
+var OSLCmm16001Popup = function () {
+	var formId = 'frCmm16001';
+
+	//atchfileId
+	var atchFileId;
+	
+	//type
+	var type;
+
+	//답장 받을 회원 id
+	var reSendUsrId;
+	
+	//파일 업로드 세팅
+	var fileUploadObj;
+	
+	//edit 목록
+	var formEditList = [];
+	
+	//form validate 주입
+	var formValidate = $.osl.validate(formId);
+	
+	//메시지를 받는 id를 담을 변수 선언
+	var usrList = [];
 	
 	var documentSetting = function(){
-		$.osl.datatable.setting(datatableId,{
-			data: {
-				source: {
-					read: {
-						url: "/cmm/cmm10000/cmm16000/selectArm1000AlarmListAjax.do"
-					},
-					params: {
-						armMenuType : "get"
-					},
-				},
+		
+		type = $("#type").val();
+		atchFileId = $("#atchFileId").val();
+		reSendUsrId = $("#reSendUsrId").val();
+		
+		//문구 세팅 
+    	$("#arm1001InsertSubmit > span").text($.osl.lang("cmm16001.button.submit"));
+    	
+    	//placeholder 세팅
+    	$("#armTitle").attr("placeholder", $.osl.lang("cmm16001.placeholder.armTitle"));
+    	$("#armContent").attr("placeholder", $.osl.lang("cmm16001.placeholder.armContent"));
+    	
+		//파일 업로드 세팅
+    	fileUploadObj = $.osl.file.uploadSet("arm1001FileUpload",{
+    		url: '/cmm/cmm10000/cmm16000/insertArm1000AlarmAtchFileInfo.do',
+    		maxFileSize: "${requestScope.fileSumMaxSize}",
+    		meta: {"atchFileId": atchFileId, "fileSn": 0},
+    		maxNumberOfFiles:20,
+    		height: 260,
+    		
+    		//submit 전 실행 함수
+    		onBeforeUpload: function(files){
+    			var rtnValue = files;
+    			var uploadFiles = {};
+    			
+    			//atchFileId 생성
+				$.osl.file.makeAtchfileId(function(data){
+					if(data.errorYn == "Y"){
+						$.osl.toastr(data.message);
+						rtnValue = [];
+					}else{
+						atchFileId = data.atchFileIdString;
+						$("#atchFileId").val(data.atchFileIdString);
+					 	fileUploadObj.setMeta({atchFileId: data.atchFileIdString});
+					 
+						//파일명 뒤에 ms 붙이기
+	    				$.each(files, function(idx, map){
+	    					map.meta.atchFileId = data.atchFileIdString;
+	    					
+	    					var jsonTmp = {};
+							jsonTmp[map.id] = map;
+							uploadFiles = $.extend(uploadFiles, jsonTmp);
+	    				});
+						
+   						//요구사항 등록
+   						submitInsertAction();
+   					}
+				});
 			},
-			columns: [
-				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, sortable: false},
-				{field: 'sendUsrNm', title: '보낸 사람', textAlign: 'left', autoHide: false, width: 120, sortField: "sendUsrNm", search:true,
-					template: function (row) {
-						if(row.sendUsrNm == null){
-							row.sendUsrNm = "";
-						}
-						var usrData = {
-							html: row.sendUsrNm,
+			//uppy에 파일 업로드 할 때
+			onBeforeFileAdded: function(currentFile, files){
+				//등록 수정
+				//추가로 등록한 파일인 경우(삭제되지 않은 업로드 파일)
+				if(currentFile.source != "database" && currentFile.source != "remove"){
+					var newNm = new Date().format("ssms")+"_"+currentFile.name;
+					currentFile.name = newNm;
+					currentFile.meta.name = newNm;
+					currentFile.meta.atchFileId = $("#atchFileId").val();
+					
+	    			//fileSn default
+	    			var fileSn = fileUploadObj.getState().meta.fileSn;
+	    			currentFile.meta.fileSn = fileSn;
+	    			fileUploadObj.setMeta({fileSn: (fileSn+1)});
+				}
+			}
+		});
+		
+		//kt-select2 설정
+		$('#forUsrSelect').select2({
+			placeholder : $.osl.lang("cmm16001.placeholder.select2"),
+			//option list 렌더링
+			templateResult: optionFormatState,
+			//tag 렌더링
+			templateSelection : tagFormatState,
+			//검색
+	        matcher: matchCustom,
+			//드롭다운 위치 지정
+			dropdownParent: $("#"+formId),
+			//스크롤 충돌 방지
+			ftScrollUse: false,
+		});
+		
+		//select2 클릭 이벤트
+		$('#forUsrSelect').on('select2:close', function (evt) {
+	        var count = $(this).select2('data').length;
+	        if(count==0){
+				$("#memCnt").text("0");
+	        	$("#memCnt").addClass("kt-hide");
+	        }
+	        else{
+	        	$("#memCnt").text(count);
+	        	$("#memCnt").removeClass("kt-hide");
+	        }
+		});
+
+		$("#memCnt").text(0);
+		
+		//사용자 리스트 세팅
+		if(type=="insert"){
+	    	selectUsrList();
+		}else{
+			//답장일 때
+			selectUsrList(reSendUsrId);
+		}
+		
+    	//edit 세팅
+		formEditList.push($.osl.editorSetting("armContent", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
+    	//edit 세팅하고 나서 textarea 보이기
+    	$("#armContent").removeClass("kt-hide");
+    	
+    	//submit 동작
+    	$("#arm1001InsertSubmit").click(function(){
+			var form = $('#'+ formId);    		
+			
+			//폼 유효 값 체크
+    		if (!form.valid()) {
+    			return false;
+    		}
+			
+			//받는 사람이 있는지 확인
+			addUsrList(false);
+			
+			if(usrList.length==0){
+				$.osl.alert($.osl.lang("cmm16001.message.inputToUser"));
+				return false;
+			}
+
+			$.osl.confirm($.osl.lang("cmm16001.message.send"),null,function(result) {
+    	        if (result.value) {
+    	        	fileUploadObj.upload();
+    	        }
+    		});
+    	});
+	};
+
+    /**
+    * kt-select2 옵션
+    */
+    var optionFormatState = function(state){
+    	if (!state.id) {
+    	    return state.text;
+   	 	}
+    	var usrId = state.id;
+    	var usrNm = state.element.attributes.getNamedItem("data-usr-nm").value;
+    	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
+    	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
+
+    	var state = $(
+    			'<div class="kt-user-card-v2 btn" data-usr-id="'+ usrId +'">' 
+				+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
+					+'<img src="'+$.osl.user.usrImgUrlVal(usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+				+'</div>'
+				+'<div class="kt-user-card-v2__details float-left">'
+					+'<span class="kt-user-card-v2__name float-left">'+usrNm+'</span>'
+					+'<span class="kt-user-card-v2__email float-left kt-margin-l-10 osl-line-height-rem-1_5">'+usrEmail+'</span>'
+				+'</div>'
+			+'</div>'
+   	    );
+    	
+    	return state;
+    };
+    
+    /**
+     * kt-select2 태그 옵션
+     */
+    var tagFormatState = function(state){
+    	if (!state.id) {
+    	    return state.id;
+   	 	}
+    	var usrId = state.id;
+    	var usrNm = state.element.attributes.getNamedItem("data-usr-nm").value;
+    	var usrImgId = state.element.attributes.getNamedItem("data-usr-img-id").value;
+    	var usrEmail = state.element.attributes.getNamedItem("data-usr-email").value;
+
+    	var state = $(
+    			'<div class="kt-user-card-v2 d-inline-block" data-usr-id="'+ usrId +'">'
+					+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'
+						+'<img src="'+$.osl.user.usrImgUrlVal(usrImgId)+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
+					+'</div>'
+					+'<div class="kt-user-card-v2__details float-left">'
+						+'<span class="kt-user-card-v2__name">'+usrNm+'</span>'
+						+'<span class="kt-user-card-v2__email">'+usrEmail+'</span>'
+					+'</div>'
+				+'</div>'
+   	    );
+    	
+   	    return state;
+    };
+    
+    /**
+     * kt-select2 검색 세팅
+     * param : selectUsrList 이미 선택된 사용자 리스트
+     */
+    var matchCustom = function(params, data){
+    	//검색 값이 빈 값인경우 전체 출력
+         if ($.trim(params.term) === '') {
+           return data;
+         }
+        
+         //기본 텍스트값이 없는 경우 빈 값 출력
+         if (typeof data.text === 'undefined') {
+           return null;
+         }
+         
+         //이메일 값 조회
+         var usrEmail = $(data.element).data("usr-email");
+
+         //id문자열에 검색어 있으면 출력
+         if (data.id.indexOf(params.term) > -1) {
+           return data;
+         }
+         //text문자열에 검색어 있으면 출력
+         else if (data.text.indexOf(params.term) > -1) {
+           return data;
+         }
+         //email문자열에 검색어 있으면 출력
+         else if (usrEmail.indexOf(params.term) > -1) {
+           return data;
+         }
+
+         //검색어에 해당안되는 데이터 출력 안함
+         return null;
+    }
+    
+    /**
+    * kt-select2 사용자 세팅
+    * param : selectUsrList 이미 선택된 사용자 리스트
+    */
+	var selectUsrList = function(selectedUsrList){
+		//AJAX 설정
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmUsrListAjax.do'/>", "async":"true"});
+		
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+
+				//모달 창 닫기
+				$.osl.layerPopupClose();
+			}else{
+				//사용자 선택 드롭박스 추가
+				$.each(data.usrAllList, function(idx, value){
+					var usrData = {
+							html: value.usrNm,
 							imgSize: "sm",
 							class:{
 								cardBtn: "osl-width__fit-content"
 							}
-						};
-						return $.osl.user.usrImgSet(row.sendUsrImgId, usrData);
-					},
-					onclick: function(rowData){
-						$.osl.user.usrInfoPopup(rowData.sendUsrId);
-					}
-				},
-				{field: 'armTitle', title:'제목', textAlign: 'left', width: 400, autoHide: false, sortField: "armTitle", search: true},
-				{field: 'sendDtm', title: '날짜', textAlign: 'center', width: 120, sortField: "sendDtm", search: true, searchType:"daterange",
-					template: function (row) {
-						var paramDatetime = new Date(row.sendDtm);
-		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
-		                return agoTimeStr.agoString;
-					}
-				},
-			],
-			searchColumns:[
-				{field: 'sendUsrId', title: '보낸 사람 ID', searchOrd: 1},
-				{field: 'sendUsrEmail', title: '보낸 사람 e-mail', searchOrd: 2},
-				{field: 'usrNm', title: '받는 사람', searchOrd: 3},
-				{field: 'usrId', title: '받는 사람 ID', searchOrd: 4},
-				{field: 'usrEmail', title: '받는 사람 e-mail', searchOrd: 5},
-				{field: 'armContent', title: '내용', searchOrd: 7}
-			],
-			rows:{
-				beforeTemplate : function(row, data, index){
-					if(data.checkCd == '02'){
-						//안읽은 것
-						$(row).css("font-weight", "bold");
-					}
-				},
-				clickCheckbox: true,
-			},
-			actionBtn:{
-				"title": "삭제 / 상세 / 답장",
-				"reInsert" : true,
-				"update" : false,
-				"dblClick" : true,
-				"check" : true,
-			},
-			actionTooltip:{
-			},
-			actionFn:{
-				"insert":function(datatableId, type, rowNum){
-					var data = {type:"insert"};
-					var options = {
-							idKey: datatableId,
-							modalTitle: "메시지 쓰기",
-							closeConfirm: false,
-							autoHeight:false,
-						};
-					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/insertCmm16001View.do',data,options);
-				},
-				"reInsert":function(rowDatas, datatableId, type, rowNum){
-					var data;
-					var options;
-					
-					if(type == "list"){
-						//선택 항목이 리스트인 경우
-						if(rowNum == 0){
-							$.osl.alert("답장할 메시지를 선택하세요.");
-							return false;
-						}else if(rowNum == 1){
-							data = {
-									type:"reInsert",
-									reSendUsrId : rowDatas[0].sendUsrId,
-									atchfileId : rowDatas[0].atchFileId
-								};
-							options = {
-									idKey: "reInsert_"+rowDatas[0].armId,
-									modalTitle: "메시지 답장",
-									closeConfirm: false,
-									autoHeight:false,
-								};
+					};
+					var str = '';
+					if(selectedUsrList != null && selectedUsrList != ""){
+						//답장 상대가 있으므로
+						$("#memCnt").text(1);
+	        			$("#memCnt").removeClass("kt-hide");
+	        	
+						//답장인 경우 사용자 세팅에 해당 사용자 자동 입력
+						if(value.usrId === selectedUsrList){
+							str = '<option selected="selected" value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
+									+ value.usrNm
+								+ '</option>';
 						}else{
-							//다중인 경우
-							$.osl.alert("1개의 메시지만 선택하세요.");
-							return false;
+							str = '<option value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
+									+ value.usrNm
+								+ '</option>';
 						}
 					}else{
-						//선택 항목이 row 단건인 경우
-						data = {
-								type:"reInsert",
-								reSendUsrId : rowDatas.sendUsrId,
-							};
-						options = {
-								idKey: "reInsert_"+rowDatas.armId,
-								modalTitle: "메시지 답장",
-								closeConfirm: false,
-								autoHeight:false,
-							};
+						str = '<option value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
+									+ value.usrNm
+								+ '</option>';
 					}
 					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/insertCmm16001View.do',data,options);
-				},
-				"delete":function(rowDatas, datatableId, type){
-					var data = {
-							dataList : JSON.stringify(rowDatas)
-					};
-
-					//AJAX 설정
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/cmm/cmm10000/cmm16000/deleteArm1000AlarmInfoAjax.do'/>", "async":"true"}
-							,data);
-					
-					//AJAX 전송 성공 함수
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-							$.osl.alert(data.message,{type: 'error'});
-
-							//모달 창 닫기
-							$.osl.layerPopupClose();
-						}else{
-							OSLCmm16000Popup.reload();
-						}
-					});
-					
-					//AJAX 전송
-					ajaxObj.send();
-					
-				},
-				"dblClick":function(rowData, datatableId, type, rowNum){
-					var data = {
-							armId : rowData.armId
-					};
-					var options = {
-							idKey: rowData.armId,
-							modalTitle: "메시지 상세",
-							closeConfirm: false,
-							autoHeight:false,
-					};
-					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/selectCmm16002View.do',data,options);
-				},
-				"check" : function(rowDatas){
-					var data = {
-							dataList : JSON.stringify(rowDatas)
-					};
-					
-					//AJAX 설정
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/cmm/cmm10000/cmm16000/updateArm1000AlarmInfoAjax.do'/>", "async":"true"}
-							,data);
-					
-					//AJAX 전송 성공 함수
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-							$.osl.alert(data.message,{type: 'error'});
-
-							//모달 창 닫기
-							$.osl.layerPopupClose();
-						}else{
-							OSLCmm16000Popup.reload();
-						}
-					});
-					
-					//AJAX 전송
-					ajaxObj.send();
-				}
-			},
-			theme:{
-				actionBtn:{
-					"reInsert" : "",
-					"check" : " kt-hide",
-				},
-				actionBtnIcon:{
-					"reInsert" : "fa flaticon2-chat-2",
-					"check" : "fa flaticon2-check-mark",
-				}
-			},
-			callback:{
-				initComplete:function(evt, config){
-					//초기 선택 - 받은 메시지
-					$("#menuTypeGet").click();
-				},
-	   			ajaxDone: function(evt, list, datatableInfo){
-	   				checkNotRead();
-	   			},
+					$("#forUsrSelect").append(str);
+				});
 			}
 		});
-		
-		$("#menuTypeGet").click(function(){
-			//선택 div
-			$("#menuTypeGet").children("h5").addClass("kt-font-boldest kt-font-brand");
-			//선택 외 div
-			$("#menuTypeSend").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			$("#menuTypeAlone").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			
-			//검색바 초기화
-			searchReset();
-			
-			//데이터 테이블 검색 조건 변경 - 강제
-			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","get");
-			//데이터 테이블 조회
- 			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-		});
-		
-		$("#menuTypeSend").click(function(){
-			//선택 div
-			$("#menuTypeSend").children("h5").addClass("kt-font-boldest kt-font-brand");
-			//선택 외 div
-			$("#menuTypeGet").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			$("#menuTypeAlone").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			
-			//검색바 초기화
-			searchReset();
-			
-			//데이터 테이블 검색 조건 변경 - 강제
-			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","send");
-			//데이터 테이블 조회
-			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-		});
-		
-		$("#menuTypeAlone").click(function(){
-			//선택 div
-			$("#menuTypeAlone").children("h5").addClass("kt-font-boldest kt-font-brand");
-			//선택 외 div
-			$("#menuTypeGet").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			$("#menuTypeSend").children("h5").removeClass("kt-font-boldest kt-font-brand");
-			
-			//검색바 초기화
-			searchReset();
-			
-			//데이터 테이블 검색 조건 변경 - 강제
-			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","alone");
-			//데이터 테이블 조회
-			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-		});
-		
+		//AJAX 전송
+		ajaxObj.send();
 	};
 	
 	/**
-	 * 안읽은 메시지 개수 확인
-	 */
-	var checkNotRead = function(){
-		//ajax 설정
-		var ajaxObj = new $.osl.ajaxRequestAction(
-    			{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmNotReadCntAjax.do'/>"});
-		//ajax 전송 성공 함수
-    	ajaxObj.setFnSuccess(function(data){
-    		if(data.errorYn == "Y"){
-				$.osl.alert(data.message,{type: 'error'});
-				//모달 창 닫기
-				$.osl.layerPopupClose();
-			}else{
-				var notRead = data.notRead;
-				
-				if(notRead.get>0){
-					$("#notReadGetCnt").removeClass("kt-hide");
-					$("#notReadGetCnt").text(notRead.get);
-				}else{
-					$("#notReadGetCnt").addClass("kt-hide");
-					$("#notReadGetCnt").text("0");
-				}
-				if(notRead.alone>0){
-					$("#notReadAloneCnt").removeClass("kt-hide");
-					$("#notReadAloneCnt").text(notRead.alone);
-				}else{
-					$("#notReadAloneCnt").addClass("kt-hide");
-					$("#notReadAloneCnt").text("0");
-				}
-			}
-    	});
-		//ajax 전송
-    	ajaxObj.send();
-	};
-	
-	/**
-	* 검색바 초기화
+	* function 명 	: addUsrList
+	* function 설명	: 참여 인원 리스트 전달
+	* param : defaultCheck 넘길 리스트가 null일 때 현재 사용자 정보 넣을지 확인(필요 true, 필요 없음false)
 	*/
-	var searchReset = function(){
-		//드롭다운 메뉴 선택 활성화 취소 및 재선택
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item.active").attr("class", "dropdown-item");
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").attr("class", "dropdown-item active");
-		
-		//검색 메뉴 명 가져오기
-		var searchBarMenuStr = $(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").text();
-		
-		//검색 메뉴 버튼 변경
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").parent().children(".btn.btn-secondary.dropdown-toggle").text(searchBarMenuStr);
-		
-		//select 감추기
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("style", "display:none;");
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("aria-hidden", "true");
-		
-		//input 보이기
-		$("#searchData_"+datatableId).removeAttr("disabled");
-		
-		//input에 검색 값 비우기
-		$("#searchData_"+datatableId).val("");
+    var addUsrList = function(defaultCheck){
 
-		//전체 검색 막기
-		//input disabled
-		$("#searchData_"+datatableId).attr("disabled","disabled");
-	}
+		var optionList = $(".select2-selection__rendered").children("li.select2-selection__choice");
+		
+		$.each(optionList, function(index, value){
+			usrList.push($(value).children("div").data("usr-id"));
+		});
+		
+		if(defaultCheck){
+			if(usrList.length == 0){
+				usrList.push($.osl.user.userInfo.usrId);
+			}
+		}
+	};
+	
+	/**
+	 * atchFileId 생성 완료 시 메시지 보내기 시작
+	 */
+	var submitInsertAction = function(){
+		//formData
+   		var fd = $.osl.formDataToJsonArray(formId);
+
+   		fd.append("idList", JSON.stringify(usrList));
+   		
+       	//파일 목록 추가하기
+       	fd.append("fileHistory",JSON.stringify(fileUploadObj.getFiles()));
+       	
+      	//파일명 뒤에 ms 붙이기
+		$.each(fileUploadObj.getFiles(), function(idx, map){
+			map.meta.atchFileId = $("#atchFileId").val();
+			fd.append("file",map);
+		});
+      	
+		//AJAX 설정
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/cmm/cmm10000/cmm16000/insertArm1000AlarmInfoAjax.do'/>"
+   			, "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false}
+			,fd);
+
+   		//AJAX 전송 성공 함수
+   		ajaxObj.setFnSuccess(function(data){
+   			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//등록 성공
+   				$.osl.toastr(data.message);
+
+   				//목록 재조회
+   				OSLCmm16000Popup.reload();
+   			
+   				//모달 창 닫기
+   				$.osl.layerPopupClose();
+   				
+   			}
+   		});
+   		
+   		//AJAX 전송
+   		ajaxObj.send();
+	};
 	
 	return {
         // public functions
         init: function() {
         	documentSetting();
-        },
-        reload: function(){
-			//datatable 조회
-			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-        	checkNotRead();
         }
         
     };
 }();
 
 $.osl.ready(function(){
-	OSLCmm16000Popup.init();
+	OSLCmm16001Popup.init();
 });
 </script>
 <!-- end script -->
-<jsp:include page="/WEB-INF/jsp/lunaops/bottom/footer.jsp" />

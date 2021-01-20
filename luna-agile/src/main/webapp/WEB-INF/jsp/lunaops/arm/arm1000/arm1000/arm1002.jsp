@@ -29,7 +29,7 @@
 				<div class="form-group kt-margin-t-10 form-group-last">
 					<label>
 						<i class="fa fa-file-upload kt-margin-r-5"></i>
-						<span data-lang-cd="">첨부 파일</span> 
+						<span data-lang-cd="cmm16002.label.attachments">첨부 파일</span> 
 					</label>
 					<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 						<div class="kt-uppy__dashboard"></div>
@@ -41,7 +41,7 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="arm1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="">답장</span></button>
+	<button type="button" class="btn btn-brand" id="arm1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="cmm16002.button.reSend">답장</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
@@ -73,7 +73,8 @@ var OSLCmm16002Popup = function () {
 	
 	var documentSetting = function(){
 		
-		var formId = 'frCmm16002';
+		//문구 세팅 
+    	$("#arm1002InsertSubmit > span").text($.osl.lang("cmm16002.button.reSend"));
 		
 		armId = $("#armId").val();
 		
@@ -88,7 +89,7 @@ var OSLCmm16002Popup = function () {
 				};
 			var options = {
 					idKey: "reInsert_"+armId,
-					modalTitle: "메시지 답장",
+					modalTitle: $.osl.lang("cmm16002.title"),
 					closeConfirm: false,
 					autoHeight:false,
 				};
