@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <form class="kt-form" id="frStm9101">
+	<input type="hidden" name="callView" id="callView" value="${param.callView}">
 	<input type="hidden" name="type" id="type" value="${param.type}">
 	<input type="hidden" name="paramJenId" id="paramJenId" value="${param.paramJenId}">
 	<input type="hidden" name="paramJobId" id="paramJobId" value="${param.paramJobId}">
@@ -18,7 +19,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm9101.label.jobRestoreId">원복 JOB ID</span></label>
+				<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm9101.label.jobRestoreId">원복 JOB ID</span></label>
 				<select class="form-control kt-select2" id="jobRestoreId" name="jobRestoreId">
 				</select>
 			</div>
@@ -64,6 +65,8 @@ var OSLStm9101Popup = function () {
 	
 	var formId = 'frStm9101';
 	var type = $("#type").val();
+	// Job 등록&수정 팝업 호출 화면
+	var callView = $("#callView").val();
 	
 	// 데이터테이블에서 넘어온 jenId, jobId
 	var paramJenId = $("#paramJenId").val();
@@ -108,7 +111,7 @@ var OSLStm9101Popup = function () {
     	//수정인경우
     	if(type == "update"){
     		// Job 정보 조회
-    		selectJobInfo(paramJenId, paramJobId);
+    		fnSelectJobInfo(paramJenId, paramJobId);
     	}
     	
     	// jenkins 선택 변경
@@ -164,6 +167,7 @@ var OSLStm9101Popup = function () {
 					$.each(jenList, function(idx, jenMap){
 						
 						var selectStr = "";
+						
 						// 수정일 경우
 						if(type == "update"){
 							// 현재 수정대상 job의 jenkins 만 목록에 표시
@@ -171,13 +175,20 @@ var OSLStm9101Popup = function () {
 								jenAppendStr = "<option value='" + jenMap.jenId + "' selected data-jen-usr-id='"+jenMap.jenUsrId+"' data-jen-usr-tok='"+jenMap.jenUsrTok+"'data-jen-url='"+jenMap.jenUrl+"' >" + jenMap.jenNm + " (" + jenMap.jenUrl + ")" + "</option>";
 							}
 						}else{
-							jenAppendStr += "<option value='" + jenMap.jenId + "' data-jen-usr-id='"+jenMap.jenUsrId+"' data-jen-usr-tok='"+jenMap.jenUsrTok+"'data-jen-url='"+jenMap.jenUrl+"' >" + jenMap.jenNm + " (" + jenMap.jenUrl + ")" + "</option>";
+							jenAppendStr += "<option value='" + jenMap.jenId + "' data-jen-usr-id='"+jenMap.jenUsrId+"' data-jen-usr-tok='"+jenMap.jenUsrTok+"'data-jen-url='"+jenMap.jenUrl+"' "+selectStr+">" + jenMap.jenNm + " (" + jenMap.jenUrl + ")" + "</option>";
 						}
 					});
 				}
 				
 				// 조회한 목록을 select2에 세팅한다.
 				$("#jenId").html(jenAppendStr);
+				
+				// jenkins 상세보기에서 job등록 팝업 호출 시
+				if(callView == "stm9002"){
+					// jenkins 선택
+					$("#jenId").val(paramJenId).trigger('change.select2');
+					$("#jenId").change();
+				}
 			}	
 		});
 		
@@ -186,7 +197,7 @@ var OSLStm9101Popup = function () {
     }
     
      // Job 정보 단건 조회
-	var selectJobInfo = function(paramJenId, paramJobId) {
+	var fnSelectJobInfo = function(paramJenId, paramJobId) {
     	
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
@@ -280,12 +291,23 @@ var OSLStm9101Popup = function () {
 	    				//모달 창 닫기
 	    				$.osl.layerPopupClose();
 	    				
-	    				if(type == "insert"){
-		    				//datatable 조회 - 등록일 경우
-		    				$("button[data-datatable-id=stm9100JobTable][data-datatable-action=select]").click();
+	    				// Jenkins 상세보기에서 job 등록&수정 팝업을 호출했을 경우
+	    				if(callView == "stm9002"){
+	    					// 넘어온 jenkins id와 현재 선택한 jenkins id가 일치할 경우
+	    					if(paramJenId == $("#jenId").val()){
+	    						// jenkins 상세보기 우측 job 목록 재조회
+		    					OSLStm9002Popup.selectJenkinsDetailInfo();
+	    					}
+	    					
+	    				// Jenkins job 생성관리 화면에서 job 등록&수정할 경우
 	    				}else{
-	    					// 수정시 현재페이지 유지한채로 재조회
-	    					$.osl.datatable.list["stm9100JobTable"].targetDt.reload();	
+	    					if(type == "insert"){
+			    				//datatable 조회 - 등록일 경우
+			    				$("button[data-datatable-id=stm9100JobTable][data-datatable-action=select]").click();
+		    				}else{
+		    					// 수정시 현재페이지 유지한채로 재조회
+		    					$.osl.datatable.list["stm9100JobTable"].targetDt.reload();	
+		    				}
 	    				}
 	    			}
 	    		});
@@ -383,6 +405,7 @@ var OSLStm9101Popup = function () {
     					
     					// job 목록 loop
     					$.each(jobRestoreList,function(idx, map){
+    						
     						// Id담기
     						jobArray.push(map.jobId); // 이미 등록된 job인지 체크하기 위한 값
     						jobRestoreArray.push(map.jobRestoreId);
@@ -395,7 +418,7 @@ var OSLStm9101Popup = function () {
     						if(map.jobTypeCd == "03"){
     							var selectStr = "";
     							//현재 선택된 JOB ID를 제외
-    							if(paramJobInfo.jobRestoreId != map.jobId){
+    							if(!$.osl.isNull(paramJobInfo) && paramJobInfo.jobRestoreId != map.jobId){
     								//이미 원복 ID로 지정된 JOB은 제외
     								if(jobRestoreArray.indexOf(map.jobId) != -1){
     									return true;
@@ -439,6 +462,12 @@ var OSLStm9101Popup = function () {
     			// 조회한 job 목록을 select2에 세팅한다.
 				$("#jobId").html(jobAppendStr);
     			
+				// jenkins 상세보기에서 job등록 팝업 호출 시
+				if(callView == "stm9002"){
+					// job 선택
+					$("#jobId").val(paramJobId).trigger('change.select2');
+				}
+    			
     		});
     		
     		//AJAX 전송
@@ -446,11 +475,6 @@ var OSLStm9101Popup = function () {
     	}
     	
     };
-    
-    // 입력영역 및 버튼 활성&비활성
-    var fnElementActivate = function(isActive){
-    	
-    }
 	
     return {
         // public functions

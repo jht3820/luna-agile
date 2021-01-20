@@ -200,7 +200,7 @@
 	<update id="stm9100DAO.updateJen9100JenkinsJobRestoreInfo" parameterClass="java.util.Map">
 		
 		<![CDATA[
-			UPDATE JEN1100 SET
+			UPDATE STM9001 SET
 				JOB_RESTORE_ID = null
 			WHERE 1=1
 			AND	LIC_GRP_ID 		= #licGrpId#

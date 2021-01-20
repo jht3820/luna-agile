@@ -139,19 +139,16 @@ var OSLStm9000 = function () {
 				},
 				// jenkins 상세정보 확인
 				"dblClick":function(rowData, datatableId, type, rowNum, elem){
-					console.log("dblClick : ", rowData);
 					
 					var data = {
 							paramJenId: rowData.jenId,
-							paramJenNm: rowData.jenNm,
-							paramJenUrl: rowData.jenUrl,
-							paramJenUsrId: rowData.jenUsrId,
-							paramJenUsrTok: rowData.jenUsrTok
+							paramJenNm: rowData.jenNm
 					};
 					var options = {
 							idKey: datatableId +"_"+ rowData.jenId,
-							modalTitle: $.osl.lang("stm9000.modal.jeknins.detailJenkins"),
-							closeConfirm: false
+							modalTitle: "["+ rowData.jenNm + "] " + $.osl.lang("stm9000.modal.jeknins.detailJenkins"),
+							closeConfirm: false,
+							modalSize: "xl"
 						};
 					
 					$.osl.layerPopupOpen('/stm/stm9000/stm9000/selectStm9002View.do',data,options);

@@ -142,7 +142,7 @@ var OSLStm9100 = function () {
 					
 					// 선택 job 삭제
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/stm/stm9000/stm9000/deleteStm9000JobInfoAjax.do'/>"}
+							{"url":"<c:url value='/stm/stm9000/stm9100/deleteStm9100JobInfoAjax.do'/>"}
 							,{deleteDataList: JSON.stringify(rowDatas)});
 					//AJAX 전송 성공 함수
 					ajaxObj.setFnSuccess(function(data){

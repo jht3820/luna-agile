@@ -1041,21 +1041,39 @@ var OSLCoreLangSetting = function () {
 		},
 		stm9002:{
 			label:{
+				leftTitle: "JENKINS 정보",
+				rightTitle: "JOB 정보",
 				jenkinsName : "JENKINS NAME",
 				jenkinsUrl : "JENKINS URL",
-				jenkinsUserId : "USER ID",
+				jenkinsUserId : "JENKNS USER ID",
 				tokenKey: "TOKEN KEY",
-				jenkinsUseCd : "사용여부",
-				jenkinsDesc : "JENKINS 설명",
+				jenkinsUse : "사용 유무",
+				mode : "mode",
+				jenkinsClass : "_class",
+				jenkinsDescription : "description",
+				jenkinsNodeName : "nodeName",
+				jenkinsNodeDesc : "nodeDescription",
+				statusLable :"상태",
+				systemRegisterLabel :"시스템 등록 유무",
+				systemRegister : "등록",
+				notSstemRegister : "미등록",
+				jobClass : "_class",
+				jobStatusEtc : "ETC",
+				jobStatusSuccess : "SUCCESS",
+				jobStatusFail : "FAIL",
+				jobStatusAborted : "ABORTED",
+				jobStatusNotBuilt : "NOT BUILT"
 			},
 			button:{
-				insert : "작성 완료",
-				update : "수정 완료"
+				jobUpdate : "수정",
+				jobDelete : "삭제",
+				jobDetail : "상세 정보",
+				jobInsert : "신규 JOB 등록",
+				moveJobList : "JOB 목록 이동"
 			},
 			message:{
 				confirm:{
-					insert:"신규 JENKINS를 등록하시겠습니까?",
-					update:"JENKINS 정보를 수정하시겠습니까?"
+					deleteMessage :"를 삭제하시겠습니까?"
 				}
 			}
 		},
