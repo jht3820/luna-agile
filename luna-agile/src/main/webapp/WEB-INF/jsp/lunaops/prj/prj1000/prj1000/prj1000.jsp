@@ -92,15 +92,14 @@ var OSLPrj1000Popup = function () {
 				],
 				actionBtn:{
 					"dblClick": true,
-					"update": false,
-					"delete": false,
+					"update": true,
+					"delete": true,
 					"title": $.osl.lang("datatable.action.functionNm"),
-					"width": 100,
 				},
 				actionTooltip:{
-					"dblClick": "상세 정보",
-					"update": "프로젝트 그룹 수정",
-					"delete": "프로젝트 그룹 삭제"
+					"dblClick": $.osl.lang("prj1000.datatable.action.dblClick"),
+					"update": $.osl.lang("prj1000.datatable.action.update"),
+					"delete": $.osl.lang("prj1000.datatable.action.delete")
 				},
 				actionFn:{
 					"insert":function(datatableId, type, rowNum){

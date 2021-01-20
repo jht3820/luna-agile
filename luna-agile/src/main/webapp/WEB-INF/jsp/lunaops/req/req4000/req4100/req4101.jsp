@@ -461,11 +461,11 @@ var OSLReq4101Popup = function () {
     		},
     		columns:[
     			{field:'rn', title:'No.', textAlign:'center', width: 50},
-    			{field:'reqProTypeNm', title:$.osl.lang("req4101.prepData.field.reqProTypeNm"), textAlign:'center', width: 80},
-    			{field:'reqOrd', title:$.osl.lang("req4101.prepData.field.reqOrd"), textAlign:'left', width: 80, autoHide:false},
-    			{field:'prjNm', title:$.osl.lang("req4101.prepData.field.prjNm"), textAlign:'left', width: 180},
-    			{field:'reqNm', title:$.osl.lang("req4101.prepData.field.reqNm"), textAlign:'left', width: 240, autoHide:false, search: true},
-    			{field:'reqDtm', title:$.osl.lang("req4101.prepData.field.reqDtm"), textAlign:'center', width: 180},
+    			{field:'reqProTypeNm', title:'처리유형', textAlign:'center', width: 80},
+    			{field:'reqOrd', title:'순번', textAlign:'left', width: 80, autoHide:false},
+    			{field:'prjNm', title:'프로젝트명', textAlign:'left', width: 180},
+    			{field:'reqNm', title:'요구사항명', textAlign:'left', width: 240, autoHide:false, search: true},
+    			{field:'reqDtm', title:'요청일', textAlign:'center', width: 180},
     		],
     		actionBtn:{
     			title : $.osl.lang("req4101.prepData.button.detailBtn"),
@@ -664,7 +664,7 @@ var OSLReq4101Popup = function () {
 	    	$("#reqDtm").val(new Date().format("yyyy-MM-dd"));
 	    	
 	    	//edit 세팅
-	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 	    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 	    		toolbar: false,
     			disableResizeEditor: false,
@@ -832,7 +832,7 @@ var OSLReq4101Popup = function () {
 				}
 		    	
 		    	//edit 세팅
-		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,

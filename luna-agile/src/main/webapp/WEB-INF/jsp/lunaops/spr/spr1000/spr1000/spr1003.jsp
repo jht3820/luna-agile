@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- begin page DOM -->
-<form class="kt-form" id="spr1003">
+<form class="kt-form" id="frSpr1003">
+	<input type="hidden" name="modalId" id="modalId" value="${param.modalId}">
+	<input type="hidden" name="paramPrjGrpId" id="paramPrjGrpId" value="${param.paramPrjGrpId}">
+	<input type="hidden" name="paramPrjId" id="paramPrjId" value="${param.paramPrjId}">
+	<input type="hidden" name="paramSprId" id="paramSprId" value="${param.paramSprId}">
 	<div class="kt-portlet__body">
 		<div class="osl-wizard" id="kt_wizard_v3" data-ktwizard-state="step-first">
 			<!--begin: Form Wizard Nav -->
@@ -56,24 +60,24 @@
 			<!--end: Form Wizard Nav -->
 			
 				<!-- begin:: 1. 회의록 작성 스프린트 회의록 작성 -->
-				<div class="osl-wizard__content w-100 osl-h-px--500 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content" data-ktwizard-state="current">
+				<div class="osl-wizard__content osl-min-h-px--700 w-100 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content" data-ktwizard-state="current">
 					<div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-12" data-select2-id="42">
 							<div class="form-group">
 								<label><i class="fa fa-user-friends kt-margin-r-5"></i>참여 인원</label>
 								<select class="form-control kt-select2 select2-hidden-accessible" id="sprConferenceUsr" name="state[]" multiple="multiple" data-select2-id="sprConferenceUsr" tabindex="-1" aria-hidden="true">
 									<!-- ex)  selected="" 여부 :: 이미 태그가 추가 되어있는 경우 -->
-									<option value="" selected=""  data-select2-id="">정형택</option>
-									<option value="" data-select2-id="">김정환</option>
-									<option value="" data-select2-id="">진주영</option>
-									<option value="" data-select2-id="">김민주</option>
-									<option value="" data-select2-id="">배용진</option>
-									<option value="" data-select2-id="">노민준</option>
-									<option value="" data-select2-id="">안지혜</option>
-									<option value="" data-select2-id="">김정환</option>
-									<option value="" data-select2-id="">오현경</option>
-									<option value="" data-select2-id="">최호현</option>
-									<option value="" data-select2-id="">박현두</option>
+									<option value="1" data-select2-id="a">정형택</option>
+									<option value="2" data-select2-id="b">김정환</option>
+									<option value="3" data-select2-id="c">진주영</option>
+									<option value="4" data-select2-id="d">김민주</option>
+									<option value="5" data-select2-id="e">배용진</option>
+									<option value="6" data-select2-id="f">노민준</option>
+									<option value="7" data-select2-id="g">안지혜</option>
+									<option value="8" data-select2-id="h">김정환</option>
+									<option value="9" data-select2-id="i">오현경</option>
+									<option value="10" data-select2-id="j">최호현</option>
+									<option value="11" data-select2-id="k">박현두</option>
 								</select>
 							</div>
 						</div>
@@ -95,7 +99,7 @@
 				</div>
 				<!-- end:: 1. 회의록 작성 스프린트 회의록 작성 -->
 				<!-- begin:: 2. 스토리 포인트 입력 요구사항 스토리 포인트 입력 -->
-				<div class="osl-wizard__content w-100 osl-h-px--500 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
+				<div class="osl-wizard__content osl-min-h-px--700 w-100 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
 					<div class="row kt-margin-t-20">
 						<div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12 kt-margin-b-20">
 							<div class="input-group">
@@ -128,7 +132,7 @@
 				</div>
 				<!-- end:: 2. 스토리 포인트 입력 요구사항 스토리 포인트 입력 -->
 				<!-- begin:: 3. 담당자 지정 요구사항 담당자 지정 -->
-				<div class="osl-wizard__content w-100 osl-h-px--500 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
+				<div class="osl-wizard__content w-100 osl-min-h-px--700 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
 					<div class="row kt-margin-t-20">
 						<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
 							<div class="input-group kt-margin-b-20">
@@ -404,7 +408,7 @@
 				</div>
 				<!-- end:: 3. 담당자 지정 요구사항 담당자 지정  -->
 				<!-- begin:: 4. 프로세스 배정 -->
-				<div class="osl-wizard__content w-100 osl-h-px--500 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
+				<div class="osl-wizard__content osl-min-h-px--700  w-100 kt-bg-light kt-padding-20 kt-padding-l-40-desktop kt-padding-r-40-desktop" data-ktwizard-type="step-content">
 					<div class="row kt-margin-t-20">
 						<!-- begin:: 4-1. 배정 프로세스 데이터 테이블 -->
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-l-20 kt-padding-r-20 osl-mobile-padding-lr-10">
@@ -501,11 +505,10 @@ var OSLSpr1003Popup = function () {
 		var formValidate = $.osl.validate(formId);
 		
 		//edit 세팅
-    	formEditList.push($.osl.editorSetting("sprStartText", {formValidate: formValidate,height:160, 'minHeight': 160, 'maxHeight': 160}));
-		
-    	
+    	formEditList.push($.osl.editorSetting("sprStartText", {formValidate: formValidate, 'minHeight': 300, disableResizeEditor: false}));
 		
 		function userImgFormatState(state){
+			console.log(state);
 			  var $state = $(
 					'<div class="kt-user-card-v2 btn">'
 						+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
@@ -539,12 +542,15 @@ var OSLSpr1003Popup = function () {
 			  return $state;
 		};
 		
+		//modalId
+		var modalId = $("#modalId").val();
+		
     	$('#sprConferenceUsr').select2({
     		//select세팅
     		templateResult: userImgFormatState,
     		//tag세팅
-    		templateSelection: userImgTagFormatState
-    	});		
+    		templateSelection: userImgTagFormatState,
+    	});
 		
 		// begin :: sortable
 		//스프린트 시작 > 담당자 지정 drag이벤트 
@@ -567,7 +573,7 @@ var OSLSpr1003Popup = function () {
 		
 		// begin :: 마법사
 		//마법사 세팅
-		var wizard = new KTWizard('osl-spr1003', {
+		var wizard = new KTWizard('frSpr1003', {
 			startStep: 1, 
 			clickableSteps: true		
 		});
@@ -600,12 +606,11 @@ var OSLSpr1003Popup = function () {
 	};
 	
 	var tagremove = function(){
-
-		
 		$('.osl-tagify__tag__removeBtn').click(function(){
 			$(this).parent().remove();
 		});
 	}
+	
 	var datatableSetting2 = function(){
 		// begin:: 2. 스토리 포인트 입력 요구사항 스토리 포인트 입력 데이터테이블
 		$.osl.datatable.setting("sprAssignReqTable",{
@@ -616,7 +621,7 @@ var OSLSpr1003Popup = function () {
 						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
 					}
 				},
-				 pageSize : 5,
+				 pageSize : 10,
 			},
 			toolbar:{
 				 items:{

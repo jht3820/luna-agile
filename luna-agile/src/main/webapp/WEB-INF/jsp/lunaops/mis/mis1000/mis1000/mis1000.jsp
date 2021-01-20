@@ -245,112 +245,132 @@
 </div>
 <!-- end :: 카드형 -->
 <!-- begin :: 데이터테이블형 -->
-<div class="kt_datatable osl-datatable-footer__divide" id="dpl1000Table"></div>
+<div class="kt_datatable osl-datatable-footer__divide" id="mis1000Table"></div>
 <!-- end :: 데이터테이블형 -->
 <!-- end DOM -->
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLReq1000Popup = function () {
+var OSLMis1000Popup = function () {
 	var documentSetting = function(){
-		$.osl.datatable.setting("dpl1000Table",{
+		var currentViewType = "01";
+	
+		// begin:: 그룹 요구사항 관리 데이터테이블
+		$.osl.datatable.setting("mis1000Table",{
 			data: {
 				source: {
 					read: {
-						url: "/req/req1000/req1000/selectReq1000ListAjaxView.do"
+						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
+						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
 					}
 				},
 			},
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
-				{field: 'prjNm', title: '결재 상태', textAlign: 'left', width: 70, search: true},
-				{field: 'reqOrd', title: '배포 상태', textAlign: 'left', width: 70, autoHide: false},
-				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'left', width: 70, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
-				{field: 'reqNm', title: '배포 명', textAlign: 'left', width: 300, search: true},
-				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 50, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 70, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'rn', title: 'No.', textAlign: 'center', width: 30, autoHide: false, sortable: false},
+				{field: '', title: '마일스톤 이름', textAlign: 'center', width: 300},
+				{field: '', title: '마일스톤 설명', textAlign: 'center', width: 150},
+				{field: '', title: '시작일', textAlign: 'center', width: 150},
+				{field: '', title: '종료일', textAlign: 'center', width: 150},
+				{field: '', title: '진척률', textAlign: 'center', width: 150},
+				{field: '', title: '전체 요구사항', textAlign: 'center', width: 150},
+				{field: '', title: '진행 중 요구사항', textAlign: 'center', width: 150},
+				{field: '', title: '완료 요구사항', textAlign: 'center', width: 150},
+				{field: '', title: '사용자', textAlign: 'center', width: 100}
 			],
 			actionBtn:{
-				"dblClick": true 
+				"dblClick": true
 			},
 			actionTooltip:{
-				"update": "요구사항 수정",
-				"delete": "요구사항 삭제"
+				"update": "수정",
+				"delete": "삭제",
+				"dblClick": "상세보기"
 			},
 			actionFn:{
-				"insert":function(datatableId, type, rowNum){
-					var data = {type:"insert"};
-					var options = {
-							idKey: datatableId,
-							modalTitle: $.osl.lang("req1001.title"),
-							closeConfirm: false,
-						};
-					
-					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
-				},
-				
-				"update":function(rowData, datatableId, type, rowNum, elem){
-					if(rowData.reqProType != "01"){
-						$.osl.alert('접수 요청중인 요구사항만 수정 가능합니다.');
-						return false;
-					}
+				"insert":function(datatableId){
 					var data = {
-							type:"update",
-							paramPrjId: rowData.prjId,
-							paramReqId: rowData.reqId,
-							paramReqUsrId: rowData.reqUsrId
-						};
+					};
 					var options = {
-							idKey: rowData.reqId,
-							modalTitle: $.osl.lang("req1001.title"),
-							closeConfirm: false
-						};
+						modalTitle: "마일스톤 등록",
+						modalSize: "xl",
+						autoHeight: false
+					};
 					
-					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
+					$.osl.layerPopupOpen('/mis/mis1000/mis1000/selectMis1002View.do',data,options);
 				},
-				"delete":function(rowDatas, datatableId, type, rowNum, elem){
-					//AJAX 설정
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/req/req1000/req1000/deleteReq1001ReqListAjax.do'/>"}
-							,{deleteDataList: JSON.stringify(rowDatas)});
-					//AJAX 전송 성공 함수
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-			   				$.osl.alert(data.message,{type: 'error'});
-			   			}else{
-			   				//삭제 성공
-			   				$.osl.toastr(data.message);
-			   				
-			   				//datatable 조회
-			   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-			   			}
-					});
-					
-					//AJAX 전송
-					ajaxObj.send();
-				},
-				"dblClick":function(rowData, datatableId, type, rowNum, elem){
+				"update":function(datatableId){
 					var data = {
-							type:"update",
-							paramPrjId: rowData.prjId,
-							paramReqId: rowData.reqId,
-							paramReqUsrId: rowData.reqUsrId
+					};
+					var options = {
+						modalTitle: "마일스톤 수정",
+						modalSize: "xl",
+						autoHeight: false
+					};
+					
+					$.osl.layerPopupOpen('/mis/mis1000/mis1000/selectMis1002View.do',data,options);
+				},
+				"dblClick":function(rowData){
+					var data = {
 						};
 					var options = {
-							idKey: rowData.reqId,
-							modalTitle: $.osl.lang("req1001.title"),
-							closeConfirm: false
+							modalTitle: "마일스톤 상세정보",
+							autoHeight: false,
+							modalSize: 'xl'
 						};
-					
-					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1002View.do',data,options);
+					$.osl.layerPopupOpen('/mis/mis1000/mis1000/selectMis1001View.do',data,options);
+				},
+				"prjAssign":function(rowData){
+					var data = {
+					};
+				var options = {
+						modalTitle: "마일스톤 프로세스 배정",
+						autoHeight: false,
+						modalSize: 'xl'
+					};
+					$.osl.layerPopupOpen('/mis/mis1000/mis1000/selectMis1003View.do',data,options);
+				}
+			},
+			callback:{
+				initComplete: function(evt,config){
+					fnViewerChange();
 				}
 			}
 		});
+		// end:: 그룹 요구사항 관리 데이터테이블
+		
+		//뷰 변경 이벤트
+		$(".btn-view-type").click(function(){
+			var viewType = $(this).data("view-type");
+			
+			//active 교체
+			$(".btn-view-type.active").removeClass("active");
+			$(this).addClass("active");
+			
+			currentViewType = viewType;
+			
+			//뷰어 변경
+			fnViewerChange();
+		});
+		
+		//카드형, 목록형
+		var fnViewerChange = function(){
+			//현재 viewType에 따라 show/hide
+			
+			//카드 형식
+			if(currentViewType == "01"){
+				$("#mis1000Table .kt-datatable__table").css({visibility: "hidden", height: 0});
+				$("#mis1000CardTable").show();
+			//데이터테이블 형식
+			}else{	
+				$("#mis1000CardTable").hide();
+				$("#mis1000Table .kt-datatable__table").css({visibility: "visible",height: "auto"});
+			}
+		}
+		var prjGrpStr = '';
+			
+
+		
 	};
-	
 	return {
         // public functions
         init: function() {
@@ -361,7 +381,7 @@ var OSLReq1000Popup = function () {
 }();
 
 $.osl.ready(function(){
-	OSLReq1000Popup.init();
+	OSLMis1000Popup.init();
 });
 </script>
 <!-- end script -->
