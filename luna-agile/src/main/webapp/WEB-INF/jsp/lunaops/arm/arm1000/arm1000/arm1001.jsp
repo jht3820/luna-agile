@@ -1,76 +1,156 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<form class="kt-form" id="frSpr2001" autocomplete="off">
+<form class="kt-form" id="frCmm16001" autocomplete="off">
+	<input type="hidden" name="atchFileId" id="atchFileId" value="<c:out value='${param.atchFileId}'/>">
 	<input type="hidden" name="type" id="type" value="<c:out value='${param.type}'/>">
-	<input type="hidden" name="mmtId" id="mmtId" value="<c:out value='${param.mmtId}'/>">
-	<input type="hidden" name="sprId" id="sprId" value="<c:out value='${param.sprId}'/>">
-	<input type="hidden" name="paramSprNm" id="paramSprNm" value="<c:out value='${param.sprNm}'/>">
+	<input type="hidden" name="reSendUsrId" id="reSendUsrId" value="<c:out value='${param.reSendUsrId}'/>">
 	<div class="kt-portlet">
 		<div class="kt-portlet__body">
-		<div class="form-group">
-			<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.sprNm">스프린트명</span></label>
-			<input type="text" class="form-control" name="sprNm" id="sprNm" readonly="readonly" required>
-		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
-						<span data-lang-cd="spr2001.label.mmtMem">참여 인원</span>
+						<span data-lang-cd="cmm16001.label.to">받는 사람</span>
 						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
 					</label>
-					<select class="form-control kt-select2 select2-hidden-accessible" id="mmtMemSelect" name="mmtMemSelect" multiple="" data-select2-id="mmtMemSelect" tabindex="-1" aria-hidden="true"></select>
+					<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.mmtNm">회의록 제목</span></label>
-					<input type="text" class="form-control" id="mmtNm" name="mmtNm" placeholder="제목" maxlength="80" required>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.title">제목</span></label>
+					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" required>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="form-group">
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.content">내용</span></label>
+					<textarea class="kt-hide" name="armContent" id="armContent" placeholder="내용" required></textarea>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group form-group-last">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr2001.label.mmtDesc">회의록 내용</span></label>
-					<textarea class="kt-hide" name="mmtDesc" id="mmtDesc" required></textarea>
+					<label>
+						<i class="fa fa-file-upload kt-margin-r-5"></i>
+						<span data-lang-cd="cmm16001.label.attachments">파일 첨부</span> 
+					</label>
+					<div class="kt-uppy osl-max-height-260" id="arm1001FileUpload">
+						<div class="kt-uppy__dashboard"></div>
+						<div class="kt-uppy__progress"></div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="spr2001SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="spr2001.submit">완료</span></button>
+	<button type="button" class="btn btn-brand" id="arm1001InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="cmm16001.button.submit">보내기</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLSpr2001Popup = function () {
-	var formId = 'frSpr2001';
+var OSLCmm16001Popup = function () {
+	var formId = 'frCmm16001';
+
+	//atchfileId
+	var atchFileId;
+	
+	//type
+	var type;
+
+	//답장 받을 회원 id
+	var reSendUsrId;
+	
+	//파일 업로드 세팅
+	var fileUploadObj;
 	
 	//edit 목록
 	var formEditList = [];
 	
 	//form validate 주입
 	var formValidate = $.osl.validate(formId);
-
-	//type
-	var type;
-
-	//참여 인원 id를 담을 변수 선언
+	
+	//메시지를 받는 id를 담을 변수 선언
 	var usrList = [];
 	
-	// Private functions
-    var documentSetting = function () {
+	var documentSetting = function(){
+		
+		type = $("#type").val();
+		atchFileId = $("#atchFileId").val();
+		reSendUsrId = $("#reSendUsrId").val();
+		
+		//문구 세팅 
+    	$("#arm1001InsertSubmit > span").text($.osl.lang("cmm16001.button.submit"));
     	
-    	type = $("#type").val();
+    	//placeholder 세팅
+    	$("#armTitle").attr("placeholder", $.osl.lang("cmm16001.placeholder.armTitle"));
+    	$("#armContent").attr("placeholder", $.osl.lang("cmm16001.placeholder.armContent"));
     	
-    	//kt-select2 설정
-		$('#mmtMemSelect').select2({
-			placeholder : $.osl.lang("spr2001.placeholder.select2") + "("+$.osl.lang("spr2001.message.select2")+")",
+		//파일 업로드 세팅
+    	fileUploadObj = $.osl.file.uploadSet("arm1001FileUpload",{
+    		url: '/cmm/cmm10000/cmm16000/insertArm1000AlarmAtchFileInfo.do',
+    		maxFileSize: "${requestScope.fileSumMaxSize}",
+    		meta: {"atchFileId": atchFileId, "fileSn": 0},
+    		maxNumberOfFiles:20,
+    		height: 260,
+    		
+    		//submit 전 실행 함수
+    		onBeforeUpload: function(files){
+    			var rtnValue = files;
+    			var uploadFiles = {};
+    			
+    			//atchFileId 생성
+				$.osl.file.makeAtchfileId(function(data){
+					if(data.errorYn == "Y"){
+						$.osl.toastr(data.message);
+						rtnValue = [];
+					}else{
+						atchFileId = data.atchFileIdString;
+						$("#atchFileId").val(data.atchFileIdString);
+					 	fileUploadObj.setMeta({atchFileId: data.atchFileIdString});
+					 
+						//파일명 뒤에 ms 붙이기
+	    				$.each(files, function(idx, map){
+	    					map.meta.atchFileId = data.atchFileIdString;
+	    					
+	    					var jsonTmp = {};
+							jsonTmp[map.id] = map;
+							uploadFiles = $.extend(uploadFiles, jsonTmp);
+	    				});
+						
+   						//요구사항 등록
+   						submitInsertAction();
+   					}
+				});
+			},
+			//uppy에 파일 업로드 할 때
+			onBeforeFileAdded: function(currentFile, files){
+				//등록 수정
+				//추가로 등록한 파일인 경우(삭제되지 않은 업로드 파일)
+				if(currentFile.source != "database" && currentFile.source != "remove"){
+					var newNm = new Date().format("ssms")+"_"+currentFile.name;
+					currentFile.name = newNm;
+					currentFile.meta.name = newNm;
+					currentFile.meta.atchFileId = $("#atchFileId").val();
+					
+	    			//fileSn default
+	    			var fileSn = fileUploadObj.getState().meta.fileSn;
+	    			currentFile.meta.fileSn = fileSn;
+	    			fileUploadObj.setMeta({fileSn: (fileSn+1)});
+				}
+			}
+		});
+		
+		//kt-select2 설정
+		$('#forUsrSelect').select2({
+			placeholder : $.osl.lang("cmm16001.placeholder.select2"),
 			//option list 렌더링
 			templateResult: optionFormatState,
 			//tag 렌더링
@@ -78,13 +158,13 @@ var OSLSpr2001Popup = function () {
 			//검색
 	        matcher: matchCustom,
 			//드롭다운 위치 지정
-			dropdownParent: $("#frSpr2001"),
+			dropdownParent: $("#"+formId),
 			//스크롤 충돌 방지
 			ftScrollUse: false,
 		});
-
+		
 		//select2 클릭 이벤트
-		$('#mmtMemSelect').on('select2:close', function (evt) {
+		$('#forUsrSelect').on('select2:close', function (evt) {
 	        var count = $(this).select2('data').length;
 	        if(count==0){
 				$("#memCnt").text("0");
@@ -95,54 +175,46 @@ var OSLSpr2001Popup = function () {
 	        	$("#memCnt").removeClass("kt-hide");
 	        }
 		});
+
+		$("#memCnt").text(0);
 		
-    	//문구 세팅 
-    	$("#spr2001SaveSubmit > span").text($.osl.lang("spr2001.button."+type+"Btn"));
-    	
-    	//placeholder 세팅
-    	$("#mmtNm").attr("placeholder", $.osl.lang("spr2001.placeholder.mmtNm"));
-
-    	//등록인경우
-    	if(type == "insert"){
-    		//선택한 스프린트 id에 해당하는 이름으로 지정
-    		$("#sprNm").val($("#paramSprNm").val());
-
-    		$("#memCnt").text(0);
-    		
-    		//사용자 리스트 세팅
-        	selectUsrList();
-        	
-    		//edit 세팅
-    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate, 'minHeight': 190, disableResizeEditor: false}));
-	    	//edit 세팅하고 나서 textarea 보이기
-	    	$("#mmtDesc").removeClass("kt-hide");
-    	
-    	}else{
-    		//수정
-    		//스프린트 회의록 정보 조회 및 세팅
-    		selectSprMmtInfo();
-    	}
+		//사용자 리스트 세팅
+		if(type=="insert"){
+	    	selectUsrList();
+		}else{
+			//답장일 때
+			selectUsrList(reSendUsrId);
+		}
+		
+    	//edit 세팅
+		formEditList.push($.osl.editorSetting("armContent", {formValidate: formValidate,height:190, 'minHeight': 190, disableResizeEditor: false}));
+    	//edit 세팅하고 나서 textarea 보이기
+    	$("#armContent").removeClass("kt-hide");
     	
     	//submit 동작
-    	$("#spr2001SaveSubmit").click(function(){
+    	$("#arm1001InsertSubmit").click(function(){
 			var form = $('#'+ formId);    		
 			
 			//폼 유효 값 체크
     		if (!form.valid()) {
     			return false;
     		}
-    		
-    		$.osl.confirm($.osl.lang("spr2001.saveString."+type+"Str"),null,function(result) {
+			
+			//받는 사람이 있는지 확인
+			addUsrList(false);
+			
+			if(usrList.length==0){
+				$.osl.alert($.osl.lang("cmm16001.message.inputToUser"));
+				return false;
+			}
+
+			$.osl.confirm($.osl.lang("cmm16001.message.send"),null,function(result) {
     	        if (result.value) {
-    	        	if(type=="insert"){
-    	        		submitInsertAction();
-    	        	}else{
-    	        		submitUpdateAction();
-    	        	}
+    	        	fileUploadObj.upload();
     	        }
     		});
     	});
-    };
+	};
 
     /**
     * kt-select2 옵션
@@ -240,7 +312,7 @@ var OSLSpr2001Popup = function () {
 	var selectUsrList = function(selectedUsrList){
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2001MmtUsrListAjax.do'/>", "async":"true"});
+				{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmUsrListAjax.do'/>", "async":"true"});
 		
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
@@ -259,21 +331,14 @@ var OSLSpr2001Popup = function () {
 								cardBtn: "osl-width__fit-content"
 							}
 					};
-					
 					var str = '';
-					if(selectedUsrList != null && selectedUsrList.length>0){
-						//등록된 참여 인원이 있으므로
-						$("#memCnt").text(selectedUsrList.length);
+					if(selectedUsrList != null && selectedUsrList != ""){
+						//답장 상대가 있으므로
+						$("#memCnt").text(1);
 	        			$("#memCnt").removeClass("kt-hide");
 	        	
-						//수정 시 이미 등록된 참여인원인지 확인
-						var check = false;
-						$.each(selectedUsrList, function(index, item){
-							if(item.usrId === value.usrId){
-								check = true;
-							}
-						});
-						if(check){
+						//답장인 경우 사용자 세팅에 해당 사용자 자동 입력
+						if(value.usrId === selectedUsrList){
 							str = '<option selected="selected" value="' + value.usrId + '" data-usr-nm="'+value.usrNm+'" data-usr-img-id="'+value.usrImgId+'" data-usr-email="'+value.email+'">' 
 									+ value.usrNm
 								+ '</option>';
@@ -288,7 +353,7 @@ var OSLSpr2001Popup = function () {
 								+ '</option>';
 					}
 					
-					$("#mmtMemSelect").append(str);
+					$("#forUsrSelect").append(str);
 				});
 			}
 		});
@@ -296,136 +361,7 @@ var OSLSpr2001Popup = function () {
 		ajaxObj.send();
 	};
 	
-    /**
-	 * 	스프린트 회의록 정보 조회
-	 */
-	 var selectSprMmtInfo = function() {
-    	var data = {
-    			mmtId :  $("#mmtId").val(),
-    			sprId :  $("#sprId").val(),
-    	};
-
-		//AJAX 설정
-		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/spr/spr2000/spr2000/selectSpr2000MmtInfoAjax.do'/>", "async":"true"}
-				,data);
-		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data){
-			if(data.errorYn == "Y"){
-				$.osl.alert(data.message,{type: 'error'});
-
-				//모달 창 닫기
-				$.osl.layerPopupClose();
-			}else{
-				//수정할때 호출
-		    	$.osl.setDataFormElem(data.mmtInfo,"frSpr2001");
-		
-				//참여 인원 정보 넣기
-				var mmtMemList = data.mmtMemList;
-				selectUsrList(mmtMemList);
-								
-	    		//edit 세팅
-	    		formEditList.push($.osl.editorSetting("mmtDesc", {formValidate: formValidate, 'minHeight': 190, disableResizeEditor: false}));
-	    		//edit 세팅하고 나서 textarea 보이기
-		    	$("#mmtDesc").removeClass("kt-hide");
-			}
-		});
-		
-		//AJAX 전송
-		ajaxObj.send();
-	};
-    
 	/**
-	 * 	스프린트 회의록 등록
-	 */
-    var submitInsertAction = function(){
-    	var form = $('#'+formId);    		
-    	
-		//폼 유효 값 체크
-		if (!form.valid()) {
-			return;
-		}
-
-       	//formData
-   		var fd = $.osl.formDataToJsonArray(formId);
-       	
-       	//회의 참여자 목록 가져오기
-		addUsrList(true);
-       	fd.append("idList", JSON.stringify(usrList));
-       	
-       	//작성자 정보 넣기
-       	fd.append("mmtUsrId", $.osl.user.userInfo.usrId);
-
-		//AJAX 설정
-   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/spr/spr2000/spr2000/insertSpr2001MmtInfoAjax.do'/>"
-   			, "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false}
-			,fd);
-
-   		//AJAX 전송 성공 함수
-   		ajaxObj.setFnSuccess(function(data){
-   			if(data.errorYn == "Y"){
-   				$.osl.alert(data.message,{type: 'error'});
-   			}else{
-   				//등록 성공
-   				$.osl.toastr(data.message);
-
-   				//모달 창 닫기
-   				$.osl.layerPopupClose();
-   				
-   				//전체 목록 재조회
-   				OSLSpr1100Popup.reload();
-   			}
-   		});
-   		
-   		//AJAX 전송
-   		ajaxObj.send();
-    };
-    
-    /**
-	 * 	스프린트 회의록 수정
-	 */
-    var submitUpdateAction = function(){
-		var form = $('#'+formId);    		
-    	
-		//폼 유효 값 체크
-		if (!form.valid()) {
-			return;
-		}
-
-       	//formData
-   		var fd = $.osl.formDataToJsonArray(formId);
-
-       	//회의 참여자 목록 가져오기
-		addUsrList(true);
-       	fd.append("idList", JSON.stringify(usrList));
-
-       	//AJAX 설정
-   		var ajaxObj = new $.osl.ajaxRequestAction(
-   				{"url":"<c:url value='/spr/spr2000/spr2000/updateSpr2001MmtInfoAjax.do'/>"
-   					, "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false}
-   				,fd);
-
-   		//AJAX 전송 성공 함수
-   		ajaxObj.setFnSuccess(function(data){
-   			if(data.errorYn == "Y"){
-   				$.osl.alert(data.message,{type: 'error'});
-   			}else{
-   				//등록 성공
-   				$.osl.toastr(data.message);
-
-   				//모달 창 닫기
-   				$.osl.layerPopupClose();
-   				
-   				//전체 목록 재조회
-   				OSLSpr2000Popup.reload();
-   			}
-   		});
-   		
-   		//AJAX 전송
-   		ajaxObj.send();
-    };
-    
-    /**
 	* function 명 	: addUsrList
 	* function 설명	: 참여 인원 리스트 전달
 	* param : defaultCheck 넘길 리스트가 null일 때 현재 사용자 정보 넣을지 확인(필요 true, 필요 없음false)
@@ -444,19 +380,62 @@ var OSLSpr2001Popup = function () {
 			}
 		}
 	};
+	
+	/**
+	 * atchFileId 생성 완료 시 메시지 보내기 시작
+	 */
+	var submitInsertAction = function(){
+		//formData
+   		var fd = $.osl.formDataToJsonArray(formId);
 
+   		fd.append("idList", JSON.stringify(usrList));
+   		
+       	//파일 목록 추가하기
+       	fd.append("fileHistory",JSON.stringify(fileUploadObj.getFiles()));
+       	
+      	//파일명 뒤에 ms 붙이기
+		$.each(fileUploadObj.getFiles(), function(idx, map){
+			map.meta.atchFileId = $("#atchFileId").val();
+			fd.append("file",map);
+		});
+      	
+		//AJAX 설정
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/cmm/cmm10000/cmm16000/insertArm1000AlarmInfoAjax.do'/>"
+   			, "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false}
+			,fd);
+
+   		//AJAX 전송 성공 함수
+   		ajaxObj.setFnSuccess(function(data){
+   			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//등록 성공
+   				$.osl.toastr(data.message);
+
+   				//목록 재조회
+   				OSLCmm16000Popup.reload();
+   			
+   				//모달 창 닫기
+   				$.osl.layerPopupClose();
+   				
+   			}
+   		});
+   		
+   		//AJAX 전송
+   		ajaxObj.send();
+	};
+	
 	return {
         // public functions
         init: function() {
         	documentSetting();
-        },
+        }
+        
     };
 }();
 
-// Initialization
 $.osl.ready(function(){
-	OSLSpr2001Popup.init();
+	OSLCmm16001Popup.init();
 });
-
-	
 </script>
+<!-- end script -->
