@@ -387,6 +387,30 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 		},
+		prj5001:{
+			complete: "완료",
+			insert:{
+				title: "프로젝트 일정 저장",
+				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "프로젝트 일정 수정",
+				saveString: "프로젝트 일정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			},
+			actionBtn : {
+				insertBtn : "프로젝트 일정 저장",
+				updateBtn : "프로젝트 일정 수정"
+			},
+			label : {
+				evtNm: "일정명",
+				evtRange: "일정 일자",
+				evtDesc: "일정 설명",
+				evtBgColor: "일정 배경 색상",
+				evtColor: "일정 색상",
+			}
+		},
 		req1001:{
 			title: "신규 요구사항 요청",
 			reqUser:{
@@ -999,7 +1023,8 @@ var OSLCoreLangSetting = function () {
 			},
 			message:{
 				job:{
-					nonSelect:"Job 정보를 추가 할 Jenkins를 선택해주세요."
+					nonSelect:"접속 확인할 Job을 선택해주세요.",
+					connectSuccess:" 접속 성공"
 				}
 			}
 		},
@@ -1638,6 +1663,30 @@ var OSLCoreLangSetting = function () {
 		prj2100:{
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
+		},
+		prj5001:{
+			complete: "완료",
+			insert:{
+				title: "프로젝트 일정 저장",
+				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "프로젝트 일정 수정",
+				saveString: "프로젝트 일정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			},
+			actionBtn : {
+				insertBtn : "프로젝트 일정 저장",
+				updateBtn : "프로젝트 일정 수정"
+			},
+			label : {
+				evtNm: "일정명",
+				evtRange: "일정 일자",
+				evtDesc: "일정 설명",
+				evtBgColor: "일정 배경 색상",
+				evtColor: "일정 색상",
+			}
 		},
 		req1001:{
 			title:"Request new requirements",
