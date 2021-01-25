@@ -41,22 +41,22 @@
 		<!-- begin :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
 		<div class="col-lg-9 col-md-12 col-sm-12 text-right osl-mobile-text--left kt-padding-r-0">
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="select" title="스프린트 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="5">
-				<i class="fa fa-list"></i><span>조회</span>
+				<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="insert" title="스프린트 관리 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="6">
-				<i class="fa fa-plus"></i><span>등록</span>
+				<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">등록</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="update" title="스프린트 관리 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="7">
-				<i class="fa fa-edit"></i><span>수정</span>
+				<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="delete" title="스프린트 관리 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="8">
-				<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="sprStart" title="스프린트 관리 시작" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="excel" tabindex="">
-				<i class="fas fa-play-circle"></i><span>시작</span>
+				<i class="fas fa-play-circle"></i><span data-lang-cd="spr1000.button.sprStart">시작</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr1000Table" data-datatable-action="sprEnd" title="스프린트 관리 종료" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="print" tabindex="">
-				<i class="fas fa-stop-circle"></i><span>종료</span>
+				<i class="fas fa-stop-circle"></i><span data-lang-cd="spr1000.button.sprEnd">종료</span>
 			</button>
 		</div>
 		<!-- end :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
@@ -102,9 +102,9 @@ var OSLSpr1000Popup = function () {
 				"dblClick": true
 			},
 			actionTooltip:{
-				"update": "수정",
-				"delete": "삭제",
-				"dblClick": "상세보기"
+				"update": $.osl.lang("spr1000.datatable.action.update"),
+				"delete": $.osl.lang("spr1000.datatable.action.delete"),
+				"dblClick": $.osl.lang("spr1000.datatable.action.dblClick")
 			},
 			actionFn:{
 				"insert":function(datatableId){
@@ -171,20 +171,60 @@ var OSLSpr1000Popup = function () {
 						};
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1001View.do',data,options);
 				},
-				"sprStart":function(rowData){
+				//스프린트 시작
+				"sprStart": function(rowData, datatableId, type){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					
+					//스프린트 상태
+					var sprInfo = rowData[0];
+					
+					//대기가 아닌 경우 시작 불가능
+					if(sprInfo.sprTypeCd != "01" || sprInfo.useCd != "01"){
+						$.osl.alert($.osl.lang("spr1000.sprTypeWaitMsg"));
+						return true;
+					}
+					
 					var data = {
+							paramPrjGrpId: sprInfo.prjGrpId
+							,paramPrjId: sprInfo.prjId
+							,paramSprId: sprInfo.sprId
 						};
 					var options = {
 							modalTitle: "스프린트 시작",
 							autoHeight: false,
-							modalSize: 'xl',
-							class:{
-								body:"osl-spr1003"
-							}
+							modalSize: "xl",
+							idKey: datatableId,
+							closeConfirm: false,
+							ftScrollUse: false
 						};
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1003View.do',data,options);
+					
+					
 				},
 				"sprEnd":function(rowData){
+					var rowDatas = rowData;
+					
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					
+					//스프린트 상태
+					var sprInfo = rowData[0];
+					
+					//시작 중이 아닌 경우 시작 불가능
+					if(sprInfo.sprTypeCd != "02"){
+						$.osl.alert($.osl.lang("spr1000.sprTypeStartMsg"));
+						return true;
+					}
+					
 					var data = {
 						};
 					var options = {
@@ -247,18 +287,18 @@ var OSLSpr1000Popup = function () {
 													+'<i class="fa fa-bars osl-padding-r0"></i>'
 												+'</button>'
 												+'<div class="dropdown-menu dropdown-menu-right" data-datatable-rownum="'+idx+'">'
-													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-brand"></i>스프린트 수정</div>'
-													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-brand"></i>스프린트 삭제</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-brand"></i>'+$.osl.lang("spr1000.menu.update")+'</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-brand"></i>'+$.osl.lang("spr1000.menu.delete")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-play-circle kt-font-brand"></i>스프린트 시작</div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-stop-circle kt-font-brand"></i>스프린트 종료</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="sprStart"><i class="fas fa-play-circle kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintStart")+'</div>'
+													+'<div class="dropdown-item" data-datatable-id="spr1000Table" data-datatable-expans="dropdown" data-datatable-action="sprEnd"><i class="fas fa-stop-circle kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintEnd")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-clipboard-list kt-font-brand"></i>스프린트 상세정보</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-clipboard-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintDetail")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>스프린트 회의록 목록</div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>스프린트 회고록 목록</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintMeetList")+'</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintResultList")+'</div>'
 													+'<div class="dropdown-divider"></div>'
-													+'<div class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>보고서 출력</div>'
+													+'<div class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>'+$.osl.lang("spr1000.menu.sprintReport")+'</div>'
 													
 												+'</div>'
 											+'</div>'

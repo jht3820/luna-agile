@@ -167,10 +167,50 @@ input:-webkit-autofill,
 .osl-min-h-px--365 {
   min-height: 365px; 
 }
+.osl-min-h-px--590 {
+  min-height: 590px !important; 
+}
+.osl-min-h-px--620 {
+  min-height: 620px; 
+}
+.osl-min-h-px--700 {
+  min-height: 700px; 
+}
 @media(min-width: 1400px){
 	.osl-h-px--500 {
 	  height: 500px; 
 	}
+}
+/*cursor: pointer*/
+.osl-cursor-pointer{
+	cursor: pointer;
+}
+.osl-contents-frame {
+    background: #23241f;
+    color: #f8f8f2;
+    min-height: 550px;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+}
+.osl-contents-frame>pre{
+	width: 100%;
+	height: 100%;
+}
+.osl-contents-frame>pre>code{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0.5rem;
+}
+
+.osl-bg-none{
+	background: none;
+}
+.osl-font{
+    font-family: "Poppins", "Nanum Gothic";
 }
 /* 글자크기 */
 .osl-font-lg {
@@ -181,9 +221,17 @@ input:-webkit-autofill,
 }
 /* datepicker */
 .daterangepicker select.yearselect{float:left;}
-/* toast 내용 글자 크기 */
+/* toast  */
 .toast .toast-message {
     font-size: 1rem;
+}
+#toast-container > div{
+	min-width: 300px;
+    width: auto;
+}
+.osl-toastr-center {
+    top: 50%;
+    left: 40%;
 }
 /* 즐겨찾기 색상 */
 .osl-favorites--active:before{
@@ -971,12 +1019,23 @@ label.required:after {
 .osl-min-width-80{
 	min-width: 80px;
 }
+.osl-min-width-85{
+	min-width: 85px;
+}
 .osl-height-38{
 	height: 38px;
 }
 .osl-max-height-260{
 	max-height: 260px;
 }
+/* 색상값 */
+.osl-color--blue{
+	color:#5867dd;
+}
+.osl-color--red{
+	color:#fd397a;
+}
+
 /* @media */
 @media (min-width: 1025px) {
 	/* 로고 배경 색상 제거 */
@@ -1267,6 +1326,9 @@ label.required:after {
 .osl-outline--secondary{
 	border: 1px solid #e1e1ef;
 }
+.osl-outline--secondary-t-1{
+	border-top: 1px solid #e1e1ef;
+}
 .osl-outline--secondary-b{
 	border-bottom: 2px solid #e1e1ef;
 }
@@ -1407,9 +1469,6 @@ label.required:after {
 .chosen,.osl-usr-sortable-chosen{
 	border: 1px solid #1cac81 !important;
 }
-.w-100{
-	width: 100%;
-}
 .osl-stm__portlet .append-div{
 	display: none;
 	max-width: 400px;
@@ -1425,7 +1484,15 @@ label.required:after {
 .osl-calendar .datepicker{
 	width: 100% !important;
 }
-
+@media(min-width:800px){
+	.osl-desktop-max-w-285{
+		max-width: 285px;
+	}
+}
+.osl-portlet__body-style--none{
+	background-color: transparent;
+	box-shadow: none;
+}
 .osl-calendar-group-list__leftList{
     border: 1px solid #ebedf2;
     margin-top: 30px;
@@ -1449,6 +1516,9 @@ label.required:after {
 .osl-dropdown-menu--position{
 	top: -95px !important;
 	left: 55px !important;
+}
+.osl-gradient-info-bar{
+	background: linear-gradient(45deg, transparent, #e2e9ff);
 }
 .osl-arrow-group--hide{
 	display: none;
@@ -1696,8 +1766,12 @@ label.required:after {
     right: 1.85rem;
     height : auto;
 }
+
+.select2-container--default .select2-results__option[aria-selected=true],.select2-container--default .select2-results__option.select2-results__option--highlighted{
+	background: #d9ede7;
+}
 @media (min-width: 767px){
-	.select2-selection__rendered{
+	.select2-selection.select2-selection--multiple > .select2-selection__rendered{
 		min-height: 57px;
 		max-height: 114px;
 		overflow-y: auto !important;
@@ -1710,6 +1784,61 @@ label.required:after {
 }
 .osl-line-height-rem-1_5{
 	line-height: 1.5rem !important;
+}
+
+.ribbon.ribbon-clip.ribbon-right .ribbon-target{
+	right: -10px;
+}
+
+.ribbon.ribbon-right .ribbon-target{
+    border-top-left-radius: 0.42rem;
+    border-bottom-left-radius: 0.42rem;
+}
+.ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner {
+    border-top-left-radius: 0.42rem;
+    border-bottom-left-radius: 0.42rem;
+}
+.ribbon .ribbon-target {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    background-color: #3699FF;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.1);
+    color: #FFFFFF;
+}
+.ribbon .ribbon-target > .ribbon-inner {
+    z-index: -1;
+    position: absolute;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner:before {
+    border-width: 0 0 10px 10px;
+    border-left-color: #181C32 !important;
+    right: 0;
+}
+.ribbon-shadow{
+    position: absolute;
+    border-style: solid;
+    border-color: transparent !important;
+    bottom: -27px;
+    font-size: 2.3rem;
+    right : -4px;
+    color: #333;
+    z-index: -2;
 }
 @media (max-width: 1400px){
 	.osl-bad__width__100{
@@ -1789,4 +1918,16 @@ label.required:after {
 		line-height: 10px;
 		text-align:left;
 	}
+}
+
+.eventColorSelDiv {
+    height: 27px;
+    width: 30px;
+    margin: 3px;
+    display: inline-block;
+    border-width: 4px;
+    border-style: double;
+    line-height: 17px;
+    text-align: center;
+	cursor: pointer;
 }

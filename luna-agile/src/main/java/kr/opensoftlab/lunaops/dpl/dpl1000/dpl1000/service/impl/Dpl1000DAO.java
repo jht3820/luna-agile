@@ -19,6 +19,20 @@ import org.springframework.stereotype.Repository;
 public class Dpl1000DAO extends ComOslitsAbstractDAO {
 	
 	
+	@SuppressWarnings("rawtypes")
+	public int  selectDpl1000ListCnt(Map paramMap) throws Exception {
+		return  (Integer) select("dpl1000DAO.selectDpl1000ListCnt", paramMap);
+	} 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map>  selectDpl1000List(Map paramMap) throws Exception {
+		return  (List<Map>) list("dpl1000DAO.selectDpl1000List", paramMap);
+	}
+	
+	
+	
+	
 	@SuppressWarnings({"rawtypes" })
 	public List selectDpl1000DeployNmList(Map inputMap)  throws Exception{
 		return (List) list("dpl1000DAO.selectDpl1000DeployNmList", inputMap);

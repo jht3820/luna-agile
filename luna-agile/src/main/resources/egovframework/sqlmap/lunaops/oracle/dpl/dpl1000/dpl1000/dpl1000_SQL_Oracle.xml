@@ -19,7 +19,7 @@
 			, T1.*
 		FROM(
 			SELECT
-				, A.PRJ_ID AS PRJ_ID
+				 A.PRJ_ID AS PRJ_ID
 				, A.DPL_ID AS DPL_ID
 				, A.DPL_NM AS DPL_NM
 				, A.DPL_VER AS DPL_VER
@@ -33,12 +33,13 @@
 				, A.DPL_TYPE_CD AS DPL_TYPE_CD
 				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', A.DPL_TYPE_CD, '1') AS DPL_TYPE_NM
 				, A.DPL_AUTO_AFTER_CD AS DPL_AUTO_AFTER_CD
-				, SF_STM4001_COM_CD_INFO("#licGrpId#, 'DPL00004', A.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00004', A.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
 				, TO_CHAR(A.DPL_AUTO_DTM, 'YYYY-MM-DD HH24:MI:SS') AS DPL_AUTO_DTM
 				, A.DPL_RESTORE_CD AS DPL_RESTORE_CD
-				, SF_STM4001_COM_CD_INFO("#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
 			FROM DPL1000 A
 			WHERE 1 = 1
+			AND DPL_DEL_CD = '02'
 			AND A.PRJ_ID = #prjId#
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
@@ -97,21 +98,6 @@
 				<isEqual property="searchTargetId" compareValue="dplRestoreCd">
 					AND	T1.DPL_RESTORE_CD LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptMemId">
-						AND EXISTS (
-							SELECT
-								Y.RPT_ID
-							FROM SPR2001 Y
-							WHERE 1 = 1
-							AND Y.LIC_GRP_ID = #licGrpId#
-						    AND Y.PRJ_GRP_ID = #prjGrpId#
-							AND Y.PRJ_ID = #prjId#
-							AND Y.SPR_ID = #sprId#
-							AND Y.RPT_ID = T1.RPT_ID
-							WHERE 1 = 1
-							AND SF_STM3000_USR_INFO(Y.USR_ID, '1') LIKE '%'|| #searchTargetData# ||'%'
-						)
-				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
 	</sql>
@@ -138,8 +124,6 @@
 		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
-	
-	
 	
 	
    	<resultMap id="resultMapSelectDpl1000" class="dpl1000VO">
@@ -432,16 +416,6 @@
 			) T1
 			WHERE T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
-	
-	   
-    <select id="dpl1000DAO.selectDpl1000ListCnt" parameterClass="dpl1000VO"  resultClass="java.lang.Integer">
-	    
-	    SELECT
-			COUNT(*)
-		FROM	(
-			<include refid="dpl1000DAO.selectDpl1000BaseList"/>
-		) T1
-    </select>
 
 	
 	<select id="dpl1000DAO.selectDpl1000DeployVerInfo" parameterClass="java.util.Map" resultClass="egovMap">

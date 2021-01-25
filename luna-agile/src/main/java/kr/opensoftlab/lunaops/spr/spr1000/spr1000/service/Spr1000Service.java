@@ -28,4 +28,12 @@ public interface Spr1000Service {
 	
 	@SuppressWarnings({ "rawtypes" })
 	Map  selectSpr1000SprInfo(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	int selectSpr1000SprReqListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	List<Map>  selectSpr1000SprReqList(Map paramMap) throws Exception;
 }

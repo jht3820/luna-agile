@@ -58,22 +58,22 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 	public int deleteSpr1000SprInfo(Map paramMap) throws Exception{
 		String deleteDataList = (String) paramMap.get("deleteDataList");
 
-		
+		//JSON파서 선언
 		JSONArray jsonArray = new JSONArray(deleteDataList);
 		
 		int deleteCnt = 0;
 		
-		
+		//삭제 요구사항 목록
 		for(int i=0;i<jsonArray.length();i++) {
 			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
 			
-			
+			//json to Map
 			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
 			
-			
+			//삭제 유무 변경
 			infoMap.put("delCd", "01");
 			
-			
+			//스프린트 삭제
 			int resultCnt = spr1000DAO.deleteSpr1000SprInfo(infoMap);
 			deleteCnt += resultCnt;
 		}
@@ -86,5 +86,16 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 	public Map selectSpr1000SprInfo(Map paramMap) throws Exception {
 		return spr1000DAO.selectSpr1000SprInfo(paramMap);
 	}
+
 	
+	@SuppressWarnings("rawtypes")
+	public int selectSpr1000SprReqListCnt(Map paramMap) throws Exception {
+		return spr1000DAO.selectSpr1000SprReqListCnt(paramMap);
+	} 
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	public List<Map>  selectSpr1000SprReqList(Map paramMap) throws Exception {
+		return spr1000DAO.selectSpr1000SprReqList(paramMap);
+	}
 }
