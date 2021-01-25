@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adm5000DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	<sql id="adm5000DAO.selectAdm5000Base">
+		SELECT
+			'01' AS EVT_TYPE , 
+			LIC_GRP_ID ,
+			HOLI_ID ,
+			HOLI_START_DATE AS HOLI_START_SEQ ,
+			HOLI_END_DATE AS HOLI_END_SEQ ,
+			TO_CHAR( TO_DATE(HOLI_START_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') HOLI_START_DATE,
+			TO_CHAR( TO_DATE(HOLI_END_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') HOLI_END_DATE,
+			TO_CHAR( TO_DATE(HOLI_START_TIME, 'HH24MI'), 'HH24:MI') HOLI_START_TIME,
+			TO_CHAR( TO_DATE(HOLI_END_TIME, 'HH24MI'), 'HH24:MI') HOLI_END_TIME,
+			TO_CHAR( TO_DATE(HOLI_START_DATE || HOLI_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') HOLI_START_FULL_DATE,
+			TO_CHAR( TO_DATE(HOLI_END_DATE || HOLI_END_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') HOLI_END_FULL_DATE,
+			START_DAY_WEEK ,
+			END_DAY_WEEK ,
+			HOLI_CD ,
+			HOLI_NM ,
+			HOLI_DESC ,
+			HOLI_INSERT_TYPE ,
+			HOLI_BG_COLOR ,
+			HOLI_COLOR ,
+			HOLI_ALL_DAY_CD ,
+			REG_DTM ,
+			REG_USR_ID ,
+			REG_USR_IP,
+			MODIFY_DTM,
+			MODIFY_USR_ID,
+			MODIFY_USR_IP
+		FROM ADM5000 
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+	</sql>
+	
+	
+	<select id="adm5000DAO.selectAdm5000HoliList" parameterClass="java.util.Map" resultClass="egovMap">
+		<include refid="adm5000DAO.selectAdm5000Base"/>
+	</select>
+	
+	
+	
+	<select id="adm5000DAO.selectAdm5000HoliInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<include refid="adm5000DAO.selectAdm5000Base"/>
+		AND HOLI_ID = #holiId#
+		
+	</select>
+	
+	
+	<insert id="adm5000DAO.insertAdm5000HoliInfo" parameterClass="java.util.Map" >
+		<selectKey resultClass="java.lang.String" keyProperty="newHoliId">
+		<![CDATA[
+			SELECT   NVL(
+                SUBSTR(NEW_HOLI_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_HOLI_ID, 12, 5)) + 1) , 5, '0')
+            ,   'HOL' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+        	) AS NEW_HOLI_ID
+				FROM   (
+	            SELECT   MAX(HOLI_ID)  AS NEW_HOLI_ID
+	            FROM   ADM5000 A
+	            WHERE   1=1
+	            AND      A.LIC_GRP_ID = #licGrpId#
+        	)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+		INSERT INTO ADM5000(
+			LIC_GRP_ID ,
+			HOLI_ID ,
+			HOLI_START_DATE ,
+			HOLI_END_DATE ,
+			HOLI_START_TIME ,
+			HOLI_END_TIME ,
+			START_DAY_WEEK ,
+			END_DAY_WEEK ,
+			HOLI_CD ,
+			HOLI_NM ,
+			HOLI_DESC ,
+			HOLI_INSERT_TYPE ,
+			HOLI_BG_COLOR ,
+			HOLI_COLOR ,
+			HOLI_ALL_DAY_CD ,
+			REG_DTM ,
+			REG_USR_ID ,
+			REG_USR_IP,
+			MODIFY_DTM,
+			MODIFY_USR_ID,
+			MODIFY_USR_IP
+		)VALUES(
+			#licGrpId# ,
+			#newHoliId#,
+			REPLACE(#holiStartDate#,'-','') ,
+			REPLACE(#holiEndDate#,'-','') ,
+			REPLACE(#holiStartTime#,':','') ,
+			REPLACE(#holiEndTime#,':','') ,
+			TO_CHAR(TO_DATE(#holiStartDate#,'YYYY-MM-DD'),'d' ) ,
+			TO_CHAR(TO_DATE(#holiEndDate#,'YYYY-MM-DD'),'d' ) ,
+			#holiCd# ,
+			#holiNm# ,
+			#holiDesc# ,
+			#holiInsertType# ,
+			#holiBgColor# ,
+			#holiColor# ,
+			#holiAllDayCd# ,
+			SYSDATE ,
+			#regUsrId# ,
+			#regUsrIp# ,
+			SYSDATE ,
+			#modifyUsrId# ,
+			#modifyUsrIp# 
+		)
+		]]>
+    </insert>
+    
+    
+	<delete id="adm5000DAO.deleteAdm5000LicGrpHoliList" parameterClass="java.util.Map">
+		<![CDATA[ 
+		DELETE  FROM ADM5000
+		WHERE  1=1
+		AND LIC_GRP_ID = #licGrpId#
+	    ]]>
+	</delete>
+</sqlMap>
