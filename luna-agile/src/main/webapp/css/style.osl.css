@@ -167,6 +167,9 @@ input:-webkit-autofill,
 .osl-min-h-px--365 {
   min-height: 365px; 
 }
+.osl-min-h-px--575 {
+  min-height: 575px; 
+}
 .osl-min-h-px--590 {
   min-height: 590px !important; 
 }
@@ -344,6 +347,38 @@ select[id^=usrOpt_] {
     padding-top: 15px;
     padding-bottom: 15px;
 }
+/* draggable */
+.osl-widget-draggable {
+    background-color: #fff;
+    cursor: move;
+    border: 1px solid #dee2e6;
+}
+.osl-widget-draggable:hover{
+	border: 1px solid #1cac81;
+}
+.osl-widget-draggable.gu-mirror .kt-widget__desc {
+    display: none;
+}
+.osl-widget-draggable.gu-mirror .kt-media > img {
+    width: 24px;
+    height: 24px;
+}
+.osl-widget-draggable.gu-mirror {
+    width: auto !important;
+    height: auto !important;
+}
+.osl-widget-draggable.active{
+	border: 1px solid #1cac81;
+}
+
+/* 사용자 선택 화살표 제어 */
+.osl-user__active--block{
+	display: none;
+}
+.osl-widget-draggable.active .osl-user__active--block{
+	display: block;
+}
+
 /* prj1000 */
 .osl-prj-group-md{
     height: 26px;
@@ -353,6 +388,13 @@ select[id^=usrOpt_] {
 	display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+}
+.kt-widget__title small{
+	margin-left: 10px;
+	font-size: 0.8rem;
+	line-height: 1rem;
+	font-weight: 400;
+	color: #aeb2b7;
 }
 .osl-widget .osl-widget-info__item{
     display: -webkit-box;
@@ -1714,34 +1756,62 @@ label.required:after {
 .osl-wizard .osl-wizard__nav .osl-wizard__nav-items .osl-wizard__nav-item[data-ktwizard-state="current"] .osl-wizard-wrapper .wizard-label .wizard-title {
     color: #1cac81;
 }
-/*단계 버튼 cursor*/
-.osl-wizard__nav-item {
-    cursor: pointer;
-}   
 /*단계 미표출 내용 div*/
-.osl-wizard [data-ktwizard-type="step-content"] {
-  	display: none; }
-    /*단계 표출 내용 div*/
-  .osl-wizard [data-ktwizard-type="step-content"][data-ktwizard-state="current"] {
-    display: block; }
- 
+.osl-wizard [data-ktwizard-type="step-content"], .osl-wizard [data-ktwizard-type="step-info"] {
+  	display: none;
+}
+
+/*단계 표출 내용 div*/
+.osl-wizard [data-ktwizard-type="step-content"][data-ktwizard-state="current"], .osl-wizard [data-ktwizard-type="step-info"][data-ktwizard-state="current"] {
+    display: inline-block;
+}
 /*이동 버튼 그룹*/
 .osl-form__actions {
-	width: fit-content;
-	margin: 0 auto; 
- }
-  
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: flex-end;
+    background-color: #fff;
+    padding: 10px 40px 0;
+}
 /*이전 버튼*/
-.modal-footer [data-ktwizard-type="action-prev"] {
-  display: none; }
+.osl-wizard[data-ktwizard-state="first"] [data-ktwizard-type="action-prev"] {
+    display: none;
+}
+.osl-wizard[data-ktwizard-state="between"] [data-ktwizard-type="action-prev"] {
+    display: inline-block;
+}
+.osl-wizard[data-ktwizard-state="last"] [data-ktwizard-type="action-prev"] {
+    display: inline-block;
+}
 
 /*다음 버튼*/
-.modal-footer [data-ktwizard-type="action-next"] {
-  display: inline-block; }
+.osl-wizard[data-ktwizard-state="first"] [data-ktwizard-type="action-next"] {
+    display: inline-block;
+}
+.osl-wizard[data-ktwizard-state="between"] [data-ktwizard-type="action-next"] {
+    display: inline-block;
+}
+.osl-wizard[data-ktwizard-state="last"] [data-ktwizard-type="action-next"] {
+    display: none;
+}
 
 /*완료 버튼*/
-.modal-footer [data-ktwizard-type="action-submit"] {
-  display: none; }
+.osl-wizard[data-ktwizard-state="first"] [data-ktwizard-type="action-submit"] {
+    display: none;
+}
+.osl-wizard[data-ktwizard-state="between"] [data-ktwizard-type="action-submit"] {
+    display: none;
+}
+.osl-wizard[data-ktwizard-state="last"] [data-ktwizard-type="action-submit"] {
+    display: inline-block;
+}
  /*******************end :: wizard*******************/
 
 .select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice{

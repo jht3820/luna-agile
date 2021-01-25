@@ -194,6 +194,8 @@ var OSLSpr1000Popup = function () {
 							paramPrjGrpId: sprInfo.prjGrpId
 							,paramPrjId: sprInfo.prjId
 							,paramSprId: sprInfo.sprId
+							,paramStartDt: sprInfo.sprStDt
+							,paramEndDt: sprInfo.sprEdDt
 						};
 					var options = {
 							modalTitle: "스프린트 시작",

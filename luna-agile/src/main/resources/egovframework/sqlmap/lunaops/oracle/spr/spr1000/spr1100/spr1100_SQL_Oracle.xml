@@ -288,4 +288,19 @@
 		</isNotEmpty>
 	</delete>
 	
+	
+    <update id="spr1100DAO.updateSpr1100ReqSprPointInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			UPDATE SPR1100 A SET
+				A.SPR_POINT = #sprPoint#
+			WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+			    AND A.PRJ_GRP_ID = #prjGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+				AND A.REQ_ID = #reqId#
+		]]>
+	</update>
+	
 </sqlMap>
