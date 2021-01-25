@@ -55,7 +55,7 @@
 				<div class="kt-portlet__head kt-portlet__head--lg">
 					<div class="kt-portlet__head-label">
 						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>담당자 목록
+							<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 담당 목록
 						</h5>
 					</div>
 					<div class="kt-portlet__head-toolbar">
@@ -82,7 +82,7 @@
 				<div class="kt-portlet__head kt-portlet__head--lg">
 					<div class="kt-portlet__head-label">
 						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>미 담당자 목록
+							<i class="fa fa-th-large kt-margin-r-5"></i>담당 대상 목록
 						</h5>
 					</div>
 					<div class="kt-portlet__head-toolbar">
@@ -90,7 +90,7 @@
 							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1002PrjAuthNoneUsrTable" data-datatable-action="selAllUsrDelete" title="선택 사용자 배정 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="1" id="prj1002AuthGrpNoneUsrInsert">
 								<i class="fa fa-arrow-alt-circle-left"></i><span>배정 등록</span>
 							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1002PrjAuthNoneUsrTable" data-datatable-action="select" title="데이터 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1002PrjAuthNoneUsrTable" data-datatable-action="select" title="담당 대상 미 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 								<i class="fa fa-list"></i><span>조회</span>
 							</button>
 						</div>
@@ -105,7 +105,7 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><i class="fa fa-check-square"></i><span>완료</span></button>
+	<button type="button" class="btn btn-brand" id="prj1002SaveSubmit"><i class="fa fa-save"></i><span>완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <script>
@@ -170,12 +170,14 @@ var OSLPrj1002Popup = function () {
     		});
     	});
 		
+		//데이터 테이블 세팅
+    	datatableSetting();
+		
 		//수정인경우 프로젝트 그룹 정보 조회
 		if(type == "update"){
 			fnPrjGrpInfoSelect();
 		}
-		//데이터 테이블 세팅
-    	datatableSetting();
+		
     };
     
     //프로젝트 그룹 저장 (생성&수정)
@@ -188,7 +190,7 @@ var OSLPrj1002Popup = function () {
     	if(!$.osl.isNull(authUsrList) && authUsrList.length > 0){
     		var usrIdList = [];
     		$.each(authUsrList, function(idx, map){
-    			usrIdList.push({licGrpId: map.licGrpId, usrId: map.usrId});
+    			usrIdList.push({licGrpId: map.licGrpId, authTypeCd: map.authTypeCd, usrId: map.usrId});
     		});
     		fd.append("usrIdList",JSON.stringify(usrIdList));
     	}
@@ -346,11 +348,14 @@ var OSLPrj1002Popup = function () {
 		});
 		
 		//사용자 미 배정 정보 datatable 세팅
-		$.osl.datatable.setting("prj1002PrjAuthNoneUsrTable",{
+		var prj1002AuthNoneUsrTable = $.osl.datatable.setting("prj1002PrjAuthNoneUsrTable",{
 			data: {
 				source: {
 					read: {
-						url: "/prj/prj1000/prj1000/selectPrj1000PrjAuthNoneUsrListAjax.do"
+						url: "/prj/prj1000/prj1000/selectPrj1000PrjAuthNoneUsrListAjax.do",
+						params:{
+							prjAuthTypeCd: "01"
+						}
 					}
 				},
 				pageSize: 4,
@@ -373,7 +378,7 @@ var OSLPrj1002Popup = function () {
 			},
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				{field: 'usrNm', title: '사용자명', textAlign: 'left', width: 150, search: true,
+				{field: 'usrNm', title: '사용자명', textAlign: 'left', width: 130, search: true,
 					template: function (row) {
 						return $.osl.user.usrImgSet(row.usrImgId, row.usrNm);
 					},
@@ -381,9 +386,9 @@ var OSLPrj1002Popup = function () {
 						$.osl.user.usrInfoPopup(rowData.usrId);
 					}
 				},
-				{field: 'usrPositionNm', title: '직책', textAlign: 'center', width: 100, search: true, searchType:"select", searchCd: "ADM00007", searchField:"usrPositionCd", sortField: "usrPositionCd"},
-				{field: 'usrDutyNm', title: '직급', textAlign: 'center', width: 100, search: true, searchType:"select", searchCd: "ADM00008", searchField:"usrDutyCd", sortField: "usrDutyCd"},
-				{field: 'deptName', title: '부서', textAlign: 'left', width: 150, search: true, sortable: false},
+				{field: 'usrPositionNm', title: '직책', textAlign: 'center', width: 90, search: true, searchType:"select", searchCd: "ADM00007", searchField:"usrPositionCd", sortField: "usrPositionCd"},
+				{field: 'usrDutyNm', title: '직급', textAlign: 'center', width: 90, search: true, searchType:"select", searchCd: "ADM00008", searchField:"usrDutyCd", sortField: "usrDutyCd"},
+				{field: 'deptName', title: '부서', textAlign: 'left', width: 130, search: true, sortable: false},
 			],
 			searchColumns:[
 				{field: 'usrId', title: '사용자 ID', searchOrd: 1}
@@ -401,6 +406,14 @@ var OSLPrj1002Popup = function () {
 			theme:{
 				actionBtnIcon:{
 					dblClick: "fa fa-arrow-alt-circle-left",
+				}
+			},
+			rows:{
+				beforeTemplate: function (row, data, index){
+					//이미 배정된 사용자인경우
+					if(prjAuthUsrIdList.indexOf(data.usrId) > -1){
+						row.addClass("osl-datatable__row-assign--none");
+					}
 				}
 			},
 			actionFn:{
@@ -487,6 +500,8 @@ var OSLPrj1002Popup = function () {
 			datatable.insertData();
 			//데이터테이블 재 조회
 			datatable.reload();
+			$.osl.datatable.list["prj1002PrjAuthNoneUsrTable"].targetDt.reload();
+			$("div.tooltip.show").remove();
 		 }
 	};
 	
@@ -520,12 +535,14 @@ var OSLPrj1002Popup = function () {
 				
 				//데이터테이블 재 조회
 				datatable.reload();
+				$.osl.datatable.list["prj1002PrjAuthNoneUsrTable"].targetDt.reload();
+				$("div.tooltip.show").remove();
 			}
 		}
 	};
 	
 	//프로젝트 그룹 정보 조회
-	var fnPrjGrpInfoSelect = function(){
+	var fnPrjGrpInfoSelect = function(deferred){
 		//프로젝트 그룹 정보 조회
 		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/prj/prj1000/prj1000/selectPrj1000PrjGrpInfoAjax.do'/>"}
@@ -550,6 +567,9 @@ var OSLPrj1002Popup = function () {
 	   				//대상 데이터 테이블
 	   				var datatable = $.osl.datatable.list["prj1002PrjAuthUsrTable"].targetDt;
 	   			
+	   				//데이터테이블 error class 제거
+	   				datatable.eq(0).removeClass("kt-datatable--error");
+	   			
 	   				$.each(data.prjAuthList, function(idx, map){
 		   				//담당자 배정 목록 추가
 		   				datatable.dataSet.push(map);
@@ -562,7 +582,8 @@ var OSLPrj1002Popup = function () {
 					//데이터 추가
 					datatable.insertData();
 					//데이터테이블 재 조회
-					datatable.reload();
+					//datatable.reload();
+					$.osl.datatable.list["prj1002PrjAuthNoneUsrTable"].targetDt.reload();
    				}
    			}
 		});

@@ -58,10 +58,10 @@ var OSLReq4100Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
-				{field: 'prjNm', title: $.osl.lang("req4100.field.prjNm"), textAlign: 'left', width: 150, search: true},
-				{field: 'reqOrd', title: $.osl.lang("req4100.field.reqOrd"), textAlign: 'left', width: 110, autoHide: false},
-				{field: 'reqProTypeNm', title:$.osl.lang("req4100.field.reqProTypeNm"), textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
-				{field: 'reqNm', title: $.osl.lang("req4100.field.reqNm"), textAlign: 'left', width: 380, search: true, autoHide: false,
+				{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150, search: true},
+				{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false},
+				{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+				{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
 					template: function(row){
 						var resultStr = $.osl.escapeHtml(row.reqNm);
 						//비밀번호가 있는 경우
@@ -71,30 +71,15 @@ var OSLReq4100Popup = function () {
 						return resultStr;
 					}
 				},
-				{field: 'reqDtm', title: $.osl.lang("req4100.field.reqDtm"), textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'regDtm', title: $.osl.lang("req4100.field.regDtm"), textAlign: 'center', width: 100, search: true, searchType:"date",
+				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'regDtm', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"date",
 					template: function (row) {
-						/* 
 						var paramDatetime = new Date(row.regDtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 0){
-							return $.osl.lang("date.agoTime.s", 0) + $.osl.lang("date.agoTime.suffixAgo");	
-						}else if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yyyy-MM-dd");
-						}
-						 */
-						var paramDatetime = new Date(row.regDtm);
-		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "M", returnFormat: "yyyy-MM-dd"});
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				},
-				{field: 'reqUsrNm', title: $.osl.lang("req4100.field.reqUsrNm"), textAlign: 'center', width: 120, search: true,
+				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
 					template: function (row) {
 						if(row.reqUsrNm == null){
 							row.reqUsrNm = "";
@@ -112,10 +97,10 @@ var OSLReq4100Popup = function () {
 						$.osl.user.usrInfoPopup(rowData.reqUsrId);
 					}
 				},
-				{field: 'reqUsrEmail', title:$.osl.lang("req4100.field.reqUsrEmail"), textAlign: 'left', width: 180, search: true},
-				{field: 'reqUsrDeptNm', title:$.osl.lang("req4100.field.reqUsrDeptNm"), textAlign: 'center', width: 300, sortable: false},
-				{field: 'reqUsrNum', title: $.osl.lang("req4100.field.reqUsrNum"), textAlign: 'center', width: 100, search: true},
-				{field: 'reqKey', title: $.osl.lang("req4100.field.reqKey"), textAlign: 'center', width: 300, sortable: false, search: true}
+				{field: 'reqUsrEmail', title:'요청자e-mail', textAlign: 'left', width: 180, search: true},
+				{field: 'reqUsrDeptNm', title:'요청자 조직', textAlign: 'center', width: 300, sortable: false},
+				{field: 'reqUsrNum', title: '요청자 연락처', textAlign: 'center', width: 100, search: true},
+				{field: 'reqKey', title: '요구사항 key', textAlign: 'center', width: 300, sortable: false, search: true}
 				
 			],
 			searchColumns:[
@@ -283,7 +268,6 @@ var OSLReq4100Popup = function () {
 								$.osl.alert($.osl.lang("req4100.alert.LockData"));
 							}else{
 								//단건 복사인 경우
-								console.log("rowDatas[0] : ", rowDatas[0]);
 								data ={
 									type:"copy",
 									//rowDatas : JSON.stringify(rowDatas),

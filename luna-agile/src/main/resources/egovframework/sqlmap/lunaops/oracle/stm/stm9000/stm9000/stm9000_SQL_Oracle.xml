@@ -1,54 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
-<sqlMap namespace="stm300DAO">
+<sqlMap namespace="stm9000DAO">
 	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias alias="Stm9000VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9000VO"/>
-	<typeAlias alias="Stm9001VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9001VO"/>
 
-	<resultMap id="resultMapSelectStm9000" class="Stm9000VO">
-		<result property="rn"  			      column="RN"/>
-		<result property="jenId"              column="JEN_ID" />  
-		<result property="jenNm"              column="JEN_NM" />  
-		<result property="jenUsrId"           column="JEN_USR_ID" />  
-		<result property="jenUsrTok"          column="JEN_USR_TOK" /> 
-		<result property="jenUrl"             column="JEN_URL" />  
-		<result property="jenDesc"             column="JEN_DESC" />  
-		<result property="useCd"              column="USE_CD" />  
-		<result property="delCd"              column="DEL_CD" />  
-		<result property="useNm"              column="USE_NM" /> 
-		<result property="regDtm"             column="REG_DTM" />  
-		<result property="regUsrId"           column="REG_USR_ID" />  
-		<result property="regUsrIp"           column="REG_USR_IP" />  
-		<result property="modifyDtm"          column="MODIFY_DTM" />  
-		<result property="modifyUsrId"        column="MODIFY_USR_ID" />  
-		<result property="modifyUsrIp"        column="MODIFY_USR_IP" />  
-    </resultMap>
-    
-        
-	<resultMap id="resultMapSelectStm9001" class="Stm9001VO">
-		<result property="rn"  			      column="RN"/>
-		<result property="jenId"              column="JEN_ID" />  
-		<result property="jenNm"              column="JEN_NM" />  
-		<result property="jenUsrId"           column="JEN_USR_ID" />  
-		<result property="jenUsrTok"          column="JEN_USR_TOK" /> 
-		<result property="jenUrl"             column="JEN_URL" />  
-		<result property="jobId"              column="JOB_ID" />  
-		<result property="jobRestoreId"           column="JOB_RESTORE_ID" />  
-		<result property="jobTok"          column="JOB_TOK" /> 
-		<result property="jobDesc"             column="JOB_DESC" />  
-		<result property="jobTypeCd"             column="JOB_TYPE_CD" /> 
-		<result property="jobTypeNm"             column="JOB_TYPE_NM" /> 
-		<result property="useCd"              column="USE_CD" />  
-		<result property="useNm"              column="USE_NM" /> 
-		<result property="regDtm"             column="REG_DTM" />  
-		<result property="regUsrId"           column="REG_USR_ID" />  
-		<result property="regUsrIp"           column="REG_USR_IP" />  
-		<result property="modifyDtm"          column="MODIFY_DTM" />  
-		<result property="modifyUsrId"        column="MODIFY_USR_ID" />  
-		<result property="modifyUsrIp"        column="MODIFY_USR_IP" />  
-    </resultMap>
-    
     
 	
 	<sql id="selectStm9000JenkinsListBase">
@@ -81,91 +36,19 @@
 					AND	A.USE_CD = #searchTargetData#
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jenNm">
-					AND	UPPER( A.JEN_NM ) LIKE '%'|| #searchTargetData# ||'%'
+					AND	A.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jenDesc">
-					AND	UPPER( A.JEN_DESC ) LIKE '%'|| #searchTargetData# ||'%'
+					AND	A.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+		ORDER BY A.REG_DTM DESC
     </sql>
-    
-    
-	
-	<sql id="selectStm9000JobList">
-		<![CDATA[
-			SELECT
-		            A.JEN_ID ,                  /* JENKINS JOB 코드 */
-		            B.JEN_NM ,                  /* JENKINS JOB 명 */ 
-		            B.JEN_USR_ID ,              /* JENKINS 사용자 ID */ 
-		            B.JEN_USR_TOK ,             /* JENKINS 사용자 TOKEN KEY */ 
-		            B.JEN_URL , 
-		            A.JOB_ID ,
-		            NVL(A.JOB_RESTORE_ID,'-') AS JOB_RESTORE_ID ,
-		            A.JOB_TOK ,
-		            A.JOB_TYPE_CD ,
-		            SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00002', A.JOB_TYPE_CD, '1') AS JOB_TYPE_NM ,
-		            A.JOB_DESC ,
-		            A.USE_CD ,                  /* 사용여부(코드 : CMM00001) */
-		            SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM , 
-		            A.REG_DTM ,                 /* 최초등록 일시 */ 
-		            A.REG_USR_ID ,              /* 최초등록자 ID */ 
-		            A.REG_USR_IP ,              /* 최초등록자 IP */ 
-		            A.MODIFY_DTM ,              /* 최종수정일시 */ 
-		            A.MODIFY_USR_ID ,           /* 최종수정자 ID */ 
-		            A.MODIFY_USR_IP             /* 최종수정자 IP */              
-			FROM
-		            STM9001 A LEFT JOIN STM9000 B ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
-			WHERE   1=1
-			AND		A.LIC_GRP_ID = #licGrpId#
-			AND		B.DEL_CD = '02'
-		]]>
-		<isNotEmpty property="projectJenkinsCheck">
-			<isEqual property="projectJenkinsCheck" compareValue="Y">
-				AND	EXISTS (
-	            	SELECT Z.*
-	                FROM STM9002 Z
-	                WHERE 1=1
-	                AND Z.LIC_GRP_ID = A.LIC_GRP_ID
-	                AND Z.JEN_ID = A.JEN_ID
-	                AND Z.JOB_ID = A.JOB_ID
-	                AND Z.PRJ_ID = #prjId#
-	            )
-			</isEqual>
-		</isNotEmpty>
-		<isNotEmpty property="jenId">
-			AND		A.JEN_ID = #jenId#
-		</isNotEmpty>
-		<isNotEmpty property="useCd">
-			AND		A.USE_CD = #useCd#
-		</isNotEmpty>
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchTxt">
-				<isEqual property="searchSelect" compareValue="jobNm"> 
-					AND		UPPER( B.JEN_NM ) like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobId"> 
-					AND		UPPER( JOB_ID ) like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobDesc"> 
-					AND		UPPER( JOB_DESC )  like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-			</isNotEmpty>
-		</isNotEmpty>
-		
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchCd">
-			<isEqual property="searchSelect" compareValue="useCd">
-				AND		A.USE_CD = #searchCd#
-			</isEqual>
-			</isNotEmpty>
-		</isNotEmpty>
-    </sql>
-    
     
     
     <select id="stm9000DAO.selectStm9000JenkinsList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    /* stm9000DAO.selectStm9000JenkinsList - Jenkins 목록 조회 */
+	    
 		SELECT T2.*
 		FROM
 		(
@@ -180,7 +63,7 @@
     
     
     <select id="stm9000DAO.selectStm9000JenkinsListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
-	    /*stm9000DAO.selectStm9000JenkinsListCnt - Jenkins 목록 총건수 조회 : 페이징 처리 */
+	    
 		SELECT
 			COUNT(*)
 		FROM
@@ -189,94 +72,37 @@
 		) T
     </select>
     
-    
-    
-    
-    
+     
     <select id="stm9000DAO.selectStm9000JenkinsNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    /* stm9000DAO.selectStm9000JenkinsNormalList Jenkins 일반 목록을 조회한다.*/
-		SELECT *
+	    
+		SELECT T2.*
 		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
+		(
+    		SELECT ROWNUM RN, T1.*
     		FROM
     		(
-					<include refid="selectStm9000JenkinsListBase"/>
-	    			) A
-	    	)
+				<include refid="selectStm9000JenkinsListBase"/>
+			) T1
+		) T2
     </select>
     
     
-    <select id="stm9000DAO.selectStm9000JobNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
-	    /* stm9000DAO.selectStm9000JobNormalList Job 일반 목록을 조회한다.*/
-		SELECT *
-		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JobList"/>
-	    			) A
-	    	)
-    </select>
-    
-    
-    
-    <select id="stm9000DAO.selectStm9000JobList" parameterClass="Stm9001VO"  resultMap="resultMapSelectStm9001">
-	    /* stm9000DAO.selectStm9000JobList job 목록을 조회한다.*/
-		SELECT *
-		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JobList"/>
-	    			) A
-	    	)
-	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
-    </select>
-    
-    
-    <select id="stm9000DAO.selectStm9000JobListCnt" parameterClass="Stm9001VO"  resultClass="java.lang.Integer">
-	    /*stm9000DAO.selectStm9000JobListCnt job 목록 총건수를 조회한다.*/
-	    	SELECT
-					COUNT(*)
-			FROM	(
-						<include refid="selectStm9000JobList"/>
-					) A
-    </select>
-    
-	 
      
 	<select id="stm9000DAO.selectStm9000JenkinsInfo" parameterClass="java.util.Map"  resultClass="egovMap">
-		/* stm9000DAO.selectStm9000JenkinsInfo - Jenkins 정보 조회 */
+		
 		SELECT *
 		FROM (
 			<include refid="selectStm9000JenkinsListBase"/>
 		) T1
 		WHERE 1=1
-			AND T1.JEN_ID = #jenId#
+		AND T1.JEN_ID = #jenId#
 	</select>
-	 
+    
      
-	<select id="stm9000DAO.selectStm9000JobInfo" parameterClass="java.util.Map"  resultClass="egovMap">
-		/* stm9000DAO.selectStm9000JobInfo - Job 정보 조회(단건) */
-		SELECT *
-		FROM (
-			<include refid="selectStm9000JobList"/>
-		) T1
-		WHERE 1=1
-			AND T1.JOB_ID = #jobId#
-	</select>
-	
-	  
 	<insert id="stm9000DAO.insertStm9000JenkinsInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newJenId">
 		<![CDATA[
-			/* stm9000DAO.insertStm9000JenkinsInfo - Jenkins 등록(새로운 JEN_ID 따기)*/ 
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_JEN_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_JEN_ID, 12, 5)) + 1) , 5, '0')
 						,	'JEN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -290,176 +116,70 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
-			/* stm9000DAO.insertStm9000JenkinsInfo  - Jenkins 등록 */ 
-				INSERT     INTO     STM9000
-					(
-					            JEN_ID              , /* JENKINS JOB 코드 */ 
-					            JEN_NM              , /* JENKINS JOB 명 */ 
-					            JEN_USR_ID          , /* JENKINS 사용자 ID */ 
-					            JEN_USR_TOK         , /* JENKINS 사용자 TOKEN KEY */ 
-					            JEN_URL             , /* JENKINS JOB URL */ 
-					            JEN_DESC            , /* JENKINS JOB Comment */ 
-					            USE_CD              , /* 사용유무(코드 : CMM00001) */ 
-					            DEL_CD				, /* 삭제유무(코드 : CMM00001) */
-					            REG_DTM             , /* 최초등록 일시 */ 
-					            REG_USR_ID          , /* 최초등록자 ID */ 
-					            REG_USR_IP          , /* 최초등록자 IP */ 
-					            MODIFY_DTM          , /* 최종수정일시 */ 
-					            MODIFY_USR_ID       , /* 최종수정자 ID */ 
-					            MODIFY_USR_IP       , /* 최종수정자 IP */ 
-					            LIC_GRP_ID          
-					)
-				VALUES
-					(
-					             #newJenId#, 
-					             #jenNm#, 
-					             #jenUsrId#, 
-					             #jenUsrTok#, 
-					             #jenUrl#, 
-					             #jenDesc#, 
-					             #useCd#, 
-					             '02',
-					             SYSDATE , 
-					             #regUsrId#, 
-					             #regUsrIp#, 
-					             SYSDATE , 
-					             #modifyUsrId#, 
-					             #modifyUsrIp#,
-					             #licGrpId# 
-					)
-			
+			 
+			INSERT INTO STM9000
+			(
+					LIC_GRP_ID,		JEN_ID,			JEN_NM,		JEN_USR_ID,			JEN_USR_TOK 
+				,	JEN_URL,		JEN_DESC,		USE_CD,		DEL_CD,				REG_DTM 
+				,	REG_USR_ID,		REG_USR_IP, 	MODIFY_DTM, MODIFY_USR_ID,		MODIFY_USR_IP 
+			)
+			VALUES
+			(
+					#licGrpId#,  	#newJenId#,		#jenNm#,	#jenUsrId#,  		#jenUsrTok#
+				,	#jenUrl#,  		#jenDesc#,  	#useCd#,  	'02',  				SYSDATE
+				,	#regUsrId#,  	#regUsrIp#,  	SYSDATE,  	#modifyUsrId#,  	#modifyUsrIp#
+			)
 		]]>
 	</insert>
 	
-	  
-	<insert id="stm9000DAO.insertStm9000JobInfo" parameterClass="java.util.Map">
-		<![CDATA[ 
-			/* stm9000DAO.insertStm9000JobInfo  - Job 등록  */ 
-				INSERT     INTO     STM9001
-					(
-					            JEN_ID              , /* JENKINS JOB 코드 */ 
-					            JOB_ID 				, /* JOB ID */
-					            JOB_RESTORE_ID 		, /* 원복 JOB ID */
-					            JOB_TOK 			, /* JOB TOKEN KEY */
-					            JOB_TYPE_CD			, /* JOB TYPE */
-					            JOB_DESC 			, /* JOB DESC */
-					            USE_CD              , /* 사용여부(코드 : CMM00001) */ 
-					            REG_DTM             , /* 최초등록 일시 */ 
-					            REG_USR_ID          , /* 최초등록자 ID */ 
-					            REG_USR_IP          , /* 최초등록자 IP */ 
-					            MODIFY_DTM          , /* 최종수정일시 */ 
-					            MODIFY_USR_ID       , /* 최종수정자 ID */ 
-					            MODIFY_USR_IP       , /* 최종수정자 IP */ 
-					            LIC_GRP_ID          
-					)
-				VALUES
-					(
-					             #jenId#, 
-					             #jobId#,
-					             #jobRestoreId#,
-					             #jobTok#,
-					             #jobTypeCd#,
-					             #jobDesc#, 
-					             #useCd#, 
-					             SYSDATE , 
-					             #regUsrId#, 
-					             #regUsrIp#, 
-					             SYSDATE , 
-					             #modifyUsrId#, 
-					             #modifyUsrIp#,
-					             #licGrpId# 
-					)
-			
-		]]>
-	</insert>
-    
 	
 	<update id="stm9000DAO.updateStm9000JenkinsInfo" parameterClass="java.util.Map">
-		/* stm9000DAO.updateStm9000JenkinsInfo - Jenkins 정보 수정 */ 
-			UPDATE     STM9000     SET 
-
-			           JEN_ID = #jenId#              , /* JENKINS JOB 코드 */ 
-			           JEN_NM = #jenNm#              , /* JENKINS JOB 명 */ 
-			           JEN_USR_ID = #jenUsrId#       , /* JENKINS 사용자 ID */ 
-			           JEN_USR_TOK = #jenUsrTok#     , /* JENKINS 사용자 TOKEN KEY */ 
-			           JEN_URL = #jenUrl#            , /* JENKINS JOB URL */ 
-			           JEN_DESC = #jenDesc#            , /* JENKINS JOB Comment */ 
-			           USE_CD = #useCd#              , /* 사용여부(코드 : CMM00001) */ 
-			           MODIFY_DTM = SYSDATE          , /* 최종수정일시 */ 
-			           MODIFY_USR_ID = #modifyUsrId# , /* 최종수정자 ID */ 
-			           MODIFY_USR_IP = #modifyUsrIp#   /* 최종수정자 IP */ 
-			WHERE
-					   1=1
-			  AND	   LIC_GRP_ID	=  	#licGrpId# 
-			  AND	   JEN_ID 		= 	#jenId#                /* JENKINS JOB 코드 */ 
+		 
+		UPDATE STM9000 SET 
+				JEN_ID = #jenId# 
+			,	JEN_NM = #jenNm# 
+			,	JEN_USR_ID = #jenUsrId# 
+			,	JEN_USR_TOK = #jenUsrTok# 
+			,	JEN_URL = #jenUrl# 
+			,	JEN_DESC = #jenDesc# 
+			,	USE_CD = #useCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp# 
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+		AND	JEN_ID = #jenId# 
 	</update>
     
-	
-	<update id="stm9000DAO.updateStm9000JobInfo" parameterClass="java.util.Map">
-		/* stm9000DAO.updateStm9000JobInfo - Job 정보 수정 */ 
-			UPDATE     STM9001     SET 
-			        JEN_ID = #jenId#            	  	, /* JENKINS JOB 코드 */ 
-			        JOB_ID = #jobId# 					, /* JOB ID */
-		            JOB_RESTORE_ID = #jobRestoreId# 	, /* 원복 JOB ID */
-		            JOB_TOK = #jobTok# 					, /* JOB TOKEN KEY */
-		            JOB_TYPE_CD = #jobTypeCd#				, /* JOB TYPE */
-		            JOB_DESC = #jobDesc# 				, /* JOB DESC */
-			        USE_CD = #useCd#             		, /* 사용여부(코드 : CMM00001) */ 
-			        MODIFY_DTM = SYSDATE         	 	, /* 최종수정일시 */ 
-			        MODIFY_USR_ID = #modifyUsrId# 		, /* 최종수정자 ID */ 
-			        MODIFY_USR_IP = #modifyUsrIp#   	/* 최종수정자 IP */ 
-			WHERE 1=1
-				AND	LIC_GRP_ID	=  	#licGrpId# 
-				AND	JEN_ID 		= 	#jenId#             /* JENKINS JOB 코드 */ 
-				AND	JOB_ID		=	#jobId#				/* JOB ID */
-	</update>
-	
-	
+    
 	<update id="stm9000DAO.deleteStm9000JenkinsInfo" parameterClass="java.util.Map">
-		UPDATE     STM9000     SET 
-		           DEL_CD = #delCd#              , /* 삭제유무(코드 : CMM00001) */ 
-		           MODIFY_DTM = SYSDATE          , /* 최종수정일시 */ 
-		           MODIFY_USR_ID = #modifyUsrId# , /* 최종수정자 ID */ 
-		           MODIFY_USR_IP = #modifyUsrIp#   /* 최종수정자 IP */ 
-		WHERE
-				   1=1
-		  AND	   LIC_GRP_ID	=  	#licGrpId# 
-		  AND	   JEN_ID 		= 	#jenId#                /* JENKINS JOB 코드 */ 
+		
+		UPDATE STM9000 SET 
+				DEL_CD = #delCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp#  
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId# 
+		AND JEN_ID = #jenId# 
 	</update>
 	
-	
-	<delete id="stm9000DAO.deleteStm9000JobInfo" parameterClass="java.util.Map">
-		DELETE FROM	STM9001 A
-		WHERE	1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#               /* JENKINS JOB 코드 */
-			AND	JOB_ID = #jobId# 
-	</delete>
-	
+    
+    
+    
 	
 	<select id="stm9000DAO.selectStm9000JenkinsUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
 		SELECT	COUNT(1) AS CNT
 		FROM 	STM9000 A
 		WHERE    1=1
 			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#               /* JENKINS JOB 코드 */ 
+			AND	JEN_ID = #jenId#                
 			AND	ROWNUM = 1
 	</select>
 	
-	
-	<select id="stm9000DAO.selectStm9000JobUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
-		SELECT	COUNT(1) AS CNT
-		FROM 	STM9001 A
-		WHERE    1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#               /* JENKINS JOB 코드 */ 
-			AND JOB_ID = #jobId#
-			AND	ROWNUM = 1
-	</select>
-    
-    
+   
     <select id="stm9000DAO.selectStm9000JenkinsUserList" parameterClass="java.util.Map"  resultClass="egovMap">
-		/* stm9000DAO.selectStm9000JenkinsUserList - Jenkins 유저 목록 조회 */
+		
 		
       SELECT   	 B.JEN_USR_ID 
 		      	,B.JEN_USR_TOK
@@ -495,7 +215,7 @@
     
     
 	<insert id="stm9000DAO.insertStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
-		/* stm9000DAO.insertStm9000JenAuthGrpInfo - jenkins 허용 역할 정보 저장  */
+		
 		<![CDATA[
 			INSERT INTO STM9002 A
 			(
@@ -515,7 +235,7 @@
 	
 	
 	<delete id="stm9000DAO.deleteStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
-		/* stm9000DAO.deleteStm9000JenAuthGrpInfo - jenkins 허용 역할 정보 제거  */
+		
 		<![CDATA[
 			DELETE FROM STM9002 A
 			WHERE 1=1
@@ -527,7 +247,7 @@
 	
 	
 	<select id="stm9000DAO.selectStm9000JenAuthGrpList"  parameterClass="java.util.Map" resultClass="egovMap">
-		/* stm9000DAO.selectStm9000JenAuthGrpList - jenkins 허용 역할 정보 목록 가져오기  */
+		
 		<![CDATA[
 			SELECT 
 				A.PRJ_ID
@@ -553,7 +273,7 @@
 	
 	
 	<select id="stm9000DAO.selectStm9000JenAuthGrpCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		/* stm9000DAO.selectStm9000JenAuthGrpCnt -  jenkins 허용 역할 정보 단건 갯수 가져오기 */
+		
 		<![CDATA[
 			SELECT COUNT(*) AS AUTH_GRP_CNT
 			FROM STM9002 A
@@ -563,4 +283,5 @@
 			AND A.AUTH_GRP_ID = #authGrpId#
 		]]>
 	</select>
+	
 </sqlMap>

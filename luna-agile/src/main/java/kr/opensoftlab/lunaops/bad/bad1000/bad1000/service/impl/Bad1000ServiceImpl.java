@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.service.impl.FileManageDAO;
+import egovframework.com.utl.sim.service.EgovFileScrty;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import kr.opensoftlab.lunaops.bad.bad1000.bad1000.service.Bad1000Service;
 import kr.opensoftlab.lunaops.bad.bad1000.bad1100.service.impl.Bad1100DAO;
@@ -72,8 +73,11 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		
 		Map stmInfo = stm2100DAO.selectStm2100BadInfo(paramMap);
 		
-		
-		paramMap.put("dsTypeCd", stmInfo.get("stmDsTypeCd"));
+		String dsTypeCd = (String) paramMap.get("dsTypeCd");
+		if(dsTypeCd ==null || dsTypeCd == "") {
+			
+			paramMap.put("dsTypeCd", stmInfo.get("stmDsTypeCd"));
+		}
 		
 		
 		paramMap.put("stmNtcYnCd", stmInfo.get("stmNtcYnCd"));
@@ -88,18 +92,13 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 		}
 		
 		
-
-
-				
-
-
-
-		
 		return bad1000DAO.selectBad1000BadList(paramMap);
 	}
 	
 	
 	public String selectBad1000BadPwInfo(Map<String, String> paramMap) throws Exception{
+		
+		paramMap.put("badPw", EgovFileScrty.encryptPassword(paramMap.get("badPw"), paramMap.get("badId")));
 		String badId = bad1000DAO.selectBad1000BadPwInfo(paramMap);
 		if(badId == null || badId == "") {
 			return "N";
@@ -156,10 +155,20 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void insertBad1000Badinfo(Map paramMap) throws Exception{
+	public void insertBad1000BadInfo(Map paramMap) throws Exception{
 		
 		String badIdStr = bad1000DAO.insertBad1000BadInfo(paramMap);
 		paramMap.put("badId", badIdStr);
+		
+		
+		String badPw = (String) paramMap.get("badPw");
+		if(badPw != null && !badPw.isEmpty()) {
+			
+			paramMap.put("badPw", EgovFileScrty.encryptPassword(badPw, badIdStr));
+			
+			
+			bad1000DAO.updateBad1000BadInfo(paramMap);
+		}
 
 		
 		String str = (String) paramMap.get("tagList");
@@ -210,6 +219,26 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void updateBad1000BadInfo(Map paramMap) throws Exception{
+
+		
+		String badPw = (String) paramMap.get("badPw");
+		if(badPw != null && !badPw.isEmpty()) {
+			
+			String prevPw = bad1000DAO.selectBad1000BadPwPrevInfo(paramMap);
+			
+			
+			String enBadPw = EgovFileScrty.encryptPassword(badPw, (String) paramMap.get("badId"));
+			
+			
+			if(enBadPw != null && enBadPw.equals(prevPw)) {
+				
+				paramMap.put("badPw", prevPw);
+			}else {
+				
+				paramMap.put("badPw", enBadPw);
+			}
+		}
+		
 		
 		bad1000DAO.updateBad1000BadInfo(paramMap);
 		
@@ -335,10 +364,6 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 
 		JSONObject jsonObj = null;
 		
-
-
-		
-		
 		Map<String, String> deleteBadCmt = new HashMap<>();
 		
 		deleteBadCmt.put("delTypeCd", "01");
@@ -376,43 +401,12 @@ public class Bad1000ServiceImpl extends EgovAbstractServiceImpl implements Bad10
 			
 			bad1000DAO.deleteBad1000BadInfo(infoMap);
 			
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
-			
 			deleteBadCmt.put("badId", (String) histInfo.get("badId")); 
 			deleteBadCmt.put("menuId", (String) histInfo.get("menuId"));
 			deleteBadCmt.put("prjGrpId", (String) deleteDataType.get("prjGrpId"));
 			deleteBadCmt.put("prjId", (String) deleteDataType.get("prjId"));
 			bad1100DAO.deleteBad1100CmtInfo(deleteBadCmt);
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	}
 	
