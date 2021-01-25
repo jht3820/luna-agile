@@ -54,8 +54,6 @@ var OSLStm6001Popup = function () {
 	var formId = 'frStm6001';
 	var type = $("#type").val();
 	
-	console.log(type);
-	
 	// 버튼 문구 세팅
 	$("#stm6001SaveSubmit > span").text($.osl.lang("stm6001.button."+type));
 	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));

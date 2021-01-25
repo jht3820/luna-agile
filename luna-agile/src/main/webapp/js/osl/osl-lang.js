@@ -1,11 +1,8 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +169,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -232,7 +229,103 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		/* 페이지 언어 */
+		
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "받은 메시지",
+				send: "보낸 메시지",
+				alone: "나에게 보낸 메시지"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "메시지 조회",
+					insertBtn : "메시지 보내기",
+					reInsertBtn : "메시지 답장",
+					checkBtn : "메시지 읽음 처리",
+					deleteBtn : "메시지 삭제",
+					dblClickBtn :"메시지 상세 조회"
+				},
+				reInsertBtn : "답장",
+				checkBtn : "읽음",
+			},
+			
+			field: {
+				sendUsrId : "보낸 사람 ID",
+				sendUsrEmail : "보낸 사람 e-mail",
+				usrNm : "받는 사람",
+				usrId : "받는 사람 ID",
+				usrEmail :"받는 사람 e-mail",
+				armContent : "내용"
+			},
+			actionBtn : {
+				title : "삭제 / 상세 / 답장",
+				insertTitle : "메시지 쓰기",
+				reInsertTitle :"메시지 답장",
+				dblClickTitle : "메시지 상세",
+			},
+			alert :{
+				message : {
+					selectMessage : "답장할 메시지를 선택하세요.",
+					selectOneMessage : "1개의 메시지만 선택하세요.<br/>${1}개의 메시지가 선택되었습니다.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "받는 사람",
+				title : "제목",
+				content : "내용",
+				attachments: "파일 첨부", 
+			},
+			placeholder :{
+				title : "제목",
+				content : "내용",
+				select2 : "선택 또는 입력"
+			},
+			message :{
+				inputToUser : "받는 사람을 입력하세요.",
+				send : "메시지를 보내시겠습니까?",
+			},
+			button : {
+				submit : "보내기"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "첨부 파일", 
+			},
+			button : {
+				reSend : "답장"
+			},
+			title :"메시지 답장"
+		},
+		dpl1100:{
+			title : {
+				deploy : "배포계획 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					dplSelect : "배포계획 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "배포계획 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
+			}
+		},
 		prj1000:{
 			startDate: "시작일",
 			endDate: "종료일",
@@ -361,6 +454,50 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
+		prj5001:{
+			complete: "완료",
+			insert:{
+				title: "프로젝트 일정 저장",
+				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
+			update:{
+				title: "프로젝트 일정 수정",
+				saveString: "프로젝트 일정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
+			},
+			actionBtn : {
+				insertBtn : "프로젝트 일정 저장",
+				updateBtn : "프로젝트 일정 수정"
+			},
+			label : {
+				evtNm: "일정명",
+				evtRange: "일정 일자",
+				evtDesc: "일정 설명",
+				evtBgColor: "일정 배경 색상",
+				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
+			}
+		},
 		req1001:{
 			title: "신규 요구사항 요청",
 			reqUser:{
@@ -374,6 +511,11 @@ var OSLCoreLangSetting = function () {
 			reqDtm: "요청 일자",
 			reqNm: "요청 제목",
 			reqDesc: "요청 내용",
+			reqPw: {
+				title : "요구사항 잠금",
+				password : "PW",
+				passwordCheck :"PW 확인"
+			},
 			attachments: "파일 첨부", 
 			complete: "완료",
 			insert:{
@@ -383,25 +525,19 @@ var OSLCoreLangSetting = function () {
 			update:{
 				saveString: "요구사항 정보를 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
-			}
+			},
+			formCheck:{
+				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
+				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
+			},
 		},
 		req4100:{
 			button:{
 				copyBtn : "복사"
 			},
 			field:{
+				
 				prjGrpNm: "프로젝트 그룹명",
-				prjNm: "프로젝트명",
-				reqOrd: "요청 번호",
-				reqProTypeNm: "처리유형",
-				reqNm: "요청 제목",
-				reqDtm: "요청일",
-				regDtm: "등록일",
-				reqUsrNm: "요청자",
-				reqUsrEmail: "요청자 e-mail",
-				reqUsrDeptNm: "요청자 조직",
-				reqUsrNum: "요청자 연락처",
-				reqKey: "요구사항 key"
 			},
 			actionBtn:{
 				title : "수정 / 삭제 / 상세 / 복사",
@@ -498,13 +634,6 @@ var OSLCoreLangSetting = function () {
 				button : {
 					detailBtn : "상세 조회",
 				},
-				field:{
-					reqProTypeNm : "처리 유형",
-					reqOrd : "순번",
-					prjNm : "프로젝트명",
-					reqNm : "요구사항명",
-					reqDtm : "요청일"
-				}
 			},
 			formCheck:{
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
@@ -513,11 +642,8 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
+				
 				usrNm : "사용자명",
-				usrId : "아이디",
-				email : "이메일",
-				tel : "연락처",
-				deptName: "소속",
 			},
 			actionBtn : {
 				title : "선택",
@@ -528,45 +654,6 @@ var OSLCoreLangSetting = function () {
 			text: "잠긴 요구사항입니다.<br/> 비밀번호를 입력하세요.",
 			button:{
 				submit : "확인",
-			}
-		},
-		spr1002:{
-			complete: "완료",
-			insert:{
-				title: "신규 스프린트 생성",
-				saveString: "신규 스프린트를 등록하시겠습니까?",
-				saveBtnString: "등록 완료",
-			},
-			update:{
-				title: "스프린트 수정",
-				saveString: "스프린트를 수정하시겠습니까?",
-				saveBtnString: "수정 완료"
-			}
-		},
-		spr1100:{
-			title : {
-				sprint : "스프린트 목록",
-				assignment : "요구사항 배정 목록",
-				unassigned : "요구사항 미배정 목록",
-			},
-			button:{
-				removeBtn: "제외",
-				addBtn:"배정"
-			},
-			actionBtn :{
-				title :{
-					selectBtn : "선택",
-					removeBtn :"제외",
-					addBtn :"배정",
-					sprSelect : "스프린트 조회",
-					assSelect : "요구사항 배정 조회",
-					nonSelect : "요구사항 미배정 조회",
-				},
-				tooltip :{
-					clickToolTip : "스프린트 선택",
-					removeToolTip :"요구사항 배정 제외",
-					addToolTip :"요구사항 배정",
-				},
 			}
 		},
 		spr1000:{
@@ -606,6 +693,77 @@ var OSLCoreLangSetting = function () {
 					delete: "스프린트 삭제",
 					dblClick: "스프린트 상세 정보"
 				}
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		spr1003:{
+			wizard:{
+				main:{
+					mmtTitle: "회의록 작성",
+					mmtDesc: "스프린트 회의록 작성",
+					sprPtTitle: "스토리 포인트 입력",
+					sprPtDesc: "요구사항 스토리 포인트 입력",
+					chargerTitle: "담당자 지정",
+					chargerDesc: "요구사항 담당자 지정",
+					processTitle: "프로세스 배정"
+				},
+				info:{
+					mmt: "* 스프린트 시작 전 회의록을 작성하세요.",
+					sprPt: "* 요구사항에 스토리 포인트를 입력하세요.",
+					charger: "* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.",
+					process: "* 배정된 프로세스가 칸반 보드에 표시됩니다."
+				},
+				btn:{
+					prev: "이전",
+					submit: "완료",
+					next: "다음"
+				}
+			},
+			lebel:{
+				mmtUsrList: "참여 인원",
+				mmtTitle: "회의록 제목",
+				mmtDesc: "회의록 내용"
+			},
+			alert:{
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
+			}
+		},
+		spr1100:{
+			title : {
+				sprint : "스프린트 목록",
+				assignment : "요구사항 배정 목록",
+				unassigned : "요구사항 미배정 목록",
+			},
+			button:{
+				removeBtn: "제외",
+				addBtn:"배정"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "선택",
+					removeBtn :"제외",
+					addBtn :"배정",
+					sprSelect : "스프린트 조회",
+					assSelect : "요구사항 배정 조회",
+					nonSelect : "요구사항 미배정 조회",
+				},
+				tooltip :{
+					clickToolTip : "스프린트 선택",
+					removeToolTip :"요구사항 배정 제외",
+					addToolTip :"요구사항 배정",
+				},
 			}
 		},
 		spr2000:{
@@ -693,6 +851,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
+			
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -872,30 +1031,20 @@ var OSLCoreLangSetting = function () {
 		},
 		stm9000: {
 			title : {
-				jenkinsManagement : "JENKINS 관리",
-				jobManagement : "JENKINS 관리"
+				jenkinsManagement : "JENKINS 관리"
 			},
 			button:{
+				common:{
+					selectConnection:"선택 접속 확인",
+					allConnection:"전체 접속 확인"
+				},
 				jenkins:{
 					selectTooltip: "Jenkins 조회",
 					insertTooltip: "Jenkins 추가",
 					updateTooltip: "Jenkins 수정",
-					deleteTooltip: "Jenkins 삭제"
-				},
-				job:{
-					selectTooltip: "Job 조회",
-					insertTooltip: "Job 추가",
-					updateTooltip: "Job 수정",
-					deleteTooltip: "Job 삭제"	
-				}
-			},
-			field:{
-				jenkins:{
-					connectCheck: "접속 확인 결과",
-					jenkinsNm: "Jenkins 명",
-					jenkinsUrl: "Jenkins Url",
-					useNm: "사용 유무",
-					JenkinsUsrId: "Jenkins User Id"
+					deleteTooltip: "Jenkins 삭제",
+					selectConnectionTooltip: "선택 Jenkins 접속 확인",
+					allConnectionTooltip: "전체 Jenkins 접속 확인"
 				}
 			},
 			actionBtn:{
@@ -911,6 +1060,132 @@ var OSLCoreLangSetting = function () {
 					updateJenkins:"Jenkins 설정 수정",
 					detailJenkins:"상세 정보"
 				}
+			},
+			message:{
+				jenkins:{
+					nonSelect:"접속 확인할 Jenkins를 선택해주세요.",
+					connectSuccess:" 접속 성공"
+				}
+			}
+		},
+		stm9001:{
+			label:{
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUseCd : "사용여부",
+				jenkinsDesc : "JENKINS 설명",
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				confirm:{
+					insert:"신규 JENKINS를 등록하시겠습니까?",
+					update:"JENKINS 정보를 수정하시겠습니까?"
+				}
+			}
+		},
+		stm9002:{
+			label:{
+				leftTitle: "JENKINS 정보",
+				rightTitle: "JOB 정보",
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "JENKNS USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUse : "사용 유무",
+				mode : "mode",
+				jenkinsClass : "_class",
+				jenkinsDescription : "description",
+				jenkinsNodeName : "nodeName",
+				jenkinsNodeDesc : "nodeDescription",
+				statusLable :"상태",
+				systemRegisterLabel :"시스템 등록 유무",
+				systemRegister : "등록",
+				notSstemRegister : "미등록",
+				jobClass : "_class",
+				jobStatusEtc : "ETC",
+				jobStatusSuccess : "SUCCESS",
+				jobStatusFail : "FAIL",
+				jobStatusAborted : "ABORTED",
+				jobStatusNotBuilt : "NOT BUILT"
+			},
+			button:{
+				jobUpdate : "수정",
+				jobDelete : "삭제",
+				jobDetail : "상세 정보",
+				jobInsert : "신규 JOB 등록",
+				moveJobList : "JOB 목록 이동"
+			},
+			message:{
+				confirm:{
+					deleteMessage :"를 삭제하시겠습니까?"
+				}
+			}
+		},
+		stm9100: {
+			title : {
+				jobManagement : "JOB 관리"
+			},
+			button:{
+				common:{
+					selectConnection:"선택 접속 확인",
+					allConnection:"전체 접속 확인"
+				},
+				job:{
+					selectTooltip: "Job 조회",
+					insertTooltip: "Job 추가",
+					updateTooltip: "Job 수정",
+					deleteTooltip: "Job 삭제"	,
+					selectConnectionTooltip: "선택 Job 접속 확인",
+					allConnectionTooltip: "전체 Job 접속 확인"
+				}
+			},
+			actionBtn:{
+				job:{
+					updateBtn:"Job 수정",
+					deleteBtn:"Job 삭제",
+					dblClickBtn:"Job 상세보기"
+				}
+			},
+			modal:{
+				job:{
+					insertJob:"신규 Job 설정 등록",
+					updateJob:"Job 설정 수정",
+					detailJob:"상세 정보"
+				}
+			},
+			message:{
+				job:{
+					nonSelect:"접속 확인할 Job을 선택해주세요.",
+					connectSuccess:" 접속 성공"
+				}
+			}
+		},
+		stm9101:{
+			label:{
+				jenkins : "JENKINS",
+				job : "JOB",
+				jobRestoreId : "원복 JOB ID",
+				tokenKey: "TOKEN KEY",
+				jobParameter: "JOB 매개변수",
+				jobTypeCd : "JOB TYPE",
+				jobUseCd : "사용 유무",
+				jobDesc : "JOB 설명"
+			},
+			button:{
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message:{
+				noExistJenkins : "JENKINS 등록이 필요합니다.",
+				confirm:{
+					insert:"신규 JOB을 등록하시겠습니까?",
+					update:"JOB 정보를 수정하시겠습니까?"
+				}
 			}
 		},
 		bad1000:{
@@ -925,21 +1200,18 @@ var OSLCoreLangSetting = function () {
 			notWriter : {
 				deleteMessage : "본인이 작성한 게시글만 삭제 가능합니다.",
 			},
+			label:{
+				deleteBadge: "삭제",
+				noticeBadge: "공지",
+			},
 			field:{
+				
+				tagNm:"태그",
+				
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
 				cmtContent:"댓글내용",
-				tagNm:"태그",
-				badTitle:"제목",
-				badHit: "조회수",
-				badFileCnt: "첨부파일 수",
-				badUsrId: "작성자",
-				badWtdtm: "작성일",
-			},
-			label:{
-				deleteBadge: "삭제",
-				noticeBadge: "공지",
 			},
 			button:{
 				dblClick : "상세",
@@ -983,13 +1255,6 @@ var OSLCoreLangSetting = function () {
 				attachFile : "파일 첨부",
 				tag: "태그",
 				comment:"댓글",
-			},
-			field:{
-				comment:{
-					writer : "작성자",
-					content:"내용",
-					writeDate : "작성일"
-				}
 			},
 			actionBtn:{
 				title : "삭제",
@@ -1083,7 +1348,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1191,7 +1456,37 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
+			cmm16000CmmTable:{
+				sendUsrNm : "From User Name",
+				armTitle : "Title",
+				sendDtm : "Date",
+			},
+			bad1000BadTable:{
+				badContent: "Content",
+				badNtcCheck : "Notice",
+				delCd:"Delete",
+				cmtContent:"Comment",
+				tagNm:"Tag",
+				badTitle:"Title",
+				badHit: "Hit",
+				badFileCnt: "Attachments Count",
+				badUsrId: "Writer",
+				badWtdtm: "Write Date",
+			},
+			bad1001CmtTable:{
+				writer : "Writer",
+				content:"Comment",
+				writeDate : "Date"
+			},
+			dpl1000DplTable:{
+				dplStsNm:"Deploy Status",
+				dplNm:"Deploy Title",
+				dplDt:"Deploy Date",
+				dplVer:"Deploy Version",
+				dplTypeNm:"Deploy Type",
+				dplDesc:"Deploy Desciption",
+			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
 				reqOrd: "Order",
@@ -1204,6 +1499,46 @@ var OSLCoreLangSetting = function () {
 				reqUsrDeptNm: "Request Department Name",
 				reqUsrNum: "Request User Number",
 				reqKey: "Request Key",
+			},
+			req1100AssTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
+			},
+			req1100NonTable:{
+				reqNm: "Request Name",
+				reqOrd : "Request Number",
+				reqProTypeNm :"Processing Status",
+				reqDtm : "Request Date",
+			},
+			req4100ReqTable:{
+				prjGrpNm: "Project Group Name",
+				prjNm: "Project Name",
+				reqOrd: "Request Number",
+				reqProTypeNm: "Processing Status",
+				reqNm: "Title",
+				reqDtm: "Request Date",
+				regDtm: "Write Date",
+				reqUsrNm: "Requester",
+				reqUsrEmail: "Requester E-mail",
+				reqUsrDeptNm: "Requester Department",
+				reqUsrNum: "Requester Contact",
+				reqKey: "Request Key"
+			},
+			prepListTable:{
+				reqProTypeNm : "Processing Status",
+				reqOrd : "Request Number",
+				prjNm : "Project Name",
+				reqNm : "Title",
+				reqDtm : "Request Date"
+			},
+			req4103ReqTable:{
+				usrNm : "User Name",
+				usrId : "Id",
+				email : "E-mail",
+				tel : "Contact",
+				deptName: "Department",
 			},
 			prj1000PrjTable:{
 				prjNm: "Project Group Name",
@@ -1230,18 +1565,6 @@ var OSLCoreLangSetting = function () {
 				sprDesc : "Sprint Desciption",
 				sprDtm :"Date Range",
 			},
-			spr1100AssTable:{
-				reqNm: "Request Name",
-				reqOrd : "Request Number",
-				reqProTypeNm :"Processing Status",
-				reqDtm : "Request Date",
-			},
-			spr1100NonTable:{
-				reqNm: "Request Name",
-				reqOrd : "Request Number",
-				reqProTypeNm :"Processing Status",
-				reqDtm : "Request Date",
-			},
 			spr2000RptTable:{
 				rptNm : "Meeting Log Title",
 				rptMemCnt : "Meeting Members",
@@ -1253,6 +1576,23 @@ var OSLCoreLangSetting = function () {
 				mmrNm:"Memoirs Title",
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
+			},
+			stm9000JenkinsTable:{
+				result : "Connection check",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins Url",
+				jenUsrId: "Jenkins User Id",
+				useNm:"Jenkins Use",
+				jenDesc:"Jenkins Description"
+			},
+			stm9100JobTable:{
+				jenNm:"Jenkins Name",
+				jobTypeNm:"Job Type",
+				jobId:"Job Id",
+				jobRestoreId:"Restore Job Id",
+				jobParameter:"Job Parameter",
+				useNm:"Job Use",
+				jobDesc:"Job Description"
 			}
 		},
 		date:{
@@ -1309,7 +1649,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -1364,7 +1704,103 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "Received Message",
+				send: "Sent Message",
+				alone: "Sent To Me"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "Select Message",
+					insertBtn : "Send Message",
+					reInsertBtn : "Reply Message",
+					checkBtn : "Read Check Message",
+					deleteBtn : "Delete Message",
+					dblClickBtn :"Detail Message"
+				},
+				reInsertBtn : "Reply",
+				checkBtn : "Read Check"
+			},
+			
+			field: {
+				sendUsrId : "From User Id",
+				sendUsrEmail : "From User E-mail",
+				usrNm : "To User Name",
+				usrId : "To User Id",
+				usrEmail :"To User E-mail",
+				armContent : "Content"
+			},
+			actionBtn : {
+				title : "Del / Det / Rep",
+				insertTitle : "Write Message",
+				reInsertTitle :"Reply Message",
+				dblClickTitle : "Detail Message",
+			},
+			alert :{
+				message : {
+					selectMessage : "Select a message to reply to.",
+					selectOneMessage : "Please select only 1 message.<br/>${1} messages have been selected.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "To",
+				title : "Title",
+				content : "Content",
+				attachments: "Attachments", 
+			},
+			placeholder :{
+				title : "Title",
+				content : "Content",
+				select2 : "Click or Search Text"
+			},
+			message :{
+				inputToUser : "Please enter the recipient.",
+				send : "Would you like to send a message?",
+			},
+			button : {
+				submit : "Send"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "Attachments", 
+			},
+			button : {
+				reSend : "Reply"
+			},
+			title :"Reply Message"
+		},
+		dpl1100:{
+			title : {
+				deploy : "Deploy List",
+				assignment : "Assignment Request List",
+				unassigned : "Unassigned Request List",
+			},
+			button:{
+				removeBtn: "Remove",
+				addBtn:"Add"
+			},
+			actionBtn :{
+				title :{
+					selectBtn : "Select",
+					removeBtn :"Remove",
+					addBtn :"Add",
+					dplSelect : "Select Deploy List",
+					assSelect : "Select Assignment Request",
+					nonSelect : "Select Unassigned Request",
+				},
+				tooltip :{
+					clickToolTip : "Select Sprint",
+					removeToolTip :"Remove Request",
+					addToolTip :"Add Request",
+				},
+			}
+		},
 		prj1000:{
 			startDate: "Start Date",
 			endDate: "End Date",
@@ -1440,6 +1876,50 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
+		prj5001:{
+			complete: "완료",
+			insert:{
+				title: "프로젝트 일정 저장",
+				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
+			update:{
+				title: "프로젝트 일정 수정",
+				saveString: "프로젝트 일정을 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
+			},
+			actionBtn : {
+				insertBtn : "프로젝트 일정 저장",
+				updateBtn : "프로젝트 일정 수정"
+			},
+			label : {
+				evtNm: "일정명",
+				evtRange: "일정 일자",
+				evtDesc: "일정 설명",
+				evtBgColor: "일정 배경 색상",
+				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
+			}
+		},
 		req1001:{
 			title:"Request new requirements",
 			reqUser:{
@@ -1449,6 +1929,11 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
@@ -1456,24 +1941,18 @@ var OSLCoreLangSetting = function () {
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
+			formCheck:{
+				passwordMessage : "You must write password for secret request.",
+				passwordMatching : "The entered passwords are different.",
+			},
 		},
 		req4100:{
 			button:{
 				copyBtn : "Copy"
 			},
 			field:{
+				
 				prjGrpNm: "Project Group Name",
-				prjNm: "Project Name",
-				reqOrd: "Request Number",
-				reqProTypeNm: "Processing Status",
-				reqNm: "Title",
-				reqDtm: "Request Date",
-				regDtm: "Write Date",
-				reqUsrNm: "Requester",
-				reqUsrEmail: "Requester E-mail",
-				reqUsrDeptNm: "Requester Department",
-				reqUsrNum: "Requester Contact",
-				reqKey: "Request Key"
 			},
 			actionBtn:{
 				title : "Udp / Del / Det / Cop",
@@ -1570,13 +2049,6 @@ var OSLCoreLangSetting = function () {
 				button : {
 					detailBtn : "Detail",
 				},
-				field:{
-					reqProTypeNm : "Processing Status",
-					reqOrd : "Request Number",
-					prjNm : "Project Name",
-					reqNm : "Title",
-					reqDtm : "Request Date"
-				}
 			},
 			formCheck:{
 				passwordMessage : "You must write password for secret request.",
@@ -1585,11 +2057,8 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
+				
 				usrNm : "User Name",
-				usrId : "Id",
-				email : "E-mail",
-				tel : "Contact",
-				deptName: "Department",
 			},
 			actionBtn : {
 				title : "Select",
@@ -1892,26 +2361,25 @@ var OSLCoreLangSetting = function () {
 				jobManagement : "JENKINS Management"
 			},
 			button:{
+				common:{
+					selectConnection:"Select connection check",
+					allConnection:"Check all connections"
+				},
 				jenkins:{
 					selectTooltip: "Jenkins Select",
 					insertTooltip: "Jenkins Insert",
 					updateTooltip: "Jenkins Update",
-					deleteTooltip: "Jenkins Delete"					
+					deleteTooltip: "Jenkins Delete",
+					selectConnectionTooltip: "Selected Jenkins connection check",
+					allConnectionTooltip: "All Jenkins connection check"
 				},
 				job:{
 					selectTooltip: "Job Select",
 					insertTooltip: "Job Insert",
 					updateTooltip: "Job Update",
-					deleteTooltip: "Job Delete"	
-				}
-			},
-			field:{
-				jenkins:{
-					connectCheck: "Connection check result",
-					jenkinsNm: "Jenkins Name",
-					jenkinsUrl: "Jenkins Url",
-					useNm: "Jenkins Use",
-					JenkinsUsrId: "Jenkins User Id"
+					deleteTooltip: "Job Delete",
+					selectConnectionTooltip: "Selected Job connection check",
+					allConnectionTooltip: "All Job connection check"
 				}
 			},
 			actionBtn:{
@@ -1919,6 +2387,11 @@ var OSLCoreLangSetting = function () {
 					updateBtn:"Jenkins Update",
 					deleteBtn:"Jenkins Delete",
 					dblClickBtn:"Jenkins Detail Info"
+				},
+				job:{
+					updateBtn:"Job Update",
+					deleteBtn:"Job Delete",
+					dblClickBtn:"Job Detail Info"
 				}
 			},
 			modal:{
@@ -1926,6 +2399,31 @@ var OSLCoreLangSetting = function () {
 					insertJenkins:"Register new Jenkins settings",
 					updateJenkins:"Modify Jenkins settings",
 					detailJenkins:"Detail Info"
+				},
+				job:{
+					insertJob:"Register new Job settings",
+					updateJob:"Modify Job settings",
+					detailJob:"Detail Info"
+				}
+			}
+		},
+		stm9001:{
+			label:{
+				jenkinsName : "JENKINS NAME",
+				jenkinsUrl : "JENKINS URL",
+				jenkinsUserId : "USER ID",
+				tokenKey: "TOKEN KEY",
+				jenkinsUseCd : "JENKINS Use",
+				jenkinsDesc : "JENKINS Description",
+			},
+			button:{
+				insert : "Complete",
+				update : "Update completed"
+			},
+			message:{
+				confirm:{
+					insert:"Would you like to register a new jenkins?",
+					update:"Would you like to edit the jenkins information?"
 				}
 			}
 		},
@@ -1941,21 +2439,17 @@ var OSLCoreLangSetting = function () {
 			notWriter : {
 				deleteMessage : "Only posts written by you can be deleted.",
 			},
-			field:{
+			label:{
+				deleteBadge: "Delete",
+				noticeBadge: "Notice",
+			},
+			field:{ 
+				tagNm:"Tag",
+				
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
 				cmtContent:"Comment",
-				tagNm:"Tag",
-				badTitle:"Title",
-				badHit: "Hit",
-				badFileCnt: "Attachments Count",
-				badUsrId: "Writer",
-				badWtdtm: "Write Date",
-			},
-			label:{
-				deleteBadge: "Delete",
-				noticeBadge: "Notice",
 			},
 			button:{
 				dblClick : "Detail",
@@ -1999,13 +2493,6 @@ var OSLCoreLangSetting = function () {
 				attachFile : "Attachments",
 				tag: "Tag",
 				comment:"Comment",
-			},
-			field:{
-				comment:{
-					writer : "Writer",
-					content:"Comment",
-					writeDate : "Date"
-				}
 			},
 			actionBtn:{
 				title : "Delete",
@@ -2099,12 +2586,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2113,7 +2600,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };
