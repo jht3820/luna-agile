@@ -1990,13 +1990,12 @@ label.required:after {
 	}
 }
 
-.eventColorSelDiv {
+.osl-calendar__guide-color {
     height: 27px;
-    width: 30px;
+    width: 27px;
     margin: 3px;
     display: inline-block;
     border-width: 4px;
-    border-style: double;
     line-height: 17px;
     text-align: center;
 	cursor: pointer;
