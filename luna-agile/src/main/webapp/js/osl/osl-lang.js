@@ -656,19 +656,6 @@ var OSLCoreLangSetting = function () {
 				submit : "확인",
 			}
 		},
-		spr1002:{
-			complete: "완료",
-			insert:{
-				title: "신규 스프린트 생성",
-				saveString: "신규 스프린트를 등록하시겠습니까?",
-				saveBtnString: "등록 완료",
-			},
-			update:{
-				title: "스프린트 수정",
-				saveString: "스프린트를 수정하시겠습니까?",
-				saveBtnString: "수정 완료"
-			}
-		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
 			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
@@ -706,6 +693,51 @@ var OSLCoreLangSetting = function () {
 					delete: "스프린트 삭제",
 					dblClick: "스프린트 상세 정보"
 				}
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		spr1003:{
+			wizard:{
+				main:{
+					mmtTitle: "회의록 작성",
+					mmtDesc: "스프린트 회의록 작성",
+					sprPtTitle: "스토리 포인트 입력",
+					sprPtDesc: "요구사항 스토리 포인트 입력",
+					chargerTitle: "담당자 지정",
+					chargerDesc: "요구사항 담당자 지정",
+					processTitle: "프로세스 배정"
+				},
+				info:{
+					mmt: "* 스프린트 시작 전 회의록을 작성하세요.",
+					sprPt: "* 요구사항에 스토리 포인트를 입력하세요.",
+					charger: "* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.",
+					process: "* 배정된 프로세스가 칸반 보드에 표시됩니다."
+				},
+				btn:{
+					prev: "이전",
+					submit: "완료",
+					next: "다음"
+				}
+			},
+			lebel:{
+				mmtUsrList: "참여 인원",
+				mmtTitle: "회의록 제목",
+				mmtDesc: "회의록 내용"
+			},
+			alert:{
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
 			}
 		},
 		spr1100:{
