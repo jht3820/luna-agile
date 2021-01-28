@@ -1208,6 +1208,16 @@ var OSLCoreLangSetting = function () {
 				notConsoleLog: "콘솔 로그가 없습니다."
 			}
 		},
+		stm9300:{
+			search:{
+				jenkinsDesc : "Jenkins 설명",
+				jobDesc : "Job 설명"
+			},
+			actionBtn:{
+				jenkinsDetail:"Jenkins 상세보기",
+				jobDetail:"Job 상세보기"
+			}
+		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.<br/> ${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -1611,7 +1621,7 @@ var OSLCoreLangSetting = function () {
 				jobId:"Job Id",
 				jobRestoreId:"Restore Job Id",
 				jobParameter:"Job Parameter",
-				useNm:"Job Use",
+				useNm:"Jenkins Use",
 				jobDesc:"Job Description"
 			},
 			stm9102JobBuildTable:{
@@ -1620,6 +1630,16 @@ var OSLCoreLangSetting = function () {
 				bldStartDtm: "Build Start Time",
 				bldDurationTm: "Duration Time",
 				regUsrNm: "Distributor"
+			},
+			stm9300PrjJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter",
+				useNm: "Jenkins Use"
 			}
 		},
 		date:{
