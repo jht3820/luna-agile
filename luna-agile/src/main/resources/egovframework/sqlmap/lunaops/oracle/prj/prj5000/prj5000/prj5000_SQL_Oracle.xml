@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="prj5000DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+   	<resultMap id="resultMapSelectPrj5000" class="egovMap">
+		<result property="rn"  					column="RN"/>
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjGrpNm"				column="PRJ_GRP_NM"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="prjNm"				column="PRJ_NM"/>
+		<result property="usrId"				column="USR_ID"/>
+		<result property="usrNm"				column="USR_NM"/>
+		
+		<result property="prjEvtId"				column="PRJ_EVT_ID"/>
+		<result property="evtType"				column="EVT_TYPE"/>
+		<result property="evtStartSeq"			column="EVT_START_SEQ"/>
+		<result property="evtEndSeq"			column="EVT_END_SEQ"/>
+		<result property="evtStartDate"			column="EVT_START_DATE"/>
+		<result property="evtEndDate"			column="EVT_END_DATE"/>
+		<result property="evtStartTime"			column="EVT_START_TIME"/>
+		<result property="evtEndTime"			column="EVT_END_TIME"/>
+		<result property="evtStartFullDate"		column="EVT_START_FULL_DATE"/>
+		<result property="evtEndFullDate"		column="EVT_END_FULL_DATE"/>
+		<result property="evtStartDayWeek"		column="EVT_START_DAY_WEEK"/>
+		<result property="evtEndDayWeek"		column="EVT_END_DAY_WEEK"/>
+		<result property="evtNm"				column="EVT_NM"/>
+		<result property="evtDesc"				column="EVT_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="evtBgColor"			column="EVT_BG_COLOR"/>
+		<result property="evtColor"				column="EVT_COLOR"/>
+		<result property="evtAllDayCd"			column="EVT_ALL_DAY_CD"/>
+		<result property="evtUseCd"				column="EVT_USE_CD"/>
+		<result property="evtUseCdNm"			column="EVT_USE_CD_NM"/>
+		
+		<result property="regDtmDay"			column="REG_DTM_DAY"/>
+		<result property="regDtm"				column="REG_DTM"/>
+		<result property="regUsrId"				column="REG_USR_ID"/>
+		<result property="regUsrNm"				column="REG_USR_NM"/>
+		<result property="regUsrIp"				column="REG_USR_IP"/>
+		<result property="modifyDtm"			column="MODIFY_DTM"/>
+		<result property="modifyDtmDay"			column="MODIFY_DTM_DAY"/>
+		<result property="modifyUsrId"			column="MODIFY_USR_ID"/>
+		<result property="modifyUsrNm"			column="MODIFY_USR_NM"/>
+		<result property="modifyUsrIp"			column="MODIFY_USR_IP"/>
+    </resultMap>
+    
+    <resultMap id="resultMapSelectPrj5000Info" class="egovMap">
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjGrpNm"				column="PRJ_GRP_NM"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="prjNm"				column="PRJ_NM"/>
+		<result property="usrId"				column="USR_ID"/>
+		<result property="usrNm"				column="USR_NM"/>
+		
+		<result property="prjEvtId"				column="PRJ_EVT_ID"/>
+		<result property="evtType"				column="EVT_TYPE"/>
+		<result property="evtStartSeq"			column="EVT_START_SEQ"/>
+		<result property="evtEndSeq"			column="EVT_END_SEQ"/>
+		<result property="evtStartDate"			column="EVT_START_DATE"/>
+		<result property="evtEndDate"			column="EVT_END_DATE"/>
+		<result property="evtStartTime"			column="EVT_START_TIME"/>
+		<result property="evtEndTime"			column="EVT_END_TIME"/>
+		<result property="evtStartFullDate"		column="EVT_START_FULL_DATE"/>
+		<result property="evtEndFullDate"		column="EVT_END_FULL_DATE"/>
+		<result property="evtStartDayWeek"		column="EVT_START_DAY_WEEK"/>
+		<result property="evtEndDayWeek"		column="EVT_END_DAY_WEEK"/>
+		<result property="evtNm"				column="EVT_NM"/>
+		<result property="evtDesc"				column="EVT_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="evtBgColor"			column="EVT_BG_COLOR"/>
+		<result property="evtColor"				column="EVT_COLOR"/>
+		<result property="evtAllDayCd"			column="EVT_ALL_DAY_CD"/>
+		<result property="evtUseCd"				column="EVT_USE_CD"/>
+		<result property="evtUseCdNm"			column="EVT_USE_CD_NM"/>
+		
+		<result property="regDtmDay"			column="REG_DTM_DAY"/>
+		<result property="regDtm"				column="REG_DTM"/>
+		<result property="regUsrId"				column="REG_USR_ID"/>
+		<result property="regUsrNm"				column="REG_USR_NM"/>
+		<result property="regUsrIp"				column="REG_USR_IP"/>
+		<result property="modifyDtm"			column="MODIFY_DTM"/>
+		<result property="modifyDtmDay"			column="MODIFY_DTM_DAY"/>
+		<result property="modifyUsrId"			column="MODIFY_USR_ID"/>
+		<result property="modifyUsrNm"			column="MODIFY_USR_NM"/>
+		<result property="modifyUsrIp"			column="MODIFY_USR_IP"/>
+    </resultMap>
+    
+    <sql id = "selectPrj5000List">
+    	SELECT T1.*, ROWNUM RN
+		FROM
+		(
+			SELECT
+				A.EVT_TYPE ,
+				A.LIC_GRP_ID ,
+				A.PRJ_GRP_ID ,
+				B.PRJ_NM AS PRJ_GRP_NM ,
+				A.PRJ_ID ,
+				C.PRJ_NM ,
+				A.USR_ID ,
+				SF_STM3000_USR_INFO(A.USR_ID, '1') AS USR_NM,
+				A.PRJ_EVT_ID ,
+				A.EVT_USE_CD ,
+				SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', NVL(B.USE_CD, A.EVT_USE_CD), '1') AS EVT_USE_CD_NM,
+				A.EVT_START_DATE AS EVT_START_SEQ ,
+				A.EVT_END_DATE AS EVT_END_SEQ ,
+				TO_CHAR( TO_DATE(A.EVT_START_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') EVT_START_DATE,
+				TO_CHAR( TO_DATE(A.EVT_END_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') EVT_END_DATE,
+				TO_CHAR( TO_DATE(A.EVT_START_TIME, 'HH24MI'), 'HH24:MI') EVT_START_TIME,
+				TO_CHAR( TO_DATE(A.EVT_END_TIME, 'HH24MI'), 'HH24:MI') EVT_END_TIME,
+				TO_CHAR( TO_DATE(A.EVT_START_DATE || A.EVT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') EVT_START_FULL_DATE,
+				TO_CHAR( TO_DATE(A.EVT_END_DATE || A.EVT_END_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') EVT_END_FULL_DATE,
+				A.EVT_START_DAY_WEEK ,
+				A.EVT_END_DAY_WEEK ,
+				A.EVT_NM ,
+				A.EVT_DESC,
+				A.EVT_BG_COLOR ,
+				A.EVT_COLOR ,
+				A.EVT_ALL_DAY_CD ,
+				A.REG_DTM ,
+				TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY,
+				A.REG_USR_ID ,
+			    SF_STM3000_USR_INFO(A.REG_USR_ID, '1') AS REG_USR_NM,
+				A.REG_USR_IP,
+				A.MODIFY_DTM,
+			    TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM_DAY,
+				A.MODIFY_USR_ID,
+			    SF_STM3000_USR_INFO(A.MODIFY_USR_ID, '1') AS MODIFY_USR_NM,
+				A.MODIFY_USR_IP
+			FROM (SELECT * FROM PRJ5000) A
+				INNER JOIN PRJ1000 B ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.PRJ_GRP_ID = B.PRJ_ID )
+				INNER JOIN PRJ1000 C ON ( A.LIC_GRP_ID = C.LIC_GRP_ID AND A.PRJ_ID = C.PRJ_ID ) 
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+					
+		) T1 WHERE 1 = 1
+    </sql>
+    
+    
+    <select id="prj5000DAO.selectPrj5000EvtList" parameterClass="java.util.Map" resultMap="resultMapSelectPrj5000">
+		SELECT *
+		FROM
+			(
+					<include refid="selectPrj5000List"/>
+	    	) Z
+	    	WHERE 1=1 
+    </select>
+    
+    
+	<select id="prj5000DAO.selectPrjEvt5000Info" parameterClass="java.util.Map" resultMap="resultMapSelectPrj5000">
+            SELECT T1.*
+			FROM
+			(
+				<include refid="selectPrj5000List"/>
+	    	) T1
+	    	WHERE 		1=1
+				
+			<isNotEmpty property="prjGrpId">
+				AND T1.PRJ_GRP_ID = #prjGrpId#
+			</isNotEmpty>
+			<isNotEmpty property="prjId">
+				AND T1.PRJ_ID = #prjId#
+			</isNotEmpty>
+			<isNotEmpty property="usrId">
+				AND T1.USR_ID = #usrId#
+			</isNotEmpty>
+			<isNotEmpty property="prjEvtId">
+				AND	T1.PRJ_EVT_ID = #prjEvtId#
+			</isNotEmpty>
+	</select>
+    
+    
+	<insert id="prj5000DAO.insertPrj5000PrjEvtAjax" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newEvtId">
+		<![CDATA[
+			SELECT   NVL(
+                SUBSTR(NEW_EVT_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_EVT_ID, 12, 5)) + 1) , 5, '0')
+            ,   'EVT' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+        	) AS NEW_EVT_ID
+				FROM
+				(
+		            SELECT	MAX(PRJ_EVT_ID)  AS NEW_EVT_ID
+		            FROM	PRJ5000 A
+		            WHERE	1=1
+		            AND		A.LIC_GRP_ID = #licGrpId#
+        		)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+		INSERT INTO PRJ5000(
+			LIC_GRP_ID ,
+			PRJ_GRP_ID ,
+			PRJ_ID ,
+			USR_ID ,
+			PRJ_EVT_ID ,
+			EVT_TYPE,
+			EVT_USE_CD ,
+			EVT_START_DATE ,
+			EVT_END_DATE ,
+			EVT_START_TIME ,
+			EVT_END_TIME ,
+			EVT_START_DAY_WEEK ,
+			EVT_END_DAY_WEEK ,
+			EVT_NM ,
+			EVT_DESC ,
+			EVT_BG_COLOR ,
+			EVT_COLOR ,
+			EVT_ALL_DAY_CD ,
+			REG_DTM ,
+			REG_USR_ID ,
+			REG_USR_IP,
+			MODIFY_DTM,
+			MODIFY_USR_ID,
+			MODIFY_USR_IP
+		)VALUES(
+			#licGrpId# ,
+			#prjGrpId# ,
+			#prjId# ,
+			#usrId# ,
+			#newEvtId# ,
+			#evtType# ,
+			#evtUseCd# ,
+			REPLACE(#evtStartDate#,'-','') ,
+			REPLACE(#evtEndDate#,'-','') ,
+			REPLACE(#evtStartTime#,':','') ,
+			REPLACE(#evtEndTime#,':','') ,
+			TO_CHAR(TO_DATE(#evtStartDate#,'YYYY-MM-DD'),'d' ) ,
+			TO_CHAR(TO_DATE(#evtEndDate#,'YYYY-MM-DD'),'d' ) ,
+			#evtNm# ,
+			#evtDesc# ,
+			#evtBgColor# ,
+			#evtColor# ,
+			#evtAllDayCd# ,
+			SYSDATE ,
+			#regUsrId# ,
+			#regUsrIp# ,
+			SYSDATE ,
+			#modifyUsrId# ,
+			#modifyUsrIp# 
+		)
+		]]>
+	</insert>
+	
+	
+	<update id="prj5000DAO.updatePrj5000PrjEvtAjax" parameterClass="java.util.Map">
+		UPDATE PRJ5000 SET
+	    	EVT_START_DATE = REPLACE(#evtStartDate#,'-','') ,
+			EVT_END_DATE = REPLACE(#evtEndDate#,'-','') ,
+	    	EVT_START_TIME = REPLACE(#evtStartTime#,':','') ,
+			EVT_END_TIME = REPLACE(#evtEndTime#,':','') ,
+			EVT_START_DAY_WEEK = TO_CHAR(TO_DATE(#evtStartDate#,'YYYY-MM-DD'),'d' ) ,
+			EVT_END_DAY_WEEK = TO_CHAR(TO_DATE(#evtEndDate#,'YYYY-MM-DD'),'d' ) ,
+			<isNotEmpty property="evtUseCd">
+				EVT_USE_CD = #evtUseCd# ,
+			</isNotEmpty>
+			<isNotEmpty property="evtNm">
+				EVT_NM = #evtNm# ,
+			</isNotEmpty>
+			<isNotEmpty property="evtDesc">
+				EVT_DESC = #evtDesc# ,
+			</isNotEmpty>
+			<isNotEmpty property="evtBgColor">
+				EVT_BG_COLOR = #evtBgColor# ,
+			</isNotEmpty>
+			<isNotEmpty property="evtColor">
+				EVT_COLOR = #evtColor# ,
+			</isNotEmpty>
+			<isNotEmpty property="evtAllDayCd">
+				EVT_ALL_DAY_CD = #evtAllDayCd# ,
+			</isNotEmpty>
+			MODIFY_DTM = SYSDATE ,
+			MODIFY_USR_ID = #modifyUsrId# ,
+			MODIFY_USR_IP = #modifyUsrIp# 
+		WHERE 	1=1
+			AND LIC_GRP_ID = #licGrpId#
+			AND PRJ_EVT_ID = #prjEvtId#
+	</update>
+	
+    
+	
+	<delete id="prj5000DAO.deletePrj5000PrjEvtInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+		DELETE  FROM PRJ5000
+		WHERE 	1=1
+			AND LIC_GRP_ID = #licGrpId#
+			AND PRJ_EVT_ID = #prjEvtId#
+	    ]]>
+	</delete>
+	
+	
+	<select id="prj5000DAO.selectPrj5000ReqList" parameterClass="java.util.Map"  resultMap="resultMapSelectPrj5000Info">
+		/* prj5000DAO.selectPrj5000ReqList 요구사항 일정 목록 조회 */
+		SELECT T1.*, ROWNUM RN
+		FROM
+		(
+			SELECT 
+				'04' AS EVT_TYPE ,
+				B.LIC_GRP_ID ,
+				B.PRJ_GRP_ID ,
+				C.PRJ_NM AS PRJ_GRP_NM ,
+				A.PRJ_ID ,
+				B.PRJ_NM ,
+				A.REQ_CHARGER_ID AS USR_ID ,
+				SF_STM3000_USR_INFO(A.REQ_CHARGER_ID, '1') AS USR_NM,
+				A.PRJ_ID || A.REQ_ID AS PRJ_EVT_ID ,
+				A.REQ_ID AS REQ_ID ,
+				'01' AS EVT_USE_CD ,
+				'예' AS EVT_USE_CD_NM ,
+				NVL(TO_CHAR(REQ_ST_DTM, 'YYYYMMDD'), TO_CHAR(REQ_ST_DU_DTM, 'YYYYMMDD')) AS EVT_START_SEQ ,
+				NVL(TO_CHAR(REQ_ED_DTM, 'YYYYMMDD'), TO_CHAR(REQ_ED_DU_DTM, 'YYYYMMDD')) AS EVT_END_SEQ ,
+				NVL(TO_CHAR(REQ_ST_DTM, 'YYYY-MM-DD'), TO_CHAR(REQ_ST_DU_DTM, 'YYYY-MM-DD')) AS EVT_START_DATE ,
+				NVL(TO_CHAR(REQ_ED_DTM, 'YYYY-MM-DD'), TO_CHAR(REQ_ED_DU_DTM, 'YYYY-MM-DD')) AS EVT_END_DATE ,
+				NVL(TO_CHAR(REQ_ST_DTM, 'HH24:MI'), TO_CHAR(REQ_ST_DU_DTM, 'HH24:MI')) AS EVT_START_TIME ,
+				NVL(TO_CHAR(REQ_ED_DTM, 'HH24:MI'), TO_CHAR(REQ_ED_DU_DTM, 'HH24:MI')) AS EVT_END_TIME ,
+				NVL(TO_CHAR(REQ_ST_DTM, 'YYYY-MM-DD HH24:MI'), TO_CHAR(REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI')) AS EVT_START_FULL_DATE ,
+				NVL(TO_CHAR(REQ_ED_DTM, 'YYYY-MM-DD HH24:MI'), TO_CHAR(REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI')) AS EVT_END_FULL_DATE ,
+				NVL(TO_CHAR(REQ_ST_DTM, 'd'), TO_CHAR(REQ_ST_DU_DTM, 'd')) AS EVT_START_DAY_WEEK ,
+				NVL(TO_CHAR(REQ_ED_DTM, 'd'), TO_CHAR(REQ_ED_DU_DTM, 'd')) AS EVT_END_DAY_WEEK ,
+				'[' || A.REQ_ORD || '] ' || A.REQ_NM AS EVT_NM ,
+				A.REQ_DESC AS EVT_DESC,
+				NULL AS EVT_BG_COLOR ,
+				NULL AS EVT_COLOR ,
+				'03' AS EVT_ALL_DAY_CD ,
+				A.REG_DTM ,
+		    	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY,
+				A.REG_USR_ID ,
+		    	SF_STM3000_USR_INFO(A.REG_USR_ID, '1') AS REG_USR_NM,
+				A.REG_USR_IP,
+				A.MODIFY_DTM,
+		    	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM_DAY,
+				A.MODIFY_USR_ID,
+		    	SF_STM3000_USR_INFO(A.MODIFY_USR_ID, '1') AS MODIFY_USR_NM,
+				A.MODIFY_USR_IP
+			FROM REQ4100 A
+			INNER JOIN PRJ1000 B ON (B.LIC_GRP_ID = #licGrpId# AND A.PRJ_ID = B.PRJ_ID)
+			INNER JOIN PRJ1000 C ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.PRJ_GRP_ID = C.PRJ_ID)
+			WHERE 1=1
+			<isNotEmpty property="prjGrpId">
+				AND B.PRJ_GRP_ID = #prjGrpId#
+			</isNotEmpty>
+			AND ( REQ_ST_DU_DTM IS NOT NULL OR REQ_ST_DTM IS NOT NULL )
+	    	AND ( REQ_ED_DU_DTM IS NOT NULL OR REQ_ED_DTM IS NOT NULL )
+			<isNotEmpty property="prjId">
+				AND	A.PRJ_ID = #prjId#
+				<isNotEmpty property="reqId">
+					AND A.REQ_ID = #reqId#		
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEqual property="target" compareValue="usrId">
+				AND A.REQ_CHARGER_ID = #usrId#
+			</isEqual>
+		) T1 
+		WHERE 1=1
+	</select>
+	
+	
+	<select id="prj5000DAO.selectPrj5000ReqInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectPrj5000Info">
+		SELECT 
+			'04' AS EVT_TYPE ,
+			B.LIC_GRP_ID ,
+			B.PRJ_GRP_ID ,
+			C.PRJ_NM AS PRJ_GRP_NM ,
+			A.PRJ_ID ,
+			B.PRJ_NM ,
+			A.REQ_CHARGER_ID AS USR_ID ,
+			SF_STM3000_USR_INFO(NVL(A.REQ_CHARGER_ID, A.REQ_USR_ID), '1') AS USR_NM,
+			A.REQ_ID AS REQ_ID ,
+			A.PRJ_ID || A.REQ_ID AS PRJ_EVT_ID ,
+			'01' AS EVT_USE_CD ,
+			'예' AS EVT_USE_CD_NM ,
+			NVL(TO_CHAR(REQ_ST_DTM, 'YYYYMMDD'), TO_CHAR(REQ_ST_DU_DTM, 'YYYYMMDD')) AS EVT_START_SEQ ,
+			NVL(TO_CHAR(REQ_ED_DTM, 'YYYYMMDD'), TO_CHAR(REQ_ED_DU_DTM, 'YYYYMMDD')) AS EVT_END_SEQ ,
+			NVL(TO_CHAR(REQ_ST_DTM, 'YYYY-MM-DD'), TO_CHAR(REQ_ST_DU_DTM, 'YYYY-MM-DD')) AS EVT_START_DATE ,
+			NVL(TO_CHAR(REQ_ED_DTM, 'YYYY-MM-DD'), TO_CHAR(REQ_ED_DU_DTM, 'YYYY-MM-DD')) AS EVT_END_DATE ,
+			NVL(TO_CHAR(REQ_ST_DTM, 'HH24:MI'), TO_CHAR(REQ_ST_DU_DTM, 'HH24:MI')) AS EVT_START_TIME ,
+			NVL(TO_CHAR(REQ_ED_DTM, 'HH24:MI'), TO_CHAR(REQ_ED_DU_DTM, 'HH24:MI')) AS EVT_END_TIME ,
+			NVL(TO_CHAR(REQ_ST_DTM, 'YYYY-MM-DD HH24:MI'), TO_CHAR(REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI')) AS EVT_START_FULL_DATE ,
+			NVL(TO_CHAR(REQ_ED_DTM, 'YYYY-MM-DD HH24:MI'), TO_CHAR(REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI')) AS EVT_END_FULL_DATE ,
+			NVL(TO_CHAR(REQ_ST_DTM, 'd'), TO_CHAR(REQ_ST_DU_DTM, 'd')) AS EVT_START_DAY_WEEK ,
+			NVL(TO_CHAR(REQ_ED_DTM, 'd'), TO_CHAR(REQ_ED_DU_DTM, 'd')) AS EVT_END_DAY_WEEK ,
+			'[' || A.REQ_ORD || '] ' || A.REQ_NM AS EVT_NM ,
+			A.REQ_DESC AS EVT_DESC,
+			NULL AS EVT_BG_COLOR ,
+			NULL AS EVT_COLOR ,
+			'03' AS EVT_ALL_DAY_CD ,
+			A.REG_DTM ,
+		    TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY,
+			A.REG_USR_ID ,
+		    SF_STM3000_USR_INFO(A.REG_USR_ID, '1') AS REG_USR_NM,
+			A.REG_USR_IP,
+			A.MODIFY_DTM,
+		    TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM_DAY,
+			A.MODIFY_USR_ID,
+		    SF_STM3000_USR_INFO(A.MODIFY_USR_ID, '1') AS MODIFY_USR_NM,
+			A.MODIFY_USR_IP
+		FROM REQ4100 A
+		INNER JOIN PRJ1000 B ON (B.LIC_GRP_ID = #licGrpId# AND A.PRJ_ID = B.PRJ_ID)
+		INNER JOIN PRJ1000 C ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.PRJ_GRP_ID = C.PRJ_ID)
+		WHERE 1=1
+		<isNotEmpty property="prjId">
+			AND	A.PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isNotEmpty property="reqId">
+			AND A.REQ_ID = #reqId#		
+		</isNotEmpty>
+	</select>
+</sqlMap>

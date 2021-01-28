@@ -23,7 +23,9 @@
 						</div>
 						<div class="kt-portlet__head-toolbar">
 							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="fa fa-chevron-down"></i></a>
+								<div class="kt-portlet__head-group">
+									<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -54,7 +56,7 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span class="osl-resize__display--show" data-lang-cd="modal.close">Close</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -114,7 +116,7 @@ var OSLSpr2002Popup = function () {
 				}
 				
 				//참여인원 태그 형으로 넣기mmtMemInfo
-				if(!$.osl.isNull(mmtMemList)){
+				if(mmtMemList != null && mmtMemList.length > 0){
 					$.each(mmtMemList, function(idx, value){
 						str += '<div class="kt-user-card-v2 d-inline-block mmtMemInfo osl-outline--secondary kt-padding-5 kt-margin-l-5 kt-margin-r-5" data-user="'+ value.usrId +'">'
 									+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'

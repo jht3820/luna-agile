@@ -472,7 +472,7 @@ var OSLBad1003Popup = function () {
     	});
 		
 		//태그
-	   $("#tagWriter").on("keypress", function (e) {
+	   $("#tagWriter").on("propertychange paste input", function (e) {
 	        var self = $(this);
 	        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
 	        if (e.key == "Enter" || e.keyCode == 32) {

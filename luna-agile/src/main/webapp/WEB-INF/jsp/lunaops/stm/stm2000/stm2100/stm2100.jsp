@@ -44,12 +44,6 @@
 			<div class="col-lg-5 col-md-6 col-sm-6">
 				<div class="osl-datatable-search" data-datatable-id="stm2100StmTable"></div>
 			</div>
-			<div class="col-lg-7 col-md-6 col-sm-6">
-				<div class="kt-align-right">
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" ><i class="fa flaticon2-indent-dots kt-font-brand"></i></button> -->
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard" onclick="location.href='/stm/stm2000/stm2100/selectStm2104View.do'"><i class="fa flaticon-squares-1 kt-font-brand"></i></button> -->
-				</div>
-			</div>
 		</div>
 		<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 	</div>
@@ -66,6 +60,7 @@
 	 var resultStr = "";
 	 var currentViewType = "01";
 	 var documentSetting = function() {	
+		 var dataTableId = "stm2100StmTable";
 		 var config = {
 			 data: {
 				 source: {
@@ -76,16 +71,16 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				 {field: 'stmTypeNm', title: $.osl.lang("stm2100.field.stmTypeNm"), textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
-				 {field: 'stmNm', title: $.osl.lang("stm2100.field.stmNm"), textAlign: 'left', width: 300, autoHide: false, search: true},
-				 {field: 'stmDsTypeNm', title: $.osl.lang("stm2100.field.stmDsTypeNm"), textAlign: 'left', width: 200},
-				 {field: 'cnt', title: $.osl.lang("stm2100.field.cnt"), textAlign: 'center', width: 150},
-				 {field: 'badCnt', title: $.osl.lang("stm2100.field.badCnt"), textAlign: 'center', width: 150,
+				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
+				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true},
+				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200},
+				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150},
+				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150,
 					 template : function(row){
 						return String(parseInt(row.cnt) - parseInt(row.delCnt)); 
 					 },
 				 },
-				 {field: 'delCnt', title: $.osl.lang("stm2100.field.delCnt"), textAlign: 'center', width: 150},
+				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150},
 			 ],
 			 rows:{
 				clickCheckbox: true
@@ -113,7 +108,7 @@
 						};
 					var options = {
 							idKey: rowData.menuId,
-							modalTitle: "[ "+rowData.stmNm+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
+							modalTitle: "[ "+ $.osl.escapeHtml(rowData.stmNm)+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
 							closeConfirm: false,
 							modalSize: "xl",
 							autoHeight: false,
@@ -142,7 +137,7 @@
 					var data = {
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
-							stmNm: rowData.stmNm,
+							stmNm: $.osl.escapeHtml(rowData.stmNm),
 							//시스템 게시판에서 접근 시 라이센스 범위로 보기 위해 01로 지정
 							stmDsTypeCd : "01",
 							stmRootYn : "Y",
@@ -181,7 +176,7 @@
 							type:"dbClick",
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
-							stmNm: rowData.stmNm,
+							stmNm: $.escapeHtml(rowData.stmNm),
 						};
 					var options = {
 							idKey: "summery_"+rowData.menuId,
@@ -381,12 +376,11 @@
 			 }
 		 };//config end
 		 //데이터 테이블 셋팅
-		 $.osl.datatable.setting("stm2100StmTable", config);
+		 $.osl.datatable.setting(dataTableId, config);
 
 		//뷰 변경 이벤트 - 카드형 그리드형 선택 확인
 		$(".btn-view-type").click(function(){
 			var viewType = $(this).data("view-type");
-			console.log("viewType : ", viewType);
 			
 			//active 교체
 			$(".btn-view-type.active").removeClass("active");
