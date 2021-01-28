@@ -109,7 +109,7 @@ var OSLStm9100 = function () {
 				"update": $.osl.lang("stm9100.actionBtn.job.updateBtn"),
 				"delete": $.osl.lang("stm9100.actionBtn.job.deleteBtn"),
 				"dblClick": $.osl.lang("stm9100.actionBtn.job.dblClickBtn"),
-				"detailJenkins": "Jenkins 상세보기",
+				"detailJenkins": $.osl.lang("stm9100.actionBtn.job.detailJenkins")
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum, elem){
@@ -162,7 +162,20 @@ var OSLStm9100 = function () {
 				},
 				// job 상세보기
 				"dblClick":function(rowData, datatableId, type, rowNum, elem){
-					console.log("dblClick : ", rowData);
+					
+					var data = {
+							paramJenId: rowData.jenId,
+							paramJobId: rowData.jobId
+					};
+					var options = {
+							idKey: datatableId +"_"+ rowData.jenId,
+							modalTitle: "["+ rowData.jobId + "] " + $.osl.lang("stm9100.modal.job.detailJob"),
+							closeConfirm: false,
+							modalSize: "xl"
+						};
+					
+					$.osl.layerPopupOpen('/stm/stm9000/stm9100/selectStm9102View.do',data,options);
+					
 				},
 				// job 선택 접속 확인
 				"selectedConnectJob":function(rowDatas, datatableId, type, rowNum, elem){
@@ -206,8 +219,20 @@ var OSLStm9100 = function () {
 					fnJobConnectionCheck(selectRows, rowDataList, 0);
 				},
 				// jenkins 상세보기
-				"detailJenkins":function(rowDatas, datatableId, type, rowNum, elem){
-					console.log("jenkins 상세보기 : ", rowDatas, datatableId);
+				"detailJenkins":function(rowData, datatableId, type, rowNum, elem){
+					
+					var data = {
+							paramJenId: rowData.jenId,
+							paramJenNm: rowData.jenNm
+					};
+					var options = {
+							idKey: datatableId +"_"+ rowData.jenId,
+							modalTitle: "["+ rowData.jenNm + "] " + $.osl.lang("stm9000.modal.jeknins.detailJenkins"),
+							closeConfirm: false,
+							modalSize: "xl"
+						};
+					
+					$.osl.layerPopupOpen('/stm/stm9000/stm9000/selectStm9002View.do',data,options);
 				}
 			},
 			theme: {

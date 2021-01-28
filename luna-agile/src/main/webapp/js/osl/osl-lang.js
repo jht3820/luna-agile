@@ -1148,7 +1148,8 @@ var OSLCoreLangSetting = function () {
 				job:{
 					updateBtn:"Job 수정",
 					deleteBtn:"Job 삭제",
-					dblClickBtn:"Job 상세보기"
+					dblClickBtn:"Job 상세보기",
+					detailJenkins:"Jenkins 상세보기"
 				}
 			},
 			modal:{
@@ -1186,6 +1187,20 @@ var OSLCoreLangSetting = function () {
 					insert:"신규 JOB을 등록하시겠습니까?",
 					update:"JOB 정보를 수정하시겠습니까?"
 				}
+			}
+		},
+		stm9102:{
+			label:{
+				leftTitle : "JOB 빌드 목록",
+				rightTitle : "콘솔 로그",
+				jenkinsNm : "JENKINS NAME",
+				jobId : "JOB ID",
+				minute : "분",
+				second : "초"
+			},
+			message:{
+				selectBuildInfo: "좌측 빌드 정보를 선택해주세요.",
+				notConsoleLog: "콘솔 로그가 없습니다."
 			}
 		},
 		bad1000:{
@@ -1593,6 +1608,13 @@ var OSLCoreLangSetting = function () {
 				jobParameter:"Job Parameter",
 				useNm:"Job Use",
 				jobDesc:"Job Description"
+			},
+			stm9102JobBuildTable:{
+				bldNum: "Build Number",
+				bldResult: "Build Result",
+				bldStartDtm: "Build Start Time",
+				bldDurationTm: "Duration Time",
+				regUsrNm: "Distributor"
 			}
 		},
 		date:{

@@ -22,6 +22,7 @@ import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.vo.Dpl1000VO;
 import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.vo.Dpl1300VO;
 import kr.opensoftlab.lunaops.dpl.dpl2000.dpl2100.service.Dpl2100Service;
 import kr.opensoftlab.lunaops.stm.stm9000.stm9000.service.Stm9000Service;
+import kr.opensoftlab.lunaops.stm.stm9000.stm9100.service.Stm9100Service;
 import kr.opensoftlab.sdf.excel.ExcelDataListResultHandler;
 import kr.opensoftlab.sdf.jenkins.vo.AutoBuildVO;
 import kr.opensoftlab.sdf.jenkins.vo.BuildVO;
@@ -45,8 +46,11 @@ public class Dpl1000ServiceImpl  extends EgovAbstractServiceImpl implements Dpl1
     @Resource(name = "dpl2100Service")
     private Dpl2100Service dpl2100Service;
     
-	@Resource(name = "stm9000Service")
-	private Stm9000Service stm9000Service;
+    @Resource(name = "stm9000Service")
+    private Stm9000Service stm9000Service;
+    
+	@Resource(name = "stm9100Service")
+	private Stm9100Service stm9100Service;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -61,9 +65,19 @@ public class Dpl1000ServiceImpl  extends EgovAbstractServiceImpl implements Dpl1
 	}
 	
 	
+	@SuppressWarnings({"rawtypes" })
+	public List selectDpl1400DplBldNumList(Map paramMap)  throws Exception{
+		return dpl1000DAO.selectDpl1400DplBldNumList(paramMap);
+	}
 	
 	
-    
+	@SuppressWarnings({"rawtypes" })
+	public int selectDpl1400DplBldNumListCnt(Map paramMap)  throws Exception{
+		return dpl1000DAO.selectDpl1400DplBldNumListCnt(paramMap);
+	}
+	
+	
+	
 	@SuppressWarnings("rawtypes")
 	public List selectDpl1000DeployNmList(Map inputMap) throws Exception {
 		return dpl1000DAO.selectDpl1000DeployNmList(inputMap);
@@ -458,7 +472,7 @@ public class Dpl1000ServiceImpl  extends EgovAbstractServiceImpl implements Dpl1
 	
 	@SuppressWarnings({"rawtypes", "unchecked" })
 	public Map selectDpl1300ToStm9000JobInfo(Map map)  throws Exception{
-		return stm9000Service.selectStm9000JobInfo(map);
+		return stm9100Service.selectStm9100JobInfo(map);
 	}
 	
 	
@@ -508,12 +522,6 @@ public class Dpl1000ServiceImpl  extends EgovAbstractServiceImpl implements Dpl1
     		
     		arm1000DAO.insertArm1000AlarmInfo(armMap);
     	}
-	}
-	
-	
-	@SuppressWarnings({"rawtypes" })
-	public List selectDpl1400DplBldNumList(Map inputMap)  throws Exception{
-		return dpl1000DAO.selectDpl1400DplBldNumList(inputMap);
 	}
 	
 		
