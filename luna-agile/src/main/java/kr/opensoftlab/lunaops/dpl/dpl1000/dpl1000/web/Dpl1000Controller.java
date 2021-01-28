@@ -677,7 +677,9 @@ public class Dpl1000Controller {
     		}
     		
     		
- 			List<Map> dplRunAuthGrp = stm9100Service.selectJen1300JenkinsJobAuthGrpNormalList(paramMap);
+    		
+ 			
+    		List<Map> dplRunAuthGrp = null;
  			
  			
  			if(dplRunAuthGrp != null && dplRunAuthGrp.size() > 0){

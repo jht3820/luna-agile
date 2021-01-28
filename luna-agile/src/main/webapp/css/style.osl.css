@@ -158,6 +158,9 @@ input:-webkit-autofill,
 .osl-min-h-px--415 {
   min-height: 415px; 
 }
+.osl-min-h-px-imp--415{
+  min-height: 415px !important;  
+}
 .osl-min-h-px--220 {
   min-height: 220px; 
 }
@@ -207,6 +210,10 @@ input:-webkit-autofill,
 	top: 0;
 	left: 0;
 	padding: 0.5rem;
+}
+/* code 영역 배경색 */
+.osl-code-bg{
+	background-color: #23241f;
 }
 
 .osl-bg-none{
