@@ -887,8 +887,13 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
-			label :{
-				summery : "옵션 별 통계",
+			label:{
+				summery : "통계",
+			},
+			chart:{
+				noData : "데이터 없음",
+				newPost : "등록 게시글",
+				deletePost : "삭제 게시글"
 			}
 		},
 		stm2101:{
@@ -2238,6 +2243,14 @@ var OSLCoreLangSetting = function () {
 				movie:"[Movie]",
 				storage:"[Storage]",
 			},
+			label:{
+				summery : "Summery",
+			},
+			chart:{
+				noData : "No Data",
+				newPost : "New Post",
+				deletePost : "Delete Post"
+			}
 		},
 		stm2101:{
 			update: "Would you like to update this board setting?",
