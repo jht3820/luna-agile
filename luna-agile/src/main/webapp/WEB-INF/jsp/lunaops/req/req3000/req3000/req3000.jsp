@@ -88,7 +88,7 @@
 				
 				<div class="kt-portlet__body">
 					<div class="row">
-						<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 osl-mobile-padding-l-10">
+						<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 kt-padding-l-10-mobile">
 							<div class="kt-padding-b-5">
 								<i class="fas fa-paperclip kt-margin-r-5 kt-font-brand"></i>
 								<span>연결 요구사항 수</span>
@@ -99,7 +99,7 @@
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="kt-pull-left kt-margin-r-25">
 										<div class="kt-padding-b-5">
 											<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>
@@ -117,7 +117,7 @@
 										</h5>
 									</div>
 								</div>
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="osl-progress">
 										<div class="kt-padding-b-5">
 											<i class="fa fa-chart-line kt-font-brand kt-margin-r-5"></i>
@@ -133,7 +133,7 @@
 					</div>
 					<div class="row border-top kt-margin-t-20 kt-padding-t-20">
 						<div class="col-lg-7 col-md-7 col-sm-7 col-7">
-							<div class="kt-user-card-v2 btn osl-flex-flow--column align-items-start kt-padding-l-30 osl-mobile-padding-l-0">
+							<div class="kt-user-card-v2 btn osl-flex-flow--column align-items-start kt-padding-l-30 kt-padding-l-0-mobile">
 								<div class="row kt-margin-l-0">
 									<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">
 										<img src="/cmm/fms/getImage.do?fileSn=0&amp;atchFileId=FILE_000000000000088" class="">
@@ -188,7 +188,7 @@
 				
 				<div class="kt-portlet__body">
 					<div class="row">
-						<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 osl-mobile-padding-l-10">
+						<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 kt-padding-l-10-mobile">
 							<div class="kt-padding-b-5">
 								<i class="fas fa-paperclip kt-margin-r-5 kt-font-brand"></i>
 								<span>연결 요구사항 수</span>
@@ -199,7 +199,7 @@
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="kt-pull-left kt-margin-r-25">
 										<div class="kt-padding-b-5">
 											<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>
@@ -217,7 +217,7 @@
 										</h5>
 									</div>
 								</div>
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="osl-progress">
 										<div class="kt-padding-b-5">
 											<i class="fa fa-chart-line kt-font-brand kt-margin-r-5"></i>
@@ -233,7 +233,7 @@
 					</div>
 					<div class="row border-top kt-margin-t-20 kt-padding-t-20">
 						<div class="col-lg-7 col-md-7 col-sm-7 col-7">
-							<div class="kt-user-card-v2 btn osl-flex-flow--column align-items-start kt-padding-l-30 osl-mobile-padding-l-0">
+							<div class="kt-user-card-v2 btn osl-flex-flow--column align-items-start kt-padding-l-30 kt-padding-l-0-mobile">
 								<div class="row kt-margin-l-0">
 									<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">
 										<img src="/cmm/fms/getImage.do?fileSn=0&amp;atchFileId=FILE_000000000000088" class="">
