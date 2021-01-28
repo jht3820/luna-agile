@@ -1179,6 +1179,9 @@ label.required:after {
 	width: 0;
 }
 /* stm2100, bad1000 */
+.osl-icon-transform__scale--150{
+	transform: scale(1.5);
+}
 .osl-portlet__head-label{
 	width: 100%;
 }

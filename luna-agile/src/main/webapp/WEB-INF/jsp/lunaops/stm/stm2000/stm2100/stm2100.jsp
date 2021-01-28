@@ -280,8 +280,18 @@
 					});
 					//그 외 담당자 수 클릭 시
 					$(".otherBadChargerList").click(function(){
-						console.log("other");
 						//새로운 팝업창 만들기 - 담당자 전체 리스트 출력
+						var item =$(this).parent().parent().parent().parent().parent();
+						var data = {
+								menuId : item.data("menuId"),
+						};
+						var options = {
+								idKey: "charger_"+ item.data("menId"),
+								modalTitle:"[ "+ item.data("stmName") +" ] "+"담당자 목록 확인",
+								closeConfirm: true,
+								autoHeight: false,
+						};
+						$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2103View.do',data,options);
 					});
 					
 				 }//ajaxDone end
