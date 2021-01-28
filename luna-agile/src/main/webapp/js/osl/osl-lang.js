@@ -1,4 +1,7 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
 	
 	var lang = {};
@@ -229,7 +232,7 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		
+		/* 페이지 언어 */
 		cmm16000:{
 			label:{
 				title : "MESSAGE",
@@ -249,7 +252,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "답장",
 				checkBtn : "읽음",
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "보낸 사람 ID",
 				sendUsrEmail : "보낸 사람 e-mail",
@@ -514,7 +517,11 @@ var OSLCoreLangSetting = function () {
 			reqPw: {
 				title : "요구사항 잠금",
 				password : "PW",
-				passwordCheck :"PW 확인"
+				passwordCheck :"PW 확인",
+				placeholder : {
+					password : "알파벳, 숫자 4-12자 이내",
+					nullPassword : "공백인 경우 기존 비밀번호 사용",
+				}
 			},
 			attachments: "파일 첨부", 
 			complete: "완료",
@@ -536,7 +543,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "복사"
 			},
 			field:{
-				
+				/*외부 주입 search bar 인 경우 사용*/
 				prjGrpNm: "프로젝트 그룹명",
 			},
 			actionBtn:{
@@ -642,7 +649,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
 				usrNm : "사용자명",
 			},
 			actionBtn : {
@@ -851,7 +858,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
-			
+			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -1235,9 +1242,9 @@ var OSLCoreLangSetting = function () {
 				noticeBadge: "공지",
 			},
 			field:{
-				
+				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"태그",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
@@ -1486,7 +1493,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
+			/* 추가된 datatable별로 언어 지정 */
 			cmm16000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
@@ -1751,7 +1758,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
+		/* 페이지 언어 */
 		cmm16000:{
 			label:{
 				title : "MESSAGE",
@@ -1771,7 +1778,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "Reply",
 				checkBtn : "Read Check"
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "From User Id",
 				sendUsrEmail : "From User E-mail",
@@ -1976,15 +1983,19 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
-			reqPw:{
-				title : "Request Lock",
-				password : "PW",
-				passwordCheck : "PW Check",
-			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
 			reqDesc: "Request description",
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+				placeholder : {
+					password : "4 to 12 letters of alphabet and number combination.",
+					nullPassword : "If blank, the old password is used.",
+				}
+			},
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
@@ -1998,7 +2009,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "Copy"
 			},
 			field:{
-				
+				/*외부 주입 search bar에서 사용*/
 				prjGrpNm: "Project Group Name",
 			},
 			actionBtn:{
@@ -2104,7 +2115,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
 				usrNm : "User Name",
 			},
 			actionBtn : {
@@ -2498,9 +2509,9 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ 
+			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"Tag",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",

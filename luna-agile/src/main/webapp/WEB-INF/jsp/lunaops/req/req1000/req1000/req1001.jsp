@@ -168,6 +168,10 @@ var OSLReq1001Popup = function () {
     	new KTPortlet('req1001RequestUsrInfo', $.osl.lang("portlet"));
     	new KTPortlet('req1001NewRequestOpt', $.osl.lang("portlet"));
     	
+    	//palceholder 세팅
+    	$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
+		$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
+    	
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req1001FileUpload",{
     		url: '/req/req1000/req1000/insertReq1001ReqAtchFileInfo.do',
@@ -396,8 +400,8 @@ var OSLReq1001Popup = function () {
 		    		pw = "Y";
 		    		//비밀번호는 비우기
 					$("#reqPw").val("");
-					$("#reqPw").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
-					$("#reqPwCheck").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
+					$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
+					$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
 		    	}
 			}
 		});
