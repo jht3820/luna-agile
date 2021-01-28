@@ -8,32 +8,57 @@
 	<sql id="selectStm9100JobListBase">
 		<![CDATA[
 			SELECT
-					A.LIC_GRP_ID
-				,	A.JEN_ID
-				,	B.JEN_NM 
-		        ,	B.JEN_USR_ID 
-		        ,	B.JEN_USR_TOK 
-		        ,	B.JEN_URL 
-		        ,	A.JOB_ID
-		        ,	A.JOB_RESTORE_ID
-		        ,	A.JOB_TOK
-		        ,	A.JOB_TYPE_CD
-		        ,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00002', A.JOB_TYPE_CD, '1') AS JOB_TYPE_NM
-		        ,	A.JOB_PARAMETER
-		        ,	A.JOB_DESC
-		        ,	A.USE_CD
-		        ,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM 
-		        ,	A.REG_DTM 
-		        ,	A.REG_USR_ID 
-		        ,	A.REG_USR_IP 
-		        ,	A.MODIFY_DTM 
-		        ,	A.MODIFY_USR_ID 
-		        ,	A.MODIFY_USR_IP              
-			FROM STM9001 A LEFT JOIN STM9000 B
-			ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
-			WHERE 1=1
-			AND A.LIC_GRP_ID = #licGrpId#
-			AND B.DEL_CD = '02'
+					ROWNUM RN
+				,	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL 
+				,	SUB1.JOB_ID
+				,	SUB1.JOB_RESTORE_ID
+				,	SUB1.JOB_TOK
+				,	SUB1.JOB_TYPE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00002', SUB1.JOB_TYPE_CD, '1') AS JOB_TYPE_NM
+				,	SUB1.JOB_PARAMETER
+				,	SUB1.JOB_DESC
+				,	SUB1.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', SUB1.USE_CD, '1') AS USE_NM 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP      
+			FROM
+			(
+				SELECT
+						A.LIC_GRP_ID
+					,	A.JEN_ID
+					,	B.JEN_NM 
+					,	B.JEN_USR_ID 
+					,	B.JEN_USR_TOK 
+					,	B.JEN_URL 
+					,	A.JOB_ID
+					,	A.JOB_RESTORE_ID
+					,	A.JOB_TOK
+					,	A.JOB_TYPE_CD
+					,	A.JOB_PARAMETER
+					,	A.JOB_DESC
+					,	A.USE_CD
+					,	A.REG_DTM 
+					,	A.REG_USR_ID 
+					,	A.REG_USR_IP 
+					,	A.MODIFY_DTM 
+					,	A.MODIFY_USR_ID 
+					,	A.MODIFY_USR_IP              
+				FROM STM9001 A LEFT JOIN STM9000 B
+				ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND B.DEL_CD = '02'
+			) SUB1
+	    	WHERE 1=1
 		]]>
 		<isNotEmpty property="projectJenkinsCheck">
 			<isEqual property="projectJenkinsCheck" compareValue="Y">
@@ -41,56 +66,52 @@
 	            	SELECT Z.*
 	                FROM STM9002 Z
 	                WHERE 1=1
-	                AND Z.LIC_GRP_ID = A.LIC_GRP_ID
-	                AND Z.JEN_ID = A.JEN_ID
-	                AND Z.JOB_ID = A.JOB_ID
+	                AND Z.LIC_GRP_ID = SUB1.LIC_GRP_ID
+	                AND Z.JEN_ID = SUB1.JEN_ID
+	                AND Z.JOB_ID = SUB1.JOB_ID
 	                AND Z.PRJ_ID = #prjId#
 	            )
 			</isEqual>
 		</isNotEmpty>
 		<isNotEmpty property="jenId">
-			AND	A.JEN_ID = #jenId#
+			AND	SUB1.JEN_ID = #jenId#
 		</isNotEmpty>
 		<isNotEmpty property="useCd">
-			AND	A.USE_CD = #useCd#
+			AND	SUB1.USE_CD = #useCd#
 		</isNotEmpty>
 		<isNotEmpty property="jobTypeCd">
-			AND	A.JOB_TYPE_CD = #jobTypeCd#
+			AND	SUB1.JOB_TYPE_CD = #jobTypeCd#
 		</isNotEmpty>
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
 				<isEqual property="searchTargetId" compareValue="jenNm">
-					AND	B.JEN_NM like '%'|| UPPER(#searchTargetData#)  ||'%'
+					AND	SUB1.JEN_NM like '%'|| UPPER(#searchTargetData#)  ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jobId">
-					AND	UPPER( A.JOB_ID ) like '%'|| UPPER(#searchTargetData#)  ||'%'
+					AND	UPPER( SUB1.JOB_ID ) like '%'|| UPPER(#searchTargetData#)  ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jobDesc">
-					AND	A.JOB_DESC like '%'|| #searchTargetData#  ||'%'
+					AND	SUB1.JOB_DESC like '%'|| #searchTargetData#  ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jobTypeCd">
-					AND	A.JOB_TYPE_CD = #searchTargetData#
+					AND	SUB1.JOB_TYPE_CD = #searchTargetData#
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="useCd">
-					AND	A.USE_CD = #searchTargetData#
+					AND	SUB1.USE_CD = #searchTargetData#
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY A.REG_DTM DESC
+		ORDER BY SUB1.REG_DTM DESC
     </sql>
     
     
     <select id="stm9100DAO.selectStm9100JobList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
-		SELECT T2.*
+		SELECT SUB2.*
 		FROM
 		(
-			SELECT ROWNUM RN, T1.*
-    		FROM
-    		(
-				<include refid="selectStm9100JobListBase"/>
-	    	) T1
-		) T2
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
 		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
@@ -102,7 +123,7 @@
 		FROM 
 		(
 			<include refid="selectStm9100JobListBase"/>
-		) T
+		) SUB2
     </select>
     
 	
@@ -119,26 +140,22 @@
      
     <select id="stm9100DAO.selectStm9100JobNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
-		SELECT T1.*
+		SELECT SUB2.*
 		FROM
 		(
-    		SELECT ROWNUM RN, A.*
-    		FROM
-    		(
-					<include refid="selectStm9100JobListBase"/>
-	    	) A
-		) T1
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
     </select>
     
      
 	<select id="stm9100DAO.selectStm9100JobInfo" parameterClass="java.util.Map"  resultClass="egovMap">
 		
-		SELECT T1.*
+		SELECT SUB2.*
 		FROM (
 			<include refid="selectStm9100JobListBase"/>
-		) T1
+		) SUB2
 		WHERE 1=1
-		AND T1.JOB_ID = #jobId#
+		AND SUB2.JOB_ID = #jobId#
 	</select>
 	
 	  
@@ -200,7 +217,7 @@
 	<update id="stm9100DAO.updateJen9100JenkinsJobRestoreInfo" parameterClass="java.util.Map">
 		
 		<![CDATA[
-			UPDATE JEN1100 SET
+			UPDATE STM9001 SET
 				JOB_RESTORE_ID = null
 			WHERE 1=1
 			AND	LIC_GRP_ID 		= #licGrpId#

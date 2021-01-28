@@ -31,6 +31,17 @@ public class Dpl1000DAO extends ComOslitsAbstractDAO {
 	}
 	
 	
+	@SuppressWarnings({"rawtypes" })
+	public List selectDpl1400DplBldNumList(Map paramMap)  throws Exception{
+		return (List) list("dpl1000DAO.selectDpl1400DplBldNumList", paramMap);
+	}
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	public int selectDpl1400DplBldNumListCnt(Map paramMap)  throws Exception{
+		return (Integer) select("dpl1000DAO.selectDpl1400DplBldNumListCnt", paramMap);
+	}
+	
 	
 	
 	@SuppressWarnings({"rawtypes" })
@@ -153,14 +164,8 @@ public class Dpl1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings({"rawtypes" })
-	public List selectDpl1000DplHistoryList(Map inputMap)  throws Exception{
-		return (List) list("dpl1000DAO.selectDpl1000DplHistoryList", inputMap);
-	}
-	
-	
-	@SuppressWarnings({"rawtypes" })
-	public List selectDpl1400DplBldNumList(Map inputMap)  throws Exception{
-		return (List) list("dpl1000DAO.selectDpl1400DplBldNumList", inputMap);
+	public List selectDpl1000DplHistoryList(Map paramMap)  throws Exception{
+		return (List) list("dpl1000DAO.selectDpl1000DplHistoryList", paramMap);
 	}
 	
 		

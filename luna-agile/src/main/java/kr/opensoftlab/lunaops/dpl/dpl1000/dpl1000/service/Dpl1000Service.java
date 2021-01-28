@@ -23,6 +23,14 @@ public interface Dpl1000Service {
 	public List<Map> selectDpl1000List(Map paramMap) throws Exception;
 
 	
+	@SuppressWarnings({"rawtypes" })
+	List selectDpl1400DplBldNumList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	int selectDpl1400DplBldNumListCnt(Map paramMap)  throws Exception;
+	
+	
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -110,10 +118,6 @@ public interface Dpl1000Service {
 	
 	@SuppressWarnings({"rawtypes" })
 	void insertDpl1000DplSignRequestList(Map paramMap)  throws Exception;
-	
-	
-	@SuppressWarnings({"rawtypes" })
-	List selectDpl1400DplBldNumList(Map inputMap)  throws Exception;
 	
 		
 	@SuppressWarnings("rawtypes")

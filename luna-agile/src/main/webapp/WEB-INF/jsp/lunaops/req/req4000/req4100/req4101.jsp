@@ -18,9 +18,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -141,7 +139,7 @@
 								<span data-lang-cd="req4101.button.deleteResetBtn">삭제 초기화</span>
 							</button>
 						</label>
-						<div class="kt-uppy osl-max-height-260" id="req4101FileUpload">
+						<div class="kt-uppy osl-max-h-px-260" id="req4101FileUpload">
 							<div class="kt-uppy__dashboard"></div>
 							<div class="kt-uppy__progress"></div>
 						</div>

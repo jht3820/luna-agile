@@ -1,11 +1,8 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +169,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -232,7 +229,77 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		/* 페이지 언어 */
+		
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "받은 메시지",
+				send: "보낸 메시지",
+				alone: "나에게 보낸 메시지"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "메시지 조회",
+					insertBtn : "메시지 보내기",
+					reInsertBtn : "메시지 답장",
+					checkBtn : "메시지 읽음 처리",
+					deleteBtn : "메시지 삭제",
+					dblClickBtn :"메시지 상세 조회"
+				},
+				reInsertBtn : "답장",
+				checkBtn : "읽음",
+			},
+			
+			field: {
+				sendUsrId : "보낸 사람 ID",
+				sendUsrEmail : "보낸 사람 e-mail",
+				usrNm : "받는 사람",
+				usrId : "받는 사람 ID",
+				usrEmail :"받는 사람 e-mail",
+				armContent : "내용"
+			},
+			actionBtn : {
+				title : "삭제 / 상세 / 답장",
+				insertTitle : "메시지 쓰기",
+				reInsertTitle :"메시지 답장",
+				dblClickTitle : "메시지 상세",
+			},
+			alert :{
+				message : {
+					selectMessage : "답장할 메시지를 선택하세요.",
+					selectOneMessage : "1개의 메시지만 선택하세요.<br/>${1}개의 메시지가 선택되었습니다.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "받는 사람",
+				title : "제목",
+				content : "내용",
+				attachments: "파일 첨부", 
+			},
+			placeholder :{
+				title : "제목",
+				content : "내용",
+				select2 : "선택 또는 입력"
+			},
+			message :{
+				inputToUser : "받는 사람을 입력하세요.",
+				send : "메시지를 보내시겠습니까?",
+			},
+			button : {
+				submit : "보내기"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "첨부 파일", 
+			},
+			button : {
+				reSend : "답장"
+			},
+			title :"메시지 답장"
+		},
 		dpl1100:{
 			title : {
 				deploy : "배포계획 목록",
@@ -387,6 +454,18 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
 		prj5001:{
 			complete: "완료",
 			insert:{
@@ -394,10 +473,17 @@ var OSLCoreLangSetting = function () {
 				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
 			update:{
 				title: "프로젝트 일정 수정",
 				saveString: "프로젝트 일정을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
 			},
 			actionBtn : {
 				insertBtn : "프로젝트 일정 저장",
@@ -409,6 +495,7 @@ var OSLCoreLangSetting = function () {
 				evtDesc: "일정 설명",
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
 			}
 		},
 		req1001:{
@@ -449,7 +536,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "복사"
 			},
 			field:{
-				/*외부 주입 search bar 인 경우 사용*/
+				
 				prjGrpNm: "프로젝트 그룹명",
 			},
 			actionBtn:{
@@ -555,7 +642,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
+				
 				usrNm : "사용자명",
 			},
 			actionBtn : {
@@ -567,19 +654,6 @@ var OSLCoreLangSetting = function () {
 			text: "잠긴 요구사항입니다.<br/> 비밀번호를 입력하세요.",
 			button:{
 				submit : "확인",
-			}
-		},
-		spr1002:{
-			complete: "완료",
-			insert:{
-				title: "신규 스프린트 생성",
-				saveString: "신규 스프린트를 등록하시겠습니까?",
-				saveBtnString: "등록 완료",
-			},
-			update:{
-				title: "스프린트 수정",
-				saveString: "스프린트를 수정하시겠습니까?",
-				saveBtnString: "수정 완료"
 			}
 		},
 		spr1000:{
@@ -619,6 +693,51 @@ var OSLCoreLangSetting = function () {
 					delete: "스프린트 삭제",
 					dblClick: "스프린트 상세 정보"
 				}
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		spr1003:{
+			wizard:{
+				main:{
+					mmtTitle: "회의록 작성",
+					mmtDesc: "스프린트 회의록 작성",
+					sprPtTitle: "스토리 포인트 입력",
+					sprPtDesc: "요구사항 스토리 포인트 입력",
+					chargerTitle: "담당자 지정",
+					chargerDesc: "요구사항 담당자 지정",
+					processTitle: "프로세스 배정"
+				},
+				info:{
+					mmt: "* 스프린트 시작 전 회의록을 작성하세요.",
+					sprPt: "* 요구사항에 스토리 포인트를 입력하세요.",
+					charger: "* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.",
+					process: "* 배정된 프로세스가 칸반 보드에 표시됩니다."
+				},
+				btn:{
+					prev: "이전",
+					submit: "완료",
+					next: "다음"
+				}
+			},
+			lebel:{
+				mmtUsrList: "참여 인원",
+				mmtTitle: "회의록 제목",
+				mmtDesc: "회의록 내용"
+			},
+			alert:{
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
 			}
 		},
 		spr1100:{
@@ -732,7 +851,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
-			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
+			
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -768,8 +887,13 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
-			label :{
-				summery : "옵션 별 통계",
+			label:{
+				summery : "통계",
+			},
+			chart:{
+				noData : "데이터 없음",
+				newPost : "등록 게시글",
+				deletePost : "삭제 게시글"
 			}
 		},
 		stm2101:{
@@ -971,21 +1095,39 @@ var OSLCoreLangSetting = function () {
 		},
 		stm9002:{
 			label:{
+				leftTitle: "JENKINS 정보",
+				rightTitle: "JOB 정보",
 				jenkinsName : "JENKINS NAME",
 				jenkinsUrl : "JENKINS URL",
-				jenkinsUserId : "USER ID",
+				jenkinsUserId : "JENKNS USER ID",
 				tokenKey: "TOKEN KEY",
-				jenkinsUseCd : "사용여부",
-				jenkinsDesc : "JENKINS 설명",
+				jenkinsUse : "사용 유무",
+				mode : "mode",
+				jenkinsClass : "_class",
+				jenkinsDescription : "description",
+				jenkinsNodeName : "nodeName",
+				jenkinsNodeDesc : "nodeDescription",
+				statusLable :"상태",
+				systemRegisterLabel :"시스템 등록 유무",
+				systemRegister : "등록",
+				notSstemRegister : "미등록",
+				jobClass : "_class",
+				jobStatusEtc : "ETC",
+				jobStatusSuccess : "SUCCESS",
+				jobStatusFail : "FAIL",
+				jobStatusAborted : "ABORTED",
+				jobStatusNotBuilt : "NOT BUILT"
 			},
 			button:{
-				insert : "작성 완료",
-				update : "수정 완료"
+				jobUpdate : "수정",
+				jobDelete : "삭제",
+				jobDetail : "상세 정보",
+				jobInsert : "신규 JOB 등록",
+				moveJobList : "JOB 목록 이동"
 			},
 			message:{
 				confirm:{
-					insert:"신규 JENKINS를 등록하시겠습니까?",
-					update:"JENKINS 정보를 수정하시겠습니까?"
+					deleteMessage :"를 삭제하시겠습니까?"
 				}
 			}
 		},
@@ -1011,7 +1153,8 @@ var OSLCoreLangSetting = function () {
 				job:{
 					updateBtn:"Job 수정",
 					deleteBtn:"Job 삭제",
-					dblClickBtn:"Job 상세보기"
+					dblClickBtn:"Job 상세보기",
+					detailJenkins:"Jenkins 상세보기"
 				}
 			},
 			modal:{
@@ -1051,6 +1194,20 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm9102:{
+			label:{
+				leftTitle : "JOB 빌드 목록",
+				rightTitle : "콘솔 로그",
+				jenkinsNm : "JENKINS NAME",
+				jobId : "JOB ID",
+				minute : "분",
+				second : "초"
+			},
+			message:{
+				selectBuildInfo: "좌측 빌드 정보를 선택해주세요.",
+				notConsoleLog: "콘솔 로그가 없습니다."
+			}
+		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.<br/> ${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -1068,9 +1225,9 @@ var OSLCoreLangSetting = function () {
 				noticeBadge: "공지",
 			},
 			field:{
-				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+				
 				tagNm:"태그",
-				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
+				
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
@@ -1211,7 +1368,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1319,7 +1476,12 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
+			cmm16000CmmTable:{
+				sendUsrNm : "From User Name",
+				armTitle : "Title",
+				sendDtm : "Date",
+			},
 			bad1000BadTable:{
 				badContent: "Content",
 				badNtcCheck : "Notice",
@@ -1451,6 +1613,13 @@ var OSLCoreLangSetting = function () {
 				jobParameter:"Job Parameter",
 				useNm:"Job Use",
 				jobDesc:"Job Description"
+			},
+			stm9102JobBuildTable:{
+				bldNum: "Build Number",
+				bldResult: "Build Result",
+				bldStartDtm: "Build Start Time",
+				bldDurationTm: "Duration Time",
+				regUsrNm: "Distributor"
 			}
 		},
 		date:{
@@ -1507,7 +1676,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -1562,7 +1731,77 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
+		cmm16000:{
+			label:{
+				title : "MESSAGE",
+				get : "Received Message",
+				send: "Sent Message",
+				alone: "Sent To Me"
+			},
+			button :{
+				tooltip : {
+					selectBtn : "Select Message",
+					insertBtn : "Send Message",
+					reInsertBtn : "Reply Message",
+					checkBtn : "Read Check Message",
+					deleteBtn : "Delete Message",
+					dblClickBtn :"Detail Message"
+				},
+				reInsertBtn : "Reply",
+				checkBtn : "Read Check"
+			},
+			
+			field: {
+				sendUsrId : "From User Id",
+				sendUsrEmail : "From User E-mail",
+				usrNm : "To User Name",
+				usrId : "To User Id",
+				usrEmail :"To User E-mail",
+				armContent : "Content"
+			},
+			actionBtn : {
+				title : "Del / Det / Rep",
+				insertTitle : "Write Message",
+				reInsertTitle :"Reply Message",
+				dblClickTitle : "Detail Message",
+			},
+			alert :{
+				message : {
+					selectMessage : "Select a message to reply to.",
+					selectOneMessage : "Please select only 1 message.<br/>${1} messages have been selected.",
+				}
+			}
+		},
+		cmm16001:{
+			label : {
+				to : "To",
+				title : "Title",
+				content : "Content",
+				attachments: "Attachments", 
+			},
+			placeholder :{
+				title : "Title",
+				content : "Content",
+				select2 : "Click or Search Text"
+			},
+			message :{
+				inputToUser : "Please enter the recipient.",
+				send : "Would you like to send a message?",
+			},
+			button : {
+				submit : "Send"
+			}
+		},
+		cmm16002 : {
+			label : {
+				attachments: "Attachments", 
+			},
+			button : {
+				reSend : "Reply"
+			},
+			title :"Reply Message"
+		},
 		dpl1100:{
 			title : {
 				deploy : "Deploy List",
@@ -1664,6 +1903,18 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
 		prj5001:{
 			complete: "완료",
 			insert:{
@@ -1671,10 +1922,17 @@ var OSLCoreLangSetting = function () {
 				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
 			update:{
 				title: "프로젝트 일정 수정",
 				saveString: "프로젝트 일정을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
 			},
 			actionBtn : {
 				insertBtn : "프로젝트 일정 저장",
@@ -1686,6 +1944,7 @@ var OSLCoreLangSetting = function () {
 				evtDesc: "일정 설명",
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
 			}
 		},
 		req1001:{
@@ -1719,7 +1978,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "Copy"
 			},
 			field:{
-				/*외부 주입 search bar에서 사용*/
+				
 				prjGrpNm: "Project Group Name",
 			},
 			actionBtn:{
@@ -1825,7 +2084,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
+				
 				usrNm : "User Name",
 			},
 			actionBtn : {
@@ -1984,6 +2243,14 @@ var OSLCoreLangSetting = function () {
 				movie:"[Movie]",
 				storage:"[Storage]",
 			},
+			label:{
+				summery : "Summery",
+			},
+			chart:{
+				noData : "No Data",
+				newPost : "New Post",
+				deletePost : "Delete Post"
+			}
 		},
 		stm2101:{
 			update: "Would you like to update this board setting?",
@@ -2211,9 +2478,9 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+			field:{ 
 				tagNm:"Tag",
-				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
+				
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
@@ -2354,12 +2621,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2368,7 +2635,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };
