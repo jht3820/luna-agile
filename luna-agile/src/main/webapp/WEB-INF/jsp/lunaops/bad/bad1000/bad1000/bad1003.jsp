@@ -39,7 +39,7 @@
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1003.label.noticeDate">공지 기간</span></label>
 					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange"/>
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right kt-bg-brand osl-height-38"><span><i class="la la-calendar-check-o kt-font-light"></i></span></span>
+				 			<span class="kt-input-icon__icon kt-input-icon__icon--right kt-bg-brand osl-h-px-38"><span><i class="la la-calendar-check-o kt-font-light"></i></span></span>
 				 		</div>
 				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
@@ -79,7 +79,7 @@
 							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attachFile">파일 첨부</span>
 							<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn"><span data-lang-cd="bad1003.button.deleteResetBtn">삭제 초기화</span></button>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height-260" name="bad1003FileUpload" id="bad1003FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-h-px-260" name="bad1003FileUpload" id="bad1003FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
