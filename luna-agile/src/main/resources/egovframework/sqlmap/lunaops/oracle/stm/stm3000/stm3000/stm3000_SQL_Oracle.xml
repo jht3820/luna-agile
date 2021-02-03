@@ -134,6 +134,9 @@
 		   AND A.LIC_GRP_ID = #licGrpId#
 		   AND A.DEL_CD = '02'
 		   ]]>
+		   <isNotEmpty property="useCd">
+				 AND A.USE_CD = #useCd#
+			</isNotEmpty>
 		   <isNotEmpty property="paramSortFieldId">
 					<isNotEmpty property="sortDirection">
 						ORDER BY $paramSortFieldId$

@@ -35,7 +35,7 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
-				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
+				<div class="kt_datatable" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -72,7 +72,7 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr2000MmtTable"></div>
 				</div>
-				<div class="kt_datatable osl-datatable-footer__divide" id="spr2000MmtTable"></div>
+				<div class="kt_datatable" id="spr2000MmtTable"></div>
 			</div>
 		</div> <!-- 회의록 목록 끝 -->
 	</div>
@@ -161,12 +161,6 @@ var OSLSpr2000Popup = function () {
 						$("#sprNm").val("");
 						$("#sprNmStr").text("");
 						selectBtnClick();
-						
-						//회의록 테이블도 초기화
-						//검색바 초기화
-						searchReset(mmtDatatableId);
-						//데이터 테이블 재조회
-						$("button[data-datatable-id="+mmtDatatableId+"][data-datatable-action=select]").click();
 					}
 				},
 				"click": function(rowData){
@@ -174,11 +168,6 @@ var OSLSpr2000Popup = function () {
 					$("#sprNm").val(rowData.sprNm);
 					$("#sprNmStr").text(rowData.sprNm + " ");
 					selectBtnClick();
-					
-					//검색바 초기화
-					searchReset(mmtDatatableId);
-					//데이터 테이블 재조회
-					$("button[data-datatable-id="+mmtDatatableId+"][data-datatable-action=select]").click();
 				}
 			}
 		});
@@ -198,33 +187,30 @@ var OSLSpr2000Popup = function () {
 				{field: 'mmtNm', title: '회의록명', textAlign: 'left', width: 400, autoHide: false, sortField: "reqNm", search:true},
 				{field: 'mmtMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
 					template:function(row){
-						if($.osl.isNull(row.mmtMemCnt)){
+						if(row.mmtMemCnt == null || row.mmtMemCnt == ""){
 							return 0;
 						}else{
 							return row.mmtMemCnt;
 						}
 					}
 				},
-				{field: 'mmtUsrNm', title: '작성자', textAlign: 'left', width: 120, search:true,
+				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120, search:true,
 					template: function (row) {
-						if($.osl.isNull(row.mmtUsrNm)){
-							row.mmtUsrNm = "-";
+						if(row.mmtUsrId == null){
+							return "";
+						}else{
+							var usrData = {
+									html: row.mmtUsrNm,
+									imgSize: "sm",
+									class:{
+										cardBtn: "osl-width__fit-content"
+									}
+							};
+							return $.osl.user.usrImgSet(row.mmtUsrImgId, usrData);
 						}
-						var usrData = {
-								html: row.mmtUsrNm,
-								imgSize: "sm",
-								class:{
-									cardBtn: "osl-width__fit-content"
-								}
-						};
-						return $.osl.user.usrImgSet(row.mmtUsrImgId, usrData);
 					},
 					onclick: function(row){
-						if($.osl.isNull(row.mmtUsrId)){
-							$.osl.alert("없는 회원입니다.");
-						}else{
-							$.osl.user.usrInfoPopup(row.mmtUsrId);
-						}
+						$.osl.user.usrInfoPopup(row.mmtUsrId);
 					}	
 				},
 				{field: 'mmtDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm", search:true, searchType:"daterange",
@@ -240,6 +226,9 @@ var OSLSpr2000Popup = function () {
 				{field: 'mmtMemNm', title: '참여인원명', searchOrd: 4},
 				{field: 'mmtMemEmail', title: '참여인원 이메일', searchOrd: 5},
 			],
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
 				"title": $.osl.lang("spr2000.actionBtn.title"),
 				"dblClick": true,
@@ -251,7 +240,7 @@ var OSLSpr2000Popup = function () {
 			},
 			actionFn:{
 				"insert":function(rowData){
-					if($.osl.isNull($("#sprId").val())){
+					if($("#sprId").val() == null || $("#sprId").val() == ""){
 						//스프린트를 선택하지 않았으면
 						$.osl.alert($.osl.lang("spr2000.message.selectMsg"));
 						return false;
@@ -309,6 +298,7 @@ var OSLSpr2000Popup = function () {
 				},
 				"dblClick": function(rowData){
 					var data = {
+							type: "update",
 							mmtId : rowData.mmtId,
 							sprId : rowData.sprId
 						};
@@ -332,38 +322,6 @@ var OSLSpr2000Popup = function () {
 		var sprId = $("#sprId").val();
 		$.osl.datatable.list[mmtDatatableId].targetDt.setDataSourceParam("sprId", sprId);
 		$("button[data-datatable-id="+mmtDatatableId+"][data-datatable-action=select]").click();
-	};
-	
-	/**
-	* searchReset : 검색바 초기화
-	* param : datatableId 초기화 시킬 검색바의 데이터 테이블 아이디
-	*/
-	var searchReset = function(datatableId){
-		//드롭다운 메뉴 선택 활성화 취소 및 재선택
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item.active").attr("class", "dropdown-item");
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").attr("class", "dropdown-item active");
-		
-		//검색 메뉴 명 가져오기
-		var searchBarMenuStr = $(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=-1]").text();
-		
-		//검색 메뉴 버튼 변경
-		$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").parent().children(".btn.btn-secondary.dropdown-toggle").text(searchBarMenuStr);
-		
-		//select 감추기
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("style", "display:none;");
-		$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("aria-hidden", "true");
-		
-		//input 보이기
-		$("#searchData_"+datatableId).removeAttr("readonly");
-		//그려진 캘린터 아이콘이 있는 경우 지우기
-		$("#searchData_"+datatableId).parent().children("span").children().children().removeClass("la-calendar");
-		
-		//input에 검색 값 비우기
-		$("#searchData_"+datatableId).val("");
-
-		//전체 검색 막기
-		//input disabled
-		$("#searchData_"+datatableId).attr("disabled","disabled");
 	};
 	
 	return {

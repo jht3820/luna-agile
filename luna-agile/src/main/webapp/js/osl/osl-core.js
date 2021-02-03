@@ -201,52 +201,6 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
-					locale:Uppy.locales.ko_KR,
-					meta: {},
-					onBeforeUpload: $.noop,
-					onBeforeFileAdded: $.noop,
-				};
-				
-				
-				config = $.extend(true, defaultConfig, config);
-				
-				var targetObj = $("#"+targetId);
-				if(targetObj.length > 0){
-					rtnObject = Uppy.Core({
-						targetId: targetId,
-						autoProceed: config.autoProceed,
-						restrictions: {
-							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
-							maxNumberOfFiles: config.maxNumberOfFiles,
-							minNumberOfFiles: config.minNumberOfFiles,
-							allowedFileTypes: config.allowedFileTypes
-						},
-						locale:config.locale,
-						meta: config.meta,
-						onBeforeUpload: function(files){
-							return config.onBeforeUpload(files);
-						},
-						onBeforeFileAdded: function(currentFile, files){
-							
-							if(currentFile.source != "database" && config.fileReadonly){
-								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
-								return false;
-							}
-							return config.onBeforeFileAdded(currentFile, files);
-						},
-						debug: config.debug,
-						logger: config.logger,
-						fileDownload: config.fileDownload
-					});
-					
-					rtnObject.use(Uppy.Dashboard, config);
-					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
-				}
-				
-				return rtnObject;
-			},
-			
-			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -1486,9 +1440,14 @@
 		        					$("#submenu-authGrp-sel").html('<i class="kt-menu__link-icon fa fa-user-tie"></i>'+$.osl.escapeHtml(map.authGrpNm));
 		        				}
 		        				
-	        					if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
-	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				
+	        					if(!prjOrdList[map.prjGrpId]["prjList"].hasOwnProperty(map.prjId)){
+	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId] = {};
 	        					}
+	        					
+		        				if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
+		        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				}
 	        					
 	        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"][map.authGrpId] = map;
 
@@ -1681,7 +1640,8 @@
 											
 											$.each(selRecords, function(idx, map){
 												var rowIdx = $(map).data("row");
-												rowData.push(datatables.targetDt.dataSet[rowIdx]);
+												var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+												rowData.push(tmp_rowData);
 											});
 											
 											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "list", rowData.length, this);
@@ -1713,10 +1673,10 @@
 											event.stopPropagation();
 											event.preventDefault();
 											event.returnValue = false;
+
+											var tmp_rowData = datatables.targetDt.dataSet[btnRowNum];
 											
-											var rowData = datatables.targetDt.dataSet[btnRowNum];
-											
-											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "info", btnRowNum, this);
+											targetConfig.actionFn[btnAction](tmp_rowData, btnDatatableId, "info", btnRowNum, this);
 										});
 									}
 								}
@@ -1795,6 +1755,7 @@
 									}
 									else{
 										var rowIdx = datatables.targetDt.getSelectedRecords().data("row");
+										
 										rowData = datatables.targetDt.dataSet[rowIdx];
 									}
 								}
@@ -1833,7 +1794,9 @@
 									else{
 										$.each(selRecords, function(idx, map){
 											var rowIdx = $(map).data("row");
-											rowData.push(datatables.targetDt.dataSet[rowIdx]);
+											var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+											
+											rowData.push(tmp_rowData);
 										});
 									}
 								}
@@ -2290,8 +2253,10 @@
 							}
 						},
 						rows:{
+							beforeTemplate: function (row, data, index){
+								
+							},
 							afterTemplate: function(row, data, index){
-
 								
 								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
 									
@@ -2805,6 +2770,15 @@
 								});
 							}
 						});
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox]:checked");
+							
+							
+							$.each(targetElem, function(idx, map){
+								map.checked = false;
+							});
+						}
 					});
 					
 					
@@ -2814,6 +2788,8 @@
 					
 					$.osl.datatable.list[targetId] = datatables;
 				}
+				
+				return datatables;
 			}
 		}
 		,date: {
@@ -3424,12 +3400,13 @@
 	
 	
 	$.osl.escapeHtml = function(sValue){
+		var rtnValue = sValue;
 		
 		if(typeof sValue == "number"){
-			return sValue;
+			return rtnValue;
 		}
 		try{
-			return sValue ? sValue.replace( /[&<>'"]/g,
+			rtnValue =  sValue ? sValue.replace( /[&<>'"]/g,
 				function (c, offset, str) {
 					if (c === "&") {
 						var substr = str.substring(offset, offset + 6);
@@ -3449,6 +3426,11 @@
 		}catch(error){
 			return "";
 		}
+		
+		
+		rtnValue = rtnValue.replace(/(&lt;\/br&gt;|&lt;br&gt;|&lt;br\/&gt;|&lt;br \/&gt;)/gi, '</br>');
+		
+		return rtnValue;
 	};
 	
 	

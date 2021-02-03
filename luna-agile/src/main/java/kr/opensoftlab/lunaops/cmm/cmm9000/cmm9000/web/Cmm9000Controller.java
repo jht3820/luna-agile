@@ -365,17 +365,19 @@ public class Cmm9000Controller {
     		
     		String prjId = (String) ss.getAttribute("selPrjId");
     		String selAuthGrpId = (String) ss.getAttribute("selAuthGrpId");
+    		String selPrjTypeCd = (String) ss.getAttribute("selPrjTypeCd");
     		String usrId = (String) loginVO.getUsrId();
     		String selMenuId = paramMap.get("menuId");
     		
     		paramMap.put("prjId", prjId);
     		paramMap.put("authGrpId", selAuthGrpId);
     		paramMap.put("usrId", usrId);
+    		paramMap.put("prjTypeCd", selPrjTypeCd);
     		
     		List<Map> menuList = (List) cmm4000Service.selectCmm4000MenuList(paramMap);
     		
     		
-    		menuList = moduleUseCheck.moduleUseMenuList(menuList);
+    		
     		
     		
     		boolean menuAuthChk = false;

@@ -22,6 +22,7 @@ import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.service.impl.FileManageDAO;
+import egovframework.com.utl.sim.service.EgovFileScrty;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import kr.opensoftlab.lunaops.arm.arm1000.arm1000.service.impl.Arm1000DAO;
@@ -187,6 +188,16 @@ public class Req1000ServiceImpl extends EgovAbstractServiceImpl implements Req10
 			
     		
     		req1000DAO.updateReq1000ReqKey(newReqMap);
+    		
+    		
+    		String reqPw = (String) convertParamMap.get("reqPw");
+    		if(reqPw != null && !reqPw.isEmpty()) {
+    			
+    			newReqMap.put("reqPw", EgovFileScrty.encryptPassword(reqPw, insNewReqId));
+    			
+    			
+    			req1000DAO.updateReq1000ReqPwInfo(newReqMap);
+    		}
 			
 			return insNewReqId;
 		}
@@ -202,6 +213,17 @@ public class Req1000ServiceImpl extends EgovAbstractServiceImpl implements Req10
 			}
 			
 			
+			
+			
+			String reqPw = (String) convertParamMap.get("reqPw");
+    		if(reqPw != null && !reqPw.isEmpty()) {
+    			convertParamMap.put("changePw", "Y");
+    			
+    			
+    			String enReqPw = EgovFileScrty.encryptPassword(reqPw, (String) reqInfoMap.get("reqId"));
+				
+				convertParamMap.put("reqPw", enReqPw);
+    		}
 			
 			
 			int uptCnt = req1000DAO.updateReq1001ReqInfo(convertParamMap);

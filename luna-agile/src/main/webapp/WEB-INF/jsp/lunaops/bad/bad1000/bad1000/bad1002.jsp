@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+\<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <form class="kt-form" id="bad1002Info" autocomplete="off">
@@ -414,7 +414,7 @@ var OSLBad1002Popup = function () {
 				$("#badTagOption").removeClass("kt-hide");
 				
           		//태그
-           	   $("#tagWriter").on("keypress", function (e) {
+           	   $("#tagWriter").on("propertychange paste input", function (e) {
            	        var self = $(this);
       	            //#이 들어온 경우 제거
        	            var tagValue = self.val().replace(/#/g,"");

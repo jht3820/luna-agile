@@ -7,133 +7,168 @@
 	<input type="hidden" name="paramPrjId" id="paramPrjId" value="${param.paramPrjId}">
 	<input type="hidden" name="startDt" id="startDt">
 	<input type="hidden" name="endDt" id="endDt">
-	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12">
-			<div class="kt-portlet">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 정보
-						</h5>
-					</div>
+		<div class="kt-portlet">
+			<div class="kt-portlet__head kt-portlet__head--lg">
+				<div class="kt-portlet__head-label">
+					<h5 class="kt-font-boldest kt-font-brand">
+						<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 정보
+					</h5>
 				</div>
-				<div class="kt-portlet__body kt-padding-15">
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjGrpNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjGrpNm" id="prjGrpNm" opttype="-1" readonly="readonly" value='<c:out value="${param.prjGrpNm}"/>' required>
+			</div>
+			<div class="kt-portlet__body kt-padding-15">
+				<div class="row">
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjGrpNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjGrpNm" id="prjGrpNm" opttype="-1" readonly="readonly" value='<c:out value="${param.prjGrpNm}"/>' >
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" value='<c:out value="${param.prjGrpStartDt}"/> ~ <c:out value="${param.prjGrpEndDt}"/>'>
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" value='<c:out value="${param.prjGrpStartDt}"/> ~ <c:out value="${param.prjGrpEndDt}"/>'required>
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 명</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 명" name="prjNm" id="prjNm" opttype="-1" maxlength="100" >
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 기간</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 기간" name="prjRange" id="prjRange" readonly="readonly" >
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 명</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 명" name="prjNm" id="prjNm" opttype="-1" maxlength="100" required>
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 유형</label>
+									<select class="form-control kt-select2" id="prjTypeCd" name="prjTypeCd" readonly="readonly" opttype="-1">
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 기간</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 기간" name="prjRange" id="prjRange" readonly="readonly" required>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 유형</label>
-								<select class="form-control kt-select2" id="prjTypeCd" name="prjTypeCd" readonly="readonly" opttype="-1">
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjDevTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 개발 방법론</label>
-								<select class="form-control kt-select2" id="prjDevTypeCd" name="prjDevTypeCd" readonly="readonly" opttype="-1">
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="prjAcrm"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 약어</span></label>
-								<input type="text" class="form-control" placeholder="프로젝트 약어" name="prjAcrm" id="prjAcrm" opttype="-1" maxlength="10" regexstr="^(?=.*?[A-Z])(?=.*?[0-9])|[A-Z]{3,10}$" regexerrorstr="영문 대문자 또는 영문 대문자, 숫자 조합으로 3~10자만 허용" required>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-12">
-							<div class="form-group">
-								<label for="prjBgColor"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 배경색</span></label>
-								<input type="color" class="form-control" placeholder="프로젝트 배경색" name="prjBgColor" id="prjBgColor" opttype="-1" value="#eef1fd" readonly="readonly">
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-12">
-							<div class="form-group">
-								<label for="prjColor"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 글씨색</span></label>
-								<input type="color" class="form-control" placeholder="프로젝트 글씨색" name="prjColor" id="prjColor" opttype="-1" value="#5578eb" readonly="readonly">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjDevTypeCd"><i class="fa fa-check-square kt-margin-r-5"></i>프로젝트 개발 방법론</label>
+									<select class="form-control kt-select2" id="prjDevTypeCd" name="prjDevTypeCd" readonly="readonly" opttype="-1">
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
-								<select class="form-control kt-select2" id="useCd" name="useCd" readonly="readonly" opttype="-1">
-								</select>
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="prjAcrm"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 약어</span></label>
+									<input type="text" class="form-control" placeholder="프로젝트 약어" name="prjAcrm" id="prjAcrm" opttype="-1" maxlength="10" regexstr="^(?=.*?[A-Z])(?=.*?[0-9])|[A-Z]{3,10}$" regexerrorstr="영문 대문자 또는 영문 대문자, 숫자 조합으로 3~10자만 허용">
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-6 col-sm-12">
+								<div class="form-group">
+									<label for="prjBgColor"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 배경색</span></label>
+									<input type="color" class="form-control" placeholder="프로젝트 배경색" name="prjBgColor" id="prjBgColor" opttype="-1" value="#eef1fd" readonly="readonly">
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-6 col-sm-12">
+								<div class="form-group">
+									<label for="prjColor"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 글씨색</span></label>
+									<input type="color" class="form-control" placeholder="프로젝트 글씨색" name="prjColor" id="prjColor" opttype="-1" value="#5578eb" readonly="readonly">
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
-								<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" maxlength="3" required>
+						<div class="row">
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
+									<select class="form-control kt-select2" id="useCd" name="useCd" readonly="readonly" opttype="-1">
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
+									<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" maxlength="3" >
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
-								<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="prjDesc" id="prjDesc" maxlength="2000" opttype="-1" ></textarea>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<div class="form-group">
+									<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
+									<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="prjDesc" id="prjDesc" maxlength="2000" opttype="-1" ></textarea>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12">
-			<div class="kt-portlet">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>담당자 목록
-						</h5>
-					</div>
-					<div class="kt-portlet__head-toolbar">
-						<div class="kt-portlet__head-wrapper">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span>조회</span>
-							</button>
+		<div class="row">
+			<div class="col-lg-6 col-md-12 col-sm-12">
+				<div class="kt-portlet">
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-label">
+							<h5 class="kt-font-boldest kt-font-brand">
+								<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 담당 목록
+							</h5>
+						</div>
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-wrapper">
+								<c:if test="${param.type != 'insert' }">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1004PrjAuthUsrTable" data-datatable-action="reset" title="담당자 배정 목록 초기화" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+										<i class="fa fa-list"></i><span>초기화</span>
+									</button>
+								</c:if>
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1004PrjAuthUsrTable" data-datatable-action="selInUsrDelete" title="선택 담당자 배정 제외" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="1" id="prj1004PrjAuthUsrInsert">
+									<span>배정 제외</span><i class="fa fa-arrow-alt-circle-right osl-padding-r0 osl-padding-l05"></i>
+								</button>
+							</div>
 						</div>
 					</div>
+					<div class="kt-portlet__body kt-padding-10 osl-min-h-px--400">
+						<div class="osl-datatable-search" data-datatable-id="prj1004PrjAuthUsrTable"></div>
+						<div class="kt_datatable" id="prj1004PrjAuthUsrTable"></div>
+					</div>
 				</div>
-				<div class="kt-portlet__body osl-min-h-px--400 kt-padding-10">
-					<div class="osl-datatable-search" data-datatable-id="prj1003PrjAuthUsrTable"></div>
-					<div class="kt_datatable" id="prj1003PrjAuthUsrTable"></div>
-				</div>
+			</div>
+			<div class="col-lg-6 col-md-12 col-sm-12">
+				<div class="kt-portlet">
+						<div class="kt-portlet__head kt-portlet__head--lg">
+							<div class="kt-portlet__head-label">
+								<h5 class="kt-font-boldest kt-font-brand">
+									<i class="fa fa-th-large kt-margin-r-5"></i>담당 대상 목록
+								</h5>
+							</div>
+							<div class="kt-portlet__head-toolbar">
+								<div class="kt-portlet__head-wrapper">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1004PrjAuthNoneUsrTable" data-datatable-action="selAllUsrDelete" title="선택 담당자 배정 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="1" id="prj1004AuthGrpNoneUsrInsert">
+										<i class="fa fa-arrow-alt-circle-left"></i><span>배정 등록</span>
+									</button>
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1004PrjAuthNoneUsrTable" data-datatable-action="select" title="담당 대상 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+										<i class="fa fa-list"></i><span>조회</span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="kt-portlet__body kt-padding-10">
+							<div class="osl-datatable-search" data-datatable-id="prj1004PrjAuthNoneUsrTable"></div>
+							<div class="kt_datatable" id="prj1004PrjAuthNoneUsrTable"></div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj1004SaveSubmit"><i class="fa fa-check-square"></i><span>완료</span></button>
+	<button type="button" class="btn btn-brand" id="prj1004SaveSubmit"><i class="fa fa-save"></i><span>완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <script>
@@ -154,6 +189,7 @@ var OSLPrj1004Popup = function () {
 	var prjAuthOriginalData = [];
 	
 	//수정인경우 대상 프로젝트ID
+	var paramPrjGrpId = $("#paramPrjGrpId").val();
 	var paramPrjId = $("#paramPrjId").val();
 	
     // Private functions
@@ -206,30 +242,43 @@ var OSLPrj1004Popup = function () {
     	        }
     		});
     	});
+
+		//프로젝트 유형에 따른 개발방법론 출력 여부
+		$('#prjTypeCd').on('select2:select', function (e) {
+			var data = e.params.data;
+			//운영 선택시 개발방법론 hide
+			if(data.id == "02"){
+				$('#prjDevTypeCd').parent("div.form-group").attr("hidden","hidden");
+			}else{
+				$('#prjDevTypeCd').parent("div.form-group").removeAttr("hidden");
+			}
+		});
+		
+		//데이터 테이블 세팅
+    	datatableSetting();
 		
 		//수정인경우 프로젝트 정보 조회
 		if(type == "update"){
-			fnPrjGrpInfoSelect();
+			fnPrjInfoSelect();
 		}
-		//데이터 테이블 세팅
-    	datatableSetting();
+		
     };
     
     //프로젝트 저장 (생성&수정)
     var saveFormAction = function() {
     	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
-    	/* 
+    	
     	//추가된 담당자 목록
     	var authUsrList = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(authUsrList) && authUsrList.length > 0){
     		var usrIdList = [];
     		$.each(authUsrList, function(idx, map){
-    			usrIdList.push({licGrpId: map.licGrpId, usrId: map.usrId});
+    			usrIdList.push({licGrpId: map.licGrpId, authTypeCd: map.authTypeCd, usrId: map.usrId});
     		});
     		fd.append("usrIdList",JSON.stringify(usrIdList));
     	}
-    	 */
+
     	//AJAX 설정
    		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj1000/prj1000/savePrj1004PrjGrpInfo.do'/>", "async": true,"contentType":false,"processData":false ,"cache":false, "loadingShow": false},fd);
     	 $.osl.showLoadingBar(true,{target: "#frPrj1004", message: "프로젝트를 생성중입니다.</br>잠시만 기다려주세요."});
@@ -242,10 +291,10 @@ var OSLPrj1004Popup = function () {
    				$.osl.toastr(data.message);
    				
    				//모달 창 닫기
-   				//$.osl.layerPopupClose();
+   				$.osl.layerPopupClose();
    				
    				//datatable 조회
-   				//$("button[data-datatable-id=prj1001PrjTable][data-datatable-action=select]").click();
+   				$("button[data-datatable-id=prj1001PrjTable][data-datatable-action=select]").click();
    			}
    		});
    		
@@ -414,7 +463,8 @@ var OSLPrj1004Popup = function () {
 			},
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				{field: 'usrNm', title: '사용자명', textAlign: 'left', width: 150, search: true,
+				{field: 'authTypeNm', title: '분류', textAlign: 'center', width: 80, search: true, searchType:"select", searchCd: "PRJ00018", searchField:"authTypeCd", sortField: "authTypeCd"},
+				{field: 'usrNm', title: '사용자명', textAlign: 'left', width: 130, search: true,
 					template: function (row) {
 						return $.osl.user.usrImgSet(row.usrImgId, row.usrNm);
 					},
@@ -442,6 +492,14 @@ var OSLPrj1004Popup = function () {
 			theme:{
 				actionBtnIcon:{
 					dblClick: "fa fa-arrow-alt-circle-left",
+				}
+			},
+			rows:{
+				beforeTemplate: function (row, data, index){
+					//이미 배정된 사용자인경우
+					if(prjAuthUsrIdList.indexOf(data.usrId) > -1){
+						row.addClass("osl-datatable__row-assign--none");
+					}
 				}
 			},
 			actionFn:{
@@ -528,6 +586,9 @@ var OSLPrj1004Popup = function () {
 			datatable.insertData();
 			//데이터테이블 재 조회
 			datatable.reload();
+			
+			$.osl.datatable.list["prj1004PrjAuthNoneUsrTable"].targetDt.reload();
+			$("div.tooltip.show").remove();
 		 }
 	};
 	
@@ -561,16 +622,19 @@ var OSLPrj1004Popup = function () {
 				
 				//데이터테이블 재 조회
 				datatable.reload();
+				
+				$.osl.datatable.list["prj1004PrjAuthNoneUsrTable"].targetDt.reload();
+				$("div.tooltip.show").remove();
 			}
 		}
 	};
 	
 	//프로젝트 정보 조회
-	var fnPrjGrpInfoSelect = function(){
+	var fnPrjInfoSelect = function(){
 		//프로젝트 정보 조회
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/prj/prj1000/prj1000/selectPrj1000PrjGrpInfoAjax.do'/>"}
-				,{prjId: paramPrjId});
+				{"url":"<c:url value='/prj/prj1000/prj1000/selectPrj1000PrjInfoAjax.do'/>"}
+				,{prjGrpId: paramPrjGrpId, prjId: paramPrjId});
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
 			if(data.errorYn == "Y"){
@@ -578,11 +642,20 @@ var OSLPrj1004Popup = function () {
    			}else{
    				var prjInfo = data.prjInfo;
    				
-   				$.osl.setDataFormElem(prjInfo, formId, ["prjNm","useCd","ord","prjDesc","startDt","endDt"]);
+   				$.osl.setDataFormElem(prjInfo, formId, ["prjNm","useCd","ord","prjDesc","startDt","endDt", "prjAcrm", "prjBgColor", "prjColor"]);
+   				$("#prjTypeCd").val(prjInfo.prjTypeCd).trigger('change.select2');
+   				$("#prjDevTypeCd").val(prjInfo.prjDevTypeCd).trigger('change.select2');
+   				
+   				//프로젝트 유형이 "운영"인경우 개발방법론 숨기기
+   				if(prjInfo.prjTypeCd == "02"){
+   					$('#prjDevTypeCd').parent("div.form-group").attr("hidden","hidden");
+   				}else{
+   					$('#prjDevTypeCd').parent("div.form-group").removeAttr("hidden");
+   				}
    				
    				//시작일 - 종료일 입력
-   				$("#prjGrpRange").data("daterangepicker").setStartDate(prjInfo.startDt);
-   				$("#prjGrpRange").data("daterangepicker").setEndDate(prjInfo.endDt);
+   				$("#prjRange").data("daterangepicker").setStartDate(prjInfo.startDt);
+   				$("#prjRange").data("daterangepicker").setEndDate(prjInfo.endDt);
    				
    				if(data.prjAuthList.length > 0){
    					//원본 데이터 저장
@@ -591,6 +664,9 @@ var OSLPrj1004Popup = function () {
 	   				//대상 데이터 테이블
 	   				var datatable = $.osl.datatable.list["prj1004PrjAuthUsrTable"].targetDt;
 	   			
+	   				//데이터테이블 error class 제거
+	   				datatable.eq(0).removeClass("kt-datatable--error");
+	   				
 	   				$.each(data.prjAuthList, function(idx, map){
 		   				//담당자 배정 목록 추가
 		   				datatable.dataSet.push(map);
@@ -603,7 +679,9 @@ var OSLPrj1004Popup = function () {
 					//데이터 추가
 					datatable.insertData();
 					//데이터테이블 재 조회
-					datatable.reload();
+					//datatable.reload();
+					$.osl.datatable.list["prj1004PrjAuthNoneUsrTable"].targetDt.reload();
+					
    				}
    			}
 		});

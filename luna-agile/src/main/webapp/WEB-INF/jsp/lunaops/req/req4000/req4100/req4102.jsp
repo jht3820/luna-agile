@@ -111,7 +111,7 @@
 					<i class="fa fa-file-upload kt-margin-r-5"></i>
 					<span data-lang-cd="req4101.label.attachments">파일 첨부</span> 
 				</label>
-				<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
+				<div class="kt-uppy osl-max-h-px-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 					<div class="kt-uppy__dashboard"></div>
 					<div class="kt-uppy__progress"></div>
 				</div>

@@ -61,20 +61,12 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -101,7 +93,7 @@ public class Spr2000Controller {
 			String sprId = (String) paramMap.get("sprId");
 			
 			
-			Map<String, Object> metaMap = null;
+			Map<String, Object> pageMap = null;
 			
 			
 			if(sprId != null && !sprId.isEmpty()) {
@@ -116,20 +108,19 @@ public class Spr2000Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				spr2000List = spr2000Service.selectSpr2000MmtList(paramMap);
-			}
-			if(totCnt != 0) {
 				
-				metaMap.put("sort", sortDirection);
-				metaMap.put("field",sortFieldId);
+				
+				pageMap.put("sort", sortDirection);
+				pageMap.put("field",sortFieldId);
 			}
 
 			
 			model.addAttribute("data", spr2000List);
-			model.addAttribute("meta", metaMap);
+			model.addAttribute("meta", pageMap);
 
 			
 			model.addAttribute("errorYn", "N");
@@ -163,20 +154,12 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -212,26 +195,17 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
-			
 			paramMap.put("useCd", "01");
 			int totCnt = stm3000Service.selectStm3000UsrListCnt(paramMap);
 			
@@ -278,20 +252,12 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -329,20 +295,12 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -377,20 +335,12 @@ public class Spr2000Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-
-			
-			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
-			}
-			
-			
-			String paramPrjId = (String) paramMap.get("prjId");
-			
-			
-			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
