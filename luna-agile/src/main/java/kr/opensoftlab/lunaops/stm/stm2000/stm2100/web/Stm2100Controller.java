@@ -60,10 +60,35 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("usrId", loginVO.getUsrId());
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			
+			String usrId = (String) paramMap.get("usrId");
+			
+			
+			if(usrId == null || "".equals(usrId)) {
+				usrId = loginVO.getUsrId();
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("usrId", usrId);
 
 			
 			Map result = stm2100Service.selectStm2100UserCheck(paramMap);
@@ -141,8 +166,17 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
 	
 			
 			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
@@ -208,8 +242,17 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
 			
 			
 			List<Map> stm2120List = stm2100Service.selectStm2120BadWtList(paramMap);
@@ -242,13 +285,28 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			List<Map> stmGrpList = stm2100Service.selectStm2100BadGrpList(paramMap);
 			List<Map> stmUsrList = stm2100Service.selectStm2100BadUsrList(paramMap);
-			
 			
 			model.addAttribute("badGrpList", stmGrpList);
 			model.addAttribute("badUsrList", stmUsrList);
@@ -279,19 +337,6 @@ public class Stm2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			
-			
-			String str = paramMap.get("stmAdmList");
-			str = str.replace("managerNum", "stmAdminCd");
-			str = str.replace("managerId", "stmAdminId");
-			str = str.replace("managerPrjId", "prjId");
-			paramMap.put("stmAdmList", str);
-			
-			str = paramMap.get("stmWtList");
-			str = str.replace("managerNum", "stmWtCd");
-			str = str.replace("managerId", "stmWtId");
-			str = str.replace("managerPrjId", "prjId");
-			paramMap.put("stmWtList", str);
 			
 			
 			stm2100Service.updateStm2100BadOptions(paramMap);
