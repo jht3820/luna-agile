@@ -105,7 +105,7 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="form-group">
 							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr1003.label.mmtTitle">회의록 제목</span></label>
-							<input type="text" class="form-control" name="mmtNm" id="mmtNm" value="test" required>
+							<input type="text" class="form-control" name="mmtNm" id="mmtNm" value="" required>
 						</div>
 					</div>
 				</div>
@@ -113,7 +113,7 @@
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="form-group form-group-last">
 							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr1003.label.mmtDesc">회의록 내용</span></label>
-							<textarea class="form-control" name="mmtDesc" id="mmtDesc" required>test</textarea>
+							<textarea class="form-control" name="mmtDesc" id="mmtDesc" required></textarea>
 						</div>
 					</div>
 				</div>
@@ -223,7 +223,6 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var wizard;
 var OSLSpr1003Popup = function () {
 	var mainFormId = 'frSpr1003';
 	
@@ -278,7 +277,7 @@ var OSLSpr1003Popup = function () {
 		
 		// begin :: 마법사
 		//마법사 세팅
-		wizard = new KTWizard('kt_wizard_v3', {
+		var wizard = new KTWizard('kt_wizard_v3', {
 			startStep: 1, 
 			clickableSteps: false		
 		});
@@ -545,7 +544,6 @@ var OSLSpr1003Popup = function () {
 			data: {
 				source: {
 					read: {
-						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
 						url: "/spr/spr1000/spr1000/selectSpr1000SprReqListAjax.do",
 						params:{
 							sprId: paramSprId
@@ -984,19 +982,6 @@ var OSLSpr1003Popup = function () {
 				},
 				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
-					/*var rowDatas = rowData;
-					//선택 레코드 없는 경우
-					if(rowDatas.length == 0){
-						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
-						return true;
-					}
-					
-					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
-						if (result.value) {
-							//사용자 배정 제외 처리
-							fnAllUsrInsert(rowDatas);
-						}
-					});*/
 				}
 			}
 		});
