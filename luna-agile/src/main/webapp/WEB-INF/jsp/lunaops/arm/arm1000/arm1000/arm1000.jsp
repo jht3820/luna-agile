@@ -82,7 +82,7 @@
 				</div>
 			</div>
 			<div class="kt-portlet__body">
-				<div class="kt_datatable" id="cmm16000CmmTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="cmm16000CmmTable"></div>
 			</div>
 		</div>
 	</div>
@@ -110,7 +110,7 @@ var OSLCmm16000Popup = function () {
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, sortable: false},
 				{field: 'sendUsrNm', title: '보낸 사람', textAlign: 'left', autoHide: false, width: 120, sortField: "sendUsrNm", search:true,
 					template: function (row) {
-						if(row.sendUsrNm == null){
+						if($.osl.isNull(row.sendUsrNm)){
 							row.sendUsrNm = "";
 						}
 						var usrData = {
