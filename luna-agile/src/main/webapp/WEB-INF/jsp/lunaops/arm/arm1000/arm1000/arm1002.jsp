@@ -31,7 +31,7 @@
 						<i class="fa fa-file-upload kt-margin-r-5"></i>
 						<span data-lang-cd="cmm16002.label.attachments">첨부 파일</span> 
 					</label>
-					<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
+					<div class="kt-uppy osl-max-h-px-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 						<div class="kt-uppy__dashboard"></div>
 						<div class="kt-uppy__progress"></div>
 					</div>
