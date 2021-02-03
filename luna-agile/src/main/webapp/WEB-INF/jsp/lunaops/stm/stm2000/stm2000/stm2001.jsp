@@ -1,299 +1,374 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html lang="ko">
-<title>OpenSoftLab</title>
-<script src="<c:url value='/js/common/oslFile.js'/>"></script>
-<script src="<c:url value='/js/common/comOslops.js'/>"></script>
-<link rel='stylesheet' href='<c:url value='/css/common/fileUpload.css'/>' type='text/css'>
-<style>
-.layer_popup_box .close_btn{top:12px; width:18px; height:18px; background:url(/images/login/x_white.png) no-repeat}
-.layer_popup_box .pop_left, .layer_popup_box .pop_right { height: 54px; }
-.required_info { color: red; }
-
-/*익스플로러 적용 위해 !important 추가*/
-/* 팝업에 따라 pop_menu_col1, pop_menu_col2 높이 변경 */
-.pop_menu_row .pop_menu_col1 { width: 20% !important; height: 45px !important; padding-left: 6px !important; }
-.pop_menu_row .pop_menu_col2 { width: 80% !important; height: 45px !important; }
-.pop_menu_row .menu_col1_subStyle { width: 40% !important; }
-.pop_menu_row .menu_col2_subStyle { width: 60% !important; }
-.pop_sub input[type="password"].input_txt { width:100% !important; height:100%!important; }
-#popup_authFrame{display:none;}
-</style>
-<script>
-
-globals_guideChkFn = fnStm2001GuideShow;
-
-var fd = new FormData();
-//중복 파일 업로드 방지 전역변수
-var fileChk = new Array();
-
-
-//현재 비밀번호 저장
-var nowPw = null;
-
-// SVN 유효성
-var arrChkObj = {	"svnRepNm":{"type":"length","msg":"Repository 명은 500byte까지 입력이 가능합니다.","max":500},
-			        "svnRepUrl":{"type":"length","msg":"URL은 500byte까지 입력이 가능합니다.","max":500},
-			        "svnUsrId":{"type":"length","msg":"User ID는 30byte까지 입력이 가능합니다.", "max":30},
-			        "svnUsrPw":{"type":"length","msg":"Password는 30byte까지 입력이 가능합니다.", "max":50},
-			        "svnTxt":{"type":"length","msg":"Repository 설명은 1000byte까지 입력이 가능합니다.","max":1000}
-				};
-
-$(document).ready(function() {
-
-	/* 	
-	*	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
-	* 	1. 공통 대분류 코드를 순서대로 배열 담기(문자열)
-	*	2. 사용구분 저장(Y: 사용중인 코드만, N: 비사용중인 코드만, 그 외: 전체)
-	*	3. 공통코드 적용할 select 객체 직접 배열로 저장
-	* 	4. 공통코드 가져와 적용할 콤보타입 객체 배열 ( S:선택, A:전체(코드값 A 세팅한 조회조건용), N:전체, E:공백추가, 그 외:없음 )
-	*	5. 동기 비동기모드 선택 (true:비동기 통신, false:동기 통신)
-	*	마스터 코드 = REQ00001:요구사항 타입, REQ00002:중요도 , CMM00001:
-	*/
-	var mstCdStrArr = "CMM00001";
-	var strUseYn = 'Y';
-	var arrObj = [ $("#useCd")];
-	var arrComboType = [ ""];
-	gfnGetMultiCommonCodeDataForm(mstCdStrArr, strUseYn, arrObj, arrComboType , false);
-	
-	$("#svnRepNm").focus();
-	
-	// 유효성 체크
-	gfnInputValChk(arrChkObj);
-	
-	var pageTitle = '{param.popupGb}';
-	
-	if(pageTitle == "insert"){
-		$("#pop_title").text("REPOSITORY 등록");
-	}else if(pageTitle == "update"){
-		$("#pop_title").text("REPOSITORY 수정");
-	}
-	
-	//탭인덱스 부여
-	//gfnSetFormAllObjTabIndex(document.getElementById("svn1000PopupFrm"));
-	
-	/* 타이틀 변경 및 버튼명 변경, 수정일경우 값 세팅 */
-	if('${param.popupGb}' == 'insert'){
-		$(".pop_title").text("REPOSITORY 등록");
-		$("#btn_update_popup").text('등록');
-	}
-	else if('${param.popupGb}' == 'update'){
-		/* $("#popup_authFrame").show();
-		//역할 목록 그리드 세팅
-		fnAuthListGrid();
-		 */
-		$(".pop_title").text("REPOSITORY 수정");
-		$("#btn_update_popup").text('수정');
+<form class="kt-form" id="frStm2001">
+	<input type="hidden" name="type" id="type" value="${requestScope.type}">
+	<input type="hidden" name="moduleType" id="moduleType" value="${param.moduleType}">
+	<div class="kt-portlet">
+		<div class="kt-portlet__body">
 		
-		var svnRepId = '${param.svnRepId}';
-		fnSelectSvn1001RepInfo(svnRepId);
-	}
-	
-	/* 저장버튼 클릭 시 */
-	$('#btn_update_popup').click(function() {
-		
-		/* 필수입력값 체크 공통 호출 */
-		var strFormId = "svn1000PopupFrm";
-		var strCheckObjArr = ["svnRepNm", "svnRepUrl","svnUsrId","svnUsrPw"];
-		var sCheckObjNmArr = ["Repository 명", "URL" ,"USER" , "PASSWORD" ];
-		if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-			return;	
-		}
-		
-		var formObj = document.getElementById("svn1000PopupFrm");
-		
-		// 등록/수정 전 유효성 체크
-		if(!gfnSaveInputValChk(arrChkObj)){
-			return false;	
-		}
-
-		fnInsertReqInfoAjax("svn1000PopupFrm");
-
-	});
-	
-	/* 취소버튼 클릭 시 팝업 창 사라지기*/
-	$('#btn_cancle_popup').click(function() {
-		gfnLayerPopupClose();
-	});
-
-	
-});
-
-	/**
-	 * 	요구사항 하나 선택했을때 요구사항 디테일 정보 조회
-	 */
- 	function fnSelectSvn1001RepInfo(svnRepId){
-		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/stm/stm2000/stm2000/selectStm2000InfoAjax.do'/>"}
-				,{ "svnRepId" : svnRepId });
-		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-        	//디테일폼 세팅
-        	gfnSetData2ParentObj(data.repInfo, "svn1000PopupFrm");
-
-        	nowPw = data.repInfo.svnUsrPw;
-		});
-		
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err){
-			data = JSON.parse(data);
-			jAlert(data.message, "알림창");
-		});
-		
-		//AJAX 전송
-		ajaxObj.send();
-	} 
-	
-	//요구사항 등록 함수
-	function fnInsertReqInfoAjax(formId){
-		//FormData에 input값 넣기
-		gfnFormDataAutoValue('svn1000PopupFrm',fd);
-		
-		//type넣기
-		fd.append("type","${param.popupGb}");
-		
-		//기존 비밀번호 넘기기
-		fd.append("nowPw",nowPw);
-		
-		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/stm/stm2000/stm2000/saveSvn2000InfoAjax.do'/>"
-					,"contentType":false
-					,"processData":false
-					,"cache":false}
-				,fd);
-		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-	    	//로딩바 숨김
-	    	gfnShowLoadingBar(false);
-	    	
-	    	//코멘트 등록 실패의 경우 리턴
-	    	if(data.saveYN == 'N'){
-	    		toast.push(data.message);
-	    		return;
-	    	}
-	    	
-	    	//그리드 새로고침
-			fnInGridListSet(firstGrid.page.currentPage,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-	    	
-			jAlert(data.message, '알림창');
-			gfnLayerPopupClose();
-		});
-		
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err){
-			toast.push(xhr.status+"("+err+")"+" 에러가 발생했습니다.");
-	    	gfnLayerPopupClose();
-		});
-		//AJAX 전송
-		ajaxObj.send();
-	}
-
-//역할 그룹 그리드
-function fnAuthListGrid(){
-	authGrid = new ax5.ui.grid();
- 
-    authGrid.setConfig({
-        target: $('[data-ax5grid="auth-grid"]'),
-        sortable:true,
-        showRowSelector: true,
-        header: {align:"center"},
-        columns: [
-         {key: "authGrpNm", label: "역할그룹 명", width: 160, align: "center"},
-         {key: "usrTypNm", label: "사용자유형", width: 120, align: "center"},
-         {key: "authGrpDesc", label: "역할그룹 설명", width: 225, align: "center"},
-        ],
-        body: {
-            align: "center",
-            columnHeight: 30
-        },
-        page:{display:false}
-    });
-}
-
-function fnStm2001GuideShow(){
-	var mainObj = $(".popup");
-	
-	//mainObj가 없는경우 false return
-	if(mainObj.length == 0){
-		return false;
-	}
-	//guide box setting
-	var guideBoxInfo = globals_guideContents["stm2001"];
-	gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
-}
-
-</script>
-
-<div class="popup" >
-<form id="svn1000PopupFrm" name="svn1000PopupFrm" method="post">
-	<input type="hidden" name="popupGb" id="popupGb" value="${param.popupGb}"/>
-	<input type="hidden" name="svnRepId" id="svnRepId" value="${param.svnRepId}" />
-	<input type="hidden" name="prjId" id="prjId" value="${sessionScope.selPrjId}"/>
-	<input type="hidden" name="reqStatusCd" id="reqStatusCd" value="01"/>
-
-	<div class="pop_title">REPOSITORY 등록</div>
-	<div class="pop_sub">
-	
-		<div class="pop_menu_row pop_menu_oneRow first_menu_row">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="svnRepNm">Repository 명</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_oneRow_col2">
-				<input type="text" title="Repository 명" class="input_txt" name="svnRepNm" id="svnRepNm" value="" maxlength="500" />
-			</div>
-		</div>
-		
-		<div class="pop_menu_row pop_menu_oneRow">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="svnRepUrl">URL</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_oneRow_col2" guide="svnUrl" >
-				<input type="text" title="URL" class="input_txt" name="svnRepUrl" id="svnRepUrl" value=""  maxlength="500"  />
-			</div>
-		</div>
-		
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 menu_col1_subStyle"><label for="svnUsrId">USER</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 menu_col2_subStyle" guide="svnUser" ><input type="text" title="USER" class="input_txt" name="svnUsrId" id="svnUsrId" value="" maxlength="30" /></div>
-		</div>
-		<div class="pop_menu_row">
-			<div class="pop_menu_col1 menu_col1_subStyle pop_menu_col1_right"><label for="svnUsrPw">PASSWORD</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 menu_col2_subStyle" guide="svnPassword" ><input type="password" title="PASSWORD" class="input_txt" name="svnUsrPw" id="svnUsrPw" value="" maxlength="50" /></div>
-		</div>
-
-		<div class="pop_menu_row pop_menu_oneRow">
-			<div class="pop_menu_col1 pop_oneRow_col1"><label for="useCd">사용여부</label><span class="required_info">&nbsp;*</span></div>
-			<div class="pop_menu_col2 pop_oneRow_col2">
-				<span class="search_select">
-					<select class="select_useCd" name="useCd" id="useCd" value="" style="height:100%; width:36%;"></select>
-				</span>
-			</div>
-		</div>
-	
-		<div class="pop_note" style="margin-bottom:0px;">
-			<div class="note_title">Repository 설명</div>
-			<textarea class="input_note" title="Repository 설명" name="svnTxt" id="svnTxt" rows="7" value="" maxlength="1000"   ></textarea>
-		</div>
-		<div id="popup_authFrame">
-			<div class="pop_note" style="margin-bottom:0px;">
-				<div class="note_title">
-					<div class="note_leftBtn">접근 허용 역할 목록</div>
-					<div class="note_rightBtn">
-						<div class="button_normal note_btn" id="btn_insert_auth">추가</div>
-						<div class="button_normal note_btn" id="btn_update_auth">삭제</div>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label><i class="fa fa-align-left kt-margin-r-5"></i>상위 메뉴 ID</label>
+						<input type="text" class="form-control" placeholder="상위 메뉴 ID" name="upperMenuId" id="upperMenuId" value="${param.upperMenuId}" readonly="readonly">
 					</div>
 				</div>
-				<div data-ax5grid="auth-grid" data-ax5grid-config="{}" style="height: 100px;"></div>	
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label><i class="fa fa-file-alt kt-margin-r-5"></i>상위 메뉴 명</label>
+						<input type="text" class="form-control" placeholder="상위 메뉴 명" name="upMenuNm" id="upMenuNm" value="${param.upMenuNm}" readonly="readonly">
+					</div>
+				</div>
 			</div>
-		</div>
-		
-		<div class="btn_div">
-			<div class="button_normal save_btn" id="btn_update_popup">등록</div>
-			<div class="button_normal exit_btn" id="btn_cancle_popup">취소</div>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label><i class="fa fa-align-left kt-margin-r-5"></i>메뉴 ID</label>
+						<input type="text" class="form-control" placeholder="메뉴 ID는 자동 생성됩니다." name="menuId" id="menuId" value="${param.menuId}" readonly="readonly">
+					</div>
+				</div>
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-file-alt kt-margin-r-5"></i>메뉴 명</label>
+						<input type="text" class="form-control" placeholder="메뉴 명" name="menuNm" id="menuNm" maxlength="100" required>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<c:choose>
+							<c:when test="${param.lvl >= '3'}">
+								<!-- 소메뉴일 경우 메뉴 경로 필수입력 -->
+								<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>메뉴 경로</label>
+								<input type="text" class="form-control" placeholder="메뉴 경로" name="menuPath" id="menuPath" maxlength="250" required>
+							</c:when>
+							<c:otherwise>
+								<label><i class="fa fa-edit kt-margin-r-5"></i>메뉴 경로</label>
+								<input type="text" class="form-control" placeholder="메뉴 경로" name="menuPath" id="menuPath" maxlength="250">
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div>
+				<div class="col-xl-6">
+					<div class="form-group">
+						<c:choose>
+							<c:when test="${param.lvl >= '3'}">
+								<!-- 소메뉴일 경우 메뉴 URL 필수입력 -->
+								<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>메뉴 URL</label>
+								<input type="text" class="form-control" placeholder="메뉴 URL" name="menuUrl" id="menuUrl" maxlength="250" required>
+							</c:when>
+							<c:otherwise>
+								<label><i class="fa fa-edit kt-margin-r-5"></i>메뉴 URL</label>
+								<input type="text" class="form-control" placeholder="메뉴 URL" name="menuUrl" id="menuUrl" maxlength="250">
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div>
+			</div>
+			<c:if test="${param.lvl == '2'}">
+				<!-- 2레벨 메뉴는 아이콘 지정 가능 -->
+				<div class="row">
+					<div class="col-xl-6">
+						<div class="form-group">
+							<label><i class="fa fa-image kt-margin-r-5"></i>메뉴 이미지 URL</label>
+							<input type="text" class="form-control" placeholder="메뉴 이미지 URL" name="menuImgUrl" id="menuImgUrl" readonly="readonly">
+						</div>
+					</div>
+					<div class="col-xl-6">
+						<div class="form-group">
+							<label><i class="fa fa-info-circle kt-margin-r-5"></i>메뉴 아이콘</label>
+							<input type="text" class="form-control" placeholder="메뉴 아이콘" name="menuIcon" id="menuIcon" minlength="2" maxlength="50" regexstr="^[a-z_-\s]{2,50}$" regexalert="영문 소문자, 공백, _-">
+						</div>
+					</div>
+				</div>
+			</c:if>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-folder-open kt-margin-r-5"></i>메뉴 타입</label>
+						<select class="form-control kt-select2" id="menuTypeCd" name="menuTypeCd">
+						</select>
+					</div>
+				</div>
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label><i class="fa fa-sliders-h kt-margin-r-5"></i>메뉴 레벨</label>
+						<input type="text" class="form-control" placeholder="메뉴 레벨" name="lvl" id="lvl" value="${param.lvl}" readonly="readonly">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-list-ol kt-margin-r-5"></i>순번</label>
+						<input type="number" class="form-control" placeholder="순번" name="ord" id="ord" min="1" required>
+					</div>
+				</div>
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용 유무</label>
+						<select class="form-control kt-select2" id="useCd" name="useCd">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-6">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-project-diagram kt-margin-r-5"></i>프로젝트 유형</label>
+						<select class="form-control kt-select2" id="prjType" name="prjType" data-osl-value="03">
+						</select>
+					</div>
+				</div>
+				<div class="col-xl-6">
+				</div>
+			</div>
+			<div class="form-group">
+				<label><i class="fa fa-edit kt-margin-r-5"></i>메뉴 설명</label>
+				<textarea class="form-control osl-min-h-px--130" name="menuDesc" id="menuDesc" maxlength="100"></textarea>
+			</div>
 		</div>
 	</div>
 </form>
+<div class="modal-footer">
+	<button type="button" class="btn btn-brand" id="stm2001SaveSubmit">완료</button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
 </div>
 
-</html>
+<script>
+"use strict";
+var OSLStm2001Popup = function () {
+	
+	var formId = 'frStm2001';
+	var type = $("#type").val();
+	
+	//form validate 주입
+	var formValidate = $.osl.validate(formId);
+	
+	//type별 데이터
+	var pageTypeData = {
+			"insert":{
+				"saveString": "신규 메뉴를 등록하시겠습니까?",
+				"saveBtnString": "작성 완료"
+			},
+			"update":{
+				"saveString": "메뉴 정보 수정은 시스템에 중대한 영향을 미칠 수 있습니다. 메뉴 정보를 수정하시겠습니까?",
+				"saveBtnString": "수정 완료"
+			}
+	};
+	
+    // Private functions
+    var documentSetting = function () {
+    	
+    	//문구 세팅
+    	$("#stm2001SaveSubmit").text(pageTypeData[type]["saveBtnString"]);
+
+    	// stm2001 팝업 공통코드 select 세팅
+		var commonCodeArr = [
+			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"}, // 사용유무
+			{mstCd: "ADM00001", useYn: "Y",targetObj: "#menuTypeCd", comboType:"OS"}, // 메뉴 타입
+			{mstCd: "ADM00006", useYn: "Y",targetObj: "#prjType", comboType:"OS"} // 프로젝트 유형
+		];
+
+  		//공통코드 채우기
+		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
+    	
+		// textarea 자동 사이즈 조절 설정
+    	autosize($("#menuDesc"));
+  		
+    	//수정인경우
+    	if(type == "update"){
+    		// 메뉴 단건 조회
+    		selectMenuInfo();
+    		
+    	// 등록인 경우 메뉴 레벨에 따라 메뉴 타입 자동 선택	
+    	}else if(type == "insert"){
+    		
+    		var menuTypeCd = "01";
+    		var menuLvl = $("#lvl").val();
+    		if(menuLvl >= 3){
+    			// 메뉴 레벨이 3일 경우 메뉴타입 기본으로 화면 선택
+    			menuTypeCd = "02";
+    		}
+    		
+    		$("#menuTypeCd").attr("data-osl-value", menuTypeCd);
+    	}
+    	
+    	
+    	// 등록 버튼 클릭
+    	$("#stm2001SaveSubmit").click(function(){
+    		
+    		var form = $('#'+formId);
+    		
+    		//폼 유효 값 체크
+    		if (!form.valid()) {
+    			return;
+    		}
+    		
+    		if(type == "insert"){
+	    		submitInsertAction();
+    		}else if(type == "update"){
+    			submitUpdateAction();
+    		}
+    	});
+    	
+    };
+
+    
+    /**
+	 * function 명 	: selectMenuInfo
+	 * function 설명	: 선택한 메뉴의 상세정보를 조회하여 화면에 세팅한다.
+	 * @param deptId : 선택한 메뉴 ID
+	 */
+	var selectMenuInfo = function() {
+    	
+		var menuId = $("#menuId").val();
+		 
+		//AJAX 설정
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/stm/stm2000/stm2000/selectStm2000MenuInfoAjax.do'/>", "async": false}
+				,{"menuId": menuId});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+			}else{
+				
+				// 메뉴 정보 세팅
+		    	$.osl.setDataFormElem(data.menuInfoMap,"frStm2001", ["upperMenuId", "upMenuNm", "menuId", "menuNm", "menuPath", "menuUrl", "menuImgUrl", "lvl", "ord", "moduleType", "menuIcon", "menuDesc"]);
+			
+				// 상위메뉴 Id 없을경우
+				if($.osl.isNull(data.menuInfoMap.upperMenuId)){
+					$("#upperMenuId").val("-");
+				}
+				
+				// 상위 메뉴 명 없을경우
+				if($.osl.isNull(data.menuInfoMap.upMenuNm)){
+					$("#upMenuNm").val("-");
+				}
+		    	
+				// 공통코드 선택값 추가
+				$("#useCd").attr("data-osl-value", data.menuInfoMap.useCd);
+				$("#menuTypeCd").attr("data-osl-value", data.menuInfoMap.menuTypeCd);
+				$("#prjType").attr("data-osl-value", data.menuInfoMap.prjType);
+				
+				// textarea 입력된 내용에 따라 size 조정
+				autosize.update($("#menuDesc"));
+				
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	};
+    
+    
+   /**
+ 	* function 명 	: submitInsertAction
+	* function 설명	: 신규 메뉴를 등록한다.
+	*/
+    var submitInsertAction = function(){
+    	
+    	var form = $('#'+formId);
+    	
+		//폼 유효 값 체크
+		if (!form.valid()) {
+			return;
+		}
+		
+		$.osl.confirm(pageTypeData[type]["saveString"],null,function(result) {
+	        if (result.value) {
+	        	
+	        	var formData = form.serializeArray();
+	        	
+	    		//AJAX 설정
+	    		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/stm/stm2000/stm2000/insertStm2000MenuInfoAjax.do'/>", "loadingShow": false}, formData);
+
+	    		//AJAX 전송 성공 함수
+	    		ajaxObj.setFnSuccess(function(data){
+	    			if(data.errorYn == "Y"){
+	    				$.osl.alert(data.message,{type: 'error'});
+	    				//모달 창 닫기
+						$.osl.layerPopupClose();
+	    			}else{
+	    				// 등록 성공
+	    				$.osl.toastr(data.message);
+
+	    				//모달 창 닫기
+	    				$.osl.layerPopupClose();
+	    				
+	    				// 트리 재조회 추가
+	    			}
+	    		});
+	    		
+	    		//AJAX 전송
+	    		ajaxObj.send();
+	        }
+	    });
+    };
+    
+    
+   /**
+ 	* function 명 	: submitUpdateAction
+	* function 설명	: 메뉴 정보를 수정한다.
+	*/
+    var submitUpdateAction = function(){
+    	
+    	var form = $('#'+formId);
+  		
+		//폼 유효 값 체크
+		if (!form.valid()) {
+			return;
+		}
+		
+		$.osl.confirm(pageTypeData[type]["saveString"],null,function(result) {
+	        if (result.value) {
+	        	
+	        	var formData = form.serializeArray();
+	        	
+	    		//AJAX 설정
+	    		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/stm/stm2000/stm2000/updateStm2000MenuInfoAjax.do'/>", "loadingShow": false}, formData);
+
+	    		//AJAX 전송 성공 함수
+	    		ajaxObj.setFnSuccess(function(data){
+	    			if(data.errorYn == "Y"){
+	    				$.osl.alert(data.message,{type: 'error'});
+	    				//모달 창 닫기
+						$.osl.layerPopupClose();
+	    			}else{
+	    				//수정 성공
+	    				$.osl.toastr(data.message);
+
+	    				//모달 창 닫기
+	    				$.osl.layerPopupClose();
+
+	    				// 트리 재조회 추가
+	    			}
+	    		});
+	    		
+	    		//AJAX 전송
+	    		ajaxObj.send();
+	        }
+	    });
+		
+    };
+    
+	
+    return {
+        // public functions
+        init: function() {
+        	documentSetting();
+        }
+        
+    };
+}();
+
+//Initialization
+$.osl.ready(function(){
+	OSLStm2001Popup.init();
+});
+</script>
+
