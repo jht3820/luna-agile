@@ -8,6 +8,8 @@ import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
 import org.springframework.stereotype.Repository;
 
 
+
+
 @Repository("spr1000DAO")
 public class Spr1000DAO  extends ComOslitsAbstractDAO {
 	
@@ -45,5 +47,17 @@ public class Spr1000DAO  extends ComOslitsAbstractDAO {
 	@SuppressWarnings({ "rawtypes" })
 	public Map  selectSpr1000SprInfo(Map paramMap) throws Exception {
 		return  (Map) select("spr1000DAO.selectSpr1000SprInfo", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int  selectSpr1000SprReqListCnt(Map paramMap) throws Exception {
+		return  (Integer)select("spr1000DAO.selectSpr1000SprReqListCnt", paramMap);
+	} 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map>  selectSpr1000SprReqList(Map paramMap) throws Exception {
+		return  (List<Map>) list("spr1000DAO.selectSpr1000SprReqList", paramMap);
 	}
 }

@@ -24,6 +24,7 @@ import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.req.req4000.req4100.service.Req4100Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
+import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
@@ -72,18 +73,31 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			
 			
@@ -101,14 +115,18 @@ public class Req4100Controller {
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			Map<String, Integer> pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
 			List<Map> req4100List = req4100Service.selectReq4100ReqList(paramMap);
 
 			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			
 			model.addAttribute("data", req4100List);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 
 			
 			model.addAttribute("errorYn", "N");
@@ -135,18 +153,31 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			
 			
@@ -164,14 +195,18 @@ public class Req4100Controller {
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			Map<String, Integer> pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
 			List<Map> req4100PrepList = req4100Service.selectReq4100PrepList(paramMap);
 			
 			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			
 			model.addAttribute("data", req4100PrepList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 			
 			
 			model.addAttribute("errorYn", "N");
@@ -205,13 +240,19 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -252,12 +293,19 @@ public class Req4100Controller {
 			
 			HttpSession ss = request.getSession();
 						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -300,18 +348,31 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			
 			
@@ -329,14 +390,18 @@ public class Req4100Controller {
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			Map<String, Integer> pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
 			List<Map> req4103UsrList = stm3000Service.selectStm3000UsrList(paramMap);
 			
 			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			
 			model.addAttribute("data", req4103UsrList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 			
 			
 			model.addAttribute("errorYn", "N");
@@ -362,13 +427,19 @@ public class Req4100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -423,12 +494,19 @@ public class Req4100Controller {
 			
 			HttpSession ss = request.getSession();
 						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -469,18 +547,23 @@ public class Req4100Controller {
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
 			
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
-			
 			
         	
         	Map reqInfoMap = (Map) req4100Service.selectReq4100ReqInfo(paramMap);        	
@@ -537,19 +620,24 @@ public class Req4100Controller {
 			HttpSession ss = request.getSession();
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
 			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
-			
 
 			req4100Service.deleteReq4100ReqList(paramMap);
 			
@@ -586,12 +674,19 @@ public class Req4100Controller {
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -628,12 +723,19 @@ public class Req4100Controller {
 			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
 			paramMap.put("licGrpId", licGrpId);
 			
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			

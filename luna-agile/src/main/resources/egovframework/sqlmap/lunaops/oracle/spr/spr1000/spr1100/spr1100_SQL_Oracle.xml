@@ -11,16 +11,37 @@
 	<sql id="selectSpr1100AssList">
 		SELECT
 			ROWNUM RN
-			, T1.*
+			, T1.REQ_ID AS REQ_ID
+			, T1.REQ_NM AS REQ_NM
+			, T1.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+			, T1.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+			, T1.REQ_USR_EMAIL AS REQ_USR_EMAIL
+			, T1.REQ_USR_NUM AS REQ_USR_NUM
+			, T1.REQ_USR_IMG_ID AS REQ_USR_IMG_ID
+			, T1.REQ_ORD AS REQ_ORD
+			, T1.REQ_PRO_TYPE AS REQ_PRO_TYPE
+			, T1.REQ_PRO_TYPE_NM AS REQ_PRO_TYPE_NM
+			, T1.REQ_DTM AS REQ_DTM
+			, T1.REQ_PW AS REQ_PW
+			, T1.PROCESS_ID AS PROCESS_ID
+			, T1.FLOW_ID AS FLOW_ID
 		FROM (
 			SELECT 
 				A.REQ_ID AS REQ_ID
 				, A.REQ_NM AS REQ_NM
+				, A.REQ_DESC AS REQ_DESC
+				, A.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+				, A.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+				, A.REQ_USR_EMAIL AS REQ_USR_EMAIL
+				, A.REQ_USR_NUM AS REQ_USR_NUM
+				, SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
 				, A.REQ_ORD AS REQ_ORD
 				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
 				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
 				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
 				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+				, A.PROCESS_ID AS PROCESS_ID
+				, A.FLOW_ID AS FLOW_ID
 		    FROM REQ4100 A JOIN SPR1100 B
 		    ON (A.REQ_ID = B.REQ_ID AND A.PRJ_ID = B.PRJ_ID AND A.PRJ_GRP_ID = B.PRJ_GRP_ID AND B.LIC_GRP_ID = #licGrpId#)
 		    WHERE 1=1
@@ -43,22 +64,78 @@
 			</isEmpty> 
 		) T1
 		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjGrpNm">
+					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqNm">
+					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNm">
+					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+					AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
 	</sql>
 	
 	
 	<sql id="selectSpr1100NonAssList">
 		SELECT
 			ROWNUM RN
-			, T1.*
+			, T1.REQ_ID AS REQ_ID
+			, T1.REQ_NM AS REQ_NM
+			, T1.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+			, T1.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+			, T1.REQ_USR_EMAIL AS REQ_USR_EMAIL
+			, T1.REQ_USR_NUM AS REQ_USR_NUM
+			, T1.REQ_USR_IMG_ID AS REQ_USR_IMG_ID
+			, T1.REQ_ORD AS REQ_ORD
+			, T1.REQ_PRO_TYPE AS REQ_PRO_TYPE
+			, T1.REQ_PRO_TYPE_NM AS REQ_PRO_TYPE_NM
+			, T1.REQ_DTM AS REQ_DTM
+			, T1.REQ_PW AS REQ_PW
+			, T1.PROCESS_ID AS PROCESS_ID
+			, T1.FLOW_ID AS FLOW_ID
 		FROM (
 			SELECT
-				 A.REQ_ID AS REQ_ID
+				A.REQ_ID AS REQ_ID
 				, A.REQ_NM AS REQ_NM
+				, A.REQ_DESC AS REQ_DESC
+				, A.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+				, A.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+				, A.REQ_USR_EMAIL AS REQ_USR_EMAIL
+				, A.REQ_USR_NUM AS REQ_USR_NUM
+				, SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
 				, A.REQ_ORD AS REQ_ORD
 				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
 				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
 				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
 				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+				, A.PROCESS_ID AS PROCESS_ID
+				, A.FLOW_ID AS FLOW_ID
 		    FROM REQ4100 A 
 		    WHERE 1=1
 		    AND A.PRJ_GRP_ID = #prjGrpId#
@@ -90,6 +167,41 @@
 			</isEmpty> 
 		) T1
 		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjGrpNm">
+					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqNm">
+					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNm">
+					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+					AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
 	</sql>
 	
 	
@@ -170,8 +282,25 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			AND A.REQ_ID = #reqId#
 		]]>
+		<isNotEmpty property="reqId">
+				AND A.REQ_ID = #reqId#
+		</isNotEmpty>
 	</delete>
+	
+	
+    <update id="spr1100DAO.updateSpr1100ReqSprPointInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			UPDATE SPR1100 A SET
+				A.SPR_POINT = #sprPoint#
+			WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+			    AND A.PRJ_GRP_ID = #prjGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+				AND A.REQ_ID = #reqId#
+		]]>
+	</update>
 	
 </sqlMap>

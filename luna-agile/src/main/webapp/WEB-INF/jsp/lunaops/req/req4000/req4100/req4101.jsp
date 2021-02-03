@@ -18,9 +18,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -141,7 +139,7 @@
 								<span data-lang-cd="req4101.button.deleteResetBtn">삭제 초기화</span>
 							</button>
 						</label>
-						<div class="kt-uppy osl-max-height-260" id="req4101FileUpload">
+						<div class="kt-uppy osl-max-h-px-260" id="req4101FileUpload">
 							<div class="kt-uppy__dashboard"></div>
 							<div class="kt-uppy__progress"></div>
 						</div>
@@ -192,7 +190,7 @@
 					</div>
 					<div class="kt-portlet__body kt-padding-10" id="prepListDiv" name="prepListDiv">
 					</div>
-					<div class="kt-portlet__body kt-padding-10 kt_datatable" id="prepListTable" name="prepListTable">
+					<div class="kt-portlet__body kt-padding-10 kt_datatable osl-datatable-footer__divide" id="prepListTable" name="prepListTable">
 					</div>
 				</div>
 			</div>
@@ -307,7 +305,7 @@ var OSLReq4101Popup = function () {
     				//atchFileId
     		    	atchFileId = $("#atchFileId").val();
     				//게시글의 atchFileId가 없는 경우 - 복사일 땐 미리 atchFileId를 비워 실행하도록 함
-    				if(atchFileId==null || atchFileId==""){
+    				if($.osl.isNull(atchFileId)){
     					//atchFileId 생성
     					$.osl.file.makeAtchfileId(function(data){
     						//atchFileId 생성 중 오류 발생 시
@@ -461,11 +459,11 @@ var OSLReq4101Popup = function () {
     		},
     		columns:[
     			{field:'rn', title:'No.', textAlign:'center', width: 50},
-    			{field:'reqProTypeNm', title:$.osl.lang("req4101.prepData.field.reqProTypeNm"), textAlign:'center', width: 80},
-    			{field:'reqOrd', title:$.osl.lang("req4101.prepData.field.reqOrd"), textAlign:'left', width: 80, autoHide:false},
-    			{field:'prjNm', title:$.osl.lang("req4101.prepData.field.prjNm"), textAlign:'left', width: 180},
-    			{field:'reqNm', title:$.osl.lang("req4101.prepData.field.reqNm"), textAlign:'left', width: 240, autoHide:false, search: true},
-    			{field:'reqDtm', title:$.osl.lang("req4101.prepData.field.reqDtm"), textAlign:'center', width: 180},
+    			{field:'reqProTypeNm', title:'처리유형', textAlign:'center', width: 80},
+    			{field:'reqOrd', title:'순번', textAlign:'left', width: 80, autoHide:false},
+    			{field:'prjNm', title:'프로젝트명', textAlign:'left', width: 180},
+    			{field:'reqNm', title:'요구사항명', textAlign:'left', width: 240, autoHide:false, search: true},
+    			{field:'reqDtm', title:'요청일', textAlign:'center', width: 180},
     		],
     		actionBtn:{
     			title : $.osl.lang("req4101.prepData.button.detailBtn"),
@@ -664,7 +662,7 @@ var OSLReq4101Popup = function () {
 	    	$("#reqDtm").val(new Date().format("yyyy-MM-dd"));
 	    	
 	    	//edit 세팅
-	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 	    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 	    		toolbar: false,
     			disableResizeEditor: false,
@@ -725,7 +723,7 @@ var OSLReq4101Popup = function () {
 						targetId: "selectUsr",
 						actionFn: function(thisObj){
 							var temp = OSLReq4103Popup.getUsrInfo();
-							if(temp != null && temp.length != 0){
+							if(!$.osl.isNull(temp)){
 								OSLReq4101Popup.setUsrInfo(temp);
 							}
 						}
@@ -832,7 +830,7 @@ var OSLReq4101Popup = function () {
 				}
 		    	
 		    	//edit 세팅
-		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
+		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
 		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,
@@ -848,7 +846,7 @@ var OSLReq4101Popup = function () {
 				$.osl.date.datepicker($("#reqDtm"), {});
 		    	
 		    	//요구사항 잠금 설정한 경우
-		    	if(data.reqInfoMap.reqPw != null && data.reqInfoMap.reqPw != ""){
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
 		    		$("#reqPwCheckbox").attr("checked", true);
 		    		$("#pwOption").removeClass("kt-hide");
 		    		pw = "Y";

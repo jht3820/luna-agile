@@ -32,10 +32,10 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-l-25">
+				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
-				<div class="kt_datatable" id="spr1000SprTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -50,27 +50,29 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000RptTable" data-datatable-action="select" title="회의록 조회" data-title-lang-cd="spr2000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000MmtTable" data-datatable-action="select" title="회의록 조회" data-title-lang-cd="spr2000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000RptTable" data-datatable-action="insert" title="회의록 추가" data-title-lang-cd="spr2000.actionBtn.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000MmtTable" data-datatable-action="insert" title="회의록 추가" data-title-lang-cd="spr2000.actionBtn.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 							<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000RptTable" data-datatable-action="update" title="회의록 수정" data-title-lang-cd="spr2000.actionBtn.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000MmtTable" data-datatable-action="update" title="회의록 수정" data-title-lang-cd="spr2000.actionBtn.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
 							<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000RptTable" data-datatable-action="delete" title="회의록 삭제" data-title-lang-cd="spr2000.actionBtn.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000MmtTable" data-datatable-action="delete" title="회의록 삭제" data-title-lang-cd="spr2000.actionBtn.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
 							<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000RptTable" data-datatable-action="dblClick" title="회의록 상세" data-title-lang-cd="spr2000.actionBtn.detailTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="dblClick" tabindex="5">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="spr2000MmtTable" data-datatable-action="dblClick" title="회의록 상세" data-title-lang-cd="spr2000.actionBtn.detailTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="dblClick" tabindex="5">
 							<i class="fa flaticon2-document"></i><span data-lang-cd="spr2000.button.detailBtn">상세</span>
 						</button>
 					</div>
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="osl-datatable-search" data-datatable-id="spr2000RptTable"></div>
-				<div class="kt_datatable" id="spr2000RptTable"></div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
+					<div class="osl-datatable-search" data-datatable-id="spr2000MmtTable"></div>
+				</div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr2000MmtTable"></div>
 			</div>
 		</div> <!-- 회의록 목록 끝 -->
 	</div>
@@ -82,7 +84,7 @@ var OSLSpr2000Popup = function () {
 	//스프린트 데이터 테이블
 	var sprDatatableId = "spr1000SprTable";
 	//회의록 목록 테이블
-	var rptDatatableId = "spr2000RptTable";
+	var mmtDatatableId = "spr2000MmtTable";
 	
 	var documentSetting = function(){
 		//스프린트 데이터 테이블 셋팅
@@ -171,53 +173,58 @@ var OSLSpr2000Popup = function () {
 		});
 
 		//회의록 목록 테이블 세팅
-		$.osl.datatable.setting(rptDatatableId,{
+		$.osl.datatable.setting(mmtDatatableId,{
 			data:{
 				source:{
 					read:{
-						url: "/spr/spr2000/spr2000/selectSpr2000RptListAjax.do"
+						url: "/spr/spr2000/spr2000/selectSpr2000MmtListAjax.do"
 					}
 				},
 			},
 			columns:[
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 80, sortField: "rn"},
-				{field: 'rptNm', title: '회의록명', textAlign: 'left', width: 450, autoHide: false, sortField: "reqNm"},
-				{field: 'rptMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
+				{field: 'mmtNm', title: '회의록명', textAlign: 'left', width: 400, autoHide: false, sortField: "reqNm", search:true},
+				{field: 'mmtMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
 					template:function(row){
-						if(row.rptMemCnt == null || row.rptMemCnt == ""){
+						if($.osl.isNull(row.mmtMemCnt)){
 							return 0;
 						}else{
-							return row.rptMemCnt;
+							return row.mmtMemCnt;
 						}
 					}
 				},
-				{field: 'rptUsrId', title: '작성자', textAlign: 'left', width: 120,
+				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120, search:true,
 					template: function (row) {
-						if(row.rptUsrId == null){
+						if($.osl.isNull(row.mmtUsrId){
 							return "";
 						}else{
 							var usrData = {
-									html: row.rptUsrNm,
+									html: row.mmtUsrNm,
 									imgSize: "sm",
 									class:{
 										cardBtn: "osl-width__fit-content"
 									}
 							};
-							return $.osl.user.usrImgSet(row.rptUsrImgId, usrData);
+							return $.osl.user.usrImgSet(row.mmtUsrImgId, usrData);
 						}
 					},
 					onclick: function(row){
-						$.osl.user.usrInfoPopup(row.rptUsrId);
+						$.osl.user.usrInfoPopup(row.mmtUsrId);
 					}	
 				},
-				{field: 'rptDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm",
+				{field: 'mmtDtm', title: '작성일', textAlign: 'center', width: 120, sortField: "reqDtm", search:true, searchType:"daterange",
 					template: function (row) {
-						var paramDatetime = new Date(row.rptDtm);
+						var paramDatetime = new Date(row.mmtDtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
 		                return agoTimeStr.agoString;
 					}
 				}
+			],
+			searchColumns:[
+				{field: 'mmtMemId', title: '참여인원ID', searchOrd: 3},
+				{field: 'mmtMemNm', title: '참여인원명', searchOrd: 4},
+				{field: 'mmtMemEmail', title: '참여인원 이메일', searchOrd: 5},
 			],
 			rows:{
 				clickCheckbox: true
@@ -233,7 +240,7 @@ var OSLSpr2000Popup = function () {
 			},
 			actionFn:{
 				"insert":function(rowData){
-					if($("#sprId").val() == null || $("#sprId").val() == ""){
+					if($.osl.isNull($("#sprId").val())){
 						//스프린트를 선택하지 않았으면
 						$.osl.alert($.osl.lang("spr2000.message.selectMsg"));
 						return false;
@@ -250,12 +257,12 @@ var OSLSpr2000Popup = function () {
 						autoHeight: false,
 						modalSize: "xl",
 					};
-					$.osl.layerPopupOpen('/spr/spr2000/spr2000/saveSpr2001RptView.do',data,options);
+					$.osl.layerPopupOpen('/spr/spr2000/spr2000/saveSpr2001MmtView.do',data,options);
 				},
 				"update":function(rowData){
 					var data = {
 							type: "update",
-							rptId : rowData.rptId,
+							mmtId : rowData.mmtId,
 							sprId : rowData.sprId
 						};
 						var options = {
@@ -265,7 +272,7 @@ var OSLSpr2000Popup = function () {
 							autoHeight: false,
 							modalSize: "xl",
 						};
-						$.osl.layerPopupOpen('/spr/spr2000/spr2000/saveSpr2001RptView.do',data,options);
+						$.osl.layerPopupOpen('/spr/spr2000/spr2000/saveSpr2001MmtView.do',data,options);
 				},
 				"delete":function(rowData){
 					var data = {
@@ -273,7 +280,7 @@ var OSLSpr2000Popup = function () {
 					};
 					//AJAX 설정
 			    	var ajaxObj = new $.osl.ajaxRequestAction(
-			    			{"url":"<c:url value='/spr/spr2000/spr2000/deleteSpr2000RptListAjax.do'/>"}
+			    			{"url":"<c:url value='/spr/spr2000/spr2000/deleteSpr2000MmtListAjax.do'/>"}
 			    				, data);
 					//AJAX 전송 성공 함수
 			    	ajaxObj.setFnSuccess(function(data){
@@ -292,7 +299,7 @@ var OSLSpr2000Popup = function () {
 				"dblClick": function(rowData){
 					var data = {
 							type: "update",
-							rptId : rowData.rptId,
+							mmtId : rowData.mmtId,
 							sprId : rowData.sprId
 						};
 					var options = {
@@ -313,8 +320,8 @@ var OSLSpr2000Popup = function () {
 	*/
 	var selectBtnClick = function(){
 		var sprId = $("#sprId").val();
-		$.osl.datatable.list[rptDatatableId].targetDt.setDataSourceParam("sprId", sprId);
-		$("button[data-datatable-id="+rptDatatableId+"][data-datatable-action=select]").click();
+		$.osl.datatable.list[mmtDatatableId].targetDt.setDataSourceParam("sprId", sprId);
+		$("button[data-datatable-id="+mmtDatatableId+"][data-datatable-action=select]").click();
 	};
 	
 	return {

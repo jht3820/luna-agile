@@ -16,8 +16,6 @@
 </div>
 <script>
 "use strict";
-//파일 업로드 세팅
-var fileUploadObj;
 var OSLReq4103Popup = function () {
 	var temp;
     var documentSetting = function () {
@@ -38,7 +36,7 @@ var OSLReq4103Popup = function () {
     		},
     		columns:[
     			{field:'rn', title:'No.', textAlign:'center', width: 50},
-    			{field:'usrNm', title:$.osl.lang("req4103.field.usrNm"), textAlign:'left', width: 120, autoHide:false, search:true,
+    			{field:'usrNm', title:'사용자명', textAlign:'left', width: 120, autoHide:false, search:true,
     				template: function (row){
     					var usrData = {
 								html: row.usrNm,
@@ -53,10 +51,10 @@ var OSLReq4103Popup = function () {
 						$.osl.user.usrInfoPopup(row.usrId);
 					}
     			},
-    			{field:'usrId', title:$.osl.lang("req4103.field.usrId"), textAlign:'left', width: 180, search:true},
-    			{field:'email', title:$.osl.lang("req4103.field.email"), textAlign:'left', width: 240, search:true},
-    			{field:'telno', title:$.osl.lang("req4103.field.tel"), textAlign:'left', width: 180, search:true},
-    			{field:'deptName', title:$.osl.lang("req4103.field.deptName"), textAlign:'left', width: 240, autoHide:false, search:true}
+    			{field:'usrId', title:'아이디', textAlign:'left', width: 180, search:true},
+    			{field:'email', title:'이메일', textAlign:'left', width: 240, search:true},
+    			{field:'telno', title:'연락처', textAlign:'left', width: 180, search:true},
+    			{field:'deptName', title:'소속', textAlign:'left', width: 240, autoHide:false, search:true}
     		],
     		actionBtn:{
     			title : $.osl.lang("req4103.actionBtn.title"),

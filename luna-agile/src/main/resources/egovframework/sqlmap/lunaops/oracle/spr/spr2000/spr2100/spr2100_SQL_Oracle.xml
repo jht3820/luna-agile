@@ -48,6 +48,7 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
+			AND A.SPR_TYPE_CD = '03'
 			ORDER BY A.MMR_ID DESC
 		) T1 LEFT JOIN SPR1000 Y
 		ON T1.SPR_ID = Y.SPR_ID
@@ -75,6 +76,20 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY RN DESC
+		</isEmpty>
 	</sql>
 	
 	
@@ -194,7 +209,9 @@
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			AND A.MMR_ID = #mmrId#
 		]]>
+		<isNotEmpty property="mmrId">
+				AND A.MMR_ID = #mmrId#
+		</isNotEmpty>
 	</delete>
 </sqlMap>

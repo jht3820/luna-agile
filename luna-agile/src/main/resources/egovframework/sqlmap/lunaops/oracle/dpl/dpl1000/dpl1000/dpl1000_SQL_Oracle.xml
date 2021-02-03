@@ -19,7 +19,7 @@
 			, T1.*
 		FROM(
 			SELECT
-				, A.PRJ_ID AS PRJ_ID
+				 A.PRJ_ID AS PRJ_ID
 				, A.DPL_ID AS DPL_ID
 				, A.DPL_NM AS DPL_NM
 				, A.DPL_VER AS DPL_VER
@@ -33,12 +33,13 @@
 				, A.DPL_TYPE_CD AS DPL_TYPE_CD
 				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', A.DPL_TYPE_CD, '1') AS DPL_TYPE_NM
 				, A.DPL_AUTO_AFTER_CD AS DPL_AUTO_AFTER_CD
-				, SF_STM4001_COM_CD_INFO("#licGrpId#, 'DPL00004', A.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00004', A.DPL_AUTO_AFTER_CD, '1') AS DPL_AUTO_AFTER_NM
 				, TO_CHAR(A.DPL_AUTO_DTM, 'YYYY-MM-DD HH24:MI:SS') AS DPL_AUTO_DTM
 				, A.DPL_RESTORE_CD AS DPL_RESTORE_CD
-				, SF_STM4001_COM_CD_INFO("#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00005', A.DPL_RESTORE_CD, '1') AS DPL_RESTORE_NM
 			FROM DPL1000 A
 			WHERE 1 = 1
+			AND DPL_DEL_CD = '02'
 			AND A.PRJ_ID = #prjId#
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
@@ -97,23 +98,99 @@
 				<isEqual property="searchTargetId" compareValue="dplRestoreCd">
 					AND	T1.DPL_RESTORE_CD LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="rptMemId">
-						AND EXISTS (
-							SELECT
-								Y.RPT_ID
-							FROM SPR2001 Y
-							WHERE 1 = 1
-							AND Y.LIC_GRP_ID = #licGrpId#
-						    AND Y.PRJ_GRP_ID = #prjGrpId#
-							AND Y.PRJ_ID = #prjId#
-							AND Y.SPR_ID = #sprId#
-							AND Y.RPT_ID = T1.RPT_ID
-							WHERE 1 = 1
-							AND SF_STM3000_USR_INFO(Y.USR_ID, '1') LIKE '%'|| #searchTargetData# ||'%'
-						)
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectDpl1400DplBldNumBase">
+		SELECT
+				ROWNUM RN
+			,	SUB1.PRJ_ID
+			,	SUB1.DPL_ID
+			,	SUB1.JEN_ID
+			,	SUB1.JOB_ID
+			,	SUB1.BLD_SEQ
+			,	SUB1.BLD_NUM
+			,	SUB1.BLD_RESULT
+			,	SUB1.BLD_RESULT_MSG
+			,	SUB1.BLD_DURATION_TM
+			,	SUB1.BLD_START_DTM
+			,	SUB1.REG_DTM
+			,	SUB1.USR_IMG_ID
+			,	SUB1.REG_USR_NM
+			,	SUB1.REG_USR_ID
+			,	SUB1.REG_USR_IP
+			,	SUB1.MODIFY_DTM
+			,	SUB1.MODIFY_USR_ID
+			,	SUB1.MODIFY_USR_IP
+		FROM
+		(
+			 SELECT
+					A.PRJ_ID
+				,	A.DPL_ID
+				,	A.JEN_ID
+				,	A.JOB_ID
+				,	A.BLD_SEQ
+				,	A.BLD_NUM
+				,	A.BLD_RESULT
+				,	A.BLD_RESULT_MSG
+				,	A.BLD_DURATION_TM
+				,	A.BLD_START_DTM
+				,	A.REG_DTM
+				,	(SELECT USR_IMG_ID FROM STM3000 Z WHERE Z.USR_ID = A.REG_USR_ID) AS USR_IMG_ID
+				,	(SELECT USR_NM FROM STM3000 Z WHERE Z.USR_ID = A.REG_USR_ID) AS REG_USR_NM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	A.MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+			FROM DPL1400 A JOIN
+			(
+				SELECT Z.PRJ_ID, Z.DPL_ID, Z.JEN_ID, Z.JOB_ID, Z.BLD_NUM,MAX(BLD_SEQ) AS MAX_BLD_SEQ
+				FROM DPL1400 Z
+				WHERE 1=1
+				GROUP BY Z.PRJ_ID, Z.DPL_ID, Z.JEN_ID, Z.JOB_ID, Z.BLD_NUM
+			) B ON(A.PRJ_ID = B.PRJ_ID AND A.DPL_ID = B.DPL_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID AND A.BLD_NUM = B.BLD_NUM AND A.BLD_SEQ = B.MAX_BLD_SEQ)
+			WHERE 1=1
+			AND A.BLD_NUM > 0
+			AND A.JEN_ID = #jenId#
+			AND A.JOB_ID = #jobId#
+		) SUB1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="bldNum">
+					AND	SUB1.BLD_NUM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="bldResult">
+					AND	SUB1.BLD_RESULT LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="regUsrNm">
+					AND	SUB1.REG_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="bldStartDtm">
+					<isNotEmpty property="searchStartDt">
+							AND SUB1.BLD_START_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+							AND SUB1.BLD_START_DTM &lt;= TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			ORDER BY $paramSortFieldId$
+			<isEqual property="sortDirection" compareValue="asc">
+				ASC
+			</isEqual>
+			<isEqual property="sortDirection" compareValue="desc">
+				DESC
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.BLD_NUM DESC
+		</isEmpty>
 	</sql>
 	
 	
@@ -138,8 +215,28 @@
 		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
+    
+    <select id="dpl1000DAO.selectDpl1400DplBldNumList" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT Z.*
+		FROM
+		(
+			<include refid="selectDpl1400DplBldNumBase"/>
+		) Z
+		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
 	
-	
+    
+    <select id="dpl1000DAO.selectDpl1400DplBldNumListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT COUNT(*) AS CNT
+		FROM 
+		( 
+			<include refid="selectDpl1400DplBldNumBase"/>
+		) Z
+	</select>
+    
+    
 	
 	
    	<resultMap id="resultMapSelectDpl1000" class="dpl1000VO">
@@ -432,16 +529,6 @@
 			) T1
 			WHERE T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
-	
-	   
-    <select id="dpl1000DAO.selectDpl1000ListCnt" parameterClass="dpl1000VO"  resultClass="java.lang.Integer">
-	    
-	    SELECT
-			COUNT(*)
-		FROM	(
-			<include refid="dpl1000DAO.selectDpl1000BaseList"/>
-		) T1
-    </select>
 
 	
 	<select id="dpl1000DAO.selectDpl1000DeployVerInfo" parameterClass="java.util.Map" resultClass="egovMap">
@@ -755,37 +842,66 @@
 		<![CDATA[
 			
 			SELECT
-				A.PRJ_ID
-					,A.DPL_ID
-					,SF_DPL1000_DPL_INFO(A.PRJ_ID, A.DPL_ID,'1') AS DPL_NM
-					,A.JEN_ID
-					,A.JOB_ID
-                    ,B.JOB_RESTORE_ID
-					,A.BLD_SEQ
-					,A.BLD_NUM
-					,A.BLD_MAIN_NUM
-					,A.BLD_RESULT
-					,A.BLD_RESULT_MSG
-					,A.BLD_DURATION_TM
-					,A.BLD_START_DTM
-					,A.BLD_CONSOLE_LOG
-					,'' AS BLD_RESTORE_NUM
-					,'' AS BLD_RESTORE_RESULT
-                    ,'' AS BLD_RESTORE_RESULT_MSG
-                    ,'' AS BLD_CONSOLE_RESTORE_LOG
-                    ,A.REG_DTM
-					,A.REG_USR_ID
-					,A.REG_USR_IP
-					,A.MODIFY_DTM
-					,A.MODIFY_USR_ID
-					,A.MODIFY_USR_IP
-				FROM DPL1400 A LEFT JOIN STM9001 B ON(B.LIC_GRP_ID = #licGrpId# AND B.JEN_ID = A.JEN_ID AND B.JOB_ID = A.JOB_ID)
+					SUB1.PRJ_ID
+				,	SUB1.DPL_ID
+				,	SF_DPL1000_DPL_INFO(SUB1.PRJ_ID, SUB1.DPL_ID,'1') AS DPL_NM
+				,	SUB1.JEN_ID
+				,	SUB1.JOB_ID
+				,	SUB1.JOB_RESTORE_ID
+				,	SUB1.BLD_SEQ
+				,	SUB1.BLD_NUM
+				,	SUB1.BLD_MAIN_NUM
+				,	SUB1.BLD_RESULT
+				,	SUB1.BLD_RESULT_MSG
+				,	SUB1.BLD_DURATION_TM
+				,	SUB1.BLD_START_DTM
+				,	SUB1.BLD_CONSOLE_LOG
+				,	SUB1.BLD_RESTORE_NUM
+				,	SUB1.BLD_RESTORE_RESULT
+				,	SUB1.BLD_RESTORE_RESULT_MSG
+				,	SUB1.BLD_CONSOLE_RESTORE_LOG
+				,	SUB1.REG_DTM
+				,	SUB1.REG_USR_ID
+				,	SUB1.REG_USR_IP
+				,	SUB1.MODIFY_DTM
+				,	SUB1.MODIFY_USR_ID
+				,	SUB1.MODIFY_USR_IP
+			FROM
+			(
+				SELECT
+						A.PRJ_ID
+					,	A.DPL_ID
+					,	A.JEN_ID
+					,	A.JOB_ID
+					,	B.JOB_RESTORE_ID
+					,	A.BLD_SEQ
+					,	A.BLD_NUM
+					,	A.BLD_MAIN_NUM
+					,	A.BLD_RESULT
+					,	A.BLD_RESULT_MSG
+					,	A.BLD_DURATION_TM
+					,	A.BLD_START_DTM
+					,	A.BLD_CONSOLE_LOG
+					,	'' AS BLD_RESTORE_NUM
+					,	'' AS BLD_RESTORE_RESULT
+					,	'' AS BLD_RESTORE_RESULT_MSG
+					,	'' AS BLD_CONSOLE_RESTORE_LOG
+					,	A.REG_DTM
+					,	A.REG_USR_ID
+					,	A.REG_USR_IP
+					,	A.MODIFY_DTM
+					,	A.MODIFY_USR_ID
+					,	A.MODIFY_USR_IP
+				FROM DPL1400 A 
+				LEFT JOIN STM9001 B 
+				ON(B.LIC_GRP_ID = #licGrpId# AND B.JEN_ID = A.JEN_ID AND B.JOB_ID = A.JOB_ID)
 				WHERE 1=1
 				AND A.PRJ_ID = #prjId# 
 				AND A.DPL_ID = #dplId# 
 				AND A.JEN_ID = #jenId#
 				AND A.JOB_ID = #jobId#
-				AND A.BLD_SEQ = #bldSeq# 
+				AND A.BLD_SEQ = #bldSeq#
+			) SUB1
 		]]>
 	</select>
 	
@@ -881,52 +997,6 @@
 	               
 				) C
 				ORDER BY C.START_DTM DESC
-		]]>
-	</select>
-	
-    
-    <select id="dpl1000DAO.selectDpl1400DplBldNumList" parameterClass="java.util.Map" resultClass="egovMap">
-		
-		SELECT *
-		FROM
-		(
-			SELECT ROWNUM AS RN, T1.*
-		    FROM
-		    (
-				SELECT A.PRJ_ID
-						,A.DPL_ID
-						,A.JEN_ID
-						,A.JOB_ID
-						,A.BLD_SEQ
-						,A.BLD_NUM
-						,A.BLD_RESULT
-						,A.BLD_RESULT_MSG
-						,A.BLD_DURATION_TM
-						,A.BLD_START_DTM
-		                ,A.REG_DTM
-						,A.REG_USR_ID
-						, SF_STM3000_USR_INFO(A.REG_USR_ID, 1) AS REG_USR_NM
-						,A.REG_USR_IP
-						,A.MODIFY_DTM
-						,A.MODIFY_USR_ID
-						,A.MODIFY_USR_IP
-				FROM DPL1400 A JOIN
-		        (
-		        	SELECT Z.PRJ_ID, Z.DPL_ID, Z.JEN_ID, Z.JOB_ID, Z.BLD_NUM,MAX(BLD_SEQ) AS MAX_BLD_SEQ
-				    FROM DPL1400 Z
-				    WHERE 1=1
-				    GROUP BY Z.PRJ_ID, Z.DPL_ID, Z.JEN_ID, Z.JOB_ID, Z.BLD_NUM
-		        ) B ON(A.PRJ_ID = B.PRJ_ID AND A.DPL_ID = B.DPL_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID AND A.BLD_NUM = B.BLD_NUM AND A.BLD_SEQ = B.MAX_BLD_SEQ)
-				WHERE 1=1
-			        AND A.BLD_NUM > 0
-			        AND A.JEN_ID = #jenId#
-					AND A.JOB_ID = #jobId#
-				ORDER BY A.BLD_NUM DESC
-			) T1
-		) T2
-		WHERE 1=1
-		<![CDATA[
-		AND RN <= 100 
 		]]>
 	</select>
 	

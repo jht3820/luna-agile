@@ -1,481 +1,368 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/lunaops/top/header.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
+<jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
-
-<link rel='stylesheet' href='<c:url value='/css/oslops/dpl.css'/>' type='text/css'>
-<link rel='stylesheet' href='<c:url value='/css/oslops/req.css'/>' type='text/css'>
-
-<script src="<c:url value='/js/common/layerPopup.js'/>"></script>
-<style type="text/css">
-	.search_select select {font-size: 0.85em;}
-	.search_select {width: 124px;height: 28px;margin: 0 5px 5px 0;}
-	.search_box_wrap {width: calc(100% - 404px);} /* width:calc(100% - (.search_select너비 * 갯수 + 32px))  */
-	.req_right_box {border-radius: 5px;}
-	.req_left_table_wrap {width: 73%;}
-	
-	/* 모바일 @media 제거 */
-	/*
-	@media screen and (max-width: 1100px) {
-		.search_box {height: 100%;}
-		.search_select {width: 124px;}
-		.search_select select {max-width: 124px;}
-		.req_left_table_wrap {width: 100%;}
-		.approval_btn {margin-right: 1%;}
-	}
-	*/
-</style>
-
-<script type="text/javascript">
-
-	var mySearch;
-	var Grid = {
-		init : function() {
-			//그리드 및 검색 상자 호출
-			fnAxGrid5View(); // Grid 초기화  설정
-			fnSearchBoxControl(); // Search Grid 초기화 설정
-		},
-		columnOption : {
-			dpl1000Search : [ 
-	                 {optionValue : "rn",optionText : "전체 보기",optionAll : true}, 
-	                 {optionValue : "dplStsCd",optionText : '배포 상태' , optionCommonCode:"DPL00001" }, 
-	                 {optionValue : "dplVer",optionText : '배포 버전'}, 
-	                 {optionValue : "dplNm",optionText : '배포 명'}, 
-	                 {optionValue : "dplTypeCd",optionText : '배포 방법' , optionCommonCode:"DPL00003"},
-	                 {optionValue : "dplUsrNm",optionText : "배포자"},
-	                 {optionValue : "dplDesc",optionText : "배포 설명"} 
-	        		]
-			}
-		}
-
-	/* 배포 정보  삭제 */
-	var fnDeleteDplInfo = function(chkList) {
-		if (gfnIsNull(chkList)) {
-			jAlert("선택된 배포계획이 없습니다.", "알림창");
-			return false;
-		}
-		
-		jConfirm("배포 계획을 삭제하시겠습니까?</br>연관된 모든 정보가 삭제됩니다.","알림창",
-				function(result) {
-					if (result) {
-						var params = "";
-						var delCount = 0;
-						var delSkipCount = 0;
-						
-						//삭제 dplId 세팅
-						$(chkList).each(function(idx, val){
-							//결재 대기중 삭제 불가능
-							if( val.signStsCd == "01" ){
-								delSkipCount++;
-								return false;
-							}
-							
-							if(delCount==0){
-								params ="dplId="+val.dplId;
-							}else{
-								params +="&dplId="+val.dplId;
-							}
-							
-							delCount++;
-						});
-						
-						//삭제 배포 계획 없는 경우
-						if(delCount===0){
-							//삭제 제외 수
-							if(delSkipCount > 0){
-								jAlert('결재 대기중인 배포 계획은 삭제가 불가능합니다.</br>-> '+delSkipCount+'개의 배포계획 삭제 취소','알림창');
-								return false;
-							}
-							
-							jAlert("선택한 배포계획이 없습니다.","알림창");
-							return false;
-						}
-										
-						//AJAX 설정
-						var ajaxObj = new gfnAjaxRequestAction(
-								{"url" : "<c:url value='/dpl/dpl1000/dpl1000/deleteDpl1000DeployVerInfoListAjax.do'/>"}, 
-								params);
-						//AJAX 전송 성공 함수
-						ajaxObj.setFnSuccess(function(data) {
-							data = JSON.parse(data);
-							if (data.successYn == "Y") {
-								fnInGridListSet(firstGrid.page.currentPage,mySearch.getParam());
-								delSkipMsg ="";
+<!-- begin page DOM -->
+<div class="kt-portlet kt-portlet--mobile">
+<!-- begin :: head -->
+	<!-- begin :: 타이틀 + 카드형,데이터테이블형 변환 버튼 -->
+	<div class="kt-portlet__head kt-portlet__head--lg">
+		<!-- begin :: 타이틀  -->
+		<div class="kt-portlet__head-label">
+			<h4 class="kt-font-boldest kt-font-brand">
+				<i class="fa fa-th-large kt-margin-r-5"></i><c:out value="${sessionScope.selMenuNm}"/>
+			</h4>
+		</div>
+		<!-- end :: 타이틀  -->
+		<!-- begin :: 카드형,데이터테이블형 변환 버튼 -->
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air btn-view-type active" title="데이터 카드 형식으로 보기" data-title-lang-cd="mis1000.button.title.card" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="6" data-view-type="01">
+						<i class="fa fa-table osl-padding-r0"></i>
+					</button>
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air btn-view-type" title="데이터 테이블 형식으로 보기" data-title-lang-cd="mis1000.button.title.grid" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="7" data-view-type="02">
+						<i class="fa fa-list osl-padding-r0"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<!-- end :: 카드형,데이터테이블형 변환 버튼 -->
+	</div>
+	<!-- end :: 타이틀 + 카드형,데이터테이블형 변환 버튼 -->
+	<!-- begin :: 내용 CRUD관련 영역 -->
+	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
+		<!-- begin :: 검색 영역 -->
+		<div class="col-lg-3 col-md-6 col-sm-12 kt-padding-r-0">
+			<div class="osl-datatable-search" data-datatable-id="mis1000Table">
+				<div class="input-group">
+					<div class="input-group-prepend"><button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">전체</button>
+						<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="mis1000Table">
+							<a class="dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
+							<a class="dropdown-item" href="javascript:void(0);" data-field-id="prjNm" data-opt-type="text">프로젝트 그룹명</a>
+							<a class="dropdown-item" href="javascript:void(0);" data-field-id="startDt" data-opt-type="date">시작 일자</a>
+							<a class="dropdown-item" href="javascript:void(0);" data-field-id="endDt" data-opt-type="date">종료 일자</a>
+						</div>
+					</div>
+					<select class="form-control kt-select2 osl-datatable-search__select" id="searchSelect_mis1000Table" name="searchSelect" aria-hidden="true" data-datatable-id="mis1000Table" style="display: none;"></select>
+					<div class="kt-input-icon kt-input-icon--right osl-border-radius-none osl-datatable-search__input" data-datatable-id="mis1000Table">
+						<input type="text" class="form-control" aria-label="검색어를 입력해주세요" disabled="disabled" name="searchData_mis1000Table" id="searchData_mis1000Table" data-datatable-id="mis1000Table">
+						<span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la"></i></span></span>
+						<input type="hidden" name="searchStartDt" id="searchStartDt_mis1000Table" data-datatable-id="mis1000Table">
+						<input type="hidden" name="searchEndDt" id="searchEndDt_mis1000Table" data-datatable-id="mis1000Table">
+					</div>
+					<div class="input-group-append">
+						<button class="btn btn-brand osl-datatable-search__button" type="button" data-datatable-id="mis1000Table">
+							<i class="fa fa-search"></i><span class=""><span>검색</span></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end :: 검색 영역 -->
+		<!-- begin :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
+		<div class="col-lg-9 col-md-12 col-sm-12 text-right osl-mobile-text--left kt-padding-r-0">
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="mis1000Table" data-datatable-action="select" title="마일스톤 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="5">
+				<i class="fa fa-list"></i><span>조회</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="mis1000Table" data-datatable-action="insert" title="마일스톤 관리 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="6">
+				<i class="fa fa-plus"></i><span>등록</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="mis1000Table" data-datatable-action="update" title="마일스톤 관리 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="7">
+				<i class="fa fa-edit"></i><span>수정</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="mis1000Table" data-datatable-action="delete" title="마일스톤 관리 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="8">
+				<i class="fa fa-trash-alt"></i><span>삭제</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="mis1000Table" data-datatable-action="prjAssign" title="마일스톤 관리 프로세스 배정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="prjAssign" tabindex="8">
+				<i class="fas fa-folder-open"></i><span>프로세스 배정</span>
+			</button>
+		</div>
+		<!-- end :: 조회 등록 수정 삭제 시작 종료 버튼 영역 -->
+	</div>
+	<!-- end :: 내용 CRUD관련 영역 -->
+<!-- end :: head -->
+</div>
+<!-- begin :: 카드형 -->
+<div id="mis1000CardTable">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<!-- begin :: 카드 -->
+			<div class="kt-portlet kt-portlet--mobile border">
+				<!-- begin :: 카드 상단 영역-->
+				<div class="kt-portlet__head kt-portlet__head--lg border-bottom-0">
+					<!-- begin :: 마일스톤 이름-->
+					<div class="kt-portlet__head-label">
+						<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">
+							<input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'" data-datatable-id="mis1000Table">&nbsp;<span></span>
+						</label>
+						<h4 class="kt-padding-l-10 font-weight-bold">마일스톤 이름</h4>
+						<div class="kt-media-group osl-margin-b-05 kt-margin-l-20">
+							<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="'+authMap.authTargetNm+'" onclick=""><img src=""></a>
+							<a href="#" class="kt-media kt-media--xs kt-media--circle" data-toggle="kt-tooltip" data-skin="brand" data-placement="top" title="" data-original-title="그 외 담당자 +'+endAuthCnt+'"><span>5</span></a>
+						</div>
+					</div>
+					<!-- end :: 마일스톤 이름-->
+					<!-- begin :: dropdown 버튼 -->
+					<div class="kt-portlet__head-toolbar">
+						<div class="dropdown dropdown-inline">
+							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fas fa-ellipsis-h kt-padding-0"></i>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right">
+								<div class="dropdown-item" id=""><i class="fa fa-edit kt-font-brand"></i>마일스톤 수정</div>
+								<div class="dropdown-item" id=""><i class="fa fa-trash kt-font-brand"></i>마일스톤 삭제</div>
+								<div class="dropdown-divider"></div>
+								<div class="dropdown-item" id=""><i class="fas fa-clipboard-list kt-font-brand"></i>마일스톤 상세정보</div>
+								<div class="dropdown-divider"></div>
+								<div class="dropdown-item" id=""><i class="fas fa-list kt-font-brand"></i>마일스톤 회의록 목록</div>
+								<div class="dropdown-divider"></div>
+								<div class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>보고서 출력</div>
 								
-								//결재 대기 취소건 있는 경우
-								if(delSkipCount > 0){
-									delSkipMsg = "</br>결재 대기 중인 "+delSkipCount+"개의 배포 계획 삭제를 취소했습니다.";
-								}
-								
-								jAlert(data.message+delSkipMsg, "알림창");
-							} else {
-								toast.push(data.message);
-							}
-						});
-						//AJAX 전송 오류 함수
-						ajaxObj.setFnError(function(xhr, status, err) {
-							data = JSON.parse(data);
-							toast.push(data.message);
-						});
-						//AJAX 전송
-						ajaxObj.send();
-					}
-				});
-
-	};
-	
-	
-	
-	$(document).ready(function() {
-		// AXISJ Grid 초기화 실행 부분들
-		Grid.init(); 
-		
-		// 배포 계획 생성관리 가이드 상자 호출
-		gfnGuideStack("add",fnDpl1000GuideShow);
-		
-	});
-
-//axisj5 그리드
-function fnAxGrid5View(){
-	firstGrid = new ax5.ui.grid();
- 
-        firstGrid.setConfig({
-            target: $('[data-ax5grid="first-grid"]'),
-            showRowSelector: true,
-            sortable:false,
-
-            header: {align:"center"},
-            columns: [
-                {key : "signStsNm",label : "결재 상태",width : 100,align : "center"},
-                {key : "dplStsNm",label : "배포 상태",width : 100,align : "center"},
-                {key : "dplVer",label : "배포 버전",width : 100,align : "center"},
-				{key : "dplNm",label : "배포 명",width : 260,align : "left"},
-				{key : "dplTypeNm",label : "배포 방법",width : 120,align : "center"},
-				{key : "dplDt",label : "배포 일자",width : 200,align : "center",
-					formatter : function() {
-						var fmtDt = this.item.dplDt;
-						// IE에서는 날짜값 뒤에 시간값이 붙어있을경우 format("yyyy-MM-dd")이 정상동작 하지 않아 yyyy-MM-dd만 자른다.
-						var fmtDtStr = fmtDt.substring(0, 10);
-						return new Date(fmtDtStr).format("yyyy-MM-dd", true);
-					}
-				},
-				{key : "dplUsrNm",label : "배포자",width :200,align : "center"},
-				{key : "dplDesc",label : "배포 설명",width :350,align : "center"}
-            ],
-            body: {
-                align: "center",
-                columnHeight: 30,
-                onClick: function () {
-           			// 클릭 이벤트
-                },onDBLClick:function(){
-                	// 더블클릭 시 상세보기
-                	var item = this.item;
-                	var data = {"dplId" : item.dplId, "prjId" : item.prjId};
-					gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1003View.do',data, "1200", "870",'scroll');
-                }
-            },
-            page: {
-                navigationItemCount: 9,
-                height: 30,
-                display: true,
-                firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
-                prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
-                nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-                lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
-                onChange: function () {
-                   fnInGridListSet(this.page.selectPage,mySearch.getParam());
-                }
-            }
-        });
-        //그리드 데이터 불러오기
- 		fnInGridListSet();
-
-}
-//그리드 데이터 넣는 함수
-function fnInGridListSet(_pageNo,ajaxParam){
-     	/* 그리드 데이터 가져오기 */
-     	//파라미터 세팅
-     	if(gfnIsNull(ajaxParam)){
-   			ajaxParam = $('form#searchFrm').serialize();
-   		}
-     	
-     	//페이지 세팅
-     	if(!gfnIsNull(_pageNo)){
-     		ajaxParam += "&pageNo="+_pageNo;
-     	}else if(typeof firstGrid.page.currentPage != "undefined"){
-     		ajaxParam += "&pageNo="+firstGrid.page.currentPage;
-     	}
-     	
-     	//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/dpl/dpl1000/dpl1000/selectDpl1000DeployVerInfoListAjax.do'/>","loadingShow":false}
-				,ajaxParam);
-		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-			var list = data.list;
-			var page = data.page;
-			
-		   	firstGrid.setData({
-		             	list:list,
-		             	page: {
-		                  currentPage: _pageNo || 0,
-		                  pageSize: page.pageSize,
-		                  totalElements: page.totalElements,
-		                  totalPages: page.totalPages
-		              }
-		             });
-		});
-		
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err){
-			//세션이 만료된 경우 로그인 페이지로 이동
-           	if(status == "999"){
-           		alert('세션이 만료되어 로그인 페이지로 이동합니다.');
-        		document.location.href="<c:url value='/cmm/cmm4000/cmm4000/selectCmm4000View.do'/>";
-        		return;
-           	}
-		});
-		
-		//AJAX 전송
-		ajaxObj.send();
-}
-	//검색 상자
-	function fnSearchBoxControl() {
-		mySearch = new AXSearch();
-
-		var fnObjSearch = {
-			pageStart : function() {
-				//검색도구 설정 01 ---------------------------------------------------------
-				mySearch.setConfig({
-					targetID : "AXSearchTarget",
-					theme : "AXSearch",
-					rows : [ {
-						display : true,
-						addClass : "",
-						style : "",
-						list : [{label : "<i class='fa fa-search'></i>&nbsp;",labelWidth : "50",type : "selectBox",width : "",key : "searchSelect",addClass : "",valueBoxStyle : "",value : "all",
-							options : Grid.columnOption.dpl1000Search,
-								onChange : function(selectedObject,value) {
-										//선택 값이 전체목록인지 확인 후 입력 상자를 readonly처리
-										if (!gfnIsNull(selectedObject.optionAll) && selectedObject.optionAll == true) {
-											axdom("#"+ mySearch.getItemId("searchTxt")).attr("readonly","readonly");
-											axdom("#"+ mySearch.getItemId("searchTxt")).val('');
-										} else {
-											axdom("#"+ mySearch.getItemId("searchTxt")).removeAttr("readonly");
-										}
-		
-										//공통코드 처리 후 select box 세팅이 필요한 경우 사용
-										if (!gfnIsNull(selectedObject.optionCommonCode)) {
-											gfnCommonSetting(mySearch,selectedObject.optionCommonCode,"searchCd","searchTxt");
-										} else if (value == "flowId") {
-											//option 초기화
-											axdom("#"+ mySearch.getItemId("searchCd")).html('');
-											//목록 불러오기
-											axdom("#"+ mySearch.getItemId("searchCd")).append('<option value="ALL">전체</option>');
-											$.each(JSON.parse(flowList),function() {
-												axdom("#"+ mySearch.getItemId("searchCd")).append('<option value="'+this.flowId+'">'+ this.flowNm+ '</option>');
-											});
-											axdom("#"+ mySearch.getItemId("searchCd")).append('<option value="FLW">미분류</option>');
-											axdom("#"+ mySearch.getItemId("searchTxt")).hide();
-											axdom("#"+ mySearch.getItemId("searchCd")).show();
-										} else if (value == "sprintId") {//option 초기화
-											axdom("#"+ mySearch.getItemId("searchCd")).html('');
-										//개발주기가 있는 경우 목록 조회
-										if (gfnIsNull(sprintList)) {
-											axdom("#"+ mySearch.getItemId("searchCd")).append('<option value="">없음</option>');
-										} else {
-											//목록 불러오기
-											$.each(JSON.parse(sprintList),function() {
-												axdom("#"+ mySearch.getItemId("searchCd")).append('<option value="'+this.sprintId+'">'+ this.sprintNm+ '</option>');
-											});
-										}
-											axdom("#"+ mySearch.getItemId("searchTxt")).hide();
-											axdom("#"+ mySearch.getItemId("searchCd")).show()
-										} else {
-											//공통코드 처리(추가 selectbox 작업이 아닌 경우 type=text를 나타낸다.)
-											axdom("#"+ mySearch.getItemId("searchTxt")).show();
-											axdom("#"+ mySearch.getItemId("searchCd")).hide();
-										}
-									}
-									},
-									{label : "",labelWidth : "",type : "inputText",width : "225",key : "searchTxt",addClass : "secondItem sendBtn",valueBoxStyle : "padding-left:0px;",value : "",
-										onkeyup:function(e){
-											if(e.keyCode == '13' ){
-												axdom("#" + mySearch.getItemId("btn_search_dlp")).click();
-											}
-										}
-									},
-									{label : "",labelWidth : "",type : "selectBox",width : "100",key : "searchCd",addClass : "selectBox",valueBoxStyle : "padding-left:0px;",value : "01",options : []},
-									{label:"<i class='fas fa-list-ol'></i>&nbsp;목록 수&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"pageSize", addClass:"", valueBoxStyle:"", value:"30",
-										options:[
-													{optionValue:15, optionText:"15"},
-					                                {optionValue:30, optionText:"30"},
-					                                {optionValue:50, optionText:"50"},
-					                                {optionValue:100, optionText:"100"},
-					                                {optionValue:200, optionText:"200"},
-					                                {optionValue:300, optionText:"300"},
-													{optionValue:600, optionText:"600"},
-													{optionValue:1000, optionText:"1000"},
-													{optionValue:5000, optionText:"5000"},
-													{optionValue:10000, optionText:"10000"}
-					                                
-					                            ],onChange: function(selectedObject, value){
-					                            	fnInGridListSet(0,$('form#searchFrm').serialize()+"&"+mySearch.getParam());
-					    						}
-									},
-									{label:"<i class='fas fa-arrows-v'></i>&nbsp;목록 높이&nbsp;", labelWidth:"60", type:"selectBox", width:"", key:"gridHeight", addClass:"", valueBoxStyle:"", value:"600",
-										options:[
-										         	{optionValue:300, optionText:"300px"},
-					                                {optionValue:600, optionText:"600px"},
-					                                {optionValue:1000, optionText:"1000px"},
-					                                {optionValue:1200, optionText:"1200px"},
-					                                {optionValue:2000, optionText:"2000px"},
-					                                
-					                            ],onChange: function(selectedObject, value){
-					                            	firstGrid.setHeight(value);
-					    						}
-									},
-									{label : "",labelWidth : "",type : "button",width : "70",key : "btn_print_newReqDemand",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-print' aria-hidden='true'></i>&nbsp;<span>프린트</span>",
-										onclick : function() {
-											$(firstGrid.exportExcel()).printThis({importCSS: false,importStyle: false,loadCSS: "/css/common/printThis.css"});
-										}
-									},									
-									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_excel_newReqDemand",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-file-excel' aria-hidden='true'></i>&nbsp;<span>엑셀</span>",
-										onclick : function() {
-											firstGrid.exportExcel("${sessionScope.selMenuNm}.xls");
-										}
-									},
-									
-									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_delete_req",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-trash-alt' aria-hidden='true'></i>&nbsp;<span>삭제</span>",
-										onclick : function() {
-											var chkList = firstGrid.getList('selected');
-											fnDeleteDplInfo(chkList);
-										}
-									},
-									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_update_req",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-edit' aria-hidden='true'></i>&nbsp;<span>수정</span>",
-										onclick : function() {
-											var item = (!gfnIsNull(Object.keys(firstGrid.focusedColumn)))? firstGrid.list[firstGrid.focusedColumn[Object.keys(firstGrid.focusedColumn)].doindex]:null;
-											if(gfnIsNull(item)){
-												toast.push('수정하려는 배포 계획을 선택해주세요.');
-												return;
-											}
-											
-											//결재 승인된 배포 계획은 수정 불가능
-											if(item.signStsCd == "02"){
-												jAlert("결재 승인된 배포 계획은 수정이 불가능합니다.", "알림창");
-												return false;
-											}
-											//배포상태 성공된 배포 계획은 수정 불가능
-											if(item.dplStsCd == "02"){
-												jAlert("성공된 배포 계획은 수정이 불가능합니다.", "알림창");
-												return false;
-											}
-
-											var data = {"dplId" : item.dplId,"popupGb" : "update"};
-											gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1001View.do',data, "1200", "830",'scroll');
-										}
-									},
-									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_insert_dpl",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-save' aria-hidden='true'></i>&nbsp;<span>등록</span>",
-										onclick : function() {
- 											gfnLayerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1001View.do',{"popupGb" : "insert"}, "1200", "830",'scroll');
-										}
-									},
-									{label : "",labelWidth : "",type : "button",width : "55",key : "btn_search_dlp",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-list' aria-hidden='true'></i>&nbsp;<span>조회</span>",
-										onclick : function() {
-											/* 검색 조건 설정 후 reload */
-								            fnInGridListSet(0,mySearch.getParam());
-										}
-									},
-									{label : "",labelWidth : "",type : "button",width : "80",key : "btn_insert_sign",style : "float:right;",valueBoxStyle : "padding:5px;",value : "<i class='fa fa-file-signature' aria-hidden='true'></i>&nbsp;<span>결재 요청</span>",
-										onclick : function() {
-											var item = (!gfnIsNull(Object.keys(firstGrid.focusedColumn)))? firstGrid.list[firstGrid.focusedColumn[Object.keys(firstGrid.focusedColumn)].doindex]:null;
-											if(gfnIsNull(item)){
-												toast.push('결재를 요청하려는 배포 계획을 선택해주세요');
-												return;
-											}
-											
-											if(item.signStsCd == "05" || item.signStsCd == "04" || item.signStsCd == "03"){
-												jConfirm("선택한 배포 계획을 결재 요청하시겠습니까?","알림창",
-													function(result) {
-														if (result) {
-															fnDplSignRequest(item);
-														}
-													}
-												);
-											}else{
-												jAlert("결재 상태가 '대기','기안','거절'인 배포 계획만 요청이 가능합니다.", "알림창");
-											}
- 											
-										}
-									}
-									
-							]}]
-						});
-			}
-		};
-
-		jQuery(document.body).ready(
-				function() {
-					fnObjSearch.pageStart();
-					//검색 상자 로드 후 텍스트 입력 폼 readonly 처리
-					axdom("#" + mySearch.getItemId("searchTxt")).attr("readonly", "readonly");
-
-					//공통코드 selectBox hide 처리
-					axdom("#" + mySearch.getItemId("searchCd")).hide();
-
-					//버튼 권한 확인
-					fnBtnAuthCheck(mySearch);
-
-				});
-	}
-	
-	//결재 대기 요청
-	function fnDplSignRequest(item){
-		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url" : "<c:url value='/dpl/dpl1000/dpl1000/insertDpl1000DplsignRequestAjax.do'/>"}, 
-				{dplId: item.dplId, dplSignTxt: item.dplSignTxt, signUsrId: item.signUsrId, dplNm: item.dplNm});
-		//AJAX 전송 성공 함수
-		ajaxObj.setFnSuccess(function(data) {
-			data = JSON.parse(data);
-			if (data.errorYn == "N") {
-				fnInGridListSet(firstGrid.page.currentPage,mySearch.getParam());
+							</div>
+						</div>
+					</div>
+					<!-- end :: dropdown 버튼-->
+				</div>	
 				
-			} else {
-				toast.push(data.message);
-			}
-		});
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err) {
-			data = JSON.parse(data);
-			toast.push(data.message);
-		});
-		//AJAX 전송
-		ajaxObj.send();
-	}
-	
-	// 배포 계획 생성관리 가이드 상자
-	function fnDpl1000GuideShow(){
-		var mainObj = $(".main_contents");
-		
-		//mainObj가 없는경우 false return
-		if(mainObj.length == 0){
-			return false;
-		}
-		//guide box setting
-		var guideBoxInfo = globals_guideContents["dpl1000"];
-		gfnGuideBoxDraw(true,mainObj,guideBoxInfo);
-	}
-	
-</script>
-<div class="main_contents" style="height: auto;">
-	<div class="dpl_title">${sessionScope.selMenuNm }</div>
-	<div class="tab_contents menu" style="max-width: 1500px;">
-		<form:form commandName="dpl1000VO" id="searchFrm" name="searchFrm" method="post" onsubmit="return false"></form:form>
-		<div id="AXSearchTarget" style="border-top: 1px solid #ccc;" guide="dpl1000button" ></div>
-		<br />
-		<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 600px;" guide="dpl1000Grid"></div>
+				<div class="kt-portlet__body kt-padding-t-0">
+					<div class="row">
+						<!-- begin :: 마일스톤 설명 -->
+						<div class="kt-padding-l-50 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 osl-mobile-padding-l-10">
+							<div class="kt-padding-b-5">
+								<h5>마일스톤 설명</h5>
+							</div>
+						</div>
+						<!-- end :: 마일스톤 설명 -->
+						<!-- begin :: 시작일,종료일,진척률 영역 -->
+						<div class="col-lg-8 col-md-8 col-sm-12">
+							<div class="row">
+								<!-- begin :: 시작일,종료일 -->
+								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+									<div class="kt-pull-left kt-margin-r-25">
+										<div class="kt-padding-b-5">
+											<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>
+											<span>시작일</span>
+										</div>
+										<h5><span class="badge badge-primary">2018-01-01</span></h5>
+									</div>
+									<div class="kt-pull-left">
+										<div class="kt-padding-b-5">
+											<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>
+											<span>종료일</span>
+										</div>
+										<h5>
+											<span class="badge badge-danger">2029-12-31</span>
+										</h5>
+									</div>
+								</div>
+								<!-- end :: 시작일,종료일 -->
+								<!-- begin :: 진척률 -->
+								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+									<div class="osl-progress">
+										<div class="kt-padding-b-5">
+											<i class="fa fa-chart-line kt-font-brand kt-margin-r-5"></i>
+											<span>진척률</span>
+										</div>
+										<div class="progress osl-prj-group-md">
+											<div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">78%</div>
+										</div>
+									</div>
+								</div>
+								<!-- end :: 진척률 -->
+							</div>
+						</div>
+						<!-- begin :: 시작일,종료일,진척률 영역 -->
+					</div>
+					<!-- end :: 카드  상단 영역 -->
+					
+					<!-- begin :: 카드  하단 영역 -->	
+					<div class="row border-top kt-margin-t-20 kt-padding-t-20">
+						<!-- end :: 요구사항 개수 표출 영역 -->
+						<div class="col-lg-4 col-md-5 col-sm-12 col-12">
+							<div class="osl-widget">
+								<div class="osl-widget-info__item">
+									<div class="osl-widget-info__item-icon">
+										<img src="/media/osl/icon/reqAll.png">
+									</div>
+									<div class="osl-widget-info__item-info">
+										<a href="#" class="osl-widget-info__item-title">전체 요구사항</a>											
+										<div class="osl-widget-info__item-desc"><span>100</span>건</div>
+									</div>
+								</div>
+								<div class="osl-widget-info__item">
+									<div class="osl-widget-info__item-icon">
+										<img src="/media/osl/icon/reqInProgress.png">
+									</div>
+									<div class="osl-widget-info__item-info">
+										<a href="#" class="osl-widget-info__item-title">진행중 요구사항</a>
+										<div class="osl-widget-info__item-desc"><span>50</span>건</div>
+									</div>
+								</div>
+							</div>
+							<div class="osl-widget">
+								<div class="osl-widget-info__item">
+									<div class="osl-widget-info__item-icon">
+										<img src="/media/osl/icon/reqDone.png">
+									</div>
+									<div class="osl-widget-info__item-info">
+										<a href="#" class="osl-widget-info__item-title">완료 요구사항</a>
+										<div class="osl-widget-info__item-desc"><span>50</span>건</div>
+									</div>
+								</div>
+								<div class="osl-widget-info__item">
+									<div class="osl-widget-info__item-icon">
+										<img src="/media/osl/icon/reqDone.png">
+									</div>
+									<div class="osl-widget-info__item-info">
+										<a href="#" class="osl-widget-info__item-title">완료 요구사항</a>
+										<div class="osl-widget-info__item-desc"><span>50</span>건</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end :: 요구사항 개수 표출 영역 -->
+						<!-- begin :: 차트 영역 -->
+						<div class="col-lg-8 col-md-7 col-sm-12 col-12">
+							<div class="row kt-padding-r-20 h-100">
+								<div class="col-lg-6 col-md-6 col-sm-12 col-12">
+									<div class="border kt-margin-r-10 h-100">차트1</div>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-12 col-12">
+									<div class="border kt-margin-l-10 h-100">차트2</div>
+								</div>
+							</div>
+						</div>
+						<!-- end :: 차트 영역 -->
+					</div>
+				</div>
+				<!-- end :: 카드 하단 영역 -->
+			</div>
+			<!-- end :: 카드 -->
+		</div>
 	</div>
 </div>
+<!-- end :: 카드형 -->
+<!-- begin :: 데이터테이블형 -->
+<div class="kt_datatable osl-datatable-footer__divide" id="dpl1000Table"></div>
+<!-- end :: 데이터테이블형 -->
+<!-- end DOM -->
+<!-- begin page script -->
+<script>
+"use strict";
+var OSLReq1000Popup = function () {
+	var documentSetting = function(){
+		$.osl.datatable.setting("dpl1000Table",{
+			data: {
+				source: {
+					read: {
+						url: "/req/req1000/req1000/selectReq1000ListAjaxView.do"
+					}
+				},
+			},
+			columns: [
+				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
+				{field: 'prjNm', title: '결재 상태', textAlign: 'left', width: 70, search: true},
+				{field: 'reqOrd', title: '배포 상태', textAlign: 'left', width: 70, autoHide: false},
+				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'left', width: 70, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProType", sortField: "reqProType"},
+				{field: 'reqNm', title: '배포 명', textAlign: 'left', width: 300, search: true},
+				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 50, search: true, searchType:"date"},
+				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 70, search: true, searchType:"date"},
+				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100, search: true, searchType:"date"},
+			],
+			actionBtn:{
+				"dblClick": true 
+			},
+			actionTooltip:{
+				"update": "요구사항 수정",
+				"delete": "요구사항 삭제"
+			},
+			actionFn:{
+				"insert":function(datatableId, type, rowNum){
+					var data = {type:"insert"};
+					var options = {
+							idKey: datatableId,
+							modalTitle: $.osl.lang("req1001.title"),
+							closeConfirm: false,
+						};
+					
+					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
+				},
+				
+				"update":function(rowData, datatableId, type, rowNum, elem){
+					if(rowData.reqProType != "01"){
+						$.osl.alert('접수 요청중인 요구사항만 수정 가능합니다.');
+						return false;
+					}
+					var data = {
+							type:"update",
+							paramPrjId: rowData.prjId,
+							paramReqId: rowData.reqId,
+							paramReqUsrId: rowData.reqUsrId
+						};
+					var options = {
+							idKey: rowData.reqId,
+							modalTitle: $.osl.lang("req1001.title"),
+							closeConfirm: false
+						};
+					
+					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
+				},
+				"delete":function(rowDatas, datatableId, type, rowNum, elem){
+					//AJAX 설정
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/req/req1000/req1000/deleteReq1001ReqListAjax.do'/>"}
+							,{deleteDataList: JSON.stringify(rowDatas)});
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						if(data.errorYn == "Y"){
+			   				$.osl.alert(data.message,{type: 'error'});
+			   			}else{
+			   				//삭제 성공
+			   				$.osl.toastr(data.message);
+			   				
+			   				//datatable 조회
+			   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+			   			}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+				},
+				"dblClick":function(rowData, datatableId, type, rowNum, elem){
+					var data = {
+							type:"update",
+							paramPrjId: rowData.prjId,
+							paramReqId: rowData.reqId,
+							paramReqUsrId: rowData.reqUsrId
+						};
+					var options = {
+							idKey: rowData.reqId,
+							modalTitle: $.osl.lang("req1001.title"),
+							closeConfirm: false
+						};
+					
+					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1002View.do',data,options);
+				}
+			}
+		});
+	};
+	
+	return {
+        // public functions
+        init: function() {
+        	documentSetting();
+        }
+        
+    };
+}();
 
+$.osl.ready(function(){
+	OSLReq1000Popup.init();
+});
+</script>
+<!-- end script -->
 <jsp:include page="/WEB-INF/jsp/lunaops/bottom/footer.jsp" />

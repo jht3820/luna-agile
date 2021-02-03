@@ -44,20 +44,15 @@
 			<div class="col-lg-5 col-md-6 col-sm-6">
 				<div class="osl-datatable-search" data-datatable-id="stm2100StmTable"></div>
 			</div>
-			<div class="col-lg-7 col-md-6 col-sm-6">
-				<div class="kt-align-right">
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="그리드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuGrid" id="menuGrid" ><i class="fa flaticon2-indent-dots kt-font-brand"></i></button> -->
-<!-- 					<button type="button" class="btn btn-bold kt-padding-5 kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" title="카드형" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" name="menuCard" id="menuCard" onclick="location.href='/stm/stm2000/stm2100/selectStm2104View.do'"><i class="fa flaticon-squares-1 kt-font-brand"></i></button> -->
-				</div>
-			</div>
 		</div>
+		<div id="stm2100StmCard"></div>
 		<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 	</div>
 </div>
-<div id="stm2100StmCard"></div>
 <!-- begin page script -->
 <script>
  "use strict";
+
  var OSLStm2100Popup = function() {
 	 //권한체크
 	 var okManager;
@@ -66,7 +61,9 @@
 	 var resultStr = "";
 	 var currentViewType = "01";
 	 var documentSetting = function() {	
+		 var datatableId = "stm2100StmTable";
 		 var config = {
+			 cardUiTarget: $("#stm2100StmCard"),
 			 data: {
 				 source: {
 					 read: {
@@ -76,16 +73,16 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				 {field: 'stmTypeNm', title: $.osl.lang("stm2100.field.stmTypeNm"), textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
-				 {field: 'stmNm', title: $.osl.lang("stm2100.field.stmNm"), textAlign: 'left', width: 300, autoHide: false, search: true},
-				 {field: 'stmDsTypeNm', title: $.osl.lang("stm2100.field.stmDsTypeNm"), textAlign: 'left', width: 200},
-				 {field: 'cnt', title: $.osl.lang("stm2100.field.cnt"), textAlign: 'center', width: 150},
-				 {field: 'badCnt', title: $.osl.lang("stm2100.field.badCnt"), textAlign: 'center', width: 150,
+				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd", sortable: true},
+				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true, sortable: true},
+				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200, sortable: true},
+				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150, sortable: false},
+				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150, sortable: false,
 					 template : function(row){
 						return String(parseInt(row.cnt) - parseInt(row.delCnt)); 
 					 },
 				 },
-				 {field: 'delCnt', title: $.osl.lang("stm2100.field.delCnt"), textAlign: 'center', width: 150},
+				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150, sortable: false},
 			 ],
 			 rows:{
 				clickCheckbox: true
@@ -113,7 +110,7 @@
 						};
 					var options = {
 							idKey: rowData.menuId,
-							modalTitle: "[ "+rowData.stmNm+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
+							modalTitle: "[ "+ $.osl.escapeHtml(rowData.stmNm)+ " ] "+$.osl.lang("stm2100.title.updateTitle"),
 							closeConfirm: false,
 							modalSize: "xl",
 							autoHeight: false,
@@ -142,7 +139,7 @@
 					var data = {
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
-							stmNm: rowData.stmNm,
+							stmNm: $.osl.escapeHtml(rowData.stmNm),
 							//시스템 게시판에서 접근 시 라이센스 범위로 보기 위해 01로 지정
 							stmDsTypeCd : "01",
 							stmRootYn : "Y",
@@ -181,7 +178,7 @@
 							type:"dbClick",
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
-							stmNm: rowData.stmNm,
+							stmNm: $.escapeHtml(rowData.stmNm),
 						};
 					var options = {
 							idKey: "summery_"+rowData.menuId,
@@ -215,105 +212,17 @@
 				 ajaxDone: function(evt, list){
 					 var cnt = 0;
 					 $.each(list, function(idx, row){
-						resultStr = "";
+						 resultStr = "";
 						var summeryData = selectStm2102(idx, row);
 		 				$("#stm2100StmCard").append(resultStr);
 		 				//차트 데이터 가져오기
-		 				drawChart(row.menuId);
 		 				//차트 그리기
-// 						 var chartOpt = {
-// 						 chart: {
-// 							    height: 350,
-// 							    type: "line",
-// 							    stacked: false
-// 							  },
-// 							  dataLabels: {
-// 							    enabled: false
-// 							  },
-// 							  colors: ["#FF1654", "#247BA0"],
-// 							  series: [
-// 							    {
-// 							      name: "Series A",
-// 							      data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
-// 							    },
-// 							    {
-// 							      name: "Series B",
-// 							      data: [20, 29, 37, 36, 44, 45, 50, 58]
-// 							    }
-// 							  ],
-// 							  stroke: {
-// 							    width: [4, 4]
-// 							  },
-// 							  plotOptions: {
-// 							    bar: {
-// 							      columnWidth: "20%"
-// 							    }
-// 							  },
-// 							  xaxis: {
-// 							    categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
-// 							  },
-// 							  yaxis: [
-// 							    {
-// 							      axisTicks: {
-// 							        show: true
-// 							      },
-// 							      axisBorder: {
-// 							        show: true,
-// 							        color: "#FF1654"
-// 							      },
-// 							      labels: {
-// 							        style: {
-// 							          colors: "#FF1654"
-// 							        }
-// 							      },
-// 							      title: {
-// 							        text: "Series A",
-// 							        style: {
-// 							          color: "#FF1654"
-// 							        }
-// 							      }
-// 							    },
-// 							    {
-// 							      opposite: true,
-// 							      axisTicks: {
-// 							        show: true
-// 							      },
-// 							      axisBorder: {
-// 							        show: true,
-// 							        color: "#247BA0"
-// 							      },
-// 							      labels: {
-// 							        style: {
-// 							          colors: "#247BA0"
-// 							        }
-// 							      },
-// 							      title: {
-// 							        text: "Series B",
-// 							        style: {
-// 							          color: "#247BA0"
-// 							        }
-// 							      }
-// 							    }
-// 							  ],
-// 							  tooltip: {
-// 							    shared: false,
-// 							    intersect: true,
-// 							    x: {
-// 							      show: false
-// 							    }
-// 							  },
-// 							  legend: {
-// 							    horizontalAlign: "left",
-// 							    offsetX: 40
-// 							  }
-// 						 };
-// 						 var chart = new ApexCharts(document.querySelector("#drawChart"+idx), chartOpt);
-// 						 chart.render();
+		 				drawChart(idx, row.menuId);
 					 });
 	 				
 	 				//카드형 내 수정 버튼 클릭 시
 	 				$(".updateBtn").click(function(){
-	 					var item =$(this).parent().parent().parent().parent();
+	 					var item =$(this).parent().parent();
 	 					var data = {
 								type: "update",
 								menuId: item.data("menuId"),
@@ -339,7 +248,8 @@
 	 				});
 	 				//카드형 내 관리 버튼 클릭 시
 	 				$(".settingBtn").click(function(){
-	 					var item = $(this).parent().parent().parent().parent();
+	 					var item = $(this).parent().parent();
+	 					
 	 					var data = {
 								menuId: item.data("menuId"),
 								stmTypeCd: item.data("stmTypeCd"),
@@ -373,20 +283,31 @@
 					});
 					//그 외 담당자 수 클릭 시
 					$(".otherBadChargerList").click(function(){
-						console.log("other");
 						//새로운 팝업창 만들기 - 담당자 전체 리스트 출력
+						var item =$(this).parent().parent().parent().parent().parent();
+						var data = {
+								menuId : item.data("menuId"),
+						};
+						var options = {
+								idKey: "charger_"+ item.data("menId"),
+								modalTitle:"[ "+ item.data("stmName") +" ] "+"담당자 목록 확인",
+								modalSize : "md",
+								closeConfirm: true,
+								autoHeight: false,
+						};
+						$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2103View.do',data,options);
 					});
 					
 				 }//ajaxDone end
 			 }
 		 };//config end
+		 
 		 //데이터 테이블 셋팅
-		 $.osl.datatable.setting("stm2100StmTable", config);
+		 $.osl.datatable.setting(datatableId, config);
 
 		//뷰 변경 이벤트 - 카드형 그리드형 선택 확인
 		$(".btn-view-type").click(function(){
 			var viewType = $(this).data("view-type");
-			console.log("viewType : ", viewType);
 			
 			//active 교체
 			$(".btn-view-type.active").removeClass("active");
@@ -405,11 +326,11 @@
 		 var viewTypeChange = function(){
 			//현재 viewType에 따라 show/hide
 			if(currentViewType == "01"){	//카드 형식
-				$("#stm2100StmTable").addClass("kt-hide");
-				$("#stm2100StmCard").removeClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+				$("#stm2100StmCard").show();
 			}else{	//데이터테이블 형식
-				$("#stm2100StmTable").removeClass("kt-hide");
-				$("#stm2100StmCard").addClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "visible",height: "auto"});
+				$("#stm2100StmCard").hide();
 			}
 		}
 		 
@@ -445,13 +366,13 @@
 						var fileSummery = data.fileSummery;
 						var badChargerList = data.badChargerList;
 						
-						resultStr += "<div class='row kt-padding-10' data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
+						resultStr += "<div class='row kt-padding-10'>"
 				 						+ "<div class='kt-portlet kt-portlet--mobile'>"
 			 								+ "<div class='col-12'>"
 					 							+ "<div class='kt-portlet__head kt-portlet__head--lg'>"
 					 								+ "<div class='kt-portlet__head-label'>"
 					 									+ "<label class='kt-checkbox kt-checkbox--single kt-checkbox--solid'>"
-						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"'><span></span>"
+						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"' data-datatable-id='"+datatableId+"'>&nbsp;<span></span>"
 					 									+ "</label>";
 							 var boardType = "";
 							 if(row.stmTypeCd == "01"){
@@ -470,7 +391,7 @@
 				 								+ "</div>"
 			 									+ "<div class='kt-media-group osl-margin-b-05'>";
 			 									//담당자 리스트 뿌리기
-			 									if(badChargerList != null && badChargerList.length > 0){
+			 									if(!$.osl.isNull(badChargerList)){
 			 										var lastCount =  badChargerList.length;
 			 										$.each(badChargerList, function(index, value){
 			 											//담당자 수 6명 이하일때만 사진 그리기
@@ -480,7 +401,6 @@
 				 											if(value.stmAdminCd=="01"){
 				 												resultStr += "<a href='#' class='kt-media kt-media--xs kt-media--circle' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.prjGrpNm)+" "+$.osl.escapeHtml(value.authGrpNm)+"' data-original-title='"+$.osl.escapeHtml(value.prjGrpNm)+" "+$.osl.escapeHtml(value.authGrpNm)+"'><span><i class='fa flaticon2-group kt-font-bold'></i></span></a>";
 				 											}else{//사용자인경우
-				 												console.log(value);
 				 												resultStr += "<a href='#' class='kt-media kt-media--xs kt-media--circle badChargerList' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' title='"+$.osl.escapeHtml(value.usrNm)+"' data-original-title='"+$.osl.escapeHtml(value.usrNm)+"' data-user='"+value.stmAdminId+"'><img src='/cmm/fms/getImage.do?fileSn=0&atchFileId="+value.usrImgId+"'></a>";
 				 											}
 			 												//남은 사용자 수
@@ -626,7 +546,7 @@
 								 									+ "<i class='fa flaticon-interface-9 kt-margin-r-5'></i>"
 																	+ "<span data-lang-cd='stm2102.label.tag'>"+$.osl.lang("stm2102.label.tag")+"</span>"
 																+  "</div>";
-									 	if(tagInfo != null && tagInfo != "" && tagInfo != "N"){
+									 	if(!$.osl.isNull(tagInfo) && tagInfo != "N"){
 									 		$.each(tagInfo, function(index, value){
 									 			if(index < 3){ //sql 조회 top 5
 									 				resultStr += "<div class='kt-margin-5 kt-padding-l-20'>"
@@ -666,20 +586,21 @@
 												}
 								 					resultStr += "</div>" //첨부파일 끝
 															+ "</div>" //첨부파일 끝
-														+ "</div>"//통계부분 끝
-													+"</div>"
-												+ "</div>"
-												+ "<div class='row kt-padding-25 kt-align-right'>"
-													+ "<div class='col-12 kt-padding-0'>"
-														+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air updateBtn' data-datatable-action='update' title='"+$.osl.lang("stm2100.actionBtn.updateTooltip")+"' data-title-lang-cd='stm2100.actionBtn.updateTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='update'>"
-															+ "<i class='fa fa-edit'></i>"
-															+ "<span data-lang-cd='datatable.button.update'>"+$.osl.lang("datatable.button.update")+"</span>"
-														+ "</button>"
-														+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air settingBtn' data-datatable-action='detail' title='"+$.osl.lang("stm2100.actionBtn.managmentTooltip")+"' data-title-lang-cd='stm2100.actionBtn.managmentTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='detail'>"
-															+ "<i class='fa flaticon-settings-1'></i>"
-															+ "<span data-lang-cd='stm2100.button.detail'>"+$.osl.lang("stm2100.button.detail")+"</span>"
-														+ "</button>"
-													+ "</div>"
+															//수정 관리 버튼 영역
+															+ "<div class='row kt-padding-t-15 kt-padding-b-15 kt-align-right'  data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
+																+ "<div class='col-12 kt-padding-0'>"
+																	+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air updateBtn' data-datatable-action='update' title='"+$.osl.lang("stm2100.actionBtn.updateTooltip")+"' data-title-lang-cd='stm2100.actionBtn.updateTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='update'>"
+																		+ "<i class='fa fa-edit'></i>"
+																		+ "<span data-lang-cd='datatable.button.update'>"+$.osl.lang("datatable.button.update")+"</span>"
+																	+ "</button>"
+																	+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air settingBtn' data-datatable-action='detail' title='"+$.osl.lang("stm2100.actionBtn.managmentTooltip")+"' data-title-lang-cd='stm2100.actionBtn.managmentTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='detail'>"
+																		+ "<i class='fa flaticon-settings-1'></i>"
+																		+ "<span data-lang-cd='stm2100.button.detail'>"+$.osl.lang("stm2100.button.detail")+"</span>"
+																	+ "</button>"
+																+ "</div>"
+															+ "</div>"
+														+"</div>" //수정 관리 버튼 영역 끝
+													+ "</div>"//통계부분 끝
 												+ "</div>"
 											+ "</div>"
 										+ "</div>" //kt-portlet kt-portlet--mobile end
@@ -695,7 +616,7 @@
 		 * param : menuId
 		 * function 설명 : 차트 그리기위한 한달 데이터 조회
 		 */
-		 var drawChart = function(menuId){
+		 var drawChart = function(index, menuId){
 			 var data = {
 					 menuId : menuId,
 			 }
@@ -711,7 +632,96 @@
 					$.osl.layerPopupClose();
 				}else{
 					var chartData = data.chartData;
-					console.log(chartData);
+					
+					var chartDate = [];
+					var newPostData = [];
+					var delPostData = [];
+					
+					$.each(chartData, function(idx, value){
+						chartDate.push(value.chartDate);
+						newPostData.push(value.totalNewCnt);
+						delPostData.push(value.delCnt);
+					});
+					
+					var chartOpt = {
+						chart: {
+							height: 320,
+							type: "area", //line, area, bar, heatmap
+							//stacked: false,
+							toolbar : {
+								show: true,
+								offsetX: 0,
+								offsetY: 0,
+								tools: {
+									download: true,
+									selection: true,
+									zoom: false,
+									zoomin: '<i class="fa fa-plus-circle osl-icon-transform__scale--150"></i>',
+									zoomout: '<i class="fa fa-minus-circle osl-icon-transform__scale--150"></i>',
+									pan: '<i class="fa fa-expand-arrows-alt osl-icon-transform__scale--150"></i>',
+									reset: '<i class="fa flaticon2-refresh-1"></i>',
+									customIcons: [
+										/* 
+										{
+											icon: '<i class="fa flaticon-more"></i>',
+											index: 4,
+											title: 'tooltip of the icon',
+											class: 'custom-icon',
+											click: function (chart, options, e) {
+											  console.log("clicked custom-icon")
+											}
+										}
+										 */
+									]
+								}
+							},
+						},
+						grid:{
+							show: false
+						},
+						colors: ["#586272", "#1cac81"],
+						series: [
+							{
+								name: $.osl.lang("stm2100.chart.deletePost"),
+								data: delPostData,
+							},
+							{
+								name: $.osl.lang("stm2100.chart.newPost"),
+								data: newPostData,
+							},
+						],
+						fill:{
+							type : "gradient",
+							gradient : {
+								shadeIntensity: 1,
+								opacityFrom: 0.7,
+								opacityTo: 0.9,
+								stops: [0, 90, 100]
+							}
+						},
+						xaxis: {
+							categories: chartDate,
+						},
+						yaxis:{
+							show: false
+						},
+						noData:{
+							text : $.osl.lang("stm2100.chart.noData"),
+							align : "center",
+							verticalAlign: "middle",
+							offsetX: 0,
+							offsetY: 0,
+						}
+					};
+					
+					var chart = new ApexCharts(document.querySelector("#drawChart"+index), chartOpt);
+					chart.render();
+					
+					$(".apexcharts-zoomout-icon").addClass("kt-margin-0");
+					$(".apexcharts-reset-icon").addClass("kt-margin-0");
+					$(".apexcharts-toolbar").addClass("kt-margin-10");
+					$(".apexcharts-toolbar").attr("style", "top:-20px; right: 10px;");
+					$(".apexcharts-toolbar").removeAttr("style[padding]");
 				}
 			});
 			

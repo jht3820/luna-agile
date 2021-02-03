@@ -79,6 +79,21 @@ public class Stm2100ServiceImpl extends EgovAbstractServiceImpl implements Stm21
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void updateStm2100BadOptions(Map<String, String> paramMap) throws Exception{
+
+		
+		String str = paramMap.get("stmAdmList");
+		str = str.replace("managerNum", "stmAdminCd");
+		str = str.replace("managerId", "stmAdminId");
+		str = str.replace("managerPrjId", "prjId");
+		paramMap.put("stmAdmList", str);
+		
+		str = paramMap.get("stmWtList");
+		str = str.replace("managerNum", "stmWtCd");
+		str = str.replace("managerId", "stmWtId");
+		str = str.replace("managerPrjId", "prjId");
+		paramMap.put("stmWtList", str);
+		
+		
 		
 		stm2100DAO.updateStm2100BadOptions(paramMap);
 		
@@ -210,5 +225,11 @@ public class Stm2100ServiceImpl extends EgovAbstractServiceImpl implements Stm21
 		result.put("resultManager", stm2100DAO.selectStm2100AdminCheck(paramMap));
 		result.put("resultWriter", stm2100DAO.selectStm2100WriterCheck(paramMap));
 		return result;
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public  List<Map> selectStm2100MonthChart(Map<String, String> paramMap) throws Exception {
+		return  stm2100DAO.selectStm2100MonthChart(paramMap);
 	}
 }
