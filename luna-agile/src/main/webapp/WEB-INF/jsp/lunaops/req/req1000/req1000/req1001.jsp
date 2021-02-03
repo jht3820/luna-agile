@@ -78,7 +78,7 @@
 				<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
 			</div>
 			<div class="form-group">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 내용</span></label>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqDesc">요청 내용</span></label>
 				<textarea  name="reqDesc" id="reqDesc" required></textarea>
 			</div>
 			<div class="form-group kt-margin-b-10">
