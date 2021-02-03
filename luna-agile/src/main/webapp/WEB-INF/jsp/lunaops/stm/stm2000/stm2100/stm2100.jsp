@@ -45,13 +45,14 @@
 				<div class="osl-datatable-search" data-datatable-id="stm2100StmTable"></div>
 			</div>
 		</div>
+		<div id="stm2100StmCard"></div>
 		<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 	</div>
 </div>
-<div id="stm2100StmCard"></div>
 <!-- begin page script -->
 <script>
  "use strict";
+
  var OSLStm2100Popup = function() {
 	 //권한체크
 	 var okManager;
@@ -62,6 +63,7 @@
 	 var documentSetting = function() {	
 		 var dataTableId = "stm2100StmTable";
 		 var config = {
+			 cardUiTarget: $("#stm2100StmCard"),
 			 data: {
 				 source: {
 					 read: {
@@ -220,7 +222,7 @@
 	 				
 	 				//카드형 내 수정 버튼 클릭 시
 	 				$(".updateBtn").click(function(){
-	 					var item =$(this).parent().parent().parent().parent();
+	 					var item =$(this).parent().parent();
 	 					var data = {
 								type: "update",
 								menuId: item.data("menuId"),
@@ -246,7 +248,8 @@
 	 				});
 	 				//카드형 내 관리 버튼 클릭 시
 	 				$(".settingBtn").click(function(){
-	 					var item = $(this).parent().parent().parent().parent();
+	 					var item = $(this).parent().parent();
+	 					
 	 					var data = {
 								menuId: item.data("menuId"),
 								stmTypeCd: item.data("stmTypeCd"),
@@ -288,6 +291,7 @@
 						var options = {
 								idKey: "charger_"+ item.data("menId"),
 								modalTitle:"[ "+ item.data("stmName") +" ] "+"담당자 목록 확인",
+								modalSize : "md",
 								closeConfirm: true,
 								autoHeight: false,
 						};
@@ -361,7 +365,7 @@
 						var fileSummery = data.fileSummery;
 						var badChargerList = data.badChargerList;
 						
-						resultStr += "<div class='row kt-padding-10' data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
+						resultStr += "<div class='row kt-padding-10'>"
 				 						+ "<div class='kt-portlet kt-portlet--mobile'>"
 			 								+ "<div class='col-12'>"
 					 							+ "<div class='kt-portlet__head kt-portlet__head--lg'>"
@@ -386,7 +390,7 @@
 				 								+ "</div>"
 			 									+ "<div class='kt-media-group osl-margin-b-05'>";
 			 									//담당자 리스트 뿌리기
-			 									if(badChargerList != null && badChargerList.length > 0){
+			 									if(!$.osl.isNull(badChargerList)){
 			 										var lastCount =  badChargerList.length;
 			 										$.each(badChargerList, function(index, value){
 			 											//담당자 수 6명 이하일때만 사진 그리기
@@ -541,7 +545,7 @@
 								 									+ "<i class='fa flaticon-interface-9 kt-margin-r-5'></i>"
 																	+ "<span data-lang-cd='stm2102.label.tag'>"+$.osl.lang("stm2102.label.tag")+"</span>"
 																+  "</div>";
-									 	if(tagInfo != null && tagInfo != "" && tagInfo != "N"){
+									 	if(!$.osl.isNull(tagInfo) && tagInfo != "N"){
 									 		$.each(tagInfo, function(index, value){
 									 			if(index < 3){ //sql 조회 top 5
 									 				resultStr += "<div class='kt-margin-5 kt-padding-l-20'>"
@@ -582,7 +586,7 @@
 								 					resultStr += "</div>" //첨부파일 끝
 															+ "</div>" //첨부파일 끝
 															//수정 관리 버튼 영역
-															+ "<div class='row kt-padding-t-15 kt-padding-b-15 kt-align-right'>"
+															+ "<div class='row kt-padding-t-15 kt-padding-b-15 kt-align-right'  data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
 																+ "<div class='col-12 kt-padding-0'>"
 																	+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air updateBtn' data-datatable-action='update' title='"+$.osl.lang("stm2100.actionBtn.updateTooltip")+"' data-title-lang-cd='stm2100.actionBtn.updateTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='update'>"
 																		+ "<i class='fa fa-edit'></i>"

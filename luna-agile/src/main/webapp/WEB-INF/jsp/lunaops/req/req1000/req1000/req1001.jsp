@@ -394,7 +394,7 @@ var OSLReq1001Popup = function () {
 		    	$.osl.file.fileListSetting(data.fileList, fileUploadObj);
 		    	
 		    	//요구사항 잠금 설정한 경우
-		    	if(data.reqInfoMap.reqPw != null && data.reqInfoMap.reqPw != ""){
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
 		    		$("#reqPwCheckbox").attr("checked", true);
 		    		$("#pwOption").removeClass("kt-hide");
 		    		pw = "Y";

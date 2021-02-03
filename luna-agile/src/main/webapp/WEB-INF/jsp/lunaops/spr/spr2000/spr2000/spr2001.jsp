@@ -261,7 +261,7 @@ var OSLSpr2001Popup = function () {
 					};
 					
 					var str = '';
-					if(selectedUsrList != null && selectedUsrList.length>0){
+					if(!$.osl.isNull(selectedUsrList)){
 						//등록된 참여 인원이 있으므로
 						$("#memCnt").text(selectedUsrList.length);
 	        			$("#memCnt").removeClass("kt-hide");

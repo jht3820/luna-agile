@@ -81,7 +81,7 @@ var OSLReq4100Popup = function () {
 				},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
 					template: function (row) {
-						if(row.reqUsrNm == null){
+						if($.osl.isNull(row.reqUsrNm)){
 							row.reqUsrNm = "";
 						}
 						var usrData = {
