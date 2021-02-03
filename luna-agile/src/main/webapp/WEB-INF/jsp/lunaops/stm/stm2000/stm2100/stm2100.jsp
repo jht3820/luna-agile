@@ -61,7 +61,7 @@
 	 var resultStr = "";
 	 var currentViewType = "01";
 	 var documentSetting = function() {	
-		 var dataTableId = "stm2100StmTable";
+		 var datatableId = "stm2100StmTable";
 		 var config = {
 			 cardUiTarget: $("#stm2100StmCard"),
 			 data: {
@@ -73,16 +73,16 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
-				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true},
-				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200},
-				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150},
-				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150,
+				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd", sortable: true},
+				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true, sortable: true},
+				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200, sortable: true},
+				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150, sortable: false},
+				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150, sortable: false,
 					 template : function(row){
 						return String(parseInt(row.cnt) - parseInt(row.delCnt)); 
 					 },
 				 },
-				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150},
+				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150, sortable: false},
 			 ],
 			 rows:{
 				clickCheckbox: true
@@ -212,12 +212,12 @@
 				 ajaxDone: function(evt, list){
 					 var cnt = 0;
 					 $.each(list, function(idx, row){
-						resultStr = "";
+						 resultStr = "";
 						var summeryData = selectStm2102(idx, row);
 		 				$("#stm2100StmCard").append(resultStr);
 		 				//차트 데이터 가져오기
-		 				drawChart(idx, row.menuId);
 		 				//차트 그리기
+		 				drawChart(idx, row.menuId);
 					 });
 	 				
 	 				//카드형 내 수정 버튼 클릭 시
@@ -301,8 +301,9 @@
 				 }//ajaxDone end
 			 }
 		 };//config end
+		 
 		 //데이터 테이블 셋팅
-		 $.osl.datatable.setting(dataTableId, config);
+		 $.osl.datatable.setting(datatableId, config);
 
 		//뷰 변경 이벤트 - 카드형 그리드형 선택 확인
 		$(".btn-view-type").click(function(){
@@ -325,11 +326,11 @@
 		 var viewTypeChange = function(){
 			//현재 viewType에 따라 show/hide
 			if(currentViewType == "01"){	//카드 형식
-				$("#stm2100StmTable").addClass("kt-hide");
-				$("#stm2100StmCard").removeClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+				$("#stm2100StmCard").show();
 			}else{	//데이터테이블 형식
-				$("#stm2100StmTable").removeClass("kt-hide");
-				$("#stm2100StmCard").addClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "visible",height: "auto"});
+				$("#stm2100StmCard").hide();
 			}
 		}
 		 
@@ -371,7 +372,7 @@
 					 							+ "<div class='kt-portlet__head kt-portlet__head--lg'>"
 					 								+ "<div class='kt-portlet__head-label'>"
 					 									+ "<label class='kt-checkbox kt-checkbox--single kt-checkbox--solid'>"
-						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"'><span></span>"
+						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"' data-datatable-id='"+datatableId+"'>&nbsp;<span></span>"
 					 									+ "</label>";
 							 var boardType = "";
 							 if(row.stmTypeCd == "01"){

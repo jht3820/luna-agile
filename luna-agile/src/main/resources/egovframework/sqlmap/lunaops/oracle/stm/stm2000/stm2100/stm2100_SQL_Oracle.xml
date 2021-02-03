@@ -45,7 +45,20 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY MENU_ID DESC
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY MENU_ID DESC
+		</isEmpty>
 	</select>
 
     
