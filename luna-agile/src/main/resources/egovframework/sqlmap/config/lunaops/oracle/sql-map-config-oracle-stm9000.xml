@@ -14,6 +14,9 @@
     <!-- <sqlMap resource="egovframework/sqlmap/rte/sample/EgovSample_Sample_SQL_Oracle.xml"/> -->
     
 	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm9000/stm9000/stm9000_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm9000/stm9100/stm9100_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm9000/stm9200/stm9200_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm9000/stm9300/stm9300_SQL_Oracle.xml"/>
 	
 </sqlMapConfig>
 

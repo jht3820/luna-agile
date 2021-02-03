@@ -78,7 +78,7 @@
 				<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
 			</div>
 			<div class="form-group">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 내용</span></label>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqDesc">요청 내용</span></label>
 				<textarea  name="reqDesc" id="reqDesc" required></textarea>
 			</div>
 			<div class="form-group kt-margin-b-10">
@@ -167,6 +167,10 @@ var OSLReq1001Popup = function () {
     	//Portlet 세팅
     	new KTPortlet('req1001RequestUsrInfo', $.osl.lang("portlet"));
     	new KTPortlet('req1001NewRequestOpt', $.osl.lang("portlet"));
+    	
+    	//palceholder 세팅
+    	$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
+		$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
     	
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req1001FileUpload",{
@@ -396,8 +400,8 @@ var OSLReq1001Popup = function () {
 		    		pw = "Y";
 		    		//비밀번호는 비우기
 					$("#reqPw").val("");
-					$("#reqPw").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
-					$("#reqPwCheck").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
+					$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
+					$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
 		    	}
 			}
 		});

@@ -329,6 +329,13 @@ public class Stm2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			
+			if("01".equals(paramMap.get("currentViewType"))) {
+				
+				List<Map> stm2110List = stm2100Service.selectStm2110BadAdmList(paramMap);
+				model.addAttribute("badChargerList", stm2110List); 
+			}
 
 			
         	
@@ -401,6 +408,43 @@ public class Stm2100Controller {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
 			return new ModelAndView("jsonView");
 		}
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102BadSummeryChartInfoAjax.do")
+	public ModelAndView selectStm2102BadSummeryChartInfoAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+
+			List<Map> chartData = stm2100Service.selectStm2100MonthChart(paramMap);
+			model.addAttribute("chartData", chartData);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm2102BadSummeryChartInfoAjax()", ex);
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2103View.do")
+	public String selectStm2103View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/stm/stm2000/stm2100/stm2103";
 	}
 	
 }

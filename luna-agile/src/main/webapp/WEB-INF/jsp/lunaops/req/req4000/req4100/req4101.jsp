@@ -139,7 +139,7 @@
 								<span data-lang-cd="req4101.button.deleteResetBtn">삭제 초기화</span>
 							</button>
 						</label>
-						<div class="kt-uppy osl-max-height-260" id="req4101FileUpload">
+						<div class="kt-uppy osl-max-h-px-260" id="req4101FileUpload">
 							<div class="kt-uppy__dashboard"></div>
 							<div class="kt-uppy__progress"></div>
 						</div>

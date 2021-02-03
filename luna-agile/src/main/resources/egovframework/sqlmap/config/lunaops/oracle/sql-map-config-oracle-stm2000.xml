@@ -6,6 +6,7 @@
 		
 	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm2000/stm2000/stm2000_SQL_Oracle.xml"></sqlMap>
 	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm2000/stm2100/stm2100_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/stm/stm2000/stm2200/stm2200_SQL_Oracle.xml"/>
 	
 </sqlMapConfig>
 
