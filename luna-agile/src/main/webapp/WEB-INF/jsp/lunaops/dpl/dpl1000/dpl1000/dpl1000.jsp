@@ -38,30 +38,7 @@
 		<!-- begin :: 내용 CRUD관련 영역 -->
 		<!-- begin :: 검색 영역 -->
 		<div class="col-lg-3 col-md-6 col-sm-12 kt-padding-r-0">
-			<div class="osl-datatable-search" data-datatable-id="dpl1000Table">
-				<div class="input-group">
-					<div class="input-group-prepend"><button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">전체</button>
-						<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="dpl1000Table">
-							<a class="dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="prjNm" data-opt-type="text">프로젝트 그룹명</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="startDt" data-opt-type="date">시작 일자</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="endDt" data-opt-type="date">종료 일자</a>
-						</div>
-					</div>
-					<select class="form-control kt-select2 osl-datatable-search__select" id="searchSelect_dpl1000Table" name="searchSelect" aria-hidden="true" data-datatable-id="dpl1000Table" style="display: none;"></select>
-					<div class="kt-input-icon kt-input-icon--right osl-border-radius-none osl-datatable-search__input" data-datatable-id="dpl1000Table">
-						<input type="text" class="form-control" aria-label="검색어를 입력해주세요" disabled="disabled" name="searchData_dpl1000Table" id="searchData_dpl1000Table" data-datatable-id="dpl1000Table">
-						<span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la"></i></span></span>
-						<input type="hidden" name="searchStartDt" id="searchStartDt_dpl1000Table" data-datatable-id="dpl1000Table">
-						<input type="hidden" name="searchEndDt" id="searchEndDt_dpl1000Table" data-datatable-id="dpl1000Table">
-					</div>
-					<div class="input-group-append">
-						<button class="btn btn-brand osl-datatable-search__button" type="button" data-datatable-id="dpl1000Table">
-							<i class="fa fa-search"></i><span class=""><span>검색</span></span>
-						</button>
-					</div>
-				</div>
-			</div>
+			<div class="osl-datatable-search" data-datatable-id="dpl1000Table"></div>
 		</div>
 		<!-- end :: 검색 영역 -->
 		<!-- begin :: 데이터테이블형 -->

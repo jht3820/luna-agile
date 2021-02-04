@@ -140,17 +140,26 @@ input:-webkit-autofill,
 .osl-h-px-38{
 	height: 38px;
 }
+.osl-min-h-px--30 {
+  min-height: 30px !important; 
+}
 .osl-min-h-px--50 {
   min-height: 50px; 
 }
 .osl-min-h-px--80 {
   min-height: 80px; 
 }
+.osl-max-h-px--100 {
+  max-height: 100px; 
+}
 .osl-min-h-px--130 {
   min-height: 130px; 
 }
 .osl-min-h-px--140 {
   min-height: 140px; 
+}
+.osl-min-h-px--202 {
+  min-height: 202px; 
 }
 .osl-min-h-px--220 {
   min-height: 220px; 
@@ -175,6 +184,9 @@ input:-webkit-autofill,
 }
 .osl-min-h-px-imp--415{
   min-height: 415px !important;  
+}
+.osl-min-h-px--490 {
+  min-height: 490px; 
 }
 .osl-min-h-px--575 {
   min-height: 575px; 
@@ -1072,11 +1084,11 @@ label.required:after {
 }
 
 .osl-timeline-item-left{
-	padding-right: 47%;
+	padding-right: 48%;
 }
 
 .osl-timeline-item-right{
-	padding-left: 48%;
+	padding-left: 48.5%;
 }
 .osl-timeline-item-center{
 	padding-left: 24%;
@@ -1589,17 +1601,17 @@ label.required:after {
 	line-height: 1.5rem !important;
 }
 
-.ribbon.ribbon-top .ribbon-target {
+.osl-ribbon.osl-ribbon__top .osl-ribbon__target {
     border-bottom-right-radius: 0.42rem;
     border-bottom-left-radius: 0.42rem;
 }
-.ribbon-ver .ribbon-target {
+.osl-ribbon__ver .osl-ribbon__target {
     padding: 5px 10px;
     min-width: 36px;
     min-height: 46px;
     text-align: center;
 }
-.ribbon-btn{
+.osl-ribbon__btn{
 	width: 35px;
     height: 35px;
     line-height: 35px;
@@ -1607,31 +1619,31 @@ label.required:after {
     border-radius: 5px;
     text-align: center;
 }
-.ribbon-btn:hover{
+.osl-ribbon__btn:hover{
 	background-color: #fff;
 }
-.ribbon.ribbon-top .ribbon-btn:hover i{
+.osl-ribbon.osl-ribbon__top .osl-ribbon__btn:hover i{
 	color: #1dc9b7 !important;
 }
 
-.ribbon.ribbon-clip.ribbon-right .ribbon-btn:hover i{
+.osl-ribbon.osl-ribbon__clip.osl-ribbon__right .osl-ribbon__btn:hover i{
 	color: #1cac81 !important;
 } 
 
 
-.ribbon.ribbon-clip.ribbon-right .ribbon-target{
+.osl-ribbon.osl-ribbon__clip.osl-ribbon__right .osl-ribbon__target{
 	right: -10px;
 }
 
-.ribbon.ribbon-right .ribbon-target{
+.osl-ribbon.osl-ribbon__right .osl-ribbon__target{
     border-top-left-radius: 0.42rem;
     border-bottom-left-radius: 0.42rem;
 }
-.ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner {
+.osl-ribbon.osl-ribbon__clip.osl-ribbon__right .osl-ribbon__target .osl-ribbon__inner {
     border-top-left-radius: 0.42rem;
     border-bottom-left-radius: 0.42rem;
 }
-.ribbon .ribbon-target {
+.osl-ribbon .osl-ribbon__target {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1649,7 +1661,7 @@ label.required:after {
     box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.1);
     color: #FFFFFF;
 }
-.ribbon .ribbon-target > .ribbon-inner {
+.osl-ribbon .osl-ribbon__target > .osl-ribbon__inner {
     z-index: -1;
     position: absolute;
     padding: 0;
@@ -1658,12 +1670,12 @@ label.required:after {
     top: 0;
     left: 0;
 }
-.ribbon.ribbon-clip.ribbon-right .ribbon-target .ribbon-inner:before {
+.osl-ribbon.osl-ribbon__clip.osl-ribbon__right .osl-ribbon__target .osl-ribbon__inner:before {
     border-width: 0 0 10px 10px;
     border-left-color: #181C32 !important;
     right: 0;
 }
-.ribbon-shadow{
+.osl-ribbon__shadow{
     position: absolute;
     border-style: solid;
     border-color: transparent !important;
