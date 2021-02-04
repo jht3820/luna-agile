@@ -266,7 +266,7 @@ var OSLReq1000Popup = function () {
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
 				{field: 'prjNm', title: '결재 상태', textAlign: 'left', width: 70, search: true},
 				{field: 'reqOrd', title: '배포 상태', textAlign: 'left', width: 70, autoHide: false},
-				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'left', width: 70, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'left', width: 70, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProType", sortField: "reqProType"},
 				{field: 'reqNm', title: '배포 명', textAlign: 'left', width: 300, search: true},
 				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 50, search: true, searchType:"date"},
 				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},

@@ -35,5 +35,9 @@ public interface Spr1000Service {
 	
 	
 	@SuppressWarnings({"rawtypes" })
-	List<Map>  selectSpr1000SprReqList(Map paramMap) throws Exception;
+	List<Map> selectSpr1000SprReqList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	int updateSpr1003SprStart(Map paramMap) throws Exception;
 }

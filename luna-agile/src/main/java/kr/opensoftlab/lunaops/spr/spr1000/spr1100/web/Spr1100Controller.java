@@ -57,12 +57,19 @@ public class Spr1100Controller {
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 			
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -88,7 +95,7 @@ public class Spr1100Controller {
 			int totCnt = 0;
 
 			
-			Map<String, Object> pageMap = null;
+			Map<String, Object> metaMap = null;
 			
 			
 			List<Map> spr1100AssList = null;
@@ -108,19 +115,19 @@ public class Spr1100Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				spr1100AssList = spr1100Service.selectSpr1100ReqList(paramMap);
 				
-				
-				pageMap.put("sort", sortDirection);
-				pageMap.put("field",sortFieldId);
 			}
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field",sortFieldId);
 		
 			
 			model.addAttribute("data", spr1100AssList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 
 			
 			model.addAttribute("errorYn", "N");
@@ -150,12 +157,20 @@ public class Spr1100Controller {
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
 									
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -186,7 +201,7 @@ public class Spr1100Controller {
 			String sprId = (String) paramMap.get("sprId");
 			
 			
-			Map<String, Object> pageMap = null; 
+			Map<String, Object> metaMap = null; 
 						
 			
 			if(sprId != null && !sprId.isEmpty()) {
@@ -201,22 +216,22 @@ public class Spr1100Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				spr1100NonAssList = spr1100Service.selectSpr1100ReqList(paramMap);
-				
-				
-				pageMap.put("sort", sortDirection);
-				pageMap.put("field",sortFieldId);
 			}
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field",sortFieldId);
 		
 			
 			model.addAttribute("data", spr1100NonAssList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 			
 			
 			model.addAttribute("errorYn", "N");
@@ -242,13 +257,20 @@ public class Spr1100Controller {
 			
 			
 			HttpSession ss = request.getSession();
-						
-			String paramPrjGrpId = paramMap.get("prjGrpId");
-			String paramPrjId = paramMap.get("prjId");
+
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
 			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
 				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
@@ -284,8 +306,25 @@ public class Spr1100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			
 			spr1100Service.deleteSpr1100ReqList(paramMap);

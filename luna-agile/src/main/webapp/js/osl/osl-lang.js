@@ -1,11 +1,7 @@
-/**
- 	* function 명 	: OSLCoreLangSetting
-	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
-	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -172,7 +168,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -457,6 +453,18 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
 		prj5001:{
 			complete: "완료",
 			insert:{
@@ -464,10 +472,17 @@ var OSLCoreLangSetting = function () {
 				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
 			update:{
 				title: "프로젝트 일정 수정",
 				saveString: "프로젝트 일정을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
 			},
 			actionBtn : {
 				insertBtn : "프로젝트 일정 저장",
@@ -479,6 +494,7 @@ var OSLCoreLangSetting = function () {
 				evtDesc: "일정 설명",
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
 			}
 		},
 		req1001:{
@@ -497,7 +513,11 @@ var OSLCoreLangSetting = function () {
 			reqPw: {
 				title : "요구사항 잠금",
 				password : "PW",
-				passwordCheck :"PW 확인"
+				passwordCheck :"PW 확인",
+				placeholder : {
+					password : "알파벳, 숫자 4-12자 이내",
+					nullPassword : "공백인 경우 기존 비밀번호 사용",
+				}
 			},
 			attachments: "파일 첨부", 
 			complete: "완료",
@@ -639,21 +659,9 @@ var OSLCoreLangSetting = function () {
 				submit : "확인",
 			}
 		},
-		spr1002:{
-			complete: "완료",
-			insert:{
-				title: "신규 스프린트 생성",
-				saveString: "신규 스프린트를 등록하시겠습니까?",
-				saveBtnString: "등록 완료",
-			},
-			update:{
-				title: "스프린트 수정",
-				saveString: "스프린트를 수정하시겠습니까?",
-				saveBtnString: "수정 완료"
-			}
-		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
+			manySelect: "1건의 스프린트만 선택해주세요.",
 			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
 			sprTypeStartMsg: "시작 중인 스프린트만 종료 할 수 있습니다.", 
 			startDate: "시작일",
@@ -689,6 +697,51 @@ var OSLCoreLangSetting = function () {
 					delete: "스프린트 삭제",
 					dblClick: "스프린트 상세 정보"
 				}
+			}
+		},
+		spr1002:{
+			complete: "완료",
+			insert:{
+				title: "신규 스프린트 생성",
+				saveString: "신규 스프린트를 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				title: "스프린트 수정",
+				saveString: "스프린트를 수정하시겠습니까?",
+				saveBtnString: "수정 완료"
+			}
+		},
+		spr1003:{
+			wizard:{
+				main:{
+					mmtTitle: "회의록 작성",
+					mmtDesc: "스프린트 회의록 작성",
+					sprPtTitle: "스토리 포인트 입력",
+					sprPtDesc: "요구사항 스토리 포인트 입력",
+					chargerTitle: "담당자 지정",
+					chargerDesc: "요구사항 담당자 지정",
+					processTitle: "프로세스 배정"
+				},
+				info:{
+					mmt: "* 스프린트 시작 전 회의록을 작성하세요.",
+					sprPt: "* 요구사항에 스토리 포인트를 입력하세요.",
+					charger: "* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.",
+					process: "* 배정된 프로세스가 칸반 보드에 표시됩니다."
+				},
+				btn:{
+					prev: "이전",
+					submit: "완료",
+					next: "다음"
+				}
+			},
+			lebel:{
+				mmtUsrList: "참여 인원",
+				mmtTitle: "회의록 제목",
+				mmtDesc: "회의록 내용"
+			},
+			alert:{
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
 			}
 		},
 		spr1100:{
@@ -838,8 +891,13 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
-			label :{
-				summery : "옵션 별 통계",
+			label:{
+				summery : "통계",
+			},
+			chart:{
+				noData : "데이터 없음",
+				newPost : "등록 게시글",
+				deletePost : "삭제 게시글"
 			}
 		},
 		stm2101:{
@@ -920,6 +978,48 @@ var OSLCoreLangSetting = function () {
 				board : "게시글",
 				tag : "태그",
 				attachFile : "첨부파일",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{
@@ -1099,7 +1199,8 @@ var OSLCoreLangSetting = function () {
 				job:{
 					updateBtn:"Job 수정",
 					deleteBtn:"Job 삭제",
-					dblClickBtn:"Job 상세보기"
+					dblClickBtn:"Job 상세보기",
+					detailJenkins:"Jenkins 상세보기"
 				}
 			},
 			modal:{
@@ -1137,6 +1238,30 @@ var OSLCoreLangSetting = function () {
 					insert:"신규 JOB을 등록하시겠습니까?",
 					update:"JOB 정보를 수정하시겠습니까?"
 				}
+			}
+		},
+		stm9102:{
+			label:{
+				leftTitle : "JOB 빌드 목록",
+				rightTitle : "콘솔 로그",
+				jenkinsNm : "JENKINS NAME",
+				jobId : "JOB ID",
+				minute : "분",
+				second : "초"
+			},
+			message:{
+				selectBuildInfo: "좌측 빌드 정보를 선택해주세요.",
+				notConsoleLog: "콘솔 로그가 없습니다."
+			}
+		},
+		stm9300:{
+			search:{
+				jenkinsDesc : "Jenkins 설명",
+				jobDesc : "Job 설명"
+			},
+			actionBtn:{
+				jenkinsDetail:"Jenkins 상세보기",
+				jobDetail:"Job 상세보기"
 			}
 		},
 		bad1000:{
@@ -1299,7 +1424,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1528,6 +1653,14 @@ var OSLCoreLangSetting = function () {
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
 			},
+			stm2200AuthTable:{
+				authGrpNm: "Auth Group Name",
+				ord: "Ord",
+				usrTypNm : "User Type",
+				acceptUseNm:"Accept Use",
+				useNm:"Use Name",
+				authGrpDesc:"Auth Group Desc"
+			},
 			stm9000JenkinsTable:{
 				result : "Connection check",
 				jenNm: "Jenkins Name",
@@ -1542,8 +1675,25 @@ var OSLCoreLangSetting = function () {
 				jobId:"Job Id",
 				jobRestoreId:"Restore Job Id",
 				jobParameter:"Job Parameter",
-				useNm:"Job Use",
+				useNm:"Jenkins Use",
 				jobDesc:"Job Description"
+			},
+			stm9102JobBuildTable:{
+				bldNum: "Build Number",
+				bldResult: "Build Result",
+				bldStartDtm: "Build Start Time",
+				bldDurationTm: "Duration Time",
+				regUsrNm: "Distributor"
+			},
+			stm9300PrjJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter",
+				useNm: "Jenkins Use"
 			}
 		},
 		date:{
@@ -1600,7 +1750,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -1827,6 +1977,18 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj5000:{
+			button:{
+				title:{
+					insert: "일정 등록",
+					local: 'ko',
+					today: '오늘',
+					fourDay: '4일',
+					dataSelect: '일정 데이터 조회',
+					insert: '일정 등록'
+				}
+			}
+		},
 		prj5001:{
 			complete: "완료",
 			insert:{
@@ -1834,10 +1996,17 @@ var OSLCoreLangSetting = function () {
 				saveString: "신규 프로젝트 일정을 생성하시겠습니까?",
 				saveBtnString: "등록 완료",
 			},
+			delete:{
+				deleteString: "프로젝트 일정을 삭제하시겠습니까?",
+				deleteBtnString: "삭제",
+			},
 			update:{
 				title: "프로젝트 일정 수정",
 				saveString: "프로젝트 일정을 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			},
+			view:{
+				title: "일정 상세정보"
 			},
 			actionBtn : {
 				insertBtn : "프로젝트 일정 저장",
@@ -1849,6 +2018,7 @@ var OSLCoreLangSetting = function () {
 				evtDesc: "일정 설명",
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
+				guideColor: "가이드 색상",
 			}
 		},
 		req1001:{
@@ -1860,15 +2030,19 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
-			reqPw:{
-				title : "Request Lock",
-				password : "PW",
-				passwordCheck : "PW Check",
-			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
 			reqDesc: "Request description",
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+				placeholder : {
+					password : "4 to 12 letters of alphabet and number combination.",
+					nullPassword : "If blank, the old password is used.",
+				}
+			},
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
@@ -2147,6 +2321,14 @@ var OSLCoreLangSetting = function () {
 				movie:"[Movie]",
 				storage:"[Storage]",
 			},
+			label:{
+				summery : "Summery",
+			},
+			chart:{
+				noData : "No Data",
+				newPost : "New Post",
+				deletePost : "Delete Post"
+			}
 		},
 		stm2101:{
 			update: "Would you like to update this board setting?",
@@ -2226,6 +2408,48 @@ var OSLCoreLangSetting = function () {
 				board : "Post",
 				tag : "Tag",
 				attachFile : "Attachments",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{
@@ -2517,12 +2741,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2531,7 +2755,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };

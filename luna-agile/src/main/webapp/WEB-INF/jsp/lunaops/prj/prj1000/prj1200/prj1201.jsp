@@ -125,7 +125,6 @@ var OSLPrj1201Popup = function () {
 
    		//AJAX 전송 성공 함수
    		ajaxObj.setFnSuccess(function(data){
-   			debugger;
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
@@ -157,7 +156,6 @@ var OSLPrj1201Popup = function () {
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
    				var prjSetInfo = data.prjSetInfo;
-				debugger;
    		    	// 설정 값 타입이 공통 코드인 경우  공통코드 select 세팅
    		    	
    		    	// 팝업 공통코드 select 세팅

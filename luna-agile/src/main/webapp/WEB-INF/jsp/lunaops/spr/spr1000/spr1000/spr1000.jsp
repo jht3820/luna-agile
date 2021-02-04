@@ -180,6 +180,11 @@ var OSLSpr1000Popup = function () {
 						$.osl.alert($.osl.lang("spr1000.nonSelect"));
 						return true;
 					}
+					//선택 레코드 1개 이상인 경우
+					else if(rowDatas.length > 1){
+						$.osl.alert($.osl.lang("spr1000.manySelect"));
+						return true;
+					}
 					
 					//스프린트 상태
 					var sprInfo = rowData[0];
@@ -194,6 +199,8 @@ var OSLSpr1000Popup = function () {
 							paramPrjGrpId: sprInfo.prjGrpId
 							,paramPrjId: sprInfo.prjId
 							,paramSprId: sprInfo.sprId
+							,paramStartDt: sprInfo.sprStDt
+							,paramEndDt: sprInfo.sprEdDt
 						};
 					var options = {
 							modalTitle: "스프린트 시작",
@@ -207,12 +214,17 @@ var OSLSpr1000Popup = function () {
 					
 					
 				},
-				"sprEnd":function(rowData){
+				"sprEnd": function(rowData, datatableId, type){
 					var rowDatas = rowData;
 					
 					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					//선택 레코드 1개 이상인 경우
+					else if(rowDatas.length > 1){
+						$.osl.alert($.osl.lang("spr1000.manySelect"));
 						return true;
 					}
 					
@@ -226,16 +238,19 @@ var OSLSpr1000Popup = function () {
 					}
 					
 					var data = {
+							paramPrjGrpId: sprInfo.prjGrpId
+							,paramPrjId: sprInfo.prjId
+							,paramSprId: sprInfo.sprId
+							,paramStartDt: sprInfo.sprStDt
+							,paramEndDt: sprInfo.sprEdDt
 						};
 					var options = {
 							modalTitle: "스프린트 종료",
 							autoHeight: false,
-							modalSize: 'xl',
-							class:{
-								body:"osl-spr1004"
-							}
+							modalSize: "xl",
+							idKey: datatableId,
+							closeConfirm: false
 						};
-					console.log(rowData);
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1004View.do',data,options);
 				}
 			},
