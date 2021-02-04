@@ -229,7 +229,7 @@ var OSLSpr1004Popup = function () {
 				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProType", sortField: "reqProType"},
 				{field: 'reqChargerNm', title: '담당자', textAlign: 'center', width: 100, search: true,
 					template: function (row) {
-						if(row.reqChargerNm == null){
+						if($.osl.isNull(row.reqChargerNm)){
 							row.reqChargerNm = "";
 						}
 						var usrData = {

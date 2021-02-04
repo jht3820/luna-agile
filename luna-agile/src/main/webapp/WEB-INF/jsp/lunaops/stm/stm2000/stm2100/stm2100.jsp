@@ -290,7 +290,7 @@
 						};
 						var options = {
 								idKey: "charger_"+ item.data("menId"),
-								modalTitle:"[ "+ item.data("stmName") +" ] "+"담당자 목록 확인",
+								modalTitle:"[ "+ $.osl.escapeHtml(item.data("stmName")) +" ] "+$.osl.lang("stm2100.title.chargerTitle"),
 								modalSize : "md",
 								closeConfirm: true,
 								autoHeight: false,

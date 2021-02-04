@@ -885,6 +885,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "게시판 속성",
 				detailTitle : "게시글 관리",
 				summeryTitle : "통계보기",
+				chargerTitle : "담당자 목록 확인"
 			},
 			type:{
 				normal:"[일반]",
@@ -2376,6 +2377,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "Board Setting",
 				detailTitle : "Board Management",
 				summeryTitle : "Board Summery",
+				chargerTitle : "Board Manager List"
 			},
 			type:{
 				normal:"[Normal]",
