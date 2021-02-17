@@ -139,7 +139,7 @@
 								<span data-lang-cd="req4101.button.deleteResetBtn">삭제 초기화</span>
 							</button>
 						</label>
-						<div class="kt-uppy osl-max-height-260" id="req4101FileUpload">
+						<div class="kt-uppy osl-max-h-px-260" id="req4101FileUpload">
 							<div class="kt-uppy__dashboard"></div>
 							<div class="kt-uppy__progress"></div>
 						</div>
@@ -190,7 +190,7 @@
 					</div>
 					<div class="kt-portlet__body kt-padding-10" id="prepListDiv" name="prepListDiv">
 					</div>
-					<div class="kt-portlet__body kt-padding-10 kt_datatable" id="prepListTable" name="prepListTable">
+					<div class="kt-portlet__body kt-padding-10 kt_datatable osl-datatable-footer__divide" id="prepListTable" name="prepListTable">
 					</div>
 				</div>
 			</div>
@@ -305,7 +305,7 @@ var OSLReq4101Popup = function () {
     				//atchFileId
     		    	atchFileId = $("#atchFileId").val();
     				//게시글의 atchFileId가 없는 경우 - 복사일 땐 미리 atchFileId를 비워 실행하도록 함
-    				if(atchFileId==null || atchFileId==""){
+    				if($.osl.isNull(atchFileId)){
     					//atchFileId 생성
     					$.osl.file.makeAtchfileId(function(data){
     						//atchFileId 생성 중 오류 발생 시
@@ -723,7 +723,7 @@ var OSLReq4101Popup = function () {
 						targetId: "selectUsr",
 						actionFn: function(thisObj){
 							var temp = OSLReq4103Popup.getUsrInfo();
-							if(temp != null && temp.length != 0){
+							if(!$.osl.isNull(temp)){
 								OSLReq4101Popup.setUsrInfo(temp);
 							}
 						}
@@ -846,7 +846,7 @@ var OSLReq4101Popup = function () {
 				$.osl.date.datepicker($("#reqDtm"), {});
 		    	
 		    	//요구사항 잠금 설정한 경우
-		    	if(data.reqInfoMap.reqPw != null && data.reqInfoMap.reqPw != ""){
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
 		    		$("#reqPwCheckbox").attr("checked", true);
 		    		$("#pwOption").removeClass("kt-hide");
 		    		pw = "Y";

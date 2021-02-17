@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm9300DAO">
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+    
+	<sql id="selectStm9002ProjectJenkinsJobListBase">
+		SELECT
+					ROWNUM AS RN
+				,	SUB1.LIC_GRP_ID
+				, 	SUB1.PRJ_GRP_ID
+				, 	SUB1.PRJ_ID
+		        ,	SUB1.PRJ_NM
+		        ,	SUB1.JEN_ID
+		        ,	SUB1.JEN_NM
+		        ,	SUB1.JEN_URL
+		        ,	SUB1.JEN_USR_ID
+		        ,	SUB1.JEN_USR_NM
+		        ,	SUB1.JEN_DESC
+		        ,	SUB1.JOB_ID
+		        ,	SUB1.JOB_TYPE_CD
+		        ,	SUB1.JOB_TYPE_NM
+		        ,	SUB1.JOB_RESTORE_ID
+				,	SUB1.JOB_PARAMETER
+		        ,	SUB1.JOB_DESC
+		        ,	SUB1.USE_CD
+		        ,	SUB1.USE_NM
+		        ,	SUB1.REG_DTM
+				,	SUB1.REG_USR_ID
+				,	SUB1.REG_USR_IP
+				,	SUB1.MODIFY_DTM
+				,	SUB1.MODIFY_USR_ID
+				,	SUB1.MODIFY_USR_IP
+		FROM
+		(
+			SELECT
+						A.LIC_GRP_ID
+					,	A.PRJ_GRP_ID
+	                , 	A.PRJ_ID
+	                , 	(SELECT PRJ_NM FROM PRJ1000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.PRJ_ID = A.PRJ_ID) AS PRJ_NM
+	                ,	A.JEN_ID
+	                ,	C.JEN_NM
+	                ,	C.JEN_URL
+	                ,	C.JEN_USR_ID
+	                , 	(SELECT USR_NM FROM STM3000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.USR_ID = C.JEN_USR_ID) AS JEN_USR_NM
+	                ,	C.JEN_DESC
+	                ,	B.JOB_ID
+	                ,	B.JOB_TYPE_CD
+	                , 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'DPL00002' AND X.SUB_CD = B.JOB_TYPE_CD) AS JOB_TYPE_NM
+	                ,	B.JOB_RESTORE_ID
+					,	B.JOB_PARAMETER
+	                ,	B.JOB_DESC
+	                ,	B.USE_CD
+	                , 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'CMM00001' AND X.SUB_CD = B.USE_CD) AS USE_NM
+	                ,	A.REG_DTM
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	A.MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+			FROM
+			STM9002 A 
+	        LEFT JOIN STM9001 B 
+	        ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID)
+	        LEFT JOIN STM9000 C 
+	        ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.JEN_ID = C.JEN_ID)
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND C.DEL_CD = '02'
+		) SUB1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	SUB1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUrl">
+					AND	SUB1.JEN_URL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenDesc">
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrId">
+					AND	SUB1.JEN_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrNm">
+					AND	SUB1.JEN_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobId">
+					AND	SUB1.JOB_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobRestoreId">
+					AND	SUB1.JOB_RESTORE_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobDesc">
+					AND	SUB1.JOB_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobTypeCd">
+					AND	SUB1.JOB_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			ORDER BY $paramSortFieldId$
+			<isEqual property="sortDirection" compareValue="asc">
+				ASC
+			</isEqual>
+			<isEqual property="sortDirection" compareValue="desc">
+				DESC
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY PRJ_NM ASC, JOB_ID ASC
+		</isEmpty>
+    </sql>
+    
+    
+    <select id="stm9300DAO.selectStm9002ProjectJenkinsJobAllList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm9002ProjectJenkinsJobListBase"/>
+		) Z
+	    WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="stm9300DAO.selectStm9002ProjectJenkinsJobAllListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		
+	    SELECT
+			COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm9002ProjectJenkinsJobListBase"/>
+		) Z
+    </select>
+    
+	
+</sqlMap>

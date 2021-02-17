@@ -8,56 +8,75 @@
 	
 	<sql id="selectStm9000JenkinsListBase">
 		<![CDATA[
-			SELECT
-					A.LIC_GRP_ID
-		        ,	A.JEN_ID 
-				,	A.JEN_NM 
-				,	A.JEN_USR_ID 
-				,	A.JEN_USR_TOK 
-				,	A.JEN_URL
-				,	A.JEN_DESC 
-				,	A.USE_CD
-				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', USE_CD, '1') AS USE_NM
-				,	A.DEL_CD 
-				,	A.REG_DTM 
-				,	A.REG_USR_ID 
-				,	A.REG_USR_IP 
-				,	A.MODIFY_DTM 
-				,	A.MODIFY_USR_ID 
-				,	A.MODIFY_USR_IP              
-			FROM STM9000 A
+			SELECT 
+					ROWNUM RN
+				, 	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID 
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL
+				,	SUB1.JEN_DESC 
+				,	SUB1.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', SUB1.USE_CD, '1') AS USE_NM
+				,	SUB1.REG_JOB_CNT
+				,	SUB1.DEL_CD 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP  
+			FROM
+			(
+					SELECT
+							A.LIC_GRP_ID
+						,	A.JEN_ID 
+						,	A.JEN_NM 
+						,	A.JEN_USR_ID 
+						,	A.JEN_USR_TOK 
+						,	A.JEN_URL
+						,	A.JEN_DESC 
+						,	A.USE_CD
+						,	(SELECT COUNT(*) FROM STM9001 Z WHERE 1=1 AND Z.JEN_ID = A.JEN_ID) AS REG_JOB_CNT
+						,	A.DEL_CD 
+						,	A.REG_DTM 
+						,	A.REG_USR_ID 
+						,	A.REG_USR_IP 
+						,	A.MODIFY_DTM 
+						,	A.MODIFY_USR_ID 
+						,	A.MODIFY_USR_IP              
+					FROM STM9000 A
+					WHERE 1=1
+					AND	LIC_GRP_ID = #licGrpId#
+					AND	DEL_CD ='02'
+			) SUB1
 			WHERE 1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	DEL_CD ='02'
 		]]>
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
 				<isEqual property="searchTargetId" compareValue="useCd">
-					AND	A.USE_CD = #searchTargetData#
+					AND	SUB1.USE_CD = #searchTargetData#
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jenNm">
-					AND	A.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="jenDesc">
-					AND	A.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY A.REG_DTM DESC
+		ORDER BY SUB1.REG_DTM DESC
     </sql>
     
     
     <select id="stm9000DAO.selectStm9000JenkinsList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
-		SELECT T2.*
+		SELECT SUB2.*
 		FROM
 		(
-    		SELECT ROWNUM RN, T1.*
-    		FROM
-    		(
 				<include refid="selectStm9000JenkinsListBase"/>
-	    	) T1
-		) T2
+		) SUB2
 		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
@@ -69,21 +88,17 @@
 		FROM
 		(
 			<include refid="selectStm9000JenkinsListBase"/>
-		) T
+		) SUB2
     </select>
     
      
     <select id="stm9000DAO.selectStm9000JenkinsNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
 	    
-		SELECT T2.*
+		SELECT SUB2.*
 		FROM
 		(
-    		SELECT ROWNUM RN, T1.*
-    		FROM
-    		(
-				<include refid="selectStm9000JenkinsListBase"/>
-			) T1
-		) T2
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
     </select>
     
     
@@ -93,9 +108,9 @@
 		SELECT *
 		FROM (
 			<include refid="selectStm9000JenkinsListBase"/>
-		) T1
+		) SUB2
 		WHERE 1=1
-		AND T1.JEN_ID = #jenId#
+		AND SUB2.JEN_ID = #jenId#
 	</select>
     
      

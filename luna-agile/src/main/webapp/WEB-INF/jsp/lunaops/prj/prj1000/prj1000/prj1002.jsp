@@ -446,7 +446,7 @@ var OSLPrj1002Popup = function () {
 	};
 	//담당자 배정 등록
 	var fnAllUsrInsert = function(selDatas){
-		if(selDatas != null && selDatas.length > 0){
+		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
 			//대상 데이터 테이블
 			var datatable = $.osl.datatable.list["prj1002PrjAuthUsrTable"].targetDt;
 			
@@ -507,7 +507,7 @@ var OSLPrj1002Popup = function () {
 	
 	//담당자 배정 제외
 	var fnAllUsrDelete = function(selDatas){
-		if(selDatas != null && selDatas.length > 0){
+		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
 			//대상 데이터 테이블
 			var datatable = $.osl.datatable.list["prj1002PrjAuthUsrTable"].targetDt;
 			

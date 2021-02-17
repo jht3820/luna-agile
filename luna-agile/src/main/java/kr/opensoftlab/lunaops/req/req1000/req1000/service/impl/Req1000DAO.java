@@ -61,6 +61,12 @@ public class Req1000DAO  extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings({ "rawtypes" })
+	public void updateReq1000ReqPwInfo(Map paramMap) throws Exception{
+		update("req1000DAO.updateReq1000ReqPwInfo",paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes" })
 	public void updateReq1001ReqSubInfo(Map paramMap) throws Exception{
 		update("req1000DAO.updateReq1001ReqSubInfo",paramMap);
 	}

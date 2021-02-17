@@ -19,8 +19,8 @@
 						<div class="osl-wizard-wrapper">
 							<div class="wizard-number">1</div>
 							<div class="wizard-label">
-								<div class="wizard-title">회의록 작성</div>
-								<div class="wizard-desc">스프린트 회의록 작성</div>
+								<div class="wizard-title"><span data-lang-cd="spr1003.wizard.main.mmtTitle">회의록 작성</span></div>
+								<div class="wizard-desc"><span data-lang-cd="spr1003.wizard.main.mmtDesc">스프린트 회의록 작성</span></div>
 							</div>
 						</div>
 					</div>
@@ -30,8 +30,8 @@
 						<div class="osl-wizard-wrapper">
 							<div class="wizard-number">2</div>
 							<div class="wizard-label">
-								<div class="wizard-title">스토리 포인트 입력</div>
-								<div class="wizard-desc">요구사항 스토리 포인트 입력</div>
+								<div class="wizard-title"><span data-lang-cd="spr1003.wizard.main.sprPtTitle">스토리 포인트 입력</span></div>
+								<div class="wizard-desc"><span data-lang-cd="spr1003.wizard.main.sprPtDesc">요구사항 스토리 포인트 입력</span></div>
 							</div>
 						</div>
 					</div>
@@ -41,8 +41,8 @@
 						<div class="osl-wizard-wrapper">
 							<div class="wizard-number">3</div>
 							<div class="wizard-label">
-								<div class="wizard-title">담당자 지정</div>
-								<div class="wizard-desc">요구사항 담당자 지정</div>
+								<div class="wizard-title"><span data-lang-cd="spr1003.wizard.main.chargerTitle">담당자 지정</span></div>
+								<div class="wizard-desc"><span data-lang-cd="spr1003.wizard.main.chargerDesc">요구사항 담당자 지정</span></div>
 							</div>
 						</div>
 					</div>
@@ -52,7 +52,7 @@
 						<div class="osl-wizard-wrapper">
 							<div class="wizard-number">4</div>
 							<div class="wizard-label">
-								<div class="wizard-title">프로세스 배정</div>
+								<div class="wizard-title"><span data-lang-cd="spr1003.wizard.main.processTitle">프로세스 배정</span></div>
 							</div>
 						</div>
 					</div>
@@ -64,33 +64,33 @@
 				<div>
 					<div class="kt-widget kt-widget--general-2 kt-widget--fit kt-padding-t-10 kt-margin-r-15" data-ktwizard-type="step-info" data-ktwizard-state="current">
 						<div class="kt-widget__top">
-							<h6 class="kt-font-bold">* 스프린트 시작 전 회의록을 작성하세요.</h6>
+							<h6 class="kt-font-bold"><span data-lang-cd="spr1003.wizard.info.mmt">* 스프린트 시작 전 회의록을 작성하세요.</span></h6>
 						</div>
 					</div>
 					<div class="kt-widget kt-widget--general-2 kt-widget--fit kt-padding-t-10 kt-margin-r-15" data-ktwizard-type="step-info">
 						<div class="kt-widget__top">
-							<h6 class="kt-font-bold">* 요구사항에 스토리 포인트를 입력하세요.</h6>
+							<h6 class="kt-font-bold"><span data-lang-cd="spr1003.wizard.info.sprPt">* 요구사항에 스토리 포인트를 입력하세요.</span></h6>
 						</div>
 					</div>
 					<div class="kt-widget kt-widget--general-2 kt-widget--fit kt-padding-t-10 kt-margin-r-15" data-ktwizard-type="step-info">
 						<div class="kt-widget__top">
-							<h6 class="kt-font-bold">* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.</h6>
+							<h6 class="kt-font-bold"><span data-lang-cd="spr1003.wizard.info.charger">* 사용자를 클릭하고 담당자 입력 상자 클릭으로 담당자를 배정하세요.</span></h6>
 						</div>
 					</div>
 					<div class="kt-widget kt-widget--general-2 kt-widget--fit kt-padding-t-10 kt-margin-r-15" data-ktwizard-type="step-info">
 						<div class="kt-widget__top">
-							<h6 class="kt-font-bold">* 배정된 프로세스가 칸반 보드에 표시됩니다.</h6>
+							<h6 class="kt-font-bold"><span data-lang-cd="spr1003.wizard.info.process">* 배정된 프로세스가 칸반 보드에 표시됩니다.</span></h6>
 						</div>
 					</div>
 				</div>
 				<button class="btn btn-outline-brand" data-ktwizard-type="action-prev">
-					<i class="fas fa-chevron-circle-left"></i><span>이전</span>
+					<i class="fas fa-chevron-circle-left"></i><span data-lang-cd="spr1003.wizard.btn.prev">이전</span>
 				</button>
 				<button class="btn btn-outline-brand kt-margin-l-20" data-ktwizard-type="action-submit">
-					<span class="kt-margin-r-5">완료</span><i class="fas fa-check-circle kt-padding-r-0"></i>
+					<span class="kt-margin-r-5" data-lang-cd="spr1003.wizard.btn.submit">완료</span><i class="fas fa-check-circle kt-padding-r-0"></i>
 				</button>
 				<button class="btn btn-outline-brand kt-margin-l-20" data-ktwizard-type="action-next">
-					<span class="kt-margin-r-5">다음</span><i class="fas fa-chevron-circle-right kt-padding-r-0"></i>
+					<span class="kt-margin-r-5" data-lang-cd="spr1003.wizard.btn.next">다음</span><i class="fas fa-chevron-circle-right kt-padding-r-0"></i>
 				</button>
 			</div>
 			<!-- begin:: 1. 회의록 작성 스프린트 회의록 작성 -->
@@ -98,22 +98,22 @@
 				<div class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="form-group">
-							<label><i class="fa fa-user-friends kt-margin-r-5"></i>참여 인원</label>
+							<label><i class="fa fa-user-friends kt-margin-r-5"></i><span data-lang-cd="spr1003.label.mmtUsrList">참여 인원</span></label>
 							<select class="form-control kt-select2 select2-hidden-accessible" id="sprConferenceUsr" name="sprConferenceUsr" multiple="multiple" data-select2-id="sprConferenceUsr" tabindex="-1" aria-hidden="true"></select>
 						</div>
 					</div>
 					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="form-group">
-							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>회의록 제목</label>
-							<input type="text" class="form-control" name="mmtNm" id="mmtNm" value="test" required>
+							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr1003.label.mmtTitle">회의록 제목</span></label>
+							<input type="text" class="form-control" name="mmtNm" id="mmtNm" value="" required>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="form-group form-group-last">
-							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>회의록 내용</label>
-							<textarea class="form-control" name="mmtDesc" id="mmtDesc" required>test</textarea>
+							<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="spr1003.label.mmtDesc">회의록 내용</span></label>
+							<textarea class="form-control" name="mmtDesc" id="mmtDesc" required></textarea>
 						</div>
 					</div>
 				</div>
@@ -223,7 +223,6 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var wizard;
 var OSLSpr1003Popup = function () {
 	var mainFormId = 'frSpr1003';
 	
@@ -278,7 +277,7 @@ var OSLSpr1003Popup = function () {
 		
 		// begin :: 마법사
 		//마법사 세팅
-		wizard = new KTWizard('kt_wizard_v3', {
+		var wizard = new KTWizard('kt_wizard_v3', {
 			startStep: 1, 
 			clickableSteps: false		
 		});
@@ -393,7 +392,7 @@ var OSLSpr1003Popup = function () {
 			}
 			
 			if(reqListCnt > reqSprPointListCnt){
-				$.osl.toastr("모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 "+(reqListCnt-reqSprPointListCnt)+"건"
+				$.osl.toastr($.osl.lang("spr1003.alert.reqSprPoint",(reqListCnt-reqSprPointListCnt))
 					,{
 						positionClass: "osl-toastr-center",
 						timeOut: 3000,
@@ -545,7 +544,6 @@ var OSLSpr1003Popup = function () {
 			data: {
 				source: {
 					read: {
-						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
 						url: "/spr/spr1000/spr1000/selectSpr1000SprReqListAjax.do",
 						params:{
 							sprId: paramSprId
@@ -567,7 +565,7 @@ var OSLSpr1003Popup = function () {
 				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 100, search: true,
 					template: function (row) {
-						if(row.reqUsrNm == null){
+						if($.osl.isNull(row.reqUsrNm)){
 							row.reqUsrNm = "";
 						}
 						var usrData = {
