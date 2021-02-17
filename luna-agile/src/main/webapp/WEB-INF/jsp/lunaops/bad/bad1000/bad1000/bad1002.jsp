@@ -1,4 +1,4 @@
-\<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <form class="kt-form" id="bad1002Info" autocomplete="off">
@@ -22,11 +22,11 @@
 				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
 					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1002.label.title">제목</span></label>
-						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
+						<input type="text" class="form-control" name="badTitle" id="badTitle" autocomplete="off" required />
 					</div>
 					<div name="badContentDiv" id="badContentDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i><span data-lang-cd="bad1002.label.content">내용</span></label>
-						<textarea class="kt-hide" name="badContent" id="badContent" required></textarea>
+						<textarea class="kt-hide" name="badContent" id="badContent" autocomplete="off" required></textarea>
 					</div>
 				</div>
 				<!-- right -->
@@ -43,7 +43,7 @@
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1002.label.noticeDate">공지 기간</span></label>
 					 		<div class="input-group">
-					 			<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange">
+					 			<input type="text" class="form-control small" autocomplete="off" name="badNtcRange" id="badNtcRange">
 					 			<div class="input-group-append">
 				 					<span class="input-group-text kt-bg-brand">
 				 						<i class="la la-calendar-check-o kt-font-light"></i>
@@ -69,11 +69,11 @@
 				 	<div class="kt-margin-l-35 kt-margin-b-10  kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" required/> 
+				 			<input type="password" class="form-control" name="badPw" id="badPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" required/> 
 				 		</div>
 				 		<div class="input-group">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw" required/>
+				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw" required/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
@@ -102,7 +102,7 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text">#</span>
 							</div>
-							<input type="text" class="form-control col-5" name="tagWriter" id="tagWriter" maxlength="30" />
+							<input type="text" class="form-control col-5" autocomplete="off" name="tagWriter" id="tagWriter" maxlength="30" />
 							<div class="input-group-prepend">
 								<span class="input-group-button btn btn-brand" id="tagBtn" name="tagBtn"><span data-lang-cd="bad1002.button.submit">등록</span></span>
 							</div>

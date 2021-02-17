@@ -21,7 +21,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.title">제목</span></label>
-					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" required>
+					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
 				</div>
 			</div>
 		</div>
@@ -29,7 +29,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.content">내용</span></label>
-					<textarea class="kt-hide" name="armContent" id="armContent" placeholder="내용" required></textarea>
+					<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
 				</div>
 			</div>
 		</div>
