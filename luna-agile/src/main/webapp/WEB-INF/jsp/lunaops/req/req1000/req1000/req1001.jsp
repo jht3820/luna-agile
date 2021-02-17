@@ -91,11 +91,11 @@
 			<div class="kt-hide osl-bad_box" name="pwOption" id="pwOption">
 		 		<div class="input-group kt-margin-b-10">
 			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.password">PW</span></label>
-		 			<input type="password" class="form-control" name="reqPw" id="reqPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
+		 			<input type="password" class="form-control" name="reqPw" id="reqPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
 		 		</div>
 		 		<div class="input-group">
 			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.passwordCheck">PW 확인</span></label>
-		 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
+		 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
 	 			</div>
 		 	</div>
 			<div class="form-group kt-margin-t-25  form-group-last">
