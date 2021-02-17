@@ -16,7 +16,7 @@
 		<div class="kt-portlet__body">
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<input type="text" class="form-control" id="armTitle" name="armTitle" readonly="readonly">
+				<input type="text" class="form-control" id="armTitle" name="armTitle" autocomplete="off" readonly="readonly">
 			</div>
 		</div>
 		<div class="row">

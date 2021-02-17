@@ -17,7 +17,7 @@
 				</span>
 			</span>
 			<div class="input-group kt-margin-t-10">
-				<input type="password" class="form-control" name="badPwInput" id="badPwInput" regexstr="^[a-z0-9]{4,12}$" required>
+				<input type="password" class="form-control" name="badPwInput" id="badPwInput" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" required>
 				<div class="input-group-append">
 					<button class="btn btn-brand" name="pwCheckBtn" id="pwCheckBtn"><span data-lang-cd="bad1004.button.submit">확인</span></button>
 				</div>
