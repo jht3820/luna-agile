@@ -565,7 +565,7 @@ var OSLSpr1003Popup = function () {
 				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 100, search: true,
 					template: function (row) {
-						if(row.reqUsrNm == null){
+						if($.osl.isNull(row.reqUsrNm)){
 							row.reqUsrNm = "";
 						}
 						var usrData = {
@@ -982,6 +982,19 @@ var OSLSpr1003Popup = function () {
 				},
 				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
+					/*var rowDatas = rowData;
+					//선택 레코드 없는 경우
+					if(rowDatas.length == 0){
+						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
+						return true;
+					}
+					
+					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
+						if (result.value) {
+							//사용자 배정 제외 처리
+							fnAllUsrInsert(rowDatas);
+						}
+					});*/
 				}
 			}
 		});

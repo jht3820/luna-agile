@@ -197,7 +197,8 @@ var OSLStm9102Popup = function () {
 				"click":true,
 				"insert":false,
 				"update":false,
-				"delete":false
+				"delete":false,
+				"lastPush": false
 			},
 			actionTooltip:{
 			},

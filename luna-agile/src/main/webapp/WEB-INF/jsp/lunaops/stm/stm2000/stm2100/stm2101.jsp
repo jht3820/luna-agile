@@ -1139,7 +1139,7 @@
  	 							+ "</div>";
  	 							//타이틀 종료
  	 					//소속 시작
- 	 					if($.osl.isNull(value.deptNm)l){
+ 	 					if($.osl.isNull(value.deptNm)){
  	 						listHtm += "<div class=''>-</div>";
  	 					}
  	 					else{

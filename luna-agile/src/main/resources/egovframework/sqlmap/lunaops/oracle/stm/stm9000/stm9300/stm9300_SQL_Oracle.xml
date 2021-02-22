@@ -9,6 +9,7 @@
 		SELECT
 					ROWNUM AS RN
 				,	SUB1.LIC_GRP_ID
+				, 	SUB1.PRJ_GRP_ID
 				, 	SUB1.PRJ_ID
 		        ,	SUB1.PRJ_NM
 		        ,	SUB1.JEN_ID
@@ -35,6 +36,7 @@
 		(
 			SELECT
 						A.LIC_GRP_ID
+					,	A.PRJ_GRP_ID
 	                , 	A.PRJ_ID
 	                , 	(SELECT PRJ_NM FROM PRJ1000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.PRJ_ID = A.PRJ_ID) AS PRJ_NM
 	                ,	A.JEN_ID
@@ -65,7 +67,7 @@
 	        ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.JEN_ID = C.JEN_ID)
 			WHERE 1=1
 			AND A.LIC_GRP_ID = #licGrpId#
-			AND B.USE_CD = '01'
+			AND C.DEL_CD = '02'
 		) SUB1
 		WHERE 1=1
 		<isNotEmpty property="searchTargetData">
