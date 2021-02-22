@@ -34,14 +34,23 @@
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="insert" title="신규 프로젝트 그룹 등록" data-title-lang-cd="prj1000.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 				<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="update" title="데이터 수정" data-title-lang-cd="prj1000.button.title.update" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="update" title="프로젝트 그룹 수정" data-title-lang-cd="prj1000.button.title.update" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
 				<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" title="데이터 삭제" data-title-lang-cd="prj1000.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
-				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="delete" title="프로젝트 그룹 휴지통 이동(삭제)" data-title-lang-cd="prj1000.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
+				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">휴지통 이동(삭제)</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" title="프로젝트 휴지통 이동" data-title-lang-cd="prj1000.button.title.trash" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
-				<i class="fa fa-trash"></i><span data-lang-cd="datatable.button.trash">휴지통</span>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 btn-elevate btn-elevate-air" name="prjTrashListMoveBtn" id="prjTrashListMoveBtn" data-datatable-id="prj1000PrjTable" title="프로젝트 그룹 휴지통 목록" data-title-lang-cd="prj1000.button.title.trash" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="5">
+				<i class="fa fa-trash"></i><i class="fa fa-list"></i><span data-lang-cd="datatable.button.trash">휴지통 목록</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="prjGrpRedo" title="프로젝트 그룹 복구" data-title-lang-cd="prj1000.button.title.redo" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" hidden>
+				<i class="fa fa-redo-alt"></i><span data-lang-cd="datatable.button.redo">복구</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1000PrjTable" data-datatable-action="prjGrpDelete" title="프로젝트 그룹 완전 삭제" data-title-lang-cd="prj1000.button.title.recordDelete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" hidden>
+				<i class="fa fa-times-circle"></i><span data-lang-cd="datatable.button.recordDelete">완전 삭제</span>
+			</button>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 btn-elevate btn-elevate-air" name="prjListMoveBtn" id="prjListMoveBtn" data-datatable-id="prj1000PrjTable" title="프로젝트 그룹 목록으로 이동" data-title-lang-cd="prj1000.button.title.prev" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="5" hidden>
+				<i class="fa fa-trash"></i><i class="fa fa-list"></i><span data-lang-cd="datatable.button.prev">돌아가기</span>
 			</button>
 		</div>
 	</div>
@@ -55,10 +64,14 @@ var OSLPrj1000Popup = function () {
 	
 	var documentSetting = function(){
 		var config = {
+				cardUiTarget: $("#prj1000CardTable"),
 				data: {
 					source: {
 						read: {
-							url: "/prj/prj1000/prj1000/selectPrj1000ListAjaxView.do"
+							url: "/prj/prj1000/prj1000/selectPrj1000ListAjaxView.do",
+							params : {
+								delCd: "02"
+							}
 						}
 					},
 				},
@@ -80,14 +93,13 @@ var OSLPrj1000Popup = function () {
 				actionBtn:{
 					"dblClick": true,
 					"update": true,
-					"delete": false,
+					"delete": true,
 					"title": $.osl.lang("datatable.action.functionNm"),
-					"width": 100,
 				},
 				actionTooltip:{
-					"dblClick": "프로젝트 목록",
-					"update": "프로젝트 그룹 수정",
-					"delete": "프로젝트 그룹 삭제"
+					"dblClick": $.osl.lang("prj1000.datatable.action.dblClick"),
+					"update": $.osl.lang("prj1000.datatable.action.update"),
+					"delete": $.osl.lang("prj1000.datatable.action.delete")
 				},
 				actionFn:{
 					"insert":function(datatableId, type, rowNum){
@@ -96,27 +108,134 @@ var OSLPrj1000Popup = function () {
 								autoHeight: false,
 								modalSize: "xl",
 								idKey: datatableId,
-								modalTitle: $.osl.lang("prj1002.title"),
+								modalTitle: $.osl.lang("prj1002.insert.title"),
 								closeConfirm: false,
 							};
 						
 						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1002View.do',data,options);
 					},
-					"update": function(rowData, row, datatableId, type, rowNum, elem){
-						var data = {type:"update"};
+					"update": function(rowData, datatableId, type, rowNum, elem){
+						var data = {
+								type:"update"
+								,paramPrjId: rowData.prjId
+							};
 						var options = {
 								autoHeight: false,
 								modalSize: "xl",
 								idKey: datatableId,
-								modalTitle: $.osl.lang("prj1002.title"),
+								modalTitle: $.osl.lang("prj1002.update.title"),
 								closeConfirm: false,
 							};
 						
 						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1002View.do',data,options);
 					},
-					"dblClick":function(rowData, row, datatableId){
-						console.log(rowData);
-					}
+					"delete":function(rowDatas, datatableId, c, rowNum, elem){
+						//선택 프로젝트 그룹 휴지통으로 이동
+						var ajaxObj = new $.osl.ajaxRequestAction(
+								{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashListAjax.do'/>"}
+								,{deleteDataList: JSON.stringify(rowDatas)});
+						//AJAX 전송 성공 함수
+						ajaxObj.setFnSuccess(function(data){
+							if(data.errorYn == "Y"){
+				   				$.osl.alert(data.message,{type: 'error'});
+				   			}else{
+				   				//삭제 성공
+				   				$.osl.toastr(data.message);
+				   				
+				   				//datatable 조회
+				   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+				   			}
+						});
+						
+						//AJAX 전송
+						ajaxObj.send();
+					},
+					//상세정보
+					"dblClick":function(rowData, datatableId, type, rowNum, elem){
+						var data = {
+								paramPrjId: rowData.prjId
+							};
+							
+						var options = {
+								autoHeight: false,
+								modalSize: "xl",
+								idKey: datatableId+"_detail",
+								modalTitle: $.osl.lang("prj1003.title"),
+								closeConfirm: false,
+							};
+						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1003View.do',data,options);
+					},
+					//복구
+					"prjGrpRedo": function(rowData, datatableId, type){
+						var rowDatas = rowData;
+						
+						//선택 레코드 없는 경우
+						if(rowDatas.length == 0){
+							$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
+							return true;
+						}
+						
+						$.osl.confirm($.osl.lang("prj1000.confirm.prjGrpRedo",rowDatas.length),{html:true}, function(result){
+							if (result.value) {
+								//선택 프로젝트 그룹 복구 처리
+								fnPrjGrpRedoUpdate(rowDatas, datatableId);
+							}
+						});
+					},
+					//완전 삭제
+					"prjGrpDelete": function(rowData, datatableId, type){
+						var rowDatas = rowData;
+						
+						//선택 레코드 없는 경우
+						if(rowDatas.length == 0){
+							$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
+							return true;
+						}
+						
+						$.osl.confirm($.osl.lang("prj1000.confirm.prjGrpDelete",rowDatas.length),{html:true}, function(result){
+							if (result.value) {
+								//선택 프로젝트 완전 삭제 처리
+								fnPrjGrpDelete(rowDatas, datatableId);
+							}
+						});
+					},
+					//프로젝트 생성
+					"prjInsert": function(rowData, datatableId, type){
+						var prjGrpInfo = rowData[0];
+						var data = {
+								type:"insert",
+								paramPrjGrpId: prjGrpInfo.prjId,
+								prjGrpNm: prjGrpInfo.prjNm,
+								prjGrpStartDt: prjGrpInfo.startDt,
+								prjGrpEndDt: prjGrpInfo.endDt
+						};
+						var options = {
+								autoHeight: false,
+								modalSize: "xl",
+								idKey: datatableId,
+								modalTitle: $.osl.lang("prj1004.insert.title"),
+								closeConfirm: false,
+							};
+						
+						$.osl.layerPopupOpen('/prj/prj1000/prj1000/selectPrj1004View.do',data,options);
+					},
+					//프로젝트 목록 이동
+					"prjListMove": function(rowData, datatableId, type){
+						var prjGrpInfo = rowData[0];
+						
+						//form 생성
+						var newForm = $("<form></form>");
+						newForm.attr("name","prjListMoveForm");
+						newForm.attr("method","post");
+						newForm.attr("action","/prj/prj1000/prj1000/selectPrj1000PrjListView.do");
+						newForm.attr("target","_self");
+						newForm.appendTo("body");
+						
+						//프로젝트 그룹 ID input 생성
+						var input = $('<input type="hidden" name="paramPrjGrpId" id="paramPrjGrpId" value="'+prjGrpInfo.prjId+'">');
+						newForm.append(input);
+						newForm.submit();
+					},
 				},
 				theme:{
 					actionBtnIcon:{
@@ -172,31 +291,58 @@ var OSLPrj1000Popup = function () {
 							if(rowCnt == 0){
 								prjGrpStr += '<div class="row">';
 							}
+
+							//프로젝트 그룹 번호
+							var rnStr = "No. "+map.rn;
+							var rnClass = "badge-primary";
+							
+							//삭제여부에 따른 목록
+							var prjGrpDelCdMenuList = {
+									//휴지통 목록 (삭제)
+									"01":[
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpRedo"><i class="fa fa fa-redo-alt kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectRedo")+'</div>',
+										'<div class="dropdown-divider"></div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjGrpDelete"><i class="fa fa-times-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.recordDelete")+'</div>',
+										'<div class="dropdown-divider"></div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
+									],
+									//일반 목록 (미 삭제)
+									"02":[
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-primary"></i>'+$.osl.lang("prj1000.menu.modify")+'</div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-primary"></i>'+$.osl.lang("prj1000.menu.trashMove")+'</div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjListMove"><i class="fa fa-list-alt kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectListMove")+'</div>',
+										'<div class="dropdown-divider"></div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="prjInsert"><i class="fa fa-plus kt-font-primary"></i>'+$.osl.lang("prj1000.menu.createProject")+'</div>',
+										'<div class="dropdown-divider"></div>',
+										'<div class="dropdown-item" data-datatable-id="prj1000PrjTable" data-datatable-expans="dropdown" data-datatable-action="dblClick"><i class="fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</div>'
+									]
+							};
+							
+							//삭제 여부에따른 rn -> trash, dropdown menu
+							if(map.delCd == "01"){
+								rnStr = '<i class="fa fa-trash-alt"></i>';
+								rnClass = "badge-danger"
+							}
+							
 							//카드 UI
 							prjGrpStr += 
 								'<div class="col-lg-6 col-md-12 col-sm-12">'
 								+'<div class="kt-portlet kt-portlet--mobile osl-prj-info-obj">'
 									+'<div class="kt-portlet__head kt-portlet__head--lg">'
 										+'<div class="kt-portlet__head-label">'
-											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'">&nbsp;<span></span></label>'
-											+'<h5 class="kt-font-boldest"><span class="badge badge-primary kt-margin-r-10">No. '+map.rn+'</span></h5>'
+											+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid"><input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'" data-datatable-id="prj1000PrjTable">&nbsp;<span></span></label>'
+											+'<h5 class="kt-font-boldest"><span class="badge '+rnClass+' kt-margin-r-10">'+rnStr+'</span></h5>'
 											+'<div class="kt-media-group osl-margin-b-05">'
 												+prjGrpAuthList
 											+'</div>'
 										+'</div>'
 										+'<div class="kt-portlet__head-toolbar">'
 											+'<div class="kt-portlet__head-wrapper">'
-												+'<button type="button" class="btn btn-outline-primary btn-bold btn-font-sm btn-elevate btn-elevate-air"  data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">'
+												+'<button type="button" class="btn btn-outline-primary btn-bold btn-font-sm btn-elevate btn-elevate-air" data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">'
 													+'<i class="fa fa-bars osl-padding-r0"></i>'
 												+'</button>'
-												+'<div class="dropdown-menu dropdown-menu-right">'
-													+'<a class="dropdown-item" href="#"><i class="fa fa-edit"></i>'+$.osl.lang("prj1000.menu.modify")+'</a>'
-													+'<a class="dropdown-item" href="#"><i class="fa fa-trash"></i>'+$.osl.lang("prj1000.menu.trashMove")+'</a>'
-													+'<a class="dropdown-item" href="#"><i class="fa fa-list-alt"></i>'+$.osl.lang("prj1000.menu.projectListMove")+'</a>'
-													+'<div class="dropdown-divider"></div>'
-													+'<a class="dropdown-item" href="#"><i class="fa fa-plus"></i>'+$.osl.lang("prj1000.menu.createProject")+'</a>'
-													+'<div class="dropdown-divider"></div>'
-													+'<a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>'+$.osl.lang("prj1000.menu.projectDetail")+'</a>'
+												+'<div class="dropdown-menu dropdown-menu-right" data-datatable-rownum="'+idx+'">'
+													+prjGrpDelCdMenuList[map.delCd].join('')
 												+'</div>'
 											+'</div>'
 										+'</div>'
@@ -282,20 +428,6 @@ var OSLPrj1000Popup = function () {
 						
 						//로드된 데이터 CARD형식으로 추가
 						$("#prj1000CardTable").html(prjGrpStr);
-						/* 
-						//data row active
-						$("input[name=prjGrpCheckbox]").click(function(){
-							var selRowChecked = this.checked;
-							var selRowNum = this.value;
-							
-							var targetObj = $("#prj1000PrjTable .kt-datatable__row[data-row="+selRowNum+"]");
-							$("#prj1000PrjTable .kt-datatable__row[data-row="+selRowNum+"] td.kt-datatable__cell--check input[type=checkbox]").click();
-							if(selRowChecked){
-								targetObj.addClass("kt-datatable__row--active");
-							}else{
-								targetObj.removeClass("kt-datatable__row--active");
-							}
-						}); */
 					}
 				}
 			};
@@ -316,8 +448,47 @@ var OSLPrj1000Popup = function () {
 			//뷰어 변경
 			fnViewerChange();
 		});
+		
+		//휴지통 목록 이벤트
+		$("#prjTrashListMoveBtn").click(function(){
+			$.osl.datatable.list["prj1000PrjTable"].targetDt.options.data.source.read.params.delCd = "01";
+			$(this).attr("hidden","hidden");
+			$("#prjListMoveBtn").removeAttr("hidden");
+
+			//추가, 수정, 삭제 버튼 감추기
+			$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=insert],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=update],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=delete]").attr("hidden","hidden");
+			 
+			//복구, 완전 삭제 버튼 보이기
+			$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=prjGrpRedo],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=prjGrpDelete]").removeAttr("hidden","hidden");
+			
+			//데이터 테이블 조회
+			$.osl.datatable.list["prj1000PrjTable"].targetDt.reload();
+		});
+		
+		//돌아가기 버튼 이벤트
+		$("#prjListMoveBtn").click(function(){
+			$.osl.datatable.list["prj1000PrjTable"].targetDt.options.data.source.read.params.delCd = "02";
+			$(this).attr("hidden","hidden");
+			$("#prjTrashListMoveBtn").removeAttr("hidden");
+			
+			//추가, 수정, 삭제 버튼 보이기
+			$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=insert],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=update],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=delete]").removeAttr("hidden");
+			
+			//복구, 완전 삭제 버튼 감추기
+			$("button[data-datatable-id=prj1000PrjTable][data-datatable-action=prjGrpRedo],"
+					+"button[data-datatable-id=prj1000PrjTable][data-datatable-action=prjGrpDelete]").attr("hidden","hidden");
+			
+			//데이터 테이블 조회
+			$.osl.datatable.list["prj1000PrjTable"].targetDt.reload();
+		});
 	};
 	
+	//카드형, 목록형
 	var fnViewerChange = function(){
 		//현재 viewType에 따라 show/hide
 		if(currentViewType == "01"){	//카드 형식
@@ -330,6 +501,51 @@ var OSLPrj1000Popup = function () {
 		}
 	}
 	
+	//프로젝트 그룹 복구처리
+	var fnPrjGrpRedoUpdate = function(redoDataList, datatableId){
+		//선택 프로젝트 그룹 휴지통으로 이동
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1000/updatePrj1000PrjGrpTrashRedoListAjax.do'/>"}
+				,{deleteDataList: JSON.stringify(redoDataList)});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//삭제 성공
+   				$.osl.toastr(data.message);
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
+	
+	//프로젝트 그룹 완전 삭제
+	var fnPrjGrpDelete = function(deleteDataList, datatableId){
+		//선택 프로젝트 그룹 휴지통으로 이동
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1000/deletePrj1000PrjGrpDeleteListAjax.do'/>"}
+				,{deleteDataList: JSON.stringify(deleteDataList)});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//삭제 성공
+   				$.osl.toastr(data.message);
+   				
+   				//datatable 조회
+   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
 	return {
         // public functions
         init: function() {

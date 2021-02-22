@@ -165,10 +165,6 @@ public class Cmm4000ServiceImpl extends EgovAbstractServiceImpl implements Cmm40
 		
 		LoginVO rtnLoginVO = cmm4000DAO.selectCmm4000LoginAction(loginVO);
 
-		System.out.println("#################### 1");
-		System.out.println(rtnLoginVO.getUsrId());
-		System.out.println(rtnLoginVO.getUsrPw());
-		
 		
 		if(rtnLoginVO==null){
 			rtnLoginVO = new LoginVO();
@@ -177,9 +173,6 @@ public class Cmm4000ServiceImpl extends EgovAbstractServiceImpl implements Cmm40
 			
 			String enUsrPw = EgovFileScrty.encryptPassword(paramUsrPw, rtnLoginVO.getUsrId());
 			loginVO.setUsrPw(enUsrPw);
-			
-			System.out.println("#################### 1");
-			System.out.println(enUsrPw);
 			
 			
 			if("01".equals(rtnLoginVO.getUseCd())){

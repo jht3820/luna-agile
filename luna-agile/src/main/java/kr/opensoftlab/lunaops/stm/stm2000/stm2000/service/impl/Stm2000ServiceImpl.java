@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
@@ -84,7 +83,153 @@ public class Stm2000ServiceImpl extends EgovAbstractServiceImpl implements Stm20
 			throw new UserDefineException(egovMessageSource.getMessage("fail.common.update"));
 		}
 	}
+
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void saveStm2000AuthGrpMenuAuthInfo(Map paramMap) throws Exception{
+		String upupMenuId = "";
+		String upMenuId = "";
+		String upupAccessYn = "";
+		String upAccessYn = "";
+		int cnt = -1;
+		
+		
+		String licGrpId = (String)paramMap.get("licGrpId");
+		String prjId = (String)paramMap.get("prjId");
+		String authGrpId = (String)paramMap.get("authGrpId");
+		String modifyUsrId = (String)paramMap.get("modifyUsrId");
+		String modifyUsrIp = (String)paramMap.get("modifyUsrIp");
+		Map newMap = null;
+		
+		
+		Map authGrpInfo = stm2000DAO.selectStm2000MenuInfo(paramMap);
+		
+		
+		if(authGrpInfo == null) {
+			throw new UserDefineException("메뉴 정보가 없습니다.");
+		}
+		upupMenuId = (String) authGrpInfo.get("twoUpperMenuId");
+		upMenuId = (String) authGrpInfo.get("upperMenuId");
+		
+		
+		cnt = stm2000DAO.selectStm2001AuthMenuAccessCheck(paramMap);
+		
+		
+		if(cnt > 0) {
+			int updateFlag = stm2000DAO.updateStm2001AuthMenuAccess(paramMap);
+			
+			if(updateFlag == 0) {
+				throw new UserDefineException("메뉴 정보 수정에 실패했습니다.");
+			}
+		}
+		
+		else {
+			stm2000DAO.insertStm2001AuthMenuAccess(paramMap);
+		}
+		
+		
+		
+		
+		
+		paramMap.put("upMenuId", upupMenuId);
+		cnt = stm2000DAO.selectStm2001AuthUpMenuAccessCheck(paramMap);
+		if(cnt > 0) {
+			upupAccessYn = "Y";
+		}else {
+			upupAccessYn = "N";
+		}
+		
+		
+		paramMap.put("menuId", upupMenuId);
+		cnt = stm2000DAO.selectStm2001AuthMenuAccessCheck(paramMap);
+		
+		newMap = new HashMap<>();
+		newMap.put("licGrpId", licGrpId);
+		newMap.put("prjId", prjId);
+		newMap.put("authGrpId", authGrpId);
+		newMap.put("menuId", upupMenuId);
+		newMap.put("accessYn", upupAccessYn);
+		newMap.put("modifyUsrId", modifyUsrId);
+		newMap.put("modifyUsrIp", modifyUsrIp);
+		
+		
+		if(cnt > 0) {
+			int updateFlag = stm2000DAO.updateStm2001AuthMenuAccess(newMap);
+			
+			if(updateFlag == 0) {
+				throw new UserDefineException();
+			}
+		}
+		
+		else {
+			stm2000DAO.insertStm2001AuthMenuAccess(newMap);
+		}
+		
+		
+		
+		
+		
+		paramMap.put("upMenuId", upMenuId);
+		cnt = stm2000DAO.selectStm2001AuthUpMenuAccessCheck(paramMap);
+		if(cnt > 0) {
+			upAccessYn = "Y";
+		}else {
+			upAccessYn = "N";
+		}
+		
+		
+		paramMap.put("menuId", upMenuId);
+		cnt = stm2000DAO.selectStm2001AuthMenuAccessCheck(paramMap);
+		
+		newMap = new HashMap<>();
+		newMap.put("licGrpId", licGrpId);
+		newMap.put("prjId", prjId);
+		newMap.put("authGrpId", authGrpId);
+		newMap.put("menuId", upMenuId);
+		newMap.put("accessYn", upAccessYn);
+		newMap.put("modifyUsrId", modifyUsrId);
+		newMap.put("modifyUsrIp", modifyUsrIp);
+		
+		
+		if(cnt > 0) {
+			int updateFlag = stm2000DAO.updateStm2001AuthMenuAccess(newMap);
+			
+			if(updateFlag == 0) {
+				throw new UserDefineException();
+			}
+		}
+		
+		else {
+			stm2000DAO.insertStm2001AuthMenuAccess(newMap);
+		}
+		
+		
+		
+		paramMap.put("menuId", "000");
+		cnt = stm2000DAO.selectStm2001AuthMenuAccessCheck(paramMap);
+		
+		newMap = new HashMap<>();
+		newMap.put("licGrpId", licGrpId);
+		newMap.put("prjId", prjId);
+		newMap.put("authGrpId", authGrpId);
+		newMap.put("menuId", "000");
+		newMap.put("accessYn", "Y");
+		newMap.put("modifyUsrId", modifyUsrId);
+		newMap.put("modifyUsrIp", modifyUsrIp);
+		
+		
+		if(cnt > 0) {
+			int updateFlag = stm2000DAO.updateStm2001AuthMenuAccess(newMap);
+			
+			if(updateFlag == 0) {
+				throw new UserDefineException();
+			}
+		}
+		
+		else {
+			stm2000DAO.insertStm2001AuthMenuAccess(newMap);
+		}
+	}
 	
 	
 	
@@ -180,38 +325,13 @@ public class Stm2000ServiceImpl extends EgovAbstractServiceImpl implements Stm20
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void saveStm2000AuthGrpMenuAuthList(List paramList) throws Exception{
-		
-		
-		
-		String dbType = EgovProperties.getProperty("Globals.DbType");
-		
 		for(Map paramMap : (List<Map>)paramList){
 			
 			String strStatus = (String) paramMap.get("status");
 			
 			
 			if("U".equals(strStatus)){
-				
-				
-				if("oracle".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListOracle(paramMap);
-					
-					
-					if("-1".equals(paramMap.get("ERR_CODE"))){
-						throw new UserDefineException((String) paramMap.get("ERR_MSG"));
-					}
-					
-				
-				}else if("cubrid".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListCubrid(paramMap);
-					
-				
-				}else if("mariadb".equals(dbType.toLowerCase())){
-					
-					stm2000DAO.saveStm2000AuthGrpMenuAuthListMariaDB(paramMap);
-				}
+				saveStm2000AuthGrpMenuAuthInfo(paramMap);
 			}	
 		}
 	}

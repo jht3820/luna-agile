@@ -33,7 +33,7 @@
 			<input type="hidden" id="stmFileStrg" name="stmFileStrg"/>
 		</div>
 		<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper" style="">
+			<div class="kt-portlet__head-wrapper">
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="select" title="게시글 조회" data-title-lang-cd="bad1000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
@@ -56,7 +56,7 @@
 		<div class="col-lg-5 col-md-6 col-sm-6">
 			<div class="osl-datatable-search" data-datatable-id="bad1000BadTable"></div>
 		</div>
-		<div class="kt_datatable" id="bad1000BadTable"></div>
+		<div class="kt_datatable  osl-datatable-footer__divide" id="bad1000BadTable"></div>
 	</div>
 </div>
 <!-- begin page script -->
@@ -80,7 +80,7 @@
 		 
 		 //시스템 관리 게시판에서 넘오는 것이 아니라 일반 메뉴로 들어올 경우
 		 //메뉴id와 게시판 유형, 게시판명을 받아 저장
-		 if($("#stmRootYn").val() == null || $("#stmRootYn").val()==""){
+		 if($.osl.isNull($("#stmRootYn").val())){
 			 //게시판 속성 정보 가져와 셋팅
 			 getStmInfo();
 			 //stmInfo 체크할 필요 없으므로
@@ -106,6 +106,7 @@
 					}
 				]
 		 }else{
+			 //시스템게시판 메뉴로 들어오는 경우
 			//insert에 필요한 stmInfo 체크해야 하므로
 			 checkStmInfo = true;
 			 //검색항목 추가
@@ -160,7 +161,7 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: "kt-checkbox--solid"}, sortable: false, autoHide: false},
-				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false,
+				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false, sortable: true,
 				 	template: function(row){
 				 		if(checkStmInfo){
 				 			setStmInfo(row);
@@ -169,7 +170,7 @@
 				 		return row.badNum;
 				 	}
 				 },
-				 {field: 'badTitle', title: $.osl.lang("bad1000.field.badTitle"), textAlign: 'left', width: 400, autoHide: false, search: true,
+				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true, sortable: true,
 					template: function(row){
 						var returnStr = "";
 						// 삭제된 게시글인 경우
@@ -197,9 +198,9 @@
 						return returnStr;
 					}, 
 				 },
-				 {field: 'badHit', title: $.osl.lang("bad1000.field.badHit"), textAlign: 'center', width: 100},
-				 {field: 'badFileCnt', title: $.osl.lang("bad1000.field.badFileCnt"), textAlign: 'center', width: 100},
-				 {field: 'badUsrId', title: $.osl.lang("bad1000.field.badUsrId"), textAlign: 'left', width: 180,
+				 {field: 'badHit', title: '조회수', textAlign: 'center', width: 100, sortable: true},
+				 {field: 'badFileCnt', title: '첨부파일 수', textAlign: 'center', width: 100},
+				 {field: 'badUsrId', title: '작성자', textAlign: 'left', width: 180,
 					template: function (row) {
 						var usrData = {
 								html: row.badUsrNm + " (" + row.badUsrId + ")",
@@ -213,20 +214,12 @@
 					onclick: function(row){
 						$.osl.user.usrInfoPopup(row.badUsrId);
 					}
-					, autoHide: false, search: true },
-				{field: 'badWtdtm', title:$.osl.lang("bad1000.field.badWtdtm"), textAlign: 'center', width: 150, search: true, searchType:"daterange",
+					, autoHide: false, search: true, sortable: true},
+				{field: 'badWtdtm', title:'작성일', textAlign: 'center', width: 150, search: true, searchType:"daterange", sortable: true,
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yyyy-MM-dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+		                return agoTimeStr.agoString;
 					},	
 				}
 			],
@@ -290,7 +283,7 @@
 						}
 					}
 					//1개의 list만 선택하거나 row의 상세버튼을 클릭한 경우
-					if(rowData.stmOptionCnt == null || rowData.stmOptionCnt == ""){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();
@@ -304,12 +297,12 @@
 							stmNm : $.osl.escapeHtml($("#stmNm").val()),
 							paramRow : JSON.stringify(rowData),
 							backPageYn: "N",
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmRootYn: $("#stmRootYn").val(),
 						};
 					var options = {
 							idKey: "bad1001_"+ rowData.badId,
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
-							
 							closeConfirm: false,
 							autoHeight: false,
 							modalSize: "xl",
@@ -328,7 +321,7 @@
 							//작성자는 비밀번호 없이도 게시글 확인 가능
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							if(rowData.badPw == "01" && row.stmPwYnCd == '01'){
+							if(rowData.badPw == "01" && rowData.stmPwYnCd == '01'){
 								$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1004PwView.do', data, pwOptions);
 							}
 							else{
@@ -340,7 +333,7 @@
 					}
 				},
 				"update":function(rowData, datatableId, type, rowNum){
-					if(rowData.stmOptionCnt == null){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();
@@ -350,7 +343,7 @@
 						rowData.stmFileStrg = $("#stmFileStrg").val();
 					}
 					var data = {
-							stmDsTypeCd: $("#stmDstypeCd").val(),
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmNm: $.osl.escapeHtml($("#stmNm").val()),
 							stmRootYn: $("#stmRootYn").val(),
 							paramRow : JSON.stringify(rowData),

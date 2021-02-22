@@ -5,7 +5,7 @@
 	<typeAlias alias="stm3000VO"	type="kr.opensoftlab.lunaops.stm.stm3000.stm3000.vo.Stm3000VO"/>
 	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	
-	<!-- Map Define -->
+	
    	<resultMap id="rMapSelectStm3000" class="stm3000VO">
    		<result property="rn" column="RN"/>
 		<result property="licGrpId" column="LIC_GRP_ID" />
@@ -40,6 +40,7 @@
 		<result property="usrNm" column="USR_NM" />
     </resultMap>
 
+	
 	<resultMap id="resultMapDefaultStm3000" class="HashMap">
 		<result property="licGrpId" column="LIC_GRP_ID" />
 		<result property="usrId" column="USR_ID" />
@@ -77,13 +78,16 @@
 		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
 	</resultMap>
 
+    
 	<resultMap id="resultMapSelectStm3000" extends="resultMapDefaultStm3000" class="HashMap">
 		<result property="rn" column="RN" />
 	</resultMap>
     
+    
     <resultMap id="resultMapSelectAdm2001" extends="resultMapDefaultStm3000" class="HashMap">
 		<result property="blkLog" column="BLK_LOG" jdbcType="CLOB" javaType="java.lang.String" />
 	</resultMap>
+    
     
 	<sql id = "selectStm3000UsrList">
 		<![CDATA[
@@ -130,6 +134,9 @@
 		   AND A.LIC_GRP_ID = #licGrpId#
 		   AND A.DEL_CD = '02'
 		   ]]>
+		   <isNotEmpty property="useCd">
+				 AND A.USE_CD = #useCd#
+			</isNotEmpty>
 		   <isNotEmpty property="paramSortFieldId">
 					<isNotEmpty property="sortDirection">
 						ORDER BY $paramSortFieldId$
@@ -186,9 +193,14 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+	   	<isNotEmpty property="searchDataTxt">
+				AND T.USR_NM LIKE '%'||#searchDataTxt#||'%'
+		</isNotEmpty>
 	</sql>
 
+	
     <select id="stm3000DAO.selectStm3000UsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 	    SELECT COUNT(*) AS CNT
 		FROM
 		(
@@ -196,7 +208,9 @@
 		) Z
     </select>
     
+    
     <select id="stm3000DAO.selectStm3000UsrList" parameterClass="java.util.Map" resultMap="resultMapSelectStm3000">
+    	
 		SELECT Z.*
 	   	FROM
 	   	(
@@ -206,7 +220,9 @@
 		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
+    
 	<select id="stm3000DAO.selectStm3000UsrInfo" parameterClass="java.util.Map" resultMap="resultMapSelectAdm2001">
+		
 		<![CDATA[ 
 			SELECT
 					A.LIC_GRP_ID
@@ -245,7 +261,7 @@
 				,	A.MODIFY_USR_IP
 				, 	( 
 						SELECT 
-							/*+ INDEX_DESC (C PK_STM3002 ) */  BLK_LOG 
+							  BLK_LOG 
 						FROM 
 						STM3002 C 
 						WHERE C.LIC_GRP_ID = A.LIC_GRP_ID 
@@ -259,7 +275,9 @@
  		]]>
 	</select>
 	
+    
     <insert id="stm3000DAO.insertStm3000UsrInfo" parameterClass="java.util.Map" >
+    	
 		<![CDATA[ 
 		INSERT INTO STM3000(
 				LIC_GRP_ID, 		USR_ID, 	USR_PW, 			USR_NM, 			EMAIL
@@ -287,7 +305,27 @@
 		</selectKey>
     </insert>
     
+    <!-- 
+                사용자를 수정한다.
+                
+        1. 사용자 수정 시 사용자가 비밀번호를 공백으로 입력하지 않았을 경우에만 비밀번호 수정한다.
+           - 비밀번호 공백으로 둘 경우 기존 비밀번호 그대로 사용
+           
+           <isNotEmpty property="enUsrPw">
+				USR_PW				= #enUsrPw#,
+		   </isNotEmpty>
+		   
+		   
+		2. 3개월 이상 로그인하지 않은 사용자의 차단여부를 정상으로 수정 시 로그인 일시를 현재일로 변경한다.
+		
+		<isNotEmpty property="loginExprYn">
+			<isEqual property="loginExprYn" compareValue="Y">
+				REC_LOGIN_DTM = sysdate,
+			</isEqual>
+		</isNotEmpty>  
+    -->
 	<update id="stm3000DAO.updateStm3000UsrInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 			USR_NM				= #usrNm#,
@@ -329,7 +367,9 @@
 		]]>
 	</update>
 	
+	
     <select id="stm3000DAO.selectCmm2000IdCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
 		<![CDATA[
 			SELECT COUNT(*) AS CNT
 			FROM STM3000 A
@@ -339,7 +379,9 @@
         ]]> 
     </select>
     
+    
     <select id="stm3000DAO.selectStm3000EmailCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
 		<![CDATA[
 			SELECT COUNT(*) AS CNT
 			FROM STM3000 A
@@ -347,7 +389,9 @@
         ]]> 
     </select>
     
+    
 	<update id="stm3000DAO.updateStm3000UseCd" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 		  	USE_CD					= #useCd#,
@@ -360,7 +404,10 @@
 			]]>
 	</update>
 	
+	 
+	
 	<update id="stm3000DAO.updateStm3000Block" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 			PW_FAIL_CNT		= #pwFailCnt#,	
@@ -381,7 +428,9 @@
 		]]>
 	</update>
 	
+	
 	<update id="stm3000DAO.deleteStm3000UsrInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 				DEL_CD				= '01'
@@ -394,11 +443,15 @@
 		]]>
 	</update>
 	
+	
 	<select id="stm3000DAO.selectStm3000ExcelList" parameterClass="stm3000VO" resultClass="egovMap">
+		
 		<include refid="selectStm3000UsrList"/>		
 	</select>
 	    
+    
 	<select id="stm3000DAO.selectPRJ2001ExistUsrInProject" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 		SELECT COUNT(*) AS CNT
 		FROM PRJ2001
@@ -408,7 +461,9 @@
 		]]>
 	</select>
 	    
+	
 	<select id="stm3000DAO.selectStm3000PwCheck" parameterClass="java.util.Map" resultClass="java.lang.String">
+		
 		<![CDATA[ 
 			SELECT	A.USR_PW
 			FROM	STM3000 A
@@ -422,7 +477,9 @@
  		]]>
 	</select>
 	
+	
 	<sql id = "selectStm3000CommonUserList">
+		
 		SELECT
 				B.USR_ID
 			,	B.USR_NM
@@ -440,7 +497,9 @@
 		</isNotEmpty>
 	</sql>
 	
+	
 	 <select id="stm3000DAO.selectStm3000CommonUserListCnt" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 	    SELECT	COUNT(*)
 		  FROM	(
@@ -450,7 +509,9 @@
 		  			) A
 		 ]]>
     </select>
+    
     <select id="stm3000DAO.selectStm3000CommonUserList" parameterClass="stm3000VO"  resultMap="rMapSelectStm3000CommonUser">
+    	
     	<![CDATA[
 		SELECT	*
 		   FROM (
@@ -468,7 +529,9 @@
 		]]>
     </select>
     
+     
     <select id="stm3000DAO.selectStm3000PrjAuthUserList" parameterClass="java.util.Map" resultClass="egovMap">
+    	
     	<![CDATA[
 		SELECT	*
 		FROM 
@@ -490,7 +553,9 @@
 		]]>
     </select>
 	
+	
 	<update id="stm3000DAO.updateStm3000AccountInit" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 			USR_PW				= #enUsrPw#,
@@ -505,7 +570,9 @@
 			]]>
 	</update>
 
+	
 	<update id="stm3000DAO.updateStm3000PasswordExprInit" parameterClass="java.util.Map">
+		
 		<![CDATA[
 		UPDATE STM3000 A SET
 			USR_PW				= #enUsrPw#,
@@ -519,7 +586,9 @@
 			]]>
 	</update>
 	
+	
 	<insert id="stm3000DAO.insertStm3002BlockLog" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO STM3002
 			(

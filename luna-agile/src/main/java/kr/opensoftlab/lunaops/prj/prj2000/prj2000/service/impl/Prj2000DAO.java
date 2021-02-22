@@ -47,7 +47,13 @@ public class Prj2000DAO extends ComOslitsAbstractDAO {
 	
 	@SuppressWarnings("rawtypes")
 	public String insertPrj2000AuthGrpInfoAjax(Map paramMap) throws Exception{
-		return (String) insert("prj2000DAO.inserPrj2000AuthGrpInfoAjax", paramMap);
+		return (String) insert("prj2000DAO.insertPrj2000AuthGrpInfoAjax", paramMap);
+	}	
+	
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj2000PrjUsrAuthListAjax(Map paramMap) throws Exception{
+		return (String) insert("prj2000DAO.insertPrj2000PrjUsrAuthListAjax", paramMap);
 	}	
 	
 	

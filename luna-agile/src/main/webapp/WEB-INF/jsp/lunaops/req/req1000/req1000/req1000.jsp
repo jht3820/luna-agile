@@ -55,7 +55,16 @@ var OSLReq1000Popup = function () {
 				{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150, search: true},
 				{field: 'reqOrd', title: '순번', textAlign: 'left', width: 110, autoHide: false},
 				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
-				{field: 'reqNm', title: '요청 제목', textAlign: 'left', width: 500, search: true},
+				{field: 'reqNm', title: '요청 제목', textAlign: 'left', width: 500, search: true,
+					template: function(row){
+						var resultStr = $.osl.escapeHtml(row.reqNm);
+						//비밀번호가 있는 경우
+						if(row.reqPw == "Y"){
+							resultStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
+						}
+						return resultStr;
+					}
+				},
 				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 150, search: true,
 					template: function (row) {
@@ -75,6 +84,9 @@ var OSLReq1000Popup = function () {
 			searchColumns:[
 				{field: 'prjGrpNm', title: '프로젝트 그룹명', searchOrd: 0}
 			],
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
 				"dblClick": true 
 				/* ,"click": true */
@@ -95,7 +107,7 @@ var OSLReq1000Popup = function () {
 					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
 				},
 				
-				"update":function(rowData, row, datatableId, type, rowNum, elem){
+				"update":function(rowData, datatableId, type, rowNum, elem){
 					if(rowData.reqProType != "01"){
 						$.osl.alert('접수 요청중인 요구사항만 수정 가능합니다.');
 						return false;
@@ -114,7 +126,7 @@ var OSLReq1000Popup = function () {
 					
 					$.osl.layerPopupOpen('/req/req1000/req1000/selectReq1001View.do',data,options);
 				},
-				"delete":function(rowDatas, row, datatableId, type, rowNum, elem){
+				"delete":function(rowDatas, datatableId, type, rowNum, elem){
 					//AJAX 설정
 					var ajaxObj = new $.osl.ajaxRequestAction(
 							{"url":"<c:url value='/req/req1000/req1000/deleteReq1001ReqListAjax.do'/>"}
@@ -135,7 +147,7 @@ var OSLReq1000Popup = function () {
 					//AJAX 전송
 					ajaxObj.send();
 				},
-				"dblClick":function(rowData, row, datatableId, type, rowNum, elem){
+				"dblClick":function(rowData, datatableId, type, rowNum, elem){
 					var data = {
 							type:"update",
 							paramPrjId: rowData.prjId,

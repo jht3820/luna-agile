@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="spr1000DAO">
+
+	
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	
+	<sql id="selectSpr1000List">
+		SELECT 
+			ROWNUM RN
+			, T1.LIC_GRP_ID
+			, T1.PRJ_GRP_ID
+			, T1.PRJ_ID
+			, T1.SPR_ID AS SPR_ID
+			, T1.SPR_NM AS SPR_NM
+			, T1.SPR_DESC
+			, T1.SPR_TYPE_CD AS SPR_TYPE_CD
+			, SF_STM4001_COM_CD_INFO(T1.LIC_GRP_ID, 'SPR00001', T1.SPR_TYPE_CD, '1') AS SPR_TYPE_NM
+			, T1.SPR_ST_DT AS SPR_ST_DT
+			, T1.SPR_ED_DT AS SPR_ED_DT
+			, T1.ORD
+			, T1.USE_CD
+			, SF_STM4001_COM_CD_INFO(T1.LIC_GRP_ID, 'CMM00001', T1.USE_CD, '1') AS USE_NM
+			, T1.DEL_CD
+			, T1.REQ_ALL_CNT
+			, T1.REQ_DONE_CNT
+			, T1.REQ_PROGRESS_CNT
+		FROM
+		(
+			SELECT
+				A.LIC_GRP_ID
+				, A.PRJ_GRP_ID
+				, A.PRJ_ID
+				, A.SPR_ID AS SPR_ID
+				, A.SPR_NM AS SPR_NM
+				, A.SPR_DESC AS SPR_DESC
+				, A.SPR_TYPE_CD AS SPR_TYPE_CD
+				, TO_CHAR(A.SPR_ST_DT, 'YYYY-MM-DD') AS SPR_ST_DT
+          		, TO_CHAR(A.SPR_ED_DT, 'YYYY-MM-DD') AS SPR_ED_DT
+          		, ORD
+          		, USE_CD
+          		, DEL_CD
+          		, (SELECT COUNT(*) FROM SPR1100 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND PRJ_GRP_ID = A.PRJ_GRP_ID AND PRJ_ID = A.PRJ_ID AND SPR_ID = A.SPR_ID) AS REQ_ALL_CNT
+				,
+		        (
+					SELECT COUNT(*)
+		            FROM SPR1100 Z INNER JOIN REQ4100 Y ON(Z.PRJ_ID = Y.PRJ_ID AND Z.REQ_ID = Y.REQ_ID AND Y.REQ_PRO_TYPE = '04')
+		            WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.PRJ_GRP_ID = A.PRJ_GRP_ID AND Z.PRJ_ID = A.PRJ_ID AND Z.SPR_ID = A.SPR_ID
+		        ) AS REQ_DONE_CNT
+		        ,
+		        (
+		          	SELECT COUNT(*)
+		            FROM SPR1100 Z INNER JOIN REQ4100 Y ON(Z.PRJ_ID = Y.PRJ_ID AND Z.REQ_ID = Y.REQ_ID AND Y.REQ_PRO_TYPE = '02')
+		            WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.PRJ_GRP_ID = A.PRJ_GRP_ID AND Z.PRJ_ID = A.PRJ_ID AND Z.SPR_ID = A.SPR_ID
+		        ) AS REQ_PROGRESS_CNT
+		    FROM SPR1000 A
+		    WHERE 1=1
+		    AND A.LIC_GRP_ID = #licGrpId#
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			<isNotEmpty property="useCd">
+				AND A.USE_CD = #useCd#
+			</isNotEmpty>
+			<isNotEmpty property="delCd">
+				AND A.DEL_CD = #delCd#
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.ORD DESC
+			</isEmpty> 
+		) T1 
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="sprNm">
+					AND	T1.SPR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.SPR_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprTypeCd">
+					AND	T1.SPR_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="sprDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	TO_DATE(T1.SPR_ST_DT, 'YYYY-MM-DD') &gt;= TO_DATE(SUBSTR(#searchStartDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	TO_DATE(T1.SPR_ED_DT, 'YYYY-MM-DD') &lt;=  TO_DATE(SUBSTR(#searchEndDt#, 0, INSTR(#searchStartDt#, ' ')), 'YYYY-MM-DD')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectSpr1000ReqList">
+		SELECT
+			ROWNUM RN
+			,	SUBT2.PRJ_ID
+			,	SF_PRJ1000_GRP_NM(SUBT2.PRJ_ID) AS PRJ_NM
+			,	SUBT2.PRJ_GRP_ID
+			,	SF_PRJ1000_GRP_NM(SUBT2.PRJ_GRP_ID) AS PRJ_GRP_NM
+			,	SUBT2.REQ_ID
+			,	SUBT2.REQ_ORD
+			,	SUBT2.REQ_CLS_ID
+			,	NVL(SF_REQ2000_REQ_CLS_NM(SUBT2.PRJ_ID, SUBT2.REQ_CLS_ID, '1'), '') AS REQ_CLS_NM
+			,	SUBT2.REQ_USR_ID
+			,	NVL(SUBT2.REQ_USR_NM, SF_STM3000_USR_INFO(SUBT2.REQ_USR_ID, '1')) AS REQ_USR_NM
+			,	SUBT2.REQ_DTM
+			,	SUBT2.REQ_USR_DEPT_ID
+			,	SUBT2.REQ_USR_DEPT_NM
+			,	SUBT2.REQ_USR_EMAIL
+			,	SUBT2.REQ_USR_NUM
+			,	SF_STM3000_USR_INFO(SUBT2.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
+			,	SUBT2.REQ_NM
+			,	SUBT2.REQ_PW
+			,	SUBT2.REQ_CHARGER_ID
+			,	SF_STM3000_USR_INFO(SUBT2.REQ_CHARGER_ID, 1) AS REQ_CHARGER_NM
+			,	SF_STM3000_USR_INFO(SUBT2.REQ_CHARGER_ID, 6) AS REQ_CHARGER_IMG_ID
+			, 	SUBT2.REQ_ST_DTM
+  		   	, 	SUBT2.REQ_ED_DTM
+			, 	SUBT2.REQ_ST_DU_DTM
+			, 	SUBT2.REQ_ED_DU_DTM
+			,	SUBT2.REQ_PRO_TYPE
+			,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', SUBT2.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+			,	SUBT2.REQ_NEW_TYPE
+			,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', SUBT2.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM
+			,	SUBT2.REQ_ACCEPT_TXT
+	    	,	SUBT2.REQ_TYPE_CD
+	    	,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', SUBT2.REQ_TYPE_CD, '1') AS REQ_TYPE_NM
+			,	SUBT2.ATCH_FILE_ID
+			,	SUBT2.CB_ATCH_FILE_ID
+			,	SUBT2.USE_CD
+			,	SUBT2.REQ_KEY
+			,	SUBT2.SPR_POINT
+		    ,	SUBT2.REG_DTM
+		    ,	SUBT2.REG_DTM_DAY
+		    ,	SUBT2.REG_USR_ID
+		    ,	SUBT2.REG_USR_IP
+		    ,	SUBT2.MODIFY_DTM
+		    ,	SUBT2.MODIFY_USR_ID
+		    ,	SUBT2.MODIFY_USR_IP
+		FROM
+		(
+			SELECT SUBT1.*
+			FROM
+			(
+				SELECT
+					A.PRJ_ID
+					,	B.PRJ_GRP_ID
+					,	B.REQ_ID
+					,	B.REQ_ORD
+					,	B.REQ_CLS_ID
+					,	B.REQ_USR_ID
+					,	B.REQ_USR_NM
+					,	TO_CHAR(B.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM
+					,	B.REQ_USR_DEPT_ID
+					,	B.REQ_USR_DEPT_NM
+					,	B.REQ_USR_EMAIL
+					,	B.REQ_USR_NUM
+					,	B.REQ_NM
+					,	NVL2(B.REQ_PW, 'Y', 'N') AS REQ_PW
+					,	B.REQ_CHARGER_ID
+					, 	NVL2(B.REQ_ST_DTM, TO_CHAR(B.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
+	   		   		, 	NVL2(B.REQ_ED_DTM, TO_CHAR(B.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+					, 	NVL2(B.REQ_ST_DU_DTM, TO_CHAR(B.REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ST_DU_DTM
+					, 	NVL2(B.REQ_ED_DU_DTM, TO_CHAR(B.REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ED_DU_DTM
+					,	B.REQ_PRO_TYPE
+					,	B.REQ_NEW_TYPE
+					,	B.REQ_ACCEPT_TXT
+			    	,	B.REQ_TYPE_CD
+					,	B.ATCH_FILE_ID
+					,	B.CB_ATCH_FILE_ID
+					,	B.USE_CD
+					,	B.REQ_KEY
+					,	A.SPR_POINT
+					,	A.REQ_LINK_ORD
+				    ,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
+				    ,	B.REG_USR_ID
+				    ,	B.REG_USR_IP
+				    ,	TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	B.MODIFY_USR_ID
+				    ,	B.MODIFY_USR_IP
+				FROM SPR1100 A INNER JOIN REQ4100 B ON (A.PRJ_GRP_ID = B.PRJ_GRP_ID AND A.PRJ_ID = B.PRJ_ID AND A.REQ_ID = B.REQ_ID)
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+						AND	SUBT1.REQ_PRO_TYPE = #searchTargetData#
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjNm">
+						AND	SUBT1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqOrd">
+						AND	SUBT1.REQ_ORD LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjGrpNm">
+						AND	SUBT1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqNm">
+						AND	SUBT1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqDesc">
+					<![CDATA[
+						AND	REGEXP_REPLACE(SUBT1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+					]]>
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrNm">
+						AND	SUBT1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+						AND	SUBT1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqUsrNum">
+						AND	SUBT1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqDtm">
+						<isNotEmpty property="searchStartDt">
+							AND	SUBT1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+						<isNotEmpty property="searchEndDt">
+							AND	SUBT1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="regDtmDay">
+						<isNotEmpty property="searchStartDt">
+							AND	SUBT1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+						<isNotEmpty property="searchEndDt">
+							AND	SUBT1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+		) SUBT2
+		WHERE 1=1
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUBT2.REQ_LINK_ORD, TO_NUMBER(REGEXP_REPLACE(SUBT2.REQ_ORD, '[^0-9]')) DESC NULLS LAST
+		</isEmpty>
+	</sql>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+    </select>
+    
+    
+    <select id="spr1000DAO.selectSpr1000SprList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectSpr1000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+	
+	<insert id="spr1000DAO.insertSpr1000SprInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newSprId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_SPR_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_SPR_ID, 12, 5)) + 1) , 5, '0')
+						,	'SPR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_SPR_ID
+			FROM	(
+			            SELECT	MAX(SPR_ID)  AS NEW_SPR_ID
+			            FROM	SPR1000 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+			            AND		A.PRJ_GRP_ID = #prjGrpId#
+			            AND		A.PRJ_ID = #prjId#
+			            AND		A.SPR_ID LIKE 'SPR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO SPR1000
+			(
+                LIC_GRP_ID		,	PRJ_GRP_ID		,	PRJ_ID
+            ,	SPR_ID			,	SPR_NM			,	SPR_DESC
+            ,	SPR_TYPE_CD		,	SPR_ST_DT		,	SPR_ED_DT
+            ,	ORD				,	USE_CD			,	DEL_CD
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #licGrpId#		,	#prjGrpId#		,	#prjId#
+            ,	#newSprId#		,	#sprNm#			,	#sprDesc#
+            ,	#sprTypeCd#		,	REPLACE(#sprStDt#, '-', '')		,	REPLACE(#sprEdDt#, '-', '')
+            ,	#ord#			,	#useCd#			,	'02'
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+        )		
+		]]>
+	</insert>
+	
+	
+	<update id="spr1000DAO.updateSpr1000Info" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		UPDATE	SPR1000 A
+        SET		MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+	]]>
+			<isNotEmpty property="sprNm">
+				,	SPR_NM		= #sprNm#     			
+     		</isNotEmpty>
+			<isNotEmpty property="sprDesc">
+				,	SPR_DESC		= #sprDesc#     			
+     		</isNotEmpty>
+			<isNotEmpty property="startDt">
+				,	SPR_ST_DT		= REPLACE(#startDt#, '-', '')
+     		</isNotEmpty>
+			<isNotEmpty property="endDt">
+				,	SPR_ED_DT		= REPLACE(#endDt#, '-', '')
+     		</isNotEmpty>
+			<isNotEmpty property="ord">
+				,	ORD		= #ord#
+     		</isNotEmpty>
+			<isNotEmpty property="useCd">
+				,	USE_CD		= #useCd#
+     		</isNotEmpty>
+     		<isNotEmpty property="sprTypeCd">
+				,	SPR_TYPE_CD		= #sprTypeCd#
+     		</isNotEmpty>
+     <![CDATA[
+        WHERE	1=1
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_GRP_ID	= #prjGrpId#
+        AND		A.PRJ_ID		= #prjId#
+        AND		A.SPR_ID		= #sprId#
+	]]>
+	</update>
+	
+	
+	<update id="spr1000DAO.deleteSpr1000SprInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		UPDATE	SPR1000 A SET
+			A.DEL_CD = #delCd#
+			,	MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+        WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_GRP_ID	= #prjGrpId#
+        AND		A.PRJ_ID		= #prjId#
+        AND		A.SPR_ID		= #sprId#
+	]]>
+	</update>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectSpr1000List"/>
+    	) T1
+    	WHERE 1=1
+		<isNotEmpty property="sprId">
+			AND		T1.SPR_ID = #sprId#
+		</isNotEmpty>
+	</select>
+	
+	
+	<select id="spr1000DAO.selectSpr1000SprReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr1000ReqList"/>
+		) Z
+    </select>
+    
+    
+    <select id="spr1000DAO.selectSpr1000SprReqList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectSpr1000ReqList"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+</sqlMap>

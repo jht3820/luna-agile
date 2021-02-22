@@ -1,6 +1,5 @@
 package kr.opensoftlab.lunaops.stm.stm9000.stm9100.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,29 +8,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
-import kr.opensoftlab.lunaops.com.vo.LoginVO;
-import kr.opensoftlab.lunaops.stm.stm9000.stm9100.service.Stm9100Service;
-import kr.opensoftlab.lunaops.stm.stm9000.stm9100.vo.Stm9100VO;
-import kr.opensoftlab.sdf.util.OslAgileConstant;
-import kr.opensoftlab.sdf.util.PagingUtil;
-import kr.opensoftlab.sdf.util.ReqHistoryMngUtil;
-import kr.opensoftlab.sdf.util.RequestConvertor;
-
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-
+import kr.opensoftlab.lunaops.com.exception.UserDefineException;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
+import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.service.Dpl1000Service;
+import kr.opensoftlab.lunaops.stm.stm9000.stm9000.web.Stm9000Controller;
+import kr.opensoftlab.lunaops.stm.stm9000.stm9100.service.Stm9100Service;
+import kr.opensoftlab.sdf.jenkins.JenkinsClient;
+import kr.opensoftlab.sdf.util.CommonScrty;
+import kr.opensoftlab.sdf.util.OslStringUtil;
+import kr.opensoftlab.sdf.util.PagingUtil;
+import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
 @Controller
@@ -43,421 +41,513 @@ public class Stm9100Controller {
 	
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
-
-	
-	@Resource(name = "propertiesService")
-	protected EgovPropertyService propertiesService;
-
-
-	
-	@Resource(name="fileMngService")
-	private FileMngService fileMngService;
-
-	@Value("${Globals.fileStorePath}")
-	private String tempPath;
-
-	
-	@Resource(name="EgovFileMngUtil")
-	private EgovFileMngUtil fileUtil;	
-
-	@Resource(name = "egovFileIdGnrService")
-	private EgovIdGnrService idgenService;
-
-	@Resource(name = "historyMng")
-	private ReqHistoryMngUtil historyMng;
 	
 	@Resource(name = "stm9100Service")
 	private Stm9100Service stm9100Service;
 	
-
+	@Resource(name = "dpl1000Service")
+	private Dpl1000Service dpl1000Service;
+	
+	@Resource(name = "jenkinsClient")
+	private JenkinsClient jenkinsClient;
+	
 	
 	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100View.do")
-	public String selectStm9100View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	public String selectStm9100View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/stm/stm9000/stm9100/stm9100";
 	}
 	
 	
-	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JenkinsProjectListAjax.do")
-    public ModelAndView selectStm9100JenkinsProjectListAjax(@ModelAttribute("stm9100VO") Stm9100VO stm9100VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	try{
-    		
-        	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
-
-    		
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-    		
-    		
-			String _pageNo_str = paramMap.get("pageNo");
-			String _pageSize_str = paramMap.get("pageSize");
-
-			int _pageNo = 1;
-			int _pageSize = OslAgileConstant.pageSize;
-
-			
-			if(_pageNo_str != null && !"".equals(_pageNo_str)){
-				_pageNo = Integer.parseInt(_pageNo_str)+1;  
-			}
-			if(_pageSize_str != null && !"".equals(_pageSize_str)){
-				_pageSize = Integer.parseInt(_pageSize_str);  
-			}
-
-			
-			stm9100VO.setLicGrpId(loginVO.getLicGrpId());
-			
-			
-			stm9100VO.setPageIndex(_pageNo);
-			stm9100VO.setPageSize(_pageSize);
-			stm9100VO.setPageUnit(_pageSize);
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(stm9100VO);  
-    		
-			
-			List<Stm9100VO> jenkinsProjectList = null;
-			
-			
-			int totCnt = 0;
-			
-			
-			totCnt =  stm9100Service.selectStm9100JenkinsProjectListCnt(stm9100VO);
-			paginationInfo.setTotalRecordCount(totCnt);
-    		
-    		
-			jenkinsProjectList = stm9100Service.selectStm9100JenkinsProjectList(stm9100VO);
-
-			
-    		model.addAttribute("list", jenkinsProjectList);
-    		
-    		
-			Map<String, Integer> pageMap = new HashMap<String, Integer>();
-			pageMap.put("pageNo",stm9100VO.getPageIndex());
-			pageMap.put("listCount", jenkinsProjectList.size());
-			pageMap.put("totalPages", paginationInfo.getTotalPageCount());
-			pageMap.put("totalElements", totCnt);
-			pageMap.put("pageSize", _pageSize);
-
-			
-			model.addAttribute("page", pageMap);
-    		
-    		
-    		model.addAttribute("errorYn", 'N');
-        	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
-        	
-        	return new ModelAndView("jsonView", model);
-    	}
-    	catch(Exception ex){
-    		Log.error("selectStm9100JenkinsProjectListAjax()", ex);
-    		
-    		
-    		model.addAttribute("errorYn", 'Y');
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-
-	
-	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9101View.do")
-	public String selectStm9101View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="stm/stm9000/stm9100/selectStm9101View.do")
+	public String selectStm9101View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/stm/stm9000/stm9100/stm9101";
 	}
 	
 	
-	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9102View.do")
-	public String selectStm9102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	public String selectStm9102View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			paramMap.put("jenId", paramMap.get("paramJenId"));
+			paramMap.put("jobId", paramMap.get("paramJobId"));
+			
+			
+			Map jobMap = stm9100Service.selectStm9100JobInfo(paramMap);
+			
+			model.addAttribute("jobInfo", jobMap);
+			
+		}catch(Exception e){
+			Log.error(e);
+		}
 		return "/stm/stm9000/stm9100/stm9102";
 	}
 	
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JenkinsProjectAuthListAjax.do")
-    public ModelAndView selectStm9100JenkinsProjectAuthListAjax(@ModelAttribute("stm9100VO") Stm9100VO stm9100VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	try{
-    		
-        	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
-        	
-    		
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-    		
-    		
-			String _pageNo_str = paramMap.get("pageNo");
-			String _pageSize_str = paramMap.get("pageSize");
-
-			int _pageNo = 1;
-			int _pageSize = OslAgileConstant.pageSize;
-
-			
-			if(_pageNo_str != null && !"".equals(_pageNo_str)){
-				_pageNo = Integer.parseInt(_pageNo_str)+1;  
-			}
-			if(_pageSize_str != null && !"".equals(_pageSize_str)){
-				_pageSize = Integer.parseInt(_pageSize_str);  
-			}
-
-			
-			stm9100VO.setLicGrpId(loginVO.getLicGrpId());
-			
-			
-			stm9100VO.setPageIndex(_pageNo);
-			stm9100VO.setPageSize(_pageSize);
-			stm9100VO.setPageUnit(_pageSize);
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(stm9100VO);  
-    		
-			
-			List<Map> jenkinsJobList = null;
-			
-			
-			int totCnt = 0;
-			
-			totCnt = stm9100Service.selectStm9100JenkinsProjectAuthListCnt(stm9100VO);
-			paginationInfo.setTotalRecordCount(totCnt);
-			
-			
-			jenkinsJobList = stm9100Service.selectStm9100JenkinsProjectAuthList(stm9100VO);
-
-			
-    		model.addAttribute("list", jenkinsJobList);
-			
-			
-			Map<String, Integer> pageMap = new HashMap<String, Integer>();
-			pageMap.put("pageNo",stm9100VO.getPageIndex());
-			pageMap.put("listCount", jenkinsJobList.size());
-			pageMap.put("totalPages", paginationInfo.getTotalPageCount());
-			pageMap.put("totalElements", totCnt);
-			pageMap.put("pageSize", _pageSize);
-
-			
-			model.addAttribute("page", pageMap);
-			
-    		model.addAttribute("errorYn", 'N');
-        	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
-        	
-        	return new ModelAndView("jsonView", model);
-    	}
-    	catch(Exception ex){
-    		Log.error("selectStm9100JenkinsProjectAuthListAjax()", ex);
-    		
-    		model.addAttribute("errorYn", 'Y');
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-	
-	
-	
-	@RequestMapping(value="/stm/stm9000/stm9100/insertStm9100ProjectAddJobAjax.do")
-    public ModelAndView insertStm9100ProjectAddJobAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	try{
-    		
-    		Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"jobId");
-    		
-        	HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-       	
-    		
-    		paramMap.put("licGrpId", loginVO.getLicGrpId());
-        	
-    		
-    		stm9100Service.insertStm9100ProjectAddJob(paramMap);
-      
-        	
-        	model.addAttribute("errorYn", 'N');
-        	model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
-        	
-        	return new ModelAndView("jsonView", model);
-    	}
-    	catch(Exception ex){
-    		Log.error("insertStm9100ProjectAddJobAjax()", ex);
-    		
-    		
-    		model.addAttribute("errorYn", 'Y');
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-	
-	
-	
-	@RequestMapping(value="/stm/stm9000/stm9100/deleteStm9100ProjectDelJobAjax.do")
-    public ModelAndView deleteStm9100ProjectDelJob(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	try{
-    		
-    		Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"jobId");
-    		
-        	HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-       	
-    		
-    		paramMap.put("licGrpId", loginVO.getLicGrpId());
-        	
-    		
-    		stm9100Service.deleteStm9100ProjectDelJob(paramMap);
-      
-        	
-        	model.addAttribute("errorYn", 'N');
-        	model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
-        	
-        	return new ModelAndView("jsonView", model);
-    	}
-    	catch(Exception ex){
-    		Log.error("deleteStm9100ProjectDelJob()", ex);
-    		
-    		
-    		model.addAttribute("errorYn", 'Y');
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-	
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JenkinsJobAuthGrpListAjax.do")
-	public ModelAndView selectStm9100JenkinsJobAuthGrpListAjax(@ModelAttribute("stm9100VO") Stm9100VO stm9100VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JobListAjax.do")
+	public ModelAndView selectStm9100JobListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
 			
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-    		
 			
-			String _pageNo_str = paramMap.get("pageNo");
-			String _pageSize_str = paramMap.get("pageSize");
-
-			int _pageNo = 1;
-			int _pageSize = OslAgileConstant.pageSize;
-
-			
-			if(_pageNo_str != null && !"".equals(_pageNo_str)){
-				_pageNo = Integer.parseInt(_pageNo_str)+1;  
-			}
-			if(_pageSize_str != null && !"".equals(_pageSize_str)){
-				_pageSize = Integer.parseInt(_pageSize_str);  
-			}
-
-			
-			stm9100VO.setLicGrpId(loginVO.getLicGrpId());
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
 			
-			stm9100VO.setPageIndex(_pageNo);
-			stm9100VO.setPageSize(_pageSize);
-			stm9100VO.setPageUnit(_pageSize);
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(stm9100VO);  
-    		
-			
-			List<Map> jenAuthGrpList = null;
+			int totCnt = stm9100Service.selectStm9100JobListCnt(paramMap);
 			
 			
-			int totCnt = 0;
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
 			
-			totCnt = stm9100Service.selectStm9100JenkinsJobAuthGrpListCnt(stm9100VO);
+			
 			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			jenAuthGrpList = stm9100Service.selectStm9100JenkinsJobAuthGrpList(stm9100VO);
-
-			model.addAttribute("list", jenAuthGrpList);
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			
-			Map<String, Integer> pageMap = new HashMap<String, Integer>();
-			pageMap.put("pageNo",stm9100VO.getPageIndex());
-			pageMap.put("listCount", jenAuthGrpList.size());
-			pageMap.put("totalPages", paginationInfo.getTotalPageCount());
-			pageMap.put("totalElements", totCnt);
-			pageMap.put("pageSize", _pageSize);
-
 			
-			model.addAttribute("page", pageMap);
+			List<Map> stm9100JobList = stm9100Service.selectStm9100JobList(paramMap);
+				
 			
 			
-			model.addAttribute("errorYN", "N");
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+				
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			model.addAttribute("data", stm9100JobList);
+			model.addAttribute("meta", metaMap);
+			
+			
+			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
 			
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
-			Log.error("selectStm9100JenkinsJobAuthGrpListAjax()", ex);
+			Log.error("selectStm9100JobListAjax()", ex);
 			
 			
-			model.addAttribute("errorYN", "Y");
+    		model.addAttribute("errorYn", "Y");
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JobDetailAjax.do")
+	public ModelAndView selectStm9100JobDetailAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			Map jobMap = stm9100Service.selectStm9100JobInfo(paramMap);
+			
+			model.addAttribute("jobInfo", jobMap);
+			
+			
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm9100JobDetailAjax()", ex);
+			
+			
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
 			return new ModelAndView("jsonView");
 		}
 	}
 	
 	
-	
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/stm/stm9000/stm9000/insertStm9100JenkinsJobAuthGrpInfoAjax.do")
-	public ModelAndView insertStm9100JenkinsJobAuthGrpInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model )	throws Exception {
+	@RequestMapping(value="/stm/stm9000/stm9100/saveStm9101JobInfoAjax.do")
+	public ModelAndView saveStm9101JobInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
 		try{
 			
-			Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"authGrpId");
-
-			List selAuthMapList = (List)paramMap.get("list");
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			HttpSession ss = request.getSession();
 			
-			int selAuthCnt = selAuthMapList.size();
-			
-			
-			int addFailAuthCnt = stm9100Service.insertStm9100JenkinsJobAuthGrpInfo(paramMap);
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());	
 			
 			
-			if(selAuthCnt == addFailAuthCnt){
+			String type = (String) paramMap.get("type");
+			
+			
+			if(!"update".equals(type)){
 				
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "선택된 모든 역할그룹이 중복됩니다.");
+				
+				int jobCheck = stm9100Service.selectStm9100JobUseCountInfo(paramMap);
+				
+				if(jobCheck > 0){
+					
+					model.addAttribute("errorYn", "Y");
+					model.addAttribute("message", egovMessageSource.getMessage("stm9100.fail.job.exists")); 
+					return new ModelAndView("jsonView");
+				}
 			}
 			
-			else if(addFailAuthCnt > 0){
+			
+			String salt = EgovProperties.getProperty("Globals.lunaops.salt");
+			
+			
+			String nowJobTok = (String)paramMap.get("nowJobTok");
+			
+			
+			String jobTok = (String)paramMap.get("jobTok");
+			
+			
+			String newJobTok = "";
+			
+			try{
+				String jenUrl=(String)paramMap.get("jenUrl");
+				String jobId=(String)paramMap.get("jobId");
+				String userId=(String)paramMap.get("jenUsrId");
+				String tokenId=(String)paramMap.get("jenUsrTok");
 				
-				model.addAttribute("errorYn", "N");
-				model.addAttribute("message", egovMessageSource.getMessage("success.common.insert")+"</br>"+addFailAuthCnt+"건의 중복 선택 역할그룹은 제외되었습니다.");
-			}else{
 				
-				model.addAttribute("errorYn", "N");
-				model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
+				if(tokenId == null || "".equals(tokenId)){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.notTokenKey"));
+					return new ModelAndView("jsonView");
+				}
+				
+				
+				tokenId = CommonScrty.decryptedAria(tokenId, salt);
+				
+				
+				jenkinsClient.setUser(userId);
+				jenkinsClient.setPassword(tokenId);
+				
+				String url = jenUrl+"/api/json";
+				String content = "";
+				
+				
+				content = jenkinsClient.excuteHttpClientJenkins(url);
+				
+				jenkinsClient.getJenkinsParser(content );
+				
+				
+				String deJobTok = jobTok;
+				
+				
+				if(nowJobTok.equals(jobTok)){
+					
+					deJobTok = CommonScrty.decryptedAria(jobTok, salt);
+				}
+				
+				
+				if(deJobTok == null || "".equals(deJobTok)){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9100.fail.job.notTokenKey"));
+					return new ModelAndView("jsonView");
+				}
+				
+				
+				url = jenUrl+"/job/"+jobId+"/config.xml";
+				String settingJobTok = "";
+				
+				settingJobTok = jenkinsClient.excuteHttpClientJobToken(url,deJobTok);
+				
+				
+				if(!deJobTok.equals(settingJobTok)){
+					
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9100.fail.job.check.tokenKey"));
+					return new ModelAndView("jsonView");
+				}
+				
+			}catch(Exception ex){
+				Log.error("saveStm9101JobInfoAjax()", ex);
+				
+				
+				
+				if(ex instanceof HttpResponseException){
+					int responseCode = ((HttpResponseException) ex).getStatusCode(); 
+					
+					if(responseCode == 401) {
+						model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+						model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.user.authentication"));
+					
+					}else if(responseCode == 404) {
+						model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+						model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.serverData"));
+					}
+				
+				}else if(ex instanceof HttpHostConnectException){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+				
+				}else if( ex instanceof ParseException){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.result.parsing.error"));
+				
+				}else if( ex instanceof IllegalArgumentException){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.unauthorized.url"));
+				
+				}else if(ex instanceof UserDefineException){
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", ex.getMessage());
+				}else{
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+				}
+					
+				return new ModelAndView("jsonView");
 			}
+			
+			
+			if("update".equals(type)){
+				
+				if(!nowJobTok.equals(jobTok)){
+					
+					newJobTok = CommonScrty.encryptedAria(jobTok, salt);
+				}else{
+					newJobTok = jobTok;
+				}
+			}
+			
+			else{
+				newJobTok = CommonScrty.encryptedAria(jobTok, salt);
+			}
+			
+			
+			paramMap.remove("jobTok");
+			
+			
+			paramMap.put("jobTok", newJobTok);
+			
+			
+			stm9100Service.saveStm9100JobInfo(paramMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.save"));
 			
 			return new ModelAndView("jsonView");
-
-		}catch(Exception e){
-			Log.error("insertStm9100JenkinsJobAuthGrpInfoAjax()", e);
+		}
+		catch(Exception ex){
+			Log.error("saveStm9101JobInfoAjax()", ex);
+			
 			
 			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.save"));
 			return new ModelAndView("jsonView");
 		}
 	}
 	
 	
-	@RequestMapping(value="/stm/stm9000/stm9100/deleteStm9100JenkinsJobAuthGrpInfoAjax.do")
-	public ModelAndView deleteStm9100JenkinsJobAuthGrpInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model )	throws Exception {
+	@RequestMapping(value="/stm/stm9000/stm9100/deleteStm9100JobInfoAjax.do")
+	public ModelAndView deleteStm9100JobInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
 		try{
 			
-			Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"authGrpId");
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVo.getLicGrpId());
 			
 			
-			stm9100Service.deleteStm9100JenkinsJobAuthGrpInfo(paramMap);
+			stm9100Service.deleteStm9100JobInfo(paramMap);
 			
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
-			
 			return new ModelAndView("jsonView");
-
-		}catch(Exception e){
-			Log.error("deleteStm9100JenkinsJobAuthGrpInfoAjax()", e);
+		}
+		catch(Exception ex){
+			Log.error("deleteStm9000JobInfoAjax()", ex);
 			
 			
 			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.save"));
 			return new ModelAndView("jsonView");
 		}
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JobConfirmConnect.do")
+	public ModelAndView selectStm9100JobConfirmConnect(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			Map jobMap = stm9100Service.selectStm9100JobInfo(paramMap);
+			
+			
+			String jenUsrId=(String)jobMap.get("jenUsrId");
+			String jenUsrTok=(String)jobMap.get("jenUsrTok");
+			String jobTok=(String)jobMap.get("jobTok");
+			String jenUrl=(String)jobMap.get("jenUrl");
+			String jobId=(String)jobMap.get("jobId");
+			
+			
+			String salt = EgovProperties.getProperty("Globals.lunaops.salt");
+			
+			
+			String deJenUsrTok = CommonScrty.decryptedAria(jenUsrTok, salt);
+			String deJobTok = CommonScrty.decryptedAria(jobTok, salt);
+			
+			
+			if(deJenUsrTok == null || "".equals(deJenUsrTok)){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.notTokenKey"));
+				return new ModelAndView("jsonView");
+			}
+			
+			
+			if(deJobTok == null || "".equals(deJobTok)){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9100.fail.job.notTokenKey"));
+				return new ModelAndView("jsonView");
+			}
+			
+			
+			jenkinsClient.setUser(jenUsrId);
+			jenkinsClient.setPassword(deJenUsrTok);
+			
+			String url = jenUrl+"/job/"+jobId+"/config.xml";
+			String settingJobTok = "";
+			
+			settingJobTok = jenkinsClient.excuteHttpClientJobToken(url,deJobTok);
+			
+			
+			if(!deJobTok.equals(settingJobTok)){
+				
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9100.fail.job.check.tokenKey"));
+				return new ModelAndView("jsonView");
+			}
+			
+			
+			model.addAttribute("resultCode", Stm9000Controller.JENKINS_OK);
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm9100JobConfirmConnect()", ex);
+			
+			
+			
+			if(ex instanceof HttpResponseException){
+				int responseCode = ((HttpResponseException) ex).getStatusCode(); 
+				
+				if(responseCode == 401) {
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.user.authentication"));
+				
+				}else if(responseCode == 404) {
+					model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+					model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.serverData"));
+				}
+			
+			}else if(ex instanceof HttpHostConnectException){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+			
+			}else if( ex instanceof ParseException){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.result.parsing.error"));
+			
+			}else if( ex instanceof IllegalArgumentException){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.unauthorized.url"));
+			
+			}else if(ex instanceof UserDefineException){
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", ex.getMessage());
+			}else{
+				model.addAttribute("resultCode", Stm9000Controller.JENKINS_FAIL);
+				model.addAttribute("resultMessage", egovMessageSource.getMessage("stm9000.fail.jenkins.connect.check.error"));
+			}
+			
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JobBuildListAjax.do")
+	public ModelAndView selectStm9100JobBuildListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			int totCnt = dpl1000Service.selectDpl1400DplBldNumListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			List<Map> jobBuildList = dpl1000Service.selectDpl1400DplBldNumList(paramMap);
+				
+			
+			
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+				
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			model.addAttribute("data", jobBuildList);
+			model.addAttribute("meta", metaMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm9100JobBuildListAjax()", ex);
+			
+			
+    		model.addAttribute("errorYn", "Y");
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9102JobView.do")
+	public String selectStm9002JobView( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/stm/stm9000/stm9000/stm9102";
+	}
 }

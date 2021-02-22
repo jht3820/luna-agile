@@ -1,265 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
-<sqlMap namespace="stm300DAO">
+<sqlMap namespace="stm9000DAO">
 	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias alias="Stm9000VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9000VO"/>
-	<typeAlias alias="Stm9001VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9000.vo.Stm9001VO"/>
 
-	<resultMap id="resultMapSelectStm9000" class="Stm9000VO">
-		<result property="rn"  			      column="RN"/>
-		<result property="jenId"              column="JEN_ID" />  
-		<result property="jenNm"              column="JEN_NM" />  
-		<result property="jenUsrId"           column="JEN_USR_ID" />  
-		<result property="jenUsrTok"          column="JEN_USR_TOK" />
-		<result property="jenUrl"             column="JEN_URL" />  
-		<result property="jenDesc"             column="JEN_DESC" /> 
-		<result property="useCd"              column="USE_CD" />  
-		<result property="delCd"              column="DEL_CD" />  
-		<result property="useNm"              column="USE_NM" /> 
-		<result property="regDtm"             column="REG_DTM" />  
-		<result property="regUsrId"           column="REG_USR_ID" /> 
-		<result property="regUsrIp"           column="REG_USR_IP" /> 
-		<result property="modifyDtm"          column="MODIFY_DTM" /> 
-		<result property="modifyUsrId"        column="MODIFY_USR_ID" /> 
-		<result property="modifyUsrIp"        column="MODIFY_USR_IP" /> 
-    </resultMap>
-    
-        
-	<resultMap id="resultMapSelectStm9001" class="Stm9001VO">
-		<result property="rn"  			      column="RN"/>
-		<result property="jenId"              column="JEN_ID" />  
-		<result property="jenNm"              column="JEN_NM" />  
-		<result property="jenUsrId"           column="JEN_USR_ID" />  
-		<result property="jenUsrTok"          column="JEN_USR_TOK" />
-		<result property="jenUrl"             column="JEN_URL" />  
-		<result property="jobId"              column="JOB_ID" />  
-		<result property="jobRestoreId"           column="JOB_RESTORE_ID" />  
-		<result property="jobTok"          column="JOB_TOK" /> 
-		<result property="jobDesc"             column="JOB_DESC" />  
-		<result property="jobTypeCd"             column="JOB_TYPE_CD" />
-		<result property="jobTypeNm"             column="JOB_TYPE_NM" />
-		<result property="useCd"              column="USE_CD" />  
-		<result property="useNm"              column="USE_NM" /> 
-		<result property="regDtm"             column="REG_DTM" /> 
-		<result property="regUsrId"           column="REG_USR_ID" />  
-		<result property="regUsrIp"           column="REG_USR_IP" />  
-		<result property="modifyDtm"          column="MODIFY_DTM" />  
-		<result property="modifyUsrId"        column="MODIFY_USR_ID" />  
-		<result property="modifyUsrIp"        column="MODIFY_USR_IP" />  
-    </resultMap>
-    
     
 	
-	<!-- sql Define  -->
-	<sql id="selectStm9000JenkinsList">
+	<sql id="selectStm9000JenkinsListBase">
 		<![CDATA[
-			SELECT
-		            JEN_ID ,                   
-		            JEN_NM ,                   
-		            JEN_USR_ID ,               
-		            JEN_USR_TOK ,              
-		            JEN_URL ,
-		            REPLACE (JEN_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS JEN_DESC , 
-		            USE_CD ,                  
-		            SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', USE_CD, '1') as USE_NM ,
-		            DEL_CD , 
-		            REG_DTM ,                  
-		            REG_USR_ID ,               
-		            REG_USR_IP ,               
-		            MODIFY_DTM ,               
-		            MODIFY_USR_ID ,            
-		            MODIFY_USR_IP                           
-				   
+			SELECT 
+					ROWNUM RN
+				, 	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID 
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL
+				,	SUB1.JEN_DESC 
+				,	SUB1.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', SUB1.USE_CD, '1') AS USE_NM
+				,	SUB1.REG_JOB_CNT
+				,	SUB1.DEL_CD 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP  
 			FROM
-		            STM9000
-			WHERE   1=1
-			AND		LIC_GRP_ID = #licGrpId#
-			AND		DEL_CD ='02'
+			(
+					SELECT
+							A.LIC_GRP_ID
+						,	A.JEN_ID 
+						,	A.JEN_NM 
+						,	A.JEN_USR_ID 
+						,	A.JEN_USR_TOK 
+						,	A.JEN_URL
+						,	A.JEN_DESC 
+						,	A.USE_CD
+						,	(SELECT COUNT(*) FROM STM9001 Z WHERE 1=1 AND Z.JEN_ID = A.JEN_ID) AS REG_JOB_CNT
+						,	A.DEL_CD 
+						,	A.REG_DTM 
+						,	A.REG_USR_ID 
+						,	A.REG_USR_IP 
+						,	A.MODIFY_DTM 
+						,	A.MODIFY_USR_ID 
+						,	A.MODIFY_USR_IP              
+					FROM STM9000 A
+					WHERE 1=1
+					AND	LIC_GRP_ID = #licGrpId#
+					AND	DEL_CD ='02'
+			) SUB1
+			WHERE 1=1
 		]]>
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchTxt">
-			<isEqual property="searchSelect" compareValue="jenNm"> 
-				AND		UPPER( JEN_NM ) like '%'|| UPPER( #searchTxt#  )  ||'%'
-			</isEqual>
-			<isEqual property="searchSelect" compareValue="jenDesc"> 
-				AND		UPPER( JEN_DESC )  like '%'|| UPPER( #searchTxt#  )  ||'%'
-			</isEqual>
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenDesc">
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchCd">
-			<isEqual property="searchSelect" compareValue="useCd">
-				AND		USE_CD = #searchCd#
-			</isEqual>
-			</isNotEmpty>
-		</isNotEmpty>
+		ORDER BY SUB1.REG_DTM DESC
     </sql>
     
-    <!-- sql Define  -->
-	<sql id="selectStm9000JobList">
-		<![CDATA[
-			SELECT
-		            A.JEN_ID ,                 
-		            B.JEN_NM ,                  
-		            B.JEN_USR_ID ,              
-		            B.JEN_USR_TOK ,             
-		            B.JEN_URL , 
-		            A.JOB_ID ,
-		            NVL(A.JOB_RESTORE_ID,'-') AS JOB_RESTORE_ID ,
-		            A.JOB_TOK ,
-		            A.JOB_TYPE_CD ,
-		            SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00002', A.JOB_TYPE_CD, '1') AS JOB_TYPE_NM ,
-		            A.JOB_DESC ,
-		            A.USE_CD ,                 
-		            SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM , 
-		            A.REG_DTM ,                 
-		            A.REG_USR_ID ,              
-		            A.REG_USR_IP ,              
-		            A.MODIFY_DTM ,              
-		            A.MODIFY_USR_ID ,           
-		            A.MODIFY_USR_IP                          
-			FROM
-		            STM9001 A LEFT JOIN STM9000 B ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
-			WHERE   1=1
-			AND		A.LIC_GRP_ID = #licGrpId#
-			AND		B.DEL_CD = '02'
-		]]>
-		<isNotEmpty property="projectJenkinsCheck">
-			<isEqual property="projectJenkinsCheck" compareValue="Y">
-				AND	EXISTS (
-	            	SELECT Z.*
-	                FROM STM9002 Z
-	                WHERE 1=1
-	                AND Z.LIC_GRP_ID = A.LIC_GRP_ID
-	                AND Z.JEN_ID = A.JEN_ID
-	                AND Z.JOB_ID = A.JOB_ID
-	                AND Z.PRJ_ID = #prjId#
-	            )
-			</isEqual>
-		</isNotEmpty>
-		<isNotEmpty property="jenId">
-			AND		A.JEN_ID = #jenId#
-		</isNotEmpty>
-		<isNotEmpty property="useCd">
-			AND		A.USE_CD = #useCd#
-		</isNotEmpty>
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchTxt">
-				<isEqual property="searchSelect" compareValue="jobNm"> 
-					AND		UPPER( B.JEN_NM ) like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobId"> 
-					AND		UPPER( JOB_ID ) like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobDesc"> 
-					AND		UPPER( JOB_DESC )  like '%'|| UPPER( #searchTxt#  )  ||'%'
-				</isEqual>
-			</isNotEmpty>
-		</isNotEmpty>
-		
-		<isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchCd">
-			<isEqual property="searchSelect" compareValue="useCd">
-				AND		A.USE_CD = #searchCd#
-			</isEqual>
-			</isNotEmpty>
-		</isNotEmpty>
-    </sql>
     
+    <select id="stm9000DAO.selectStm9000JenkinsList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT SUB2.*
+		FROM
+		(
+				<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="stm9000DAO.selectStm9000JenkinsListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+    </select>
+    
+     
     <select id="stm9000DAO.selectStm9000JenkinsNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
-		SELECT *
+	    
+		SELECT SUB2.*
 		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JenkinsList"/>
-	    			) A
-	    	)
+		(
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
     </select>
     
-    <select id="stm9000DAO.selectStm9000JobNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
-		SELECT *
-		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JobList"/>
-	    			) A
-	    	)
-    </select>
     
-    <select id="stm9000DAO.selectStm9000JenkinsList" parameterClass="Stm9000VO"  resultMap="resultMapSelectStm9000">
-		SELECT *
-		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JenkinsList"/>
-	    			) A
-	    	)
-	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
-    </select>
-    
-    <select id="stm9000DAO.selectStm9000JenkinsListCnt" parameterClass="Stm9000VO"  resultClass="java.lang.Integer">
-	    	SELECT
-					COUNT(*)
-			FROM	(
-						<include refid="selectStm9000JenkinsList"/>
-					) A
-    </select>
-    
-    <select id="stm9000DAO.selectStm9000JobList" parameterClass="Stm9001VO"  resultMap="resultMapSelectStm9001">
-		SELECT *
-		FROM
-			(
-    		SELECT ROWNUM RN,
-    			     A.*
-    		FROM
-    		(
-					<include refid="selectStm9000JobList"/>
-	    			) A
-	    	)
-	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
-    </select>
-    
-    <select id="stm9000DAO.selectStm9000JobListCnt" parameterClass="Stm9001VO"  resultClass="java.lang.Integer">
-	    	SELECT
-					COUNT(*)
-			FROM	(
-						<include refid="selectStm9000JobList"/>
-					) A
-    </select>
-    
-	 
+     
 	<select id="stm9000DAO.selectStm9000JenkinsInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		
 		SELECT *
 		FROM (
-			<include refid="selectStm9000JenkinsList"/>
-		) T1
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
 		WHERE 1=1
-			AND T1.JEN_ID = #jenId#
+		AND SUB2.JEN_ID = #jenId#
 	</select>
-	 
-	<select id="stm9000DAO.selectStm9000JobInfo" parameterClass="java.util.Map"  resultClass="egovMap">
-		SELECT *
-		FROM (
-			<include refid="selectStm9000JobList"/>
-		) T1
-		WHERE 1=1
-			AND T1.JOB_ID = #jobId#
-	</select>
-	
+    
+     
 	<insert id="stm9000DAO.insertStm9000JenkinsInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newJenId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_JEN_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_JEN_ID, 12, 5)) + 1) , 5, '0')
 						,	'JEN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -273,163 +131,70 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
-				INSERT     INTO     STM9000
-					(
-					            JEN_ID              ,  
-					            JEN_NM              ,  
-					            JEN_USR_ID          ,  
-					            JEN_USR_TOK         ,  
-					            JEN_URL             ,  
-					            JEN_DESC            ,  
-					            USE_CD              ,  
-					            DEL_CD				, 
-					            REG_DTM             ,  
-					            REG_USR_ID          ,  
-					            REG_USR_IP          ,  
-					            MODIFY_DTM          ,  
-					            MODIFY_USR_ID       ,  
-					            MODIFY_USR_IP       ,  
-					            LIC_GRP_ID
-					)
-				VALUES
-					(
-					             #newJenId#, 
-					             #jenNm#, 
-					             #jenUsrId#, 
-					             #jenUsrTok#, 
-					             #jenUrl#, 
-					             #jenDesc#, 
-					             #useCd#, 
-					             '02',
-					             SYSDATE , 
-					             #regUsrId#, 
-					             #regUsrIp#, 
-					             SYSDATE , 
-					             #modifyUsrId#, 
-					             #modifyUsrIp#,
-					             #licGrpId# 
-					)
-			
+			 
+			INSERT INTO STM9000
+			(
+					LIC_GRP_ID,		JEN_ID,			JEN_NM,		JEN_USR_ID,			JEN_USR_TOK 
+				,	JEN_URL,		JEN_DESC,		USE_CD,		DEL_CD,				REG_DTM 
+				,	REG_USR_ID,		REG_USR_IP, 	MODIFY_DTM, MODIFY_USR_ID,		MODIFY_USR_IP 
+			)
+			VALUES
+			(
+					#licGrpId#,  	#newJenId#,		#jenNm#,	#jenUsrId#,  		#jenUsrTok#
+				,	#jenUrl#,  		#jenDesc#,  	#useCd#,  	'02',  				SYSDATE
+				,	#regUsrId#,  	#regUsrIp#,  	SYSDATE,  	#modifyUsrId#,  	#modifyUsrIp#
+			)
 		]]>
 	</insert>
 	
-	<insert id="stm9000DAO.insertStm9000JobInfo" parameterClass="java.util.Map">
-		<![CDATA[ 
-				INSERT     INTO     STM9001
-					(
-					            JEN_ID              ,  
-					            JOB_ID 				, 
-					            JOB_RESTORE_ID 		, 
-					            JOB_TOK 			, 
-					            JOB_TYPE_CD			, 
-					            JOB_DESC 			, 
-					            USE_CD              ,  
-					            REG_DTM             ,  
-					            REG_USR_ID          ,  
-					            REG_USR_IP          ,  
-					            MODIFY_DTM          ,  
-					            MODIFY_USR_ID       ,  
-					            MODIFY_USR_IP       ,  
-					            LIC_GRP_ID
-					)
-				VALUES
-					(
-					             #jenId#, 
-					             #jobId#,
-					             #jobRestoreId#,
-					             #jobTok#,
-					             #jobTypeCd#,
-					             #jobDesc#, 
-					             #useCd#, 
-					             SYSDATE , 
-					             #regUsrId#, 
-					             #regUsrIp#, 
-					             SYSDATE , 
-					             #modifyUsrId#, 
-					             #modifyUsrIp#,
-					             #licGrpId# 
-					)
-			
-		]]>
-	</insert>
-    
+	
 	<update id="stm9000DAO.updateStm9000JenkinsInfo" parameterClass="java.util.Map">
-			UPDATE     STM9000     SET 
-
-			           JEN_ID = #jenId#              ,  
-			           JEN_NM = #jenNm#              ,  
-			           JEN_USR_ID = #jenUsrId#       ,  
-			           JEN_USR_TOK = #jenUsrTok#     ,  
-			           JEN_URL = #jenUrl#            ,  
-			           JEN_DESC = #jenDesc#            , 
-			           USE_CD = #useCd#              ,  
-			           MODIFY_DTM = SYSDATE          ,  
-			           MODIFY_USR_ID = #modifyUsrId# ,  
-			           MODIFY_USR_IP = #modifyUsrIp#    
-			WHERE
-					   1=1
-			  AND	   LIC_GRP_ID	=  	#licGrpId# 
-			  AND	   JEN_ID 		= 	#jenId#         
+		 
+		UPDATE STM9000 SET 
+				JEN_ID = #jenId# 
+			,	JEN_NM = #jenNm# 
+			,	JEN_USR_ID = #jenUsrId# 
+			,	JEN_USR_TOK = #jenUsrTok# 
+			,	JEN_URL = #jenUrl# 
+			,	JEN_DESC = #jenDesc# 
+			,	USE_CD = #useCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp# 
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+		AND	JEN_ID = #jenId# 
 	</update>
     
-	<update id="stm9000DAO.updateStm9000JobInfo" parameterClass="java.util.Map">
-			UPDATE     STM9001     SET 
-			        JEN_ID = #jenId#            	  	,  
-			        JOB_ID = #jobId# 					, 
-		            JOB_RESTORE_ID = #jobRestoreId# 	, 
-		            JOB_TOK = #jobTok# 					, 
-		            JOB_TYPE_CD = #jobTypeCd#				,
-		            JOB_DESC = #jobDesc# 				, 
-			        USE_CD = #useCd#             		,  
-			        MODIFY_DTM = SYSDATE         	 	,  
-			        MODIFY_USR_ID = #modifyUsrId# 		,  
-			        MODIFY_USR_IP = #modifyUsrIp#   	 
-			WHERE 1=1
-				AND	LIC_GRP_ID	=  	#licGrpId# 
-				AND	JEN_ID 		= 	#jenId#              
-				AND	JOB_ID		=	#jobId#				
-	</update>
-	
+    
 	<update id="stm9000DAO.deleteStm9000JenkinsInfo" parameterClass="java.util.Map">
-		UPDATE     STM9000     SET 
-		           DEL_CD = #delCd#              , 
-		           MODIFY_DTM = SYSDATE          , 
-		           MODIFY_USR_ID = #modifyUsrId# , 
-		           MODIFY_USR_IP = #modifyUsrIp#   
-		WHERE
-				   1=1
-		  AND	   LIC_GRP_ID	=  	#licGrpId# 
-		  AND	   JEN_ID 		= 	#jenId#               
+		
+		UPDATE STM9000 SET 
+				DEL_CD = #delCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp#  
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId# 
+		AND JEN_ID = #jenId# 
 	</update>
 	
-	<delete id="stm9000DAO.deleteStm9000JobInfo" parameterClass="java.util.Map">
-		DELETE FROM	STM9001 A
-		WHERE	1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#               
-			AND	JOB_ID = #jobId# 
-	</delete>
+    
+    
+    
 	
 	<select id="stm9000DAO.selectStm9000JenkinsUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
 		SELECT	COUNT(1) AS CNT
 		FROM 	STM9000 A
 		WHERE    1=1
 			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId# 
+			AND	JEN_ID = #jenId#                
 			AND	ROWNUM = 1
 	</select>
 	
-	<select id="stm9000DAO.selectStm9000JobUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
-		SELECT	COUNT(1) AS CNT
-		FROM 	STM9001 A
-		WHERE    1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#             
-			AND JOB_ID = #jobId#
-			AND	ROWNUM = 1
-	</select>
-    
+   
     <select id="stm9000DAO.selectStm9000JenkinsUserList" parameterClass="java.util.Map"  resultClass="egovMap">
+		
 		
       SELECT   	 B.JEN_USR_ID 
 		      	,B.JEN_USR_TOK
@@ -463,7 +228,9 @@
 		</isNotEmpty>
 	</select>
     
+    
 	<insert id="stm9000DAO.insertStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO STM9002 A
 			(
@@ -481,7 +248,9 @@
 		]]>
 	</insert>
 	
+	
 	<delete id="stm9000DAO.deleteStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE FROM STM9002 A
 			WHERE 1=1
@@ -491,7 +260,9 @@
 		]]>
 	</delete>
 	
+	
 	<select id="stm9000DAO.selectStm9000JenAuthGrpList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 				A.PRJ_ID
@@ -515,7 +286,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="stm9000DAO.selectStm9000JenAuthGrpCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 			SELECT COUNT(*) AS AUTH_GRP_CNT
 			FROM STM9002 A
@@ -525,4 +298,5 @@
 			AND A.AUTH_GRP_ID = #authGrpId#
 		]]>
 	</select>
+	
 </sqlMap>

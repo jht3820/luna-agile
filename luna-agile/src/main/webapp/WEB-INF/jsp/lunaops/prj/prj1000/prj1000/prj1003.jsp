@@ -1,327 +1,279 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<html lang="ko">
-<title>OpenSoftLab</title>
-
-<style>
-	.ui-draggable {top: -68px;}
-	.check_prj{padding:31px 25px !important;}
-	.checking{color:#4b73eb;padding:5px 0px; display:inline-block;}
-	.dup_btn { font-size: 0.95em; }
-	.pop_left { padding-top:20px; padding-bottom:20px; }
-	.pop_right {height:50px;}
-	.pop_left {height:50px;}
-	.ui-datepicker-trigger { padding-top: 5px; }
-</style>
-
+<form class="kt-form" id="frPrj1003">
+	<input type="hidden" name="paramPrjId" id="paramPrjId" value="${param.paramPrjId}">
+	<div class="row">
+		<div class="col-lg-6 col-md-12 col-sm-12">
+			<div class="kt-portlet">
+				<div class="kt-portlet__head kt-portlet__head--lg">
+					<div class="kt-portlet__head-label">
+						<h5 class="kt-font-boldest kt-font-brand">
+							<i class="fa fa-th-large kt-margin-r-5"></i>프로젝트 그룹 정보
+						</h5>
+					</div>
+				</div>
+				<div class="kt-portlet__body kt-padding-15">
+					<div class="row">
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="required" for="prjNm"><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹명</span></label>
+								<input type="text" class="form-control" placeholder="프로젝트 그룹명" name="prjNm" id="prjNm" opttype="-1" readonly="readonly" required>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="required" for="prjGrpRange"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>프로젝트 그룹 기간</span></label>
+								<input type="text" class="form-control" placeholder="프로젝트 그룹 기간" name="prjGrpRange" id="prjGrpRange" readonly="readonly" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>사용유무</label>
+								<select class="form-control kt-select2" id="useCd" name="useCd" readonly="readonly" opttype="-1" disabled>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="required" for="ord"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>정렬 순서</span></label>
+								<input type="number" class="form-control" placeholder="정렬 순서" name="ord" id="ord" value="1" opttype="-1" min="0" max="999" readonly="readonly" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label><i class="fa fa-edit kt-margin-r-5"></i><span>프로젝트 그룹 설명</span></label>
+								<textarea class="form-control osl-min-h-px--140 osl-textarea__resize--none" name="prjDesc" id="prjDesc" opttype="-1" readonly="readonly" ></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-md-12 col-sm-12">
+			<div class="kt-portlet">
+				<div class="kt-portlet__head kt-portlet__head--lg">
+					<div class="kt-portlet__head-label">
+						<h5 class="kt-font-boldest kt-font-brand">
+							<i class="fa fa-th-large kt-margin-r-5"></i>담당자 목록
+						</h5>
+					</div>
+					<div class="kt-portlet__head-toolbar">
+						<div class="kt-portlet__head-wrapper">
+							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+								<i class="fa fa-list"></i><span>조회</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="kt-portlet__body osl-min-h-px--400 kt-padding-10">
+					<div class="osl-datatable-search" data-datatable-id="prj1003PrjAuthUsrTable"></div>
+					<div class="kt_datatable" id="prj1003PrjAuthUsrTable"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="kt-portlet">
+				<div class="kt-portlet__head kt-portlet__head--lg">
+					<div class="kt-portlet__head-label">
+						<h5 class="kt-font-boldest kt-font-brand">
+							<i class="fa fa-th-large kt-margin-r-5"></i>권한있는 프로젝트 목록 ( <span id="prjAuthListCnt"></span> / <span id="prjChildListCnt"></span> )
+						</h5>
+					</div>
+					<div class="kt-portlet__head-toolbar">
+						<div class="kt-portlet__head-wrapper">
+							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj1003PrjAuthUsrTable" data-datatable-action="select" title="사용자 배정 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+								<i class="fa fa-list"></i><span>조회</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="kt-portlet__body kt-padding-10">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="osl-datatable-search" data-datatable-id="prj1003PrjTable"></div>
+						</div>
+					</div>
+					<div class="kt_datatable" id="prj1003PrjTable"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<div class="modal-footer">
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
+</div>
 <script>
-
-//유효성 체크
-var arrChkObj = {"prjNm":{"type":"length","msg":"프로젝트 ${prjGrpNm}명은 200byte까지 입력이 가능합니다.",max:200}
-				,"prjAcrm":{"type":"length","msg":"프로젝트 약어는 10byte까지 입력이 가능합니다.",max:10}
-				,"prjDesc":{"type":"length","msg":"프로젝트 설명은 4000byte까지 입력이 가능합니다.",max:4000}
-				,"ord":{"type":"number"}};
-
-// 프로젝트 약어 영문 숫자여부 체크
-var arrChkObj2 = {"prjAcrm":{"type":"english","engOption":"includeNumber"}};
-
-//생성 타입 (group - 그룹, project - 단위)
-$(document).ready(function() {
-	//그룹 or 단위
-	var type = "${type}";
+"use strict";
+var OSLPrj1003Popup = function () {
+	var formId = 'frPrj1003';
 	
-	// 유효성 체크
-	gfnInputValChk(arrChkObj);
-	// 프로젝트 약어 유효성 체크
-	gfnInputValChk(arrChkObj2);
+	//배정 담당자 중복 체크
+	var prjAuthUsrIdList = [];
 	
-	var prjGrpStartDt = "${startDt}";
-	var prjGrpEndDt = "${endDt}";
+	//수정시 배정담당자 원본 데이터
+	var prjAuthOriginalData = [];
 	
-	//프로젝트 그룹 생성 메시지
-	if(type == "group"){
-		//그룹 정보 숨김
-		$("#popupPrjForm .prjGrpNameSpan").hide();
+	//수정인경우 대상 프로젝트ID
+	var paramPrjId = $("#paramPrjId").val();
+	
+    // Private functions
+    var documentSetting = function () {
+    	// 팝업 공통코드 select 세팅
+		var commonCodeArr = [
+			{mstCd: "CMM00001", useYn: "Y",targetObj: "#useCd", comboType:"OS"} // 사용유무
+		];
+		//공통코드 채우기
+		$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		
-		//프로젝트 유형 숨김
-		$("#popupPrjForm .prjTypeDiv").hide();
+		//그룹 정보 조회
+		fnPrjGrpInfoSelect();
 		
-		// 프로젝트 약어 숨김
-		$("#popupPrjForm .popPrjAcrmDiv").hide();
-		
-		//그룹 코드
-		$("#prjGrpCd").val("01");
-		
-		/* 달력 세팅(시작일, 종료일) */
-		gfnCalRangeSet("startDt", "endDt");
-		
-		jAlert("프로젝트 그룹 생성이 필요합니다.", "알림", function( result ) {
-			if( result ){
-				jAlert("현재 진행하고자 하는 프로젝트 그룹의 이름, 기간, 설명 등을 \n입력하고 저장하여 진행 해주세요.", "알림");
-			}
-		});
-	}
-	//단위 프로젝트 생성 메시지
-	else if(type == "project"){
-		prjGrpStartDt = prjGrpStartDt.replace( /(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-		prjGrpEndDt = prjGrpEndDt.replace( /(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-		
-		//그룹 기간 표시
-		//$("#prjGrpPeriod").text(prjGrpStartDt + " ~ " + prjGrpEndDt);
-		$("#prjGrpDt_txt").val(prjGrpStartDt + " ~ " + prjGrpEndDt);
-		
-		//그룹 정보 표시
-		$("#popupPrjForm .prjGrpNameSpan").show();
-		
-		//프로젝트 유형 표시
-		$("#popupPrjForm .prjTypeDiv").show();
-		
-		//프로젝트 약어 표시
-		$("#popupPrjForm .popPrjAcrmDiv").show();
-		
-		//그룹 코드
-		$("#prjGrpCd").val("02");
-		
-		/* 달력 세팅(시작일, 종료일) */
-		gfnCalRangeSet("startDt", "endDt", prjGrpStartDt, prjGrpEndDt);
-		
-		jAlert("프로젝트 그룹 생성을 완료하셨습니다.", "알림", function( result ) {
-			if( result ){
-				jAlert("다음으로  프로젝트를 생성하여야 합니다.", "알림", function( result ) {
-					if( result ){
-						jAlert("현재 진행하고자 하는 프로젝트의 이름, 기간, 설명 등을 \n입력하고 저장하여 해주세요.", "알림");
+		//데이터 테이블 세팅
+    	datatableSetting();
+    };
+    
+    //담당자 배정, 배정 프로젝트 목록
+    var datatableSetting = function(){
+    	//사용자 배정 정보 datatable 세팅
+		$.osl.datatable.setting("prj1003PrjAuthUsrTable",{
+			data: {
+				source: {
+					read: {
+						url: "/prj/prj1000/prj1000/selectPrj1000PrjAuthUsrListAjax.do",
+						params: {
+							"paramPrjId": paramPrjId
+						}
 					}
-				});
+				},
+				pageSize: 4,
+			},
+			toolbar:{
+				items:{
+					pagination:{
+						pageSizeSelect : [4, 10, 20, 30, 50, 100]
+					}
+				}
+			},
+			columns: [
+				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+				{field: 'usrNm', title: '사용자명', textAlign: 'left', width: 150, search: true,
+					template: function (row) {
+						return $.osl.user.usrImgSet(row.usrImgId, row.usrNm);
+					},
+					onclick: function(rowData){
+						$.osl.user.usrInfoPopup(rowData.usrId);
+					}
+				},
+				{field: 'usrPositionNm', title: '직책', textAlign: 'center', width: 100, search: true, searchType:"select", searchCd: "ADM00007", searchField:"usrPositionCd"},
+				{field: 'usrDutyNm', title: '직급', textAlign: 'center', width: 100, search: true, searchType:"select", searchCd: "ADM00008", searchField:"usrDutyCd"},
+				{field: 'deptName', title: '부서', textAlign: 'left', width: 150, search: true},
+			],
+			searchColumns:[
+				{field: 'usrId', title: '사용자 ID', searchOrd: 1}
+			],
+			actionBtn:{
+				"update": false,
+				"delete": false,
+			},
+			actionTooltip:{
+			},
+			theme:{
+				actionBtnIcon:{
+					"dblClick": "fa fa-arrow-alt-circle-right",
+				}
+			},
+		});
+    	
+		//데이터 테이블 세팅
+		$.osl.datatable.setting("prj1003PrjTable", {
+			data: {
+				source: {
+					read: {
+						url: "/prj/prj1000/prj1000/selectPrj1001ListAjaxView.do",
+						params:{
+							paramPrjGrpId: paramPrjId
+						}
+					}
+				},
+				pageSize: 4,
+			},
+			toolbar:{
+				items:{
+					pagination:{
+						pageSizeSelect : [4, 10, 20, 30, 50, 100]
+					}
+				}
+			},
+			columns: [
+				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false},
+				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 200, search: true},
+				{field: 'startDt', title: '시작 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'endDt', title: '종료 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'reqAllCnt', title: '전체 요구사항 수', textAlign: 'center', width: 100
+					,template: function (row) {return String(row.reqAllCnt)}},
+				{field: 'reqInProgressCnt', title: '진행중 요구사항', textAlign: 'center', width: 100
+					,template: function (row) {return String(row.reqInProgressCnt)}},
+				{field: 'reqDoneCnt', title: '완료 요구사항', textAlign: 'center', width: 100
+					,template: function (row) {return String(row.reqDoneCnt)}},
+			],
+			actionBtn:{
+				"update": false,
+				"delete": false,
+			},
+			callback:{
+				ajaxDone: function(evt, list,datatableInfo){
+					//총 개수
+					$("#prjAuthListCnt").text(datatableInfo.lastResponse.meta.total);
+				}
 			}
 		});
-	}else{
-		//호출 오류
-	}
+	};
 	
-	
-	//레이어 팝업 닫기 막기
-	$('.close_btn.white').click(function(event){
-		event.stopImmediatePropagation();
-		return;
-	});
-	//CTRL + 클릭 막기
-	ctrlCloseVar = "N";
-	$(document).click('onmousedown', function(event){
-	  	if(event.ctrlKey && (event.button == 0) ){
-	    	return false;
-	  	}
-	});
-	
-	//esc키 막기
-	$(document).off("keyup");
-	
-	/* 저장버튼 클릭 시 */
-	$('#btn_insertReg').click(function() {
-		/* 필수입력값 체크 공통 호출 */
-		var strFormId = "popupPrjForm";
-		var strCheckObjArr = ["prjNm", "startDt", "endDt", "ord"];
-		var sCheckObjNmArr = ["프로젝트 명", "시작일자", "종료일자", "정렬순서"];
-		
-		//필수 값 확인
-		if(gfnRequireCheck(strFormId, strCheckObjArr, sCheckObjNmArr)){
-			return false;	
-		}
-		
-		// 단위 프로젝트인 경우
-		if(type == "project"){
-			
-			// 프로젝트 약어는 필수값
-			var strCheckObjArr2 = ["prjAcrm"];
-			var sCheckObjNmArr2 = ["프로젝트 약어"];
-
-			if(gfnRequireCheck(strFormId, strCheckObjArr2, sCheckObjNmArr2)){
-				return false;	
-			}
-
-			// 프로젝트 약어 유효성 검증
-			var saveObjectValid = {
-					// 영문 대문자 또는 영문대문자+숫자 조합 입력
-					"prjAcrm":{"type":"regExp","pattern":/^(?=.*?[A-Z])(?=.*?[0-9])|[A-Z]{3,10}$/ ,"msg":"프로젝트 약어는 영문 대문자 또는 영문 대문자, 숫자 조합으로 3~10자만 사용 가능합니다.", "required":true} 
-			}
-			
-			// 약어 유효성 검사
-			if(!gfnInputValChk(saveObjectValid)){
-				return false;	
-			}
-			
-			// 등록 전 약어 유효성 검사
-			if(!gfnSaveInputValChk(saveObjectValid)){
-				return false;	
-			}
-		}
-
-		// 등록 전 입력값 유효성 검사
-		if(!gfnSaveInputValChk(arrChkObj)){
-			return false;	
-		}
-		
-		//error있는경우 오류
-		if($("#popupPrjForm .inputError").length > 0){
-			jAlert("유효하지 않은 값이 입력된 항목이 존재합니다.<br>항목을 확인해주세요.","알림");
-			$(".inputError")[0].focus()
-			return false;
-		}
-		
-		// 저장
-		fnInsertReg();
-		
-	});
-	
-	/* 프로젝트 약어 입력될 경우 이벤트 */
-	$('#prjAcrm').change(function() {
-		  if($("#prjAcrm").hasClass("inputError")){
-				$("#prjAcrm").removeClass("inputError");
-          }
-	});
-	
-	// 프로젝트 약어 입력 keyup 이벤트
-	$("#prjAcrm").keyup(function(e){
-		 var inputVal = $("#prjAcrm").val();
-		 // 입력된 값을 대문자로 변환
-	 	$("#prjAcrm").val(inputVal.toUpperCase());
-	});
-		
-	// 프로젝트 약어 focusout 이벤트
-	$("#prjAcrm").focusout(function(e){
-		var inputVal = $("#prjAcrm").val();  
-		// 입력된 값을 대문자로 변환
-	 	$("#prjAcrm").val(inputVal.toUpperCase());
-		// 숫자만 입력했는지 체크
-		if($.isNumeric($("#prjAcrm").val())){
-			jAlert("프로젝트 약어는 영문 대문자 또는 영문 대문자, 숫자 조합으로 입력해야 합니다.", "알림창");
-			$("#prjAcrm").val(''); 
-			$("#prjAcrm").focus();
-		}
-	});
-	
-	/* 	
-	 *	공통코드 가져올때 한번 트랜잭션으로 여러 코드 가져와서 셀렉트박스에 세팅하는 함수(사용 권장)
-	 * 	1. 공통 대분류 코드를 순서대로 배열 담기(문자열)
-	 *	2. 사용구분 저장(Y: 사용중인 코드만, N: 비사용중인 코드만, 그 외: 전체)
-	 *	3. 공통코드 적용할 select 객체 직접 배열로 저장
-	 * 	4. 공통코드 가져와 적용할 콤보타입 객체 배열 ( S:선택, A:전체(코드값 A 세팅한 조회조건용), N:전체, E:공백추가,OS:선택 값 selected, 그 외:없음 )
-	 *	5. 동기 비동기모드 선택 (true:비동기 통신, false:동기 통신)
-	 *	마스터 코드 = REQ00001:요구사항 타입, REQ00002:중요도 
-	 */
-	var mstCdStrArr = "PRJ00013";
-	var strUseYn = 'Y';
-	var arrObj = [$("select[name=prjType]")];
-	var arrComboType = ["OS"];
-	getMulticommonCodeDataForm(mstCdStrArr, strUseYn, arrObj, arrComboType , false);
-	
-	/**
-	 * 프로젝트 생성관리 등록(insert) AJAX
-	 */
-	function fnInsertReg(){
-		
-		//입력 정보
-		var prjInfoArray = $("#popupPrjForm").serializeArray();
-		
-		//AJAX 설정
-		var ajaxObj = new gfnAjaxRequestAction(
-				{"url":"<c:url value='/prj/prj1000/prj1000/insertPrj1001Ajax.do'/>"}
-				,prjInfoArray);
-		
+	//프로젝트 그룹 정보 조회
+	var fnPrjGrpInfoSelect = function(){
+		//프로젝트 그룹 정보 조회
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1000/selectPrj1000PrjGrpInfoAjax.do'/>"}
+				,{prjId: paramPrjId});
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
-			data = JSON.parse(data);
-			
-			if(data.errorYN == "Y"){
-				jAlert(data.message, '알림창');
-			}else{
-				//그룹 생성인경우 프로젝트 생성 팝업 재 호출
-		    	if(type == "group"){
-		    		gfnLayerPopupClose();
-		    		
-		    		//프로젝트 생성 팝업 호출
-					var data = {type: "project"};
-					gfnLayerPopupOpen('/prj/prj1000/prj1000/selectPrj1003View.do', data, '761', '580','auto');
-		    	}else{
-		    		//프로젝트 생성 완료된경우
-		    		jAlert('프로젝트가 정상적으로 생성되었습니다.', '알림창', function( result ) {
-						if( result ){
-					    	//로그인 페이지로 강제 이동
-					    	document.location.href="/cmm/cmm4000/cmm4000/selectCmm4000View.do"
-						}
-					});
-		    	}
-			}
-			
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				var prjInfo = data.prjInfo;
+   				
+   				$.osl.setDataFormElem(prjInfo, formId, ["prjNm","useCd","ord","prjDesc","startDt","endDt"]);
+   				
+   				//시작일 - 종료일 입력
+   				$("#prjGrpRange").val(prjInfo.startDt+" ~ "+prjInfo.endDt);
+   				
+   				//프로젝트 전체 배정 개수
+   				$("#prjChildListCnt").text(prjInfo.prjChildCnt);
+   			}
 		});
-		
-		//AJAX 전송 오류 함수
-		ajaxObj.setFnError(function(xhr, status, err){
-			data = JSON.parse(data);
-			jAlert(data.message, "알림창");
-	 	});
 		
 		//AJAX 전송
 		ajaxObj.send();
-	}
+	};
+	return {
+        // public functions
+        init: function() {
+        	documentSetting();
+        }
+    };
+}();
+
+// Initialization
+$.osl.ready(function(){
+	OSLPrj1003Popup.init();
 });
 
+	
 </script>
-
-<div class="popup">
-	<div class="pop_title">최초 라이선스 등록자 프로젝트 ${groupStr}등록</div>
-	<div class="pop_sub">
-		<form id="popupPrjForm" name="prjForm" method="post">
-			<input type="hidden" name="type" id="type" value="${type}"/>
-			<input type="hidden" name="prjGrpId" id="prjGrpId" value="${prjGrpId}"/>
-			<input type="hidden" id="useCd" name="useCd" value="01" />
-			<input type="hidden" id="prjGrpCd" name="prjGrpCd" value="01" />
-			<input type="hidden" name="ord" id="ord" value="1">
-			<div class="pop_left prjGrpNameSpan">프로젝트 그룹</div>
-			<div class="pop_right prjGrpNameSpan">
-				<!--
-				<span id="search_select" style="line-height: 28px;margin-left: 5px;">${prjGrpNm }</span>
-				-->
-				<input type="text" id="prjGrpNm_txt" name="prjGrpNm_txt" class="grpNm_txt" readonly="readonly" title="프로젝트 그룹 명" value="${prjGrpNm}"/>
-			</div>
-			<div class="pop_left prjGrpNameSpan">프로젝트 그룹 기간</div>
-			<div class="pop_right prjGrpNameSpan">
-				<div id="prjGrpPeriod">
-					<input type="text" id="prjGrpDt_txt" name="prjGrpDt_txt" class="dt_txt" readonly="readonly" title="프로젝트 그룹 기간"/>
-				</div>
-			</div>
-			<div class="pop_left">프로젝트 ${groupStr}명<span class="required_info">&nbsp;*</span></div>
-			<div class="pop_right">
-				<input type="text" title="프로젝트 ${groupStr}명" class="input_txt" id="prjNm" name="prjNm">
-			</div>
-			<div class="pop_left">프로젝트 ${groupStr}기간<span class="required_info">&nbsp;*</span></div>
-			<div class="pop_right">
-				<span class="fl"><input type="text" id="startDt" name="startDt" class="calendar_input" readonly="readonly" title="개발 시작일" style="height: 32px;" /></span>
-				<span class="calendar_bar fl">~</span>
-				<span class="fl"><input type="text" id="endDt" name="endDt" class="calendar_input" readonly="readonly" title="개발 종료일" style="height: 32px;"/></span>
-			</div>
-			
-			<div class="pop_left prjTypeDiv">프로젝트 유형 <span class="required_info">&nbsp;*</span></div>
-			<div class="pop_right prjTypeDiv">
-				<select class="search_select" title="셀렉트 박스" id="prjType" name="prjType" style="height: 100%;">
-						</select>
-			</div>
-			<div class="pop_left popPrjAcrmDiv">프로젝트 약어<span class="required_info">&nbsp;*</span> </div>
-			<div class="pop_right popPrjAcrmDiv">
-				<input id="prjAcrm" type="text"  name="prjAcrm" maxlength="10" />
-			</div>
-			<div class="menu_col_textarea">
-				<div class="pop_left bottom_line">프로젝트 ${groupStr}설명</div>
-				<div class="pop_right bottom_line">
-					<textarea class="input_note" style="height: 100%;" title="설명" id="prjDesc" name="prjDesc"></textarea>
-				</div>
-			</div>
-			<div class="btn_div">
-				<div class="button_normal save_btn complete_btn" id="btn_insertReg">저장</div>
-			</div>
-		</form>	
-	</div>
-</div>
-
-</html>

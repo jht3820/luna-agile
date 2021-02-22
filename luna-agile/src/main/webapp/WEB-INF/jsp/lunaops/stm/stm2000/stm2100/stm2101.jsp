@@ -78,7 +78,7 @@
 								<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
 									<input type="checkbox"  name="stmFileYnCd" id="stmFileYnCd"><span></span>
 								</label>
-								<span data-lang-cd="stm2101.label.attchFileCheck">첨부파일 사용</span>
+								<span data-lang-cd="stm2101.label.attachFileCheck">첨부파일 사용</span>
 							</div>
 						</div>
 					</div>
@@ -161,8 +161,8 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="stm2101SaveSubmit"><span data-lang-cd="stm2101.button.updateSubmit">수정 완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><span data-lang-cd="modal.close">닫기</span></button>
+	<button type="button" class="btn btn-brand" id="stm2101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="stm2101.button.updateSubmit">수정 완료</span></button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -187,6 +187,18 @@
     	selectBadChargerList(); // 게시판 담당자
     	selectBadWriterList(); // 게시판 글 작성 범위
     	setGrpAndUsrList(oriAdmin, oriWriter); //전체 사용자 및 권한그룹 목록을 담당자와 글작성범위로 분류
+    	
+    	
+    	//kt-select2 설정
+    	$('#stmTypeCd').select2({
+			ftScrollUse: false,
+		});
+    	$('#stmDsTypeCd').select2({
+			ftScrollUse: false,
+		});
+    	$('#searchSelect').select2({
+			ftScrollUse: false,
+		});
     	
     	//초기 검색 select 안보이게
 		$("#searchSelect~span").addClass("osl-datatable-search--hide");
@@ -849,7 +861,7 @@
 
 					//담당자 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(adminData, function(idx, items){
-						if(value.authGrpId != null && value.authGrpId != "" && value.prjId != null && value.prjId != ""){
+						if(!$.osl.isNull(value.authGrpId) && !$.osl.isNull(value.prjId)){
 							if((value.authGrpId==items.stmAdminId || value.authGrpId==items.id) && value.prjId == items.prjId){
 								passKey_admin = true;
 							}
@@ -857,7 +869,7 @@
 					});
 					//글작성 범위 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(writerData, function(idx, items){
-						if(value.authGrpId != null && value.authGrpId != "" && value.prjId != null && value.prjId != ""){
+						if(!$.osl.isNull(value.authGrpId) && !$.osl.isNull(value.prjId)){
 							if((value.authGrpId==items.stmWtId || value.authGrpId==items.id) && value.prjId == items.prjId){
 								passKey_writer = true;
 							}
@@ -897,7 +909,7 @@
 					
 					//담당자 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(adminData, function(idx, items){
-						if(value.usrId != null && value.usrId != ""){
+						if(!$.osl.isNull(value.usrId)){
 							if(value.usrId==items.stmAdminId|| value.usrId==items.id ){
 								passKey_admin = true;
 							}
@@ -905,7 +917,7 @@
 					});
 					//글작성 범위 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(writerData, function(idx, items){
-						if(value.usrId != null && value.usrId != ""){
+						if(!$.osl.isNull(value.usrId)){
 							if(value.usrId==items.stmWtId|| value.usrId==items.id ){
 								passKey_writer = true;
 							}
@@ -1071,7 +1083,7 @@
  							+"</div>";
  							//타이틀 종료
  					//소속 시작
- 					if(value.deptNm == null){
+ 					if($.osl.isNull(value.deptNm)){
  						listHtml += "<div class=''>-</div>";
  					}
  					else{
@@ -1127,7 +1139,7 @@
  	 							+ "</div>";
  	 							//타이틀 종료
  	 					//소속 시작
- 	 					if(value.deptNm == null){
+ 	 					if($.osl.isNull(value.deptNm)){
  	 						listHtm += "<div class=''>-</div>";
  	 					}
  	 					else{
@@ -1179,7 +1191,7 @@
  	 							+"</div>";
  	 							//타이틀 종료
  	 					//소속 시작
- 	 					if(value.deptNm == null){
+ 	 					if($.osl.isNull(value.deptNm)){
  	 						listHtml += "<div class=''>-</div>";
  	 					}
  	 					else{
@@ -1231,7 +1243,7 @@
  							+"</div>";
  							//타이틀 종료
  					//소속 시작
- 					if(value.deptNm == null){
+ 					if($.osl.isNull(value.deptNm)){
  						listHtml += "<div class='osl-card__prjnm'>-</div>";
  					}else{
  						listHtml += "<div class='osl-card__prjnm'>"
