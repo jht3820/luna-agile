@@ -139,6 +139,33 @@ input:-webkit-autofill,
 .osl-margin-b-05{
 	margin-bottom: 0.5rem;
 }
+.osl-badge-brand{
+	display: inline-block;
+	padding: 0.5em 0.75em;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25rem;
+	-webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+	margin-left: 10px;
+	font-weight: 800;
+	background-color: #1cac81;
+	color: #fff;
+}
+.osl-badge-brand-outline{
+	border: 1px solid #1cac81;
+	background: none;
+	color: #1cac81;
+}
+.osl-badge-brand:hover{
+	background-color: #1cac81;
+	color: #fff;
+}
 /* 높이값 세로값 */
 .osl-h-px-38{
 	height: 38px;
@@ -1019,10 +1046,6 @@ label.required:after {
 	border: 1px solid #1cac81 !important;
 	box-sizing: border-box;
 }
-.kt-timeline .kt-timeline__item:before{
-	left: 50%;
-}
-
 /*사용자 정보 - 모달 폰트 색상*/
 .osl-user-info__modal{
 	color: #333;
@@ -1087,22 +1110,13 @@ label.required:after {
 	cursor: pointer;
 }
 
-.osl-timeline-item-left{
-	padding-right: 48%;
+.flex-flow--inherit{
+	flex-flow: inherit;
 }
 
-.osl-timeline-item-right{
-	padding-left: 48.5%;
-}
-.osl-timeline-item-center{
-	padding-left: 24%;
-	padding-right: 24%;
-}
+
 .osl-timeline-item-center:after{
 	display: none;
-}
-.osl-timeline-item-center>.kt-timeline__item-section{
-	padding-left: 46%;
 }
 .osl-timeline-content {
     position: relative;
@@ -1111,26 +1125,6 @@ label.required:after {
     box-shadow: 0px 0px 30px 0px rgba(82, 63, 105, 0.1);
     border: 1px solid #eee;
     background-color: #fff;
-}
-
-.kt-timeline__item:after {
-    content: '\f0da';
-    position: absolute;
-    top: 6rem;
-    left: 46.5%;
-    font-size: 3.2rem;
-    color: #fff;
-    font-weight: 800;
-    -webkit-text-shadow:  4px 1px 6px #e2e2e2;
-    text-shadow:  4px 1px 6px #e2e2e2;
-    font-family: 'Font Awesome 5 Free';
-}
-.kt-timeline__item.osl-timeline-item-right:after {
-    content: '\f0d9';
-    right: 100%;
-    left: 52.5%;
-    top: 35%;
-    text-shadow: -2px 2px 6px #e2e2e2;
 }
 .osl-email{
     line-height: 1rem;
@@ -1175,6 +1169,12 @@ label.required:after {
     overflow: hidden;
     max-height: 50px;
     text-overflow: ellipsis;
+}
+
+.osl-charge-requirements__flaticon-star-div{
+	padding: 1px 4px;
+	background-color: #e2e5ec;
+	border-radius: 5px;
 }
 /* req4100 */
 .osl-outline--brand{
@@ -2043,7 +2043,60 @@ label.required:after {
 		padding-right:10px !important;
 	}
 }
-
+@media (max-width:1023px){
+	.kt-timeline__item.osl-timeline-item-left .osl-timeline-content,
+	.kt-timeline__item.osl-timeline-item-right .osl-timeline-content,
+	.kt-timeline__item.osl-timeline-item-center .osl-timeline-content{
+		margin-left: 50px;
+	}
+}
+@media (min-width:1024px){
+	.osl-timeline-item-right{
+		padding-left: 48.5%;
+	}
+	.osl-timeline-item-left{
+		padding-right: 48%;
+	}
+	
+	.osl-timeline-item-center{
+		padding-left: 24%;
+		padding-right: 24%;
+	}
+	
+	.osl-timeline-item-center>.kt-timeline__item-section{
+		padding-left: 46%;
+	}
+	.kt-timeline .kt-timeline__item:before{
+		left: 50%;
+	}
+	.kt-timeline__item.osl-timeline-item-left .osl-timeline-content:after,
+	.kt-timeline__item.osl-timeline-item-right .osl-timeline-content:after {
+	    content: '\f0da';
+	    position: absolute;
+	    top: 25%;
+	    right: -13px;
+	    font-size: 3.2rem;
+	    color: #fff;
+	    font-weight: 800;
+	    -webkit-text-shadow:  4px 1px 6px #e2e2e2;
+	    text-shadow:  4px 1px 6px #e2e2e2;
+	    font-family: 'Font Awesome 5 Free';
+	}
+	.kt-timeline__item.osl-timeline-item-right .osl-timeline-content:after {
+	    content: '\f0d9';
+	    left: -13px;
+	    text-shadow: -2px 2px 6px #e2e2e2;
+	}
+	.flex-row-reverse-desktop{
+		flex-flow: row-reverse;
+	}
+	.kt-timeline__item.osl-timeline-item-left .osl-timeline-content{
+		margin-right: 50px;
+	}
+	.kt-timeline__item.osl-timeline-item-right .osl-timeline-content{
+		margin-left: 50px;
+	}
+}
 @media (max-width: 900px){
 	.osl-widget-info__item .osl-widget-info__item-icon{
 		display:none;
