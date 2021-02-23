@@ -56,7 +56,7 @@
 		<div class="col-lg-5 col-md-6 col-sm-6">
 			<div class="osl-datatable-search" data-datatable-id="bad1000BadTable"></div>
 		</div>
-		<div class="kt_datatable" id="bad1000BadTable"></div>
+		<div class="kt_datatable  osl-datatable-footer__divide" id="bad1000BadTable"></div>
 	</div>
 </div>
 <!-- begin page script -->
@@ -80,7 +80,7 @@
 		 
 		 //시스템 관리 게시판에서 넘오는 것이 아니라 일반 메뉴로 들어올 경우
 		 //메뉴id와 게시판 유형, 게시판명을 받아 저장
-		 if($("#stmRootYn").val() == null || $("#stmRootYn").val()==""){
+		 if($.osl.isNull($("#stmRootYn").val())){
 			 //게시판 속성 정보 가져와 셋팅
 			 getStmInfo();
 			 //stmInfo 체크할 필요 없으므로
@@ -161,7 +161,7 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: "kt-checkbox--solid"}, sortable: false, autoHide: false},
-				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false,
+				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false, sortable: true,
 				 	template: function(row){
 				 		if(checkStmInfo){
 				 			setStmInfo(row);
@@ -170,7 +170,7 @@
 				 		return row.badNum;
 				 	}
 				 },
-				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true,
+				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true, sortable: true,
 					template: function(row){
 						var returnStr = "";
 						// 삭제된 게시글인 경우
@@ -198,7 +198,7 @@
 						return returnStr;
 					}, 
 				 },
-				 {field: 'badHit', title: '조회수', textAlign: 'center', width: 100},
+				 {field: 'badHit', title: '조회수', textAlign: 'center', width: 100, sortable: true},
 				 {field: 'badFileCnt', title: '첨부파일 수', textAlign: 'center', width: 100},
 				 {field: 'badUsrId', title: '작성자', textAlign: 'left', width: 180,
 					template: function (row) {
@@ -214,8 +214,8 @@
 					onclick: function(row){
 						$.osl.user.usrInfoPopup(row.badUsrId);
 					}
-					, autoHide: false, search: true },
-				{field: 'badWtdtm', title:'작성일', textAlign: 'center', width: 150, search: true, searchType:"daterange",
+					, autoHide: false, search: true, sortable: true},
+				{field: 'badWtdtm', title:'작성일', textAlign: 'center', width: 150, search: true, searchType:"daterange", sortable: true,
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
 		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
@@ -283,7 +283,7 @@
 						}
 					}
 					//1개의 list만 선택하거나 row의 상세버튼을 클릭한 경우
-					if(rowData.stmOptionCnt == null || rowData.stmOptionCnt == ""){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();
@@ -333,7 +333,7 @@
 					}
 				},
 				"update":function(rowData, datatableId, type, rowNum){
-					if(rowData.stmOptionCnt == null){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();

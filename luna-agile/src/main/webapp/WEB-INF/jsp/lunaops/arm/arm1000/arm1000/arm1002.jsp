@@ -16,7 +16,7 @@
 		<div class="kt-portlet__body">
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<input type="text" class="form-control" id="armTitle" name="armTitle" readonly="readonly">
+				<input type="text" class="form-control" id="armTitle" name="armTitle" autocomplete="off" readonly="readonly">
 			</div>
 		</div>
 		<div class="row">
@@ -31,7 +31,7 @@
 						<i class="fa fa-file-upload kt-margin-r-5"></i>
 						<span data-lang-cd="cmm16002.label.attachments">첨부 파일</span> 
 					</label>
-					<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
+					<div class="kt-uppy osl-max-h-px-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 						<div class="kt-uppy__dashboard"></div>
 						<div class="kt-uppy__progress"></div>
 					</div>

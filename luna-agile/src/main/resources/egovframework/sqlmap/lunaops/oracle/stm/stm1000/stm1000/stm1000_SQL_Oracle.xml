@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="stm1000DAO">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	
+	<sql id = "selectPrj1000LicencePrjAllListBase">
+		SELECT
+			ROWNUM AS RN
+			,	SUBT2.*
+		FROM
+		(
+			SELECT
+					CONNECT_BY_ISLEAF AS LEAF
+				,	SUBT1.PRJ_ID
+		        ,	SUBT1.PRJ_GRP_ID
+		        ,	SUBT1.LIC_GRP_ID
+		        ,	SUBT1.PRJ_NM
+		        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
+		        ,	TO_CHAR(TO_DATE(SUBT1.END_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS END_DT   
+		        ,	SUBT1.ORD
+		        ,	SUBT1.PRJ_DESC
+		        ,	SUBT1.USE_CD
+		        ,	SUBT1.DEL_CD
+		        ,	SUBT1.PRJ_TYPE_CD
+		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
+		        ,	SUBT1.PRJ_DEV_TYPE_CD
+		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
+		        ,	SUBT1.PRJ_ACRM
+		        ,	SUBT1.PRJ_GRP_CD
+		        ,	SUBT1.REG_DTM
+		        ,	SUBT1.REG_USR_ID
+		        ,	SUBT1.REG_USR_IP
+		        ,	SUBT1.MODIFY_DTM
+		        ,	SUBT1.MODIFY_USR_ID
+		        ,	SUBT1.MODIFY_USR_IP
+			FROM
+			(
+				SELECT 
+						A.PRJ_ID
+					,	A.PRJ_GRP_ID
+					,	A.LIC_GRP_ID
+					,	A.PRJ_NM
+					,	A.START_DT 
+					,	A.END_DT   
+					,	A.ORD
+					,	A.PRJ_DESC
+					,	A.USE_CD
+					,	A.DEL_CD
+					,	A.PRJ_TYPE_CD
+					,	A.PRJ_DEV_TYPE_CD
+					,	A.PRJ_ACRM
+					,	A.PRJ_GRP_CD
+					,	A.REG_DTM
+					,	A.REG_USR_ID
+					,	A.REG_USR_IP
+					,	A.MODIFY_DTM
+					,	A.MODIFY_USR_ID
+					,	A.MODIFY_USR_IP
+				FROM PRJ1000 A
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.USE_CD = '01'
+			) SUBT1
+			WHERE 1=1
+			AND SUBT1.USE_CD = '01'
+			CONNECT BY PRIOR SUBT1.PRJ_ID = SUBT1.PRJ_GRP_ID
+			START WITH SUBT1.PRJ_GRP_ID IS NULL
+			ORDER SIBLINGS BY SUBT1.ORD, SUBT1.PRJ_NM
+		) SUBT2
+		WHERE 1=1
+		AND LEAF = (CASE SUBT2.PRJ_GRP_CD WHEN '01' THEN 0 WHEN '02' THEN 1 END)
+	</sql>
+	
+	
+	<select id="stm1000DAO.selectPrj1000LicencePrjAllListBase" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1000LicencePrjAllListBase"/>
+    	) T1
+    	WHERE 1=1
+	</select>
+	
+</sqlMap>

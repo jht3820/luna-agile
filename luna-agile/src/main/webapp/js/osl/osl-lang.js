@@ -514,7 +514,11 @@ var OSLCoreLangSetting = function () {
 			reqPw: {
 				title : "요구사항 잠금",
 				password : "PW",
-				passwordCheck :"PW 확인"
+				passwordCheck :"PW 확인",
+				placeholder : {
+					password : "알파벳, 숫자 4-12자 이내",
+					nullPassword : "공백인 경우 기존 비밀번호 사용",
+				}
 			},
 			attachments: "파일 첨부", 
 			complete: "완료",
@@ -658,6 +662,7 @@ var OSLCoreLangSetting = function () {
 		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
+			manySelect: "1건의 스프린트만 선택해주세요.",
 			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
 			sprTypeStartMsg: "시작 중인 스프린트만 종료 할 수 있습니다.", 
 			startDate: "시작일",
@@ -880,6 +885,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "게시판 속성",
 				detailTitle : "게시글 관리",
 				summeryTitle : "통계보기",
+				chargerTitle : "담당자 목록 확인"
 			},
 			type:{
 				normal:"[일반]",
@@ -974,6 +980,48 @@ var OSLCoreLangSetting = function () {
 				board : "게시글",
 				tag : "태그",
 				attachFile : "첨부파일",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{
@@ -1206,6 +1254,60 @@ var OSLCoreLangSetting = function () {
 			message:{
 				selectBuildInfo: "좌측 빌드 정보를 선택해주세요.",
 				notConsoleLog: "콘솔 로그가 없습니다."
+			}
+		},
+		stm9200:{
+			common:{
+				assign : "배정",
+				notAssign : "제외"
+			},
+			title:{
+				allPrjList : "전체 프로젝트 목록",
+				assignJobList : "JOB 배정 목록",
+				notAssignJobList : "JOB 미배정 목록"
+			},
+			button:{
+				dplAuthSetting : "배포 실행 권한 설정"
+			},
+			toolTip:{
+				searchAssignJob:"JOB 배정 목록 조회",
+				searchNotAssignJob:"JOB 미배정 목록 조회",
+				jobAssign :"JOB 배정",
+				jobDelete : "JOB 배정 제외",
+			},
+			message:{
+				alert:{
+					treeNodeSelect : "왼쪽 트리에서 프로젝트를 선택해주세요.",
+					assignJobSelect : "프로젝트에 배정된 JOB을 선택해주세요.",
+					selectOneJob : "프로젝트에 배정된 JOB을 1개만 선택하세요."
+				},
+				toastr:{
+					projectSelect : "프로젝트 그룹이 아닌 프로젝트를 선택해주세요."
+				},
+				confirm:{
+					selJobAssign : "선택한 JOB을 배정하시겠습니까?",
+					selJobNotAssign : "선택한 JOB을 배정 제외하시겠습니까?",
+				}
+			}
+		},
+		stm9300:{
+			button:{
+				toolTil:{
+					prjAssignJobSearch:"프로젝트 배정 JOB 조회"
+				}
+			},
+			search:{
+				jenkinsDesc : "Jenkins 설명",
+				jobDesc : "Job 설명"
+			},
+			actionBtn:{
+				jenkinsDetail:"Jenkins 상세보기",
+				jobDetail:"Job 상세보기"
+			},
+			modal:{
+				title:{
+					detail :"상세보기"
+				}
 			}
 		},
 		bad1000:{
@@ -1509,6 +1611,7 @@ var OSLCoreLangSetting = function () {
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
+				prjGrpNm: "Prject Group Name",
 				reqOrd: "Order",
 				reqProTypeNm: "Process Type",
 				reqNm: "Request Name",
@@ -1597,6 +1700,14 @@ var OSLCoreLangSetting = function () {
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
 			},
+			stm2200AuthTable:{
+				authGrpNm: "Auth Group Name",
+				ord: "Ord",
+				usrTypNm : "User Type",
+				acceptUseNm:"Accept Use",
+				useNm:"Use Name",
+				authGrpDesc:"Auth Group Desc"
+			},
 			stm9000JenkinsTable:{
 				result : "Connection check",
 				jenNm: "Jenkins Name",
@@ -1611,7 +1722,7 @@ var OSLCoreLangSetting = function () {
 				jobId:"Job Id",
 				jobRestoreId:"Restore Job Id",
 				jobParameter:"Job Parameter",
-				useNm:"Job Use",
+				useNm:"Jenkins Use",
 				jobDesc:"Job Description"
 			},
 			stm9102JobBuildTable:{
@@ -1620,6 +1731,33 @@ var OSLCoreLangSetting = function () {
 				bldStartDtm: "Build Start Time",
 				bldDurationTm: "Duration Time",
 				regUsrNm: "Distributor"
+			},
+			stm9200AssignJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
+			stm9200NotAssignJobTable:{
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
+			stm9300PrjJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter",
+				useNm: "Jenkins Use"
 			}
 		},
 		date:{
@@ -1956,15 +2094,19 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
-			reqPw:{
-				title : "Request Lock",
-				password : "PW",
-				passwordCheck : "PW Check",
-			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
 			reqDesc: "Request description",
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+				placeholder : {
+					password : "4 to 12 letters of alphabet and number combination.",
+					nullPassword : "If blank, the old password is used.",
+				}
+			},
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
@@ -2236,6 +2378,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "Board Setting",
 				detailTitle : "Board Management",
 				summeryTitle : "Board Summery",
+				chargerTitle : "Board Manager List"
 			},
 			type:{
 				normal:"[Normal]",
@@ -2330,6 +2473,48 @@ var OSLCoreLangSetting = function () {
 				board : "Post",
 				tag : "Tag",
 				attachFile : "Attachments",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{

@@ -45,13 +45,14 @@
 				<div class="osl-datatable-search" data-datatable-id="stm2100StmTable"></div>
 			</div>
 		</div>
+		<div id="stm2100StmCard"></div>
 		<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 	</div>
 </div>
-<div id="stm2100StmCard"></div>
 <!-- begin page script -->
 <script>
  "use strict";
+
  var OSLStm2100Popup = function() {
 	 //권한체크
 	 var okManager;
@@ -60,8 +61,9 @@
 	 var resultStr = "";
 	 var currentViewType = "01";
 	 var documentSetting = function() {	
-		 var dataTableId = "stm2100StmTable";
+		 var datatableId = "stm2100StmTable";
 		 var config = {
+			 cardUiTarget: $("#stm2100StmCard"),
 			 data: {
 				 source: {
 					 read: {
@@ -71,16 +73,16 @@
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 50, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
-				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd"},
-				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true},
-				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200},
-				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150},
-				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150,
+				 {field: 'stmTypeNm', title:'유형', textAlign: 'left', width: 100, search: true, searchType:"select", searchCd:"STM00001", searchField:"stmTypeCd", sortable: true},
+				 {field: 'stmNm', title:'게시판명', textAlign: 'left', width: 300, autoHide: false, search: true, sortable: true},
+				 {field: 'stmDsTypeNm', title: '공개범위', textAlign: 'left', width: 200, sortable: true},
+				 {field: 'cnt', title: '전체글 수', textAlign: 'center', width: 150, sortable: false},
+				 {field: 'badCnt', title: '유효글 수', textAlign: 'center', width: 150, sortable: false,
 					 template : function(row){
 						return String(parseInt(row.cnt) - parseInt(row.delCnt)); 
 					 },
 				 },
-				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150},
+				 {field: 'delCnt', title: '삭제글 수', textAlign: 'center', width: 150, sortable: false},
 			 ],
 			 rows:{
 				clickCheckbox: true
@@ -210,17 +212,17 @@
 				 ajaxDone: function(evt, list){
 					 var cnt = 0;
 					 $.each(list, function(idx, row){
-						resultStr = "";
+						 resultStr = "";
 						var summeryData = selectStm2102(idx, row);
 		 				$("#stm2100StmCard").append(resultStr);
 		 				//차트 데이터 가져오기
-		 				drawChart(idx, row.menuId);
 		 				//차트 그리기
+		 				drawChart(idx, row.menuId);
 					 });
 	 				
 	 				//카드형 내 수정 버튼 클릭 시
 	 				$(".updateBtn").click(function(){
-	 					var item =$(this).parent().parent().parent().parent();
+	 					var item =$(this).parent().parent();
 	 					var data = {
 								type: "update",
 								menuId: item.data("menuId"),
@@ -246,7 +248,8 @@
 	 				});
 	 				//카드형 내 관리 버튼 클릭 시
 	 				$(".settingBtn").click(function(){
-	 					var item = $(this).parent().parent().parent().parent();
+	 					var item = $(this).parent().parent();
+	 					
 	 					var data = {
 								menuId: item.data("menuId"),
 								stmTypeCd: item.data("stmTypeCd"),
@@ -280,15 +283,27 @@
 					});
 					//그 외 담당자 수 클릭 시
 					$(".otherBadChargerList").click(function(){
-						console.log("other");
 						//새로운 팝업창 만들기 - 담당자 전체 리스트 출력
+						var item =$(this).parent().parent().parent().parent().parent();
+						var data = {
+								menuId : item.data("menuId"),
+						};
+						var options = {
+								idKey: "charger_"+ item.data("menId"),
+								modalTitle:"[ "+ $.osl.escapeHtml(item.data("stmName")) +" ] "+$.osl.lang("stm2100.title.chargerTitle"),
+								modalSize : "md",
+								closeConfirm: true,
+								autoHeight: false,
+						};
+						$.osl.layerPopupOpen('/stm/stm2000/stm2100/selectStm2103View.do',data,options);
 					});
 					
 				 }//ajaxDone end
 			 }
 		 };//config end
+		 
 		 //데이터 테이블 셋팅
-		 $.osl.datatable.setting(dataTableId, config);
+		 $.osl.datatable.setting(datatableId, config);
 
 		//뷰 변경 이벤트 - 카드형 그리드형 선택 확인
 		$(".btn-view-type").click(function(){
@@ -311,11 +326,11 @@
 		 var viewTypeChange = function(){
 			//현재 viewType에 따라 show/hide
 			if(currentViewType == "01"){	//카드 형식
-				$("#stm2100StmTable").addClass("kt-hide");
-				$("#stm2100StmCard").removeClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+				$("#stm2100StmCard").show();
 			}else{	//데이터테이블 형식
-				$("#stm2100StmTable").removeClass("kt-hide");
-				$("#stm2100StmCard").addClass("kt-hide");
+				$("#stm2100StmTable .kt-datatable__table").css({visibility: "visible",height: "auto"});
+				$("#stm2100StmCard").hide();
 			}
 		}
 		 
@@ -351,13 +366,13 @@
 						var fileSummery = data.fileSummery;
 						var badChargerList = data.badChargerList;
 						
-						resultStr += "<div class='row kt-padding-10' data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
+						resultStr += "<div class='row kt-padding-10'>"
 				 						+ "<div class='kt-portlet kt-portlet--mobile'>"
 			 								+ "<div class='col-12'>"
 					 							+ "<div class='kt-portlet__head kt-portlet__head--lg'>"
 					 								+ "<div class='kt-portlet__head-label'>"
 					 									+ "<label class='kt-checkbox kt-checkbox--single kt-checkbox--solid'>"
-						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"'><span></span>"
+						 									+ "<input type='checkbox' value='"+idx+"' name='stmGrpCheckbox' id='stmGrpCheckbox_"+row.menuId+"' data-datatable-id='"+datatableId+"'>&nbsp;<span></span>"
 					 									+ "</label>";
 							 var boardType = "";
 							 if(row.stmTypeCd == "01"){
@@ -376,7 +391,7 @@
 				 								+ "</div>"
 			 									+ "<div class='kt-media-group osl-margin-b-05'>";
 			 									//담당자 리스트 뿌리기
-			 									if(badChargerList != null && badChargerList.length > 0){
+			 									if(!$.osl.isNull(badChargerList)){
 			 										var lastCount =  badChargerList.length;
 			 										$.each(badChargerList, function(index, value){
 			 											//담당자 수 6명 이하일때만 사진 그리기
@@ -531,7 +546,7 @@
 								 									+ "<i class='fa flaticon-interface-9 kt-margin-r-5'></i>"
 																	+ "<span data-lang-cd='stm2102.label.tag'>"+$.osl.lang("stm2102.label.tag")+"</span>"
 																+  "</div>";
-									 	if(tagInfo != null && tagInfo != "" && tagInfo != "N"){
+									 	if(!$.osl.isNull(tagInfo) && tagInfo != "N"){
 									 		$.each(tagInfo, function(index, value){
 									 			if(index < 3){ //sql 조회 top 5
 									 				resultStr += "<div class='kt-margin-5 kt-padding-l-20'>"
@@ -572,7 +587,7 @@
 								 					resultStr += "</div>" //첨부파일 끝
 															+ "</div>" //첨부파일 끝
 															//수정 관리 버튼 영역
-															+ "<div class='row kt-padding-t-15 kt-padding-b-15 kt-align-right'>"
+															+ "<div class='row kt-padding-t-15 kt-padding-b-15 kt-align-right'  data-menu-id='"+row.menuId+"' data-stm-type-cd='"+row.stmTypeCd+"' data-stm-name='"+$.osl.escapeHtml(row.stmNm)+"' data-stm-ds-type-cd='"+row.stmDsTypeCd+"'>"
 																+ "<div class='col-12 kt-padding-0'>"
 																	+ "<button type='button' class='btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air updateBtn' data-datatable-action='update' title='"+$.osl.lang("stm2100.actionBtn.updateTooltip")+"' data-title-lang-cd='stm2100.actionBtn.updateTooltip' data-toggle='kt-tooltip' data-skin='brand' data-placement='top' data-auth-button='update'>"
 																		+ "<i class='fa fa-edit'></i>"

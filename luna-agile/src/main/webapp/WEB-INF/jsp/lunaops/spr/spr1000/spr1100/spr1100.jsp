@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="kt_datatable" id="spr1000SprTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -58,7 +58,7 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="kt_datatable" id="req1100AssTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="req1100AssTable"></div>
 			</div>
 		</div> <!-- 요구사항배정목록 끝 -->
 		<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
@@ -81,7 +81,7 @@
 				</div>
 			</div>
 			<div class="kt-portelt__body">
-				<div class="kt_datatable" id="req1100NonTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="req1100NonTable"></div>
 			</div>
 		</div>
 	</div> <!-- 요구사항 미배정목록 끝 -->

@@ -21,7 +21,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.title">제목</span></label>
-					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" required>
+					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
 				</div>
 			</div>
 		</div>
@@ -29,7 +29,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="form-group">
 					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.content">내용</span></label>
-					<textarea class="kt-hide" name="armContent" id="armContent" placeholder="내용" required></textarea>
+					<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
 				</div>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 						<i class="fa fa-file-upload kt-margin-r-5"></i>
 						<span data-lang-cd="cmm16001.label.attachments">파일 첨부</span> 
 					</label>
-					<div class="kt-uppy osl-max-height-260" id="arm1001FileUpload">
+					<div class="kt-uppy osl-max-h-px-260" id="arm1001FileUpload">
 						<div class="kt-uppy__dashboard"></div>
 						<div class="kt-uppy__progress"></div>
 					</div>
@@ -332,7 +332,7 @@ var OSLCmm16001Popup = function () {
 							}
 					};
 					var str = '';
-					if(selectedUsrList != null && selectedUsrList != ""){
+					if(!$.osl.isNull(selectedUsrList)){
 						//답장 상대가 있으므로
 						$("#memCnt").text(1);
 	        			$("#memCnt").removeClass("kt-hide");

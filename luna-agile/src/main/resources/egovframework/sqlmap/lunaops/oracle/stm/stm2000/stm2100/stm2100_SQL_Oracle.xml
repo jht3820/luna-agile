@@ -45,7 +45,20 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY MENU_ID DESC
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY MENU_ID DESC
+		</isEmpty>
 	</select>
 
     
@@ -102,6 +115,7 @@
 		    , A.STM_ADMIN_CD AS STM_ADMIN_CD
 		    , B.USR_IMG_ID AS USR_IMG_ID
 		    , B.USR_NM AS USR_NM
+		    , B.EMAIL AS EMAIL
 		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
 		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
 		    , A.PRJ_ID AS PRJ_ID
@@ -198,6 +212,7 @@
 		    , A.STM_WT_CD AS STM_WT_CD
 		    , B.USR_IMG_ID AS USR_IMG_ID
 		    , B.USR_NM AS USR_NM
+		    , B.EMAIL AS EMAIL
 		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
 		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
 		    , A.PRJ_ID AS PRJ_ID

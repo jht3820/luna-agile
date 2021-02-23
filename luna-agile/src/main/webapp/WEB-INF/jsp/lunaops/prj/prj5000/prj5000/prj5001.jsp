@@ -19,7 +19,7 @@
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					<div class="form-group">
 						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="prj5001.label.evtNm">일정명</span></label>
-						<input type="text" class="form-control" placeholder="일정명" name="evtNm" id="evtNm" opttype="-1" maxlength="100" required>
+						<input type="text" class="form-control" placeholder="일정명" name="evtNm" id="evtNm" opttype="-1" maxlength="50" required>
 					</div>
 				</div>
 				<div class="col-lg-12 col-md-12 col-sm-12">

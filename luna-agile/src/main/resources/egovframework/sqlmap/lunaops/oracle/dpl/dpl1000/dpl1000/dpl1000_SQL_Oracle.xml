@@ -181,6 +181,9 @@
 		</isNotEmpty>
 		<isNotEmpty property="paramSortFieldId">
 			ORDER BY $paramSortFieldId$
+			<isEqual property="sortDirection" compareValue="asc">
+				ASC
+			</isEqual>
 			<isEqual property="sortDirection" compareValue="desc">
 				DESC
 			</isEqual>
@@ -371,7 +374,8 @@
                 , B.SIGN_DTM
                 , B.SIGN_REG_USR_ID
 				, SF_STM3000_USR_INFO(B.SIGN_REG_USR_ID, 1) SIGN_REG_USR_NM
-                , SF_STM3000_USR_INFO(B.SIGN_REG_USR_ID, 6) SIGN_REG_USR_IMG                  
+                , SF_STM3000_USR_INFO(B.SIGN_REG_USR_ID, 6) SIGN_REG_USR_IMG
+				, A.REG_DTM                  
 	            , A.REG_USR_ID               
 	            , A.REG_USR_IP               
 	            , A.MODIFY_DTM               
@@ -1191,6 +1195,7 @@
 				, A.CHG_DATE
 				, A.CHG_MSG
 				, A.CHG_USER
+				, A.REG_DTM
 				, A.REG_USR_ID
 				, A.REG_USR_IP
 				, A.MODIFY_DTM
@@ -1220,6 +1225,7 @@
 				, A.CHG_REVISION
 				, A.FILE_PATH
 				, A.EDIT_TYPE_CD
+				, A.REG_DTM
 				, A.REG_USR_ID
 				, A.REG_USR_IP
 				, A.MODIFY_DTM

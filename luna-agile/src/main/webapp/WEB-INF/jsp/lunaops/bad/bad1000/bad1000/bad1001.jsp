@@ -82,7 +82,7 @@
 			<div class="input-group kt-margin-t-10 kt-margin-b-10 kt-padding-l-30 kt-padding-r-10 osl-bad__width__95 kt-hide" name="badCmtInput" id="badCmtInput">
 				<div class="input-group-prepend kt-padding-r-15" name="loginUsr" id="loginUsr">
 				</div>
-				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" maxlength="370" />
+				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" autocomplete="off" maxlength="370" />
 				<div class="form-group-append">
 					<button class="btn btn-brand" type="button" name="cmtSaveBtn" id="cmtSaveBtn"><span data-lang-cd="bad1001.button.submit">등록</span></button>
 				</div>

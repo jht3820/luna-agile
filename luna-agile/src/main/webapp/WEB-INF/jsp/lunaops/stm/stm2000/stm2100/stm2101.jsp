@@ -188,6 +188,18 @@
     	selectBadWriterList(); // 게시판 글 작성 범위
     	setGrpAndUsrList(oriAdmin, oriWriter); //전체 사용자 및 권한그룹 목록을 담당자와 글작성범위로 분류
     	
+    	
+    	//kt-select2 설정
+    	$('#stmTypeCd').select2({
+			ftScrollUse: false,
+		});
+    	$('#stmDsTypeCd').select2({
+			ftScrollUse: false,
+		});
+    	$('#searchSelect').select2({
+			ftScrollUse: false,
+		});
+    	
     	//초기 검색 select 안보이게
 		$("#searchSelect~span").addClass("osl-datatable-search--hide");
 		
@@ -849,7 +861,7 @@
 
 					//담당자 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(adminData, function(idx, items){
-						if(value.authGrpId != null && value.authGrpId != "" && value.prjId != null && value.prjId != ""){
+						if(!$.osl.isNull(value.authGrpId) && !$.osl.isNull(value.prjId)){
 							if((value.authGrpId==items.stmAdminId || value.authGrpId==items.id) && value.prjId == items.prjId){
 								passKey_admin = true;
 							}
@@ -857,7 +869,7 @@
 					});
 					//글작성 범위 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(writerData, function(idx, items){
-						if(value.authGrpId != null && value.authGrpId != "" && value.prjId != null && value.prjId != ""){
+						if(!$.osl.isNull(value.authGrpId) && !$.osl.isNull(value.prjId)){
 							if((value.authGrpId==items.stmWtId || value.authGrpId==items.id) && value.prjId == items.prjId){
 								passKey_writer = true;
 							}
@@ -897,7 +909,7 @@
 					
 					//담당자 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(adminData, function(idx, items){
-						if(value.usrId != null && value.usrId != ""){
+						if(!$.osl.isNull(value.usrId)){
 							if(value.usrId==items.stmAdminId|| value.usrId==items.id ){
 								passKey_admin = true;
 							}
@@ -905,7 +917,7 @@
 					});
 					//글작성 범위 리스트로부터 중복되는 항목이 있는지 확인
 					$.each(writerData, function(idx, items){
-						if(value.usrId != null && value.usrId != ""){
+						if(!$.osl.isNull(value.usrId)){
 							if(value.usrId==items.stmWtId|| value.usrId==items.id ){
 								passKey_writer = true;
 							}
@@ -1071,7 +1083,7 @@
  							+"</div>";
  							//타이틀 종료
  					//소속 시작
- 					if(value.deptNm == null){
+ 					if($.osl.isNull(value.deptNm)){
  						listHtml += "<div class=''>-</div>";
  					}
  					else{
@@ -1127,7 +1139,7 @@
  	 							+ "</div>";
  	 							//타이틀 종료
  	 					//소속 시작
- 	 					if(value.deptNm == null){
+ 	 					if($.osl.isNull(value.deptNm)){
  	 						listHtm += "<div class=''>-</div>";
  	 					}
  	 					else{
@@ -1179,7 +1191,7 @@
  	 							+"</div>";
  	 							//타이틀 종료
  	 					//소속 시작
- 	 					if(value.deptNm == null){
+ 	 					if($.osl.isNull(value.deptNm)){
  	 						listHtml += "<div class=''>-</div>";
  	 					}
  	 					else{
@@ -1231,7 +1243,7 @@
  							+"</div>";
  							//타이틀 종료
  					//소속 시작
- 					if(value.deptNm == null){
+ 					if($.osl.isNull(value.deptNm)){
  						listHtml += "<div class='osl-card__prjnm'>-</div>";
  					}else{
  						listHtml += "<div class='osl-card__prjnm'>"
