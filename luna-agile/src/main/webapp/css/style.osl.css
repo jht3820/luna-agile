@@ -417,6 +417,10 @@ select[id^=usrOpt_] {
     padding-top: 15px;
     padding-bottom: 15px;
 }
+/* button */
+.osl-datatable-search__btn-title--none .btn i{
+	padding:0;
+}
 /* draggable */
 .osl-widget-draggable {
     background-color: #fff;

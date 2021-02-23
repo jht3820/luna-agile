@@ -26,7 +26,13 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		modal:{
-			close: "닫기"
+			close: "닫기",
+			insert:{
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveBtnString: "수정 완료"
+			}
 		},
 		portlet:{
 			tools: {
@@ -200,6 +206,13 @@ var OSLCoreLangSetting = function () {
 				myPage:{
 					title:"개인정보 수정",
 					error:"사용자 정보가 없으므로 개인정보 수정 화면으로 이동할 수 없습니다."
+				},
+				auth:{
+					saveMsg: "${1}명의 사용자가 배정되었습니다.",
+					saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+					saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)",
+					allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
+					allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 				}
 			},
 			error:{
@@ -2663,7 +2676,7 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ 
+			field:{
 				tagNm:"Tag",
 				
 				badContent: "Content",
