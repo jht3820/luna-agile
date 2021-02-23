@@ -336,5 +336,29 @@ public class Stm2000ServiceImpl extends EgovAbstractServiceImpl implements Stm20
 		}
 	}
 	
+
+
 	
+	@SuppressWarnings({ "rawtypes"})
+	public List<Map> selectStm2002FavoritesList(Map paramMap) throws Exception{
+		return stm2000DAO.selectStm2002FavoritesList(paramMap);
+	}
+	
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm2002FvrTypeCntInfo(Map paramMap) throws Exception{
+		return stm2000DAO.selectStm2002FvrTypeCntInfo(paramMap);
+	}
+	
+	
+	public String insertStm2002FavoritesInfo(Map<String, String> paramMap) throws Exception {
+		return stm2000DAO.insertStm2002FavoritesInfo(paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	public int updateStm2002FavoritesInfo(Map paramMap) throws Exception{
+		return stm2000DAO.updateStm2002FavoritesInfo(paramMap);
+	}
 }

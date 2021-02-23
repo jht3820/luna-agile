@@ -12,7 +12,7 @@
 		name: "LUNA™OPS 2.0"	
 		,deferred: $.Deferred() 
 		,version: "2.0"		
-		,cVersion: "1.06"	
+		,cVersion: "1.08"	
 		,langCd: "ko"		
 		,selPrjGrpId: ''
 		,selPrjId: ''
@@ -1579,6 +1579,132 @@
 	        				
 	        			});
 	        		}
+	        		
+	        		
+        			$.osl.datatable.setting("chargeReqTable",{
+        				data: {
+        					source: {
+        						read: {
+        							url: "/req/req4000/req4100/selectReq4100ChargeReqListAjax.do"
+        						}
+        					},
+        				},
+        				columns: [
+        					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+        					{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
+        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150},
+        					{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false, search: true},
+        					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false},
+        					{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
+        						template: function(row){
+        							var resultStr = $.osl.escapeHtml(row.reqNm);
+        							
+        							if(row.reqPw == "Y"){
+        								resultStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
+        							}
+        							return resultStr;
+        						}
+        					},
+        					{field: 'reqDesc', title:'요구사항 설명', textAlign: 'left', width: 100, autoHide: true, search: true},
+        					{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
+        						template: function (row) {
+        							if(row.reqUsrNm == null){
+        								row.reqUsrNm = "";
+        							}
+        							var usrData = {
+        								html: row.reqUsrNm,
+        								imgSize: "sm",
+        								class:{
+        									cardBtn: "osl-width__fit-content"
+        								}
+        							};
+        							return $.osl.user.usrImgSet(row.reqUsrImgId, usrData);
+        						},
+        						onclick: function(rowData){
+        							$.osl.user.usrInfoPopup(rowData.reqUsrId);
+        						}
+        					}
+        					
+        				],
+        				actionBtn:{
+        					"update": false,
+        					"delete" : false,
+        				},
+        				actionTooltip:{
+        					
+        				},
+        				actionFn:{
+        					
+        				},
+
+        				callback:{
+        					initComplete: function(evt,config){
+        						$("#chargeReqTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+        						$("#chargeReqCardTable").show();
+        					},
+        					ajaxDone: function(evt, list){
+        						var prjGrpStr = '';
+        						$.each(list, function(idx, map){
+        							var prjGrpAuthList = '';
+        							var prjAuthTargetList = [];
+        							var fvrUse = '';
+        							
+        							
+        							var rnStr = "No. "+map.rn;
+        							var rnClass = "badge-primary";
+        							var usrData = {
+    									html: map.reqUsrNm,
+    									imgSize: "sm",
+    									class:{
+    										cardBtn: "osl-width__fit-content",
+    									}
+    								};
+        							
+        							if(map.fvrUseCd == '01'){
+    									fvrUse = 'osl-favorites--active';
+    								}        							
+        							
+        							prjGrpStr +=
+        								 '<div class="col-lg-12 col-md-12 col-sm-12">'
+										+'	<div class="kt-portlet kt-portlet--solid-success osl-charge-requirements">'
+										+'		<div class="kt-portlet__head ">'
+										+'			<div class="kt-portlet__head-label">'
+										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
+										+'			</div>'
+										+'			<div class="kt-portlet__head-toolbar">'
+										+'				<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this)"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__body osl-padding-b-7">'
+										+'			<div class="kt-portlet__content osl-charge-requirements__body">'
+										+'				'+$.osl.escapeHtml(map.reqDesc)+''
+										+'			</div>'
+										+'			<div class="kt-align-right osl-margin-t-1rm">'
+										+'				<i class="fa fa-key"></i>'
+										+'				<i class="fa fa-key"></i>'
+										+'				<i class="fa fa-key"></i>'
+										+'				<i class="fa fa-key"></i>'
+										+'				<i class="fa fa-key"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right" style="display: flex;justify-content: space-between;">'
+										+'			<div class="osl-charge-requirements__footer-label" style="display: flex;align-items: center;-webkit-box-align: center;">'
+										+'				'+$.osl.user.usrImgSet(map.reqUsrImgId, usrData)+''
+										+'			</div>'
+										+'			<div class="osl-charge-requirements__footer-toolbar" style="display: flex;align-content: flex-end;">'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">업무화면</a>'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">상세보기</a>'
+										+'			</div>'
+										+'		</div>'
+										+'	</div>'
+										+'</div>';
+        						});
+        						
+        						
+        						$("#chargeReqCardTable").html(prjGrpStr);
+        					}
+        				}
+        			});
         			
 	        		$.osl.prjGrpAuthList = prjOrdList;
 	        		$.osl.showLoadingBar(false,{target: "#kt_header"});
@@ -2256,33 +2382,6 @@
 							beforeTemplate: function (row, data, index){
 								
 							},
-							afterTemplate: function(row, data, index){
-								
-								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
-									
-									if(config.rows.clickCheckbox == true){
-										
-										row.click(function(){
-											var targetRow = $(this).closest("tr");
-											var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
-											
-											if(targetElem.is(":checked") == true){
-												targetElem.prop("checked", false);
-												datatables.targetDt.setInactive(targetElem);
-												
-												targetRow.removeClass("osl-datatable__row--selected");
-												targetRow.addClass("kt-datatable__row--even");
-											}else{
-												targetElem.prop("checked", true);
-												datatables.targetDt.setActive(targetElem);
-											}
-											
-										});
-									}
-								}
-								
-								btnEvt["info"](row);
-							},
 							clickCheckbox: false
 						},
 						sortable: true,
@@ -2371,6 +2470,39 @@
 					
 					targetConfig = $.extend(true, targetConfig, config, config);
 
+					
+					targetConfig.rows["afterTemplate"] = function(row, data, index){
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+							
+							if(config.rows.clickCheckbox == true){
+								
+								row.click(function(){
+									var targetRow = $(this).closest("tr");
+									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+									
+									if(targetElem.is(":checked") == true){
+										targetElem.prop("checked", false);
+										datatables.targetDt.setInactive(targetElem);
+										
+										targetRow.removeClass("osl-datatable__row--selected");
+										targetRow.addClass("kt-datatable__row--even");
+									}else{
+										targetElem.prop("checked", true);
+										datatables.targetDt.setActive(targetElem);
+									}
+									
+								});
+							}
+						}
+						
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("afterTemplate")){
+							config.rows.afterTemplate(row, data, index);
+						}
+						btnEvt["info"](row);
+					};
+					
 					
 					var actionWidth = 0;
 					
@@ -3462,6 +3594,23 @@
 		var type = "success";
 		
 		var title = "";
+		var targetConfig = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "2000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+		};
 		
 		
 		if(!$.osl.isNull(agument) && typeof agument == "string"){
@@ -3474,6 +3623,9 @@
 			if(agument.hasOwnProperty("title")){
 				title = agument.title;
 			}
+			
+			
+			targetConfig = $.extend(true, targetConfig, agument, agument);
 		}
 		
 		
@@ -3481,6 +3633,7 @@
 			type = agument.type;
 		}
 		
+		toastr.options = targetConfig;
 		switch(type){
 			case "info":
 				toastr.info(msg, title);
@@ -3855,7 +4008,7 @@
 		
 		
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"/cmm/cmm9000/cmm9000/saveCmm9000FavoriteInfo.do", "loadingShow":true}
+				{"url":"/stm/stm2000/stm2000/saveStm2002FavoriteInfo.do", "loadingShow":true}
 				,paramData);
 		
 		

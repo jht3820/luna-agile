@@ -101,6 +101,54 @@
  		<result property="regDtmDay"			column="REG_DTM_DAY"/>
  		<result property="reqKey"				column="REQ_KEY"/>
     </resultMap>
+    
+   	<resultMap id="resultMapSelectChargeReq4100Info" class="egovMap">
+		<result property="rn"  				column="RN"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="prjNm"				column="PRJ_NM"/>
+		<result property="reqId"				column="REQ_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="reqClsId"				column="REQ_CLS_ID"/>
+		<result property="reqClsNm"				column="REQ_CLS_NM"/>
+		<result property="reqOrd"				column="REQ_ORD"/>
+		<result property="reqUsrId"				column="REQ_USR_ID"/>
+		<result property="reqUsrNm"				column="REQ_USR_NM"/>
+		<result property="reqDtm"				column="REQ_DTM"/>
+		<result property="reqUsrDeptId"			column="REQ_USR_DEPT_ID"/>
+		<result property="reqUsrDeptNm"			column="REQ_USR_DEPT_NM"/>
+		<result property="reqUsrEmail"			column="REQ_USR_EMAIL"/>
+		<result property="reqUsrNum"			column="REQ_USR_NUM"/>
+		<result property="reqUsrImgId"			column="REQ_USR_IMG_ID"/>
+		<result property="reqNm"				column="REQ_NM"/>
+		<result property="reqDesc"				column="REQ_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="reqPw"					column="REQ_PW"/>
+		<result property="reqChargerId"			column="REQ_CHARGER_ID"/>
+		<result property="reqChargerNm"			column="REQ_CHARGER_NM"/>
+		<result property="reqChargerImgId"			column="REQ_CHARGER_IMG_ID"/>
+		<result property="reqStDtm"				column="REQ_ST_DTM"/>
+		<result property="reqEdDtm"				column="REQ_ED_DTM"/>
+		<result property="reqStDuDtm"			column="REQ_ST_DU_DTM"/>
+		<result property="reqEdDuDtm"			column="REQ_ED_DU_DTM"/>
+		<result property="reqProType"			column="REQ_PRO_TYPE"/>
+		<result property="reqProTypeNm"			column="REQ_PRO_TYPE_NM"/>
+		<result property="reqNewType"			column="REQ_NEW_TYPE"/>
+		<result property="reqNewTypeNm"			column="REQ_NEW_TYPE_NM"/>		
+		<result property="reqAcceptTxt"			column="REQ_ACCEPT_TXT"/>	
+		<result property="reqTypeCd"			column="REQ_TYPE_CD"/>
+		<result property="atchFileId"			column="ATCH_FILE_ID"/>
+		<result property="cbAtchFileId"			column="CB_ATCH_FILE_ID"/>
+		<result property="milestoneId"			column="MILESTONE_ID"/>
+		<result property="processId"			column="PROCESS_ID"/>
+		<result property="processNm"			column="PROCESS_NM"/>
+		<result property="flowId"				column="FLOW_ID"/>
+		<result property="flowNm"				column="FLOW_NM"/>
+		<result property="useCd"				column="USE_CD"/>
+ 		<result property="regDtmDay"			column="REG_DTM_DAY"/>
+ 		<result property="reqKey"				column="REQ_KEY"/>
+ 		<result property="fvrId"				column="FVR_ID"/>
+ 		<result property="fvrUseCd"				column="FVR_USE_CD"/>
+ 		<result property="fvrOrd"				column="FVR_ORD"/>
+    </resultMap>
 
 	
 	
@@ -276,6 +324,153 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectChargeReq4100List">
+		SELECT 
+			ROWNUM RN
+			, 	T1.PRJ_ID
+			,	T1.PRJ_NM
+			,	T1.PRJ_GRP_ID
+			,	T1.PRJ_GRP_NM
+			,	T1.USR_SEL_PRJ_ORD
+			,	T1.REQ_ID
+			,	T1.REQ_ORD
+			,	T1.REQ_CLS_ID
+			,	T1.REQ_CLS_NM
+			,	T1.REQ_USR_ID
+			,	T1.REQ_USR_NM
+			,	T1.REQ_DTM
+			,	T1.REQ_USR_DEPT_ID
+			,	T1.REQ_USR_DEPT_NM
+			,	T1.REQ_USR_EMAIL
+			,	T1.REQ_USR_NUM
+			,	T1.REQ_USR_IMG_ID
+			,	T1.REQ_NM
+			,	T1.REQ_DESC
+			,	T1.REQ_PW
+			,	T1.REQ_CHARGER_ID
+			,	T1.REQ_CHARGER_NM
+			,	T1.REQ_CHARGER_IMG_ID
+			, 	T1.REQ_ST_DTM
+  		   	, 	T1.REQ_ED_DTM
+			, 	T1.REQ_ST_DU_DTM
+			, 	T1.REQ_ED_DU_DTM
+			,	T1.REQ_PRO_TYPE
+			,   T1.REQ_PRO_TYPE_NM
+			,	T1.REQ_NEW_TYPE
+			,   T1.REQ_NEW_TYPE_NM
+			,	T1.REQ_ACCEPT_TXT
+	    	,	T1.REQ_TYPE_CD
+	    	,   T1.REQ_TYPE_NM
+			,	T1.ATCH_FILE_ID
+			,	T1.CB_ATCH_FILE_ID
+			,	T1.MILESTONE_ID
+			,	T1.PROCESS_ID
+			,	T1.PROCESS_NM
+			,	T1.FLOW_ID
+			,	T1.FLOW_NM
+			,	T1.USE_CD
+			,	T1.REQ_KEY
+			,	T1.REQ_MIDDLE_DONE_TXT
+		    ,	T1.FVR_ID
+		    ,	T1.FVR_USE_CD
+		    ,	T1.FVR_ORD
+		    ,	T1.REG_DTM
+		    ,	T1.REG_DTM_DAY
+		    ,	T1.REG_USR_ID
+		    ,	T1.REG_USR_IP
+		    ,	T1.MODIFY_DTM
+		    ,	T1.MODIFY_USR_ID
+		    ,	T1.MODIFY_USR_IP
+		FROM
+		(
+			SELECT 
+					A.PRJ_ID
+					,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM
+					,	A.PRJ_GRP_ID
+					,	SF_PRJ1000_GRP_NM(A.PRJ_GRP_ID) AS PRJ_GRP_NM
+					,	DECODE(A.PRJ_ID, #prjId#, '1', '2') AS USR_SEL_PRJ_ORD
+					,	A.REQ_ID
+					,	A.REQ_ORD
+					,	A.REQ_CLS_ID
+					,	NVL(SF_REQ2000_REQ_CLS_NM(A.PRJ_ID, A.REQ_CLS_ID, '1'), '') AS REQ_CLS_NM
+					,	A.REQ_USR_ID
+					,	NVL(REQ_USR_NM, SF_STM3000_USR_INFO(A.REQ_USR_ID, '1')) AS REQ_USR_NM
+					,	TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM
+					,	A.REQ_USR_DEPT_ID
+					,	A.REQ_USR_DEPT_NM
+					,	A.REQ_USR_EMAIL
+					,	A.REQ_USR_NUM
+					,	SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
+					,	A.REQ_NM
+					<![CDATA[
+					,	REGEXP_REPLACE(A.REQ_DESC, '<[^>]*>', ' ') AS REQ_DESC
+					]]>
+					,	NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+					,	A.REQ_CHARGER_ID
+					,	SF_STM3000_USR_INFO(A.REQ_CHARGER_ID, 1) AS REQ_CHARGER_NM
+					,	SF_STM3000_USR_INFO(A.REQ_CHARGER_ID, 6) AS REQ_CHARGER_IMG_ID
+					, 	NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
+    		   		, 	NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+					, 	NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ST_DU_DTM
+					, 	NVL2(A.REQ_ED_DU_DTM, TO_CHAR(A.REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ED_DU_DTM
+					,	A.REQ_PRO_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+					,	A.REQ_NEW_TYPE
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', A.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM
+					,	A.REQ_ACCEPT_TXT
+			    	,	A.REQ_TYPE_CD
+			    	,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', A.REQ_TYPE_CD, '1') AS REQ_TYPE_NM
+					,	A.ATCH_FILE_ID
+					,	A.CB_ATCH_FILE_ID
+					,	A.MILESTONE_ID
+					,	A.PROCESS_ID
+					,	'' AS PROCESS_NM
+					,	A.FLOW_ID
+					,	'' AS FLOW_NM
+					,	A.USE_CD
+					,	A.REQ_KEY
+					,	A.REQ_MIDDLE_DONE_TXT
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+				    ,	B.FVR_ID
+				    ,	B.FVR_USE_CD
+				    ,	CASE WHEN B.FVR_USE_CD = '01' THEN '1' ELSE '2' END FVR_ORD  
+		    FROM (SELECT * FROM REQ4100) A
+		    LEFT JOIN STM2002 B ON ( A.REQ_ID = B.FVR_DATA1 AND B.FVR_TYPE = '05')
+		    WHERE 1=1
+				AND A.REQ_CHARGER_ID = #usrId#
+		) T1 WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqNm">
+					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNm">
+					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqOrd">
+					AND	T1.REQ_ORD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+			
+			ORDER BY T1.FVR_ORD ASC, T1.MODIFY_DTM DESC
 	</sql>
 	
 	<sql id="selectReq4100PrepList">
@@ -837,6 +1032,28 @@
 			AND A.PRJ_GRP_ID = #prjGrpId#
 	    ) SUBT1
 	    ORDER BY PRJ_ID, TO_NUMBER(REGEXP_REPLACE(REQ_ORD, '[^0-9]')) NULLS LAST, REQ_DTM DESC, REG_DTM DESC
+    </select>
+    
+    
+	<select id="req4100DAO.selectReq4100ChargeReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectChargeReq4100List"/>
+		) Z
+    </select>
+    
+    
+    <select id="req4100DAO.selectReq4100ChargeReqList" parameterClass="java.util.Map"  resultMap="resultMapSelectChargeReq4100Info">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectChargeReq4100List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
 </sqlMap>
