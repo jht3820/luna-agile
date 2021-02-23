@@ -8,27 +8,27 @@
 			</div>
 			<!-- begin :: tab button 영역 -->
 			<div class="kt-portlet__head-toolbar">
-				<ul class="nav nav-pills nav-pills-sm" role="tablist">
+				<ul class="nav nav-pills nav-pills-sm flex-flow--inherit" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link active" data-toggle="tab" href="#osl_tabs_1_1" role="tab">배포정보</a>
+						<a class="nav-link active text-center" data-toggle="tab" href="#osl_tabs_1_1" role="tab">배포정보</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_2" role="tab">전체 이력</a>
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_2" role="tab">전체 이력</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_3" role="tab">빌드 이력</a>
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_3" role="tab">빌드 이력</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_4" role="tab">결재 이력</a>
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_4" role="tab">결재 이력</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_5" role="tab">수정 이력</a>
-					</li>
-					<li class="nav-item osl-tab--sizeup">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_6" role="tab">배정 리비전</a>
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_5" role="tab">수정 이력</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#osl_tabs_1_7" role="tab">배정 요구사항 목록</a>
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_6" role="tab">배정 리비전</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-center" data-toggle="tab" href="#osl_tabs_1_7" role="tab">배정 요구사항 목록</a>
 					</li>
 				</ul>
 			</div>
@@ -165,7 +165,7 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-l-10">2019-07-23 20:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-l-50 osl-ribbon osl-ribbon__top osl-ribbon__ver">
+									<div class="osl-timeline-content osl-ribbon osl-ribbon__top osl-ribbon__ver">
 										<div class="osl-ribbon__target bg-success" style="top: -2px; right: 20px;">
 											<div class="osl-ribbon__btn kt-padding-l-10 kt-padding-r-10" title="결과 콘솔로그" data-toggle="kt-tooltip" data-skin="info" data-placement="bottom">
 												<i class="fa fa-code"></i>
@@ -175,8 +175,10 @@
 											</div>
 										</div>
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[원복-28] SECMS_build</span>
-											<span class="badge badge-danger kt-margin-r-15 float-left">실패</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-danger kt-margin-r-15 float-left">실패</div>
+												<div class="kt-font-bolder kt-padding-l-55">[원복-28] SECMS_build</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">빌드 실패</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -196,7 +198,7 @@
 		
 								<!--Begin::Item -->
 								<div class="kt-timeline__item kt-timeline__item--success osl-timeline-item-left">
-									<div class="kt-timeline__item-section flex-row-reverse">
+									<div class="kt-timeline__item-section flex-row-reverse-desktop">
 										<div class="kt-timeline__item-section-border">
 											<div class="kt-timeline__item-section-icon">
 												<i class="fas fa-check kt-font-success"></i>
@@ -204,7 +206,7 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-r-10">2019-07-20 12:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-r-50 osl-ribbon osl-ribbon__top osl-ribbon__ver">
+									<div class="osl-timeline-content osl-ribbon osl-ribbon__top osl-ribbon__ver">
 										<div class="osl-ribbon__target bg-success" style="top: -2px; right: 20px;">
 											<div class="osl-ribbon__btn kt-padding-l-10 kt-padding-r-10" title="결과 콘솔로그" data-toggle="kt-tooltip" data-placement="bottom">
 												<i class="fa fa-code"></i>
@@ -214,8 +216,10 @@
 											</div>
 										</div>
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[원복-28] SECMS_build</span>
-											<span class="badge badge-success kt-margin-r-15 float-left">성공</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-success kt-margin-r-15 float-left">성공</div>
+												<div class="kt-font-bolder kt-padding-l-55">[원복-28] SECMS_build</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">빌드 성공</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -278,7 +282,7 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-l-10">2019-07-23 20:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-l-50 osl-ribbon osl-ribbon__top osl-ribbon__ver">
+									<div class="osl-timeline-content osl-ribbon osl-ribbon__top osl-ribbon__ver">
 										<div class="osl-ribbon__target bg-success" style="top: -2px; right: 20px;">
 											<div class="osl-ribbon__btn kt-padding-l-10 kt-padding-r-10" title="결과 콘솔로그" data-toggle="kt-tooltip" data-skin="info" data-placement="bottom">
 												<i class="fa fa-code"></i>
@@ -288,8 +292,10 @@
 											</div>
 										</div>
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[원복-28] SECMS_build</span>
-											<span class="badge badge-danger kt-margin-r-15 float-left">실패</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-danger kt-margin-r-15 float-left">실패</div>
+												<div class="kt-font-bolder kt-padding-l-55">[원복-28] SECMS_build</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">빌드 실패</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -309,7 +315,7 @@
 		
 								<!--Begin::Item -->
 								<div class="kt-timeline__item kt-timeline__item--success osl-timeline-item-left">
-									<div class="kt-timeline__item-section flex-row-reverse">
+									<div class="kt-timeline__item-section flex-row-reverse-desktop">
 										<div class="kt-timeline__item-section-border">
 											<div class="kt-timeline__item-section-icon">
 												<i class="fas fa-check kt-font-success"></i>
@@ -317,7 +323,7 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-r-10">2019-07-20 12:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-r-50 osl-ribbon osl-ribbon__top osl-ribbon__ver">
+									<div class="osl-timeline-content osl-ribbon osl-ribbon__top osl-ribbon__ver">
 										<div class="osl-ribbon__target bg-success" style="top: -2px; right: 20px;">
 											<div class="osl-ribbon__btn kt-padding-l-10 kt-padding-r-10" title="결과 콘솔로그" data-toggle="kt-tooltip" data-placement="bottom">
 												<i class="fa fa-code"></i>
@@ -327,8 +333,10 @@
 											</div>
 										</div>
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[원복-28] SECMS_build</span>
-											<span class="badge badge-success kt-margin-r-15 float-left">성공</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-success kt-margin-r-15 float-left">성공</div>
+												<div class="kt-font-bolder kt-padding-l-55">[원복-28] SECMS_build</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">빌드 성공</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -429,10 +437,12 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-l-10">2019-07-23 20:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-l-50">
+									<div class="osl-timeline-content">
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[반려] 결재 반려</span>
-											<span class="badge badge-danger kt-margin-r-15 float-left">반려</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-danger kt-margin-r-15 float-left">반려</div>
+												<div class="kt-font-bolder kt-padding-l-55">[반려] 결재 반려</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">장애처리 긴급배포에 대한 결재 반려합니다.</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -452,7 +462,7 @@
 		
 								<!--Begin::Item -->
 								<div class="kt-timeline__item kt-timeline__item--success osl-timeline-item-left">
-									<div class="kt-timeline__item-section flex-row-reverse">
+									<div class="kt-timeline__item-section flex-row-reverse-desktop">
 										<div class="kt-timeline__item-section-border">
 											<div class="kt-timeline__item-section-icon">
 												<i class="fas fa-check kt-font-success"></i>
@@ -460,10 +470,12 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-r-10">2019-07-20 12:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-r-50">
+									<div class="osl-timeline-content">
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[승인] 결재 승인</span>
-											<span class="badge badge-success kt-margin-r-15 float-left">승인</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-success kt-margin-r-15 float-left">승인</div>
+												<div class="kt-font-bolder kt-padding-l-55">[승인] 결재 승인</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0">장애처리 긴급배포에 대한 결재 승인합니다.</div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -483,7 +495,7 @@
 								
 								<!--Begin::Item -->
 								<div class="kt-timeline__item kt-timeline__item--dark osl-timeline-item-left">
-									<div class="kt-timeline__item-section flex-row-reverse">
+									<div class="kt-timeline__item-section flex-row-reverse-desktop">
 										<div class="kt-timeline__item-section-border">
 											<div class="kt-timeline__item-section-icon">
 												<i class="fas fa-edit kt-font-dark"></i>
@@ -491,10 +503,12 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-r-10">2019-07-20 12:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-r-50">
+									<div class="osl-timeline-content">
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[대기] 결재 요청</span>
-											<span class="badge badge-dark kt-margin-r-15 float-left">요청</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-dark kt-margin-r-15 float-left">요청</div>
+												<div class="kt-font-bolder kt-padding-l-55">[대기] 결재 요청</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0"></div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -513,7 +527,7 @@
 								<!--End::Item -->
 								<!--Begin::Item -->
 								<div class="kt-timeline__item kt-timeline__item--dark osl-timeline-item-left">
-									<div class="kt-timeline__item-section flex-row-reverse">
+									<div class="kt-timeline__item-section flex-row-reverse-desktop">
 										<div class="kt-timeline__item-section-border">
 											<div class="kt-timeline__item-section-icon">
 												<i class="fas fa-edit kt-font-dark"></i>
@@ -521,10 +535,12 @@
 										</div>
 										<span class="kt-timeline__item-datetime kt-margin-r-10">2019-07-20 12:14:30</span>
 									</div>
-									<div class="osl-timeline-content kt-margin-r-50">
+									<div class="osl-timeline-content">
 										<div class="kt-timeline__item-text kt-margin-l-0 kt-margin-b-10 kt-padding-20">
-											<span class="kt-font-bolder">[기안] 기안서 작성</span>
-											<span class="badge badge-dark kt-margin-r-15 float-left">기안</span>
+											<div class="w-100 float-left kt-padding-r-90">
+												<div class="badge badge-success kt-margin-r-15 float-left">기안</div>
+												<div class="kt-font-bolder kt-padding-l-55">[기안] 기안서 작성</div>
+											</div>
 											<div class="kt-timeline__item-info kt-font-dark kt-padding-b-0"></div>
 										</div>
 										<div class="border-top kt-padding-t-10 kt-padding-l-20 kt-padding-r-20">
@@ -734,64 +750,65 @@ var OSLDpl1002Popup = function () {
 		
 		$("#dpldate").data("daterangepicker");
 		
-		/*var collapsePorlet = new KTPortlet('dplInfo', $.osl.lang("portlet"));*/
-		/*new KTPortlet('dplReqList', $.osl.lang("portlet"));
-		new KTPortlet('dplRecord', $.osl.lang("portlet"));*/
-		
-
-		/*$('.osl-tab--sizeup').click(function(){
-			if($(this).hasClass('active')){
-				console.log('dkssud');
-			}else{
-				collapsePorlet.collapse();
-				$('.big-row').addClass('osl-pop__tab--size-up');
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			//target : 탭 a태그 href 값
+			var target = e.currentTarget.hash;
+			//맨뒤 div id 끝자리 추출
+			var targetNum = target.substring(target.length-1,target.length);
+			
+			
+			if(targetNum==6){
+				datatableSetting1();
+				
+			}else if(targetNum==7){
+				datatableSetting4();
 			}
-		});*/
-		//배정된 요구사항 목록
-		$.osl.datatable.setting("dpl1002Table",{
-			data: {
-				source: {
-					read: {
-						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
-					}
-				},
-				 pageSize : 5,
-			},
-			toolbar:{
-				 items:{
-					 pagination:{
-						 pageSizeSelect : [5, 10, 20, 30, 50, 100],
-						//페이지 그룹단위 변경
-						pages:{
-							desktop: {
-								layout: 'default',
-								pagesNumber: 5
-							},
-							tablet:{
-								layout: 'default',
-								pagesNumber: 3
-							}
-						}
-					 }
-				 }
-			 },
-			columns: [
-				{field: '', title: '순번', textAlign: 'center', width: 20, search: true},
-				{field: '', title: '처리 상태', textAlign: 'center', width: 30, autoHide: false},
-				{field: '', title: '요구사항 명', textAlign: 'center', width: 150, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
-				{field: '', title: '요구사항 설명', textAlign: 'center', width: 150, search: true},
-				{field: '', title: '프로세스명', textAlign: 'center', width: 70, search: true, searchType:"date"},
-				{field: '', title: '작업흐름 명', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: '', title: '요청자', textAlign: 'center', width: 70, search: true, searchType:"date"},
-				{field: '', title: '담당자', textAlign: 'center', width: 70, search: true, searchType:"date"},
-			],
-			actionBtn:{
-				"dblClick": false 
-			}
+			
 		});
 		
 		
-		//배정된 요구사항 목록
+		// 조직 tree 세팅
+		var treeObj = $.osl.tree.setting("dplPopRevisionFileTreeDiv",{
+			data:{
+				url:"<c:url value='/stm/stm6000/stm6000/selectStm6000DeptListAjax.do'/>",
+				key: "deptId",
+				pKey: "upperDeptId",
+				labelKey: "deptName"
+			},
+			search:{
+				//대소문자 구분
+				case_insensitive : true,
+				//검색 결과 노드만 표시
+				show_only_matches: true,
+				//show_only_matches: true 일때 하위 노드도 같이 표시 할건지
+				show_only_matches_children: true,
+			},
+			callback:{
+				onclick: function(treeObj,selNode){
+					// 조직 단건 조회
+					selectDeptInfo(selNode.original.deptId);
+				},
+				init: function(treeObj,data){
+					//console.log(treeObj,data);
+				}
+			}
+		});
+		
+		/*스크롤 세팅*/
+		//조직 트리 스크롤 세팅
+		ktScrollInit("#dplPopRevisionFileTreeDiv", "312.5");
+		ktScrollInit("#osl_tabs_1_1", "550");
+		ktScrollInit("#osl_tabs_1_2", "550");
+		ktScrollInit("#osl_tabs_1_3", "550");
+		ktScrollInit("#osl_tabs_1_4", "550");
+		ktScrollInit("#osl_tabs_1_5", "550");
+		ktScrollInit("#osl_tabs_1_6", "550");
+		ktScrollInit("#osl_tabs_1_7", "550");
+		
+	};
+	
+	//배정된 요구사항 목록
+	var datatableSetting1 = function(){
 		$.osl.datatable.setting("dplPopTab1002Table",{
 			data: {
 				source: {
@@ -838,13 +855,16 @@ var OSLDpl1002Popup = function () {
 			},
 			actionFn:{
 				"click":function(rowData){
+					datatableSetting2();
 					$('.osl-div-cover.big').css('display','none');
 					$('.osl-div-cover')[1].append('좌측 배정된 요구사항을 선택해주세요.');
 				}
 			}
 		});
-		
-		//리비전 리스트
+	}
+	
+	//리비전 리스트
+	var datatableSetting2 = function(){
 		$.osl.datatable.setting("dplPopReivisionListDiv",{
 			data: {
 				source: {
@@ -888,11 +908,14 @@ var OSLDpl1002Popup = function () {
 			actionFn:{
 				"click":function(rowData){
 					$('.osl-div-cover').css('display','none');
+					datatableSetting3();
 				}
 			}
 		});
-		
-		/*리비전 파일 그리드*/
+	}
+	
+	/*리비전 파일 그리드*/
+	var datatableSetting3 = function(){
 		$.osl.datatable.setting("dplPopRevisionFileGridDiv",{
 			data: {
 				source: {
@@ -929,47 +952,53 @@ var OSLDpl1002Popup = function () {
 				"dblClick": false 
 			}
 		});
-		
-		// 조직 tree 세팅
-		var treeObj = $.osl.tree.setting("dplPopRevisionFileTreeDiv",{
-			data:{
-				url:"<c:url value='/stm/stm6000/stm6000/selectStm6000DeptListAjax.do'/>",
-				key: "deptId",
-				pKey: "upperDeptId",
-				labelKey: "deptName"
-			},
-			search:{
-				//대소문자 구분
-				case_insensitive : true,
-				//검색 결과 노드만 표시
-				show_only_matches: true,
-				//show_only_matches: true 일때 하위 노드도 같이 표시 할건지
-				show_only_matches_children: true,
-			},
-			callback:{
-				onclick: function(treeObj,selNode){
-					// 조직 단건 조회
-					selectDeptInfo(selNode.original.deptId);
+	}
+	
+
+	//배정된 요구사항 목록
+	var datatableSetting4 = function(){
+		$.osl.datatable.setting("dpl1002Table",{
+			data: {
+				source: {
+					read: {
+						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
+					}
 				},
-				init: function(treeObj,data){
-					//console.log(treeObj,data);
-				}
+				 pageSize : 5,
+			},
+			toolbar:{
+				 items:{
+					 pagination:{
+						 pageSizeSelect : [5, 10, 20, 30, 50, 100],
+						//페이지 그룹단위 변경
+						pages:{
+							desktop: {
+								layout: 'default',
+								pagesNumber: 5
+							},
+							tablet:{
+								layout: 'default',
+								pagesNumber: 3
+							}
+						}
+					 }
+				 }
+			 },
+			columns: [
+				{field: '', title: '순번', textAlign: 'center', width: 20, search: true},
+				{field: '', title: '처리 상태', textAlign: 'center', width: 30, autoHide: false},
+				{field: '', title: '요구사항 명', textAlign: 'center', width: 150, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+				{field: '', title: '요구사항 설명', textAlign: 'center', width: 150, search: true},
+				{field: '', title: '프로세스명', textAlign: 'center', width: 70, search: true, searchType:"date"},
+				{field: '', title: '작업흐름 명', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: '', title: '요청자', textAlign: 'center', width: 70, search: true, searchType:"date"},
+				{field: '', title: '담당자', textAlign: 'center', width: 70, search: true, searchType:"date"},
+			],
+			actionBtn:{
+				"dblClick": false 
 			}
 		});
-		
-		/*스크롤 세팅*/
-		//조직 트리 스크롤 세팅
-		ktScrollInit("#dplPopRevisionFileTreeDiv", "312.5");
-		ktScrollInit("#osl_tabs_1_1", "550");
-		ktScrollInit("#osl_tabs_1_2", "550");
-		ktScrollInit("#osl_tabs_1_3", "550");
-		ktScrollInit("#osl_tabs_1_4", "550");
-		ktScrollInit("#osl_tabs_1_5", "550");
-		ktScrollInit("#osl_tabs_1_6", "550");
-		ktScrollInit("#osl_tabs_1_7", "550");
-		
-	};
-	
+	}	
 	/*
 	 * function명 : ktScrollInit
 	 * function설명 : 스크롤 세팅 및 반응형 될 때 세로크기값을 계산해준다

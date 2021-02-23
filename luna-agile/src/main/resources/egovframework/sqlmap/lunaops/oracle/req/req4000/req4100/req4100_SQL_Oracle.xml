@@ -470,7 +470,7 @@
 			</isNotEmpty>
 		</isNotEmpty>
 			
-			ORDER BY T1.FVR_ORD ASC, T1.MODIFY_DTM DESC
+			ORDER BY T1.FVR_ORD ASC, T1.MODIFY_DTM DESC, T1.REQ_PRO_TYPE ASC
 	</sql>
 	
 	<sql id="selectReq4100PrepList">

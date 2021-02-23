@@ -1669,14 +1669,16 @@
 										+'	<div class="kt-portlet kt-portlet--solid-success osl-charge-requirements">'
 										+'		<div class="kt-portlet__head ">'
 										+'			<div class="kt-portlet__head-label">'
-										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
+										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title" data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
 										+'			</div>'
 										+'			<div class="kt-portlet__head-toolbar">'
-										+'				<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this)"></i>'
+										+'				<span class="osl-charge-requirements__flaticon-star-div">'
+										+'					<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this)"></i>'
+										+'				</span>'
 										+'			</div>'
 										+'		</div>'
 										+'		<div class="kt-portlet__body osl-padding-b-7">'
-										+'			<div class="kt-portlet__content osl-charge-requirements__body">'
+										+'			<div class="kt-portlet__content osl-charge-requirements__body"  data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="'+$.osl.escapeHtml(map.reqDesc)+'">'
 										+'				'+$.osl.escapeHtml(map.reqDesc)+''
 										+'			</div>'
 										+'			<div class="kt-align-right osl-margin-t-1rm">'
@@ -1688,7 +1690,7 @@
 										+'			</div>'
 										+'		</div>'
 										+'		<div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right" style="display: flex;justify-content: space-between;">'
-										+'			<div class="osl-charge-requirements__footer-label" style="display: flex;align-items: center;-webkit-box-align: center;">'
+										+'			<div class="osl-charge-requirements__footer-label" style="display: flex;align-items: center;-webkit-box-align: center;" onclick="$.osl.user.usrInfoPopup(\''+map.reqUsrId+'\');">'
 										+'				'+$.osl.user.usrImgSet(map.reqUsrImgId, usrData)+''
 										+'			</div>'
 										+'			<div class="osl-charge-requirements__footer-toolbar" style="display: flex;align-content: flex-end;">'
@@ -1702,6 +1704,7 @@
         						
         						
         						$("#chargeReqCardTable").html(prjGrpStr);
+        						KTApp.initTooltips();
         					}
         				}
         			});
@@ -2611,6 +2614,12 @@
 						$.each(targetConfig.searchColumns, function(idx, map){
 							
 							if(searchAddList.indexOf(map.field) == -1){
+								
+								var fieldLangTitle = $.osl.lang("datatable."+targetId+"."+map.field);
+								if(!$.osl.isNull(fieldLangTitle)){
+									map.title = fieldLangTitle;
+								}
+								
 								
 								if(map.hasOwnProperty("searchOrd")){
 									var searchOrd = map.searchOrd;

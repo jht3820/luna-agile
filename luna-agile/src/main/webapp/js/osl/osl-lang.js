@@ -1611,6 +1611,7 @@ var OSLCoreLangSetting = function () {
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
+				prjGrpNm: "Prject Group Name",
 				reqOrd: "Order",
 				reqProTypeNm: "Process Type",
 				reqNm: "Request Name",
