@@ -1171,11 +1171,14 @@ label.required:after {
     text-overflow: ellipsis;
 }
 
-.osl-charge-requirements__flaticon-star-div{
-	padding: 1px 4px;
-	background-color: #e2e5ec;
-	border-radius: 5px;
+.osl-charge-requirements__color--white {
+    color: #ffffff !important;;
 }
+
+.kt-offcanvas-panel .kt-offcanvas-panel__body .kt_datatable .kt-datatable__pager{
+	padding: 0px
+}
+
 /* req4100 */
 .osl-outline--brand{
 	border: 2px solid #1cac81;
