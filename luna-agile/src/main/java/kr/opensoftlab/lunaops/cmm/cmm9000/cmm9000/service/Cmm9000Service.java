@@ -11,17 +11,4 @@ public interface Cmm9000Service {
 	Map selectCmm9000LeftMenuInfos(Map paramMap) throws Exception;
 
 	
-	@SuppressWarnings({ "rawtypes"})
-	List<Map> selectCmm9000FavoritesList(Map paramMap) throws Exception;
-
-	
-	@SuppressWarnings("rawtypes")
-	int selectCmm9000FvrTypeCntInfo(Map paramMap) throws Exception;
-	
-	
-	String insertCmm9000FavoritesInfo(Map<String, String> paramMap) throws Exception ;
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	int updateCmm9000FavoritesInfo(Map paramMap) throws Exception;
 }

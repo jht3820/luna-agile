@@ -5,9 +5,11 @@
 	
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 
-	<!-- <select id="cmm9000DAO.selectCmm9000AlarmCntInfo" parameterClass="java.util.Map" resultClass="egovMap" cacheModel="commonCachemodel.cmm9000">-->
+	
+	
 	<select id="cmm9000DAO.selectCmm9000AlarmCntInfo" parameterClass="java.util.Map" resultClass="egovMap" >
 		<![CDATA[					
+			
 			SELECT	(	
 						SELECT	COUNT(*) AS REQ_CNT
 			          	FROM	REQ4100 A
@@ -15,14 +17,17 @@
 			          	AND		A.PRJ_ID = #selPrjId#
 			          	AND		A.PROCESS_ID IS NULL 
 			          	AND		A.USE_CD = '01'  
-			          	AND		A.REQ_PRO_TYPE = '01'
-					) AS REQ_CNT
+			          	AND		A.REQ_PRO_TYPE = '01' 
+					) AS REQ_CNT	
 			FROM	DUAL
 		]]>
 	</select>
 	
+	
+	
 	<select id="cmm9000DAO.selectCmm9000ChargeReqCntList" parameterClass="java.util.Map" resultClass="egovMap" >
 		<![CDATA[					
+			
 			SELECT COUNT(*) AS CNT
 			FROM REQ4100 A
 			WHERE 1=1
@@ -31,8 +36,11 @@
 		]]>
 	</select>	
 	
+	
+	
 	<select id="cmm9000DAO.selectCmm9000AllReqCntList" parameterClass="java.util.Map" resultClass="egovMap" >
 		<![CDATA[					
+			
 			SELECT COUNT(*) AS CNT
 			FROM REQ4100 A
 			WHERE 1=1
@@ -40,8 +48,10 @@
 		]]>
 	</select>
 	
+	
 	<select id="cmm9000DAO.selectCmm9000ProjectType" parameterClass="java.util.Map" resultClass="String" >
 		<![CDATA[					
+			
 			SELECT	A.PRJ_TYPE
 			FROM	PRJ1000 A
 			WHERE	1=1
@@ -49,170 +59,5 @@
 			AND A.LIC_GRP_ID 	= #licGrpId#
 		]]>
 	</select>
-	
-	<select id="cmm9000DAO.selectCmm9000FavoritesList" parameterClass="java.util.Map" resultClass="egovMap" >
-		<![CDATA[					
-			SELECT
-				A.LIC_GRP_ID
-				,A.USR_ID
-				,A.FVR_ID
-		        ,B.MENU_NM AS FVR_NM
-			    ,A.FVR_DATA1 AS FVR_SUB_DATA1
-		        ,B.MENU_URL AS FVR_SUB_DATA2
-		        ,B.MENU_TYPE_CD AS FVR_SUB_DATA3
-			    ,SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.FVR_DATA1, '3') AS FVR_SUB_DATA4
-				,SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.FVR_DATA1, '2') AS FVR_SUB_DATA5
-			    ,'' AS FVR_SUB_DATA6
-				,A.FVR_TYPE
-				,A.FVR_USE_CD
-			FROM STM2002 A INNER JOIN STM2000 B
-			ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.FVR_DATA1 = B.MENU_ID AND B.USE_CD = '01' )
-			WHERE	1=1
-				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USR_ID = #usrId#
-				AND A.FVR_TYPE = '01'
-				AND A.FVR_USE_CD = '01'
-			UNION
-			SELECT	A.LIC_GRP_ID
-					,A.USR_ID
-					,A.FVR_ID
-			        ,B.PRJ_NM AS FVR_NM
-			        ,A.FVR_DATA1 AS FVR_SUB_DATA1
-			        ,B.PRJ_DESC AS FVR_SUB_DATA2
-			        ,'' AS FVR_SUB_DATA3
-			        ,'' AS FVR_SUB_DATA4
-			        ,'' AS FVR_SUB_DATA5
-			        ,'' AS FVR_SUB_DATA6
-					,A.FVR_TYPE
-					,A.FVR_USE_CD
-			FROM	STM2002 A INNER JOIN PRJ1000 B
-				ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.FVR_DATA1 = B.PRJ_ID AND B.USE_CD = '01' AND B.PRJ_GRP_CD = '01')
-			WHERE	1=1
-				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USR_ID = #usrId#
-				AND A.FVR_TYPE = '02'
-				AND A.FVR_USE_CD = '01'
-			UNION
-			SELECT	A.LIC_GRP_ID
-					,A.USR_ID
-					,A.FVR_ID
-					,B.PRJ_NM AS FVR_NM
-					,A.FVR_DATA1 AS FVR_SUB_DATA1
-					,A.FVR_DATA2 AS FVR_SUB_DATA2
-					,C.PRJ_NM AS FVR_SUB_DATA3
-					,B.PRJ_DESC AS FVR_SUB_DATA4
-					,'' AS FVR_SUB_DATA5
-					,'' AS FVR_SUB_DATA6
-					,A.FVR_TYPE
-					,A.FVR_USE_CD
-			FROM	STM2002 A INNER JOIN PRJ1000 B
-				ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.FVR_DATA1 = B.PRJ_GRP_ID AND FVR_DATA2 = B.PRJ_ID AND B.USE_CD = '01' AND B.PRJ_GRP_CD = '02')
-      		INNER JOIN PRJ1000 C
-      			ON ( B.LIC_GRP_ID = C.LIC_GRP_ID AND B.PRJ_GRP_ID = C.PRJ_ID AND C.USE_CD = '01' AND C.PRJ_GRP_CD = '01')
-			WHERE	1=1
-				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USR_ID = #usrId#
-				AND A.FVR_TYPE IN '03'
-				AND A.FVR_USE_CD = '01'
-			UNION
-			SELECT	A.LIC_GRP_ID
-					,A.USR_ID
-					,A.FVR_ID
-					,B.AUTH_GRP_NM AS FVR_NM
-					,A.FVR_DATA1 AS FVR_SUB_DATA1
-			        ,A.FVR_DATA2 AS FVR_SUB_DATA2
-			        ,A.FVR_DATA3 AS FVR_SUB_DATA3
-					,D.PRJ_NM AS FVR_SUB_DATA4
-					,C.PRJ_NM AS FVR_SUB_DATA5
-					,B.AUTH_GRP_DESC AS FVR_SUB_DAT6
-					,A.FVR_TYPE
-					,A.FVR_USE_CD
-			FROM STM2002 A INNER JOIN PRJ2000 B
-				ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.FVR_DATA2 = B.PRJ_ID AND A.FVR_DATA3 = B.AUTH_GRP_ID AND B.USE_CD = '01' )
-			INNER JOIN PRJ1000 C
-				ON ( A.LIC_GRP_ID = C.LIC_GRP_ID AND A.FVR_DATA2 = C.PRJ_ID AND C.USE_CD = '01' )
-			INNER JOIN PRJ1000 D
-				ON ( A.LIC_GRP_ID = D.LIC_GRP_ID AND C.PRJ_GRP_ID = D.PRJ_ID AND D.USE_CD = '01' AND D.PRJ_GRP_CD = '01')
-			WHERE	1=1
-				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USR_ID = #usrId#
-				AND A.FVR_TYPE = '04'
-				AND A.FVR_USE_CD = '01'
-		]]>
-	</select>
-	
-	<select id="cmm9000DAO.selectCmm9000FvrTypeCntInfo" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
-		<![CDATA[					
-			SELECT count(*)
-			FROM STM2002 A
-			WHERE	1=1
-				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USR_ID = #usrId#
-				AND A.FVR_ID = #fvrId#
-				AND A.FVR_TYPE = #fvrType#
-		]]>
-			<isNotEmpty property="fvrType">
-				<isEqual property="fvrType" compareValue="01">
-					AND A.FVR_DATA1 = #fvrData1# 
-				</isEqual>
-				<isEqual property="fvrType" compareValue="02">
-					AND A.FVR_DATA1 = #fvrData1#
-				</isEqual>
-				<isEqual property="fvrType" compareValue="03">
-					AND A.FVR_DATA1 = #fvrData1#
-					AND A.FVR_DATA2 = #fvrData2#
-				</isEqual>
-				<isEqual property="fvrType" compareValue="04">
-					AND A.FVR_DATA1 = #fvrData1#
-					AND A.FVR_DATA2 = #fvrData2#
-					AND A.FVR_DATA3 = #fvrData3#
-				</isEqual>
-			</isNotEmpty>
-	</select>
-	
-	<insert id="cmm9000DAO.insertCmm9000FavoritesInfo" parameterClass="java.util.Map">
-		<selectKey resultClass="java.lang.String" keyProperty="newFvrId">
-		<![CDATA[
-			SELECT	NVL( 
-							SUBSTR(NEW_FVR_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_FVR_ID, 12, 5)) + 1) , 5, '0')
-						,	'FVR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-            		) AS NEW_FVR_ID 
-			FROM	(
-			            SELECT	MAX(FVR_ID)  AS NEW_FVR_ID
-			            FROM	STM2002 A
-			            WHERE	1=1
-                        AND		A.LIC_GRP_ID = #licGrpId#
-                        AND		A.USR_ID = #usrId#
-			            AND		A.FVR_ID LIKE 'FVR' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
-					)
-		]]>
-		</selectKey>
-			INSERT INTO STM2002
-			(
-				LIC_GRP_ID,				USR_ID,					FVR_ID
-				,FVR_TYPE,				FVR_DATA1,				FVR_DATA2
-				,FVR_DATA3,				FVR_USE_CD
-				,REG_DTM,				REG_USR_ID,				REG_USR_IP
-			)
-			VALUES
-			(
-				#licGrpId#,				#usrId#,				#newFvrId#
-				,#fvrType#,				#fvrData1#,				#fvrData2#
-				,#fvrData3#,			#fvrUseCd#
-				,SYSDATE,				#regUsrId#,				#regUsrIp#
-			)
-	</insert>
-	
-	<update id="cmm9000DAO.updateCmm9000FavoritesInfo" parameterClass="java.util.Map">
-		UPDATE STM2002 SET
-			FVR_USE_CD = #fvrUseCd#
-			,	MODIFY_DTM		= SYSDATE
-			,	MODIFY_USR_ID	= #modifyUsrId#
-			,	MODIFY_USR_IP	= #modifyUsrIp#
-		WHERE 1=1
-			AND LIC_GRP_ID = #licGrpId#
-			AND USR_ID = #usrId#
-			AND FVR_ID = #fvrId#
-	</update>
 	
 </sqlMap>

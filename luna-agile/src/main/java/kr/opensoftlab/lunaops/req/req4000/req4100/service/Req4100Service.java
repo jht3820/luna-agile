@@ -68,4 +68,12 @@ public interface Req4100Service {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Map> selectReq4100ReqProTypeOrdList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int  selectReq4100ChargeReqListCnt(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings({ "rawtypes" })
+	public List<Map>  selectReq4100ChargeReqList(Map paramMap) throws Exception;
 }
