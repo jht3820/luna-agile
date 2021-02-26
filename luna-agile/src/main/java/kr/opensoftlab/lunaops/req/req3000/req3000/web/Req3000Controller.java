@@ -64,11 +64,16 @@ public class Req3000Controller {
 	@Resource(name="EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
 	
+	
 	@RequestMapping(value="/req/req3000/req3000/selectReq3000View.do")
 	public String selectReq3000View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/req/req3000/req3000/req3000";
 	}
 	
+	@RequestMapping(value="/req/req3000/req3000/selectReq3002View.do")
+	public String selectReq3002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/req/req3000/req3000/req3002";
+	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value="/req/req3000/req3000/selectReq3000ListAjaxView.do")
@@ -105,21 +110,8 @@ public class Req3000Controller {
 			paramMap.put("reqUsrId", loginVO.getUsrId());
 
 			
-			
-			int totCnt = req3000Service.selectReq3000ReqGrpListCnt(paramMap);
-
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-
-			
-			
-			List<Map> req3000List = req3000Service.selectReq3000ReqGrpList(paramMap);
-			
-			
+			/
+			/
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -178,21 +170,8 @@ public class Req3000Controller {
 			paramMap.put("reqUsrId", loginVO.getUsrId());
 			
 			
-			
-			int totCnt = req3000Service.selectReq3001ReqGrpLinkReqListCnt(paramMap);
-			
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-			
-			
-			
-			List<Map> req3000List = req3000Service.selectReq3001ReqGrpLinkReqList(paramMap);
-			
-			
+			/
+			/
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -251,21 +230,8 @@ public class Req3000Controller {
 			paramMap.put("reqUsrId", loginVO.getUsrId());
 			
 			
-			
-			int totCnt = req3000Service.selectReq3002ReqGrpAddReqListCnt(paramMap);
-			
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-			
-			
-			
-			List<Map> req3000List = req3000Service.selectReq3002ReqGrpAddReqList(paramMap);
-			
-			
+			/
+			/
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -342,7 +308,7 @@ public class Req3000Controller {
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
-			Log.error("insertReq1001ReqAtchFileId()", ex);
+			Log.error("insertReq3001ReqAtchFileId()", ex);
 
 			
 			model.addAttribute("errorYn", "Y");

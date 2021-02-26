@@ -436,7 +436,8 @@
 				,	A.REQ_GRP_KEY	= #reqGrpKey#
 			</isNotEmpty>	
 				,	A.USE_CD 		= #useCd#
-				,	A.MODIFY_DTM		= SYSDATE
+				,	A.ATCH_FILE_ID = #atchFileId#
+				,	A.MODIFY_DTM = SYSDATE
 			    ,	A.MODIFY_USR_ID	= #modifyUsrId#
 			    ,	A.MODIFY_USR_IP	= #modifyUsrIp#
        	WHERE	1=1
