@@ -55,6 +55,35 @@ public class Stm2000DAO extends ComOslitsAbstractDAO {
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
+	public int selectStm2001AuthMenuAccessCheck(Map paramMap) throws Exception{
+		return (int) select("stm2000DAO.selectStm2001AuthMenuAccessCheck",paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void insertStm2001AuthMenuAccess(Map paramMap) throws Exception{
+		insert("stm2000DAO.insertStm2001AuthMenuAccess", paramMap);
+	}	
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	public int updateStm2001AuthMenuAccess(Map paramMap) throws Exception{
+		return update("stm2000DAO.updateStm2001AuthMenuAccess", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm2001AuthUpMenuAccessCheck(Map paramMap) throws Exception{
+		return (int) select("stm2000DAO.selectStm2001AuthUpMenuAccessCheck",paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void insertStm2001MenuRootAuthList(Map paramMap) throws Exception{
+		insert("stm2000DAO.insertStm2001MenuRootAuthList", paramMap);
+	}
+	
 	
 	
 	
@@ -118,22 +147,25 @@ public class Stm2000DAO extends ComOslitsAbstractDAO {
     }	
 	
 	
-	@SuppressWarnings({ "rawtypes" })
-	public int saveStm2000AuthGrpMenuAuthListOracle(Map paramMap) throws Exception{
-		return update("stm2000DAO.saveStm2000AuthGrpMenuAuthList", paramMap);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Map> selectStm2002FavoritesList(Map paramMap) throws Exception{
+		return (List<Map>) list("stm2000DAO.selectStm2002FavoritesList", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm2002FvrTypeCntInfo(Map paramMap) throws Exception{
+		return (int) select("stm2000DAO.selectStm2002FvrTypeCntInfo", paramMap);
+	}
+	
+	
+	public String insertStm2002FavoritesInfo(Map<String, String> paramMap) throws Exception {
+		return (String) insert("stm2000DAO.insertStm2002FavoritesInfo", paramMap);	
 	}
 	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public void saveStm2000AuthGrpMenuAuthListCubrid(Map paramMap) throws Exception{
-		select ("stm2000DAO.saveStm2000AuthGrpMenuAuthList", paramMap);
+	public int updateStm2002FavoritesInfo(Map paramMap) throws Exception{
+		return update("stm2000DAO.updateStm2002FavoritesInfo",paramMap);
 	}
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	public int saveStm2000AuthGrpMenuAuthListMariaDB(Map paramMap) throws Exception{
-		return update("stm2000DAO.saveStm2000AuthGrpMenuAuthList", paramMap);
-	}
-	
-	
 }

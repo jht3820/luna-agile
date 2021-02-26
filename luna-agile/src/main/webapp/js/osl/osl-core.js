@@ -12,7 +12,7 @@
 		name: "LUNA™OPS 2.0"	
 		,deferred: $.Deferred() 
 		,version: "2.0"		
-		,cVersion: "1.06"	
+		,cVersion: "1.08"	
 		,langCd: "ko"		
 		,selPrjGrpId: ''
 		,selPrjId: ''
@@ -102,6 +102,22 @@
 					};
 			var headerExist = $("#kt_header");
 			var contentExist = $("#kt_content");
+			
+			
+			$(document).keydown(function(event) {
+				
+				if ( event.keyCode == 113 || event.which == 113 ) {
+					var modalList = $(".modal");
+					$.each(modalList, function(idx, map){
+						var dragObj = $(map).data("draggabilly");
+						
+						if(!$.osl.isNull(dragObj)){
+							
+							dragObj.setPosition(0,0);
+						}
+					});
+				}
+			});
 			
 			
 			if(!$.osl.isNull(headerExist) && headerExist.length > 0){
@@ -386,6 +402,8 @@
 			
 			loadingNodeCnt:500,
 			
+			list:{},
+			
 			setting: function(targetId, config){
 				
 				var treeObj = null;
@@ -429,6 +447,85 @@
 					
 					
 					var actionFunction = {
+						select: function(){
+							if($.osl.isNull(treeObj)){
+            					$.osl.toastr($.osl.lang("tree.error.handler"));
+            					return false;
+            				}
+							
+							
+							var url = config.data.url;
+							var paramData = config.data.param;
+							
+							
+							var ajaxObj = new $.osl.ajaxRequestAction(
+									{"url": url, "async": false}
+									,paramData);
+							
+							
+							ajaxObj.setFnSuccess(function(data){
+								if(data.errorYn == "Y"){
+									$.osl.alert(data.message,{type: 'error'});
+								}else{
+									var treeDataList = data.list;
+									
+									
+									if($.osl.isNull(treeDataList)){
+										$.each(data,function(idx, map){
+											if(typeof map == "object"){
+												try{
+													if(map.length > 0){
+														treeDataList = map;
+														return false;
+													}
+												}catch(e){
+													return true;
+												}
+											}
+										});
+									}
+									
+									
+									if(treeDataList.length > 0){
+										var rtnTreeData = [];
+										var tmpMap = {};
+										
+										var key = config.data.key;
+										var pKey = config.data.pKey;
+										var labelKey = config.data.labelKey;
+										
+										
+										$.each(treeDataList, function(idx, map){
+											map["text"] = map[labelKey];
+											tmpMap[map[key]] = map;
+										});
+										
+										
+										$.each(treeDataList, function(idx, map){
+											
+											if(tmpMap[map[pKey]] && map[key] != map[pKey]){
+												
+												if (!tmpMap[map[pKey]]["children"]){
+													tmpMap[map[pKey]]["children"] = [];
+												}
+												
+												
+												tmpMap[map[pKey]]["children"].push(map);
+											}else{
+												
+												rtnTreeData.push(map);
+											}
+										});
+										
+										treeObj.jstree(true).settings.core.data = rtnTreeData;
+										treeObj.jstree(true).refresh();
+									}
+								}
+							});
+							
+							
+							ajaxObj.send();
+						},
 						allNodeOpen: function(obj){
 							if($.osl.isNull(treeObj)){
             					$.osl.toastr($.osl.lang("tree.error.handler"));
@@ -581,6 +678,9 @@
 				            		}
 				            	}
 				            },
+				            "actionFn":{
+				            	
+				            },
 				            "callback":{
 				            	
 				            	"init": $.noop,
@@ -618,7 +718,15 @@
 							
 							
 							if(!actionFunction.hasOwnProperty(action)){
-								$(map).remove();
+								if(config.hasOwnProperty("actionFn") && config.actionFn.hasOwnProperty(action) && typeof config.actionFn[action] == "function"){
+									
+									$(map).click(function(){
+										config.actionFn[action](treeObj, map);
+									});
+								}else{
+									
+									$(map).remove();
+								}
 							}else{
 								
 								$(map).click(function(){
@@ -629,195 +737,128 @@
 					}
 					
 					
-					
-					var url = config.data.url;
-					var paramData = config.data.param;
+					treeObj = targetObj.jstree(config);
 					
 					
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url": url, "async": false}
-							,paramData);
+					treeObj.bind('select_node.jstree', function(event, data){
+						var selNode = data.instance.get_node(data.selected);
+			            var id = selNode.id;
+			            treeObj.jstree().selNode = {id: id, data:data};
+			            
+			            
+			            config.callback.onclick(treeObj, selNode);
+			        }).bind('deselect_node.jstree', function(event, data){
+			        	treeObj.jstree().selNode = null;
+			        }).bind('search.jstree', function(nodes, str, res){
+			        	
+			        	if(str.nodes.length == 0){
+			        		
+			        		treeObj.jstree(true).hide_all();
+			        		
+			        		
+			        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
+			        	}
+			        	
+			        }).bind('loaded.jstree', function(event, data) {
+			        	
+			            config.callback.init(treeObj, data);
+			        });
 					
 					
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-							$.osl.alert(data.message,{type: 'error'});
-						}else{
-							var treeDataList = data.list;
-							
-							
-							if($.osl.isNull(treeDataList)){
-								$.each(data,function(idx, map){
-									if(typeof map == "object"){
-										try{
-											if(map.length > 0){
-												treeDataList = map;
-												return false;
-											}
-										}catch(e){
-											return true;
-										}
-									}
-								});
-							}
-							
-							
-							if(treeDataList.length > 0){
-								var rtnTreeData = [];
-								var tmpMap = {};
-								
-								var key = config.data.key;
-								var pKey = config.data.pKey;
-								var labelKey = config.data.labelKey;
-								
-								
-								$.each(treeDataList, function(idx, map){
-									map["text"] = map[labelKey];
-									tmpMap[map[key]] = map;
-								});
-								
-								
-								$.each(treeDataList, function(idx, map){
-									
-									if(tmpMap[map[pKey]] && map[key] != map[pKey]){
-										
-										if (!tmpMap[map[pKey]]["children"]){
-											tmpMap[map[pKey]]["children"] = [];
-										}
-										
-										
-										tmpMap[map[pKey]]["children"].push(map);
-									}else{
-										
-										rtnTreeData.push(map);
-									}
-								});
-								
-								config.core.data = rtnTreeData;
-							}
-							
-							
-							treeObj = targetObj.jstree(config);
-							
-							
-							treeObj.bind('select_node.jstree', function(event, data){
-								var selNode = data.instance.get_node(data.selected);
-					            var id = selNode.id;
-					            treeObj.jstree().selNode = {id: id, data:data};
-					            
-					            
-					            config.callback.onclick(treeObj, selNode);
-					        }).bind('deselect_node.jstree', function(event, data){
-					        	treeObj.jstree().selNode = null;
-					        }).bind('search.jstree', function(nodes, str, res){
-					        	
-					        	if(str.nodes.length == 0){
-					        		
-					        		treeObj.jstree(true).hide_all();
-					        		
-					        		
-					        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
-					        	}
-					        	
-					        }).bind('loaded.jstree', function(event, data) {
-					        	
-					            config.callback.init(treeObj, data);
-					        });
-							
-							
-							var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
-							
-							
-							if(searchTarget.length > 0){
-								
-								
-								searchTarget.empty();
-								
-								
-								var btnStyle = searchTarget.data("search-style");
-								
-								var btnStyleStr = "btn-brand";
-								
-								if(!$.osl.isNull(btnStyle)){
-									btnStyleStr = "btn-"+btnStyle;
-								}
-								
-								
-								var searchTargetHtml = 
-									'<div class="input-group">'
-										+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
-											+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
-											+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
-												+'<span><i class="la la-search"></i></span>'
-											+'</span>'
-										+'</div>'
-										+'<div class="input-group-append">'
-											+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
-												+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
-											'</button>'
-										+'</div>'
-									+'</div>';
-								
-								searchTarget.html(searchTargetHtml);
-								
-								
-								var fnTreeSearch = function(searchValue){
-									treeObj.jstree(true).show_all();
-									
-									
-									if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
-										$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
-									}
-									
-									treeObj.jstree("search", searchValue);
-								};
-								
-								
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
-									if (e.which === 13){
-										
-										var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
-										
-										thisObj.children("i").removeClass("la la-search");
-										
-										
-										thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-										
-										
-										fnTreeSearch($(this).val());
-										
-										setTimeout(function(){
-											thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-											
-											
-											thisObj.children("i").addClass("la la-search");
-										},300);
-									}
-								});
-								
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
-
-									var thisObj = $(this).children("span");
-									
-									
-									thisObj.children("span").hide();
-									thisObj.addClass("spinner-border spinner-border-sm");
-
-									fnTreeSearch($("#treeSearch_"+targetId).val());
-									
-									setTimeout(function(){
-										thisObj.removeClass("spinner-border spinner-border-sm");
-										thisObj.children("span").show();
-									},300);
-								});
-							}
+					var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
+					
+					
+					if(searchTarget.length > 0){
+						
+						
+						searchTarget.empty();
+						
+						
+						var btnStyle = searchTarget.data("search-style");
+						
+						var btnStyleStr = "btn-brand";
+						
+						if(!$.osl.isNull(btnStyle)){
+							btnStyleStr = "btn-"+btnStyle;
 						}
-					});
+						
+						
+						var searchTargetHtml = 
+							'<div class="input-group">'
+								+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
+									+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
+									+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
+										+'<span><i class="la la-search"></i></span>'
+									+'</span>'
+								+'</div>'
+								+'<div class="input-group-append">'
+									+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
+										+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
+									'</button>'
+								+'</div>'
+							+'</div>';
+						
+						searchTarget.html(searchTargetHtml);
+						
+						
+						var fnTreeSearch = function(searchValue){
+							treeObj.jstree(true).show_all();
+							
+							
+							if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
+								$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
+							}
+							
+							treeObj.jstree("search", searchValue);
+						};
+						
+						
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
+							if (e.which === 13){
+								
+								var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
+								
+								thisObj.children("i").removeClass("la la-search");
+								
+								
+								thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+								
+								
+								fnTreeSearch($(this).val());
+								
+								setTimeout(function(){
+									thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+									
+									
+									thisObj.children("i").addClass("la la-search");
+								},300);
+							}
+						});
+						
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
+
+							var thisObj = $(this).children("span");
+							
+							
+							thisObj.children("span").hide();
+							thisObj.addClass("spinner-border spinner-border-sm");
+
+							fnTreeSearch($("#treeSearch_"+targetId).val());
+							
+							setTimeout(function(){
+								thisObj.removeClass("spinner-border spinner-border-sm");
+								thisObj.children("span").show();
+							},300);
+						});
+					}
 					
 					
-					ajaxObj.send();
+					actionFunction["select"]();
+					
+					
+					$.osl.tree.list[targetId] = treeObj;
 				}
 				return treeObj;
 			}
@@ -833,7 +874,7 @@
 			
 			
 			if($.osl.isNull(langId)){
-				return ""
+				return "";
 			}
 			
 			
@@ -857,6 +898,11 @@
 					}
 				});
 			}catch(e){
+			}
+			
+			
+			if($.osl.isNull(rtnLangStr)){
+				return "";
 			}
 			
 			
@@ -885,7 +931,7 @@
 					if($.osl.isNull(langStr)){
 						return true;
 					}
-					$(map).text(langStr);
+					$(map).html(langStr);
 				});
 			}
 			
@@ -1077,7 +1123,7 @@
 		        			$.osl.user.usrOptData = usrOptData;
 		        		}
 		        		
-	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+	        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        	}
         			
         			if(!$.osl.isNull(data.langList)){
@@ -1465,9 +1511,14 @@
 		        					$("#submenu-authGrp-sel").html('<i class="kt-menu__link-icon fa fa-user-tie"></i>'+$.osl.escapeHtml(map.authGrpNm));
 		        				}
 		        				
-	        					if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
-	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				
+	        					if(!prjOrdList[map.prjGrpId]["prjList"].hasOwnProperty(map.prjId)){
+	        						prjOrdList[map.prjGrpId]["prjList"][map.prjId] = {};
 	        					}
+	        					
+		        				if(!prjOrdList[map.prjGrpId]["prjList"][map.prjId].hasOwnProperty("authGrpList")){
+		        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"] = {};
+		        				}
 	        					
 	        					prjOrdList[map.prjGrpId]["prjList"][map.prjId]["authGrpList"][map.authGrpId] = map;
 
@@ -1599,6 +1650,159 @@
 	        				
 	        			});
 	        		}
+
+	        		
+        			$.osl.datatable.setting("chargeReqTable",{
+        				data: {
+        					source: {
+        						read: {
+        							url: "/req/req4000/req4100/selectReq4100ChargeReqListAjax.do"
+        						}
+        					}
+        				},
+        				columns: [
+        					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+        					{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
+        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150},
+        					{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false, search: true},
+        					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+        					{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
+        						template: function(row){
+        							var resultStr = $.osl.escapeHtml(row.reqNm);
+        							
+        							if(row.reqPw == "Y"){
+        								resultStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
+        							}
+        							return resultStr;
+        						}
+        					},
+        					{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
+        					{field: 'regDtm', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"date",
+        						template: function (row) {
+        							var paramDatetime = new Date(row.regDtm);
+        			                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+        			                return agoTimeStr.agoString;
+        						}
+        					},
+        					{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
+        						template: function (row) {
+        							if($.osl.isNull(row.reqUsrNm)){
+        								row.reqUsrNm = "";
+        							}
+        							var usrData = {
+        								html: row.reqUsrNm,
+        								imgSize: "sm",
+        								class:{
+        									cardBtn: "osl-width__fit-content"
+        								}
+        							};
+        							return $.osl.user.usrImgSet(row.reqUsrImgId, usrData);
+        						},
+        						onclick: function(rowData){
+        							$.osl.user.usrInfoPopup(rowData.reqUsrId);
+        						}
+        					},
+        					{field: 'reqUsrEmail', title:'요청자e-mail', textAlign: 'left', width: 180, search: true},
+        					{field: 'reqUsrDeptNm', title:'요청자 조직', textAlign: 'center', width: 300, sortable: false},
+        					{field: 'reqUsrNum', title: '요청자 연락처', textAlign: 'center', width: 100, search: true},
+        					{field: 'reqKey', title: '요구사항 key', textAlign: 'center', width: 300, sortable: false, search: true}
+        				],
+        				searchColumns:[
+        					{field: 'prjGrpNm', title: $.osl.lang("req4100.field.prjGrpNm"), searchOrd: 0}
+        				],
+        				actionBtn:{
+        					"update": false,
+        					"delete" : false,
+        				},
+        				toolbar:{
+        					items:{
+        						pagination:{
+        							pageSizeSelect : [4, 10, 20, 30, 50, 100],
+        							pages:{
+        								desktop: {
+        									layout: 'compact',
+        								},
+            							tablet: {
+            								layout: 'compact'
+            							},
+        							}
+        						}
+        					}
+        				},
+        				callback:{
+        					initComplete: function(evt,config){
+        						$("#chargeReqTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+        						$("#chargeReqCardTable").show();
+        					},
+        					ajaxDone: function(evt, list){
+        						var prjGrpStr = '';
+        						$.each(list, function(idx, map){
+        							var prjGrpAuthList = '';
+        							var prjAuthTargetList = [];
+        							var fvrUse = '';
+        							
+        							var cardUi = 'kt-portlet--solid-success';
+        							
+        							
+        							var rnStr = "No. "+map.rn;
+        							var rnClass = "badge-primary";
+        							var usrData = {
+    									html: map.reqUsrNm,
+    									imgSize: "sm",
+    									class:{
+    										cardBtn: "osl-width__fit-content",
+    										cardName: "osl-charge-requirements__color--white",
+    									}
+    								};
+        							
+        							if(map.fvrUseCd == '01'){
+    									fvrUse = 'osl-favorites--active';
+    								}        							
+        							
+        							prjGrpStr +=
+        								 '	<div class="kt-portlet osl-charge-requirements '+cardUi+'" data-prj-grp-id="'+map.prjGrpId+'" data-prj-id="'+map.prjId+'" data-req-id="'+map.reqId+'">'
+										+'		<div class="kt-portlet__head ">'
+										+'			<div class="kt-portlet__head-label">'
+										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title" data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
+										+'			</div>'
+										+'			<div class="kt-portlet__head-toolbar">'
+										+'				<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this);$.osl.datatable.list.chargeReqTable.targetDt.reload();"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__body osl-padding-b-7">'
+										+'			<div class="kt-portlet__content osl-charge-requirements__body"  data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="'+$.osl.escapeHtml(map.reqDesc)+'">'
+										+'				'+$.osl.escapeHtml(map.reqDesc)+''
+										+'			</div>'
+										+'			<div class="kt-align-right osl-margin-t-1rm">'
+										+'				<i class="fa fa-key"></i>'
+						        		+'				<i class="fa fa-file-signature"></i>'
+						        		+'				<i class="far fa-stop-circle"></i>'
+						        		+'				<i class="fa fa-sign-out-alt"></i>'
+						        		+'				<i class="fa fa-code-branch"></i>'
+						        		+'				<i class="fa fa-code"></i>'
+						        		+'				<i class="fa fa-puzzle-piece"></i>'
+						        		+'				<i class="fa fa-user-shield"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right" style="display: flex;justify-content: space-between;">'
+										+'			<div class="osl-charge-requirements__footer-label" style="display: flex;align-items: center;-webkit-box-align: center;" onclick="$.osl.user.usrInfoPopup(\''+map.reqUsrId+'\');">'
+										+'				'+$.osl.user.usrImgSet(map.reqUsrImgId, usrData)+''
+										+'			</div>'
+										+'			<div class="osl-charge-requirements__footer-toolbar" style="display: flex;align-content: flex-end;">'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">업무화면</a>'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">상세보기</a>'
+										+'			</div>'
+										+'		</div>'
+										+'	</div>';
+        						});
+        						
+        						
+        						
+        						$("#chargeReqCardTable").html(prjGrpStr);
+        						KTApp.initTooltips();
+        					}
+        				}
+        			});
         			
 	        		$.osl.prjGrpAuthList = prjOrdList;
 	        		$.osl.showLoadingBar(false,{target: "#kt_header"});
@@ -1660,7 +1864,8 @@
 											
 											$.each(selRecords, function(idx, map){
 												var rowIdx = $(map).data("row");
-												rowData.push(datatables.targetDt.dataSet[rowIdx]);
+												var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+												rowData.push(tmp_rowData);
 											});
 											
 											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "list", rowData.length, this);
@@ -1692,10 +1897,10 @@
 											event.stopPropagation();
 											event.preventDefault();
 											event.returnValue = false;
+
+											var tmp_rowData = datatables.targetDt.dataSet[btnRowNum];
 											
-											var rowData = datatables.targetDt.dataSet[btnRowNum];
-											
-											targetConfig.actionFn[btnAction](rowData, btnDatatableId, "info", btnRowNum, this);
+											targetConfig.actionFn[btnAction](tmp_rowData, btnDatatableId, "info", btnRowNum, this);
 										});
 									}
 								}
@@ -1707,41 +1912,54 @@
 					},
 					
 					action: {
-						"select": function(elem, datatableId) {
+						"select": function(elem, datatableId, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
 								
-								datatables.targetDt.setDataSourceParam("pagination.page",1);
-								datatables.targetDt.reload();
+								if(datatables.config.actionFn.hasOwnProperty("select")){
+									
+									datatables.config.actionFn["select"](datatableId, elem);
+								}
+								
+								else{
+									datatables.targetDt.setDataSourceParam("pagination.page",1);
+									datatables.targetDt.reload();
+								}
 							});
 						},
-						"insert": function(elem, datatableId, type, rowNum) {
+						"insert": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								
 								datatables.config.actionFn["insert"](datatableId, type, rowNum,elem);
 							});
 						},
-						"update": function(elem, datatableId, type, rowNum) {
+						"update": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData;
 								
@@ -1761,6 +1979,7 @@
 									}
 									else{
 										var rowIdx = datatables.targetDt.getSelectedRecords().data("row");
+										
 										rowData = datatables.targetDt.dataSet[rowIdx];
 									}
 								}
@@ -1774,15 +1993,16 @@
 								
 							});
 						},
-						"delete": function(elem, datatableId, type, rowNum) {
+						"delete": function(elem, datatableId, type, rowNum, bubleFlag) {
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData = [];
 								
@@ -1798,7 +2018,9 @@
 									else{
 										$.each(selRecords, function(idx, map){
 											var rowIdx = $(map).data("row");
-											rowData.push(datatables.targetDt.dataSet[rowIdx]);
+											var tmp_rowData = datatables.targetDt.dataSet[rowIdx];
+											
+											rowData.push(tmp_rowData);
 										});
 									}
 								}
@@ -1816,15 +2038,17 @@
 								
 							});
 						},
-						"click": function(elem, datatableId, type, rowNum, row){
+						"click": function(elem, datatableId, type, rowNum, row, bubleFlag){
 							
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
@@ -1833,17 +2057,19 @@
 							});
 							
 							
-							$(row).off("click");
+							
 							$(row).click(function(event){
 								
 								if($(event.target.parentElement).hasClass("kt-checkbox") || $(event.target.parentElement).hasClass("kt-datatable__toggle-detail")){
 									return true;
 								}
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								
 								
 								$(".kt_datatable[id="+datatableId+"] tr.kt-datatable__row.osl-datatable__row--selected").removeClass("osl-datatable__row--selected");
@@ -1855,15 +2081,16 @@
 								datatables.config.actionFn["click"](rowData, datatableId, type, rowNum, elem);
 							});
 						},
-						"dblClick": function(elem, datatableId, type, rowNum, row){
+						"dblClick": function(elem, datatableId, type, rowNum, row, bubleFlag){
 							$(elem).off("click");
 							$(elem).click(function(event){
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
 								
@@ -1873,12 +2100,13 @@
 							
 							$(row).off("dblclick");
 							$(row).on('dblclick', function (event) {
-								
-								event.cancelable = true;
-								event.stopPropagation();
-								event.preventDefault();
-								event.returnValue = false;
-								
+								if(bubleFlag != false){
+									
+									event.cancelable = true;
+									event.stopPropagation();
+									event.preventDefault();
+									event.returnValue = false;
+								}
 								var rowData = datatables.targetDt.dataSet[rowNum];
 								
 								
@@ -1897,6 +2125,12 @@
 						
 						if(searchTarget.length > 0){
 							
+							var btnTitle = "";
+							if(!searchTarget.hasClass("osl-datatable-search__btn-title--none")){
+								btnTitle = '<span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>';
+							}
+							
+							
 							var btnStyle = searchTarget.data("search-style");
 							
 							var btnStyleStr = "btn-brand";
@@ -1907,8 +2141,8 @@
 							
 							
 							var searchTargetHtml = 
-								'<div class="form-group">'
-									+'<div class="input-group">'
+								
+									'<div class="input-group">'
 										+'<div class="input-group-prepend">'
 											+'<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">'+$.osl.lang("datatable.search.allTitle")+'</button>'
 											+'<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="'+elemId+'">'
@@ -1922,15 +2156,15 @@
 											+'<span class="kt-input-icon__icon kt-input-icon__icon--right">'
 												+'<span><i class="la"></i></span>'
 											+'</span>'
-											+'<input type="hidden" name="searchStartDt" id="searchStartDt" data-datatable-id="'+elemId+'">'
-											+'<input type="hidden" name="searchEndDt" id="searchEndDt" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchStartDt" id="searchStartDt_'+elemId+'" data-datatable-id="'+elemId+'">'
+											+'<input type="hidden" name="searchEndDt" id="searchEndDt_'+elemId+'" data-datatable-id="'+elemId+'">'
 										+'</div>'
 										+'<div class="input-group-append">'
 											+'<button class="btn '+btnStyleStr+' osl-datatable-search__button" type="button" data-datatable-id="'+elemId+'">'
-												+'<i class="fa fa-search"></i><span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>'
+												+'<i class="fa fa-search"></i>'+btnTitle
 											+'</button>'
 										+'</div>'
-									+'</div>'
+									
 								+'</div>';
 							
 							
@@ -1990,13 +2224,14 @@
 					action: {
 						"select":function(){
 							
-							var selectBtn = $("button[data-datatable-id="+targetId+"][data-datatable-action=select]");
-							if(selectBtn.length > 0){
-								selectBtn[0].click();
-							}else{
+							if(datatables.config.actionFn.hasOwnProperty("select")){
 								
-								datatables[targetId].targetDt.setDataSourceParam("pagination.page",1);
-								datatables[targetId].targetDt.reload();
+								datatables.config.actionFn["select"](datatables.targetDt[0].id, datatables.targetDt[0]);
+							}
+							
+							else{
+								datatables.targetDt.setDataSourceParam("pagination.page",1);
+								datatables.targetDt.reload();
 							}
 						},
 						"select-input":function(targetObj){
@@ -2059,14 +2294,18 @@
 					
 					inputHandle: function(elemId, searchFieldId, searchType, searchCd){
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						var searchDataTarget = $(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]");
 						
-						$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						searchDataTarget.val('');
 						
-						$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"),"destroy");
+						$.osl.date.datepicker(searchDataTarget,"destroy");
 						
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val('');
-						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val('');
+						$.osl.date.daterangepicker(searchDataTarget,"destroy");
+						
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val('');
+						
+						searchDataTarget.off('keypress');
 						
 						if(searchType == "select"){
 							
@@ -2075,7 +2314,7 @@
 							];
 
 			        		
-		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , false);
+		        			$.osl.getMulticommonCodeDataForm(commonCodeArr , true);
 		        			
 		        			
 		        			searchEvt.action["layout-clean"](elemId,searchType);
@@ -2104,13 +2343,13 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.datepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, selected){
+							$.osl.date.datepicker(searchDataTarget, {}, function(defaultConfig, selected){
 								var minDate = new Date(selected.date).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(selected.date).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2122,14 +2361,14 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,true,"la-calendar");
 							
 							
-							$.osl.date.daterangepicker($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]"), {}, function(defaultConfig, start, end, label){
+							$.osl.date.daterangepicker(searchDataTarget, {}, function(defaultConfig, start, end, label){
 								
 								var minDate = new Date(start).format("yyyy-MM-dd 00:00:00");
 								var maxDate = new Date(end).format("yyyy-MM-dd 23:59:59");
 								
 								
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt[data-datatable-id="+elemId+"]").val(minDate);
-								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt[data-datatable-id="+elemId+"]").val(maxDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchStartDt_"+elemId+"[data-datatable-id="+elemId+"]").val(minDate);
+								$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchEndDt_"+elemId+"[data-datatable-id="+elemId+"]").val(maxDate);
 								
 								
 								searchEvt.action["select-input"]($(".osl-datatable-search__input[data-datatable-id="+elemId+"] > span i.la"));
@@ -2141,16 +2380,66 @@
 							searchEvt.action["layout-clean"](elemId,searchType,false,false);
 							
 							
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").off('keypress');
-							$(".osl-datatable-search__input[data-datatable-id="+elemId+"] > input#searchData_"+elemId+"[data-datatable-id="+elemId+"]").on('keypress', function(e) {
-								if (e.which === 13){
-									var thisObj = $(this);
-									var thisObjIcon = thisObj.siblings("span").find("i.la");
-									
-									
-									searchEvt.action["select-input"](thisObjIcon);
+							var fieldId = $(".osl-datatable-search__dropdown[data-datatable-id="+elemId+"] > .dropdown-item.active").data("field-id");
+							var fieldData = datatableInfo.getColumnByField(fieldId);
+							
+							
+							var enterKeyPressFlag = true;
+							
+							
+							if($.osl.isNull(fieldData)){
+								if(datatableInfo.options.hasOwnProperty("searchColumns") && datatableInfo.options.searchColumns.length > 0){
+									$.each(datatableInfo.options.searchColumns, function(idx, map){
+										if(fieldId == map.field){
+											fieldData = map;
+											return false;
+										}
+									});
 								}
-							});
+							}
+							if(!$.osl.isNull(fieldData)){
+								
+								if(fieldData.hasOwnProperty("searchKeyCode") && fieldData.hasOwnProperty("searchKeyEvt")){
+									var keyCode = fieldData["searchKeyCode"];
+									var keyEvt = fieldData["searchKeyEvt"];
+									
+									
+									if(!$.osl.isNull(keyCode) && typeof keyEvt == "function"){
+										
+										if(keyCode == 13){
+											enterKeyPressFlag = false;
+										}
+										
+										searchDataTarget.on('keypress', function(e) {
+											if (e.which == keyCode){
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
+											}
+											
+											else if(keyCode == -1){
+												var thisObj = $(this);
+												var thisObjIcon = thisObj.siblings("span").find("i.la");
+												
+												keyEvt(e, datatableInfo, searchDataTarget, function(){searchEvt.action["select-input"](thisObjIcon)});
+											}
+										});
+									}
+								}
+							}
+							if(enterKeyPressFlag){
+								
+								searchDataTarget.on('keypress', function(e) {
+									if (e.which === 13){
+										var thisObj = $(this);
+										var thisObjIcon = thisObj.siblings("span").find("i.la");
+										
+										
+										searchEvt.action["select-input"](thisObjIcon);
+									}
+								});
+							}
 						}
 					}
 				}
@@ -2169,7 +2458,7 @@
 						},
 						layout: {
 							scroll: false,
-							footer: false,
+							footer: false
 						},
 						translate:{
 							records:{
@@ -2194,15 +2483,17 @@
 							}
 						},
 						rows:{
-							afterTemplate: function(row, data, index){
-								btnEvt["info"](row);
-							}
+							beforeTemplate: function (row, data, index){
+								
+							},
+							clickCheckbox: false
 						},
 						sortable: true,
 						pagination: true,
 						search: false,
 						columns: [],
 						searchColumns: [],
+						cardUiTarget: null,
 						actionBtn:{
 							"autoHide": false,
 							"title": "Actions",
@@ -2268,7 +2559,11 @@
 							
 							reloaded: $.noop,
 							
-							sort: $.noop
+							sort: $.noop,
+							
+							perpage: $.noop,
+							
+							gotoPage: $.noop
 						}
 					};
 					
@@ -2279,6 +2574,39 @@
 					
 					targetConfig = $.extend(true, targetConfig, config, config);
 
+					
+					targetConfig.rows["afterTemplate"] = function(row, data, index){
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+							
+							if(config.rows.clickCheckbox == true){
+								
+								row.click(function(){
+									var targetRow = $(this).closest("tr");
+									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+									
+									if(targetElem.is(":checked") == true){
+										targetElem.prop("checked", false);
+										datatables.targetDt.setInactive(targetElem);
+										
+										targetRow.removeClass("osl-datatable__row--selected");
+										targetRow.addClass("kt-datatable__row--even");
+									}else{
+										targetElem.prop("checked", true);
+										datatables.targetDt.setActive(targetElem);
+									}
+									
+								});
+							}
+						}
+						
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("afterTemplate")){
+							config.rows.afterTemplate(row, data, index);
+						}
+						btnEvt["info"](row);
+					};
+					
 					
 					var actionWidth = 0;
 					
@@ -2388,6 +2716,12 @@
 							
 							if(searchAddList.indexOf(map.field) == -1){
 								
+								var fieldLangTitle = $.osl.lang("datatable."+targetId+"."+map.field);
+								if(!$.osl.isNull(fieldLangTitle)){
+									map.title = fieldLangTitle;
+								}
+								
+								
 								if(map.hasOwnProperty("searchOrd")){
 									var searchOrd = map.searchOrd;
 									
@@ -2406,46 +2740,57 @@
 					}
 					
 					
-					targetConfig = $.extend(true, targetConfig, {
-						data:{
-							source:{
-								read:{
-									params: {
-										dtParamPrjGrpId: $.osl.selPrjGrpId,
-										dtParamPrjId: $.osl.selPrjId,
-										dtParamAuthGrpId: $.osl.selAuthGrpId,
-										searchTargetId: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
-										},
-										searchTargetType: function(){
-											return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-										},
-										searchTargetData: function(){
-											var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
-											var searchTargetData;
-											if(searchTargetType == "select"){
-												searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
-											}
-											else if(searchTargetType == "all"){ 
-												searchTargetData = null;
-											}
-											else{
-												searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
-											}
+					if(targetConfig.data.type != 'local'){
+						
+						targetConfig = $.extend(true, targetConfig, {
+							data:{
+								source:{
+									read:{
+										params: {
 											
-											return searchTargetData;
-										},
-										searchStartDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt").val();
-										},
-										searchEndDt: function(){
-											return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt").val();
+											dtParamPrjGrpId: $.osl.selPrjGrpId,
+											dtParamPrjId: $.osl.selPrjId,
+											dtParamAuthGrpId: $.osl.selAuthGrpId,
+											
+											
+											searchTargetId: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("field-id");
+											},
+											
+											searchTargetType: function(){
+												return $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+											},
+											
+											
+											searchTargetData: function(){
+												var searchTargetType = $(".osl-datatable-search__dropdown[data-datatable-id="+targetId+"] > .dropdown-item.active").data("opt-type");
+												var searchTargetData;
+												if(searchTargetType == "select"){
+													searchTargetData = $(".osl-datatable-search__select[data-datatable-id="+targetId+"]").val();
+												}
+												else if(searchTargetType == "all"){ 
+													searchTargetData = null;
+												}
+												else{
+													searchTargetData = $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchData_"+targetId).val();
+												}
+												
+												return searchTargetData;
+											},
+											
+											searchStartDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchStartDt_"+targetId+"").val();
+											},
+											
+											searchEndDt: function(){
+												return $(".osl-datatable-search__input[data-datatable-id="+targetId+"] > input#searchEndDt_"+targetId+"").val();
+											}
 										}
 									}
 								}
 							}
-						}
-					});
+						});
+					}
 
 					
 					if(searchColumns.length > 0){
@@ -2463,17 +2808,152 @@
 					
 					var datatableInfo = $(ktDatatableTarget).KTDatatable(targetConfig);
 					
+					
 					$(ktDatatableTarget).on("kt-datatable--on-ajax-done",function(evt,list){
 						targetConfig.callback.ajaxDone(evt.target, list, datatableInfo);
+						
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							var targetUIs = targetConfig.cardUiTarget;
+							if(targetUIs.length > 0){
+								
+								$.each(targetUIs, function(idx, targetUI){
+									
+									var dropdownItems = $(targetUI).find(".dropdown-item[data-datatable-id="+targetId+"][data-datatable-expans=dropdown]");
+									$.each(dropdownItems, function(itemIdx, item){
+										
+										var btnAction = $(this).data("datatable-action");
+										
+										
+										var rownum = $(this).data("datatable-rownum");
+										
+										
+										if($.osl.isNull(rownum)){
+											rownum = $(this).parent(".dropdown-menu").data("datatable-rownum");
+										}
+										
+										
+										if($.osl.isNull(rownum)){
+											rownum = $(this).parents("[data-datatable-rownum]").data("datatable-rownum");
+										}
+										
+										
+										if($.osl.isNull(rownum)){
+											return true;
+										}
+										
+										
+										if(!$.osl.isNull(btnAction)){
+											
+											if(btnEvt.action.hasOwnProperty(btnAction)){
+												var rowData = datatables.targetDt.dataSet[rownum];
+												btnEvt.action[btnAction](this, targetId, "info", rownum, false);
+											}else{
+												
+												if(targetConfig.actionFn.hasOwnProperty(btnAction)){
+													$(this).off("click");
+													$(this).click(function(event){
+														
+														event.cancelable = true;
+														event.stopPropagation();
+														event.preventDefault();
+														event.returnValue = false;
+														
+														var rowData = datatables.targetDt.dataSet[rownum];
+														var rowDatas = [];
+														rowDatas.push(rowData);
+														
+														targetConfig.actionFn[btnAction](rowDatas, targetId, "info", this);
+													});
+												}
+											}
+										}
+									});
+									
+									
+									$(targetUI).find("input[type=checkbox][data-datatable-id="+targetId+"]").click(function(){
+										var rowNum = this.value;
+										var targetRow = datatableInfo.row("[data-row="+rowNum+"]").nodes();
+										
+										var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+										
+										if(targetElem.length > 0){
+											if(targetElem.is(":checked") == true){
+												targetElem.prop("checked", false);
+												datatableInfo.setInactive(targetElem);
+												
+												targetRow.removeClass("osl-datatable__row--selected");
+												targetRow.addClass("kt-datatable__row--even");
+											}else{
+												targetElem.prop("checked", true);
+												datatableInfo.setActive(targetElem);
+											}
+										}
+									});
+								});
+							}
+						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-init",function(evt,config){
 						targetConfig.callback.initComplete(evt.target, config, datatableInfo);
+						
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							
+							var datatableBody = datatableInfo.tableBody;
+							var datatableChkbox = $(datatableBody).find("label.kt-checkbox").children("input[type=checkbox]");
+							
+							
+							if(datatableChkbox.length > 0){
+								datatableChkbox.change(function(){
+									var rowNum = $(this).parents("tr.kt-datatable__row").data("row");
+									var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox][data-datatable-id="+targetId+"][value="+rowNum+"]");
+									if(targetElem.length > 0){
+										if(targetElem.is(":checked") == true){
+											targetElem.prop("checked", false);
+										}else{
+											targetElem.prop("checked", true);
+										}
+									}
+								});
+							}
+							
+							
+							var datatableHead = datatableInfo.tableHead;
+							var datatableChkbox = $(datatableHead).find("label.kt-checkbox.kt-checkbox--all").children("input[type=checkbox]");
+							
+							datatableChkbox.change(function(){
+								var rowNum = $(this).parents("tr.kt-datatable__row").data("row");
+								var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox][data-datatable-id="+targetId+"]");
+								
+								if(targetElem.length > 0){
+									if($(this).is(":checked") == true){
+										targetElem.prop("checked", true);
+									}else{
+										targetElem.prop("checked", false);
+									}
+								}
+							});
+						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-reloaded",function(evt,config){
 						targetConfig.callback.reloaded(evt.target, config, datatableInfo);
 					});
+					
+					
+					$(ktDatatableTarget).on("kt-datatable--on-update-perpage",function(evt,args){
+						targetConfig.callback.perpage(evt.target, args, datatableInfo);
+					});
+					
+					
+					$(ktDatatableTarget).on("kt-datatable--on-goto-page",function(evt,args){
+						targetConfig.callback.gotoPage(evt.target, args, datatableInfo);
+					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-sort",function(evt,data){
 						
@@ -2489,11 +2969,14 @@
 							datatableInfo.setDataSourceParam("sortFieldId",field);
 							datatableInfo.setDataSourceParam("sortDirection",data.sort);
 							
+							
 							datatableInfo.reload();
+							
 							
 							targetConfig.callback.sort(evt.target, data, datatableInfo);
 						}
 					});
+					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-layout-updated",function(evt,config){
 						
@@ -2506,13 +2989,14 @@
 								targetObj.off("click");
 								targetObj.click(function(event){
 									
-									event.cancelable = true;
-									event.stopPropagation();
-									event.preventDefault();
-									event.returnValue = false;
-									
-									
 									if(typeof map.onclick == "function"){
+										
+										event.cancelable = true;
+										event.stopPropagation();
+										event.preventDefault();
+										event.returnValue = false;
+										
+										
 										var rowNum = $(this).parent("tr").data("row");
 										var rowData = null;
 										try{
@@ -2522,11 +3006,21 @@
 											console.log(e);
 										}
 										
+										
 										map.onclick(rowData, event);
 									}
 								});
 							}
 						});
+						
+						if(!$.osl.isNull(targetConfig.cardUiTarget)){
+							var targetElem = targetConfig.cardUiTarget.find("input[type=checkbox]:checked");
+							
+							
+							$.each(targetElem, function(idx, map){
+								map.checked = false;
+							});
+						}
 					});
 					
 					
@@ -2536,6 +3030,8 @@
 					
 					$.osl.datatable.list[targetId] = datatables;
 				}
+				
+				return datatables;
 			}
 		}
 		,date: {
@@ -2544,7 +3040,7 @@
 				
 				$.fn.datepicker.dates['ko'] = $.osl.lang("date.datepicker");
 				
-				moment.defineLocale('fr', $.osl.lang("date.moment"));
+				moment.updateLocale('fr', $.osl.lang("date.moment"));
 			}
 			
 			,datepicker: function(targetObj, config, callback){
@@ -2586,6 +3082,7 @@
 			}
 			
 			,daterangepicker: function(targetObj, config, callback){
+				var datePickerObj = null;
 				
 				if($.osl.isNull($(targetObj)) || $(targetObj).length == 0){
 					return true;
@@ -2603,7 +3100,7 @@
 					}
 				}else{
 					var minYear = moment().subtract(10, 'year').format('YYYY');
-					var maxYear = moment().format('YYYY');
+					var maxYear = moment().subtract(-10, 'year').format('YYYY');
 					
 					var defaultConfig = {
 				            buttonClasses: 'btn btn-sm',
@@ -2620,12 +3117,13 @@
 					defaultConfig = $.extend(true, defaultConfig, config);
 					
 					
-					$(targetObj).daterangepicker(defaultConfig,
+					datePickerObj = $(targetObj).daterangepicker(defaultConfig,
 						function(start, end, label) {
 							callback(defaultConfig, start, end, label);
 						}
 					);
 				}
+				return datePickerObj;
 			}
 		}
 		
@@ -2791,7 +3289,7 @@
 				var returnStr = 
 					'<div class="kt-user-card-v2 btn '+cardBtn+'">'
 						+'<div class="kt-user-card-v2__pic kt-media '+imgSize+' kt-media--circle '+cardPic+'">'
-							+'<img class=" '+usrImg+'" src="'+usrImgId+'"/>'
+							+'<img class=" '+usrImg+'" src="'+usrImgId+'" onerror="this.src=\'/media/users/default.jpg\'"/>'
 						+'</div>'
 						+'<div class="kt-user-card-v2__details '+cardDetail+'">'
 							+'<span class="kt-user-card-v2__name '+cardName+'">'+cardContent+'</span>'
@@ -2933,7 +3431,7 @@
 		this.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 		
 		
-		this.async = "true";
+		this.async = true;
 		
 		
 		this.cache = "true";
@@ -3031,7 +3529,7 @@
 			        error: function(xhr, status, err){
 			        	
 			        	if(xhr.status == '999'){
-			        		$.osl.alert($.osl.lang("common.alert.title"),$.osl.lang("common.error.sessionInvalid"),"error",
+			        		$.osl.alert($.osl.lang("common.error.sessionInvalid"),"error",
 			        				function(){
 					        			document.location.href="/cmm/cmm4000/cmm4000/selectCmm4000View.do";
 					        		}
@@ -3042,7 +3540,7 @@
 				    		 },3000);
 			        		return;
 			        	}else if(xhr.status == '998'){
-			        		$.osl.alert($.osl.lang("common.alert.title"),$.osl.lang("common.error.nonAuth"),"error");
+			        		$.osl.alert($.osl.lang("common.error.nonAuth"),"error");
 			        		if(tmp_loadingShow){
 			        			$.osl.showLoadingBar(false);
 			        		}
@@ -3144,12 +3642,13 @@
 	
 	
 	$.osl.escapeHtml = function(sValue){
+		var rtnValue = sValue;
 		
 		if(typeof sValue == "number"){
-			return sValue;
+			return rtnValue;
 		}
 		try{
-			return sValue ? sValue.replace( /[&<>'"]/g,
+			rtnValue =  sValue ? sValue.replace( /[&<>'"]/g,
 				function (c, offset, str) {
 					if (c === "&") {
 						var substr = str.substring(offset, offset + 6);
@@ -3169,6 +3668,11 @@
 		}catch(error){
 			return "";
 		}
+		
+		
+		rtnValue = rtnValue.replace(/(&lt;\/br&gt;|&lt;br&gt;|&lt;br\/&gt;|&lt;br \/&gt;)/gi, '</br>');
+		
+		return rtnValue;
 	};
 	
 	
@@ -3200,6 +3704,23 @@
 		var type = "success";
 		
 		var title = "";
+		var targetConfig = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "2000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+		};
 		
 		
 		if(!$.osl.isNull(agument) && typeof agument == "string"){
@@ -3212,6 +3733,9 @@
 			if(agument.hasOwnProperty("title")){
 				title = agument.title;
 			}
+			
+			
+			targetConfig = $.extend(true, targetConfig, agument, agument);
 		}
 		
 		
@@ -3219,6 +3743,7 @@
 			type = agument.type;
 		}
 		
+		toastr.options = targetConfig;
 		switch(type){
 			case "info":
 				toastr.info(msg, title);
@@ -3593,7 +4118,7 @@
 		
 		
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"/cmm/cmm9000/cmm9000/saveCmm9000FavoriteInfo.do", "loadingShow":true}
+				{"url":"/stm/stm2000/stm2000/saveStm2002FavoriteInfo.do", "loadingShow":true}
 				,paramData);
 		
 		
@@ -4062,6 +4587,11 @@
 		
 		var formatDate = new Date(paramDatetime).format("yyyy-MM-dd HH:mm:ss");
 		
+		
+		if(options.hasOwnProperty("returnFormat")){
+			formatDate = new Date(paramDatetime).format(options.returnFormat);
+		}
+		
 		if(!$.osl.isNull(agoTime) && agoTime > 0){
 			agoTime = agoTime/1000;
 			
@@ -4090,28 +4620,40 @@
 
 			
 			var suffixAgo = $.osl.lang("date.agoTime.suffixAgo");
-			var agoString;
-			$.each(agoTimeArr, function(idx, map){
-				
-				if(!$.osl.isNull(options) && options.hasOwnProperty("fullTime")){
-					if(agoTimeStr[idx] == options.fullTime && map > 0){
-						agoString = formatDate;
-						return false;
-					}
-				
-				}else if(!$.osl.isNull(options) && options.hasOwnProperty("returnTime")){
-					if(agoTimeStr[idx] == options.returnTime){
-						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
-						return false;
-					}
-				}else{
-					
-					if(map > 0){
-						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
-						return false;
-					}
+			var agoString = formatDate;
+			
+			
+			if(!$.osl.isNull(options) && options.hasOwnProperty("returnTime")){
+				var searchIdx = agoTimeStr.indexOf(options.returnTime);
+				if(searchIdx > 0 && agoTimeArr[searchIdx] > 0){
+					agoString = $.osl.lang("date.agoTime."+agoTimeStr[searchIdx],agoTimeArr[searchIdx])+" "+suffixAgo;
 				}
-			});
+			}else{
+				$.each(agoTimeArr, function(idx, map){
+					if(map > 0){
+						
+						if(!$.osl.isNull(options) && options.hasOwnProperty("fullTime")){
+							var searchIdx = agoTimeStr.indexOf(options.fullTime);
+							
+							
+							if(!$.osl.isNull(searchIdx) && searchIdx >= 0){
+								
+								if(searchIdx >= idx){
+									agoString = formatDate;
+									return false;
+								}else{ 
+									agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
+									return false;
+								}
+							}
+						}
+						
+						agoString = $.osl.lang("date.agoTime."+agoTimeStr[idx],map)+" "+suffixAgo;
+						return false;
+					}
+				});
+			}
+		
 			
 			return {
 				sec: secAgo,
@@ -4124,7 +4666,16 @@
 				agoString: agoString
 			};
 		}
-		return formatDate;
+		return {
+			sec: 0,
+			min: 0,
+			hour: 0,
+			day: 0,
+			month: 0,
+			year: 0,
+			formatDate: formatDate,
+			agoString: formatDate
+		};
 	}
 }));
 

@@ -10,88 +10,99 @@
 		FROM
 		(
 			SELECT
-				CONNECT_BY_ISLEAF AS LEAF
-			,	SUBT1.PRJ_ID
-	        ,	SUBT1.PRJ_GRP_ID
-	        ,	SUBT1.LIC_GRP_ID
-	        ,	SUBT1.PRJ_NM
-	        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
-	        ,	TO_CHAR(TO_DATE(SUBT1.END_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS END_DT   
-	        ,	SUBT1.ORD
-	        ,	SUBT1.PRJ_DESC
-	        ,	SUBT1.USE_CD
-	        ,	SUBT1.PRJ_TYPE_CD
-	        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
-	        ,	SUBT1.PRJ_DEV_TYPE_CD
-	        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
-	        ,	SUBT1.PRJ_ACRM
-	        ,	SUBT1.PRJ_GRP_CD
-	        ,	SUBT1.USR_ID
-	        ,	SUBT1.PRJ_CHILD_CNT
-	        ,	SUBT1.REQ_ALL_CNT
-	        ,	SUBT1.REQ_IN_PROGRESS_CNT
-	        ,	SUBT1.REQ_DONE_CNT
-	        ,	SUBT1.PRJ_USR_CHARGER_LIST
-	        ,	SUBT1.REG_DTM
-	        ,	SUBT1.REG_USR_ID
-	        ,	SUBT1.REG_USR_IP
-	        ,	SUBT1.MODIFY_DTM
-	        ,	SUBT1.MODIFY_USR_ID
-	        ,	SUBT1.MODIFY_USR_IP
+				SUBT1.PRJ_ID
+		        ,	SUBT1.PRJ_GRP_ID
+		        ,	SUBT1.LIC_GRP_ID
+		        ,	SUBT1.PRJ_NM
+		        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
+		        ,	TO_CHAR(TO_DATE(SUBT1.END_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS END_DT   
+		        ,	SUBT1.ORD
+		        ,	SUBT1.PRJ_DESC
+		        ,	SUBT1.USE_CD
+		        ,	SUBT1.DEL_CD
+		        ,	SUBT1.PRJ_TYPE_CD
+		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
+		        ,	SUBT1.PRJ_DEV_TYPE_CD
+		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
+		        ,	SUBT1.PRJ_ACRM
+		        ,	SUBT1.PRJ_GRP_CD
+		        ,	SUBT1.PRJ_CHILD_CNT
+		        ,	SUBT1.REQ_ALL_CNT
+		        ,	SUBT1.REQ_IN_PROGRESS_CNT
+		        ,	SUBT1.REQ_DONE_CNT
+		        ,	SUBT1.PRJ_USR_CHARGER_LIST
+		        ,	SUBT1.REG_DTM
+		        ,	SUBT1.REG_USR_ID
+		        ,	SUBT1.REG_USR_IP
+		        ,	SUBT1.MODIFY_DTM
+		        ,	SUBT1.MODIFY_USR_ID
+		        ,	SUBT1.MODIFY_USR_IP
 			FROM
 			(
 				SELECT 
 					A.PRJ_ID
-				,	A.PRJ_GRP_ID
-				,	A.LIC_GRP_ID
-				,	A.PRJ_NM
-				,	A.START_DT 
-				,	A.END_DT   
-				,	A.ORD
-				,	A.PRJ_DESC
-				,	A.USE_CD
-				,	A.PRJ_TYPE_CD
-				,	A.PRJ_DEV_TYPE_CD
-				,	A.PRJ_ACRM
-				,	A.PRJ_GRP_CD
-				,	B.USR_ID
-				,	(SELECT COUNT(*) FROM PRJ1000 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID) AS PRJ_CHILD_CNT
-				,	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID) AS REQ_ALL_CNT
-				, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '02') AS REQ_IN_PROGRESS_CNT
-				, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '04') AS REQ_DONE_CNT
-				,	(
-	              		SELECT WM_CONCAT(Z.PRJ_AUTH_TYPE_CD || '|' || Z.PRJ_AUTH_TARGET_ID || '|' || Y.USR_IMG_ID || '|' ||Y.USR_NM)
-						FROM PRJ1001 Z
-						INNER JOIN STM3000 Y ON(Y.USR_ID = Z.PRJ_AUTH_TARGET_ID AND Y.LIC_GRP_ID = #licGrpId# AND Y.USE_CD = '01' AND Y.BLOCK = '01')
-						WHERE 1=1
-             				AND Z.PRJ_AUTH_TYPE_CD = '01'
-							AND Z.PRJ_ID = A.PRJ_ID
-	              	) AS PRJ_USR_CHARGER_LIST
-				,	A.REG_DTM
-				,	A.REG_USR_ID
-				,	A.REG_USR_IP
-				,	A.MODIFY_DTM
-				,	A.MODIFY_USR_ID
-				,	A.MODIFY_USR_IP
+					,	A.PRJ_GRP_ID
+					,	A.LIC_GRP_ID
+					,	A.PRJ_NM
+					,	A.START_DT 
+					,	A.END_DT   
+					,	A.ORD
+					,	A.PRJ_DESC
+					,	A.USE_CD
+					,	A.DEL_CD
+					,	A.PRJ_TYPE_CD
+					,	A.PRJ_DEV_TYPE_CD
+					,	A.PRJ_ACRM
+					,	A.PRJ_GRP_CD
+					,	(SELECT COUNT(*) FROM PRJ1000 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID) AS PRJ_CHILD_CNT
+					,	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID) AS REQ_ALL_CNT
+					, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '02') AS REQ_IN_PROGRESS_CNT
+					, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_GRP_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '04') AS REQ_DONE_CNT
+					,	(
+		              		SELECT WM_CONCAT(Z.PRJ_AUTH_TYPE_CD || '|' || Z.PRJ_AUTH_TARGET_ID || '|' || Y.USR_IMG_ID || '|' ||Y.USR_NM)
+							FROM PRJ1001 Z
+							INNER JOIN STM3000 Y ON(Y.USR_ID = Z.PRJ_AUTH_TARGET_ID AND Y.LIC_GRP_ID = #licGrpId# AND Y.USE_CD = '01' AND Y.BLOCK = '01')
+							WHERE 1=1
+		            				AND Z.PRJ_AUTH_TYPE_CD = '01'
+								AND Z.PRJ_ID = A.PRJ_ID
+		              	) AS PRJ_USR_CHARGER_LIST
+					,	A.REG_DTM
+					,	A.REG_USR_ID
+					,	A.REG_USR_IP
+					,	A.MODIFY_DTM
+					,	A.MODIFY_USR_ID
+					,	A.MODIFY_USR_IP
 				FROM PRJ1000 A
-				LEFT JOIN
-				(
-				      SELECT	Z.USR_ID, Z.PRJ_ID
-				      FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
-				      WHERE	1=1
-				      GROUP BY  Z.USR_ID, Z.PRJ_ID
-				) B ON (A.PRJ_ID = B.PRJ_ID)
 				WHERE 1=1
 				AND A.LIC_GRP_ID = #licGrpId#
-				AND A.USE_CD = '01'
-				AND ((A.PRJ_GRP_CD = '01') OR (A.PRJ_GRP_CD = '02' AND B.PRJ_ID IS NOT NULL))
-			) SUBT1
-			WHERE 1=1
+				AND EXISTS
+				(
+					SELECT P.PRJ_GRP_ID
+					FROM
+					(
+				      	SELECT	DISTINCT X.PRJ_GRP_ID
+				        FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
+				        INNER JOIN PRJ1000 X ON (X.PRJ_ID = Z.PRJ_ID AND X.USE_CD = '01')
+				        UNION 
+				        SELECT Z.PRJ_ID
+				        FROM PRJ1001 Z
+				        WHERE 1=1
+				        AND Z.PRJ_AUTH_TYPE_CD = '01'
+				        AND Z.PRJ_AUTH_TARGET_ID = #usrId#
+					) P
+					WHERE 1=1
+		      		AND P.PRJ_GRP_ID = A.PRJ_ID
+		     	)
+	     	) SUBT1
+	     	WHERE 1=1
 			<isNotEmpty property="prjGrpCd">
 				AND SUBT1.PRJ_GRP_CD = #prjGrpCd#
 			</isNotEmpty>
 			<isNotEmpty property="useCd">
 				AND SUBT1.USE_CD = #useCd#
+			</isNotEmpty>
+			<isNotEmpty property="delCd">
+				AND SUBT1.DEL_CD = #delCd#
 			</isNotEmpty>
 			<isNotEmpty property="searchTargetData">
 				<isNotEmpty property="searchTargetId">
@@ -112,20 +123,92 @@
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>
-			CONNECT BY PRIOR SUBT1.PRJ_ID = SUBT1.PRJ_GRP_ID
-			START WITH SUBT1.PRJ_GRP_ID IS NULL
-			ORDER SIBLINGS BY
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
-					$paramSortFieldId$
+					ORDER BY $paramSortFieldId$
 					<isEqual property="sortDirection" compareValue="desc">
 						DESC
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>
 			<isEmpty property="paramSortFieldId">
-				SUBT1.ORD, SUBT1.PRJ_NM
+				ORDER BY SUBT1.ORD, SUBT1.PRJ_NM
 			</isEmpty>
+	     ) SUBT2
+	</sql>
+	
+	
+	<sql id = "selectPrj1000PrjAllList">
+		SELECT
+			ROWNUM AS RN
+			,	SUBT2.*
+		FROM
+		(
+			SELECT
+				CONNECT_BY_ISLEAF AS LEAF
+			,	SUBT1.PRJ_ID
+	        ,	SUBT1.PRJ_GRP_ID
+	        ,	SUBT1.LIC_GRP_ID
+	        ,	SUBT1.PRJ_NM
+	        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
+	        ,	TO_CHAR(TO_DATE(SUBT1.END_DT,'YYYYMMDD'),'YYYY-MM-DD') 	AS END_DT   
+	        ,	SUBT1.ORD
+	        ,	SUBT1.PRJ_DESC
+	        ,	SUBT1.USE_CD
+	        ,	SUBT1.DEL_CD
+	        ,	SUBT1.PRJ_TYPE_CD
+	        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
+	        ,	SUBT1.PRJ_DEV_TYPE_CD
+	        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00014', SUBT1.PRJ_DEV_TYPE_CD, '1') AS PRJ_DEV_TYPE_NM
+	        ,	SUBT1.PRJ_ACRM
+	        ,	SUBT1.PRJ_GRP_CD
+	        ,	SUBT1.REG_DTM
+	        ,	SUBT1.REG_USR_ID
+	        ,	SUBT1.REG_USR_IP
+	        ,	SUBT1.MODIFY_DTM
+	        ,	SUBT1.MODIFY_USR_ID
+	        ,	SUBT1.MODIFY_USR_IP
+			FROM
+			(
+				SELECT 
+					A.PRJ_ID
+				,	A.PRJ_GRP_ID
+				,	A.LIC_GRP_ID
+				,	A.PRJ_NM
+				,	A.START_DT 
+				,	A.END_DT   
+				,	A.ORD
+				,	A.PRJ_DESC
+				,	A.USE_CD
+				,	A.DEL_CD
+				,	A.PRJ_TYPE_CD
+				,	A.PRJ_DEV_TYPE_CD
+				,	A.PRJ_ACRM
+				,	A.PRJ_GRP_CD
+				,	A.REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	A.MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+				FROM PRJ1000 A
+				LEFT JOIN
+				(
+				      SELECT	Z.PRJ_ID
+				      FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
+				      WHERE	1=1
+				      GROUP BY  Z.PRJ_ID
+				) B ON (A.PRJ_ID = B.PRJ_ID)
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.USE_CD = '01'
+				AND ((A.PRJ_GRP_CD = '01') OR (A.PRJ_GRP_CD = '02' AND B.PRJ_ID IS NOT NULL))
+			) SUBT1
+			WHERE 1=1
+			AND SUBT1.USE_CD = '01'
+			CONNECT BY PRIOR SUBT1.PRJ_ID = SUBT1.PRJ_GRP_ID
+			START WITH SUBT1.PRJ_GRP_ID IS NULL
+			ORDER SIBLINGS BY SUBT1.ORD, SUBT1.PRJ_NM
 		) SUBT2
 		WHERE 1=1
 		AND LEAF = (CASE SUBT2.PRJ_GRP_CD WHEN '01' THEN 0 WHEN '02' THEN 1 END)
@@ -140,6 +223,9 @@
 			SELECT
 					SUBT1.PRJ_ID
 		        ,	SUBT1.PRJ_GRP_ID
+		        ,	SUBT1.PRJ_GRP_NM
+				,	SUBT1.PRJ_GRP_START_DT
+				,	SUBT1.PRJ_GRP_END_DT
 		        ,	SUBT1.LIC_GRP_ID
 		        ,	SUBT1.PRJ_NM
 		        ,	TO_CHAR(TO_DATE(SUBT1.START_DT,'YYYYMMDD'),'YYYY-MM-DD') AS START_DT 
@@ -147,6 +233,7 @@
 		        ,	SUBT1.ORD
 		        ,	SUBT1.PRJ_DESC
 		        ,	SUBT1.USE_CD
+		        ,	SUBT1.DEL_CD
 		        ,	SUBT1.PRJ_TYPE_CD
 		        ,	SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'PRJ00013', SUBT1.PRJ_TYPE_CD, '1') AS PRJ_TYPE_NM
 		        ,	SUBT1.PRJ_DEV_TYPE_CD
@@ -155,7 +242,6 @@
 		        ,	SUBT1.PRJ_GRP_CD
 		        ,	SUBT1.PRJ_BG_COLOR
 		       	,	SUBT1.PRJ_COLOR
-		        ,	SUBT1.USR_ID
 		        ,	SUBT1.REQ_ALL_CNT
 		        ,	SUBT1.REQ_IN_PROGRESS_CNT
 		        ,	SUBT1.REQ_DONE_CNT
@@ -171,6 +257,9 @@
 				SELECT
 						A.PRJ_ID
 					,	A.PRJ_GRP_ID
+					,	C.PRJ_NM AS PRJ_GRP_NM
+					,	C.START_DT AS PRJ_GRP_START_DT
+					,	C.END_DT AS PRJ_GRP_END_DT
 					,	A.LIC_GRP_ID
 					,	A.PRJ_NM
 					,	A.START_DT 
@@ -178,13 +267,13 @@
 					,	A.ORD
 					,	A.PRJ_DESC
 					,	A.USE_CD
+					,	A.DEL_CD
 					,	A.PRJ_TYPE_CD
 					,	A.PRJ_DEV_TYPE_CD
 					,	A.PRJ_ACRM
 					,	A.PRJ_GRP_CD
 		       		,	A.PRJ_BG_COLOR
 		       		,	A.PRJ_COLOR
-					,	B.USR_ID
 					,	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_ID = A.PRJ_ID) AS REQ_ALL_CNT
 					, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '02') AS REQ_IN_PROGRESS_CNT
 					, 	(SELECT COUNT(*) FROM REQ4100 Z WHERE 1=1 AND Z.PRJ_ID = A.PRJ_ID AND Z.REQ_PRO_TYPE = '04') AS REQ_DONE_CNT
@@ -205,19 +294,23 @@
 				FROM PRJ1000 A
 					INNER JOIN
 					(
-					      SELECT	Z.USR_ID, Z.PRJ_ID
+					      SELECT Z.PRJ_ID
 					      FROM	PRJ2001 Z INNER JOIN PRJ2000 Y ON ( Z.PRJ_ID = Y.PRJ_ID AND Z.AUTH_GRP_ID = Y.AUTH_GRP_ID AND Z.USR_ID = #usrId#)
 					      WHERE	1=1
-					      GROUP BY  Z.USR_ID, Z.PRJ_ID
+					      GROUP BY Z.PRJ_ID
 					) B ON (A.PRJ_ID = B.PRJ_ID)
+					INNER JOIN PRJ1000 C ON( C.PRJ_ID = A.PRJ_GRP_ID AND C.USE_CD = '01' AND C.DEL_CD = '02' )
 				WHERE 1=1
 					AND A.PRJ_GRP_ID = #prjGrpId#
 					AND A.LIC_GRP_ID = #licGrpId#
 					AND A.USE_CD = '01'
 			) SUBT1
 			WHERE 1=1
-			<isNotEmpty property="useCd">
+				<isNotEmpty property="useCd">
 					AND SUBT1.USE_CD = #useCd#
+				</isNotEmpty>
+				<isNotEmpty property="delCd">
+					AND SUBT1.DEL_CD = #delCd#
 				</isNotEmpty>
 				<isNotEmpty property="searchTargetData">
 					<isNotEmpty property="searchTargetId">
@@ -253,17 +346,242 @@
 	</sql>
 	
 	
+	<sql id="selectPrj1000PrjAuthUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT2.AUTH_TYPE_CD,
+			SUBT2.AUTH_TYPE_NM,
+			SUBT2.LIC_GRP_ID,
+			SUBT2.PRJ_ID,
+			SUBT2.USR_ID,
+			SUBT2.USR_NM,
+			SUBT2.EMAIL,
+			SUBT2.TELNO,
+			SUBT2.USR_IMG_ID,
+			SUBT2.DEPT_ID,
+			SUBT2.DEPT_NAME,
+			SUBT2.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT2.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT SUBT1.*,
+					SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00018', SUBT1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM
+			FROM
+			(
+				SELECT
+					'01' AS AUTH_TYPE_CD,
+					B.LIC_GRP_ID,
+					A.PRJ_ID,
+					A.PRJ_AUTH_TYPE_CD,
+					A.PRJ_AUTH_TARGET_ID AS USR_ID,
+					B.USR_NM,
+					B.EMAIL,
+					B.TELNO,
+					B.USR_IMG_ID,
+					B.DEPT_ID,
+					SF_STM6000_DEPT_NM(#licGrpId#, B.DEPT_ID, '2') AS DEPT_NAME,
+					B.USR_POSITION_CD,
+					B.USR_DUTY_CD
+				FROM PRJ1001 A
+				INNER JOIN STM3000 B ON ( B.LIC_GRP_ID = #licGrpId# AND B.USR_ID = A.PRJ_AUTH_TARGET_ID )
+				WHERE 1=1
+					AND A.PRJ_ID = #prjId#
+					AND B.DEL_CD = '02'
+					AND B.USE_CD = '01'
+					AND B.BLOCK = '01'
+					AND A.PRJ_AUTH_TYPE_CD = '01'
+				UNION
+				SELECT
+					'02' AS AUTH_TYPE_CD,
+					B.LIC_GRP_ID,
+					A.PRJ_ID,
+					A.PRJ_AUTH_TYPE_CD,
+					A.PRJ_AUTH_TARGET_ID AS USR_ID,
+					B.AUTH_GRP_NM AS USR_NM,
+					'' AS EMAIL,
+					'' AS TELNO,
+					'' AS USR_IMG_ID,
+					'' AS DEPT_ID,
+					'' AS DEPT_NM,
+					'' AS USR_POSITION_CD,
+					'' AS USR_DUTY_CD
+				FROM PRJ1001 A
+				INNER JOIN PRJ2000 B ON (  B.LIC_GRP_ID  = #licGrpId# AND A.PRJ_ID = B.PRJ_ID AND B.AUTH_GRP_ID = A.PRJ_AUTH_TARGET_ID AND B.USE_CD = '01')
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.PRJ_AUTH_TYPE_CD = '02'
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="prjAuthTypeCd">
+				AND		SUBT1.PRJ_AUTH_TYPE_CD = #prjAuthTypeCd#
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUBT1.AUTH_TYPE_CD, '02', 1, '01', 2), SUBT1.USR_NM, SUBT1.USR_POSITION_CD DESC, SUBT1.USR_DUTY_CD DESC
+			</isEmpty>
+		) SUBT2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT2.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT2.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectPrj2100PrjAuthNoneUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT2.AUTH_TYPE_CD,
+			SUBT2.AUTH_TYPE_NM,
+			SUBT2.LIC_GRP_ID,
+			SUBT2.USR_ID,
+			SUBT2.USR_NM,
+			SUBT2.EMAIL,
+			SUBT2.TELNO,
+			SUBT2.USR_IMG_ID,
+			SUBT2.DEPT_ID,
+			SUBT2.DEPT_NAME,
+			SUBT2.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT2.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT SUBT1.*,
+			SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00018', SUBT1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM
+			FROM
+			(
+				SELECT 
+					'01' AS AUTH_TYPE_CD,
+					A.LIC_GRP_ID,
+					A.USR_ID,
+					A.USR_NM,
+					A.EMAIL,
+					A.TELNO,
+					A.USR_IMG_ID,
+					A.DEPT_ID,
+					SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME,
+					A.USR_POSITION_CD,
+					A.USR_DUTY_CD
+				FROM STM3000 A
+				WHERE	1=1
+	      			AND A.LIC_GRP_ID = #licGrpId#
+					AND A.DEL_CD = '02'
+					AND A.USE_CD = '01'
+					AND A.BLOCK = '01'
+	        		AND	NOT EXISTS
+	        		(
+						SELECT	Z.PRJ_AUTH_TARGET_ID
+	                    FROM	PRJ1001 Z
+	                    WHERE	1=1
+	                    AND 	Z.PRJ_AUTH_TYPE_CD = '01'
+	                    AND		Z.PRJ_AUTH_TARGET_ID = A.USR_ID
+	                    AND		Z.PRJ_ID = #prjId#
+					)
+				UNION
+				SELECT
+					'02' AS AUTH_TYPE_CD,
+					A.LIC_GRP_ID,
+					A.AUTH_GRP_ID AS USR_ID,
+					A.AUTH_GRP_NM AS USR_NM,
+					'' AS EMAIL,
+					'' AS TELNO,
+					'' AS USR_IMG_ID,
+					'' AS DEPT_ID,
+					'' AS DEPT_NM,
+					'' AS USR_POSITION_CD,
+					'' AS USR_DUTY_CD
+				FROM PRJ2000 A
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.USE_CD = '01'
+				AND	NOT EXISTS
+	       		(
+					SELECT	Z.PRJ_AUTH_TARGET_ID
+					FROM	PRJ1001 Z
+	                WHERE	1=1
+	                AND 	Z.PRJ_AUTH_TYPE_CD = '02'
+	                AND		Z.PRJ_AUTH_TARGET_ID = A.AUTH_GRP_ID
+	                AND		Z.PRJ_ID = A.PRJ_ID
+				)
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="prjAuthTypeCd">
+             AND	SUBT1.AUTH_TYPE_CD = #prjAuthTypeCd#
+            </isNotEmpty>
+            <isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUBT1.AUTH_TYPE_CD, '02', 1, '01', 2), SUBT1.USR_NM
+			</isEmpty>
+		) SUBT2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT2.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT2.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
 	<select id="prj1000DAO.selectPrj1000PrjGrpAllList" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		SELECT T1.*
 		FROM
 		(
-			<include refid="selectPrj1000PrjGrpList"/>
+			<include refid="selectPrj1000PrjAllList"/>
     	) T1
     	WHERE 1=1
 	</select>
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpList" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		SELECT T1.*
 		FROM
 		(
@@ -275,16 +593,18 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjGrpListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		SELECT
 			COUNT(*)
 		FROM
 		(
-			<include refid="selectPrj1000PrjList"/>
+			<include refid="selectPrj1000PrjGrpList"/>
 		) T1
 	</select>
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjList" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		SELECT T1.*
 		FROM
 		(
@@ -296,6 +616,7 @@
 	
 	
 	<select id="prj1000DAO.selectPrj1000PrjListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		SELECT
 			COUNT(*)
 		FROM
@@ -305,23 +626,89 @@
 	</select>
 	
 	
-	<select id="prj1000DAO.selectPrj1000Info" parameterClass="java.util.Map" resultClass="egovMap">
-			
-            SELECT T1.*
-			FROM
-			(
-				<include refid="selectPrj1000PrjGrpList"/>
-	    	) T1
-	    	WHERE 1=1
-			<isNotEmpty property="prjId">
-				AND		T1.PRJ_ID = #prjId#
+	<select id="prj1000DAO.selectPrj1000PrjAuthUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1000PrjAuthUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj1000PrjAuthUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj1000PrjAuthUsrList"/>
+		) T1
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
+		) T1
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj1000GrpInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1000PrjGrpList"/>
+    	) T1
+    	WHERE 1=1
+		<isNotEmpty property="prjId">
+			AND		T1.PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isEmpty property="prjId">
+			<isNotEmpty property="selPrjId">
+				AND		T1.PRJ_ID = #selPrjId#
 			</isNotEmpty>
-			<isEmpty property="prjId">
-				<isNotEmpty property="selPrjId">
-					AND		T1.PRJ_ID = #selPrjId#
-				</isNotEmpty>
-			</isEmpty>
-			ORDER BY T1.ORD ASC
+		</isEmpty>
+		ORDER BY T1.ORD ASC
+	</select>
+	
+	
+	<select id="prj1000DAO.selectPrj1000Info" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1000PrjList"/>
+    	) T1
+    	WHERE 1=1
+		<isNotEmpty property="prjId">
+			AND		T1.PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isEmpty property="prjId">
+			<isNotEmpty property="selPrjId">
+				AND		T1.PRJ_ID = #selPrjId#
+			</isNotEmpty>
+		</isEmpty>
+		ORDER BY T1.ORD ASC
 	</select>
 	
 	
@@ -386,12 +773,14 @@
 			INSERT INTO PRJ1000
 			(
                 PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_NM			,	START_DT		,	END_DT
-            ,	ORD				,	PRJ_DESC		,	USE_CD			,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
+            ,	ORD				,	PRJ_DESC		,	USE_CD			,	DEL_CD
+            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_GRP_CD
             ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
             ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
         )VALUES(
                 #newPrjGrpId#	,	NULL		,	#licGrpId#		,	#prjNm#    		,	REPLACE(#startDt#, '-', '')		,	REPLACE(#endDt#, '-', '')
-            ,	#ord#			,	#prjDesc#	,	#useCd#			,	#prjTypeCd# 	,	#prjDevTypeCd#		,	#prjGrpCd#
+            ,	#ord#			,	#prjDesc#	,	#useCd#			,	'02'
+            ,	#prjTypeCd# 	,	#prjDevTypeCd#		,	#prjGrpCd#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
             ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
         )		
@@ -399,7 +788,45 @@
 		]]>
 	</insert>
 	
-	<update id="prj1000DAO.updatePrj1000Ajax" parameterClass="java.util.Map">
+	
+	<insert id="prj1000DAO.insertPrj1000PrjAjax" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newPrjId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_PRJ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PRJ_ID, 12, 5)) + 1) , 5, '0')
+						,	'PRJ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_PRJ_ID 
+			FROM	(
+			            SELECT	MAX(PRJ_ID)  AS NEW_PRJ_ID
+			            FROM	PRJ1000 A
+			            WHERE	1=1
+			            AND		A.PRJ_ID LIKE 'PRJ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+			            AND		A.PRJ_GRP_CD = '02'
+					)
+		]]>
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO PRJ1000
+			(
+                PRJ_ID			,	PRJ_GRP_ID		,	LIC_GRP_ID		,	PRJ_NM			,	START_DT		,	END_DT
+            ,	ORD				,	PRJ_DESC		,	USE_CD			,	DEL_CD
+            ,	PRJ_TYPE_CD		,	PRJ_DEV_TYPE_CD ,	PRJ_ACRM		,	PRJ_GRP_CD		,	PRJ_BG_COLOR	,	PRJ_COLOR
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #newPrjId#		,	#prjGrpId#		,	#licGrpId#		,	#prjNm#    		,	REPLACE(#startDt#, '-', '')		,	REPLACE(#endDt#, '-', '')
+            ,	#ord#			,	#prjDesc#		,	#useCd#			,	'02'
+            ,	#prjTypeCd# 	,	#prjDevTypeCd#	,	#prjAcrm#		,	#prjGrpCd#		,	#prjBgColor#	,	#prjColor#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#
+        )		
+		
+		]]>
+	</insert>
+	
+	
+	<update id="prj1000DAO.updatePrj1000" parameterClass="java.util.Map">
 	<![CDATA[
 		
 		UPDATE	PRJ1000 A
@@ -429,7 +856,7 @@
 	</update>
 	
 	
-	<delete id="prj1000DAO.deletePrj1000PrjGrpAjax" parameterClass="java.util.Map">
+	<delete id="prj1000DAO.deletePrj1000PrjAjax" parameterClass="java.util.Map">
 	<![CDATA[
 		
 		DELETE	
@@ -437,51 +864,23 @@
         WHERE	1=1
 		AND		A.LIC_GRP_ID 	= #licGrpId#
         AND		A.PRJ_ID		= #prjId#
-        AND		A.PRJ_GRP_CD	= '01'
 	]]>
 	</delete>
 	
+	
+	<delete id="prj1000DAO.updatePrj1000PrjTrashMoveAjax" parameterClass="java.util.Map">
+	<![CDATA[
 		
-	
-	<parameterMap id="deletePrj1001InfoParam" 	class="java.util.Map">
-		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjId"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-	</parameterMap>
-	
-	<procedure id="prj1000DAO.deletePrj1001Ajax" parameterMap="deletePrj1001InfoParam" >
-		{ CALL SP_PRJ1000_PRJ_INFO_DELETE(?,?,?,?) }
-	</procedure>
-	
-	
-	<parameterMap id="insertPrj1001InfoParam" 	class="java.util.Map">
-		<parameter property="prjGrpCd"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN" nullValue="02"/>
-	
-		<parameter property="prjGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="licGrpId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjNm"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="startDt"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="endDt"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		
-		<parameter property="ord"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN" nullValue="0"/>
-		<parameter property="prjDesc"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="useCd"				javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjType"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="prjAcrm"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="regUsrId"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="regUsrIp"			javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-
-		<parameter property="modifyUsrId"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="modifyUsrIp"		javaType="java.lang.String"		jdbcType="VARCHAR"	mode="IN"/>
-		<parameter property="NEW_PRJ_ID"		javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_CODE"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-		<parameter property="ERR_MSG"			javaType="java.lang.String"		jdbcType="VARCHAR"  mode="OUT"	nullValue=""/>
-	</parameterMap>
-	
-	<procedure id="prj1000DAO.insertPrj1001InfoAjax" parameterMap="insertPrj1001InfoParam" >
-		{ CALL SP_PRJ1000_PRJ_INFO_INSERT(?,	?,?,?,?,?		,?,?,?,?,?,?,?		,?,?,?,?,?) }
-	</procedure>
+		UPDATE	PRJ1000 A SET
+			A.DEL_CD = #delCd#
+			,	MODIFY_DTM		= SYSDATE
+            ,	MODIFY_USR_ID	= #modifyUsrId#
+            ,	MODIFY_USR_IP	= #modifyUsrIp#
+        WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.PRJ_ID		= #prjId#
+	]]>
+	</delete>
 	
 	
 	<select id="prj1000DAO.selectPrj1000ProjectGroupListAjax" parameterClass="java.util.Map" resultClass="egovMap">
@@ -550,9 +949,13 @@
 	
 	<select id="prj1000DAO.selectPrj1000AdminPrjList" parameterClass="java.util.Map" resultClass="egovMap">
 			
-      		SELECT B.PRJ_ID
-					, B.PRJ_NM
-					, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
+      		SELECT
+      			B.PRJ_GRP_ID
+      			, B.PRJ_ID
+				, B.PRJ_NM
+				, NVL(B.PRJ_DESC,' ') AS PRJ_DESC
+				, B.PRJ_TYPE_CD
+				, B.PRJ_DEV_TYPE_CD
 			FROM
 						(
 							SELECT DISTINCT Z.PRJ_ID
@@ -621,4 +1024,21 @@
 	        )		
 		]]>
 	</insert>
+	
+	
+	<delete id="prj1000DAO.deletePrj1000PrjAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE	
+			FROM	PRJ1001 A
+	        WHERE	1=1
+	        AND		A.PRJ_ID		= #prjId#	
+		]]>
+		<isNotEmpty property="prjAuthTypeCd">
+			AND A.PRJ_AUTH_TYPE_CD = #prjAuthTypeCd#
+		</isNotEmpty>
+		<isNotEmpty property="prjAuthTargetId">
+			AND A.PRJ_AUTH_TARGET_ID = #prjAuthTargetId#
+		</isNotEmpty>
+	</delete>
 </sqlMap>

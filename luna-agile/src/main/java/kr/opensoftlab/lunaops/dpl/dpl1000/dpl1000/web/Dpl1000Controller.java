@@ -36,6 +36,7 @@ import kr.opensoftlab.lunaops.stm.stm9000.stm9100.service.Stm9100Service;
 import kr.opensoftlab.sdf.jenkins.AutoBuildInit;
 import kr.opensoftlab.sdf.jenkins.JenkinsClient;
 import kr.opensoftlab.sdf.util.OslAgileConstant;
+import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
@@ -94,77 +95,119 @@ public class Dpl1000Controller {
     }
 	
     
-     @SuppressWarnings({ "rawtypes", "unchecked" })
- 	@RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1001View.do")
-     public String selectDpl1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
- 		
-    	 try{
- 			
- 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
- 			paramMap.put("prjId", (String)request.getSession().getAttribute("selPrjId"));
- 			
- 			Map dpl1000DplInfo = null;
- 			List<Map> dpl1000DplJobList = null;
- 			String dpl1000DplJobListJson = "{}";
- 			
- 			
- 			
- 			String pageType = paramMap.get("popupGb");
- 			
- 			
- 			if( "update".equals(pageType) || "select".equals(pageType)){
- 				dpl1000DplInfo = dpl1000Service.selectDpl1000DeployVerInfo(paramMap);
- 				dpl1000DplJobList = dpl1000Service.selectDpl1300DeployJobList(paramMap);
- 				
- 				dpl1000DplJobListJson = (new GsonBuilder().serializeNulls().create()).toJsonTree(dpl1000DplJobList).toString();
- 			}
- 			
- 			model.put("dpl1000DplInfo", dpl1000DplInfo);
- 			model.put("dpl1000DplJobList", dpl1000DplJobList);
- 			model.put("dpl1000DplJobListJson", dpl1000DplJobListJson.replaceAll("<", "&lt"));
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1001View.do")
+    public String selectDpl1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1001";
+    }
+    
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1002View.do")
+    public String selectDpl1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1002";
+    }
 
- 			return "/dpl/dpl1000/dpl1000/dpl1001";
- 		}
- 		catch(Exception ex){
- 			Log.error("selectReq1001View()", ex);
- 			throw new Exception(ex.getMessage());
- 		}
-     }
+	
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1003View.do")
+    public String selectDpl1003View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1003";
+    }
+    
+	
+
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/dpl/dpl1000/dpl1000/selectDpl1000DplListAjax.do")
+	public ModelAndView selectDpl1000DplListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjGrpId = paramMap.get("prjGrpId");
+			String paramPrjId = paramMap.get("prjId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			paramMap.put("delCd", "02");
+			
+			
+			
+			int totCnt = 0;
+			List<Map> dataList = null;
+			Map<String, Object> metaMap = null;
+			
+			
+			totCnt = dpl1000Service.selectDpl1000ListCnt(paramMap);
+
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+
+			
+			
+			dataList = dpl1000Service.selectDpl1000List(paramMap);
+			
+        	
+			
+			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			model.addAttribute("data", dataList);
+			model.addAttribute("meta", metaMap);
+        	
+        	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+        	
+        	return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("selectDpl1000DplListAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	
+    
+     
     
      
      
-     @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1002View.do")
-     public String selectDpl1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		 return "/dpl/dpl1000/dpl1000/dpl1002";
-     }
+    
      
      
-     @SuppressWarnings("rawtypes")
-	@RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1003View.do")
-     public String selectDpl1003View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	  try{
- 			
- 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
- 			
- 			
- 			Map dpl1000DplInfo = dpl1000Service.selectDpl1000DeployVerInfo(paramMap);
-			
- 			model.put("prjId", paramMap.get("prjId"));
- 			model.put("dpl1000DplInfo", dpl1000DplInfo);
- 			
- 			
- 			
- 			
- 			model.put("callView", paramMap.get("callView"));
-
- 			return "/dpl/dpl1000/dpl1000/dpl1003";
- 		}
- 		catch(Exception ex){
- 			Log.error("selectDpl1003View()", ex);
- 			throw new Exception(ex.getMessage());
- 		}
-    	 
-     }
+    
 
      
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -587,7 +630,9 @@ public class Dpl1000Controller {
     		}
     		
     		
- 			List<Map> dplRunAuthGrp = stm9100Service.selectJen1300JenkinsJobAuthGrpNormalList(paramMap);
+    		
+ 			
+    		List<Map> dplRunAuthGrp = null;
  			
  			
  			if(dplRunAuthGrp != null && dplRunAuthGrp.size() > 0){

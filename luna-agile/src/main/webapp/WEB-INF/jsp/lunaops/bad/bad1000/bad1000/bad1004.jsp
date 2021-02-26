@@ -11,13 +11,15 @@
 	<div class="kt-portlet__body">
 		<div class="kt-align-center">
 			<span>
-				이 글은 비밀글입니다.<br>
-				비밀번호를 입력하세요.
+				<span data-lang-cd="bad1004.text">
+					이 글은 비밀글입니다.
+					비밀번호를 입력하세요.
+				</span>
 			</span>
 			<div class="input-group kt-margin-t-10">
-				<input type="password" class="form-control" name="badPwInput" id="badPwInput" regexstr="^[a-z0-9]{4,12}$" required>
+				<input type="password" class="form-control" name="badPwInput" id="badPwInput" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" required>
 				<div class="input-group-append">
-					<button class="btn btn-brand" name="pwCheckBtn" id="pwCheckBtn">확인</button>
+					<button class="btn btn-brand" name="pwCheckBtn" id="pwCheckBtn"><span data-lang-cd="bad1004.button.submit">확인</span></button>
 				</div>
 			</div>
 		</div>
@@ -30,10 +32,12 @@
 var OSLBad1004Popup = function () {
 	//목록에서 받아온 row data
 	var rowData = JSON.parse($("#paramRow").val());
-	
-	$("#badPw").focus();
-	
     var documentSetting = function () {
+    	
+    	//placeholder
+		$("#badPwInput").attr("placeholder", $.osl.lang("bad1002.placeholder.password"));
+    	
+		$("#badPwInput").focus();
     	//비밀번호 확인 버튼 클릭 했을 때
     	$("#pwCheckBtn").click(function(){
     		selectPwInfo();

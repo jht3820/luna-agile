@@ -2,12 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<style>
-img {
-  max-width: 100%;
-}
-</style>
-
 <input type="hidden" name="stmTypeCd" id="stmTypeCd" value="${param.stmTypeCd}" /> 
 <input type="hidden" name="stmDsTypeCd" id="stmDsTypeCd" value='${param.stmDsTypeCd}'/>
 <input type="hidden" name="stmNm" id="stmNm" value='${param.stmNm}'/>
@@ -19,7 +13,7 @@ img {
 	<div class="card">
 		<div class="card-header kt-font-bolder">
 			<!-- 제목 -->
-			<div class="kt-padding-t-10 kt-padding-b-15" name="badTitleDiv" id="badTitleDiv" style="font-size:1.5em; border-bottom: 1px solid #dedede;"></div>
+			<div class="kt-padding-t-10 kt-padding-b-15 osl-font-size--1_5 osl-border-b--dedede" name="badTitleDiv" id="badTitleDiv"></div>
 			<!-- 작성자, 작성일, 조회수 -->
 			<div class="osl-portlet__head-label kt-margin-t-10">
 				<div class="kt-padding-5 osl-padding-b-6__5" name="writerDiv" id="writerDiv"  data-badUsrId=''></div>
@@ -30,23 +24,23 @@ img {
 		<div class="osl-bad__card-body">
 			<!-- 수정, 삭제, 복원 -->
 			<div class="osl-portlet__sub-toolbar">
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" name="updateBtn" id="updateBtn" title="게시글 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
-					<i class="fa fa-edit"></i><span>수정</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" name="updateBtn" id="updateBtn" title="게시글 수정" data-title-lang-cd="bad1001.actionBtn.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
+					<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" name="deleteBtn" id="deleteBtn" title="게시글 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
-					<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" name="deleteBtn" id="deleteBtn" title="게시글 삭제" data-title-lang-cd="bad1001.actionBtn.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
+					<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air kt-hide" name="restoreBtn" id="restoreBtn" title="게시글 복원" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
-					<i class="la la-rotate-left"></i><span>복원</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air kt-hide" name="restoreBtn" id="restoreBtn" title="게시글 복원" data-title-lang-cd="bad1001.actionBtn.restoreTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom">
+					<i class="la la-rotate-left"></i><span data-lang-cd="bad1001.button.restore">복구</span>
 				</button>
 			</div>
 			<!-- 내용 -->
-			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20" style="min-height: 150px;" name="badContentDiv" id="badContentDiv"></div>
+			<div class="bard-text kt-padding-30 kt-padding-t-20 kt-padding-b-20 osl-min-height--150 osl-max-width--100-p" name="badContentDiv" id="badContentDiv"></div>
 			<!-- 첨부파일 목록 -->
 			<div class="form-group kt-margin-20 kt-hide" name="badFileOption" id="badFileOption">
 				<hr class="kt-margin-t-20 kt-margin-b-20">
 				<div class="kt-font-bolder kt-padding-l-5">
-					<i class="fa fa-file-upload kt-margin-r-5"></i>파일 첨부
+					<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1001.label.attachFile">파일 첨부</span>
 				</div>
 				<div class="kt-margin-t-10 kt-uppy fileReadonly" name="fileListDiv" id="fileListDiv">
 					<div class="kt-uppy__dashboard"></div>
@@ -56,7 +50,7 @@ img {
 			<!-- 태그 리스트 -->
 			<div class="form-group kt-margin-20 kt-hide" name="badTagOption" id="badTagOption">
 				<div class="kt-font-bolder kt-padding-l-5">
-					<i class="fa fa-hashtag kt-margin-r-5"></i> 태그
+					<i class="fa fa-hashtag kt-margin-r-5"></i><span data-lang-cd="bad1001.label.tag">태그</span>
 				</div>
 				<div class="kt-margin-t-10" name="tagListDiv" id="tagListDiv">
 				</div>
@@ -65,16 +59,16 @@ img {
 	</div>
 	<!-- 댓글 리스트 -->
 	<div class="card kt-margin-t-10"  name="badCmtDiv" id="badCmtDiv">
-		<div class="card-header kt-font-bolder" style="line-height: 32px">
-			<i class="fa flaticon-chat-1 kt-margin-r-5"></i> 댓글
-			<div class="kt-portlet__head-toolbar" style="float:right; align-items:''; ">
+		<div class="card-header kt-font-bolder osl-line-height--32">
+			<i class="fa flaticon-chat-1 kt-margin-r-5"></i><span data-lang-cd="bad1001.label.comment">댓글</span>
+			<div class="kt-portlet__head-toolbar float-right">
 				<!-- 댓글 조회/삭제 -->
 				<div class="kt-widget__wrapper" name="badCmtBtnDiv" id="badCmtBtnDiv">
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1001CmtTable" data-datatable-action="select" title="댓글 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-						<i class="fa fa-list"></i><span>조회</span>
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1001CmtTable" data-datatable-action="select" title="댓글 조회" data-title-lang-cd="bad1001.actionBtn.selectComment" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1001CmtTable" data-datatable-action="delete" title="댓글 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="2">
-						<i class="fa fa-trash-alt"></i><span>삭제</span>
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1001CmtTable" data-datatable-action="delete" title="댓글 삭제" data-title-lang-cd="bad1001.actionBtn.deleteComment" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="2">
+						<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 					</button>
 				</div>
 			</div>
@@ -85,12 +79,12 @@ img {
 				<div class="osl-datatable-search col-lg-5 col-md-6 col-sm-6 col-12" data-datatable-id="bad1001CmtTable"></div>
 			</div>
 			<!-- 댓글 입력창 -->
-			<div class="input-group kt-margin-t-10 kt-margin-b-10 kt-padding-l-30 kt-padding-r-10 kt-hide" style="width:95%" name="badCmtInput" id="badCmtInput">
+			<div class="input-group kt-margin-t-10 kt-margin-b-10 kt-padding-l-30 kt-padding-r-10 osl-bad__width__95 kt-hide" name="badCmtInput" id="badCmtInput">
 				<div class="input-group-prepend kt-padding-r-15" name="loginUsr" id="loginUsr">
 				</div>
-				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" maxlength="370" />
+				<input type="text" class="form-control" name="cmtWriter" id="cmtWriter" autocomplete="off" maxlength="370" />
 				<div class="form-group-append">
-					<button class="btn btn-brand" type="button" name="cmtSaveBtn" id="cmtSaveBtn">등록</button>
+					<button class="btn btn-brand" type="button" name="cmtSaveBtn" id="cmtSaveBtn"><span data-lang-cd="bad1001.button.submit">등록</span></button>
 				</div>
 			</div>
 			
@@ -100,6 +94,9 @@ img {
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
@@ -131,7 +128,7 @@ var OSLBad1001Popup = function () {
     	
     	//권한체크
 		checkUser();
-		
+    	
 		// 파일 업로드 세팅
 	   	fileUploadObj = $.osl.file.uploadSet("fileListDiv",{
 	   		meta: {"atchFileId": paramRowData.atchFileId, "fileSn": 0},
@@ -171,6 +168,7 @@ var OSLBad1001Popup = function () {
 						template: function (row) {
 							var usrData = {
 									html: row.badCmtUsrNm + " (" + row.badCmtUsrId + ")",
+									imgSize: "sm",
 									class:{
 										cardBtn: "osl-width__fit-content"
 									}
@@ -180,41 +178,33 @@ var OSLBad1001Popup = function () {
 						onclick: function(rowData){
 							$.osl.user.usrInfoPopup(rowData.badCmtUsrId);
 						}
-						, autoHide: true, search:true},
-				 {field: 'badCmtContent', title: '내용', textAlign: 'left', width:740, autoHide: false, search:true,
+						, search:true},
+				 {field: 'badCmtContent', title:'내용', textAlign: 'left', width:740, autoHide: false, search:true,
 					template:function(row){
-						var returnStr = "<span class='cmtTxt' style='word-break: break-word;'>"+$.osl.escapeHtml(row.badCmtContent)+"</span>";
+						var returnStr = "<span class='cmtTxt text-break'>"+$.osl.escapeHtml(row.badCmtContent)+"</span>";
 						return returnStr;
 					}			
 				 },
 				 {field: 'badCmtDtm', title: '작성일', textAlign: 'center', width: 100, search:true, searchType:"daterange",
 					 template: function(row){
 						var paramDatetime = new Date(row.badCmtDtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 0){
-							//실시간 댓글 - agoTime이 (-) 가 되는 경우 발생
-							return "0초 전";
-						}else if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yy.MM.dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yy.MM.dd"});
+		                return agoTimeStr.agoString;
 					},	
 				 }
 			 ],
 			 layout:{ "header" : false },
+			 rows:{
+				clickCheckbox: true
+			},
 			 actionBtn:{
-				 "title": "삭제",
+				 "title": $.osl.lang("bad1001.actionBtn.title"),
 				 "update": false,
 				 "delete": true,
 				 "click": true,
 			 },
 			 actionTooltip:{
-				"delete": "댓글 삭제",
+				"delete": $.osl.lang("bad1001.actionBtn.deleteComment"),
 			},
 			 actionFn:{
 				 "delete":function(rowDatas){
@@ -254,22 +244,7 @@ var OSLBad1001Popup = function () {
 					 		$.osl.alert($.osl.lang("bad1001.notCmtWriter.deleteMessage"), {"type":"warning"});
 					 	}
 					 }
-				 },
-				 "click": function(row, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				}
+				 }
 			 },
 			 theme:{
 				 actionBtn:{
@@ -335,10 +310,10 @@ var OSLBad1001Popup = function () {
 					menuRootYn : 'N',
 					deleteDataList : JSON.stringify(paramRowData),
 			};
-			
+			;
 			var options = {
 					idKey: "del_"+paramRowData.badId, //$("#badId").val(),
-					modalTitle: "[ NO." +paramRowData.badNum +" ] 게시글 삭제 사유",
+					modalTitle: $.osl.lang("bad1001.title.boardCheck.oneStep", paramRowData.badNum) + " " +$.osl.lang("bad1001.title.deleteReason"),
 					closeConfirm: false,
 					autoHeight: false,
 					modalSize: "xl"
@@ -383,6 +358,8 @@ var OSLBad1001Popup = function () {
 						selectBadInfo(false);
 						//댓글 재조회
 						selectCmtList();
+						//복원 성공 메세지 출력
+						$.osl.toastr(data.message);
 					}	
 				});
 		    	//AJAX 전송
@@ -435,23 +412,23 @@ var OSLBad1001Popup = function () {
 				// 제목 넣기
 				$("#badTitleDiv").empty();
 				var titleStr = "";
-				var title = setBad.badTitle;
+				var title = $.osl.escapeHtml(setBad.badTitle);
 				
 				// 공지사항인지 확인
-				if(setBad.badNtcCheck=='01'){
+				if(setBad.badNtcCheck=='01' && paramRowData.stmNtcYnCd=='01'){
 					// 공지사항인 경우 badge 추가
-					titleStr += "<span class='kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-margin-5'>공지</span>";
+					titleStr += "<span class='kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-margin-5'>"+$.osl.lang("bad1000.label.noticeBadge")+"</span>";
 					titleStr += title;
 				}else{
 					titleStr += title;
 				}
 				// 비밀글인 경우 제목에 아이콘 추가
-				if(setBad.badPw == '01'){
+				if(setBad.badPw != null && setBad.badPw != "" && paramRowData.stmPwYnCd=='01'){
 					titleStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
 				}
 				// 삭제된 글인지 확인
-				if(setBad.delCd=='01'){
-					titleStr = "<span class='kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-margin-5'>삭제</span>" + titleStr;
+				if(setBad.delCd=='01' && $("#stmRootYn").val()=='Y'){
+					titleStr = "<span class='kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-margin-5'>"+$.osl.lang("bad1000.label.deleteBadge")+"</span>" + titleStr;
 					//수정 삭제버튼 감추기
 					$("#updateBtn").addClass("kt-hide");
 					$("#deleteBtn").addClass("kt-hide");
@@ -473,6 +450,7 @@ var OSLBad1001Popup = function () {
 				// 작성자 정보 넣기
 				var usrData = {
 						html: setBad.badUsrNm + " (" +setBad.badUsrId + ")",
+						imgSize: "sm",
 						class:{
 							cardBtn: "osl-width__fit-content"
 						}
@@ -486,18 +464,13 @@ var OSLBad1001Popup = function () {
 				});
 				
 				// 작성일 정보 넣기
-				$("#writeDateDiv").text("작성일시 : " + setBad.badWtdtm);
+				$("#writeDateDiv").text($.osl.lang("bad1001.label.writeDate")+ " : " + setBad.badWtdtm);
 				
-// 				// 조회수 정보 넣기
-// 				$("#hitDiv").text("조회수 : " + setBad.badHit);
-				
-				// body ------------------
 				// 내용입력
 				$("#badContentDiv").html(setBad.badContent);
 				
-				// option ------------------
 				// 첨부파일
-				if(fileList != null && fileList != ""){
+				if(paramRowData.stmFileCnt != '0' && fileList != null && fileList != ""){
 					$("#badFileOption").removeClass("kt-hide");
 					
 					//파일Sn넣기
@@ -510,17 +483,44 @@ var OSLBad1001Popup = function () {
 				}
 				
 				// 태그
-				if(tagList != null && tagList[0] != null)
+				if(paramRowData.stmTagYnCd == '01' && tagList != null && tagList[0] != null)
 				{
 					$("#badTagOption").removeClass("kt-hide");
 					$.each(tagList, function(idx, value){
 						// 태그 리스트 출력 작성하기
 						var innerHtml = "";
-	                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-padding-5' style='display: inline-flex; margin: 3px;' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
+	                	innerHtml += "<tag title='"+$.osl.escapeHtml(value)+"' contenteditable='false' spellcheck='false' class='tagify tagify__tag--brand tagify--noAnim kt-padding-5 osl-display--inline-flex osl-margin-3' role='tag' value='"+$.osl.escapeHtml(value)+"'>";
 	                	innerHtml += "<div><div class='tagify__tag-text kt-margin-l-5 kt-margin-r-5'>#"+$.osl.escapeHtml(value)+"</div></div></tag>";
 	                	
 	                	$("#tagListDiv").append(innerHtml);
 	                	tag.push(value);
+					});
+					
+					//태그 클릭 이벤트
+					$("tag").click(function(){
+						
+						//지정시 변경 안됨........
+// 						$.osl.datatable.list["bad1000BadTable"].targetDt.setDataSourceParam("searchTargetId", "tagNm");
+// 						$.osl.datatable.list["bad1000BadTable"].targetDt.setDataSourceParam("searchTargetType", "text");
+// 						$.osl.datatable.list["bad1000BadTable"].targetDt.setDataSourceParam("searchTargetData", $(this).attr("value"));
+						
+						//모달 창 닫기
+						$.osl.layerPopupClose();
+						//드롭다운 메뉴 선택 활성화 취소 및 재선택
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").children("a.dropdown-item.active").attr("class", "dropdown-item");
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").children("a.dropdown-item[data-field-id=tagNm]").attr("class", "dropdown-item active");
+						//검색 메뉴 버튼 변경
+						$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id=bad1000BadTable]").parent().children(".btn.btn-secondary.dropdown-toggle").text($.osl.lang("bad1000.field.tagNm"));
+						
+						//select 감추기
+						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("style", "display:none;");
+						$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id=bad1000BadTable]").attr("aria-hidden", "true");
+						//input 보이기
+						$("#searchData_bad1000BadTable").removeAttr("disabled");
+						//input에 태그 검색 값 넣기
+						$("#searchData_bad1000BadTable").val($(this).attr("value"));
+						//검색
+		    			$(".osl-datatable-search__button[data-datatable-id=bad1000BadTable]").click();	
 					});
 				}else{
 					$("#badTagOption").addClass("kt-hide");
@@ -535,9 +535,9 @@ var OSLBad1001Popup = function () {
 						$("#badCmtInput").removeClass("kt-hide");
 						// 댓글 입력창 앞에 현재 회원 사진 세팅
 						$("#loginUsr").empty();
-						// 작성자 정보 넣기
 						var usrData = {
 								html: $.osl.user.userInfo.usrNm + " (" + $.osl.user.userInfo.usrId + ")",
+								imgSize: "sm",
 								class:{
 									cardBtn: "osl-width__fit-content"
 								}

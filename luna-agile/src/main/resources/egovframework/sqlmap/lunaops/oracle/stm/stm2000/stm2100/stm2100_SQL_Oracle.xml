@@ -4,7 +4,9 @@
 <sqlMap namespace="stm2100DAO">
 	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 
+    
     <select id="stm2100DAO.selectStm2100BadList" parameterClass="java.util.Map"  resultClass="egovMap">
+     
 		SELECT
 			C.LIC_GRP_ID AS LIC_GRP_ID
 			, C.MENU_ID AS MENU_ID
@@ -43,10 +45,25 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY MENU_ID DESC
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY MENU_ID DESC
+		</isEmpty>
 	</select>
 
+    
     <select id="stm2100DAO.selectStm2100BadInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT 
 		    A.STM_TYPE_CD AS STM_TYPE_CD
 		    , SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00001', A.STM_TYPE_CD, '1') AS STM_TYPE_NM
@@ -65,7 +82,9 @@
 		AND A.MENU_ID = #menuId#
     </select>
     
+    
 	<update id="stm2100DAO.updateStm2100BadOptions" parameterClass="java.util.Map">
+		
 		UPDATE 
 			STM2100
 		SET 
@@ -85,7 +104,9 @@
 		AND MENU_ID = #menuId#
 	</update>
     
+    
     <select id="stm2100DAO.selectStm2110BadAdmList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT T1.*
 		FROM
 		(
@@ -94,6 +115,7 @@
 		    , A.STM_ADMIN_CD AS STM_ADMIN_CD
 		    , B.USR_IMG_ID AS USR_IMG_ID
 		    , B.USR_NM AS USR_NM
+		    , B.EMAIL AS EMAIL
 		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
 		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
 		    , A.PRJ_ID AS PRJ_ID
@@ -121,9 +143,11 @@
 		ORDER BY T1.STM_ADMIN_CD ASC, T1.STM_ADMIN_ID ASC, T1.DEPT_NM ASC
     </select>
     
+	
 	<insert id="stm2100DAO.insertStm2110BadAdmin" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
 			<![CDATA[
+				 
 				SELECT	NVL( 
 				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -135,6 +159,7 @@
 				  )
 			]]>
 		</selectKey>
+		
 		INSERT INTO STM2110
 		(
 			LIC_GRP_ID
@@ -154,8 +179,8 @@
 			#licGrpId#
 			, #menuId#
 		    , #lblId#
-		    , #stmAdminCd#
-		    , #stmAdminId#
+		    , #codeNum#
+		    , #id#
 		    , #prjGrpId#
 		    , #prjId#
 		    , SYSDATE
@@ -167,14 +192,18 @@
 		)
 	</insert>
         
+    
 	<delete id="stm2100DAO.deleteStm2110BadAdmin" parameterClass="java.util.Map">
+		
 		DELETE FROM STM2110 
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
 		AND MENU_ID = #menuId#
 	</delete>
 	
+    
     <select id="stm2100DAO.selectStm2120BadWtList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT T1.*
 		FROM
 		(
@@ -183,6 +212,7 @@
 		    , A.STM_WT_CD AS STM_WT_CD
 		    , B.USR_IMG_ID AS USR_IMG_ID
 		    , B.USR_NM AS USR_NM
+		    , B.EMAIL AS EMAIL
 		    , SF_STM6000_DEPT_NM(A.LIC_GRP_ID, B.DEPT_ID, '2') AS DEPT_NM
 		    , C.AUTH_GRP_NM AS AUTH_GRP_NM
 		    , A.PRJ_ID AS PRJ_ID
@@ -210,9 +240,11 @@
 		ORDER BY T1.STM_WT_CD ASC, T1.STM_WT_ID ASC, T1.DEPT_NM ASC
     </select>
     
+    
 	<insert id="stm2100DAO.insertStm2120BadWriter" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String"	keyProperty="lblId">
 			<![CDATA[
+				 
 				SELECT	NVL( 
 				          SUBSTR(LBL_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(LBL_ID, 12, 5)) + 1) , 5, '0')
 				      ,	'STM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -224,6 +256,7 @@
 				  )
 			]]>
 		</selectKey>
+		
 		INSERT INTO STM2120
 		(
 			LIC_GRP_ID
@@ -243,8 +276,8 @@
 			#licGrpId#
 			, #menuId#
 		    , #lblId#
-		    , #stmWtCd#
-		    , #stmWtId#
+		    , #codeNum#
+		    , #id#
 		    , #prjGrpId#
 		    , #prjId#
 		    , SYSDATE
@@ -256,14 +289,18 @@
 		)
 	</insert>
 	
+	
 	<delete id="stm2100DAO.deleteStm2120BadWriter" parameterClass="java.util.Map">
+		
 		DELETE FROM STM2120
 		WHERE 1 = 1
 		AND LIC_GRP_ID = #licGrpId#
 		AND MENU_ID = #menuId#
 	</delete>
 	
+     
     <select id="stm2100DAO.selectStm2100BadGrpList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT
 			A.AUTH_GRP_NM AS AUTH_GRP_NM
 			, A.AUTH_GRP_ID AS AUTH_GRP_ID
@@ -276,10 +313,13 @@
 		WHERE 1 = 1
 		AND A.USE_CD = '01'
 		AND A.LIC_GRP_ID = #licGrpId#
+		AND A.PRJ_ID != 'ROOTSYSTEM_PRJ'
 		AND A.PRJ_ID IS NOT NULL
 	</select>
 
+    
     <select id="stm2100DAO.selectStm2100BadUsrList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 	    SELECT
 			A.USR_ID AS USR_ID
 			, A.USR_NM AS USR_NM
@@ -293,7 +333,9 @@
 		ORDER BY USR_NM ASC
 	</select>
 	
+	
     <select id="stm2100DAO.selectStm2100AdminCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+	    
 		SELECT
 			NVL2(A.LBL_ID, 'Y', 'N') AS YN
 		FROM STM2110 A
@@ -305,7 +347,9 @@
 		)
 	</select>
 	
+	
     <select id="stm2100DAO.selectStm2100WriterCheck" parameterClass="java.util.Map"  resultClass="java.lang.String">
+	    
 		SELECT
 			NVL2(A.LBL_ID, 'Y', 'N') AS YN
 		FROM STM2120 A
@@ -315,6 +359,48 @@
 		AND ( ( A.STM_WT_CD = '01' AND A.STM_WT_ID = #authGrpId#  AND A.PRJ_ID = #prjId#  )
 			OR ( A.STM_WT_CD = '02' AND A.STM_WT_ID = #usrId# )
 		)
+	</select>
+	
+	
+	<select id="stm2100DAO.selectStm2100MonthChart" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT
+			NVL2(E.BAD_WTDTM, E.BAD_WTDTM, E.MODIFY_DTM) AS CHART_DATE
+			, NVL(E.TOTAL_NEW_CNT, 0) AS TOTAL_NEW_CNT
+			, NVL(E.DEL_CNT, 0) AS DEL_CNT
+		FROM(
+			SELECT
+				C.BAD_WTDTM AS BAD_WTDTM
+				, C.TOTAL_NEW_CNT AS TOTAL_NEW_CNT
+				, D.MODIFY_DTM AS MODIFY_DTM
+				, D.DEL_CNT AS DEL_CNT
+			FROM(
+				SELECT
+					TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD') AS BAD_WTDTM
+					, TO_CHAR(COUNT(A.BAD_ID)) AS TOTAL_NEW_CNT
+				FROM BAD1000 A 
+				WHERE 1 = 1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.MENU_ID = #menuId#
+				AND TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD') BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM-DD') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+				GROUP BY TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD')
+				) C 
+			FULL OUTER JOIN (
+				SELECT 
+					TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD') AS MODIFY_DTM
+					, TO_CHAR(COUNT(B.BAD_ID)) AS DEL_CNT
+				FROM BAD1000 B
+				WHERE 1 = 1
+				AND B.LIC_GRP_ID = #licGrpId#
+				AND B.MENU_ID = #menuId#
+				AND TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD') BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYY-MM-DD') AND TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+				GROUP BY TO_CHAR(B.MODIFY_DTM, 'YYYY-MM-DD')
+			) D 
+			ON ( C.BAD_WTDTM = D.MODIFY_DTM )
+			WHERE 1 = 1
+		) E
+		WHERE 1 = 1
+		ORDER BY CHART_DATE ASC
 	</select>
 
 </sqlMap>

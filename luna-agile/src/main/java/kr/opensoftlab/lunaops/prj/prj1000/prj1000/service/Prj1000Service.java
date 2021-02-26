@@ -1,81 +1,162 @@
-package kr.opensoftlab.lunaops.prj.prj1000.prj1000.service;
+package kr.opensoftlab.lunaops.prj.prj1000.prj1100.service;
+
+
 
 import java.util.List;
 import java.util.Map;
 
 
-
-public interface Prj1000Service {
-	
-	@SuppressWarnings("rawtypes")
-	List selectPrj1000PrjGrpAllList(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	List selectPrj1000PrjGrpList(Map paramMap) throws Exception;
-	
-	@SuppressWarnings("rawtypes")
-	int selectPrj1000PrjGrpListCnt(Map paramMap) throws Exception;
+public interface Prj1100Service {
 
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1000PrjList(Map paramMap) throws Exception;
+	int selectPrj1100ProcessListCnt(Map paramMap) throws Exception;
 	
 	
-	@SuppressWarnings("rawtypes")
-	int selectPrj1000PrjListCnt(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	Map selectPrj1000Info(Map paramMap) throws Exception;
+	@SuppressWarnings({  "rawtypes" })
+	List<Map> selectPrj1100ProcessList(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1001PrjGrpAuthList(Map paramMap) throws Exception;
+	Map selectPrj1100ProcessInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1000PrjGrpExistCheck(Map paramMap) throws Exception;
+	void updatePrj1100ProcessInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1000PrjGrpIdExistCheck(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	String insertPrj1000PrjGrpAjax(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	String insertPrj1001Ajax(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	int updatePrj1000Ajax(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	void deletePrj1000PrjGrpAjax(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	void deletePrj1001Ajax(Map paramMap) throws Exception;
-	
-	@SuppressWarnings("rawtypes")
-	List<Map> selectPrj1000ProjectGroupListAjax(Map<String, String> paramMap);
-	
-	@SuppressWarnings("rawtypes")
-	int selectPrj1000ProjectAcronymCount(Map paramMap) throws Exception;
-	
-
-	@SuppressWarnings("rawtypes")
-	List selectPrj1000AdminPrjList(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	String insertPrj1000WizardProject(Map paramMap) throws Exception;
+	void updatePrj1100ProcessConfirmInfo(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")
-	String insertPrj1000PrjAuthInfo(Map paramMap) throws Exception;
+	void updatePrj1100ProcessConfirmCancle(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	String insertPrj1100ProcessInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1100ProcessInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1100ProcessReqCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1101FlowList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	Map selectPrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void updatePrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertPrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1102ReqOptList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1102OptList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1103OptFileList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1102OptCntInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void updatePrj1102OtpInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertPrj1102OtpInfo(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1102OtpInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertPrj1103OtpValueInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void updatePrj1103OtpValueInfo(Map paramMap) throws Exception;
+	
+
+	
+	@SuppressWarnings("rawtypes")
+	int insertPrj1105RevisionNumList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1104RevisionNumList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1104RevisionNumInfo(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1104ReqRevisionNumList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1104ReqRevisionNumListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1104ReqRevisionNumCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int insertPrj1105FlowAuthGrpList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1105FlowAuthGrpList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertPrj1105FlowAuthGrpInfo(Map paramMap) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	void deletePrj1105FlowAuthGrpInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1105FlowAuthGrpList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1105FlowAuthGrpCnt(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1100ProcessCopyList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertPrj1100ProcessCopyInfo(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1102FlwOptExistFileIdList(Map paramMap) throws Exception;
 }

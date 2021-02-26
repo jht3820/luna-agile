@@ -62,6 +62,13 @@
 		        WHERE 1 = 1
 		        AND Y.ATCH_FILE_ID = B.ATCH_FILE_ID
 		    	) AS BAD_FILE_CNT
+	    	, (	SELECT
+	    			TO_CHAR((NVL(SUM(B.FILE_SIZE)/(1024*1024), 0))) AS FILE_SIZE
+	    		FROM COMTNFILEDETAIL B
+	    		WHERE 1 = 1
+	    		AND Y.ATCH_FILE_ID = B.ATCH_FILE_ID
+	    		GROUP BY B.ATCH_FILE_ID
+	    	 	) AS BAD_FILE_SIZE
 		    , ( SELECT
 		            TO_CHAR(NVL(COUNT(C.BAD_CMT_ID), 0 )) AS CMT_CNT
 		        FROM BAD1100 C
@@ -69,14 +76,6 @@
 		        AND Y.LIC_GRP_ID = C.LIC_GRP_ID
 		        AND Y.MENU_ID = C.MENU_ID
 		        AND Y.BAD_ID = C.BAD_ID
-		        <isNotEmpty property="dsTypeCd">
-		            <isEqual property="dsTypeCd" compareValue="02">
-		                AND C.PRJ_GRP_ID = #prjGrpId#
-		            </isEqual>
-		            <isEqual property="dsTypeCd" compareValue="03">
-		                AND C.PRJ_ID = #prjId#
-		            </isEqual>
-		        </isNotEmpty>
 		     ) AS BAD_CMT_CNT
 		   , Y.DEL_CD AS DEL_CD
 		   , X.STM_NTC_YN_CD AS STM_NTC_YN_CD
@@ -86,56 +85,64 @@
 		   , X.STM_FILE_CNT AS STM_FILE_CNT
 		   , X.STM_FILE_STRG/(1024*1024) AS STM_FILE_STRG
 		FROM (
-			SELECT
-				C.*
-				, SF_STM3000_USR_INFO(C.BAD_USR_ID, 1) AS BAD_USR_NM
-		    	, SF_STM3000_USR_INFO(C.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
-				, '01' AS BAD_NTC_CHECK
-			FROM (
-				SELECT
-					ROWNUM BAD_NUM
-				    , B.*
-				FROM (
+			<isNotEmpty property="stmNtcYnCd">
+				<isEqual property="stmNtcYnCd" compareValue="01">
 					SELECT
-					    A.LIC_GRP_ID AS LIC_GRP_ID
-					    , A.PRJ_GRP_ID AS PRJ_GRP_ID
-					    , A.PRJ_ID AS PRJ_ID
-					    , A.MENU_ID AS MENU_ID
-					    , A.BAD_ID AS BAD_ID
-					    , A.BAD_TITLE AS BAD_TITLE
-					    , A.BAD_CONTENT AS BAD_CONTENT
-					    , A.BAD_USR_ID AS BAD_USR_ID
-					    , TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
-					    , A.BAD_NTC_TYPE AS BAD_NTC_TYPE
-					    , NVL2( A.BAD_NTC_STDTM, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_STDTM
-					    , NVL2( A.BAD_NTC_EDDTM, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_EDDTM
-					    , TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
-					    , TO_CHAR(A.BAD_HIT) AS BAD_HIT
-					    , A.BAD_CMT_YN AS BAD_CMT_YN
-					    , NVL2(A.BAD_PW, '01', '02') AS BAD_PW
-					    , A.ATCH_FILE_ID AS ATCH_FILE_ID
-					    , A.DEL_CD AS DEL_CD
-					FROM BAD1000 A
+						C.*
+						, SF_STM3000_USR_INFO(C.BAD_USR_ID, 1) AS BAD_USR_NM
+				    	, SF_STM3000_USR_INFO(C.BAD_USR_ID, 6) AS BAD_USR_IMG_ID
+						, '01' AS BAD_NTC_CHECK
+					FROM (
+						SELECT
+							ROWNUM BAD_NUM
+						    , B.*
+						FROM (
+							SELECT
+							    A.LIC_GRP_ID AS LIC_GRP_ID
+							    , A.PRJ_GRP_ID AS PRJ_GRP_ID
+							    , A.PRJ_ID AS PRJ_ID
+							    , A.MENU_ID AS MENU_ID
+							    , A.BAD_ID AS BAD_ID
+							    , A.BAD_TITLE AS BAD_TITLE
+							    , A.BAD_CONTENT AS BAD_CONTENT
+							    , A.BAD_USR_ID AS BAD_USR_ID
+							    , TO_CHAR(A.BAD_WTDTM, 'YYYY-MM-DD HH24:MI:SS') AS BAD_WTDTM
+							    , A.BAD_NTC_TYPE AS BAD_NTC_TYPE
+							    , NVL2( A.BAD_NTC_STDTM, TO_CHAR(A.BAD_NTC_STDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_STDTM
+							    , NVL2( A.BAD_NTC_EDDTM, TO_CHAR(A.BAD_NTC_EDDTM, 'YYYY-MM-DD'), '' ) AS BAD_NTC_EDDTM
+							    , TO_CHAR(SYSDATE, 'YYYY-MM-DD') AS MOMENT
+							    , TO_CHAR(A.BAD_HIT) AS BAD_HIT
+							    , A.BAD_CMT_YN AS BAD_CMT_YN
+							    , NVL2(A.BAD_PW, '01', '02') AS BAD_PW
+							    , A.ATCH_FILE_ID AS ATCH_FILE_ID
+							    , A.DEL_CD AS DEL_CD
+							FROM BAD1000 A
+							WHERE 1 = 1
+							AND A.LIC_GRP_ID = #licGrpId#
+							AND A.MENU_ID = #menuId#
+							ORDER BY BAD_ID ASC
+						) B
+						WHERE 1 = 1
+						ORDER BY BAD_NUM DESC
+					) C
 					WHERE 1 = 1
-					AND A.LIC_GRP_ID = #licGrpId#
-					AND A.MENU_ID = #menuId#
-					ORDER BY BAD_ID ASC
-				) B
-				WHERE 1 = 1
-				ORDER BY BAD_NUM DESC
-			) C
-			WHERE 1 = 1
-			AND C.BAD_NTC_TYPE = '03'
-			OR ( C.BAD_NTC_TYPE = '02' AND C.MOMENT BETWEEN C.BAD_NTC_STDTM AND C.BAD_NTC_EDDTM )
-			<isNotEmpty property="dsTypeCd">
-			    <isEqual property="dsTypeCd" compareValue="02">
-			        AND C.PRJ_GRP_ID = #prjGrpId#
-			    </isEqual>
-			    <isEqual property="dsTypeCd" compareValue="03">
-			        AND C.PRJ_ID = #prjId#
-			    </isEqual>
+					AND C.BAD_NTC_TYPE = '03'
+					OR ( C.BAD_NTC_TYPE = '02' AND C.MOMENT BETWEEN C.BAD_NTC_STDTM AND C.BAD_NTC_EDDTM )
+					<isNotEmpty property="stmRootYn">
+						<isEqual property="stmRootYn" compareValue="N">
+							<isNotEmpty property="dsTypeCd">
+							    <isEqual property="dsTypeCd" compareValue="02">
+							        AND C.PRJ_GRP_ID = #prjGrpId#
+							    </isEqual>
+							    <isEqual property="dsTypeCd" compareValue="03">
+							        AND C.PRJ_ID = #prjId#
+							    </isEqual>
+							</isNotEmpty>
+						</isEqual>
+					</isNotEmpty>
+					UNION ALL
+				</isEqual>
 			</isNotEmpty>
-			UNION ALL
 			SELECT
 				G.*
 				, SF_STM3000_USR_INFO(G.BAD_USR_ID, 1) AS BAD_USR_NM
@@ -175,16 +182,24 @@
 				ORDER BY BAD_NUM DESC
 			) G
 			WHERE 1 = 1
-			AND G.BAD_NTC_TYPE = '01'
-			OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &lt; G.BAD_NTC_STDTM )
-			OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &gt; G.BAD_NTC_EDDTM )
-			<isNotEmpty property="dsTypeCd">
-			    <isEqual property="dsTypeCd" compareValue="02">
-			        AND G.PRJ_GRP_ID = #prjGrpId#
-			    </isEqual>
-			    <isEqual property="dsTypeCd" compareValue="03">
-			        AND G.PRJ_ID = #prjId#
-			    </isEqual>
+			<isNotEmpty property="stmNtcYnCd">
+				<isEqual property="stmNtcYnCd" compareValue="01">
+					AND G.BAD_NTC_TYPE = '01'
+					OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &lt; G.BAD_NTC_STDTM )
+					OR ( G.BAD_NTC_TYPE = '02' AND G.MOMENT &gt; G.BAD_NTC_EDDTM )
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty property="stmRootYn">
+				<isEqual property="stmRootYn" compareValue="N">
+					<isNotEmpty property="dsTypeCd">
+					    <isEqual property="dsTypeCd" compareValue="02">
+					        AND G.PRJ_GRP_ID = #prjGrpId#
+					    </isEqual>
+					    <isEqual property="dsTypeCd" compareValue="03">
+					        AND G.PRJ_ID = #prjId#
+					    </isEqual>
+					</isNotEmpty>
+				</isEqual>
 			</isNotEmpty>
 		) Y LEFT JOIN STM2100 X ON ( Y.MENU_ID = X.MENU_ID AND X.USE_CD = '01')
 		WHERE 1 = 1
@@ -227,36 +242,58 @@
 	                FROM BAD1100 H
 	                WHERE 1 = 1
 	                AND Y.BAD_ID = H.BAD_ID
-	                AND H.PRJ_GRP_ID = #prjGrpId#
-	                AND H.PRJ_ID = #prjId#
+	                AND H.LIC_GRP_ID = #licGrpId#
+	                <isNotEmpty property="dsTypeCd">
+					    <isEqual property="dsTypeCd" compareValue="02">
+					        AND H.PRJ_GRP_ID = #prjGrpId#
+					    </isEqual>
+					    <isEqual property="dsTypeCd" compareValue="03">
+					        AND H.PRJ_ID = #prjId#
+					    </isEqual>
+					</isNotEmpty>
 	                AND H.BAD_CMT_CONTENT LIKE '%'|| #searchTargetData# ||'%'
                 )
 			</isEqual>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	        <isEqual property="searchTargetId" compareValue="tagNm">
+	            AND EXISTS (
+		            SELECT
+		            	J.BAD_ID
+		            FROM BAD1010 J INNER JOIN (
+		                SELECT
+		                    I.TAG_ID AS TAG_ID
+		                FROM TAG1000 I
+		                WHERE 1 = 1
+		                AND I.LIC_GRP_ID = #licGrpId#
+		                AND I.TAG_NM LIKE '%'|| TRIM(#searchTargetData#) ||'%'
+	                ) K ON ( J.TAG_ID = K.TAG_ID )
+	                WHERE 1 = 1
+	                AND J.BAD_ID = Y.BAD_ID
+	                AND J.LIC_GRP_ID = #licGrpId#
+	                <isNotEmpty property="dsTypeCd">
+					    <isEqual property="dsTypeCd" compareValue="02">
+					        AND J.PRJ_GRP_ID = #prjGrpId#
+					    </isEqual>
+					    <isEqual property="dsTypeCd" compareValue="03">
+					        AND J.PRJ_ID = #prjId#
+					    </isEqual>
+					</isNotEmpty>
+                )
+			</isEqual>
 		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+				<isEqual property="sortDirection" compareValue="asc">
+					ASC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY RN DESC
+		</isEmpty>
 	</sql>
 	
     
@@ -304,6 +341,29 @@
 		AND A.BAD_ID = #badId#
 		AND A.DEL_CD = '02'
 		AND A.BAD_PW = #badPw#
+	</select>
+	
+    
+    <select id="bad1000DAO.selectBad1000BadPwPrevInfo" parameterClass="java.util.Map"  resultClass="java.lang.String">
+	    
+		SELECT
+			A.BAD_PW AS BAD_PW
+		FROM BAD1000 A
+		WHERE 1 = 1
+		AND A.LIC_GRP_ID = #licGrpId#
+		<isNotEmpty property="dsTypeCd">
+			<isNotEmpty property="dsTypeCd">
+				<isEqual property="dsTypeCd" compareValue="02">
+					AND A.PRJ_GRP_ID = #prjGrpId#
+				</isEqual>
+				<isEqual property="dsTypeCd" compareValue="03">
+					AND A.PRJ_ID = #prjId#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		AND A.MENU_ID = #menuId#
+		AND A.BAD_ID = #badId#
+		AND A.DEL_CD = '02'
 	</select>
     
     
@@ -620,43 +680,46 @@
 		SET
 			BAD_TITLE = #badTitle#
 			, BAD_CONTENT = #badContent#
-			<isNotNull property="badNtcType">
-				<isNotEmpty property="badNtcType">
-					, BAD_NTC_TYPE = #badNtcType#
-				</isNotEmpty>
-			</isNotNull>
-			<isNull property="notChangeNtc">
-				<isEmpty property="badNtcType">
-					, BAD_NTC_TYPE = '01'
-				</isEmpty>
-				<isNotNull property="badNtcStdtm">
-					<isNotEmpty property="badNtcStdtm">
-					, BAD_NTC_STDTM = #badNtcStdtm#
-					</isNotEmpty>
-				</isNotNull>
-				<isEmpty property="badNtcStdtm">
-					, BAD_NTC_STDTM = NULL
-				</isEmpty>
-				<isNotNull property="badNtcEddtm">
-					<isNotEmpty property="badNtcEddtm">
-					, BAD_NTC_EDDTM = #badNtcEddtm#
-					</isNotEmpty>
-				</isNotNull>
-				<isEmpty property="badNtcEddtm">
-					, BAD_NTC_EDDTM = NULL
-				</isEmpty>
-				<isNotNull property="badPw">
-					<isNotEmpty property="badPw">
-						, BAD_PW = #badPw#
-					</isNotEmpty>
-					<isEmpty property = "badPw">
-						, BAD_PW = NULL
+			<isNotEmpty property="notChangeNtc">
+				<isEqual property="notChangeNtc" compareValue="N">
+					<isNotNull property="badNtcType">
+						<isNotEmpty property="badNtcType">
+							, BAD_NTC_TYPE = #badNtcType#
+						</isNotEmpty>
+					</isNotNull>
+					<isEmpty property="badNtcType">
+						, BAD_NTC_TYPE = '01'
 					</isEmpty>
-				</isNotNull>
-				<isNull property="badPw">
-					, BAD_PW = NULL
-				</isNull>
-			</isNull>
+					<isNotNull property="badNtcStdtm">
+						<isNotEmpty property="badNtcStdtm">
+							, BAD_NTC_STDTM = #badNtcStdtm#
+						</isNotEmpty>
+					</isNotNull>
+					<isEmpty property="badNtcStdtm">
+						, BAD_NTC_STDTM = NULL
+					</isEmpty>
+					<isNotNull property="badNtcEddtm">
+						<isNotEmpty property="badNtcEddtm">
+							, BAD_NTC_EDDTM = #badNtcEddtm#
+						</isNotEmpty>
+					</isNotNull>
+					<isEmpty property="badNtcEddtm">
+						, BAD_NTC_EDDTM = NULL
+					</isEmpty>
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty property="notChangePw">
+				<isEqual property="notChangePw" compareValue="N">
+					<isNotNull property="badPw">
+						<isNotEmpty property="badPw">
+							, BAD_PW = #badPw#
+						</isNotEmpty>
+						<isEmpty property = "badPw">
+							, BAD_PW = NULL
+						</isEmpty>
+					</isNotNull>
+				</isEqual>
+			</isNotEmpty>
 			, BAD_CMT_YN = #badCmtYn#
 			, ATCH_FILE_ID = #atchFileId#
 			, FILE_SN = #fileSn#
@@ -857,11 +920,13 @@
 	    
 		SELECT
 			TO_CHAR(NVL(COUNT(A.BAD_ID), 0)) AS CNT
-		FROM BAD1000 A
+		FROM BAD1000 A LEFT JOIN STM2100 B
+		ON A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID
 		WHERE 1 = 1
 		AND A.DEL_CD = '02'
 		AND A.LIC_GRP_ID = #licGrpId#
 		AND A.MENU_ID = #menuId#
+		AND B.STM_PW_YN_CD = '01'
 		AND (A.BAD_PW IS NOT NULL OR A.BAD_PW != '')
     </select>
     

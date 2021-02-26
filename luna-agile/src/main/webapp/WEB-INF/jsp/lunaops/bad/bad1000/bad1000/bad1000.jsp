@@ -7,10 +7,10 @@
 			<h3 class="kt-portlet__head-title kt-font-boldest kt-font-brand">
 			<c:if test="${not empty param.stmTypeCd}">
 				<c:if test="${param.stmTypeCd eq '01' }">
-					<i class="la la-newspaper-o kt-margin-r-5"></i>[일반]
+					<i class="la la-newspaper-o kt-margin-r-5"></i><span data-lang-cd="stm2100.type.normal">[일반]</span>
 				</c:if>
 				<c:if test="${param.stmTypeCd eq '02' }">
-					<i class="la la-server kt-margin-r-5"></i>[자료실]
+					<i class="la la-server kt-margin-r-5"></i><span data-lang-cd="stm2100.type.storage">[자료실]</span>
 				</c:if>
 				<c:out value="${param.stmNm }"/>
 			</c:if>
@@ -31,24 +31,23 @@
 			<input type="hidden" id="stmCmtYnCd" name="stmCmtYnCd"/>
 			<input type="hidden" id="stmFileCnt" name="stmFileCnt"/>
 			<input type="hidden" id="stmFileStrg" name="stmFileStrg"/>
-			<input type="hidden" id="modalSize" name="modalSize"/>
 		</div>
 		<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper" style="">
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="select" title="데이터 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-					<i class="fa fa-list"></i><span>조회</span>
+			<div class="kt-portlet__head-wrapper">
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="select" title="게시글 조회" data-title-lang-cd="bad1000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="insert" title="게시글 추가" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
-					<i class="fa fa-plus"></i><span>추가</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="insert" title="게시글 추가" data-title-lang-cd="bad1000.actionBtn.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
+					<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="update" title="게시글 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
-					<i class="fa fa-edit"></i><span>수정</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="update" title="게시글 수정" data-title-lang-cd="bad1000.actionBtn.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+					<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="delete" title="게시글 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
-					<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="delete" title="게시글 삭제" data-title-lang-cd="bad1000.actionBtn.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
+					<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="dblClick" title="게시글 상세" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="dblClick" tabindex="5">
-					<i class="fa flaticon2-document"></i><span>상세</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="bad1000BadTable" data-datatable-action="dblClick" title="게시글 상세" data-title-lang-cd="bad1000.actionBtn.detailTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="dblClick" tabindex="5">
+					<i class="fa flaticon2-document"></i><span data-lang-cd="bad1000.button.dblClick">상세</span>
 				</button>
 			</div>
 		</div>
@@ -57,7 +56,7 @@
 		<div class="col-lg-5 col-md-6 col-sm-6">
 			<div class="osl-datatable-search" data-datatable-id="bad1000BadTable"></div>
 		</div>
-		<div class="kt_datatable" id="bad1000BadTable"></div>
+		<div class="kt_datatable  osl-datatable-footer__divide" id="bad1000BadTable"></div>
 	</div>
 </div>
 <!-- begin page script -->
@@ -81,17 +80,33 @@
 		 
 		 //시스템 관리 게시판에서 넘오는 것이 아니라 일반 메뉴로 들어올 경우
 		 //메뉴id와 게시판 유형, 게시판명을 받아 저장
-		 if($("#stmRootYn").val()==""){
+		 if($.osl.isNull($("#stmRootYn").val())){
 			 //게시판 속성 정보 가져와 셋팅
 			 getStmInfo();
 			 //stmInfo 체크할 필요 없으므로
 			 checkStmInfo = false;
 			 //검색항목 추가
 			 searchAdd = [
-					{field: 'badContent', title:"내용", searchOrd: 2},
-					{field: 'badNtcCheck', title:"공지유무", searchOrd: 4, searchType:"select", searchCd: "CMM00001"},
+					{field: 'badContent', title:$.osl.lang("bad1000.field.badContent"), searchOrd: 2},
+					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 4},
+					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 5, 
+						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
+						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
+							// SpaceBar 시 빈공간이 생기지 않도록 방지
+                            e.preventDefault(); 
+							if(e.key=="Enter" || e.keyCode == 32){
+								//검색
+								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
+							}else{
+								var txt = $("#searchData_"+dataTableId).val() + e.key;
+								txt = txt.replace(/#/g,"");
+								$("#searchData_"+dataTableId).val(txt);
+							}
+						},		
+					}
 				]
 		 }else{
+			 //시스템게시판 메뉴로 들어오는 경우
 			//insert에 필요한 stmInfo 체크해야 하므로
 			 checkStmInfo = true;
 			 //검색항목 추가
@@ -100,6 +115,21 @@
 					{field: 'badNtcCheck', title:$.osl.lang("bad1000.field.badNtcCheck"), searchOrd: 4, searchType:"select", searchCd: "CMM00001"},
 					{field: 'delCd', title:$.osl.lang("bad1000.field.delCd"), searchOrd: 5, searchType:"select", searchCd: "CMM00001"},
 					{field: 'cmtContent', title:$.osl.lang("bad1000.field.cmtContent"), searchOrd: 6},
+					{field: 'tagNm', title:$.osl.lang("bad1000.field.tagNm"), searchOrd: 7,
+						searchKeyCode: "-1", //spacebar 클릭 시 이벤트 실행
+						searchKeyEvt : function(e, datatableInfo, searchDataTarget){
+							// SpaceBar 시 빈공간이 생기지 않도록 방지
+                            e.preventDefault(); 
+							if(e.key=="Enter" || e.keyCode == 32){
+								//검색
+								$("button[data-datatable-id="+dataTableId+"][data-datatable-action=select]").click();
+							}else{
+								var txt = $("#searchData_"+dataTableId).val() + e.key;
+								txt = txt.replace(/#/g,"");
+								$("#searchData_"+dataTableId).val(txt);
+							}
+						},		
+					},
 				];
 		 }
 		 
@@ -120,29 +150,33 @@
 						}
 					 }
 				 },
+				 pageSize : 8,
+			 },
+			 toolbar:{
+				 items:{
+					 pagination:{
+						 pageSizeSelect : [8, 10, 20, 30, 50, 100]
+					 }
+				 }
 			 },
 			 columns: [
 				 {field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: "kt-checkbox--solid"}, sortable: false, autoHide: false},
-				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false,
+				 {field: 'badNum', title: 'No.', textAlign: 'center', width: 50, autoHide: false, sortable: true,
 				 	template: function(row){
 				 		if(checkStmInfo){
-				 			setStmInfo(row);	
+				 			setStmInfo(row);
 				 			checkStmInfo = false;
 				 		}
 				 		return row.badNum;
-				 	}	 
+				 	}
 				 },
-				 {field: 'badTitle', title: $.osl.lang("bad1000.field.badTitle"), textAlign: 'left', width: 400, autoHide: false, search: true,
+				 {field: 'badTitle', title: '제목', textAlign: 'left', width: 400, autoHide: false, search: true, sortable: true,
 					template: function(row){
 						var returnStr = "";
-						// 시스템 게시판 관리 메뉴에서 접근한 경우
 						// 삭제된 게시글인 경우
-						if($("#stmRootYn").val() != null && $("#stmRootYn").val() != ""){
-							
-							if($("#stmRootYn").val() == "Y"){
-								if(row.delCd == "01"){
-									returnStr += "<span class='kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-margin-5'>"+$.osl.lang("bad1000.label.deleteBadge")+"</span>";
-								}
+						if($("#stmRootYn").val() == "Y"){
+							if(row.delCd == "01"){
+								returnStr += "<span class='kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-margin-5'>"+$.osl.lang("bad1000.label.deleteBadge")+"</span>";
 							}
 						}
 						// 공지사항인 경우
@@ -152,11 +186,11 @@
 						// 제목
 						returnStr += $.osl.escapeHtml(row.badTitle);
 						// 댓글이 있는 경우
-						if(row.badCmtCnt > 0){
+						if(row.badCmtCnt > 0 && row.stmCmtYnCd == '01'){
 							returnStr += "<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10'>"+row.badCmtCnt+"</span>";
 						}
 						// 비밀번호가 걸린 글인 경우
-						if(row.badPw == "01"){
+						if(row.badPw == "01" && row.stmPwYnCd == '01'){
 							returnStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
 						}
 						
@@ -164,12 +198,13 @@
 						return returnStr;
 					}, 
 				 },
-				 {field: 'badHit', title: $.osl.lang("bad1000.field.badHit"), textAlign: 'center', width: 100},
-				 {field: 'badFileCnt', title: $.osl.lang("bad1000.field.badFileCnt"), textAlign: 'center', width: 100},
-				 {field: 'badUsrId', title: $.osl.lang("bad1000.field.badUsrId"), textAlign: 'left', width: 180,
+				 {field: 'badHit', title: '조회수', textAlign: 'center', width: 100, sortable: true},
+				 {field: 'badFileCnt', title: '첨부파일 수', textAlign: 'center', width: 100},
+				 {field: 'badUsrId', title: '작성자', textAlign: 'left', width: 180,
 					template: function (row) {
 						var usrData = {
 								html: row.badUsrNm + " (" + row.badUsrId + ")",
+								imgSize: "sm",
 								class:{
 									cardBtn: "osl-width__fit-content"
 								}
@@ -179,29 +214,23 @@
 					onclick: function(row){
 						$.osl.user.usrInfoPopup(row.badUsrId);
 					}
-					, autoHide: false, search: true },
-				{field: 'badWtdtm', title:$.osl.lang("bad1000.field.badWtdtm"), textAlign: 'center', width: 150, search: true, searchType:"daterange",
+					, autoHide: false, search: true, sortable: true},
+				{field: 'badWtdtm', title:'작성일', textAlign: 'center', width: 150, search: true, searchType:"daterange", sortable: true,
 					template: function(row){
 						var paramDatetime = new Date(row.badWtdtm);
-						var agoTime = new Date() - paramDatetime;
-						if(agoTime < 1000 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "s"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "m"}).agoString;
-						}else if(agoTime < 1000 * 60 * 60 * 24){
-							return $.osl.datetimeAgo(paramDatetime, {returnTime: "h"}).agoString;
-						}else{
-							return paramDatetime.format("yyyy-MM-dd");
-						}
+		                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+		                return agoTimeStr.agoString;
 					},	
 				}
 			],
 			searchColumns: searchAdd,
+			rows:{
+				clickCheckbox: true
+			},
 			actionBtn:{
 				"title" : $.osl.lang("bad1000.actionBtn.title"),
 				"width" : 200,
-				"click": true,
-				"dblClick" : true
+				"dblClick" : true,
 			},
 			actionTooltip:{
 				"update" : $.osl.lang("bad1000.actionBtn.updateBtn"),
@@ -226,7 +255,7 @@
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]",
 							closeConfirm: true,
 							autoHeight: false,
-							modalSize: rowData.modalSize,
+							modalSize: "xl",
 						};
 					//담당자 또는 글작성범위에 해당하는 회원만 글등록
 					if(okManager == true || okWriter == true){
@@ -254,7 +283,7 @@
 						}
 					}
 					//1개의 list만 선택하거나 row의 상세버튼을 클릭한 경우
-					if(rowData.stmOptionCnt == null || rowData.stmOptionCnt == ""){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();
@@ -262,19 +291,18 @@
 						rowData.stmTagYnCd = $("#stmTagYnCd").val();
 						rowData.stmFileCnt = $("#stmFileCnt").val();
 						rowData.stmFileStrg = $("#stmFileStrg").val();
-						rowData.modalSize = $("#modalSize").val();
 					}
 					var data = {
 							stmTypeCd : $("#stmTypeCd").val(),
 							stmNm : $.osl.escapeHtml($("#stmNm").val()),
 							paramRow : JSON.stringify(rowData),
 							backPageYn: "N",
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmRootYn: $("#stmRootYn").val(),
 						};
 					var options = {
 							idKey: "bad1001_"+ rowData.badId,
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
-							
 							closeConfirm: false,
 							autoHeight: false,
 							modalSize: "xl",
@@ -293,7 +321,7 @@
 							//작성자는 비밀번호 없이도 게시글 확인 가능
 							$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1001View.do',data,options);
 						}else{
-							if(rowData.badPw == "01"){
+							if(rowData.badPw == "01" && rowData.stmPwYnCd == '01'){
 								$.osl.layerPopupOpen('/bad/bad1000/bad1000/selectBad1004PwView.do', data, pwOptions);
 							}
 							else{
@@ -305,7 +333,7 @@
 					}
 				},
 				"update":function(rowData, datatableId, type, rowNum){
-					if(rowData.stmOptionCnt == null){
+					if($.osl.isNull(rowData.stmOptionCnt)){
 						rowData.stmOptionCnt = $("#stmOptionCnt").val();
 						rowData.stmNtcYnCd = $("#stmNtcYnCd").val();
 						rowData.stmCmtYnCd = $("#stmCmtYnCd").val();
@@ -313,10 +341,9 @@
 						rowData.stmTagYnCd = $("#stmTagYnCd").val();
 						rowData.stmFileCnt = $("#stmFileCnt").val();
 						rowData.stmFileStrg = $("#stmFileStrg").val();
-						rowData.modalSize = $("#modalSize").val();
 					}
 					var data = {
-							stmDsTypeCd: $("#stmDstypeCd").val(),
+							stmDsTypeCd: $("#stmDsTypeCd").val(),
 							stmNm: $.osl.escapeHtml($("#stmNm").val()),
 							stmRootYn: $("#stmRootYn").val(),
 							paramRow : JSON.stringify(rowData),
@@ -326,7 +353,7 @@
 							modalTitle: "[ "+$.osl.escapeHtml($("#stmNm").val())+" ]  NO."+rowData.badNum,
 							closeConfirm: true,
 							autoHeight: false,
-							modalSize: rowData.modalSize,
+							modalSize: "xl",
 						};
 					//담당자 또는 해당 게시글을 작성한 회원만 수정 가능
 					if(okManager == true || rowData.badUsrId == $.osl.user.userInfo.usrId){
@@ -345,16 +372,18 @@
 					};
 					var titleStr;
 					if(rowDatas.length >= 1){
-						titleStr = "[ NO." + rowDatas[0].badNum +"] 게시글";
 						if(rowDatas.length>1){
-							titleStr = $.osl.lang("bad1000.title.boardCheck.twoStep", rowDatas[0].badNum, rowDatas.length -1);
+							var num = rowDatas[0].badNum;
+							var ect = rowDatas.length-1;
+							titleStr = $.osl.lang("bad1000.title.boardCheck.twoStep", num, ect);
 						}else{
-							titleStr = $.osl.lang("bad1000.title.boardCheck.oneStep", rowDatas[0].badNum);
+							titleStr = $.osl.lang("bad1000.title.boardCheck.oneStep", num);
 						}
+						titleStr +=  " " +$.osl.lang("bad1000.title.deleteReason");
 					}
 					var options = {
 							idKey: "bad1005_"+rowDatas.badId,
-							modalTitle: titleStr + " " +$.osl.lang("bad1000.title.deleteReason"),
+							modalTitle: titleStr,
 							closeConfirm: false,
 							autoHeight: false,
 							modalSize: "xl",
@@ -377,22 +406,7 @@
 							$.osl.alert($.osl.lang("bad1000.notAuthority.deleteMessage"), {"type":"warning"});
 						}
 					}
-				},
-				"click": function(rowData, datatableId, type, rowNum, elem){
-					//클릭한 row(tr)에서 label 태그 kt-checkbox 클래스를 찾고
-					//그 안에 있는 체크박스를 체크
-					var targetElem = $(elem).closest("tr").find("label.kt-checkbox").children("input[type=checkbox]");
-					if(targetElem.is(":checked")==true){
-						targetElem.prop("checked", false);
-						$.osl.datatable.list[datatableId].targetDt.setInactive(targetElem);
-						//선택된것처럼 row 컬러가 그대로 남아있으므로
-						$(elem).closest("tr").removeClass("osl-datatable__row--selected");
-						$(elem).closest("tr").addClass("kt-datatable__row--even");
-					}else{
-						targetElem.prop("checked", true);
-						$.osl.datatable.list[datatableId].targetDt.setActive(targetElem);
-					}
-				},
+				}
 			 },
 			 theme: {
 				 actionBtn:{
@@ -404,6 +418,22 @@
 				 }
 			 }
 		 });
+		 
+		//데이터 테이블 렌더링 업데이트 및 테이블 크기 조정 시 이벤트 발생
+//     	$("#"+dataTableId).on("kt-datatable--on-layout-updated", function(){
+    		
+//   			searchData_bad1000BadTable
+//     		//검색 버튼 클릭하면
+//     		 $(".btn.btn-brand.osl-datatable-search__button[data-datatable-id="+dataTableId+"]").click(function(){
+//     			 if(selectActiveTxt == $.osl.lang("bad1000.field.tagTxt")){
+//     				 //var tagTxt = $(".osl-datatable-search[data-datatable-id=bad1000BadTable]").children().children().children("div>.osl-datatable-search__input").children().val();
+// 					 //이벤트
+					 
+//     				 $.osl.alert("dddd");
+//     				 return false;
+//     			 }
+//     		 });
+//     	});
 	 };
 	 
 	// 게시판 옵션 가져오기
@@ -420,7 +450,6 @@
 		 var stmCmtYnCd;
 		 var stmFileCnt;
 		 var stmFileStrg;
-		 var modalSize;
 		 
 		stmOptionCnt = 0;
 			if(data.stmNtcYnCd == '01'){
@@ -450,12 +479,6 @@
 			$("#stmCmtYnCd").val(data.stmCmtYnCd);
 			$("#stmFileCnt").val(data.stmFileCnt);
 			$("#stmFileStrg").val(data.stmFileStrg);
-			//모달크기
-			if(stmOptionCnt==0){
-				$("#modalSize").val("md");
-			}else{
-				$("#modalSize").val("xl");
-			}
 	 }
 	 
 	 
@@ -553,7 +576,7 @@
 		 
 	 return {
 		 init: function(){
-			 documentSetting();
+			 documentSetting();		
 		 }, 
 		 reload: function(){
 			 $("button[data-datatable-id=bad1000BadTable][data-datatable-action=select]").click();
