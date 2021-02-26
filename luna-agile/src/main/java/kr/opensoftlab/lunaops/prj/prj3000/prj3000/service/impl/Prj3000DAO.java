@@ -3,6 +3,8 @@ package kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
+
 import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
 
 import org.springframework.stereotype.Repository;
@@ -81,5 +83,26 @@ public class Prj3000DAO extends ComOslitsAbstractDAO {
 	@SuppressWarnings("rawtypes")
 	public String insertPrj3000ParamMenuInfo(Map paramMap) throws Exception{
 		return (String) insert("prj3000DAO.insertPrj3000ParamMenuInfo", paramMap);
+	}
+
+	
+	public int selectPrj3000DocNextOrd(Map<String, String> paramMap) throws Exception{
+		return (Integer) select("prj3000DAO.selectPrj3000DocNextOrd", paramMap);
+	}
+
+	
+	public String insertPrj3000DocInfo(Map<String, String> paramMap) throws Exception{
+		return (String) insert("prj3000DAO.insertPrj3000DocInfo",paramMap);
+		
+	}
+
+	
+	public int updatePrj3000DocInfo(Map<String, String> paramMap) throws Exception{
+		return (int) update("prj3000DAO.updatePrj3000DocInfo", paramMap);
+	}
+
+	
+	public void deletePrj3000DocInfo(Map infoMap) throws Exception{
+		delete("prj3000DAO.deletePrj3000DocInfo", infoMap);
 	}
 }

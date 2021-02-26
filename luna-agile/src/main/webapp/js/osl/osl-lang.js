@@ -26,7 +26,13 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		modal:{
-			close: "닫기"
+			close: "닫기",
+			insert:{
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveBtnString: "수정 완료"
+			}
 		},
 		portlet:{
 			tools: {
@@ -200,6 +206,13 @@ var OSLCoreLangSetting = function () {
 				myPage:{
 					title:"개인정보 수정",
 					error:"사용자 정보가 없으므로 개인정보 수정 화면으로 이동할 수 없습니다."
+				},
+				auth:{
+					saveMsg: "${1}명의 사용자가 배정되었습니다.",
+					saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+					saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)",
+					allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
+					allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 				}
 			},
 			error:{
@@ -454,6 +467,101 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+		},
 		prj5000:{
 			button:{
 				title:{
@@ -534,6 +642,20 @@ var OSLCoreLangSetting = function () {
 				passwordMessage : "비밀글에 사용할 비밀번호를 입력해주세요.",
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 			},
+		},
+		req3000:{
+			title:{
+				detailTitle:"그룹 요구사항 상세보기"
+			},
+			datatable:{
+				action:{
+					update:"그룹 요구사항 수정하기",
+					delete:"그룹 요구사항 삭제하기",
+					excel:"그룹 요구사항 목록 엑셀",
+					print:"그룹 요구사항 목록 프린트",
+					dblClick:"그룹 요구사항 상세보기"
+				}
+			}
 		},
 		req4100:{
 			button:{
@@ -1611,6 +1733,7 @@ var OSLCoreLangSetting = function () {
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
+				prjGrpNm: "Prject Group Name",
 				reqOrd: "Order",
 				reqProTypeNm: "Process Type",
 				reqNm: "Request Name",
@@ -1633,6 +1756,15 @@ var OSLCoreLangSetting = function () {
 				reqOrd : "Request Number",
 				reqProTypeNm :"Processing Status",
 				reqDtm : "Request Date",
+			},req3000Table:{
+				reqGrpNm:"Group requestion Name",
+				reqGrpLinkCnt:"Linked requestion Counts",
+				reqGrpUsrNm:"Request User Name",
+				email:"Request email",
+				deptNm: "Request Department Name",
+				telno: "Request User Number",
+				regGrpChargerNm:"Request Charger Name",
+				regDtmDay:"Write Date"
 			},
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
@@ -2040,6 +2172,101 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+		},
 		prj5000:{
 			button:{
 				title:{
@@ -2112,6 +2339,32 @@ var OSLCoreLangSetting = function () {
 			formCheck:{
 				passwordMessage : "You must write password for secret request.",
 				passwordMatching : "The entered passwords are different.",
+			},
+		},
+		req3000:{
+			title:{
+				detailTitle:"Group requirement detail"
+			},
+			datatable:{
+				action:{
+					update:"Group requirement update",
+					delete:"Group requirement delete",
+					excel:"Group requirement excel",
+					print:"Group requirement print",
+					dblClick:"Group requirement detail"
+				},
+				button:{
+					title:{
+						select:"Group requirement select",
+						insert:"Group requirement insert",
+						delete:"Group requirement delete",
+						update:"Group requirement update",
+						excel:"Group requirement excel",
+						print:"Group requirement print",
+						upload:"Group requirement upload",
+						download:"Form download"
+					}
+				},
 			},
 		},
 		req4100:{

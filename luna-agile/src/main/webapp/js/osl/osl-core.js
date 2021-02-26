@@ -12,7 +12,7 @@
 		name: "LUNA™OPS 2.0"	
 		,deferred: $.Deferred() 
 		,version: "2.0"		
-		,cVersion: "1.06"	
+		,cVersion: "1.08"	
 		,langCd: "ko"		
 		,selPrjGrpId: ''
 		,selPrjId: ''
@@ -201,6 +201,52 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -356,6 +402,8 @@
 			
 			loadingNodeCnt:500,
 			
+			list:{},
+			
 			setting: function(targetId, config){
 				
 				var treeObj = null;
@@ -399,6 +447,85 @@
 					
 					
 					var actionFunction = {
+						select: function(){
+							if($.osl.isNull(treeObj)){
+            					$.osl.toastr($.osl.lang("tree.error.handler"));
+            					return false;
+            				}
+							
+							
+							var url = config.data.url;
+							var paramData = config.data.param;
+							
+							
+							var ajaxObj = new $.osl.ajaxRequestAction(
+									{"url": url, "async": false}
+									,paramData);
+							
+							
+							ajaxObj.setFnSuccess(function(data){
+								if(data.errorYn == "Y"){
+									$.osl.alert(data.message,{type: 'error'});
+								}else{
+									var treeDataList = data.list;
+									
+									
+									if($.osl.isNull(treeDataList)){
+										$.each(data,function(idx, map){
+											if(typeof map == "object"){
+												try{
+													if(map.length > 0){
+														treeDataList = map;
+														return false;
+													}
+												}catch(e){
+													return true;
+												}
+											}
+										});
+									}
+									
+									
+									if(treeDataList.length > 0){
+										var rtnTreeData = [];
+										var tmpMap = {};
+										
+										var key = config.data.key;
+										var pKey = config.data.pKey;
+										var labelKey = config.data.labelKey;
+										
+										
+										$.each(treeDataList, function(idx, map){
+											map["text"] = map[labelKey];
+											tmpMap[map[key]] = map;
+										});
+										
+										
+										$.each(treeDataList, function(idx, map){
+											
+											if(tmpMap[map[pKey]] && map[key] != map[pKey]){
+												
+												if (!tmpMap[map[pKey]]["children"]){
+													tmpMap[map[pKey]]["children"] = [];
+												}
+												
+												
+												tmpMap[map[pKey]]["children"].push(map);
+											}else{
+												
+												rtnTreeData.push(map);
+											}
+										});
+										
+										treeObj.jstree(true).settings.core.data = rtnTreeData;
+										treeObj.jstree(true).refresh();
+									}
+								}
+							});
+							
+							
+							ajaxObj.send();
+						},
 						allNodeOpen: function(obj){
 							if($.osl.isNull(treeObj)){
             					$.osl.toastr($.osl.lang("tree.error.handler"));
@@ -551,6 +678,9 @@
 				            		}
 				            	}
 				            },
+				            "actionFn":{
+				            	
+				            },
 				            "callback":{
 				            	
 				            	"init": $.noop,
@@ -588,7 +718,15 @@
 							
 							
 							if(!actionFunction.hasOwnProperty(action)){
-								$(map).remove();
+								if(config.hasOwnProperty("actionFn") && config.actionFn.hasOwnProperty(action) && typeof config.actionFn[action] == "function"){
+									
+									$(map).click(function(){
+										config.actionFn[action](treeObj, map);
+									});
+								}else{
+									
+									$(map).remove();
+								}
 							}else{
 								
 								$(map).click(function(){
@@ -599,195 +737,128 @@
 					}
 					
 					
-					
-					var url = config.data.url;
-					var paramData = config.data.param;
+					treeObj = targetObj.jstree(config);
 					
 					
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url": url, "async": false}
-							,paramData);
+					treeObj.bind('select_node.jstree', function(event, data){
+						var selNode = data.instance.get_node(data.selected);
+			            var id = selNode.id;
+			            treeObj.jstree().selNode = {id: id, data:data};
+			            
+			            
+			            config.callback.onclick(treeObj, selNode);
+			        }).bind('deselect_node.jstree', function(event, data){
+			        	treeObj.jstree().selNode = null;
+			        }).bind('search.jstree', function(nodes, str, res){
+			        	
+			        	if(str.nodes.length == 0){
+			        		
+			        		treeObj.jstree(true).hide_all();
+			        		
+			        		
+			        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
+			        	}
+			        	
+			        }).bind('loaded.jstree', function(event, data) {
+			        	
+			            config.callback.init(treeObj, data);
+			        });
 					
 					
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-							$.osl.alert(data.message,{type: 'error'});
-						}else{
-							var treeDataList = data.list;
-							
-							
-							if($.osl.isNull(treeDataList)){
-								$.each(data,function(idx, map){
-									if(typeof map == "object"){
-										try{
-											if(map.length > 0){
-												treeDataList = map;
-												return false;
-											}
-										}catch(e){
-											return true;
-										}
-									}
-								});
-							}
-							
-							
-							if(treeDataList.length > 0){
-								var rtnTreeData = [];
-								var tmpMap = {};
-								
-								var key = config.data.key;
-								var pKey = config.data.pKey;
-								var labelKey = config.data.labelKey;
-								
-								
-								$.each(treeDataList, function(idx, map){
-									map["text"] = map[labelKey];
-									tmpMap[map[key]] = map;
-								});
-								
-								
-								$.each(treeDataList, function(idx, map){
-									
-									if(tmpMap[map[pKey]] && map[key] != map[pKey]){
-										
-										if (!tmpMap[map[pKey]]["children"]){
-											tmpMap[map[pKey]]["children"] = [];
-										}
-										
-										
-										tmpMap[map[pKey]]["children"].push(map);
-									}else{
-										
-										rtnTreeData.push(map);
-									}
-								});
-								
-								config.core.data = rtnTreeData;
-							}
-							
-							
-							treeObj = targetObj.jstree(config);
-							
-							
-							treeObj.bind('select_node.jstree', function(event, data){
-								var selNode = data.instance.get_node(data.selected);
-					            var id = selNode.id;
-					            treeObj.jstree().selNode = {id: id, data:data};
-					            
-					            
-					            config.callback.onclick(treeObj, selNode);
-					        }).bind('deselect_node.jstree', function(event, data){
-					        	treeObj.jstree().selNode = null;
-					        }).bind('search.jstree', function(nodes, str, res){
-					        	
-					        	if(str.nodes.length == 0){
-					        		
-					        		treeObj.jstree(true).hide_all();
-					        		
-					        		
-					        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
-					        	}
-					        	
-					        }).bind('loaded.jstree', function(event, data) {
-					        	
-					            config.callback.init(treeObj, data);
-					        });
-							
-							
-							var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
-							
-							
-							if(searchTarget.length > 0){
-								
-								
-								searchTarget.empty();
-								
-								
-								var btnStyle = searchTarget.data("search-style");
-								
-								var btnStyleStr = "btn-brand";
-								
-								if(!$.osl.isNull(btnStyle)){
-									btnStyleStr = "btn-"+btnStyle;
-								}
-								
-								
-								var searchTargetHtml = 
-									'<div class="input-group">'
-										+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
-											+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
-											+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
-												+'<span><i class="la la-search"></i></span>'
-											+'</span>'
-										+'</div>'
-										+'<div class="input-group-append">'
-											+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
-												+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
-											'</button>'
-										+'</div>'
-									+'</div>';
-								
-								searchTarget.html(searchTargetHtml);
-								
-								
-								var fnTreeSearch = function(searchValue){
-									treeObj.jstree(true).show_all();
-									
-									
-									if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
-										$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
-									}
-									
-									treeObj.jstree("search", searchValue);
-								};
-								
-								
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
-									if (e.which === 13){
-										
-										var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
-										
-										thisObj.children("i").removeClass("la la-search");
-										
-										
-										thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-										
-										
-										fnTreeSearch($(this).val());
-										
-										setTimeout(function(){
-											thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-											
-											
-											thisObj.children("i").addClass("la la-search");
-										},300);
-									}
-								});
-								
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
-
-									var thisObj = $(this).children("span");
-									
-									
-									thisObj.children("span").hide();
-									thisObj.addClass("spinner-border spinner-border-sm");
-
-									fnTreeSearch($("#treeSearch_"+targetId).val());
-									
-									setTimeout(function(){
-										thisObj.removeClass("spinner-border spinner-border-sm");
-										thisObj.children("span").show();
-									},300);
-								});
-							}
+					var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
+					
+					
+					if(searchTarget.length > 0){
+						
+						
+						searchTarget.empty();
+						
+						
+						var btnStyle = searchTarget.data("search-style");
+						
+						var btnStyleStr = "btn-brand";
+						
+						if(!$.osl.isNull(btnStyle)){
+							btnStyleStr = "btn-"+btnStyle;
 						}
-					});
+						
+						
+						var searchTargetHtml = 
+							'<div class="input-group">'
+								+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
+									+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
+									+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
+										+'<span><i class="la la-search"></i></span>'
+									+'</span>'
+								+'</div>'
+								+'<div class="input-group-append">'
+									+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
+										+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
+									'</button>'
+								+'</div>'
+							+'</div>';
+						
+						searchTarget.html(searchTargetHtml);
+						
+						
+						var fnTreeSearch = function(searchValue){
+							treeObj.jstree(true).show_all();
+							
+							
+							if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
+								$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
+							}
+							
+							treeObj.jstree("search", searchValue);
+						};
+						
+						
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
+							if (e.which === 13){
+								
+								var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
+								
+								thisObj.children("i").removeClass("la la-search");
+								
+								
+								thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+								
+								
+								fnTreeSearch($(this).val());
+								
+								setTimeout(function(){
+									thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+									
+									
+									thisObj.children("i").addClass("la la-search");
+								},300);
+							}
+						});
+						
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
+
+							var thisObj = $(this).children("span");
+							
+							
+							thisObj.children("span").hide();
+							thisObj.addClass("spinner-border spinner-border-sm");
+
+							fnTreeSearch($("#treeSearch_"+targetId).val());
+							
+							setTimeout(function(){
+								thisObj.removeClass("spinner-border spinner-border-sm");
+								thisObj.children("span").show();
+							},300);
+						});
+					}
 					
 					
-					ajaxObj.send();
+					actionFunction["select"]();
+					
+					
+					$.osl.tree.list[targetId] = treeObj;
 				}
 				return treeObj;
 			}
@@ -1579,6 +1650,159 @@
 	        				
 	        			});
 	        		}
+
+	        		
+        			$.osl.datatable.setting("chargeReqTable",{
+        				data: {
+        					source: {
+        						read: {
+        							url: "/req/req4000/req4100/selectReq4100ChargeReqListAjax.do"
+        						}
+        					}
+        				},
+        				columns: [
+        					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+        					{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
+        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150},
+        					{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false, search: true},
+        					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+        					{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
+        						template: function(row){
+        							var resultStr = $.osl.escapeHtml(row.reqNm);
+        							
+        							if(row.reqPw == "Y"){
+        								resultStr += "<i class='la la-unlock kt-icon-xl kt-margin-l-5 kt-margin-r-5'></i>";
+        							}
+        							return resultStr;
+        						}
+        					},
+        					{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
+        					{field: 'regDtm', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"date",
+        						template: function (row) {
+        							var paramDatetime = new Date(row.regDtm);
+        			                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+        			                return agoTimeStr.agoString;
+        						}
+        					},
+        					{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
+        						template: function (row) {
+        							if($.osl.isNull(row.reqUsrNm)){
+        								row.reqUsrNm = "";
+        							}
+        							var usrData = {
+        								html: row.reqUsrNm,
+        								imgSize: "sm",
+        								class:{
+        									cardBtn: "osl-width__fit-content"
+        								}
+        							};
+        							return $.osl.user.usrImgSet(row.reqUsrImgId, usrData);
+        						},
+        						onclick: function(rowData){
+        							$.osl.user.usrInfoPopup(rowData.reqUsrId);
+        						}
+        					},
+        					{field: 'reqUsrEmail', title:'요청자e-mail', textAlign: 'left', width: 180, search: true},
+        					{field: 'reqUsrDeptNm', title:'요청자 조직', textAlign: 'center', width: 300, sortable: false},
+        					{field: 'reqUsrNum', title: '요청자 연락처', textAlign: 'center', width: 100, search: true},
+        					{field: 'reqKey', title: '요구사항 key', textAlign: 'center', width: 300, sortable: false, search: true}
+        				],
+        				searchColumns:[
+        					{field: 'prjGrpNm', title: $.osl.lang("req4100.field.prjGrpNm"), searchOrd: 0}
+        				],
+        				actionBtn:{
+        					"update": false,
+        					"delete" : false,
+        				},
+        				toolbar:{
+        					items:{
+        						pagination:{
+        							pageSizeSelect : [4, 10, 20, 30, 50, 100],
+        							pages:{
+        								desktop: {
+        									layout: 'compact',
+        								},
+            							tablet: {
+            								layout: 'compact'
+            							},
+        							}
+        						}
+        					}
+        				},
+        				callback:{
+        					initComplete: function(evt,config){
+        						$("#chargeReqTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+        						$("#chargeReqCardTable").show();
+        					},
+        					ajaxDone: function(evt, list){
+        						var prjGrpStr = '';
+        						$.each(list, function(idx, map){
+        							var prjGrpAuthList = '';
+        							var prjAuthTargetList = [];
+        							var fvrUse = '';
+        							
+        							var cardUi = 'kt-portlet--solid-success';
+        							
+        							
+        							var rnStr = "No. "+map.rn;
+        							var rnClass = "badge-primary";
+        							var usrData = {
+    									html: map.reqUsrNm,
+    									imgSize: "sm",
+    									class:{
+    										cardBtn: "osl-width__fit-content",
+    										cardName: "osl-charge-requirements__color--white",
+    									}
+    								};
+        							
+        							if(map.fvrUseCd == '01'){
+    									fvrUse = 'osl-favorites--active';
+    								}        							
+        							
+        							prjGrpStr +=
+        								 '	<div class="kt-portlet osl-charge-requirements '+cardUi+'" data-prj-grp-id="'+map.prjGrpId+'" data-prj-id="'+map.prjId+'" data-req-id="'+map.reqId+'">'
+										+'		<div class="kt-portlet__head ">'
+										+'			<div class="kt-portlet__head-label">'
+										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title" data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
+										+'			</div>'
+										+'			<div class="kt-portlet__head-toolbar">'
+										+'				<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this);$.osl.datatable.list.chargeReqTable.targetDt.reload();"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__body osl-padding-b-7">'
+										+'			<div class="kt-portlet__content osl-charge-requirements__body"  data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="'+$.osl.escapeHtml(map.reqDesc)+'">'
+										+'				'+$.osl.escapeHtml(map.reqDesc)+''
+										+'			</div>'
+										+'			<div class="kt-align-right osl-margin-t-1rm">'
+										+'				<i class="fa fa-key"></i>'
+						        		+'				<i class="fa fa-file-signature"></i>'
+						        		+'				<i class="far fa-stop-circle"></i>'
+						        		+'				<i class="fa fa-sign-out-alt"></i>'
+						        		+'				<i class="fa fa-code-branch"></i>'
+						        		+'				<i class="fa fa-code"></i>'
+						        		+'				<i class="fa fa-puzzle-piece"></i>'
+						        		+'				<i class="fa fa-user-shield"></i>'
+										+'			</div>'
+										+'		</div>'
+										+'		<div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right" style="display: flex;justify-content: space-between;">'
+										+'			<div class="osl-charge-requirements__footer-label" style="display: flex;align-items: center;-webkit-box-align: center;" onclick="$.osl.user.usrInfoPopup(\''+map.reqUsrId+'\');">'
+										+'				'+$.osl.user.usrImgSet(map.reqUsrImgId, usrData)+''
+										+'			</div>'
+										+'			<div class="osl-charge-requirements__footer-toolbar" style="display: flex;align-content: flex-end;">'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">업무화면</a>'
+										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">상세보기</a>'
+										+'			</div>'
+										+'		</div>'
+										+'	</div>';
+        						});
+        						
+        						
+        						
+        						$("#chargeReqCardTable").html(prjGrpStr);
+        						KTApp.initTooltips();
+        					}
+        				}
+        			});
         			
 	        		$.osl.prjGrpAuthList = prjOrdList;
 	        		$.osl.showLoadingBar(false,{target: "#kt_header"});
@@ -1901,6 +2125,12 @@
 						
 						if(searchTarget.length > 0){
 							
+							var btnTitle = "";
+							if(!searchTarget.hasClass("osl-datatable-search__btn-title--none")){
+								btnTitle = '<span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>';
+							}
+							
+							
 							var btnStyle = searchTarget.data("search-style");
 							
 							var btnStyleStr = "btn-brand";
@@ -1931,7 +2161,7 @@
 										+'</div>'
 										+'<div class="input-group-append">'
 											+'<button class="btn '+btnStyleStr+' osl-datatable-search__button" type="button" data-datatable-id="'+elemId+'">'
-												+'<i class="fa fa-search"></i><span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>'
+												+'<i class="fa fa-search"></i>'+btnTitle
 											+'</button>'
 										+'</div>'
 									
@@ -2256,33 +2486,6 @@
 							beforeTemplate: function (row, data, index){
 								
 							},
-							afterTemplate: function(row, data, index){
-								
-								if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
-									
-									if(config.rows.clickCheckbox == true){
-										
-										row.click(function(){
-											var targetRow = $(this).closest("tr");
-											var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
-											
-											if(targetElem.is(":checked") == true){
-												targetElem.prop("checked", false);
-												datatables.targetDt.setInactive(targetElem);
-												
-												targetRow.removeClass("osl-datatable__row--selected");
-												targetRow.addClass("kt-datatable__row--even");
-											}else{
-												targetElem.prop("checked", true);
-												datatables.targetDt.setActive(targetElem);
-											}
-											
-										});
-									}
-								}
-								
-								btnEvt["info"](row);
-							},
 							clickCheckbox: false
 						},
 						sortable: true,
@@ -2371,6 +2574,39 @@
 					
 					targetConfig = $.extend(true, targetConfig, config, config);
 
+					
+					targetConfig.rows["afterTemplate"] = function(row, data, index){
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+							
+							if(config.rows.clickCheckbox == true){
+								
+								row.click(function(){
+									var targetRow = $(this).closest("tr");
+									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+									
+									if(targetElem.is(":checked") == true){
+										targetElem.prop("checked", false);
+										datatables.targetDt.setInactive(targetElem);
+										
+										targetRow.removeClass("osl-datatable__row--selected");
+										targetRow.addClass("kt-datatable__row--even");
+									}else{
+										targetElem.prop("checked", true);
+										datatables.targetDt.setActive(targetElem);
+									}
+									
+								});
+							}
+						}
+						
+						
+						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("afterTemplate")){
+							config.rows.afterTemplate(row, data, index);
+						}
+						btnEvt["info"](row);
+					};
+					
 					
 					var actionWidth = 0;
 					
@@ -2479,6 +2715,12 @@
 						$.each(targetConfig.searchColumns, function(idx, map){
 							
 							if(searchAddList.indexOf(map.field) == -1){
+								
+								var fieldLangTitle = $.osl.lang("datatable."+targetId+"."+map.field);
+								if(!$.osl.isNull(fieldLangTitle)){
+									map.title = fieldLangTitle;
+								}
+								
 								
 								if(map.hasOwnProperty("searchOrd")){
 									var searchOrd = map.searchOrd;
@@ -3462,6 +3704,23 @@
 		var type = "success";
 		
 		var title = "";
+		var targetConfig = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "2000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+		};
 		
 		
 		if(!$.osl.isNull(agument) && typeof agument == "string"){
@@ -3474,6 +3733,9 @@
 			if(agument.hasOwnProperty("title")){
 				title = agument.title;
 			}
+			
+			
+			targetConfig = $.extend(true, targetConfig, agument, agument);
 		}
 		
 		
@@ -3481,6 +3743,7 @@
 			type = agument.type;
 		}
 		
+		toastr.options = targetConfig;
 		switch(type){
 			case "info":
 				toastr.info(msg, title);
@@ -3855,7 +4118,7 @@
 		
 		
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"/cmm/cmm9000/cmm9000/saveCmm9000FavoriteInfo.do", "loadingShow":true}
+				{"url":"/stm/stm2000/stm2000/saveStm2002FavoriteInfo.do", "loadingShow":true}
 				,paramData);
 		
 		
