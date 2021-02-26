@@ -166,7 +166,7 @@ var OSLReq3001Popup = function () {
     	
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req3001FileUpload",{
-    		/*아래 세팅은 현재 화면 세팅을 위해 req1000에서 가지고 온 소스 입니다*/
+    		
     		url: '/req/req3000/req3000/insertReq3001ReqAtchFileInfo.do',
     		maxFileSize: "${requestScope.fileSumMaxSize}",
     		meta: {"atchFileId": atchFileId, "fileSn": 0},
@@ -327,8 +327,6 @@ var OSLReq3001Popup = function () {
     	//데이터 테이블 셋팅
     	datatableSetting();
     	
-    	
-    	
 	}
 	//연결, 미연결 요구사항 목록
 	var datatableSetting = function(){
@@ -483,6 +481,22 @@ var OSLReq3001Popup = function () {
 					}
 				},
 				pageSize:5,
+			},
+			toolbar:{
+				items:{
+					pagination:{
+						pageSizeSelect : [4, 10, 20, 30, 50, 100],
+						pages:{
+							desktop: {
+								layout: 'default',
+								pagesNumber: 5
+							},
+							tablet: {
+								layout: 'compact'
+							}
+						}
+					}
+				}
 			},
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
@@ -693,6 +707,7 @@ var OSLReq3001Popup = function () {
 		    	//파일 목록 세팅
 		    	$.osl.file.fileListSetting(data.fileList, fileUploadObj);
 		    	
+		    	
 		    	//연결된 요구사항 테이블에 저장
 		    	if(data.reqGrpConList.length > 0){
 		    		
@@ -713,11 +728,17 @@ var OSLReq3001Popup = function () {
 						//중복체크 추가
 						reqConnectedList.push(map.usrId);
 	   				});
+	   				
+	   				//중복제거
+					var dataSet = new Set(datatable.dataSet);
+					var originalDataSet = new Set(datatable.originalDataSet);
+					datatable.dataSet = Array.from(dataSet);
+					datatable.originalDataSet = Array.from(originalDataSet);
 					
 					//데이터 추가
 					datatable.insertData();
 					//데이터테이블 재 조회
-					//datatable.reload();
+					datatable.reload();
 					$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 					
    				}
