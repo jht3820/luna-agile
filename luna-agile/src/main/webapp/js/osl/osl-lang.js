@@ -1648,6 +1648,7 @@ var OSLCoreLangSetting = function () {
 				reqProTypeNm :"Processing Status",
 				reqDtm : "Request Date",
 			},
+		
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
 				prjNm: "Project Name",
@@ -2127,6 +2128,9 @@ var OSLCoreLangSetting = function () {
 				passwordMessage : "You must write password for secret request.",
 				passwordMatching : "The entered passwords are different.",
 			},
+		},
+		req3001:{
+			title:"Request new Group requirements"
 		},
 		req4100:{
 			button:{
@@ -2676,7 +2680,7 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{
+			field:{ 
 				tagNm:"Tag",
 				
 				badContent: "Content",
