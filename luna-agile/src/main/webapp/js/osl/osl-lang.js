@@ -477,11 +477,14 @@ var OSLCoreLangSetting = function () {
 				signUseCd : "결재 사용 유무",
 				docDesc : "비고"
 			},
-			mesaage : {
+			message : {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
 					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
 					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
 				}
 			},
 			modal : {
@@ -513,6 +516,27 @@ var OSLCoreLangSetting = function () {
 				confirm : {
 					insert : "산출물 양식 정보를 추가 하시겠습니까?",
 					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
 				}
 			}
 		},
@@ -2158,11 +2182,14 @@ var OSLCoreLangSetting = function () {
 				signUseCd : "결재 사용 유무",
 				docDesc : "비고"
 			},
-			mesaage : {
+			message : {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
 					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
 					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
 				}
 			},
 			modal : {
@@ -2194,6 +2221,27 @@ var OSLCoreLangSetting = function () {
 				confirm : {
 					insert : "산출물 양식 정보를 추가 하시겠습니까?",
 					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
 				}
 			}
 		},
