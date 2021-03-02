@@ -1,7 +1,8 @@
+
 var OSLCoreLangSetting = function () {
-	//언어 세팅 데이터
+	
 	var lang = {};
-	//한국어
+	
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -25,7 +26,13 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		modal:{
-			close: "닫기"
+			close: "닫기",
+			insert:{
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveBtnString: "수정 완료"
+			}
 		},
 		portlet:{
 			tools: {
@@ -168,7 +175,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -199,6 +206,13 @@ var OSLCoreLangSetting = function () {
 				myPage:{
 					title:"개인정보 수정",
 					error:"사용자 정보가 없으므로 개인정보 수정 화면으로 이동할 수 없습니다."
+				},
+				auth:{
+					saveMsg: "${1}명의 사용자가 배정되었습니다.",
+					saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+					saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)",
+					allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
+					allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 				}
 			},
 			error:{
@@ -228,7 +242,7 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		/* 페이지 언어 */
+		
 		cmm16000:{
 			label:{
 				title : "MESSAGE",
@@ -248,7 +262,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "답장",
 				checkBtn : "읽음",
 			},
-			/*검색 바 메뉴 추가한 경우 */
+			
 			field: {
 				sendUsrId : "보낸 사람 ID",
 				sendUsrEmail : "보낸 사람 e-mail",
@@ -430,6 +444,17 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		prj1101:{
+			complete: "완료",
+			insert:{
+				title: "신규 프로세스 생성",
+				saveString: "신규 프로세스를 생성하시겠습니까?",
+			},
+			update:{
+				title: "프로세스 수정",
+				saveString: "프로세스를 수정하시겠습니까?",
+			}
+		},
 		prj1201:{
 			title: "프로젝트 설정 수정",
 			complete: "완료",
@@ -452,6 +477,101 @@ var OSLCoreLangSetting = function () {
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
+		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
 		},
 		prj5000:{
 			button:{
@@ -534,12 +654,26 @@ var OSLCoreLangSetting = function () {
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 			},
 		},
+		req3000:{
+			title:{
+				detailTitle:"그룹 요구사항 상세보기"
+			},
+			datatable:{
+				action:{
+					update:"그룹 요구사항 수정하기",
+					delete:"그룹 요구사항 삭제하기",
+					excel:"그룹 요구사항 목록 엑셀",
+					print:"그룹 요구사항 목록 프린트",
+					dblClick:"그룹 요구사항 상세보기"
+				}
+			}
+		},
 		req4100:{
 			button:{
 				copyBtn : "복사"
 			},
 			field:{
-				/*외부 주입 search bar 인 경우 사용*/
+				
 				prjGrpNm: "프로젝트 그룹명",
 			},
 			actionBtn:{
@@ -645,7 +779,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
+				
 				usrNm : "사용자명",
 			},
 			actionBtn : {
@@ -855,7 +989,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
-			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
+			
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -884,6 +1018,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "게시판 속성",
 				detailTitle : "게시글 관리",
 				summeryTitle : "통계보기",
+				chargerTitle : "담당자 목록 확인"
 			},
 			type:{
 				normal:"[일반]",
@@ -1254,7 +1389,46 @@ var OSLCoreLangSetting = function () {
 				notConsoleLog: "콘솔 로그가 없습니다."
 			}
 		},
+		stm9200:{
+			common:{
+				assign : "배정",
+				notAssign : "제외"
+			},
+			title:{
+				allPrjList : "전체 프로젝트 목록",
+				assignJobList : "JOB 배정 목록",
+				notAssignJobList : "JOB 미배정 목록"
+			},
+			button:{
+				dplAuthSetting : "배포 실행 권한 설정"
+			},
+			toolTip:{
+				searchAssignJob:"JOB 배정 목록 조회",
+				searchNotAssignJob:"JOB 미배정 목록 조회",
+				jobAssign :"JOB 배정",
+				jobDelete : "JOB 배정 제외",
+			},
+			message:{
+				alert:{
+					treeNodeSelect : "왼쪽 트리에서 프로젝트를 선택해주세요.",
+					assignJobSelect : "프로젝트에 배정된 JOB을 선택해주세요.",
+					selectOneJob : "프로젝트에 배정된 JOB을 1개만 선택하세요."
+				},
+				toastr:{
+					projectSelect : "프로젝트 그룹이 아닌 프로젝트를 선택해주세요."
+				},
+				confirm:{
+					selJobAssign : "선택한 JOB을 배정하시겠습니까?",
+					selJobNotAssign : "선택한 JOB을 배정 제외하시겠습니까?",
+				}
+			}
+		},
 		stm9300:{
+			button:{
+				toolTil:{
+					prjAssignJobSearch:"프로젝트 배정 JOB 조회"
+				}
+			},
 			search:{
 				jenkinsDesc : "Jenkins 설명",
 				jobDesc : "Job 설명"
@@ -1262,6 +1436,11 @@ var OSLCoreLangSetting = function () {
 			actionBtn:{
 				jenkinsDetail:"Jenkins 상세보기",
 				jobDetail:"Job 상세보기"
+			},
+			modal:{
+				title:{
+					detail :"상세보기"
+				}
 			}
 		},
 		bad1000:{
@@ -1281,9 +1460,9 @@ var OSLCoreLangSetting = function () {
 				noticeBadge: "공지",
 			},
 			field:{
-				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+				
 				tagNm:"태그",
-				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
+				
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
@@ -1424,7 +1603,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	//영어
+	
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1532,7 +1711,7 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			/* 추가된 datatable별로 언어 지정 */
+			
 			cmm16000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
@@ -1565,6 +1744,7 @@ var OSLCoreLangSetting = function () {
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
+				prjGrpNm: "Prject Group Name",
 				reqOrd: "Order",
 				reqProTypeNm: "Process Type",
 				reqNm: "Request Name",
@@ -1587,6 +1767,15 @@ var OSLCoreLangSetting = function () {
 				reqOrd : "Request Number",
 				reqProTypeNm :"Processing Status",
 				reqDtm : "Request Date",
+			},req3000Table:{
+				reqGrpNm:"Group requestion Name",
+				reqGrpLinkCnt:"Linked requestion Counts",
+				reqGrpUsrNm:"Request User Name",
+				email:"Request email",
+				deptNm: "Request Department Name",
+				telno: "Request User Number",
+				regGrpChargerNm:"Request Charger Name",
+				regDtmDay:"Write Date"
 			},
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
@@ -1685,6 +1874,23 @@ var OSLCoreLangSetting = function () {
 				bldDurationTm: "Duration Time",
 				regUsrNm: "Distributor"
 			},
+			stm9200AssignJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
+			stm9200NotAssignJobTable:{
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
 			stm9300PrjJobTable:{
 				prjNm: "Project Name",
 				jenNm: "Jenkins Name",
@@ -1750,7 +1956,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  // The week that contains Jan 4th is the first week of the year.
+		            doy : 4  
 		        }
 		    },
 		    agoTime:{
@@ -1805,7 +2011,7 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		/* 페이지 언어 */
+		
 		cmm16000:{
 			label:{
 				title : "MESSAGE",
@@ -1825,7 +2031,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "Reply",
 				checkBtn : "Read Check"
 			},
-			/*검색 바 메뉴 추가한 경우 */
+			
 			field: {
 				sendUsrId : "From User Id",
 				sendUsrEmail : "From User E-mail",
@@ -1977,6 +2183,101 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+		},
 		prj5000:{
 			button:{
 				title:{
@@ -2051,12 +2352,38 @@ var OSLCoreLangSetting = function () {
 				passwordMatching : "The entered passwords are different.",
 			},
 		},
+		req3000:{
+			title:{
+				detailTitle:"Group requirement detail"
+			},
+			datatable:{
+				action:{
+					update:"Group requirement update",
+					delete:"Group requirement delete",
+					excel:"Group requirement excel",
+					print:"Group requirement print",
+					dblClick:"Group requirement detail"
+				},
+				button:{
+					title:{
+						select:"Group requirement select",
+						insert:"Group requirement insert",
+						delete:"Group requirement delete",
+						update:"Group requirement update",
+						excel:"Group requirement excel",
+						print:"Group requirement print",
+						upload:"Group requirement upload",
+						download:"Form download"
+					}
+				},
+			},
+		},
 		req4100:{
 			button:{
 				copyBtn : "Copy"
 			},
 			field:{
-				/*외부 주입 search bar에서 사용*/
+				
 				prjGrpNm: "Project Group Name",
 			},
 			actionBtn:{
@@ -2162,7 +2489,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
+				
 				usrNm : "User Name",
 			},
 			actionBtn : {
@@ -2314,6 +2641,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "Board Setting",
 				detailTitle : "Board Management",
 				summeryTitle : "Board Summery",
+				chargerTitle : "Board Manager List"
 			},
 			type:{
 				normal:"[Normal]",
@@ -2598,9 +2926,9 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
+			field:{ 
 				tagNm:"Tag",
-				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
+				
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
@@ -2741,12 +3069,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        // public functions
+        
         init: function() {
-        	//언어팩 목록
+        	
     		var langList = ["ko","en"];
     		
-    		//언어 데이터
+    		
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2755,7 +3083,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		//datepicker 언어 처리
+    		
     		$.osl.date.init();
         }
     };

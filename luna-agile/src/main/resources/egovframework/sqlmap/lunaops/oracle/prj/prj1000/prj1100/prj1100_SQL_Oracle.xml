@@ -2,28 +2,516 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="prj1100DAO">
 	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias 	alias="Prj1100VO"	type="kr.opensoftlab.lunaops.prj.prj1000.prj1100.vo.Prj1100VO"/>
-	
-	<resultMap id="flowResultMap" class="HashMap">
-		<result property="prjId" column="PRJ_ID" />
-		<result property="prjNm" column="PRJ_NM" />
-		<result property="processId" column="PROCESS_ID" />
-		<result property="processNm" column="PROCESS_NM" />
-		<result property="processDesc" column="PROCESS_DESC" nullValue=""/>
-		<result property="processConfirmCd" column="PROCESS_CONFIRM_CD" />
-		<result property="processMiddleDoneCd" column="PROCESS_MIDDLE_DONE_CD" />
-		<result property="processJsonData" column="PROCESS_JSON_DATA" jdbcType="CLOB" javaType="java.lang.String" />		
-		<result property="useCd" column="USE_CD" />
-		<result property="processOrd" column="PROCESS_ORD" />
-		<result property="regDtm" column="REG_DTM" />
-		<result property="regUsrId" column="REG_USR_ID" />
-		<result property="regUsrIp" column="REG_USR_IP" />
-		<result property="modifyDtm" column="MODIFY_DTM" />
-		<result property="modifyUsrId" column="MODIFY_USR_ID" />
-		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
-	</resultMap>
-	
 
+	
+	<sql id="selectPrj1100List">
+		<![CDATA[
+			SELECT
+				ROWNUM RN,
+				SUBT1.LIC_GRP_ID,
+				SUBT1.PRJ_GRP_ID,
+				SUBT1.PRJ_ID,
+				SUBT1.PRJ_NM,
+				SUBT1.PROCESS_ID,
+				SUBT1.PROCESS_NM,
+				SUBT1.PROCESS_DESC,
+				SUBT1.PROCESS_TRANSFER_CD,
+				SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'CMM00005', SUBT1.PROCESS_TRANSFER_CD, '1') AS PROCESS_TRANSFER_NM,
+				SUBT1.PROCESS_DISABLED_CD,
+				SF_STM4001_COM_CD_INFO(SUBT1.LIC_GRP_ID, 'FLW00006', SUBT1.PROCESS_DISABLED_CD, '1') AS PROCESS_DISABLED_NM,
+				SUBT1.USE_CD,
+				SUBT1.PROCESS_ORD,
+				SUBT1.REQ_CNT,
+				SUBT1.REG_DTM,
+				SUBT1.REG_USR_ID,
+				SUBT1.REG_USR_IP,
+				SUBT1.MODIFY_DTM,
+				SUBT1.MODIFY_USR_ID,
+				SUBT1.MODIFY_USR_IP
+			FROM
+			(
+				SELECT
+					B.LIC_GRP_ID,
+					B.PRJ_GRP_ID,
+					A.PRJ_ID,
+					B.PRJ_NM,
+					A.PROCESS_ID,
+					A.PROCESS_NM,
+					A.PROCESS_DESC,
+					A.PROCESS_TRANSFER_CD,
+					A.PROCESS_DISABLED_CD,
+					A.USE_CD,
+					A.PROCESS_ORD,
+					(SELECT COUNT(*) FROM REQ4100 Z WHERE Z.PRJ_ID = A.PRJ_ID AND Z.PROCESS_ID = A.PROCESS_ID) AS REQ_CNT,
+					TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI') AS REG_DTM,
+					A.REG_USR_ID,
+					A.REG_USR_IP,
+					TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI') AS MODIFY_DTM,
+					A.MODIFY_USR_ID,
+					A.MODIFY_USR_IP
+				FROM PRJ1100 A
+				INNER JOIN PRJ1000 B ON (A.PRJ_ID = B.PRJ_ID AND B.LIC_GRP_ID = #licGrpId# AND B.USE_CD = '01' AND B.DEL_CD = '02')
+				WHERE 1=1
+				]]>
+				<isNotEmpty property="prjId">
+					AND A.PRJ_ID = #prjId#
+				</isNotEmpty>
+				<isNotEmpty property="useCd">
+					AND A.USE_CD = #useCd#
+				</isNotEmpty>
+				<isNotEmpty property="processTransferCd">
+					AND A.PROCESS_TRANSFER_CD = #processTransferCd#
+				</isNotEmpty>
+				<isNotEmpty property="processDisabledCd">
+					AND A.PROCESS_DISABLED_CD = #processDisabledCd#
+				</isNotEmpty>
+				<isNotEmpty property="paramSortFieldId">
+					<isNotEmpty property="sortDirection">
+						ORDER BY $paramSortFieldId$
+						<isEqual property="sortDirection" compareValue="desc">
+							DESC
+						</isEqual>
+						<isEqual property="sortDirection" compareValue="asc">
+							ASC
+						</isEqual>
+					</isNotEmpty>
+				</isNotEmpty>
+				<isEmpty property="paramSortFieldId">
+					ORDER BY A.PROCESS_ORD, A.PROCESS_NM, A.REG_DTM DESC
+				</isEmpty> 
+				<![CDATA[
+			) SUBT1
+			WHERE 1=1
+		]]>
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="processNm">
+						AND	SUBT1.PROCESS_NM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="processId">
+						AND	SUBT1.PROCESS_ID = #searchTargetData#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectPrj1100ProcessAuthUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT2.AUTH_TYPE_CD,
+			SUBT2.AUTH_TYPE_NM,
+			SUBT2.LIC_GRP_ID,
+			SUBT2.PRJ_ID,
+			SUBT2.PROCESS_ID
+			SUBT2.USR_ID,
+			SUBT2.USR_NM,
+			SUBT2.EMAIL,
+			SUBT2.TELNO,
+			SUBT2.USR_IMG_ID,
+			SUBT2.DEPT_ID,
+			SUBT2.DEPT_NAME,
+			SUBT2.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT2.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT SUBT1.*,
+					SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00018', SUBT1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM
+			FROM
+			(
+				SELECT
+					'01' AS AUTH_TYPE_CD,
+					B.LIC_GRP_ID,
+					A.PRJ_ID,
+					A.PROCESS_ID,
+					A.PROCESS_AUTH_TYPE_CD,
+					A.PROCESS_AUTH_TARGET_ID AS USR_ID,
+					B.USR_NM,
+					B.EMAIL,
+					B.TELNO,
+					B.USR_IMG_ID,
+					B.DEPT_ID,
+					SF_STM6000_DEPT_NM(#licGrpId#, B.DEPT_ID, '2') AS DEPT_NAME,
+					B.USR_POSITION_CD,
+					B.USR_DUTY_CD
+				FROM PRJ1106 A
+				INNER JOIN STM3000 B ON ( B.LIC_GRP_ID = #licGrpId# AND B.USR_ID = A.PROCESS_AUTH_TARGET_ID )
+				WHERE 1=1
+					AND A.PRJ_ID = #prjId#
+					AND	A.PROCESS_ID = #processId#
+					AND B.DEL_CD = '02'
+					AND B.USE_CD = '01'
+					AND B.BLOCK = '01'
+					AND A.PROCESS_AUTH_TYPE_CD = '01'
+				UNION
+				SELECT
+					'02' AS AUTH_TYPE_CD,
+					B.LIC_GRP_ID,
+					A.PRJ_ID,
+					A.PROCESS_ID,
+					A.PROCESS_AUTH_TYPE_CD,
+					A.PROCESS_AUTH_TARGET_ID AS USR_ID,
+					B.AUTH_GRP_NM AS USR_NM,
+					'' AS EMAIL,
+					'' AS TELNO,
+					'' AS USR_IMG_ID,
+					'' AS DEPT_ID,
+					'' AS DEPT_NM,
+					'' AS USR_POSITION_CD,
+					'' AS USR_DUTY_CD
+				FROM PRJ1106 A
+				INNER JOIN PRJ2000 B ON (  B.LIC_GRP_ID  = #licGrpId# AND A.PRJ_ID = B.PRJ_ID AND B.AUTH_GRP_ID = A.PROCESS_AUTH_TARGET_ID AND B.USE_CD = '01')
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND	A.PROCESS_ID = #processId#
+				AND A.PROCESS_AUTH_TYPE_CD = '02'
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="prjAuthTypeCd">
+				AND		SUBT1.PROCESS_AUTH_TYPE_CD = #prjAuthTypeCd#
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUBT1.AUTH_TYPE_CD, '02', 1, '01', 2), SUBT1.USR_NM, SUBT1.USR_POSITION_CD DESC, SUBT1.USR_DUTY_CD DESC
+			</isEmpty>
+		) SUBT2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT2.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT2.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectPrj1100ProcessAuthNoneUsrList">
+		SELECT
+			ROWNUM RN,
+			SUBT2.AUTH_TYPE_CD,
+			SUBT2.AUTH_TYPE_NM,
+			SUBT2.LIC_GRP_ID,
+			SUBT2.USR_ID,
+			SUBT2.USR_NM,
+			SUBT2.EMAIL,
+			SUBT2.TELNO,
+			SUBT2.USR_IMG_ID,
+			SUBT2.DEPT_ID,
+			SUBT2.DEPT_NAME,
+			SUBT2.USR_POSITION_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUBT2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM,
+			SUBT2.USR_DUTY_CD,
+			NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUBT2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(
+			SELECT SUBT1.*,
+			SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00018', SUBT1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM
+			FROM
+			(
+				SELECT 
+					'01' AS AUTH_TYPE_CD,
+					A.LIC_GRP_ID,
+					A.USR_ID,
+					A.USR_NM,
+					A.EMAIL,
+					A.TELNO,
+					A.USR_IMG_ID,
+					A.DEPT_ID,
+					SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME,
+					A.USR_POSITION_CD,
+					A.USR_DUTY_CD
+				FROM STM3000 A
+				WHERE	1=1
+	      			AND A.LIC_GRP_ID = #licGrpId#
+					AND A.DEL_CD = '02'
+					AND A.USE_CD = '01'
+					AND A.BLOCK = '01'
+	        		AND	NOT EXISTS
+	        		(
+						SELECT	Z.PROCESS_AUTH_TARGET_ID
+	                    FROM	PRJ1106 Z
+	                    WHERE	1=1
+	                    AND 	Z.PROCESS_AUTH_TYPE_CD = '01'
+	                    AND		Z.PROCESS_AUTH_TARGET_ID = A.USR_ID
+	                    AND		Z.PRJ_ID = #prjId#
+					)
+				UNION
+				SELECT
+					'02' AS AUTH_TYPE_CD,
+					A.LIC_GRP_ID,
+					A.AUTH_GRP_ID AS USR_ID,
+					A.AUTH_GRP_NM AS USR_NM,
+					'' AS EMAIL,
+					'' AS TELNO,
+					'' AS USR_IMG_ID,
+					'' AS DEPT_ID,
+					'' AS DEPT_NM,
+					'' AS USR_POSITION_CD,
+					'' AS USR_DUTY_CD
+				FROM PRJ2000 A
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.USE_CD = '01'
+				AND	NOT EXISTS
+	       		(
+					SELECT	Z.PROCESS_AUTH_TARGET_ID
+					FROM	PRJ1106 Z
+	                WHERE	1=1
+	                AND 	Z.PROCESS_AUTH_TYPE_CD = '02'
+	                AND		Z.PROCESS_AUTH_TARGET_ID = A.AUTH_GRP_ID
+	                AND		Z.PRJ_ID = A.PRJ_ID
+				)
+			) SUBT1
+			WHERE 1=1
+			<isNotEmpty property="prjAuthTypeCd">
+             AND	SUBT1.AUTH_TYPE_CD = #prjAuthTypeCd#
+            </isNotEmpty>
+            <isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUBT1.AUTH_TYPE_CD, '02', 1, '01', 2), SUBT1.USR_NM
+			</isEmpty>
+		) SUBT2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUBT2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUBT2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrNm">
+					AND	SUBT2.USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrId">
+					AND	SUBT2.USR_ID = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUBT2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	<select id="prj1100DAO.selectPrj1100ProcessListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectPrj1100List"/>
+		) Z
+    </select>
+    
+    
+    <select id="prj1100DAO.selectPrj1100ProcessList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectPrj1100List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+	<select id="prj1100DAO.selectPrj1100ProcessInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1100List"/>
+    	) T1
+    	WHERE 1=1
+		AND T1.PRJ_ID = #prjId#
+		AND T1.PROCESS_ID = #processId#
+	</select>
+	
+	
+	<insert id="prj1100DAO.insertPrj1100ProcessInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newProcessId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_PROCESS_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PROCESS_ID, 12, 5)) + 1) , 5, '0')
+						,	'PCS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_PROCESS_ID 
+			FROM	(
+			            SELECT	MAX(PROCESS_ID)  AS NEW_PROCESS_ID
+			            FROM	PRJ1100 A
+			            WHERE	1=1
+                        AND		A.PRJ_ID = #prjId#
+			            AND		A.PROCESS_ID LIKE 'PCS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO PRJ1100
+			(
+				PRJ_ID,					PROCESS_ID
+				,PROCESS_NM,			PROCESS_DESC
+				,PROCESS_TRANSFER_CD,	PROCESS_DISABLED_CD
+				,USE_CD,				PROCESS_ORD
+				,REG_DTM,				REG_USR_ID,				REG_USR_IP
+				,MODIFY_DTM,			MODIFY_USR_ID,			MODIFY_USR_IP
+			)
+			VALUES
+			(
+				#prjId#,				#newProcessId#
+				,#processNm#,			#processDesc#
+				,#processTransferCd#,	'02'
+				,'01',					#processOrd#
+				,SYSDATE,				#regUsrId#,				#regUsrIp#
+				,SYSDATE,				#modifyUsrId#,			#modifyUsrId#
+			)
+		]]>
+	</insert>
+		
+	
+	<update id="prj1100DAO.updatePrj1100ProcessInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			UPDATE PRJ1100 A
+			SET
+		]]>
+			A.MODIFY_DTM = SYSDATE
+			,A.MODIFY_USR_ID = #modifyUsrId#
+			,A.MODIFY_USR_IP = #modifyUsrIp#
+			<isNotEmpty property="processNm">
+				, A.PROCESS_NM = #processNm#
+			</isNotEmpty>
+			<isNotEmpty property="processDesc">
+				, A.PROCESS_DESC = #processDesc#
+			</isNotEmpty>
+			<isNotEmpty property="processOrd">
+				, A.PROCESS_ORD = #processOrd#
+			</isNotEmpty>
+			<isNotEmpty property="processTransferCd">
+				, A.PROCESS_TRANSFER_CD = #processTransferCd#	
+			</isNotEmpty>
+			<isNotEmpty property="processDisabledCd">
+				, A.PROCESS_DISABLED_CD = #processDisabledCd#
+			</isNotEmpty>	
+		<![CDATA[
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+		]]>
+	</update>
+	
+	
+	
+	<select id="prj1100DAO.selectPrj1100ProcessAuthUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1100ProcessAuthUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1100DAO.selectPrj1100ProcessAuthUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj1100ProcessAuthUsrList"/>
+		) T1
+	</select>
+	
+	
+	<select id="prj1100DAO.selectPrj1100ProcessAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T1.*
+		FROM
+		(
+			<include refid="selectPrj1100ProcessAuthNoneUsrList"/>
+    	) T1
+    	WHERE 1=1
+    	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="prj1100DAO.selectPrj1100ProcessAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectPrj1100ProcessAuthNoneUsrList"/>
+		) T1
+	</select>
+	
+	
+	<insert id="prj1100DAO.insertPrj1100ProcessAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO PRJ1106
+			(
+                PRJ_ID,				PROCESS_ID,				PROCESS_AUTH_TYPE_CD,	PROCESS_AUTH_TARGET_ID	
+            ,	REG_DTM,			REG_USR_ID,				REG_USR_IP
+            ,	MODIFY_DTM,			MODIFY_USR_ID,			MODIFY_USR_IP
+	        )VALUES(
+	        	#prjId#,			#processId#,			#processAuthTypeCd#,	#processAuthTargetId#
+	        	,SYSDATE,			#regUsrId#,				#regUsrIp#
+	        	,SYSDATE,			#regUsrId#,				#regUsrIp#
+	        )		
+		]]>
+	</insert>
+	
+	
+	<delete id="prj1100DAO.deletePrj1100ProcessAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE	
+			FROM	PRJ1106 A
+	        WHERE	1=1
+	        AND		A.PRJ_ID		= #prjId#
+	        AND		A.PROCESS_ID	= #processId#
+		]]>
+		<isNotEmpty property="processAuthTypeCd">
+			AND A.PROCESS_AUTH_TYPE_CD = #processAuthTypeCd#
+		</isNotEmpty>
+		<isNotEmpty property="processAuthTargetId">
+			AND A.PROCESS_AUTH_TARGET_ID = #processAuthTargetId#
+		</isNotEmpty>
+	</delete>
+	
+	
 	<sql id="prj1100DAO.selectPrj1104ReqRevisionNumList">
 		<![CDATA[
 			SELECT 
@@ -55,132 +543,8 @@
 	</sql>
 	
 	
-	<select id="prj1100DAO.selectPrj1100ProcessList" parameterClass="java.util.Map" resultMap="flowResultMap">
-		<![CDATA[
-			SELECT 
-				A.PRJ_ID,			B.PRJ_NM
-				,A.PROCESS_ID,				A.PROCESS_NM
-				,A.PROCESS_DESC
-				,A.PROCESS_CONFIRM_CD
-				,A.PROCESS_MIDDLE_DONE_CD
-				,( SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = 'CMM00005' AND SUB_CD = A.PROCESS_MIDDLE_DONE_CD ) AS PROCESS_MIDDLE_DONE_NM
-				,A.PROCESS_JSON_DATA
-				,A.USE_CD
-				,A.PROCESS_ORD
-				,TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
-				,A.REG_USR_ID,				A.REG_USR_IP
-				,TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
-				,A.MODIFY_USR_ID,			A.MODIFY_USR_IP
-			FROM PRJ1100 A, PRJ1000 B
-			WHERE 1=1
-			AND A.PRJ_ID = #prjId#
-			AND A.PRJ_ID = B.PRJ_ID(+)
-		]]>	
-			<isNotEmpty property="dshType">
-				<isEqual property="dshType" compareValue="dsh1000">
-					AND A.PROCESS_CONFIRM_CD = '02'
-				</isEqual>
-			</isNotEmpty>
-		<![CDATA[
-			AND A.USE_CD = '01'
-			ORDER BY A.PROCESS_ORD,A.REG_DTM
-		]]>
-	</select>
-	
-	<select id="prj1100DAO.selectPrj1100ProcessInfo" parameterClass="java.util.Map" resultClass="egovMap">
-		<![CDATA[
-			SELECT 
-				A.PRJ_ID
-				,A.PROCESS_ID,				A.PROCESS_NM
-				,A.PROCESS_DESC
-				,A.PROCESS_CONFIRM_CD
-				,A.PROCESS_MIDDLE_DONE_CD
-				,( SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = #licGrpId# AND MST_CD = 'CMM00005' AND SUB_CD = A.PROCESS_MIDDLE_DONE_CD ) AS PROCESS_MIDDLE_DONE_NM	
-				,A.PROCESS_JSON_DATA
-				,A.USE_CD
-				,A.PROCESS_ORD
-				,TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
-				,A.REG_USR_ID,				A.REG_USR_IP
-				,TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
-				,A.MODIFY_USR_ID,			A.MODIFY_USR_IP
-			FROM PRJ1100 A
-			WHERE 1=1
-			AND A.PRJ_ID = #prjId#
-			AND A.PROCESS_ID = #processId#
-		]]>
-	</select>
-	
-	<update id="prj1100DAO.updatePrj1100ProcessInfo" parameterClass="java.util.Map">
-		<![CDATA[
-			UPDATE PRJ1100 A
-			SET
-		]]>
-			<isNotEmpty property="processNm">
-				A.PROCESS_NM = #processNm#
-				,A.PROCESS_DESC = #processDesc#
-				,A.PROCESS_ORD = #processOrd#
-			</isNotEmpty>
-			<isNotEmpty property="processNm">
-				<isNotEmpty property="processJsonData">
-				,
-				</isNotEmpty>	
-			</isNotEmpty>
-			<isNotEmpty property="processJsonData">
-				A.PROCESS_JSON_DATA = #processJsonData#
-			</isNotEmpty>
-			<isNotEmpty property="processConfirmCd">
-				, A.PROCESS_CONFIRM_CD = #processConfirmCd#	
-			</isNotEmpty>
-			<isNotEmpty property="processMiddleDoneCd">
-				,A.PROCESS_MIDDLE_DONE_CD = #processMiddleDoneCd#
-			</isNotEmpty>	
-				,A.MODIFY_DTM = SYSDATE
-				,A.MODIFY_USR_ID = #modifyUsrId#
-				,A.MODIFY_USR_IP = #modifyUsrIp#
-		<![CDATA[
-			WHERE 1=1
-			AND A.PRJ_ID = #prjId#
-			AND A.PROCESS_ID = #processId#
-		]]>
-	</update>
-	
-	<insert id="prj1100DAO.insertPrj1100ProcessInfo" parameterClass="java.util.Map">
-		<selectKey resultClass="java.lang.String" keyProperty="newProcessId">
-		<![CDATA[
-			SELECT	NVL( 
-							SUBSTR(NEW_PROCESS_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_PROCESS_ID, 12, 5)) + 1) , 5, '0')
-						,	'PCS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-            		) AS NEW_PROCESS_ID 
-			FROM	(
-			            SELECT	MAX(PROCESS_ID)  AS NEW_PROCESS_ID
-			            FROM	PRJ1100 A
-			            WHERE	1=1
-                        AND		A.PRJ_ID = #prjId#
-			            AND		A.PROCESS_ID LIKE 'PCS' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
-					)
-		]]>
-		</selectKey>
-		<![CDATA[
-			INSERT INTO PRJ1100
-			(
-				PRJ_ID,					PROCESS_ID,				PROCESS_NM
-				,PROCESS_DESC
-				,PROCESS_CONFIRM_CD,	PROCESS_MIDDLE_DONE_CD,	PROCESS_JSON_DATA
-				,USE_CD,				PROCESS_ORD
-				,REG_DTM,				REG_USR_ID,				REG_USR_IP
-			)
-			VALUES
-			(
-				#prjId#,				#newProcessId#,			#processNm#
-				,#processDesc#
-				,#processConfirmCd#,	#processMiddleDoneCd#,	EMPTY_CLOB()
-				,'01',					#processOrd#
-				,SYSDATE,		#regUsrId#,				#regUsrIp#
-			)
-		]]>
-	</insert>
-	
 	<update id="prj1100DAO.deletePrj1100ProcessInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			UPDATE PRJ1100 A
 			SET
@@ -194,7 +558,9 @@
 		]]>
 	</update>
 	
+	
 	<select id="prj1100DAO.selectPrj1100ProcessReqCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 			SELECT COUNT(*) AS REQ_CNT
 			FROM REQ4100 A
@@ -204,7 +570,9 @@
 		]]>	
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1101FlowList" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 				A.PRJ_ID,					A.PROCESS_ID,			A.FLOW_ID,					A.FLOW_NEXT_ID
@@ -275,7 +643,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1101FlowInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 				A.PRJ_ID,					A.PROCESS_ID,			A.FLOW_ID,					A.FLOW_NEXT_ID
@@ -295,7 +665,9 @@
 		]]>
 	</select>
 	
+	
 	<insert id="prj1100DAO.insertPrj1101FlowInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO PRJ1101
 			(
@@ -325,7 +697,9 @@
 		]]>
 	</insert>
 	
+	
 	<update id="prj1100DAO.updatePrj1101FlowInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			UPDATE PRJ1101 A
 			SET
@@ -380,7 +754,9 @@
 		]]>
 	</update>
 	
+	
 	<update id="prj1100DAO.deletePrj1101FlowInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			UPDATE PRJ1101 A
 			SET
@@ -397,9 +773,9 @@
 			</isNotEmpty>
 	</update>
 	
-	<!-- 선택 요구사항에 해당하는 추가 항목 목록 -->
+	
 	<select id="prj1100DAO.selectPrj1102ReqOptList"  parameterClass="java.util.Map" resultClass="egovMap">
-		/* prj1100DAO.selectPrj1102ReqOptList - 선택 요구사항에 해당하는 추가 항목 목록 */
+		
 		<![CDATA[
 			SELECT
 				A.PRJ_ID,				A.PROCESS_ID,			A.FLOW_ID,					A.ITEM_ID
@@ -439,7 +815,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1102OptList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT
 				A.PRJ_ID,				A.PROCESS_ID,			A.FLOW_ID,					A.ITEM_ID
@@ -471,7 +849,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1103OptFileList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT
 				C.ORIGNL_FILE_NM AS FILE_NAME
@@ -491,7 +871,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1102OptCntInfo"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 			SELECT COUNT(*) AS CNT
 			FROM PRJ1103 A
@@ -503,6 +885,7 @@
 			AND A.ITEM_ID =  #itemId#
 		]]>
 	</select>
+	
 	
 	<insert id="prj1100DAO.insertPrj1102OtpInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newItemId">
@@ -521,6 +904,7 @@
 					)
 		]]>
 		</selectKey>
+		
 		<![CDATA[
 			INSERT INTO PRJ1102 A
 			(
@@ -544,7 +928,9 @@
 		]]>
 	</insert>
 	
+	
 	<insert id="prj1100DAO.insertPrj1102OtpCopyInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO PRJ1102 A
 			(
@@ -567,6 +953,7 @@
 		
 		]]>
 	</insert>
+	
 	
 	<update id="prj1100DAO.updatePrj1102OtpInfo" parameterClass="java.util.Map">
 		<![CDATA[
@@ -593,6 +980,7 @@
 		]]>
 	</update>
 	
+	
 	<update id="prj1100DAO.deletePrj1102OtpInfo" parameterClass="java.util.Map">
 		<![CDATA[
 			UPDATE PRJ1102 A
@@ -613,7 +1001,9 @@
 		</isNotEmpty>
 	</update>
 	
+	
 	<insert id="prj1100DAO.insertPrj1103OtpValueInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO PRJ1103 A
 			(
@@ -633,6 +1023,7 @@
 		]]>
 	</insert>
 	
+	
 	<update id="prj1100DAO.updatePrj1103OtpValueInfo" parameterClass="java.util.Map">
 		<![CDATA[
 			UPDATE PRJ1103 A
@@ -650,7 +1041,9 @@
 		]]>
 	</update>
 	
+	
 	<insert id="prj1100DAO.insertPrj1104RevisionNumInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO PRJ1104 A
 			(
@@ -670,7 +1063,9 @@
 		]]>
 	</insert>
 	
+	
 	<delete id="prj1100DAO.deletePrj1103RevisionNumInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE FROM PRJ1104 A
 			WHERE 1=1
@@ -683,7 +1078,9 @@
 		]]>
 	</delete>
 
-	<select id="prj1100DAO.selectPrj1104ReqRevisionNumList"  parameterClass="Prj1100VO" resultClass="egovMap">
+	 
+	<select id="prj1100DAO.selectPrj1104ReqRevisionNumList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		SELECT *
 		FROM
 			(
@@ -697,7 +1094,9 @@
 	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
-    <select id="prj1100DAO.selectPrj1104ReqRevisionNumListCnt" parameterClass="Prj1100VO"  resultClass="java.lang.Integer">
+	 
+    <select id="prj1100DAO.selectPrj1104ReqRevisionNumListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 				COUNT(*)
 		FROM(
@@ -706,7 +1105,9 @@
     </select>
 	
 	
+	
 	<select id="prj1100DAO.selectPrj1104ReqRevisionNumCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 			SELECT COUNT(*) AS REP_CNT
 			FROM PRJ1104 A, STM8000 B
@@ -723,7 +1124,9 @@
 		]]>
 	</select>
 	
+	
 	<insert id="prj1100DAO.insertPrj1105FlowAuthGrpInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			INSERT INTO PRJ1105 A
 			(
@@ -743,7 +1146,9 @@
 		]]>
 	</insert>
 	
+	
 	<delete id="prj1100DAO.deletePrj1105FlowAuthGrpInfo" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE FROM PRJ1105 A
 			WHERE 1=1
@@ -755,7 +1160,9 @@
 		]]>
 	</delete>
 	
+	
 	<select id="prj1100DAO.selectPrj1105FlowAuthGrpList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 				A.PRJ_ID, A.PROCESS_ID, A.FLOW_ID, A.AUTH_GRP_ID, A.AUTH_GRP_TARGET_CD
@@ -785,7 +1192,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1105FlowAuthGrpCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
 		<![CDATA[
 			SELECT COUNT(*) AS AUTH_GRP_CNT
 			FROM PRJ1105 A
@@ -798,7 +1207,9 @@
 		]]>
 	</select>
 	
-	<select id="prj1100DAO.selectPrj1100ProcessCopyList"  parameterClass="java.util.Map" resultMap="flowResultMap">
+	
+	<select id="prj1100DAO.selectPrj1100ProcessCopyList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT
 				B.PRJ_ID,					C.PRJ_NM
@@ -823,6 +1234,9 @@
 				AND Z.USR_TYP = '02'
 				AND Z.LIC_GRP_ID = #licGrpId#
 		]]>
+				<!-- 전체 프로젝트 생성관리에서 프로젝트 생성 마법사 호출시 
+					 전체 라이선스 그룹에서  관리자 권한을 가지고있는 프로젝트의 프로세스 목록을 조회한다.
+				-->
 		 		<isNotEqual property="selectType" compareValue="systemAdmin">
 			    	AND USR_ID = #usrId#
 			   </isNotEqual>
@@ -837,7 +1251,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="prj1100DAO.selectPrj1102FlwOptExistFileIdList"  parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT A.*
 			FROM PRJ1103 A, PRJ1102 B

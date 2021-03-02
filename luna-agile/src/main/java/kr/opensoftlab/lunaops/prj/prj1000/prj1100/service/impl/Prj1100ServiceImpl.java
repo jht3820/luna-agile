@@ -8,15 +8,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
-import kr.opensoftlab.lunaops.prj.prj1000.prj1100.service.Prj1100Service;
-import kr.opensoftlab.lunaops.prj.prj1000.prj1100.vo.Prj1100VO;
-
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
+import kr.opensoftlab.lunaops.prj.prj1000.prj1100.service.Prj1100Service;
 
 @Service("prj1100Service")
 public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj1100Service {
@@ -31,9 +29,15 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
    	
    	@Resource(name = "egovFileIdGnrService")
 	private EgovIdGnrService idgenService;
-   	
-    
+
+	
 	@SuppressWarnings("rawtypes")
+	public int  selectPrj1100ProcessListCnt(Map paramMap) throws Exception {
+		return  prj1100DAO.selectPrj1100ProcessListCnt(paramMap);
+	} 
+	
+    
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List selectPrj1100ProcessList(Map paramMap) throws Exception {
 		return prj1100DAO.selectPrj1100ProcessList(paramMap);
 	}
@@ -113,6 +117,41 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 		
 		
 		prj1100DAO.deletePrj1102OtpInfo(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1100ProcessAuthUsrList(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100ProcessAuthUsrList(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100ProcessAuthUsrListCnt(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100ProcessAuthUsrListCnt(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1100ProcessAuthNoneUsrList(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100ProcessAuthNoneUsrList(paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100ProcessAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100ProcessAuthNoneUsrListCnt(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1100ProcessAuthInfo(Map paramMap) throws Exception{
+		return prj1100DAO.insertPrj1100ProcessAuthInfo(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int deletePrj1100ProcessAuthInfo(Map paramMap) throws Exception{
+		return prj1100DAO.deletePrj1100ProcessAuthInfo(paramMap);
 	}
 	
 	
@@ -349,13 +388,14 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 	
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj1104ReqRevisionNumList(Prj1100VO prj1100VO) throws Exception {
-		return prj1100DAO.selectPrj1104ReqRevisionNumList(prj1100VO);
+	public List selectPrj1104ReqRevisionNumList(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1104ReqRevisionNumList(paramMap);
 	}
 	
 	
-	public int selectPrj1104ReqRevisionNumListCnt(Prj1100VO prj1100VO) throws Exception {
-		return prj1100DAO.selectPrj1104ReqRevisionNumListCnt(prj1100VO);
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1104ReqRevisionNumListCnt(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1104ReqRevisionNumListCnt(paramMap);
 	}
 
 	

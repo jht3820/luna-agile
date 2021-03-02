@@ -34,11 +34,11 @@ public interface Prj1000Service {
 	
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception;
+	List selectPrj1000PrjAuthNoneUsrList(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
-	int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception;
+	int selectPrj1000PrjAuthNoneUsrListCnt(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")

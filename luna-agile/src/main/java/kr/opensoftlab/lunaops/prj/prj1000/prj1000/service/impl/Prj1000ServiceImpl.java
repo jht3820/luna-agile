@@ -122,13 +122,13 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception {
-		return prj1000DAO.selectPrj2100PrjAuthNoneUsrList(paramMap);
+	public List selectPrj1000PrjAuthNoneUsrList(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthNoneUsrList(paramMap);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
-		return prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
+	public int selectPrj1000PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthNoneUsrListCnt(paramMap);
 	}
 
 	
