@@ -159,6 +159,7 @@
 			LEFT JOIN STM3000 C
 				ON (A.REQ_GRP_USR_ID = C.USR_ID AND C.LIC_GRP_ID = #licGrpId#)
 			WHERE 1=1
+			AND	A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">

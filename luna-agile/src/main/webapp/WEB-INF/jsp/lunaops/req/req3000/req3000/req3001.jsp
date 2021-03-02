@@ -601,9 +601,11 @@ var OSLReq3001Popup = function () {
 		//출력 메시지 세팅
 		var toastrMsg = "";
 		var toastrType = "success";
+		
 		if(selDatas.length > reqDupleList){
 			toastrMsg += $.osl.lang("req3000.insert.saveMsg",(selDatas.length-reqDupleList));
 		}
+		
 		if(reqDupleList > 0){
 			//이미 추가된 메시지 있는 경우 </br>
 			if(toastrMsg.length > 0){
@@ -612,6 +614,7 @@ var OSLReq3001Popup = function () {
 			toastrMsg += $.osl.lang("req3000.insert.saveDupleMsg",reqDupleList);
 			toastrType = "warning";
 		}
+		
 		//모든 요구사항이 연결되있는 경우
 		if(reqDupleList == selDatas.length){
 			
@@ -628,7 +631,7 @@ var OSLReq3001Popup = function () {
 		//데이터테이블 재 조회
 		datatable.reload();
 		
-		//$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
+		$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 		$("div.tooltip.show").remove(); 
 		
 	};
@@ -665,7 +668,7 @@ var OSLReq3001Popup = function () {
 				//데이터테이블 재 조회
 				datatable.reload();
 				
-				//$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
+				$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 				$("div.tooltip.show").remove();
 				
 			}
@@ -766,13 +769,13 @@ var OSLReq3001Popup = function () {
 			return;
 		}
 		
-		if($.osl.isNull($("#regGrpUsrId").val())){
-			$.osl.alert("요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.");
+		if($.osl.isNull($("#reqGrpUsrId").val())){
+			$.osl.alert($.osl.lang("req3000.alert.checkUsrId"));
 			return;
 		}
 		
-		if($.osl.isNull($("#regGrpChargerId").val())){
-			$.osl.alert("담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.");
+		if($.osl.isNull($("#reqGrpChargerId").val())){
+			$.osl.alert($.osl.lang("req3000.alert.checkChargerId"));
 			return;
 		}
 		
@@ -825,7 +828,7 @@ var OSLReq3001Popup = function () {
    			}
    		});
    		
-   		//AJAX 전송
+  		//AJAX 전송
    		ajaxObj.send();
    		
 		//리로드
@@ -856,8 +859,6 @@ var OSLReq3001Popup = function () {
     		fd.append("reqGrpLinkReqList",JSON.stringify(reqIdList));	
     	}
        	
-       	debugger;
-       	
        	//파일 목록 추가하기 (수정이력 관리)
        	var uploadFileList = [];
        	$.each(fileUploadObj.getFiles(), function(idx, map){
@@ -880,7 +881,7 @@ var OSLReq3001Popup = function () {
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
-   				//등록 성공
+   				//수정 성공
    				$.osl.toastr(data.message);
 
    				//모달 창 닫기
@@ -891,9 +892,8 @@ var OSLReq3001Popup = function () {
    			}
    		});
    		
-   		
-   		//AJAX 전송
-   		ajaxObj.send();
+	   	//AJAX 전송
+	   	ajaxObj.send();
    		
    		//리로드
    		$.osl.datatable.list["req3000Table"].targetDt.reload();
@@ -955,7 +955,7 @@ var OSLReq3001Popup = function () {
 			return;
 		}
 		
-		$.osl.confirm("등록하시겠습니까?",null,function(result) {
+		$.osl.confirm($.osl.lang("req3000.confirm."+$("#type").val()),null,function(result) {
 			if (result.value) {
 	        	fileUploadObj.upload();
 	        }	

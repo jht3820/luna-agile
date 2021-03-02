@@ -11,7 +11,6 @@
 	<input type="hidden" name="reqGrpChargerId" id="reqGrpChargerId" value="${param.paramReqGrpChargerId}">
 	<input type="hidden" name="reqGrpId" id="reqGrpId" value="${param.paramReqGrpId}">
 	<input type="hidden" name="atchFileId" id="atchFileId">
-	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
 	<div class="row">
 		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20" id="req3000ReqGrpWrap">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0" id="req3000ReqGrpInfo">
@@ -75,7 +74,7 @@
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 								<div class="form-group">
 									<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="req3000.label.fileUpload">파일첨부</span>
-									<div class="kt-uppy" id="req3001FileUpload">
+									<div class="kt-uppy fileReadonly" id="fileListDiv">
 										<div class="kt-uppy__dashboard"></div>
 										<div class="kt-uppy__progress"></div>
 									</div>
@@ -236,22 +235,27 @@ var OSLReq3002Popup = function () {
 		//포틀릿셋팅
 		var portlet = new KTPortlet('req3000ReqGrpInfo', $.osl.lang("portlet"));
 		portlet.expand();
+		
 		//edit 세팅
-    	formEditList.push($.osl.editorSetting("reqGrpDesc", {formValidate: formValidate}));
+    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
+    		toolbar: false,
+			disableResizeEditor: false,
+			disableDragAndDrop: true,
+			disabledEditor: true,
+			height:260
+    	}));
     	
     	//파일 업로드 세팅
-    	fileUploadObj = $.osl.file.uploadSet("req3001FileUpload",{
-    		
-    		url: '/req/req3000/req3000/insertReq3001ReqAtchFileInfo.do',
+    	fileUploadObj = $.osl.file.uploadSet("fileListDiv",{
     		maxFileSize: "${requestScope.fileSumMaxSize}",
-    		meta: {"atchFileId": atchFileId, "fileSn": 0},
-    		maxNumberOfFiles:20,
+    		meta: {"atchFileId": $("#atchFileId").val(), "fileSn": 0},
+    		maxNumberOfFiles:260,
     		isDraggingOver: false,
     		fileDownload: true,
     		fileReadonly: true,
     		
     	});
-    	
+    	fileUploadObj.reset();
     	//그룹 요구사항 정보 조회
     	selectReqGrpInfo();
     	
@@ -261,6 +265,7 @@ var OSLReq3002Popup = function () {
 	 * 	그룹 요구사항 정보 조회
 	*/
     var selectReqGrpInfo = function(){
+		
     	var data = {
     			prjGrpId: $("#prjGrpId").val(),
     			prjId: $("#prjId").val(),

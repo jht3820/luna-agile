@@ -655,6 +655,19 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"연결에 성공했습니다.",
+				saveDupleMsg:"이미 연결된 요구사항입니다.",
+				saveAllDupleMsg:"모든 요구사항이 연결되었습니다.",
+			},
+			alert:{
+				insert:"그룹 요구사항을 등록하시겠습니까?",
+				delete:"선택된 그룹 요구사항을 삭제하시겠습니까?",
+				deleteList:"${1}건의 그룹 요구사항을 삭제하시겠습니까?",
+				update:"그룹 요구사항을 수정하시겠습니까?",
+				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
+				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
+			},
 			title:{
 				detailTitle:"그룹 요구사항 상세보기",
 				insert:"그룹 요구사항 등록",
@@ -2372,6 +2385,21 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"Connection success",
+				saveDupleMsg:"That connection is already connected",
+				saveAllDupleMsg:"All request is already connected",
+			},
+			alert:{
+				checkUsrId:"You must search user name. \n because we must know about detail department belong user",
+				checkChargerId:"You must search charger name. \n because we must know about detail department belong charger",
+			},
+			confirm:{
+				insert:"Would you like to register your group requirement?",
+				delete:"Would you like to delete your group requirement?",
+				deleteList:"Would you like to delet your ${1} requirements?",
+				update:"Would you like to update your group requirement?",
+			},
 			actionBtn:{
 				title : "Select",
 				clickBtn : "Select",

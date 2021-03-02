@@ -54,7 +54,8 @@
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="delete" title="그룹 요구사항 목록 삭제" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.delete" data-placement="bottom" data-auth-button="delete" tabindex="8">
 				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 엑셀" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.excel" data-placement="bottom" data-auth-button="excel" tabindex="">
+			<!-- 미구현기능 -->
+			<!-- <button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 엑셀" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.excel" data-placement="bottom" data-auth-button="excel" tabindex="">
 				<i class="fas fa-file-excel"></i><span data-lang-cd="datatable.button.excel">엑셀</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 프린트" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.print" data-placement="bottom" data-auth-button="print" tabindex="">
@@ -65,7 +66,7 @@
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 업로드" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.upload" data-placement="bottom" data-auth-button="upload" tabindex="">
 				<i class="fas fa-file-upload"></i><span data-lang-cd="datatable.button.upload">업로드</span>
-			</button>
+			</button> -->
 		</div>
 	</div>
 </div>
@@ -124,8 +125,8 @@ var OSLReq3000Popup = function () {
 		},
 		actionBtn:{
 			"dblClick":true,
-			"excel":true,
-			"print":true,
+			/* "excel":true,
+			"print":true, */
 			"insert":false,
 			"update":true,
 			"title": $.osl.lang("datatable.action.functionNm")
@@ -135,15 +136,15 @@ var OSLReq3000Popup = function () {
 			"update":$.osl.lang("req3000.datatable.action.update"),
 			"dblClick": $.osl.lang("req3000.datatable.action.dblClick"),
 			"delete": $.osl.lang("req3000.datatable.action.delete"),
-			"excel": $.osl.lang("req3000.datatable.action.excel"),
-			"print": $.osl.lang("req3000.datatable.action.print"),
+			/* "excel": $.osl.lang("req3000.datatable.action.excel"),
+			"print": $.osl.lang("req3000.datatable.action.print"), */
 		},
 		// 테마
 		theme:{
 			actionBtnIcon:{
 				"dblClick":"fa fa-list-alt",
-				"excel":"fa fa-file-excel",
-				"print":"fa fa-print"
+				/* "excel":"fa fa-file-excel",
+				"print":"fa fa-print" */
 			}
 		},
 		actionFn:{
@@ -204,8 +205,11 @@ var OSLReq3000Popup = function () {
 		   			}
 				});
 				
-				//AJAX 전송
-				ajaxObj.send();
+				if($.osl.confirm($.osl.lang("req3000.alert.delete"))){
+					//AJAX 전송
+					ajaxObj.send();
+				}
+				
 			},"dblClick":function(rowData, datatableId, type, rowNum){
 				var data = {
 						
