@@ -3,16 +3,6 @@
 #kt_header_brand > a > img{
 	width:130px;
 }
-/* flex */
-.osl-align-items-center{
-	-webkit-box-align: center !important;
-    -ms-flex-align: center !important;
-    align-items: center !important;
-}
-.osl-flex-shrink-0{
-	-ms-flex-negative: 0 !important;
-    flex-shrink: 0 !important;
-}
 .osl-margin-r-1rm{
 	margin-right: 1rem !important;
 }
@@ -49,24 +39,8 @@
 .osl-font-size-15rm{
 	font-size:1.5rem !important;
 }
-
-.osl-d-flex{
-	display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-.osl-flex-column{
-	-webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
 .osl-margin-r-auto{
 	margin-right: auto;
-}
-.osl-flex-wrap{
-	-ms-flex-wrap: wrap;
-    flex-wrap: wrap;
 }
 .osl-flex-row-fluid{
 	-webkit-box-flex: 1;
@@ -100,7 +74,26 @@ input:-webkit-autofill,
 	 -webkit-transition: background-color 9999s ease-out;
      -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
-
+/* mask */
+.osl-mask{
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+    align-items: center;
+    
+    -webkit-box-pack: center;
+	-ms-flex-pack: center;
+    justify-content: center;
+    
+    -webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+}
 /* 정렬 */
 .osl-align-center--imp{
 	text-align:center !important;
@@ -2162,7 +2155,8 @@ label.required:after {
 	}
 }
 @media (max-width: 700px) {
-	button.btn > span {
+	/* span.class에 osl-resize__display--show 있는경우 숨기지 않음*/
+	button.btn > span:not(.osl-resize__display--show) {
 	    display: none;
 	}
 	button.btn i{

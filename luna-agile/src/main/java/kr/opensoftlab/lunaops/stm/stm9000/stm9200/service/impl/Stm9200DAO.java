@@ -46,5 +46,40 @@ public class Stm9200DAO extends ComOslitsAbstractDAO {
 	public void deleteStm9200JenkinsJobInfo(Map paramMap) throws Exception {
 		delete("stm9200DAO.deleteStm9002JenkinsJobInfo", paramMap);
 	} 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm9200PrjAssignDplAuthList(Map paramMap) throws Exception{
+		return (List<Map>) list("stm9200DAO.selectStm9003PrjAssignDplAuthList", paramMap);
+	}
 
+	
+	@SuppressWarnings("rawtypes" )
+	public int selectStm9200PrjAssignDplAuthListCnt(Map paramMap) throws Exception{
+		return (Integer) select("stm9200DAO.selectStm9003PrjAssignDplAuthListCnt", paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectStm9200PrjNotAssignDplAuthList(Map paramMap) throws Exception{
+		return (List<Map>) list("stm9200DAO.selectStm9003PrjNotAssignDplAuthList", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes" )
+	public int selectStm9200PrjNotAssignDplAuthListCnt(Map paramMap) throws Exception{
+		return (Integer) select("stm9200DAO.selectStm9003PrjNotAssignDplAuthListCnt", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void insertStm9200DplAuthInfo(Map paramMap) throws Exception {
+		insert("stm9200DAO.insertStm9003DplAuthInfo", paramMap);
+	} 
+	
+	
+	@SuppressWarnings("rawtypes")
+	public void deleteStm9200DplAuthInfo(Map paramMap) throws Exception {
+		delete("stm9200DAO.deleteStm9003DplAuthInfo", paramMap);
+	} 
 }

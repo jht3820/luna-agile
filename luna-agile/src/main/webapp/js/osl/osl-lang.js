@@ -1416,6 +1416,7 @@ var OSLCoreLangSetting = function () {
 				allPrjList : "전체 프로젝트 목록",
 				assignJobList : "JOB 배정 목록",
 				notAssignJobList : "JOB 미배정 목록"
+				dplAuthSettingModal : "배포 실행 권한 설정"
 			},
 			button:{
 				dplAuthSetting : "배포 실행 권한 설정"
@@ -1441,6 +1442,30 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm9201:{
+			title:{
+				assignDplAuth : "배포 실행 권한 목록",
+				notAssignDplAuth : "미배정 권한 그룹 및 사용자"
+			},
+			button:{
+				title:{
+					dplAuthInsert : "배정 등록",
+					dplAuthDelete : "배정 제외"
+				},
+				toolTip:{
+					dplAuthInsert : "배포 실행 권한 등록",
+					dplAuthDelete : "배포 실행 권한 제외",
+					assignAuthSearch : "배정 실행 권한 대상 목록 조회",
+					notAssignAuthSearch : "미배정 권한 대상 목록 조회"
+				}
+			},
+			message:{
+				confirm:{
+					dplAuthInsert:"${1}건의 대상을 배정하시겠습니까?",
+					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
+				}
+			}
+		}
 		stm9300:{
 			button:{
 				toolTil:{
@@ -1922,6 +1947,22 @@ var OSLCoreLangSetting = function () {
 				jobTypeNm: "Job Type",
 				jobRestoreId: "Restore Job Id",
 				jobParameter: "Job Parameter"
+			},
+			stm9201AssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
+			stm9201NotAssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
 			},
 			stm9300PrjJobTable:{
 				prjNm: "Project Name",
@@ -3169,4 +3210,3 @@ var OSLCoreLangSetting = function () {
     		$.osl.date.init();
         }
     };
-}();
