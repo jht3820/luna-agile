@@ -24,13 +24,15 @@
 					    	,	A.ORD
 					    	,	A.DOC_DESC
 		          			,	A.DOC_FORM_FILE_ID
-		          			,	A.DOC_FORM_FILE_SN
+		          			,	A.DOC_FORM_CONF_FILE_ID
 		          			,	A.DOC_ATCH_FILE_ID
-							,	A.DOC_FILE_SN
+							,	A.DOC_CONF_FILE_ID
 							,	A.DOC_CONF_DESC
 							,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
 		          			,	A.USE_CD
 		          			, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') as USE_NM
+		          			,	A.SIGN_USE_CD
+		          			,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00021', A.SIGN_USE_CD, '1') as SIGN_USE_NM
 					    	,	'' AS ROW_STATUS
 		            	FROM	
 		            			PRJ3000 A 
@@ -54,21 +56,23 @@
 				,	A.DOC_ID
 				,	A.PRJ_ID
 				,	A.UPPER_DOC_ID
-				,	SF_PRJ3000_DOC_NM(B.LIC_GRP_ID, A.PRJ_ID, A.DOC_ID, '2') AS UP_DOC_NM
+				,	SF_PRJ3000_DOC_NM(B.LIC_GRP_ID, A.PRJ_ID, A.DOC_ID, '2') AS UPPER_DOC_NM
 			    ,	(SELECT	UPPER_DOC_ID FROM PRJ3000 Z JOIN (SELECT PRJ_ID,LIC_GRP_ID FROM PRJ1000) C ON(Z.PRJ_ID = C.PRJ_ID) WHERE C.LIC_GRP_ID = B.LIC_GRP_ID AND Z.DOC_ID = A.UPPER_DOC_ID AND Z.PRJ_ID = A.PRJ_ID) AS TWO_UPPER_DOC_ID
-			    ,	SF_PRJ3000_DOC_NM(B.LIC_GRP_ID, A.PRJ_ID, A.DOC_ID, '3') AS UPUP_DOC_NM
+			    ,	SF_PRJ3000_DOC_NM(B.LIC_GRP_ID, A.PRJ_ID, A.DOC_ID, '3') AS TWO_UPPER_DOC_NM
                 ,	A.DOC_NM
 				,	A.LVL
 			    ,	A.ORD
 			    ,	A.DOC_DESC
                 ,	A.DOC_FORM_FILE_ID
-                ,	A.DOC_FORM_FILE_SN
+                ,	A.DOC_FORM_CONF_FILE_ID
                 ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_FILE_SN
+                ,	A.DOC_CONF_FILE_ID
                 ,	A.DOC_CONF_DESC
                 ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
                 ,	A.USE_CD
                 , 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') as USE_NM
+                ,	A.SIGN_USE_CD
+                ,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00021', A.SIGN_USE_CD, '1') as SIGN_USE_NM
 				,	A.REG_DTM
 				,	A.REG_USR_ID
 				,	A.REG_USR_IP
@@ -112,7 +116,7 @@
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_FILE_SN	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_FILE_SN
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
 			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
 			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
 			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
@@ -151,19 +155,19 @@
 			
 			INSERT INTO PRJ3000 A
 			(
-					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_FILE_SN	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_FILE_SN
-			  	,	LVL				  	,	ORD		  			,	DOC_ED_DTM			,	USE_CD  			
-			  	,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	,	MODIFY_DTM			
-			  	,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
+					DOC_ID					,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
+			  	,	LVL				  		,	ORD		  			,	DOC_ED_DTM			,	USE_CD  			
+			  	,	REG_DTM  				,	REG_USR_ID			,	REG_USR_IP		  	,	MODIFY_DTM			
+			  	,	MODIFY_USR_ID			,	MODIFY_USR_IP		,	PRJ_ID				,	SIGN_USE_CD
 			)
 			VALUES
 			(
-					#newDocId#		,	null			,	#docNm#		,	null			
-				,	0				,	'시스템 ROOT'		,	null		,	0
+					#newDocId#		,	null			,	'전체'		,	null			
+				,	null			,	'시스템 ROOT'		,	null		,	null
 			    ,	0	    		,	1				,	null		,	'01'			
 			    ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#	,	SYSDATE			
-			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#
+			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#		,	'02'
 			)
 		]]>
 	</insert>
@@ -199,8 +203,8 @@
 	<![CDATA[
 		
 		UPDATE	PRJ3000 A
-        SET		DOC_FORM_FILE_SN	= #docFormFileSn#
-            ,	DOC_FILE_SN			= #docFileSn#
+        SET		DOC_FORM_CONF_FILE_ID	= #docFormFileSn#
+            ,	DOC_CONF_FILE_ID			= #docFileSn#
             ,	MODIFY_DTM      	= SYSDATE
             ,	MODIFY_USR_ID   	= #modifyUsrId#
             ,	MODIFY_USR_IP   	= #modifyUsrIp#
@@ -222,7 +226,7 @@
 	<![CDATA[
 		
 		UPDATE	PRJ3000 A
-        SET		DOC_FORM_FILE_SN	= #docFileSn#
+        SET		DOC_FORM_CONF_FILE_ID	= #docFileSn#
         	,	MODIFY_DTM      	= SYSDATE
             ,	MODIFY_USR_ID   	= #modifyUsrId#
             ,	MODIFY_USR_IP   	= #modifyUsrIp#
@@ -246,9 +250,9 @@
 			    ,	A.ORD
 			    ,	A.DOC_DESC
                 ,	A.DOC_FORM_FILE_ID
-                ,	A.DOC_FORM_FILE_SN
+                ,	A.DOC_FORM_CONF_FILE_ID
                 ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_FILE_SN
+                ,	A.DOC_CONF_FILE_ID
                 ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
                 ,	A.USE_CD
 			FROM	(SELECT * FROM PRJ3000 WHERE PRJ_ID = #prjId# AND USE_CD = '01') A
@@ -275,9 +279,9 @@
 					    	,	A.ORD
 					    	,	A.DOC_DESC
 		          			,	A.DOC_FORM_FILE_ID
-		          			,	A.DOC_FORM_FILE_SN
+		          			,	A.DOC_FORM_CONF_FILE_ID
 		          			,	A.DOC_ATCH_FILE_ID
-							,	A.DOC_FILE_SN
+							,	A.DOC_CONF_FILE_ID
 							,	A.DOC_CONF_DESC
 							,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
 		          			,	A.USE_CD
@@ -306,9 +310,9 @@
 			    ,	A.ORD
 			    ,	A.DOC_DESC
                 ,	A.DOC_FORM_FILE_ID
-                ,	A.DOC_FORM_FILE_SN
+                ,	A.DOC_FORM_CONF_FILE_ID
                 ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_FILE_SN
+                ,	A.DOC_CONF_FILE_ID
                 ,	A.DOC_CONF_DESC
                 ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
                 ,	A.USE_CD
@@ -333,7 +337,7 @@
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_FILE_SN	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_FILE_SN
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
 			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
 			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
 			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
@@ -349,4 +353,85 @@
 			)
 		]]>
 	</insert>
+	
+	<select id="prj3000DAO.selectPrj3000DocNextOrd" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT 	NVL(MAX(A.ORD), 0) + 1 AS NEX_ORD
+        FROM 	PRJ3000 A
+        JOIN	PRJ1000 B
+        ON		A.PRJ_ID = B.PRJ_ID
+        WHERE 	1=1 
+        AND 	B.LIC_GRP_ID = #licGrpId#
+        AND 	A.UPPER_DOC_ID = #upperDocId#
+        AND		A.PRJ_ID	=	#prjId#
+	</select>
+	
+	<insert id="prj3000DAO.insertPrj3000DocInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
+		<![CDATA[
+			 
+			SELECT	NVL( 
+							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
+						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_DOC_ID 
+			FROM	(
+			            SELECT	MAX(DOC_ID)  AS NEW_DOC_ID
+			            FROM	PRJ3000 A
+			            JOIN	PRJ1000 B
+			            ON		A.PRJ_ID = B.PRJ_ID
+			            WHERE	1=1
+                        AND		B.LIC_GRP_ID = #licGrpId#
+                        AND		A.PRJ_ID	 = #prjId#
+			            AND		A.DOC_ID LIKE 'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>		
+		</selectKey>
+		<![CDATA[ 
+			
+			INSERT INTO PRJ3000 A
+			(
+					PRJ_ID				,	DOC_ID				,	UPPER_DOC_ID		,	DOC_NM
+				,	DOC_DESC			,	LVL					,	ORD					,	DOC_ED_DTM
+				,	USE_CD				,	SIGN_USE_CD			,	REG_DTM				,	REG_USR_ID			
+				,	REG_USR_IP			,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#prjId#				,	#newDocId#			,	#upperDocId#		,	#docNm# 
+				,	#docDesc#			,	(#lvl# + 1)			,	#ord#				,	#docEdDtm#
+				,	'01'				,	#signUseCd#			,	SYSDATE				,	#regUsrId#			
+				,	#regUsrIp#			,	SYSDATE				,	#modifyUsrId#		,	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	<update id="prj3000DAO.updatePrj3000DocInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		
+		UPDATE	PRJ3000 A
+        SET		
+            	MODIFY_DTM      	= SYSDATE
+            ,	MODIFY_USR_ID   	= #modifyUsrId#
+            ,	MODIFY_USR_IP   	= #modifyUsrIp#
+            ,	DOC_ED_DTM			= TO_DATE(REPLACE(#docEdDtm#, '-'), 'YYYYMMDD')
+            ,	USE_CD				= #useCd#
+            , 	DOC_NM				= #docNm#
+            ,	DOC_DESC			= #docDesc#
+            , 	ORD					= #ord#
+            ,	SIGN_USE_CD			= #signUseCd#
+        WHERE	1=1
+        AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
+        AND		A.DOC_ID		= 	#docId#
+        AND		A.PRJ_ID		=	#prjId#
+	]]>
+	</update>
+	
+	<delete id="prj3000DAO.deletePrj3000DocInfo" parameterClass="java.util.Map">
+		
+		DELETE
+		FROM	PRJ3000
+		WHERE	1 = 1
+		AND		DOC_ID = #docId#
+		AND		PRJ_ID = #prjId#
+	</delete>
 </sqlMap>

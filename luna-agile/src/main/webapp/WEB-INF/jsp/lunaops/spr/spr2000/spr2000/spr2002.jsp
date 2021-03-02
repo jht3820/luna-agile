@@ -116,7 +116,7 @@ var OSLSpr2002Popup = function () {
 				}
 				
 				//참여인원 태그 형으로 넣기mmtMemInfo
-				if(mmtMemList != null && mmtMemList.length > 0){
+				if(!$.osl.isNull(mmtMemList)){
 					$.each(mmtMemList, function(idx, value){
 						str += '<div class="kt-user-card-v2 d-inline-block mmtMemInfo osl-outline--secondary kt-padding-5 kt-margin-l-5 kt-margin-r-5" data-user="'+ value.usrId +'">'
 									+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle float-left">'

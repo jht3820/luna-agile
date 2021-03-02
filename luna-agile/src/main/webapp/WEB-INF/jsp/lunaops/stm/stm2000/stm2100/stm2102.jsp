@@ -175,7 +175,7 @@
 				}else{
 					$("#badPwCnt").text($.osl.lang("stm2102.summery.badPwCntN"));
 				}
-				if(tagInfo != null && tagInfo != "" && tagInfo != "N"){
+				if(!$.osl.isNull(tagInfo) && tagInfo != "N"){
 					$("#tagTop").empty();
 					$.each(tagInfo, function(idx, value){
 						if(idx < 3){ //sql 조회 top 5

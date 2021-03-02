@@ -35,7 +35,7 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-l-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
-				<div class="kt_datatable" id="spr1000SprTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -185,7 +185,7 @@ var OSLSpr2100Popup = function () {
 				{field: 'mmrNm', title: '회고록 제목', textAlign: 'left', width: 80},
 				{field: 'mmrUsrId', title: '작성자', textAlign: 'left', width: 80,
 					template: function (row) {
-						if(row.mmrUsrId == null){
+						if($.osl.isNull(row.mmrUsrId)){
 							return "";
 						}else{
 							var usrData = {
@@ -224,7 +224,7 @@ var OSLSpr2100Popup = function () {
 			},
 			actionFn:{
 				"insert":function(rowData){
-					if($("#sprId").val() == null || $("#sprId").val() == ""){
+					if($.osl.isNull($("#sprId").val())){
 						//스프린트를 선택하지 않았으면
 						$.osl.alert($.osl.lang("spr2100.message.selectMsg"));
 						return false;

@@ -7,7 +7,7 @@
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
 			<h4 class="kt-font-boldest kt-font-brand">
-				<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="cmm16000.label.title">MESSAGE</span>
+				<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="arm1000.label.title">MESSAGE</span>
 			</h4>
 		</div>
 	</div>
@@ -18,7 +18,7 @@
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
 					<h5 class="kt-font-boldest kt-font-brand">
-						<i class="fa flaticon2-send-1kt-margin-r-5"></i><span data-lang-cd="cmm16000.label.title">MESSAGE</span>
+						<i class="fa flaticon2-send-1kt-margin-r-5"></i><span data-lang-cd="arm1000.label.title">MESSAGE</span>
 					</h5>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 				<div id="menuTypeGet">
 					<h5>
 						<i class="fa flaticon2-new-email kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16000.label.get">받은 메시지</span>
+						<span data-lang-cd="arm1000.label.get">받은 메시지</span>
 					</h5>
 					<span class="kt-margin-l-5 kt-margin-r-5" id="getAllCnt" name="getAllCnt">
 						<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10 kt-hide' id="notReadGetCnt" name="notReadGetCnt">0</span>
@@ -36,7 +36,7 @@
 				<div id="menuTypeSend">
 					<h5>
 						<i class="fa flaticon2-mail-1  kt-padding-t-5 kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16000.label.send">보낸 메시지</span>
+						<span data-lang-cd="arm1000.label.send">보낸 메시지</span>
 					</h5>
 					<span class="kt-margin-l-5 kt-margin-r-5" id="sendAllCnt" name="sendAllCnt">
 						<span id="sendCnt" name="sendCnt"></span>
@@ -45,7 +45,7 @@
 				<div id="menuTypeAlone">
 					<h5>
 						<i class="fa flaticon2-writing kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16000.label.alone">나에게 보낸 메시지</span>
+						<span data-lang-cd="arm1000.label.alone">나에게 보낸 메시지</span>
 					</h5>
 					<span class="kt-margin-l-5 kt-margin-r-5" id="aloneAllCnt" name="aloneAllCnt">
 						<span class='kt-badge kt-badge--metal kt-badge--inline kt-margin-10 kt-padding-10 kt-hide' id="notReadAloneCnt" name="notReadAloneCnt">0</span>
@@ -59,30 +59,30 @@
 		<div class="kt-portlet kt-portlet--mobile">
 			<div class="kt-portlet__head kt-portlet__head--lg">
 				<div class="kt-portlet__head-label">
-					<div class="osl-datatable-search kt-margin-b-0" data-datatable-id="cmm16000CmmTable"></div>
+					<div class="osl-datatable-search kt-margin-b-0" data-datatable-id="arm1000ArmTable"></div>
 				</div>
 				<div class="kt-portlet__head-toolbar osl-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="select" title="메시지 조회" data-title-lang-cd="cmm16000.button.tooltip.selectBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="select" title="메시지 조회" data-title-lang-cd="arm1000.button.tooltip.selectBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="insert" title="메시지 보내기" data-title-lang-cd="cmm16000.button.tooltip.insertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="insert" title="메시지 보내기" data-title-lang-cd="arm1000.button.tooltip.insertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 							<i class="fa flaticon2-mail-1"></i><span data-lang-cd="datatable.button.insert">쓰기</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="reInsert" title="메시지 답장" data-title-lang-cd="cmm16000.button.tooltip.reInsertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="reInsert" tabindex="3">
-							<i class="fa flaticon2-chat-2"></i><span data-lang-cd="cmm16000.button.reInsertBtn">답장</span>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="reInsert" title="메시지 답장" data-title-lang-cd="arm1000.button.tooltip.reInsertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="reInsert" tabindex="3">
+							<i class="fa flaticon2-chat-2"></i><span data-lang-cd="arm1000.button.reInsertBtn">답장</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="check" title="메시지 읽음 처리" data-title-lang-cd="cmm16000.button.tooltip.checkBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="check" tabindex="4">
-							<i class="fa flaticon2-check-mark"></i><span data-lang-cd="cmm16000.button.checkBtn">읽음</span>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="check" title="메시지 읽음 처리" data-title-lang-cd="arm1000.button.tooltip.checkBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="check" tabindex="4">
+							<i class="fa flaticon2-check-mark"></i><span data-lang-cd="arm1000.button.checkBtn">읽음</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="cmm16000CmmTable" data-datatable-action="delete" title="메시지 삭제" data-title-lang-cd="cmm16000.button.tooltip.deleteBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="delete" title="메시지 삭제" data-title-lang-cd="arm1000.button.tooltip.deleteBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
 							<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 						</button>
 					</div>
 				</div>
 			</div>
 			<div class="kt-portlet__body">
-				<div class="kt_datatable" id="cmm16000CmmTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="arm1000ArmTable"></div>
 			</div>
 		</div>
 	</div>
@@ -90,15 +90,15 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLCmm16000Popup = function () {
-	var datatableId = "cmm16000CmmTable";
+var OSLArm1000Popup = function () {
+	var datatableId = "arm1000ArmTable";
 	
 	var documentSetting = function(){
 		$.osl.datatable.setting(datatableId,{
 			data: {
 				source: {
 					read: {
-						url: "/cmm/cmm10000/cmm16000/selectArm1000AlarmListAjax.do"
+						url: "/arm/arm1000/arm1000/selectArm1000AlarmListAjax.do"
 					},
 					params: {
 						armMenuType : "get"
@@ -110,7 +110,7 @@ var OSLCmm16000Popup = function () {
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, sortable: false},
 				{field: 'sendUsrNm', title: '보낸 사람', textAlign: 'left', autoHide: false, width: 120, sortField: "sendUsrNm", search:true,
 					template: function (row) {
-						if(row.sendUsrNm == null){
+						if($.osl.isNull(row.sendUsrNm)){
 							row.sendUsrNm = "";
 						}
 						var usrData = {
@@ -136,12 +136,12 @@ var OSLCmm16000Popup = function () {
 				},
 			],
 			searchColumns:[
-				{field: 'sendUsrId', title: $.osl.lang("cmm16000.field.sendUsrId"), searchOrd: 1},
-				{field: 'sendUsrEmail', title: $.osl.lang("cmm16000.field.sendUsrEmail"), searchOrd: 2},
-				{field: 'usrNm', title: $.osl.lang("cmm16000.field.usrNm"), searchOrd: 3},
-				{field: 'usrId', title: $.osl.lang("cmm16000.field.usrId"), searchOrd: 4},
-				{field: 'usrEmail', title: $.osl.lang("cmm16000.field.usrEmail"), searchOrd: 5},
-				{field: 'armContent', title: $.osl.lang("cmm16000.field.armContent"), searchOrd: 7}
+				{field: 'sendUsrId', title: $.osl.lang("arm1000.field.sendUsrId"), searchOrd: 1},
+				{field: 'sendUsrEmail', title: $.osl.lang("arm1000.field.sendUsrEmail"), searchOrd: 2},
+				{field: 'usrNm', title: $.osl.lang("arm1000.field.usrNm"), searchOrd: 3},
+				{field: 'usrId', title: $.osl.lang("arm1000.field.usrId"), searchOrd: 4},
+				{field: 'usrEmail', title: $.osl.lang("arm1000.field.usrEmail"), searchOrd: 5},
+				{field: 'armContent', title: $.osl.lang("arm1000.field.armContent"), searchOrd: 7}
 			],
 			rows:{
 				beforeTemplate : function(row, data, index){
@@ -153,28 +153,28 @@ var OSLCmm16000Popup = function () {
 				clickCheckbox: true,
 			},
 			actionBtn:{
-				"title": $.osl.lang("cmm16000.actionBtn.title"),
+				"title": $.osl.lang("arm1000.actionBtn.title"),
 				"reInsert" : true,
 				"update" : false,
 				"dblClick" : true,
 				"check" : true,
 			},
 			actionTooltip:{
-				"reInsert" : $.osl.lang("cmm16000.button.tooltip.reInsertBtn"),
-				"dblClick" : $.osl.lang("cmm16000.button.tooltip.dblClickBtn"),
-				"check" : $.osl.lang("cmm16000.button.tooltip.checkBtn"),
+				"reInsert" : $.osl.lang("arm1000.button.tooltip.reInsertBtn"),
+				"dblClick" : $.osl.lang("arm1000.button.tooltip.dblClickBtn"),
+				"check" : $.osl.lang("arm1000.button.tooltip.checkBtn"),
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum){
 					var data = {type:"insert"};
 					var options = {
 							idKey: datatableId,
-							modalTitle: $.osl.lang("cmm16000.actionBtn.insertTitle"),
+							modalTitle: $.osl.lang("arm1000.actionBtn.insertTitle"),
 							closeConfirm: false,
 							autoHeight:false,
 						};
 					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/insertCmm16001View.do',data,options);
+					$.osl.layerPopupOpen('/arm/arm1000/arm1000/insertArm1001View.do',data,options);
 				},
 				"reInsert":function(rowDatas, datatableId, type, rowNum){
 					var data;
@@ -183,7 +183,7 @@ var OSLCmm16000Popup = function () {
 					if(type == "list"){
 						//선택 항목이 리스트인 경우
 						if(rowNum == 0){
-							$.osl.alert($.osl.lang("cmm16000.alert.message.selectMessage"));
+							$.osl.alert($.osl.lang("arm1000.alert.message.selectMessage"));
 							return false;
 						}else if(rowNum == 1){
 							data = {
@@ -193,13 +193,13 @@ var OSLCmm16000Popup = function () {
 								};
 							options = {
 									idKey: "reInsert_"+rowDatas[0].armId,
-									modalTitle: $.osl.lang("cmm16000.actionBtn.reInsertTitle"),
+									modalTitle: $.osl.lang("arm1000.actionBtn.reInsertTitle"),
 									closeConfirm: false,
 									autoHeight:false,
 								};
 						}else{
 							//다중인 경우
-							$.osl.alert($.osl.lang("cmm16000.alert.message.selectOneMessage", rowNum));
+							$.osl.alert($.osl.lang("arm1000.alert.message.selectOneMessage", rowNum));
 							return false;
 						}
 					}else{
@@ -210,13 +210,13 @@ var OSLCmm16000Popup = function () {
 							};
 						options = {
 								idKey: "reInsert_"+rowDatas.armId,
-								modalTitle: $.osl.lang("cmm16000.actionBtn.reInsertTitle"),
+								modalTitle: $.osl.lang("arm1000.actionBtn.reInsertTitle"),
 								closeConfirm: false,
 								autoHeight:false,
 							};
 					}
 					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/insertCmm16001View.do',data,options);
+					$.osl.layerPopupOpen('/arm/arm1000/arm1000/insertArm1001View.do',data,options);
 				},
 				"delete":function(rowDatas, datatableId, type){
 					var data = {
@@ -225,7 +225,7 @@ var OSLCmm16000Popup = function () {
 
 					//AJAX 설정
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/cmm/cmm10000/cmm16000/deleteArm1000AlarmInfoAjax.do'/>", "async":"true"}
+							{"url":"<c:url value='/arm/arm1000/arm1000/deleteArm1000AlarmInfoAjax.do'/>", "async":"true"}
 							,data);
 					
 					//AJAX 전송 성공 함수
@@ -236,7 +236,7 @@ var OSLCmm16000Popup = function () {
 							//모달 창 닫기
 							$.osl.layerPopupClose();
 						}else{
-							OSLCmm16000Popup.reload();
+							OSLArm1000Popup.reload();
 						}
 					});
 					
@@ -250,12 +250,12 @@ var OSLCmm16000Popup = function () {
 					};
 					var options = {
 							idKey: rowData.armId,
-							modalTitle: $.osl.lang("cmm16000.actionBtn.dblClickTitle"),
+							modalTitle: $.osl.lang("arm1000.actionBtn.dblClickTitle"),
 							closeConfirm: false,
 							autoHeight:false,
 					};
 					
-					$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/selectCmm16002View.do',data,options);
+					$.osl.layerPopupOpen('/arm/arm1000/arm1000/selectArm1002View.do',data,options);
 				},
 				"check" : function(rowDatas){
 					var data = {
@@ -264,7 +264,7 @@ var OSLCmm16000Popup = function () {
 					
 					//AJAX 설정
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/cmm/cmm10000/cmm16000/updateArm1000AlarmInfoAjax.do'/>", "async":"true"}
+							{"url":"<c:url value='/arm/arm1000/arm1000/updateArm1000AlarmInfoAjax.do'/>", "async":"true"}
 							,data);
 					
 					//AJAX 전송 성공 함수
@@ -275,7 +275,7 @@ var OSLCmm16000Popup = function () {
 							//모달 창 닫기
 							$.osl.layerPopupClose();
 						}else{
-							OSLCmm16000Popup.reload();
+							OSLArm1000Popup.reload();
 						}
 					});
 					
@@ -360,7 +360,7 @@ var OSLCmm16000Popup = function () {
 	var checkNotRead = function(){
 		//ajax 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-    			{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmNotReadCntAjax.do'/>"});
+    			{"url":"<c:url value='/arm/arm1000/arm1000/selectArm1000AlarmNotReadCntAjax.do'/>"});
 		//ajax 전송 성공 함수
     	ajaxObj.setFnSuccess(function(data){
     		if(data.errorYn == "Y"){
@@ -442,7 +442,7 @@ var OSLCmm16000Popup = function () {
 }();
 
 $.osl.ready(function(){
-	OSLCmm16000Popup.init();
+	OSLArm1000Popup.init();
 });
 </script>
 <!-- end script -->

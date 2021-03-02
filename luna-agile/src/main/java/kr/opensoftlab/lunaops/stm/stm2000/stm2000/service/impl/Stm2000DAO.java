@@ -147,4 +147,25 @@ public class Stm2000DAO extends ComOslitsAbstractDAO {
     }	
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Map> selectStm2002FavoritesList(Map paramMap) throws Exception{
+		return (List<Map>) list("stm2000DAO.selectStm2002FavoritesList", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectStm2002FvrTypeCntInfo(Map paramMap) throws Exception{
+		return (int) select("stm2000DAO.selectStm2002FvrTypeCntInfo", paramMap);
+	}
+	
+	
+	public String insertStm2002FavoritesInfo(Map<String, String> paramMap) throws Exception {
+		return (String) insert("stm2000DAO.insertStm2002FavoritesInfo", paramMap);	
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	public int updateStm2002FavoritesInfo(Map paramMap) throws Exception{
+		return update("stm2000DAO.updateStm2002FavoritesInfo",paramMap);
+	}
 }
