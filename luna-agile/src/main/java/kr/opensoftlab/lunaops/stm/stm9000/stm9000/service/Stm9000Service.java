@@ -34,5 +34,4 @@ public interface Stm9000Service {
 	
 	Object saveStm9000JenkinsInfo(Map<String, String> paramMap)  throws Exception;
 	
-
 }
