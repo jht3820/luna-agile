@@ -94,6 +94,23 @@ public class Dpl1000Controller {
     	return "/dpl/dpl1000/dpl1000/dpl1000";
     }
 	
+    
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1001View.do")
+    public String selectDpl1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1001";
+    }
+    
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1002View.do")
+    public String selectDpl1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1002";
+    }
+
+	
+    @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1003View.do")
+    public String selectDpl1003View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		 return "/dpl/dpl1000/dpl1000/dpl1003";
+    }
+    
 	
 
 	
@@ -182,79 +199,15 @@ public class Dpl1000Controller {
 	
 	
 	
-	
     
-     @SuppressWarnings({ "rawtypes", "unchecked" })
- 	@RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1001View.do")
-     public String selectDpl1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
- 		
-    	 try{
- 			
- 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
- 			paramMap.put("prjId", (String)request.getSession().getAttribute("selPrjId"));
- 			
- 			Map dpl1000DplInfo = null;
- 			List<Map> dpl1000DplJobList = null;
- 			String dpl1000DplJobListJson = "{}";
- 			
- 			
- 			
- 			String pageType = paramMap.get("popupGb");
- 			
- 			
- 			if( "update".equals(pageType) || "select".equals(pageType)){
- 				dpl1000DplInfo = dpl1000Service.selectDpl1000DeployVerInfo(paramMap);
- 				dpl1000DplJobList = dpl1000Service.selectDpl1300DeployJobList(paramMap);
- 				
- 				dpl1000DplJobListJson = (new GsonBuilder().serializeNulls().create()).toJsonTree(dpl1000DplJobList).toString();
- 			}
- 			
- 			model.put("dpl1000DplInfo", dpl1000DplInfo);
- 			model.put("dpl1000DplJobList", dpl1000DplJobList);
- 			model.put("dpl1000DplJobListJson", dpl1000DplJobListJson.replaceAll("<", "&lt"));
-
- 			return "/dpl/dpl1000/dpl1000/dpl1001";
- 		}
- 		catch(Exception ex){
- 			Log.error("selectReq1001View()", ex);
- 			throw new Exception(ex.getMessage());
- 		}
-     }
+     
     
      
      
-     @RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1002View.do")
-     public String selectDpl1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		 return "/dpl/dpl1000/dpl1000/dpl1002";
-     }
+    
      
      
-     @SuppressWarnings("rawtypes")
-	@RequestMapping(value="/dpl/dpl1000/dpl1000/selectDpl1003View.do")
-     public String selectDpl1003View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	  try{
- 			
- 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
- 			
- 			
- 			Map dpl1000DplInfo = dpl1000Service.selectDpl1000DeployVerInfo(paramMap);
-			
- 			model.put("prjId", paramMap.get("prjId"));
- 			model.put("dpl1000DplInfo", dpl1000DplInfo);
- 			
- 			
- 			
- 			
- 			model.put("callView", paramMap.get("callView"));
-
- 			return "/dpl/dpl1000/dpl1000/dpl1003";
- 		}
- 		catch(Exception ex){
- 			Log.error("selectDpl1003View()", ex);
- 			throw new Exception(ex.getMessage());
- 		}
-    	 
-     }
+    
 
      
 	@SuppressWarnings({ "unchecked", "rawtypes" })

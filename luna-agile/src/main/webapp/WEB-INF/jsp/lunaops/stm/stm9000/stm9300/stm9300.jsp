@@ -12,7 +12,7 @@
 		</div>
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-wrapper">
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm9300PrjJobTable" data-datatable-action="select" title="프로젝트 배정 Job 조회" data-title-lang-cd="stm9100.button.jenkins.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm9300PrjJobTable" data-datatable-action="select" title="프로젝트 배정 Job 조회" data-title-lang-cd="stm9300.button.toolTil.prjAssignJobSearch" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
 			</div>
@@ -98,7 +98,7 @@ var OSLStm9300 = function () {
 					};
 					var options = {
 							idKey: datatableId +"_"+ rowData.jenId,
-							modalTitle: "["+ rowData.jobId + "] " + $.osl.lang("stm9100.modal.job.detailJob"),
+							modalTitle: "["+ rowData.jobId + "] " + $.osl.lang("stm9300.modal.title.detail"),
 							closeConfirm: false,
 							modalSize: "xl"
 					};
@@ -115,7 +115,7 @@ var OSLStm9300 = function () {
 					};
 					var options = {
 							idKey: datatableId +"_"+ rowData.jenId,
-							modalTitle: "["+ rowData.jenNm + "] " + $.osl.lang("stm9000.modal.jeknins.detailJenkins"),
+							modalTitle: "["+ rowData.jenNm + "] " + $.osl.lang("stm9300.modal.title.detail"),
 							closeConfirm: false,
 							modalSize: "xl"
 						};

@@ -37,27 +37,4 @@ public class Cmm9000DAO extends ComOslitsAbstractDAO {
 		return (String) select("cmm9000DAO.selectCmm9000ProjectType", paramMap);
 	}
 	
-
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<Map> selectCmm9000FavoritesList(Map paramMap) throws Exception{
-		return (List<Map>) list("cmm9000DAO.selectCmm9000FavoritesList", paramMap);
-	}
-
-	
-	@SuppressWarnings("rawtypes")
-	public int selectCmm9000FvrTypeCntInfo(Map paramMap) throws Exception{
-		return (int) select("cmm9000DAO.selectCmm9000FvrTypeCntInfo", paramMap);
-	}
-	
-	
-	public String insertCmm9000FavoritesInfo(Map<String, String> paramMap) throws Exception {
-		return (String) insert("cmm9000DAO.insertCmm9000FavoritesInfo", paramMap);	
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	public int updateCmm9000FavoritesInfo(Map paramMap) throws Exception{
-		return update("cmm9000DAO.updateCmm9000FavoritesInfo",paramMap);
-	}
 }

@@ -27,14 +27,14 @@
 							<!-- begin:: 산출물 메뉴 목록 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm4000MstCodeTable" data-datatable-action="select" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 메뉴 목록 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="select" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 메뉴 목록 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
 								</div>
 								<div class="kt-portlet__head-group">
 									<div class="kt-portlet__head-group">
-										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a>
-										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a>
+										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="prj3100DocTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a>
+										<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="prj3100DocTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a>
 										<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 									</div>
 								</div>
@@ -57,13 +57,13 @@
 						<div class="kt-portlet__body">
 							<div class="row">
 								<div class="col-12">
-									<div class="osl-tree-search" data-tree-id="stm6000DeptTree"></div>
+									<div class="osl-tree-search" data-tree-id="prj3100DocTree"></div>
 								</div>
 							</div>
 							<div class="kt-separator kt-separator--space-sm kt-separator--border-solid"></div>
 							<div class="row">
 								<div class="col-12">
-									<div class="osl-tree kt-scroll" data-height="410" id="stm6000DeptTree"></div>
+									<div class="osl-tree kt-scroll" data-height="410" id="prj3100DocTree"></div>
 								</div>
 							</div>
 						</div>
@@ -85,7 +85,7 @@
 							<!-- begin:: 산출물 정보 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="" data-datatable-action="select" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 정보 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectDocInfo" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectDocInfo" tabindex="1" data-original-title="산출물 정보 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
 									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="" data-datatable-action="update" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" data-original-title="산출물 양식 다운로드">
@@ -97,56 +97,58 @@
 						</div>
 						
 						<div class="kt-portlet__body">
-							<div class="row">
-								<div class="col-6">
-									<div class="form-group">
-										<label>산출물 ID</label>
-										<input type="" class="form-control" readonly="readonly">
+							<form class="kt-form" id="frPrj3100">
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fa fa-align-left kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docId">산출물 ID</span></label>
+											<input type="text" class="form-control" placeholder="산출물 ID" name="docId" id="docId" readonly="readonly">
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docNm">산출물 명</span></label>
+											<input type="text" class="form-control" placeholder="산출물 명" name="docNm" id="docNm" readonly="readonly">
+										</div>
 									</div>
 								</div>
-								<div class="col-6">
-									<div class="form-group">
-										<label>산출물 명</label>
-										<input type="" class="form-control" readonly="readonly">
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fa fa-check-square kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docUseCd">사용유무</span></label>
+											<input type="text" class="form-control" placeholder="사용유무"  name="useNm" id="useNm" readonly="readonly">
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fa fa-list-ol kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docOrd">순번</span></label>
+											<input type="text" class="form-control" placeholder="순번" name="ord" id="ord" readonly="readonly">
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-6">
-									<div class="form-group">
-										<label>사용 여부</label>
-										<input type="" class="form-control" readonly="readonly">
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fas fa-calendar-alt kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docEdDtm">산출물 마감일</span></label>
+											<input type="text" class="form-control" placeholder="산출물 마감일" name="docEdDtm" id="docEdDtm" readonly="readonly">
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label><i class="fa fa-project-diagram kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docEdDtm">산출물 구분</span></label>
+											<input type="" class="form-control" placeholder="산출물 구분" readonly="readonly">
+										</div>
 									</div>
 								</div>
-								<div class="col-6">
-									<div class="form-group">
-										<label>순번</label>
-										<input type="" class="form-control" readonly="readonly">
+								<div class="row">
+									<div class="col-12">
+										<div class="form-group">
+											<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="prj3100.label.docEtc">비고</span></label>
+											<div class="form-control h-100 osl-min-height--12rem" id="docDesc"></div>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-6">
-									<div class="form-group">
-										<label>산출물 마감일</label>
-										<input type="" class="form-control" readonly="readonly">
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="form-group">
-										<label>산출물 구분</label>
-										<input type="" class="form-control" readonly="readonly">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="form-group">
-										<label>비고</label>
-										<textarea class="form-control" id="" rows="3" readonly="readonly"></textarea>
-									</div>
-								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -512,13 +514,13 @@
 							<!-- begin:: 산출물 연결 관리 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="" data-datatable-action="select" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 연결 관리 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="select" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 연결 관리 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="" data-datatable-action="update" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" data-original-title="산출물 연결 관리 연결">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="insert" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3" data-original-title="산출물 연결 관리 연결">
 										<i class="fa fa-edit"></i><span>연결</span>
 									</button>
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="" data-datatable-action="delete" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 연결 관리 연결 제거">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="delete" title="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 연결 관리 연결 제거">
 										<i class="fa fa-trash-alt"></i><span>연결 제거</span>
 									</button>
 								</div>
@@ -527,7 +529,12 @@
 						</div>
 						
 						<div class="kt-portlet__body">
-							
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-sm-12">
+									<div class="osl-datatable-search" data-datatable-id="prj3200PrjTable"></div>
+								</div>
+							</div>
+							<div class="kt_datatable" id="prj3200PrjTable"></div>
 						</div>
 					</div>
 				</div>
@@ -542,17 +549,27 @@
 "use strict";
 var OSLPrj3000Popup = function () {
 	
-	var formId = "frStm6000";
+	var formId = "frPrj3100";
+	
+	//트리 메뉴
+	var treeObj = '';
+	
+	//산출물 아이디
+	var docId = '';
+	
+	//산출물 연결 정보 데이터 테이블
+	var prj3200PrjTable = "prj3200PrjTable";
 	
 	var documentSetting = function(){
 		
 		// 조직 tree 세팅
-		var treeObj = $.osl.tree.setting("stm6000DeptTree",{
+		// 조직 tree 세팅
+		treeObj = $.osl.tree.setting("prj3100DocTree",{
 			data:{
-				url:"<c:url value='/stm/stm6000/stm6000/selectStm6000DeptListAjax.do'/>",
-				key: "deptId",
-				pKey: "upperDeptId",
-				labelKey: "deptName"
+				url:"<c:url value='/prj/prj3000/prj3000/selectPrj3000DocListAjax.do'/>",
+				key: "docId",
+				pKey: "upperDocId",
+				labelKey: "docNm"
 			},
 			search:{
 				//대소문자 구분
@@ -564,23 +581,194 @@ var OSLPrj3000Popup = function () {
 			},
 			callback:{
 				onclick: function(treeObj,selNode){
-					// 조직 단건 조회
-					selectDeptInfo(selNode.original.deptId);
+					
+					// 산출물 정보 단건 조회
+					selectDocInfo(selNode.original);
 				},
 				init: function(treeObj,data){
-					//console.log(treeObj,data);
+					//console.log(treeObj,data); 
+				}
+			},
+			actionFn : {
+				"selectDocInfo" : function(obj){
+					
+					//선택한 트리 노드 없으면 튕기기
+					var selectNodeIds = treeObj.jstree("get_selected");
+					if($.osl.isNull(selectNodeIds)){
+						$.osl.alert($.osl.lang("prj3100.message.alert.treeSelect"));
+						return false;
+					}
+					
+					// 선택노드
+					var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+					var nodeData = selectNode.original;
+					
+					// 산출물 정보 단건 조회
+					selectDocInfo(nodeData);
+				}
+			 
+			}
+			
+		});
+		
+		/*스크롤 세팅*/
+		//조직 트리 스크롤 세팅
+		ktScrollInit("#prj3100DocTree", "410");
+		//확정 파일 스크롤 세팅
+		ktScrollInit("#confirmation-list", "350");
+		//확정 대기 파일 스크롤 세팅
+		ktScrollInit("#wait-confirmation-list", "350");	
+		
+		//데이터 테이블 세팅
+		$.osl.datatable.setting("prj3200PrjTable",{
+			data: {
+				source: {
+					read: {
+						url: "/prj/prj3000/prj3200/selectPrj3200DocConListAjax.do"
+					}
+				},
+			},
+			columns: [
+				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
+				{field: 'targetTypeNm', title: '구분', textAlign: 'left', width: 80, search: false},
+				{field: 'targetNm', title: '대상 명', textAlign: 'left', width: 180, search: true, autoHide: false},
+				{field: 'regUsrNm', title: '등록자', textAlign: 'center', width: 80, search: true,
+					template: function (row) {
+						return $.osl.user.usrImgSet(row.regUsrId, row.regUsrNm);
+					},
+					onclick: function(rowData){
+						$.osl.user.usrInfoPopup(rowData.regUsrId);
+					}
+				},
+				{field: 'regDtm', title: '등록일', textAlign: 'center', width: 80, search: true, searchType:"date"}
+				
+			],
+			searchColumns:[
+				{field: 'targetCd', title: '구분', searchOrd: 0, searchType:"select", searchCd:"PRJ00022"}
+			],
+			rows:{
+				clickCheckbox: true
+			},
+			actionBtn:{
+				"title": "연결 제거",
+				"update": false
+			},
+			actionTooltip:{
+				"delete": "연결 제거"
+			},
+			actionFn:{
+				"insert":function(datatableId, type, rowNum){
+					
+					//선택된 산출물 없다면 튕기기
+					var selectNodeIds = treeObj.jstree("get_selected");
+					if($.osl.isNull(selectNodeIds)){
+						$.osl.alert($.osl.lang("prj3100.message.alert.treeSelect"));
+						return false;
+					}
+					
+					// 선택노드
+					var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+					var nodeData = selectNode.original;
+					
+					var data = {docId: docId,
+								dtParamPrjId : nodeData.prjId};
+					var options = {
+							idKey: datatableId,
+							modalTitle: $.osl.lang("prj3100.modal.title.insertDocCon"),
+							closeConfirm: false,
+							modalSize: "xl"
+						};
+					
+					$.osl.layerPopupOpen('/prj/prj3000/prj3200/selectPrj3200View.do',data,options);
+				},
+				"delete":function(rowDatas, datatableId, type, rowNum, elem){
+					//AJAX 설정
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/prj/prj3000/prj3200/deletePrj3200DocConInfoAjax.do'/>"}
+							,{deleteDataList: JSON.stringify(rowDatas)});
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						if(data.errorYn == "Y"){
+			   				$.osl.alert(data.message,{type: 'error'});
+			   			}else{
+			   				//삭제 성공
+			   				$.osl.toastr(data.message);
+			   				
+			   				//datatable 조회
+			   				$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
+			   			}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
 				}
 			}
 		});
 		
 		
-		/*스크롤 세팅*/
-		//조직 트리 스크롤 세팅
-		ktScrollInit("#stm6000DeptTree", "410");
-		//확정 파일 스크롤 세팅
-		ktScrollInit("#confirmation-list", "350");
-		//확정 대기 파일 스크롤 세팅
-		ktScrollInit("#wait-confirmation-list", "350");	
+		
+		 /**
+		 * function 명 	: selectDocInfo
+		 * function 설명	: 선택한 산출물의 상세정보를 조회하여 화면에 세팅한다.
+		 * @param docId : 선택한 산출물 ID
+		 */
+		var selectDocInfo = function(nodeData) {
+	    	
+			//AJAX 설정
+			var ajaxObj = new $.osl.ajaxRequestAction(
+					{"url":"<c:url value='/prj/prj3000/prj3000/selectPrj3000DocInfoAjax.do'/>", "async": false}
+					,{"docId": nodeData.docId, "dtParamPrjId" : nodeData.prjId});
+			
+			//AJAX 전송 성공 함수
+			ajaxObj.setFnSuccess(function(data){
+				
+				if(data.errorYn == "Y"){
+					$.osl.alert(data.message,{type: 'error'});
+				}else{
+					$("#"+formId)[0].reset();
+					
+					// 산출물 정보 세팅
+			    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3100", ["docId", "docNm", "useNm", "ord", "docEdDtm", "signUseNm"]);
+				
+			    	var docDesc = data.docInfoMap.docDesc;
+					
+					// 산출물 마감일 없을 경우
+					if($.osl.isNull(data.docInfoMap.docEdDtm)){
+						$("#docEdDtm").val("-");
+					}
+					
+					if(!$.osl.isNull(docDesc)){
+						docDesc =  $.osl.escapeHtml(docDesc);
+				    	// 비고 값 div영역에 세팅
+						$("#docDesc").html(docDesc.replace(/\n/g, '<br/>'));
+					}
+					
+					//입력된 검색값 초기화 (보류)
+					//$("#searchData_prj3200PrjTable").val('');
+					
+					//데이터 테이블 정보 세팅
+					selectDocConInfo();
+				}
+			});
+			
+			//AJAX 전송
+			ajaxObj.send();
+		};
+		
+		
+		/**
+		 * function 명 	: selectDocConInfo
+		 * function 설명	: 선택한 산출물의 연결 정보를 조회하여 화면에 세팅한다.
+		 * @param docId : 선택한 산출물 ID
+		 */
+		var selectDocConInfo = function(){
+			docId = $("#docId").val();
+			console.log(docId);
+			$.osl.datatable.list[prj3200PrjTable].targetDt.setDataSourceParam("docId", docId);
+			$("button[data-datatable-id="+prj3200PrjTable+"][data-datatable-action=select]").click();
+			 
+		}
 		
 		
 		
@@ -687,6 +875,9 @@ var OSLPrj3000Popup = function () {
 	         height: targetHeight
 	    });
 	}
+	
+	
+	
 	
 	return {
         // public functions

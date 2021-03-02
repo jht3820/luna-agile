@@ -1,11 +1,8 @@
 package kr.opensoftlab.lunaops.stm.stm2000.stm2000.web;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.rte.fdl.cmmn.trace.LeaveaTrace;
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 import kr.opensoftlab.sdf.util.ModuleUseCheck;
-import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
@@ -294,4 +289,45 @@ public class Stm2000Controller {
     
 
 	
+    @RequestMapping(value="/stm/stm2000/stm2000/saveStm2002FavoriteInfo.do")
+    public ModelAndView saveStm2002FavoriteInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+    	
+    	try{
+    		
+    		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+    		
+    		HttpSession ss = request.getSession();
+    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+    		
+    		
+    		paramMap.put("usrId", loginVO.getUsrId());
+    		
+    		
+    		paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
+    		
+    		String fvrId = (String) paramMap.get("fvrId");
+    		
+    		
+    		int fvrInfoCnt = stm2000Service.selectStm2002FvrTypeCntInfo(paramMap);
+    		
+    		if(fvrInfoCnt > 0) {
+    			
+    			stm2000Service.updateStm2002FavoritesInfo(paramMap);
+    		}else {
+    			
+    			fvrId = stm2000Service.insertStm2002FavoritesInfo(paramMap);
+    		}
+    		
+    		model.addAttribute("fvrId", fvrId);
+    		model.addAttribute("errorYn", "N");
+    		model.addAttribute("message", egovMessageSource.getMessage("success.common.save"));
+    		return new ModelAndView("jsonView");
+    		
+    	}catch(Exception ex){
+    		Log.error("saveStm2002FavoriteInfo()", ex);
+    		model.addAttribute("errorYn", "Y");
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.save"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
 }
