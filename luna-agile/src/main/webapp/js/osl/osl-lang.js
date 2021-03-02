@@ -656,7 +656,12 @@ var OSLCoreLangSetting = function () {
 		},
 		req3000:{
 			title:{
-				detailTitle:"그룹 요구사항 상세보기"
+				detailTitle:"그룹 요구사항 상세보기",
+				insert:"그룹 요구사항 등록",
+				update:"그룹 요구사항 수정",
+				detail:"그룹 요구사항 상세정보",
+				selectCharger:"그룹 요구사항 담당자 검색",
+				selectUsr:"그룹 요구사항 요청자 검색"
 			},
 			datatable:{
 				action:{
@@ -1668,6 +1673,10 @@ var OSLCoreLangSetting = function () {
 				update: "Update",
 				delete: "Delete",
 				trash: "Trash",
+				upload:"Upload",
+				excel:"Excel",
+				print:"Print",
+				download:"Form Download",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -1776,6 +1785,16 @@ var OSLCoreLangSetting = function () {
 				telno: "Request User Number",
 				regGrpChargerNm:"Request Charger Name",
 				regDtmDay:"Write Date"
+			},
+			req3001UnconnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
+			},
+			req3001ConnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
 			},
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
@@ -2353,8 +2372,23 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			actionBtn:{
+				title : "Select",
+				clickBtn : "Select",
+			},
+			button:{
+				select:" ",
+				delete:" ",
+				insert:" ",
+				connect:" ",
+				reset:" ",
+				done:"Done",
+			},
 			title:{
-				detailTitle:"Group requirement detail"
+				detailTitle:"Group requirement detail",
+				insert:"Group requirement insert",
+				update:"Group requirement update",
+				detail:"Group requirement Detail Information",
 			},
 			datatable:{
 				action:{
@@ -2373,10 +2407,28 @@ var OSLCoreLangSetting = function () {
 						excel:"Group requirement excel",
 						print:"Group requirement print",
 						upload:"Group requirement upload",
-						download:"Form download"
+						download:"Form download",
+						reset:"Connection reset",
+						connect:"Connect"
 					}
 				},
 			},
+			label:{
+				reqGrpNo:"Group requirement Number",
+				reqGrpUsr:"Request User",
+				reqGrpCharger:"Group requirement Charger",
+				reqGrpNm:"Group requirement Name",
+				reqGrpDesc:"Group requirement Descirption",
+				fileUpload:"File Upload",
+				linkedReqList:"Linked requirements List",
+				unlinkedReqList:"Unlinked requirements List",
+				linkedReqInfo:"Linked requirements Information",
+				linkedReqTypeList:"Linked requirements Type List",
+				total:"Total",
+				ongoing:"Ongoing",
+				done:"Done",
+				linkedReqCount:"Linked requirements Counts",
+			}
 		},
 		req4100:{
 			button:{
