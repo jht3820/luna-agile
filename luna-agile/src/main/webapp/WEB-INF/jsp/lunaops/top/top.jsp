@@ -142,7 +142,7 @@
 							
 							<!--begin: Message -->
 							<div class="kt-header__topbar-item">
-								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="location.href='/cmm/cmm10000/cmm16000/cmm16000View.do'">
+								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="location.href='/arm/arm1000/arm1000/selectArm1000View.do'">
 									<span class="kt-header__topbar-icon"><i class="flaticon-email-black-circular-button"></i></span>
 								</div>
 							</div>
