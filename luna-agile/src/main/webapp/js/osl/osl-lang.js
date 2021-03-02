@@ -444,6 +444,17 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		prj1101:{
+			complete: "완료",
+			insert:{
+				title: "신규 프로세스 생성",
+				saveString: "신규 프로세스를 생성하시겠습니까?",
+			},
+			update:{
+				title: "프로세스 수정",
+				saveString: "프로세스를 수정하시겠습니까?",
+			}
+		},
 		prj1201:{
 			title: "프로젝트 설정 수정",
 			complete: "완료",
@@ -644,8 +655,26 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"연결에 성공했습니다.",
+				saveDupleMsg:"이미 연결된 요구사항입니다.",
+				saveAllDupleMsg:"모든 요구사항이 연결되었습니다.",
+			},
+			alert:{
+				insert:"그룹 요구사항을 등록하시겠습니까?",
+				delete:"선택된 그룹 요구사항을 삭제하시겠습니까?",
+				deleteList:"${1}건의 그룹 요구사항을 삭제하시겠습니까?",
+				update:"그룹 요구사항을 수정하시겠습니까?",
+				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
+				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
+			},
 			title:{
-				detailTitle:"그룹 요구사항 상세보기"
+				detailTitle:"그룹 요구사항 상세보기",
+				insert:"그룹 요구사항 등록",
+				update:"그룹 요구사항 수정",
+				detail:"그룹 요구사항 상세정보",
+				selectCharger:"그룹 요구사항 담당자 검색",
+				selectUsr:"그룹 요구사항 요청자 검색"
 			},
 			datatable:{
 				action:{
@@ -1387,6 +1416,7 @@ var OSLCoreLangSetting = function () {
 				allPrjList : "전체 프로젝트 목록",
 				assignJobList : "JOB 배정 목록",
 				notAssignJobList : "JOB 미배정 목록"
+				dplAuthSettingModal : "배포 실행 권한 설정"
 			},
 			button:{
 				dplAuthSetting : "배포 실행 권한 설정"
@@ -1412,6 +1442,30 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm9201:{
+			title:{
+				assignDplAuth : "배포 실행 권한 목록",
+				notAssignDplAuth : "미배정 권한 그룹 및 사용자"
+			},
+			button:{
+				title:{
+					dplAuthInsert : "배정 등록",
+					dplAuthDelete : "배정 제외"
+				},
+				toolTip:{
+					dplAuthInsert : "배포 실행 권한 등록",
+					dplAuthDelete : "배포 실행 권한 제외",
+					assignAuthSearch : "배정 실행 권한 대상 목록 조회",
+					notAssignAuthSearch : "미배정 권한 대상 목록 조회"
+				}
+			},
+			message:{
+				confirm:{
+					dplAuthInsert:"${1}건의 대상을 배정하시겠습니까?",
+					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
+				}
+			}
+		}
 		stm9300:{
 			button:{
 				toolTil:{
@@ -1657,6 +1711,10 @@ var OSLCoreLangSetting = function () {
 				update: "Update",
 				delete: "Delete",
 				trash: "Trash",
+				upload:"Upload",
+				excel:"Excel",
+				print:"Print",
+				download:"Form Download",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -1765,6 +1823,16 @@ var OSLCoreLangSetting = function () {
 				telno: "Request User Number",
 				regGrpChargerNm:"Request Charger Name",
 				regDtmDay:"Write Date"
+			},
+			req3001UnconnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
+			},
+			req3001ConnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
 			},
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
@@ -1879,6 +1947,22 @@ var OSLCoreLangSetting = function () {
 				jobTypeNm: "Job Type",
 				jobRestoreId: "Restore Job Id",
 				jobParameter: "Job Parameter"
+			},
+			stm9201AssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
+			stm9201NotAssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
 			},
 			stm9300PrjJobTable:{
 				prjNm: "Project Name",
@@ -2342,8 +2426,40 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"Connection success",
+				saveDupleMsg:"That connection is already connected",
+				saveAllDupleMsg:"All request is already connected",
+			},
+			alert:{
+				checkUsrId:"You must search user name. \n because we must know about detail department belong user",
+				checkChargerId:"You must search charger name. \n because we must know about detail department belong charger",
+			},
+			confirm:{
+				insert:"Would you like to register your group requirement?",
+				delete:"Would you like to delete your group requirement?",
+				deleteList:"Would you like to delet your ${1} requirements?",
+				update:"Would you like to update your group requirement?",
+			},
+			actionBtn:{
+				title : "Select",
+				clickBtn : "Select",
+			},
+			button:{
+				select:" ",
+				delete:" ",
+				insert:" ",
+				connect:" ",
+				reset:" ",
+				done:"Done",
+			},
 			title:{
-				detailTitle:"Group requirement detail"
+				detailTitle:"Group requirement detail",
+				insert:"Group requirement insert",
+				update:"Group requirement update",
+				detail:"Group requirement Detail Information",
+				selectUsr:"Search group requirement request user",
+				selectCharger:"Search group requirement charger",
 			},
 			datatable:{
 				action:{
@@ -2362,10 +2478,28 @@ var OSLCoreLangSetting = function () {
 						excel:"Group requirement excel",
 						print:"Group requirement print",
 						upload:"Group requirement upload",
-						download:"Form download"
+						download:"Form download",
+						reset:"Connection reset",
+						connect:"Connect"
 					}
 				},
 			},
+			label:{
+				reqGrpNo:"Group requirement Number",
+				reqGrpUsr:"Request User",
+				reqGrpCharger:"Group requirement Charger",
+				reqGrpNm:"Group requirement Name",
+				reqGrpDesc:"Group requirement Descirption",
+				fileUpload:"File Upload",
+				linkedReqList:"Linked requirements List",
+				unlinkedReqList:"Unlinked requirements List",
+				linkedReqInfo:"Linked requirements Information",
+				linkedReqTypeList:"Linked requirements Type List",
+				total:"Total",
+				ongoing:"Ongoing",
+				done:"Done",
+				linkedReqCount:"Linked requirements Counts",
+			}
 		},
 		req4100:{
 			button:{
@@ -3076,4 +3210,3 @@ var OSLCoreLangSetting = function () {
     		$.osl.date.init();
         }
     };
-}();

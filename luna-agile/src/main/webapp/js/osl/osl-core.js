@@ -201,52 +201,6 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
-					locale:Uppy.locales.ko_KR,
-					meta: {},
-					onBeforeUpload: $.noop,
-					onBeforeFileAdded: $.noop,
-				};
-				
-				
-				config = $.extend(true, defaultConfig, config);
-				
-				var targetObj = $("#"+targetId);
-				if(targetObj.length > 0){
-					rtnObject = Uppy.Core({
-						targetId: targetId,
-						autoProceed: config.autoProceed,
-						restrictions: {
-							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
-							maxNumberOfFiles: config.maxNumberOfFiles,
-							minNumberOfFiles: config.minNumberOfFiles,
-							allowedFileTypes: config.allowedFileTypes
-						},
-						locale:config.locale,
-						meta: config.meta,
-						onBeforeUpload: function(files){
-							return config.onBeforeUpload(files);
-						},
-						onBeforeFileAdded: function(currentFile, files){
-							
-							if(currentFile.source != "database" && config.fileReadonly){
-								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
-								return false;
-							}
-							return config.onBeforeFileAdded(currentFile, files);
-						},
-						debug: config.debug,
-						logger: config.logger,
-						fileDownload: config.fileDownload
-					});
-					
-					rtnObject.use(Uppy.Dashboard, config);
-					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
-				}
-				
-				return rtnObject;
-			},
-			
-			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -2486,7 +2440,8 @@
 							beforeTemplate: function (row, data, index){
 								
 							},
-							clickCheckbox: false
+							clickCheckbox: false,
+							minHeight: null
 						},
 						sortable: true,
 						pagination: true,
@@ -2577,26 +2532,37 @@
 					
 					targetConfig.rows["afterTemplate"] = function(row, data, index){
 						
-						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+						if(config.hasOwnProperty("rows")){
 							
-							if(config.rows.clickCheckbox == true){
+							if(config.rows.hasOwnProperty("minHeight")){
+								var minHeight = config.rows.minHeight;
 								
-								row.click(function(){
-									var targetRow = $(this).closest("tr");
-									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+								
+								if(!$.osl.isNull(minHeight) && $.isNumeric(minHeight)){
+									$(row).css({"min-height": parseInt(minHeight)+"px"});
+								}
+							}
+							if(config.rows.hasOwnProperty("clickCheckbox")){
+								
+								if(config.rows.clickCheckbox == true){
 									
-									if(targetElem.is(":checked") == true){
-										targetElem.prop("checked", false);
-										datatables.targetDt.setInactive(targetElem);
+									row.click(function(){
+										var targetRow = $(this).closest("tr");
+										var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
 										
-										targetRow.removeClass("osl-datatable__row--selected");
-										targetRow.addClass("kt-datatable__row--even");
-									}else{
-										targetElem.prop("checked", true);
-										datatables.targetDt.setActive(targetElem);
-									}
-									
-								});
+										if(targetElem.is(":checked") == true){
+											targetElem.prop("checked", false);
+											datatables.targetDt.setInactive(targetElem);
+											
+											targetRow.removeClass("osl-datatable__row--selected");
+											targetRow.addClass("kt-datatable__row--even");
+										}else{
+											targetElem.prop("checked", true);
+											datatables.targetDt.setActive(targetElem);
+										}
+										
+									});
+								}
 							}
 						}
 						
@@ -2810,6 +2776,7 @@
 					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-ajax-done",function(evt,list){
+						
 						targetConfig.callback.ajaxDone(evt.target, list, datatableInfo);
 						
 						
@@ -2890,6 +2857,19 @@
 											}
 										}
 									});
+									
+									
+									$(targetUI).find('[data-toggle="kt-tooltip"]').each(function() {
+							            KTApp.initTooltip($(this));
+							        });
+									
+									
+									$(targetUI).find(".osl-datatable__card").click(function(){
+										var rowNum = $(this).data("datatable-rownum");
+										var rowData = datatables.targetDt.dataSet[rowNum];
+										targetConfig.actionFn["click"](rowData, targetId, "card", rowNum, this);
+									});
+									
 								});
 							}
 						}

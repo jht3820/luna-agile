@@ -66,7 +66,17 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY SUB1.REG_DTM DESC
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.REG_DTM DESC
+		</isEmpty>
     </sql>
     
     
@@ -178,125 +188,5 @@
 		AND	LIC_GRP_ID = #licGrpId# 
 		AND JEN_ID = #jenId# 
 	</update>
-	
-    
-    
-    
-	
-	<select id="stm9000DAO.selectStm9000JenkinsUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
-		SELECT	COUNT(1) AS CNT
-		FROM 	STM9000 A
-		WHERE    1=1
-			AND	LIC_GRP_ID = #licGrpId#
-			AND	JEN_ID = #jenId#                
-			AND	ROWNUM = 1
-	</select>
-	
-   
-    <select id="stm9000DAO.selectStm9000JenkinsUserList" parameterClass="java.util.Map"  resultClass="egovMap">
-		
-		
-      SELECT   	 B.JEN_USR_ID 
-		      	,B.JEN_USR_TOK
-		      	,B.JEN_NM
-		      	,B.JEN_URL
-		      	,B.JEN_ID
-		      	,(SELECT COUNT(1) FROM  STM9003 C 
-		            WHERE 1=1
-		            AND		A.LIC_GRP_ID = #licGrpId#
-		            AND     A.PRJ_ID = C.PRJ_ID
-					AND     A.JEN_ID = C.JEN_ID
-					AND		A.JOB_ID = C.JOB_ID
-					AND     C.AUTH_GRP_ID =  #authGrpId#
-		             )    AS AUTH_CNT
-      FROM
-      			STM9001 B ,
-         		(   SELECT	LIC_GRP_ID ,
-         					PRJ_ID , 
-         		            JEN_ID ,
-         		            JOB_ID ,
-         		    FROM	STM9002 
-         		    WHERE	PRJ_ID  = #prjId#  )  A 
-		WHERE   1=1
-		AND		A.LIC_GRP_ID = #licGrpId#
-		AND		A.LIC_GRP_ID = B.LIC_GRP_ID
-		AND     A.JEN_ID = B.JEN_ID
-		AND		A.JOB_ID = B.JOB_ID
-		AND     B.USE_CD ='01'
-		<isNotEmpty property="jobname">
-		AND     B.JEN_NM = #jobname#
-		</isNotEmpty>
-	</select>
-    
-    
-	<insert id="stm9000DAO.insertStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
-		
-		<![CDATA[
-			INSERT INTO STM9002 A
-			(
-				A.PRJ_ID,				A.JEN_ID,					A.AUTH_GRP_ID
-				,A.REG_DTM,				A.REG_USR_ID,				A.REG_USR_IP
-				,A.MODIFY_DTM,			A.MODIFY_USR_ID,			A.MODIFY_USR_IP
-			)
-			VALUES
-			(
-				#prjId#,				#jenId#,					#authGrpId#
-				,SYSDATE,				#regUsrId#,					#regUsrIp#
-				,SYSDATE,				#modifyUsrId#,				#modifyUsrIp#
-			)		
-		
-		]]>
-	</insert>
-	
-	
-	<delete id="stm9000DAO.deleteStm9000JenAuthGrpInfo" parameterClass="java.util.Map">
-		
-		<![CDATA[
-			DELETE FROM STM9002 A
-			WHERE 1=1
-				AND		A.PRJ_ID = #prjId#
-				AND		A.JEN_ID = #jenId#
-				AND		A.AUTH_GRP_ID = #authGrpId#
-		]]>
-	</delete>
-	
-	
-	<select id="stm9000DAO.selectStm9000JenAuthGrpList"  parameterClass="java.util.Map" resultClass="egovMap">
-		
-		<![CDATA[
-			SELECT 
-				A.PRJ_ID
-				,A.JEN_ID
-				,A.AUTH_GRP_ID
-			    ,B.AUTH_GRP_NM
-			    ,B.AUTH_GRP_DESC
-			    ,B.CREATE_DT
-			    ,B.USE_CD
-			    ,B.USR_TYP
-			    ,SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00004', B.USR_TYP, '1') AS USR_TYP_NM
-			FROM STM9002 A, PRJ2000 B
-			WHERE 1=1
-			AND B.LIC_GRP_ID = #licGrpId#
-			AND	A.PRJ_ID = #prjId#
-			AND A.JEN_ID = #jenId#
-			AND A.PRJ_ID = B.PRJ_ID
-			AND A.AUTH_GRP_ID = B.AUTH_GRP_ID
-			AND B.USE_CD = '01'
-			ORDER BY B.ORD
-		]]>
-	</select>
-	
-	
-	<select id="stm9000DAO.selectStm9000JenAuthGrpCnt"  parameterClass="java.util.Map" resultClass="java.lang.Integer">
-		
-		<![CDATA[
-			SELECT COUNT(*) AS AUTH_GRP_CNT
-			FROM STM9002 A
-			WHERE 1=1
-			AND	A.PRJ_ID = #prjId#
-			AND A.JEN_ID = #jenId#
-			AND A.AUTH_GRP_ID = #authGrpId#
-		]]>
-	</select>
 	
 </sqlMap>

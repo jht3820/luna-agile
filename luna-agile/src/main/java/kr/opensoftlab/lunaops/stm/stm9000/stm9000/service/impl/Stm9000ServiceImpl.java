@@ -98,5 +98,4 @@ public class Stm9000ServiceImpl  extends EgovAbstractServiceImpl implements Stm9
 			stm9000DAO.deleteStm9000JenkinsInfo(delJenInfoMap);
 		}
 	}
-	
 }

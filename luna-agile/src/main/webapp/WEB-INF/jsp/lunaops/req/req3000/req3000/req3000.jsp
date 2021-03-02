@@ -4,24 +4,12 @@
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
 <!-- begin page DOM -->
-<div class="kt-portlet kt-portlet--mobile">
+<div class="kt-portlet kt-portlet--mobile ">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
 			<h4 class="kt-font-boldest kt-font-brand">
 				<i class="fa fa-th-large kt-margin-r-5"></i><c:out value="${sessionScope.selMenuNm}"/>
 			</h4>
-		</div>
-		<div class="kt-portlet__head-toolbar">
-			<div class="kt-portlet__head-wrapper">
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air btn-view-type active" title="데이터 카드 형식으로 보기" data-title-lang-cd="req3000.button.title.card" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="6" data-view-type="01">
-						<i class="fa fa-table osl-padding-r0"></i>
-					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air btn-view-type" title="데이터 테이블 형식으로 보기" data-title-lang-cd="req3000.button.title.grid" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="7" data-view-type="02">
-						<i class="fa fa-list osl-padding-r0"></i>
-					</button>
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
@@ -61,38 +49,36 @@
 				<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="update" title="그룹 요구사항 목록 수정" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.update" data-placement="bottom" data-auth-button="update" tabindex="7">
-				<i class="fa fa-edit"></i><span>수정</span>
+				<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="delete" title="그룹 요구사항 목록 삭제" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.delete" data-placement="bottom" data-auth-button="delete" tabindex="8">
-				<i class="fa fa-trash-alt"></i><span>삭제</span>
+				<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 엑셀" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.excel" data-placement="bottom" data-auth-button="excel" tabindex="">
-				<i class="fas fa-file-excel"></i><span>엑셀</span>
+			<!-- 미구현기능 -->
+			<!-- <button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 엑셀" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.excel" data-placement="bottom" data-auth-button="excel" tabindex="">
+				<i class="fas fa-file-excel"></i><span data-lang-cd="datatable.button.excel">엑셀</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 프린트" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.print" data-placement="bottom" data-auth-button="print" tabindex="">
-				<i class="fas fa-print"></i><span>프린트</span>
+				<i class="fas fa-print"></i><span data-lang-cd="datatable.button.print">프린트</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 양식 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.download" data-placement="bottom" data-auth-button="form-download" tabindex="">
-				<i class="fas fa-file-download"></i><span>양식 다운로드</span>
+				<i class="fas fa-file-download"></i><span data-lang-cd="datatable.button.download">양식 다운로드</span>
 			</button>
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="assign" title="그룹 요구사항 목록 업로드" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.upload" data-placement="bottom" data-auth-button="upload" tabindex="">
-				<i class="fas fa-file-upload"></i><span>업로드</span>
-			</button>
+				<i class="fas fa-file-upload"></i><span data-lang-cd="datatable.button.upload">업로드</span>
+			</button> -->
 		</div>
 	</div>
 </div>
-<div id="req3000CardTable"></div>
 <div class="kt_datatable osl-datatable-footer__divide" id="req3000Table"></div>
 <!-- end DOM -->
 <!-- begin page script -->
 <script>
 "use strict";
 var OSLReq3000Popup = function () {
-	var currentViewType = "01";
 	
 	var documentSetting = function(){
 		var config = {
-				cardUiTarget:$("#req3000CardTable"),
 				data:{
 					source:{
 						read:{
@@ -139,8 +125,8 @@ var OSLReq3000Popup = function () {
 		},
 		actionBtn:{
 			"dblClick":true,
-			"excel":true,
-			"print":true,
+			/* "excel":true,
+			"print":true, */
 			"insert":false,
 			"update":true,
 			"title": $.osl.lang("datatable.action.functionNm")
@@ -150,15 +136,15 @@ var OSLReq3000Popup = function () {
 			"update":$.osl.lang("req3000.datatable.action.update"),
 			"dblClick": $.osl.lang("req3000.datatable.action.dblClick"),
 			"delete": $.osl.lang("req3000.datatable.action.delete"),
-			"excel": $.osl.lang("req3000.datatable.action.excel"),
-			"print": $.osl.lang("req3000.datatable.action.print"),
+			/* "excel": $.osl.lang("req3000.datatable.action.excel"),
+			"print": $.osl.lang("req3000.datatable.action.print"), */
 		},
 		// 테마
 		theme:{
 			actionBtnIcon:{
 				"dblClick":"fa fa-list-alt",
-				"excel":"fa fa-file-excel",
-				"print":"fa fa-print"
+				/* "excel":"fa fa-file-excel",
+				"print":"fa fa-print" */
 			}
 		},
 		actionFn:{
@@ -169,6 +155,7 @@ var OSLReq3000Popup = function () {
 						modalSize: "xl",
 						modalTitle: $.osl.lang("req3001.title"),
 						closeConfirm: false,
+						modalTitle:$.osl.lang("req3000.title.insert"),
 					};
 				
 				$.osl.layerPopupOpen('/req/req3000/req3000/selectReq3001View.do',data,options);
@@ -187,7 +174,8 @@ var OSLReq3000Popup = function () {
 						idKey: datatableId,
 						modalTitle: $.osl.lang("req3001.title"),
 						closeConfirm: false,
-						modalSize: "xl"
+						modalSize: "xl",
+						modalTitle:$.osl.lang("req3000.title.update"),
 					};
 				
 				$.osl.layerPopupOpen('/req/req3000/req3000/selectReq3001View.do',data,options);
@@ -217,8 +205,11 @@ var OSLReq3000Popup = function () {
 		   			}
 				});
 				
-				//AJAX 전송
-				ajaxObj.send();
+				if($.osl.confirm($.osl.lang("req3000.alert.delete"))){
+					//AJAX 전송
+					ajaxObj.send();
+				}
+				
 			},"dblClick":function(rowData, datatableId, type, rowNum){
 				var data = {
 						
@@ -232,135 +223,19 @@ var OSLReq3000Popup = function () {
 						idKey: rowData.reqId,
 						modalTitle: "그룹 요구사항 상세정보",
 						closeConfirm: false,
-						modalSize: "xl"
+						modalSize: "xl",
+						modalTitle:$.osl.lang("req3000.title.detail"),
 					};
 				
 				$.osl.layerPopupOpen('/req/req3000/req3000/selectReq3002View.do',data,options);	
-			}
-		},callback:{
-			initComplete: function(evt,config){
-				fnViewerChange();
-			},
-			ajaxDone: function(evt, list){
-				var reqGrpStr = '';
-				var rowCnt = 0;
-				$.each(list, function(idx, map){
-					
-					//그룹요구사항  번호
-					var rnStr = "No. "+map.rn;
-					var rnClass = "badge-primary";
-					
-					
-					//카드 UI
-					if(rowCnt == 0){
-						reqGrpStr += '<div class="row">';
-					}
-						reqGrpStr +=
-						'<div class="col-lg-6 col-md-12 col-sm-12">'
-							+'<div class="kt-portlet kt-portlet--mobile border">'
-								+'<div class="kt-portlet__head kt-portlet__head--lg border-bottom-0">'
-									+'<div class="kt-portlet__head-label">'
-										+'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">'
-											+'<input type="checkbox" value="'+idx+'" name="prjGrpCheckbox" id="prjGrpCheckbox_'+map.prjId+'" data-datatable-id="req3000Table">&nbsp;<span></span>'
-										+'</label>'
-										+'<div class="row osl-flex-flow--column">'
-											+'<h4 class="kt-font-boldest osl-min-h-px--50 kt-padding-t-25 kt-padding-l-10"><span>'+$.osl.escapeHtml(map.reqGrpNm)+'</span></h4>'
-											+'<h5 class="kt-padding-l-10"><span class="badge badge-dark">'+$.osl.escapeHtml(map.reqGrpNo)+'</span></h5>'
-										+'</div>'
-									+'</div>'
-									+'<div class="kt-portlet__head-toolbar">'
-										+'<div class="dropdown dropdown-inline">'
-											+'<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-												+'<i class="fas fa-ellipsis-h kt-padding-0"></i>'
-											+'</button>'
-											+'<div class="dropdown-menu dropdown-menu-right">'
-												+'<div data-table-id="req3000Table" data-datatable-expans="dropdown" data-datatable-action="update" class="dropdown-item" id=""><i class="fa fa-edit kt-font-brand"></i>수정</div>'
-												+'<div data-table-id="req3000Table" data-datatable-expans="dropdown" data-datatable-action="delete" class="dropdown-item" id=""><i class="fa fa-trash kt-font-brand"></i>삭제</div>'
-												+'<div data-table-id="req3000Table" data-datatable-expans="dropdown" data-datatable-action="excel" class="dropdown-item" id=""><i class="fas fa-file-excel kt-font-brand"></i>엑셀</div>'
-												+'<div data-table-id="req3000Table" data-datatable-expans="dropdown" data-datatable-action="print" class="dropdown-item" id=""><i class="fas fa-print kt-font-brand"></i>프린트</div>'
-											+'</div>'
-										+'</div>'
-									+'</div>'
-								+'</div>'
-								+'<div class="kt-portlet__body">'
-									+'<div class="row">'
-										+'<div class="kt-padding-l-40 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 kt-padding-l-10-mobile">'
-											+'<div class="kt-padding-b-5">'
-												+'<i class="fas fa-paperclip kt-margin-r-5 kt-font-brand"></i>'
-												+'<span>연결 요구사항 수</span>'
-											+'</div>'
-											+'<h5 class="kt-padding-l-20">'
-												+'<span class="text-muted">'+$.osl.escapeHtml(map.reqGrpLinkCnt)+'</span>'
-											+'</h5>'
-										+'</div>'
-									+'</div>'
-								+'</div>'
-								+'<div class="row border-top kt-margin-t-20 kt-padding-t-20">'
-									+'<div class="col-lg-7 col-md-7 col-sm-7 col-7">'
-										+'<div class="kt-user-card-v2 btn osl-flex-flow--column align-items-start kt-padding-l-30 kt-padding-l-0-mobile">'
-											+'<div class="row kt-margin-l-0">'
-												+'<div class="kt-user-card-v2__pic kt-media kt-media--sm kt-media--circle">'
-													+'<img src="/cmm/fms/getImage.do?fileSn=0&amp;atchFileId=FILE_000000000000088" class="">'
-												+'</div>'
-												+'<div class="kt-user-card-v2__details">'
-													+'<span class="kt-user-card-v2__name">'+$.osl.escapeHtml(map.reqGrpUsrNm)+'</span>'
-												+'</div>'
-												+'<div class="kt-margin-l-10">'
-													+'<span>(직급 / 직책)</span>'
-												+'</div>'
-											+'</div>'
-											+'<div class="row kt-margin-l-35 kt-margin-t-10">'
-												+'<span class="">소속</span>'
-											+'</div>'
-										+'</div>'
-									+'</div>'
-									+'<div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex osl-flex-flow--column">'
-										+'<p class="text-right osl-margin-r-3rm" id="">'+$.osl.escapeHtml(map.email)+'</p>'
-										+'<p class="text-right osl-margin-r-3rm" id="">'+$.osl.escapeHtml(map.regDtmDay)+'</p>'
-									+'</div>'
-								+'</div>'
-							+'</div>'
-						+'</div>'
-					rowCnt++;
-					if(rowCnt == 2){
-						reqGrpStr += '</div>';
-						rowCnt = 0;
-					}	
-				});
-				//로드된 데이터 CARD형식으로 추가
-				$("#req3000CardTable").html(reqGrpStr);
+				}
 			}
 		}
-	}
 		// begin:: 그룹 요구사항 관리 데이터테이블
 		$.osl.datatable.setting("req3000Table", config);
 		// end:: 그룹 요구사항 관리 데이터테이블
 		
-		//뷰 변경 이벤트
-		$(".btn-view-type").click(function(){
-			var viewType = $(this).data("view-type");
-			
-			//active 교체
-			$(".btn-view-type.active").removeClass("active");
-			$(this).addClass("active");
-			
-			currentViewType = viewType;
-			
-			//뷰어 변경
-			fnViewerChange();
-		});
 	}
-		//카드형, 목록형
-		var fnViewerChange = function(){
-			//현재 viewType에 따라 show/hide
-			if(currentViewType == "01"){	//카드 형식
-				$("#req3000Table .kt-datatable__table").css({visibility: "hidden", height: 0});
-				$("#req3000CardTable").show();
-			}else{	//데이터테이블 형식
-				$("#req3000Table .kt-datatable__table").css({visibility: "visible",height: "auto"});
-				$("#req3000CardTable").hide();
-			}
-		}
 	return {
         // public functions
         init: function() {

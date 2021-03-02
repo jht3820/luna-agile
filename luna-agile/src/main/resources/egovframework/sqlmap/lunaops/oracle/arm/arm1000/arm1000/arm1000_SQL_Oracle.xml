@@ -167,7 +167,7 @@
 			</isNotEmpty>
 		</isNotEmpty>
 		<isEmpty property="paramSortFieldId">
-			ORDER BY RN DESC
+			ORDER BY T1.ARM_ID DESC
 		</isEmpty>
 	</sql>
     

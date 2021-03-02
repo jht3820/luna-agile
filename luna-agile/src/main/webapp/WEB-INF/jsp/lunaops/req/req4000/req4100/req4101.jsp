@@ -201,7 +201,6 @@
 	<button type="button" class="btn btn-brand" id="req4101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="req4101.complete">완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
-
 <script>
 "use strict";
 var OSLReq4101Popup = function () {
@@ -694,6 +693,14 @@ var OSLReq4101Popup = function () {
     		$("#usrImgId").val(""); //이미지 default 넣기
     	});
    		
+    	//엔터키
+		$("#usrNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchUsrNmBtn").click();
+			}
+		});
+    	
     	//포커스가 아웃될 경우
    		$("#usrNm").blur(function(){
    			//입력된 요청자 명이 있을 경우
