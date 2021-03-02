@@ -444,6 +444,17 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		prj1101:{
+			complete: "완료",
+			insert:{
+				title: "신규 프로세스 생성",
+				saveString: "신규 프로세스를 생성하시겠습니까?",
+			},
+			update:{
+				title: "프로세스 수정",
+				saveString: "프로세스를 수정하시겠습니까?",
+			}
+		},
 		prj1201:{
 			title: "프로젝트 설정 수정",
 			complete: "완료",

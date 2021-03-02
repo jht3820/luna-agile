@@ -452,7 +452,7 @@
 	</sql>
 	
 	
-	<sql id="selectPrj2100PrjAuthNoneUsrList">
+	<sql id="selectPrj1000PrjAuthNoneUsrList">
 		SELECT
 			ROWNUM RN,
 			SUBT2.AUTH_TYPE_CD,
@@ -649,25 +649,25 @@
 	</select>
 	
 	
-	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
+	<select id="prj1000DAO.selectPrj1000PrjAuthNoneUsrList" parameterClass="java.util.Map" resultClass="egovMap">
 		
 		SELECT T1.*
 		FROM
 		(
-			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
+			<include refid="selectPrj1000PrjAuthNoneUsrList"/>
     	) T1
     	WHERE 1=1
     	AND T1.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
 	</select>
 	
 	
-	<select id="prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	<select id="prj1000DAO.selectPrj1000PrjAuthNoneUsrListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
 		
 		SELECT
 			COUNT(*)
 		FROM
 		(
-			<include refid="selectPrj2100PrjAuthNoneUsrList"/>
+			<include refid="selectPrj1000PrjAuthNoneUsrList"/>
 		) T1
 	</select>
 	
@@ -842,7 +842,7 @@
 				,	PRJ_TYPE_CD		= #prjTypeCd#     			
      		</isNotEmpty>
      		<isNotEmpty property="prjDevTypeCd">
-				,	PRJ_DEV_TYPE_CD		= #prjDecTypeCd#     			
+				,	PRJ_DEV_TYPE_CD		= #prjDevTypeCd#     			
      		</isNotEmpty>
      <![CDATA[
      		, PRJ_GRP_CD	= #prjGrpCd#

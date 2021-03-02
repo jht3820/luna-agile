@@ -2890,6 +2890,11 @@
 											}
 										}
 									});
+									
+									
+									$(targetUI).find('[data-toggle="kt-tooltip"]').each(function() {
+							            KTApp.initTooltip($(this));
+							        });
 								});
 							}
 						}
