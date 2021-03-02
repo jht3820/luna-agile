@@ -2486,7 +2486,8 @@
 							beforeTemplate: function (row, data, index){
 								
 							},
-							clickCheckbox: false
+							clickCheckbox: false,
+							minHeight: null
 						},
 						sortable: true,
 						pagination: true,
@@ -2577,26 +2578,37 @@
 					
 					targetConfig.rows["afterTemplate"] = function(row, data, index){
 						
-						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+						if(config.hasOwnProperty("rows")){
 							
-							if(config.rows.clickCheckbox == true){
+							if(config.rows.hasOwnProperty("minHeight")){
+								var minHeight = config.rows.minHeight;
 								
-								row.click(function(){
-									var targetRow = $(this).closest("tr");
-									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+								
+								if(!$.osl.isNull(minHeight) && $.isNumeric(minHeight)){
+									$(row).css({"min-height": parseInt(minHeight)+"px"});
+								}
+							}
+							if(config.rows.hasOwnProperty("clickCheckbox")){
+								
+								if(config.rows.clickCheckbox == true){
 									
-									if(targetElem.is(":checked") == true){
-										targetElem.prop("checked", false);
-										datatables.targetDt.setInactive(targetElem);
+									row.click(function(){
+										var targetRow = $(this).closest("tr");
+										var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
 										
-										targetRow.removeClass("osl-datatable__row--selected");
-										targetRow.addClass("kt-datatable__row--even");
-									}else{
-										targetElem.prop("checked", true);
-										datatables.targetDt.setActive(targetElem);
-									}
-									
-								});
+										if(targetElem.is(":checked") == true){
+											targetElem.prop("checked", false);
+											datatables.targetDt.setInactive(targetElem);
+											
+											targetRow.removeClass("osl-datatable__row--selected");
+											targetRow.addClass("kt-datatable__row--even");
+										}else{
+											targetElem.prop("checked", true);
+											datatables.targetDt.setActive(targetElem);
+										}
+										
+									});
+								}
 							}
 						}
 						

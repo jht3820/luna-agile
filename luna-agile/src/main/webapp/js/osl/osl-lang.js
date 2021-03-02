@@ -2389,6 +2389,8 @@ var OSLCoreLangSetting = function () {
 				insert:"Group requirement insert",
 				update:"Group requirement update",
 				detail:"Group requirement Detail Information",
+				selectUsr:"Search group requirement request user",
+				selectCharger:"Search group requirement charger",
 			},
 			datatable:{
 				action:{
