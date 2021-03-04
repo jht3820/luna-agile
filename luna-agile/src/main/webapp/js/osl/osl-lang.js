@@ -1,8 +1,11 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -175,7 +178,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -242,8 +245,8 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		
-		cmm16000:{
+		/* 페이지 언어 */
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "받은 메시지",
@@ -262,7 +265,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "답장",
 				checkBtn : "읽음",
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "보낸 사람 ID",
 				sendUsrEmail : "보낸 사람 e-mail",
@@ -284,7 +287,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "받는 사람",
 				title : "제목",
@@ -304,7 +307,7 @@ var OSLCoreLangSetting = function () {
 				submit : "보내기"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "첨부 파일", 
 			},
@@ -691,7 +694,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "복사"
 			},
 			field:{
-				
+				/*외부 주입 search bar 인 경우 사용*/
 				prjGrpNm: "프로젝트 그룹명",
 			},
 			actionBtn:{
@@ -797,7 +800,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
 				usrNm : "사용자명",
 			},
 			actionBtn : {
@@ -1007,7 +1010,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
-			
+			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -1415,7 +1418,7 @@ var OSLCoreLangSetting = function () {
 			title:{
 				allPrjList : "전체 프로젝트 목록",
 				assignJobList : "JOB 배정 목록",
-				notAssignJobList : "JOB 미배정 목록"
+				notAssignJobList : "JOB 미배정 목록",
 				dplAuthSettingModal : "배포 실행 권한 설정"
 			},
 			button:{
@@ -1465,7 +1468,7 @@ var OSLCoreLangSetting = function () {
 					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
 				}
 			}
-		}
+		},
 		stm9300:{
 			button:{
 				toolTil:{
@@ -1503,9 +1506,9 @@ var OSLCoreLangSetting = function () {
 				noticeBadge: "공지",
 			},
 			field:{
-				
+				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"태그",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
@@ -1646,7 +1649,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1758,8 +1761,8 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
-			cmm16000CmmTable:{
+			/* 추가된 datatable별로 언어 지정 */
+			arm1000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
 				sendDtm : "Date",
@@ -2029,7 +2032,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -2084,8 +2087,8 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
-		cmm16000:{
+		/* 페이지 언어 */
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "Received Message",
@@ -2104,7 +2107,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "Reply",
 				checkBtn : "Read Check"
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "From User Id",
 				sendUsrEmail : "From User E-mail",
@@ -2126,7 +2129,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "To",
 				title : "Title",
@@ -2146,7 +2149,7 @@ var OSLCoreLangSetting = function () {
 				submit : "Send"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "Attachments", 
 			},
@@ -2506,7 +2509,7 @@ var OSLCoreLangSetting = function () {
 				copyBtn : "Copy"
 			},
 			field:{
-				
+				/*외부 주입 search bar에서 사용*/
 				prjGrpNm: "Project Group Name",
 			},
 			actionBtn:{
@@ -2612,7 +2615,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
 				usrNm : "User Name",
 			},
 			actionBtn : {
@@ -3049,9 +3052,9 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ 
+			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"Tag",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
@@ -3192,12 +3195,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -3206,7 +3209,8 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };
+}();
