@@ -108,11 +108,11 @@
 					</div>
 					<div class="form-group">
 						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.reqNm">요청 제목</span></label>
-						<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
+						<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" autocomplete="off" required>
 					</div>
 					<div class="form-group">
 						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.reqDesc">요청 내용</span></label>
-						<textarea  class="kt-hide" name="reqDesc" id="reqDesc" required></textarea>
+						<textarea  class="kt-hide" name="reqDesc" id="reqDesc" autocomplete="off" required></textarea>
 					</div>
 					<div class="form-group kt-margin-b-10">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
@@ -124,11 +124,11 @@
 					<div class="kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req4101.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="reqPw" id="reqPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
+				 			<input type="password" class="form-control" name="reqPw" id="reqPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
 				 		</div>
 				 		<div class="input-group">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req4101.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
+				 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck"autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
 			 			</div>
 				 	</div>
 					<div class="form-group kt-margin-t-25 form-group-last">
@@ -201,7 +201,6 @@
 	<button type="button" class="btn btn-brand" id="req4101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="req4101.complete">완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
-
 <script>
 "use strict";
 var OSLReq4101Popup = function () {
@@ -694,6 +693,14 @@ var OSLReq4101Popup = function () {
     		$("#usrImgId").val(""); //이미지 default 넣기
     	});
    		
+    	//엔터키
+		$("#usrNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchUsrNmBtn").click();
+			}
+		});
+    	
     	//포커스가 아웃될 경우
    		$("#usrNm").blur(function(){
    			//입력된 요청자 명이 있을 경우

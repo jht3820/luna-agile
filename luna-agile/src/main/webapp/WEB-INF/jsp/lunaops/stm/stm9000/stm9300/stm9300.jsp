@@ -79,14 +79,14 @@ var OSLStm9300 = function () {
 				"insert": false,
 				"update": false,
 				"delete": false,
-				"detailJenkins":true,
+				//"detailJenkins":true,
 				"dblClick": true,
 				"title": $.osl.lang("datatable.action.functionNm"),
 				"width" : 160
 			},
 			actionTooltip:{
 				"dblClick": $.osl.lang("stm9300.actionBtn.jobDetail"),
-				"detailJenkins": $.osl.lang("stm9300.actionBtn.jenkinsDetail")
+				//"detailJenkins": $.osl.lang("stm9300.actionBtn.jenkinsDetail")
 			},
 			actionFn:{
 				// job 상세보기
@@ -107,7 +107,7 @@ var OSLStm9300 = function () {
 					
 				},
 				// jenkins 상세보기
-				"detailJenkins":function(rowData, datatableId, type, rowNum, elem){
+				/* "detailJenkins":function(rowData, datatableId, type, rowNum, elem){
 					
 					var data = {
 							paramJenId: rowData.jenId,
@@ -121,11 +121,11 @@ var OSLStm9300 = function () {
 						};
 					
 					$.osl.layerPopupOpen('/stm/stm9000/stm9000/selectStm9002View.do',data,options);
-				}
+				} */
 			},
 			theme: {
 				 actionBtnIcon:{
-					 "detailJenkins": "fa flaticon-settings-1",
+					 //"detailJenkins": "fa flaticon-settings-1",
 					 "dblClick": "fa fa-info-circle"
 				 }
 			 }

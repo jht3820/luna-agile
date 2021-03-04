@@ -58,14 +58,14 @@ public class Arm1000Controller {
 	private EgovFileMngUtil fileUtil;
     
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/cmm16000View.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000View.do")
 	public String selectArm1000AlarmListView(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-			return "/cmm/cmm10000/cmm16000/cmm16000";
+			return "/arm/arm1000/arm1000/arm1000";
 	}
 
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/cmm/cmm10000/cmm16000/selectArm1000AlarmListAjax.do")
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmListAjax.do")
 	public ModelAndView selectArm1000AlarmListAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
@@ -167,7 +167,7 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value = "/cmm/cmm10000/cmm16000/selectArm1000AlarmNotReadCntAjax.do")
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmNotReadCntAjax.do")
 	public ModelAndView selectArm1000AlarmNotReadCntAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
@@ -249,15 +249,15 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/insertCmm16001View.do")
-	public String insertCmm16001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-			return "/cmm/cmm10000/cmm16000/cmm16001";
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1001View.do")
+	public String insertArmm1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			return "/arm/arm1000/arm1000/arm1001";
 	}
 
 
 	
 	@SuppressWarnings({ "rawtypes" })
-	@RequestMapping(value = "/cmm/cmm10000/cmm16000/selectArm1000AlarmUsrListAjax.do")
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmUsrListAjax.do")
 	public ModelAndView selectArm1000AlarmUsrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
 		try {
 			
@@ -314,7 +314,7 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/insertArm1000AlarmAtchFileInfo.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1000AlarmAtchFileInfo.do")
 	public ModelAndView insertArm1000AlarmAtchFileInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest)request;
@@ -368,7 +368,7 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/insertArm1000AlarmInfoAjax.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1000AlarmInfoAjax.do")
 	public ModelAndView insertArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
@@ -426,8 +426,8 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/selectCmm16002View.do")
-	public String selectCmm16002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1002View.do")
+	public String selectArm1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
@@ -437,17 +437,17 @@ public class Arm1000Controller {
 			model.addAttribute("fileSumMaxSize",fileSumMaxSize);
 			model.addAttribute("type",paramMap.get("type"));
 			
-			return "/cmm/cmm10000/cmm16000/cmm16002";
+			return "/arm/arm1000/arm1000/arm1002";
 		}
 		catch(Exception ex){
-			Log.error("selectCmm16002View()", ex);
+			Log.error("selectArm1002View()", ex);
 			throw new Exception(ex.getMessage());
 		}
 	}
 	
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/selectArm1000AlarmInfoAjax.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000AlarmInfoAjax.do")
 	public ModelAndView selectArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
@@ -524,7 +524,7 @@ public class Arm1000Controller {
 	
 
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/updateArm1000AlarmInfoAjax.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/updateArm1000AlarmInfoAjax.do")
 	public ModelAndView updateArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			
@@ -575,7 +575,7 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/cmm/cmm10000/cmm16000/deleteArm1000AlarmInfoAjax.do")
+	@RequestMapping(value="/arm/arm1000/arm1000/deleteArm1000AlarmInfoAjax.do")
 	public ModelAndView deleteArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		try{
 			

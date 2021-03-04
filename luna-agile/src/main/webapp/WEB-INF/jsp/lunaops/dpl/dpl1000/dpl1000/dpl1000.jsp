@@ -68,10 +68,10 @@ var OSLDpl1000Popup = function () {
 				{field: 'reqOrd', title: '배포 상태', textAlign: 'center', width: 100, autoHide: false},
 				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'center', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
 				{field: 'reqNm', title: '배포 명', textAlign: 'center', width: 300, search: true},
-				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 70, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 70},
+				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100},
+				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 100},
+				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100},
 			],
 			actionBtn:{
 				"dblClick": true 

@@ -296,6 +296,7 @@ var modal_popup = function(url, data, opts){
 				
 			});
 		}
+
 		
 		$.osl.deferred.resolve();
 		return $.osl.deferred.promise();

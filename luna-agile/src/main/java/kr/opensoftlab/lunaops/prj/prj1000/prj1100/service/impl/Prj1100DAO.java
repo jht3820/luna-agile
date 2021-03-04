@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import kr.opensoftlab.lunaops.com.dao.ComOslitsAbstractDAO;
-import kr.opensoftlab.lunaops.prj.prj1000.prj1100.vo.Prj1100VO;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +12,14 @@ public class Prj1100DAO  extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj1100ProcessList(Map paramMap) throws Exception {
-		return (List) list("prj1100DAO.selectPrj1100ProcessList", paramMap);
+	public int  selectPrj1100ProcessListCnt(Map paramMap) throws Exception {
+		return  (Integer)select("prj1100DAO.selectPrj1100ProcessListCnt", paramMap);
+	} 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map>  selectPrj1100ProcessList(Map paramMap) throws Exception {
+		return  (List<Map>) list("prj1100DAO.selectPrj1100ProcessList", paramMap);
 	}
 	
 	
@@ -40,7 +45,42 @@ public class Prj1100DAO  extends ComOslitsAbstractDAO {
 	public void deletePrj1100ProcessInfo(Map paramMap) throws Exception {
 		update("prj1100DAO.deletePrj1100ProcessInfo", paramMap);
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1100ProcessAuthUsrList(Map paramMap) throws Exception {
+		return (List) list("prj1100DAO.selectPrj1100ProcessAuthUsrList", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100ProcessAuthUsrListCnt(Map paramMap) throws Exception {
+		return (int) select("prj1100DAO.selectPrj1100ProcessAuthUsrListCnt", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1100ProcessAuthNoneUsrList(Map paramMap) throws Exception {
+		return (List) list("prj1100DAO.selectPrj1100ProcessAuthNoneUsrList", paramMap);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100ProcessAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return (int) select("prj1100DAO.selectPrj1100ProcessAuthNoneUsrListCnt", paramMap);
+	}
 
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1100ProcessAuthInfo(Map paramMap) throws Exception{
+		return (String) insert("prj1100DAO.insertPrj1100ProcessAuthInfo", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int deletePrj1100ProcessAuthInfo(Map paramMap) throws Exception{
+		return (int) delete("prj1100DAO.deletePrj1100ProcessAuthInfo", paramMap);
+	}
+	
 	
 	@SuppressWarnings("rawtypes")
 	public int selectPrj1100ProcessReqCnt(Map paramMap) throws Exception {
@@ -151,13 +191,14 @@ public class Prj1100DAO  extends ComOslitsAbstractDAO {
 
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj1104ReqRevisionNumList(Prj1100VO prj1100VO) throws Exception {
-		return (List) list("prj1100DAO.selectPrj1104ReqRevisionNumList", prj1100VO);
+	public List selectPrj1104ReqRevisionNumList(Map paramMap) throws Exception {
+		return (List) list("prj1100DAO.selectPrj1104ReqRevisionNumList", paramMap);
 	}
 	
 	
-	public int selectPrj1104ReqRevisionNumListCnt(Prj1100VO prj1100VO) throws Exception {
-		return (Integer) select("prj1100DAO.selectPrj1104ReqRevisionNumListCnt", prj1100VO);
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1104ReqRevisionNumListCnt(Map paramMap) throws Exception {
+		return (Integer) select("prj1100DAO.selectPrj1104ReqRevisionNumListCnt", paramMap);
 	}
 	
 	
