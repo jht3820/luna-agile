@@ -36,7 +36,7 @@
 				<div class="osl-datatable-search" data-datatable-id="req4100ReqTable"></div>
 			</div>
 		</div>
-		<div class="kt_datatable" id="req4100ReqTable"></div>
+		<div class="kt_datatable osl-datatable-footer__divide" id="req4100ReqTable"></div>
 	</div>
 </div>
 <!-- begin page script -->
@@ -60,7 +60,7 @@ var OSLReq4100Popup = function () {
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
 				{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150, search: true},
 				{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false},
-				{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+				{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProType", sortField: "reqProType"},
 				{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
 					template: function(row){
 						var resultStr = $.osl.escapeHtml(row.reqNm);
@@ -81,7 +81,7 @@ var OSLReq4100Popup = function () {
 				},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
 					template: function (row) {
-						if(row.reqUsrNm == null){
+						if($.osl.isNull(row.reqUsrNm)){
 							row.reqUsrNm = "";
 						}
 						var usrData = {

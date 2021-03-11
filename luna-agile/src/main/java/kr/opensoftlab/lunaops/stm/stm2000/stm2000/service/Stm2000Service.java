@@ -73,4 +73,18 @@ public interface Stm2000Service {
 	void saveStm2000AuthGrpMenuAuthList(List paramList) throws Exception;
 	
 	
+	
+	@SuppressWarnings({ "rawtypes"})
+	List<Map> selectStm2002FavoritesList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	int selectStm2002FvrTypeCntInfo(Map paramMap) throws Exception;
+	
+	
+	String insertStm2002FavoritesInfo(Map<String, String> paramMap) throws Exception ;
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	int updateStm2002FavoritesInfo(Map paramMap) throws Exception;
 }

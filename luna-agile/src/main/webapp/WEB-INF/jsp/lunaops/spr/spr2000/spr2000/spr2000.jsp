@@ -35,7 +35,7 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr1000SprTable"></div>
 				</div>
-				<div class="kt_datatable" id="spr1000SprTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr1000SprTable"></div>
 			</div>
 		</div>
 	</div> <!-- 스프린트 목록 끝 -->
@@ -72,7 +72,7 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-8 kt-padding-25">
 					<div class="osl-datatable-search" data-datatable-id="spr2000MmtTable"></div>
 				</div>
-				<div class="kt_datatable" id="spr2000MmtTable"></div>
+				<div class="kt_datatable osl-datatable-footer__divide" id="spr2000MmtTable"></div>
 			</div>
 		</div> <!-- 회의록 목록 끝 -->
 	</div>
@@ -187,7 +187,7 @@ var OSLSpr2000Popup = function () {
 				{field: 'mmtNm', title: '회의록명', textAlign: 'left', width: 400, autoHide: false, sortField: "reqNm", search:true},
 				{field: 'mmtMemCnt', title: '참여자 수', textAlign: 'center', width: 80,
 					template:function(row){
-						if(row.mmtMemCnt == null || row.mmtMemCnt == ""){
+						if($.osl.isNull(row.mmtMemCnt)){
 							return 0;
 						}else{
 							return row.mmtMemCnt;
@@ -196,7 +196,7 @@ var OSLSpr2000Popup = function () {
 				},
 				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120, search:true,
 					template: function (row) {
-						if(row.mmtUsrId == null){
+						if($.osl.isNull(row.mmtUsrId){
 							return "";
 						}else{
 							var usrData = {
@@ -240,7 +240,7 @@ var OSLSpr2000Popup = function () {
 			},
 			actionFn:{
 				"insert":function(rowData){
-					if($("#sprId").val() == null || $("#sprId").val() == ""){
+					if($.osl.isNull($("#sprId").val())){
 						//스프린트를 선택하지 않았으면
 						$.osl.alert($.osl.lang("spr2000.message.selectMsg"));
 						return false;

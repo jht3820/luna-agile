@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="arm1100DAO">
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+   	<resultMap id="resultMapSelectArm1100" class="egovMap">
+   		<result property="licGrpId" column="LIC_GRP_ID"/>
+   		<result property="authGrpId" column="AUTH_GRP_ID"/>
+   		<result property="prjGrpId" column="PRJ_GRP_ID"/>
+   		<result property="prjId" column="PRJ_ID"/>
+   		<result property="usrId" column="USR_ID"/>
+   		
+   		<result property="ntfId" column="NTF_ID"/>
+   		<result property="sendUsrId" column="SEND_USR_ID"/>
+   		<result property="sendUsrNm" column="SEND_USR_NM"/>
+   		
+   		<result property="armTypeCd" column="ARM_TYPE_CD"/>
+   		<result property="armTypeNm" column="ARM_TYPE_NM"/>
+   		<result property="armSendTypeCd" column="ARM_SEND_TYPE_CD"/>
+   		<result property="armSendTypeNm" column="ARM_SEND_TYPE_NM"/>
+   		<result property="armTitle" column="ARM_TITLE"/>
+   		<result property="armContent" column="ARM_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
+   		<result property="sendDtm" column="SEND_DTM"/>
+   		
+   		
+   		<result property="checkUsrId" column="CHECK_USR_ID"/>
+   		<result property="checkCd" column="CHECK_CD"/>
+   		<result property="checkNm" column="CHECK_NM"/>
+   		<result property="checkDtm" column="CHECK_DTM"/>
+   	</resultMap>
+   	
+   	
+	
+	<sql id="selectArm1100List">
+		SELECT
+			ROWNUM RN
+			, T1.LIC_GRP_ID AS LIC_GRP_ID
+			, T1.NTF_ID AS NTF_ID
+			, T1.SEND_USR_ID AS SEND_USR_ID
+			, T1.SEND_USR_NM AS SEND_USR_NM
+			, T1.ARM_TYPE_CD AS ARM_TYPE_CD
+			, T1.ARM_TYPE_NM AS ARM_TYPE_NM
+			, T1.ARM_SEND_TYPE_CD AS ARM_SEND_TYPE_CD
+			, T1.ARM_SEND_TYPE_NM AS ARM_SEND_TYPE_NM
+			, T1.PRJ_GRP_ID AS PRJ_GRP_ID
+			, T1.PRJ_ID AS PRJ_ID
+			, T1.AUTH_GRP_ID AS AUTH_GRP_ID
+			, T1.USR_ID AS USR_ID
+			, T1.ARM_TITLE AS ARM_TITLE
+			, T1.ARM_CONTENT AS ARM_CONTENT
+			, T1.SEND_DTM AS SEND_DTM
+			, T1.CHECK_USR_ID AS CHECK_USR_ID
+			, T1.CHECK_CD AS CHECK_CD
+			, T1.CHECK_NM AS CHECK_NM
+			, T1.CHECK_DTM AS CHECK_DTM
+		FROM (
+			SELECT
+				  R1.LIC_GRP_ID AS LIC_GRP_ID
+				, R1.NTF_ID AS NTF_ID
+				, R1.SEND_USR_ID AS SEND_USR_ID
+				, R1.SEND_USR_NM AS SEND_USR_NM
+				, R1.ARM_TYPE_CD AS ARM_TYPE_CD
+				, R1.ARM_TYPE_NM AS ARM_TYPE_NM
+				, R1.ARM_SEND_TYPE_CD AS ARM_SEND_TYPE_CD
+				, R1.ARM_SEND_TYPE_NM AS ARM_SEND_TYPE_NM
+				, R1.PRJ_GRP_ID AS PRJ_GRP_ID
+				, R1.PRJ_ID AS PRJ_ID
+				, R1.AUTH_GRP_ID AS AUTH_GRP_ID
+				, R1.USR_ID AS USR_ID
+				, R1.ARM_TITLE AS ARM_TITLE
+				, R1.ARM_CONTENT AS ARM_CONTENT
+				, R1.SEND_DTM AS SEND_DTM
+				, R1.CHECK_USR_ID AS CHECK_USR_ID
+				, R1.CHECK_CD AS CHECK_CD
+				, R1.CHECK_NM AS CHECK_NM
+				, R1.CHECK_DTM AS CHECK_DTM
+			FROM (
+				
+				SELECT  A.LIC_GRP_ID
+					  , A.NTF_ID
+					  , A.SEND_USR_ID
+					  , SF_STM3000_USR_INFO(A.SEND_USR_ID, 1) AS SEND_USR_NM
+					  , A.ARM_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00003', A.ARM_TYPE_CD, '1') AS ARM_TYPE_NM
+					  , A.ARM_SEND_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00002', A.ARM_SEND_TYPE_CD, '2') AS ARM_SEND_TYPE_NM
+					  , A.PRJ_GRP_ID
+					  , A.PRJ_ID
+					  , A.AUTH_GRP_ID
+					  , A.USR_ID
+					  , A.ARM_TITLE
+					  <![CDATA[ , REGEXP_REPLACE (A.ARM_CONTENT ,'</br>|<br>|<br/>' , ' ' ) AS ARM_CONTENT ]]>
+					  , TO_CHAR(A.SEND_DTM, 'YYYY-MM-DD HH24:MI:SS') AS SEND_DTM
+					  , B.CHECK_USR_ID
+					  , NVL(B.CHECK_CD,'02') AS CHECK_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'CMM00001', B.CHECK_CD, '1') AS CHECK_NM
+					  , TO_CHAR(B.CHECK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS CHECK_DTM
+				FROM ARM1100 A
+				LEFT JOIN ARM1101 B ON (A.NTF_ID=B.NTF_ID)
+				WHERE 1 = 1
+					AND A.ARM_TYPE_CD = '01'
+					AND EXISTS(
+					  	SELECT Z.USR_ID
+					    FROM PRJ2001 Z
+					    LEFT JOIN PRJ1000 T ON Z.PRJ_ID=T.PRJ_ID
+					    WHERE 1 = 1 
+					      AND Z.USR_ID=#usrId#
+					      AND T.PRJ_GRP_ID=A.PRJ_GRP_ID
+					    GROUP BY Z.USR_ID
+				  )
+				
+				UNION ALL
+				
+				
+				SELECT  A.LIC_GRP_ID
+					  , A.NTF_ID
+					  , A.SEND_USR_ID
+					  , SF_STM3000_USR_INFO(A.SEND_USR_ID, 1) AS SEND_USR_NM
+					  , A.ARM_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00003', A.ARM_TYPE_CD, '1') AS ARM_TYPE_NM
+					  , A.ARM_SEND_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00002', A.ARM_SEND_TYPE_CD, '2') AS ARM_SEND_TYPE_NM
+					  , A.PRJ_GRP_ID
+					  , A.PRJ_ID
+					  , A.AUTH_GRP_ID
+					  , A.USR_ID
+					  , A.ARM_TITLE
+					  <![CDATA[ , REGEXP_REPLACE (A.ARM_CONTENT ,'</br>|<br>|<br/>' , ' ' ) AS ARM_CONTENT ]]>
+					  , TO_CHAR(A.SEND_DTM, 'YYYY-MM-DD HH24:MI:SS') AS SEND_DTM
+					  , B.CHECK_USR_ID
+					  , NVL(B.CHECK_CD,'02') AS CHECK_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'CMM00001', B.CHECK_CD, '1') AS CHECK_NM
+					  , TO_CHAR(B.CHECK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS CHECK_DTM
+				FROM ARM1100 A
+				LEFT JOIN ARM1101 B ON (A.NTF_ID=B.NTF_ID)
+				WHERE 1 = 1
+					AND A.ARM_TYPE_CD = '02'
+					AND EXISTS(
+					  	SELECT Z.USR_ID
+					    FROM PRJ2001 Z
+					    WHERE Z.PRJ_ID=A.PRJ_ID 
+					    AND Z.USR_ID=#usrId#
+					    GROUP BY Z.USR_ID
+				  )
+				
+				UNION ALL
+				
+				
+				SELECT  A.LIC_GRP_ID
+					  , A.NTF_ID
+					  , A.SEND_USR_ID
+					  , SF_STM3000_USR_INFO(A.SEND_USR_ID, 1) AS SEND_USR_NM
+					  , A.ARM_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00003', A.ARM_TYPE_CD, '1') AS ARM_TYPE_NM
+					  , A.ARM_SEND_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00002', A.ARM_SEND_TYPE_CD, '2') AS ARM_SEND_TYPE_NM
+					  , A.PRJ_GRP_ID
+					  , A.PRJ_ID
+					  , A.AUTH_GRP_ID
+					  , A.USR_ID
+					  , A.ARM_TITLE
+					  <![CDATA[ , REGEXP_REPLACE (A.ARM_CONTENT ,'</br>|<br>|<br/>' , ' ' ) AS ARM_CONTENT ]]>
+					  , TO_CHAR(A.SEND_DTM, 'YYYY-MM-DD HH24:MI:SS') AS SEND_DTM
+					  , B.CHECK_USR_ID
+					  , NVL(B.CHECK_CD,'02') AS CHECK_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'CMM00001', B.CHECK_CD, '1') AS CHECK_NM
+					  , TO_CHAR(B.CHECK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS CHECK_DTM
+				FROM ARM1100 A
+				LEFT JOIN ARM1101 B ON (A.NTF_ID=B.NTF_ID)
+				WHERE 1 = 1
+					AND A.ARM_TYPE_CD = '03'
+					AND EXISTS(
+					  	SELECT Z.USR_ID
+					    FROM PRJ2001 Z
+					    WHERE Z.AUTH_GRP_ID=A.AUTH_GRP_ID
+					    AND Z.USR_ID=#usrId#
+					    GROUP BY Z.USR_ID
+				  )
+				  
+				UNION ALL
+				
+				
+				SELECT  A.LIC_GRP_ID
+					  , A.NTF_ID
+					  , A.SEND_USR_ID
+					  , SF_STM3000_USR_INFO(A.SEND_USR_ID, 1) AS SEND_USR_NM
+					  , A.ARM_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00003', A.ARM_TYPE_CD, '1') AS ARM_TYPE_NM
+					  , A.ARM_SEND_TYPE_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'ARM00002', A.ARM_SEND_TYPE_CD, '2') AS ARM_SEND_TYPE_NM
+					  , A.PRJ_GRP_ID
+					  , A.PRJ_ID
+					  , A.AUTH_GRP_ID
+					  , A.USR_ID
+					  , A.ARM_TITLE
+					  <![CDATA[ , REGEXP_REPLACE (A.ARM_CONTENT ,'</br>|<br>|<br/>' , ' ' ) AS ARM_CONTENT ]]>
+					  , TO_CHAR(A.SEND_DTM, 'YYYY-MM-DD HH24:MI:SS') AS SEND_DTM
+					  , B.CHECK_USR_ID
+					  , NVL(B.CHECK_CD,'02') AS CHECK_CD
+					  , SF_STM4001_COM_CD_INFO(A.LIC_GRP_ID, 'CMM00001', B.CHECK_CD, '1') AS CHECK_NM
+					  , TO_CHAR(B.CHECK_DTM, 'YYYY-MM-DD HH24:MI:SS') AS CHECK_DTM
+				FROM ARM1100 A
+				LEFT JOIN ARM1101 B ON (A.NTF_ID=B.NTF_ID)
+				WHERE 1 = 1
+					AND A.USR_ID=#usrId#
+					AND A.ARM_TYPE_CD = '04'
+			) R1 ORDER BY R1.CHECK_CD DESC, R1.SEND_DTM DESC
+		) T1
+		WHERE 1 = 1
+		
+	</sql>
+    
+    
+	<select id="arm1100DAO.selectArm1100NtfListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectArm1100List"/>
+		) Z
+    </select>
+    
+    
+    <select id="arm1100DAO.selectArm1100NtfList" parameterClass="java.util.Map"  resultMap="resultMapSelectArm1100">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectArm1100List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    
+    <select id="arm1100DAO.selectArm1100NtfNotReadCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT 
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectArm1100List"/>
+		) Z 
+		WHERE Z.CHECK_CD = '02'
+    </select>
+    
+    
+    <select id="arm1100DAO.selectArm1100NtfNotReadList" parameterClass="java.util.Map"  resultMap="resultMapSelectArm1100">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectArm1100List"/>
+		) Z 
+		WHERE Z.CHECK_CD = '02'
+    </select>
+    
+    
+    <insert id="arm1100DAO.insertArm1100NtfInfo" parameterClass="java.util.Map">
+    	<selectKey resultClass="java.lang.String" keyProperty="newNtfId">
+    		<![CDATA[
+				 
+				SELECT	NVL( 
+								SUBSTR(NEW_NTF_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_NTF_ID, 12, 5)) + 1) , 5, '0')
+							,	'NTF' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+	            		) AS NEW_NTF_ID 
+				FROM	(
+				            SELECT	MAX(NTF_ID)  AS NEW_NTF_ID
+				            FROM ARM1100 A
+				            WHERE 1 = 1
+				            AND A.LIC_GRP_ID = #licGrpId#
+				            AND A.NTF_ID LIKE 'NTF' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+						)
+			]]>
+    	</selectKey>
+    	<![CDATA[ 
+			 
+			INSERT INTO ARM1100 
+			(
+				LIC_GRP_ID,			NTF_ID,			SEND_USR_ID
+				,ARM_TYPE_CD,		ARM_SEND_TYPE_CD
+				,AUTH_GRP_ID,		USR_ID,			PRJ_GRP_ID,		PRJ_ID
+				,ARM_TITLE,			ARM_CONTENT,	SEND_DTM
+			)
+			VALUES
+			(
+				#licGrpId#,				#newNtfId#,							#sendUsrId#
+		       ,#armTypeCd#,			#armSendTypeCd#
+		       ,#authGrpId#,			#usrId#,			#prjGrpId#,		#prjId#
+			   ,#armTitle#,				#armContent#,		SYSDATE
+			)
+		]]>
+    </insert>
+    
+    
+    <insert id="arm1100DAO.insertArm1101NtfInfo" parameterClass="java.util.Map">
+    	<selectKey resultClass="java.lang.String" keyProperty="newNtfChkId">
+    		<![CDATA[
+				 
+				SELECT	NVL( 
+								SUBSTR(NEW_NTF_CHECK_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_NTF_CHECK_ID, 12, 5)) + 1) , 5, '0')
+							,	'CHK' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+	            		) AS NEW_NTF_CHK_ID 
+				FROM	(
+				            SELECT	MAX(NTF_CHECK_ID)  AS NEW_NTF_CHECK_ID
+				            FROM ARM1101 A
+				            WHERE 1 = 1
+				            AND A.LIC_GRP_ID = #licGrpId#
+				            AND A.NTF_CHECK_ID LIKE 'ARM' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+						)
+			]]>
+    	</selectKey>
+    	<![CDATA[ 
+			 
+			INSERT INTO ARM1101 
+			(
+				LIC_GRP_ID,		NTF_ID,		NTF_CHECK_ID
+				,CHECK_USR_ID,		CHECK_CD,		CHECK_DTM
+			)
+			VALUES 
+			(
+				#licGrpId#,		#ntfId#,				#newNtfChkId#
+		       ,#checkUsrId#,		 '01',					SYSDATE
+			)
+		]]>
+    </insert>
+    
+</sqlMap>

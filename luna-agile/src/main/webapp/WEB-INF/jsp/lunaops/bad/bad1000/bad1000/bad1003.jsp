@@ -18,11 +18,11 @@
 				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12" name="leftDiv" id="leftDiv">
 					<div name="badTitleDiv" id="badTitleDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-open-text-book kt-margin-r-5"></i><span data-lang-cd="bad1003.label.title">제목</span></label>
-						<input type="text" class="form-control" name="badTitle" id="badTitle" required />
+						<input type="text" class="form-control" name="badTitle" id="badTitle" autocomplete="off" required />
 					</div>
 					<div name="badContentDiv" id="badContentDiv" class="kt-margin-b-10">
 						<label class="required"><i class="fa flaticon2-edit kt-margin-r-5"></i><span data-lang-cd="bad1003.label.content">내용</span></label>
-						<textarea class="kt-hide" name="badContent" id="badContent" required></textarea>
+						<textarea class="kt-hide" name="badContent" id="badContent" autocomplete="off" required></textarea>
 					</div>
 				</div>
 				<!-- right -->
@@ -38,8 +38,8 @@
 				 	<div class="kt-margin-l-35 form-group kt-hide osl-bad_box" name="ntcOption" id="ntcOption">
 				 		<div class="input-group kt-input-icon pull-right">
 					 		<label class="input-group-addon kt-margin-5 kt-padding-5"><span data-lang-cd="bad1003.label.noticeDate">공지 기간</span></label>
-					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange"/>
-				 			<span class="kt-input-icon__icon kt-input-icon__icon--right kt-bg-brand osl-height-38"><span><i class="la la-calendar-check-o kt-font-light"></i></span></span>
+					 		<input type="text" class="form-control small" name="badNtcRange" id="badNtcRange" autocomplete="off"/>
+				 			<span class="kt-input-icon__icon kt-input-icon__icon--right kt-bg-brand osl-h-px-38"><span><i class="la la-calendar-check-o kt-font-light"></i></span></span>
 				 		</div>
 				 		<div class="row kt-padding-t-10 kt-padding-l-15">
 					 		<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success kt-margin-t-10 kt-margin-b-0"><input type="checkbox" name="badNtcTopYnCd" id="badNtcTopYnCd">
@@ -59,11 +59,11 @@
 				 	<div class="kt-margin-l-35 kt-margin-b-10  kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="badPw" id="badPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내"/> 
+				 			<input type="password" class="form-control" name="badPw" id="badPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내"/> 
 				 		</div>
 				 		<div class="input-group">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-70 required'><span data-lang-cd="bad1003.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw"/>
+				 			<input type="password" class="form-control" name="badPwCheck" id="badPwCheck" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexalert="알파벳과 숫자 조합 4-12자 이내" equalTo="#badPw"/>
 			 			</div>
 				 	</div>
 				 	<!-- 댓글 스위치 -->
@@ -79,7 +79,7 @@
 							<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="bad1003.label.attachFile">파일 첨부</span>
 							<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn"><span data-lang-cd="bad1003.button.deleteResetBtn">삭제 초기화</span></button>
 						</div>
-						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-height-260" name="bad1003FileUpload" id="bad1003FileUpload">
+						<div class="col-12 kt-margin-t-10 kt-padding-l-20 kt-padding-r-10 kt-uppy osl-max-h-px-260" name="bad1003FileUpload" id="bad1003FileUpload">
 							<div class='kt-uppy__dashboard'></div>
 							<div class='kt-uppy__progress'></div>
 						</div>
@@ -93,7 +93,7 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text">#</span>
 							</div>
-							<input type="text" class="form-control col-5" name="tagWriter" id="tagWriter" maxlength="30" />
+							<input type="text" class="form-control col-5" name="tagWriter" id="tagWriter" autocomplete="off" maxlength="30" />
 							<div class="input-group-prepend">
 								<span class="input-group-button btn btn-brand" id="tagBtn" name="tagBtn"><span data-lang-cd="bad1003.button.submit">등록</span></span>
 							</div>

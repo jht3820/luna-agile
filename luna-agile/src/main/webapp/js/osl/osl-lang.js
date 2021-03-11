@@ -1,8 +1,11 @@
-
+/**
+ 	* function 명 	: OSLCoreLangSetting
+	* function 설명	: core에서 사용되는 언어 데이터를 세팅한다.
+	*/
 var OSLCoreLangSetting = function () {
-	
+	//언어 세팅 데이터
 	var lang = {};
-	
+	//한국어
 	lang["ko"] = {
 		fromValidate:{
 			messages: {
@@ -26,7 +29,13 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		modal:{
-			close: "닫기"
+			close: "닫기",
+			insert:{
+				saveBtnString: "등록 완료"
+			},
+			update:{
+				saveBtnString: "수정 완료"
+			}
 		},
 		portlet:{
 			tools: {
@@ -169,7 +178,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -200,6 +209,13 @@ var OSLCoreLangSetting = function () {
 				myPage:{
 					title:"개인정보 수정",
 					error:"사용자 정보가 없으므로 개인정보 수정 화면으로 이동할 수 없습니다."
+				},
+				auth:{
+					saveMsg: "${1}명의 사용자가 배정되었습니다.",
+					saveDupleMsg: "이미 배정된 ${1}명의 사용자 제외",
+					saveAllDupleMsg: "이미 배정중인 사용자입니다. (${1}명)",
+					allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
+					allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
 				}
 			},
 			error:{
@@ -229,8 +245,8 @@ var OSLCoreLangSetting = function () {
 				closeAlert: "팝업 창을 닫으시겠습니까?"
 			}
 		},
-		
-		cmm16000:{
+		/* 페이지 언어 */
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "받은 메시지",
@@ -249,7 +265,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "답장",
 				checkBtn : "읽음",
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "보낸 사람 ID",
 				sendUsrEmail : "보낸 사람 e-mail",
@@ -271,7 +287,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "받는 사람",
 				title : "제목",
@@ -291,7 +307,7 @@ var OSLCoreLangSetting = function () {
 				submit : "보내기"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "첨부 파일", 
 			},
@@ -431,6 +447,17 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		prj1101:{
+			complete: "완료",
+			insert:{
+				title: "신규 프로세스 생성",
+				saveString: "신규 프로세스를 생성하시겠습니까?",
+			},
+			update:{
+				title: "프로세스 수정",
+				saveString: "프로세스를 수정하시겠습니까?",
+			}
+		},
 		prj1201:{
 			title: "프로젝트 설정 수정",
 			complete: "완료",
@@ -453,6 +480,101 @@ var OSLCoreLangSetting = function () {
 		prj2100:{
 			allUsrInsert:"${1}건의 사용자를 배정하시겠습니까?",
 			allUsrInDelete:"${1}건의 사용자를 배정 제외하시겠습니까?"
+		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
 		},
 		prj5000:{
 			button:{
@@ -514,7 +636,11 @@ var OSLCoreLangSetting = function () {
 			reqPw: {
 				title : "요구사항 잠금",
 				password : "PW",
-				passwordCheck :"PW 확인"
+				passwordCheck :"PW 확인",
+				placeholder : {
+					password : "알파벳, 숫자 4-12자 이내",
+					nullPassword : "공백인 경우 기존 비밀번호 사용",
+				}
 			},
 			attachments: "파일 첨부", 
 			complete: "완료",
@@ -531,12 +657,44 @@ var OSLCoreLangSetting = function () {
 				passwordMatching : "입력된 비밀번호가 서로 다릅니다.",
 			},
 		},
+		req3000:{
+			insert:{
+				saveMsg:"연결에 성공했습니다.",
+				saveDupleMsg:"이미 연결된 요구사항입니다.",
+				saveAllDupleMsg:"모든 요구사항이 연결되었습니다.",
+			},
+			alert:{
+				insert:"그룹 요구사항을 등록하시겠습니까?",
+				delete:"선택된 그룹 요구사항을 삭제하시겠습니까?",
+				deleteList:"${1}건의 그룹 요구사항을 삭제하시겠습니까?",
+				update:"그룹 요구사항을 수정하시겠습니까?",
+				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
+				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
+			},
+			title:{
+				detailTitle:"그룹 요구사항 상세보기",
+				insert:"그룹 요구사항 등록",
+				update:"그룹 요구사항 수정",
+				detail:"그룹 요구사항 상세정보",
+				selectCharger:"그룹 요구사항 담당자 검색",
+				selectUsr:"그룹 요구사항 요청자 검색"
+			},
+			datatable:{
+				action:{
+					update:"그룹 요구사항 수정하기",
+					delete:"그룹 요구사항 삭제하기",
+					excel:"그룹 요구사항 목록 엑셀",
+					print:"그룹 요구사항 목록 프린트",
+					dblClick:"그룹 요구사항 상세보기"
+				}
+			}
+		},
 		req4100:{
 			button:{
 				copyBtn : "복사"
 			},
 			field:{
-				
+				/*외부 주입 search bar 인 경우 사용*/
 				prjGrpNm: "프로젝트 그룹명",
 			},
 			actionBtn:{
@@ -642,7 +800,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 search bar 검색, 데이터테이블과 일치시키기*/
 				usrNm : "사용자명",
 			},
 			actionBtn : {
@@ -658,6 +816,7 @@ var OSLCoreLangSetting = function () {
 		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
+			manySelect: "1건의 스프린트만 선택해주세요.",
 			sprTypeWaitMsg: "대기 중인 스프린트만 시작 할 수 있습니다.",
 			sprTypeStartMsg: "시작 중인 스프린트만 종료 할 수 있습니다.", 
 			startDate: "시작일",
@@ -851,7 +1010,7 @@ var OSLCoreLangSetting = function () {
 			notAuthority : {
 					basic : "해당 게시판에 대한 권한이 없습니다.",
 			},
-			
+			/*카드형 그리기로 인해 선언, 데이터 테이블 필드명과 동일하게 지정*/
 			field:{
 				stmTypeNm: "유형",
 				stmNm: "게시판명",
@@ -880,6 +1039,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "게시판 속성",
 				detailTitle : "게시글 관리",
 				summeryTitle : "통계보기",
+				chargerTitle : "담당자 목록 확인"
 			},
 			type:{
 				normal:"[일반]",
@@ -887,8 +1047,13 @@ var OSLCoreLangSetting = function () {
 				movie:"[영상]",
 				storage:"[자료실]",
 			},
-			label :{
-				summery : "옵션 별 통계",
+			label:{
+				summery : "통계",
+			},
+			chart:{
+				noData : "데이터 없음",
+				newPost : "등록 게시글",
+				deletePost : "삭제 게시글"
 			}
 		},
 		stm2101:{
@@ -969,6 +1134,48 @@ var OSLCoreLangSetting = function () {
 				board : "게시글",
 				tag : "태그",
 				attachFile : "첨부파일",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{
@@ -1148,7 +1355,8 @@ var OSLCoreLangSetting = function () {
 				job:{
 					updateBtn:"Job 수정",
 					deleteBtn:"Job 삭제",
-					dblClickBtn:"Job 상세보기"
+					dblClickBtn:"Job 상세보기",
+					detailJenkins:"Jenkins 상세보기"
 				}
 			},
 			modal:{
@@ -1188,6 +1396,99 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm9102:{
+			label:{
+				leftTitle : "JOB 빌드 목록",
+				rightTitle : "콘솔 로그",
+				jenkinsNm : "JENKINS NAME",
+				jobId : "JOB ID",
+				minute : "분",
+				second : "초"
+			},
+			message:{
+				selectBuildInfo: "좌측 빌드 정보를 선택해주세요.",
+				notConsoleLog: "콘솔 로그가 없습니다."
+			}
+		},
+		stm9200:{
+			common:{
+				assign : "배정",
+				notAssign : "제외"
+			},
+			title:{
+				allPrjList : "전체 프로젝트 목록",
+				assignJobList : "JOB 배정 목록",
+				notAssignJobList : "JOB 미배정 목록",
+				dplAuthSettingModal : "배포 실행 권한 설정"
+			},
+			button:{
+				dplAuthSetting : "배포 실행 권한 설정"
+			},
+			toolTip:{
+				searchAssignJob:"JOB 배정 목록 조회",
+				searchNotAssignJob:"JOB 미배정 목록 조회",
+				jobAssign :"JOB 배정",
+				jobDelete : "JOB 배정 제외",
+			},
+			message:{
+				alert:{
+					treeNodeSelect : "왼쪽 트리에서 프로젝트를 선택해주세요.",
+					assignJobSelect : "프로젝트에 배정된 JOB을 선택해주세요.",
+					selectOneJob : "프로젝트에 배정된 JOB을 1개만 선택하세요."
+				},
+				toastr:{
+					projectSelect : "프로젝트 그룹이 아닌 프로젝트를 선택해주세요."
+				},
+				confirm:{
+					selJobAssign : "선택한 JOB을 배정하시겠습니까?",
+					selJobNotAssign : "선택한 JOB을 배정 제외하시겠습니까?",
+				}
+			}
+		},
+		stm9201:{
+			title:{
+				assignDplAuth : "배포 실행 권한 목록",
+				notAssignDplAuth : "미배정 권한 그룹 및 사용자"
+			},
+			button:{
+				title:{
+					dplAuthInsert : "배정 등록",
+					dplAuthDelete : "배정 제외"
+				},
+				toolTip:{
+					dplAuthInsert : "배포 실행 권한 등록",
+					dplAuthDelete : "배포 실행 권한 제외",
+					assignAuthSearch : "배정 실행 권한 대상 목록 조회",
+					notAssignAuthSearch : "미배정 권한 대상 목록 조회"
+				}
+			},
+			message:{
+				confirm:{
+					dplAuthInsert:"${1}건의 대상을 배정하시겠습니까?",
+					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
+				}
+			}
+		},
+		stm9300:{
+			button:{
+				toolTil:{
+					prjAssignJobSearch:"프로젝트 배정 JOB 조회"
+				}
+			},
+			search:{
+				jenkinsDesc : "Jenkins 설명",
+				jobDesc : "Job 설명"
+			},
+			actionBtn:{
+				jenkinsDetail:"Jenkins 상세보기",
+				jobDetail:"Job 상세보기"
+			},
+			modal:{
+				title:{
+					detail :"상세보기"
+				}
+			}
+		},
 		bad1000:{
 			selectBadInfoCnt : "1건의 게시글을 선택하세요.<br/> ${1}건의 게시글이 선택되었습니다." ,
 			notAuthority : {
@@ -1205,9 +1506,9 @@ var OSLCoreLangSetting = function () {
 				noticeBadge: "공지",
 			},
 			field:{
-				
+				/*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"태그",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "내용",
 				badNtcCheck : "공지유무",
 				delCd:"삭제유무",
@@ -1348,7 +1649,7 @@ var OSLCoreLangSetting = function () {
 		}
 	};
 	
-	
+	//영어
 	lang["en"] = {
 		fromValidate:{
 			messages: {
@@ -1413,6 +1714,10 @@ var OSLCoreLangSetting = function () {
 				update: "Update",
 				delete: "Delete",
 				trash: "Trash",
+				upload:"Upload",
+				excel:"Excel",
+				print:"Print",
+				download:"Form Download",
 				title:{
 					select: "Data Select",
 					insert: "Data Insert",
@@ -1456,8 +1761,8 @@ var OSLCoreLangSetting = function () {
 				placeholder: "After entering, please press enter key",
 				allTitle: "All"
 			},
-			
-			cmm16000CmmTable:{
+			/* 추가된 datatable별로 언어 지정 */
+			arm1000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
 				sendDtm : "Date",
@@ -1489,6 +1794,7 @@ var OSLCoreLangSetting = function () {
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
+				prjGrpNm: "Prject Group Name",
 				reqOrd: "Order",
 				reqProTypeNm: "Process Type",
 				reqNm: "Request Name",
@@ -1511,6 +1817,25 @@ var OSLCoreLangSetting = function () {
 				reqOrd : "Request Number",
 				reqProTypeNm :"Processing Status",
 				reqDtm : "Request Date",
+			},req3000Table:{
+				reqGrpNm:"Group requestion Name",
+				reqGrpLinkCnt:"Linked requestion Counts",
+				reqGrpUsrNm:"Request User Name",
+				email:"Request email",
+				deptNm: "Request Department Name",
+				telno: "Request User Number",
+				regGrpChargerNm:"Request Charger Name",
+				regDtmDay:"Write Date"
+			},
+			req3001UnconnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
+			},
+			req3001ConnectReqTable:{
+				prjNm:"Project Name",
+				reqOrd:"Request order",
+				reqNm:"Request Name",
 			},
 			req4100ReqTable:{
 				prjGrpNm: "Project Group Name",
@@ -1577,6 +1902,14 @@ var OSLCoreLangSetting = function () {
 				mmrUsrId : "Wirter",
 				mmrDtm :"Write Date",
 			},
+			stm2200AuthTable:{
+				authGrpNm: "Auth Group Name",
+				ord: "Ord",
+				usrTypNm : "User Type",
+				acceptUseNm:"Accept Use",
+				useNm:"Use Name",
+				authGrpDesc:"Auth Group Desc"
+			},
 			stm9000JenkinsTable:{
 				result : "Connection check",
 				jenNm: "Jenkins Name",
@@ -1591,8 +1924,58 @@ var OSLCoreLangSetting = function () {
 				jobId:"Job Id",
 				jobRestoreId:"Restore Job Id",
 				jobParameter:"Job Parameter",
-				useNm:"Job Use",
+				useNm:"Jenkins Use",
 				jobDesc:"Job Description"
+			},
+			stm9102JobBuildTable:{
+				bldNum: "Build Number",
+				bldResult: "Build Result",
+				bldStartDtm: "Build Start Time",
+				bldDurationTm: "Duration Time",
+				regUsrNm: "Distributor"
+			},
+			stm9200AssignJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
+			stm9200NotAssignJobTable:{
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter"
+			},
+			stm9201AssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
+			stm9201NotAssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
+			stm9300PrjJobTable:{
+				prjNm: "Project Name",
+				jenNm: "Jenkins Name",
+				jenUrl: "Jenkins URL",
+				jobId: "Job Id",
+				jobTypeNm: "Job Type",
+				jobRestoreId: "Restore Job Id",
+				jobParameter: "Job Parameter",
+				useNm: "Jenkins Use"
 			}
 		},
 		date:{
@@ -1649,7 +2032,7 @@ var OSLCoreLangSetting = function () {
 		        dayOfMonthOrdinalParse: /\d{1,2}(er|)/,
 		        week : {
 		            dow : 0,
-		            doy : 4  
+		            doy : 4  // The week that contains Jan 4th is the first week of the year.
 		        }
 		    },
 		    agoTime:{
@@ -1704,8 +2087,8 @@ var OSLCoreLangSetting = function () {
 				cancel: "Cancel"
 			}
 		},
-		
-		cmm16000:{
+		/* 페이지 언어 */
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "Received Message",
@@ -1724,7 +2107,7 @@ var OSLCoreLangSetting = function () {
 				reInsertBtn : "Reply",
 				checkBtn : "Read Check"
 			},
-			
+			/*검색 바 메뉴 추가한 경우 */
 			field: {
 				sendUsrId : "From User Id",
 				sendUsrEmail : "From User E-mail",
@@ -1746,7 +2129,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "To",
 				title : "Title",
@@ -1766,7 +2149,7 @@ var OSLCoreLangSetting = function () {
 				submit : "Send"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "Attachments", 
 			},
@@ -1876,6 +2259,101 @@ var OSLCoreLangSetting = function () {
 			allUsrInsert:"Do you want to allocate ${1} users?",
 			allUsrInDelete:"Are you sure you want to exclude ${1} users?"
 		},
+		prj3000 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+				},
+				confirm:{
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
+				}
+			},
+			modal : {
+				title : {
+					insertDoc : "신규 산출물 양식 등록",
+					updateDoc : "산출물 양식 수정",
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3001 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+				
+			},
+			button : {
+				insert : "작성 완료",
+				update : "수정 완료"
+			},
+			message : {
+				confirm : {
+					insert : "산출물 양식 정보를 추가 하시겠습니까?",
+					update : "산출물 양식 정보를 수정 하시겠습니까?"
+				}
+			}
+		},
+		prj3100 : {
+			label : {
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docUseCd : "사용 유무",
+				docOrd : "순번",
+				docEdDtm : "만료일자",
+				signUseCd : "결재 사용 유무",
+				docDesc : "비고"
+			},
+			message : {
+				alert : {
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
+				}
+			},
+			modal : {
+				title : {
+					insertDocCon : "산출물 연결"
+				}
+			}
+		},
+		prj3200 : {
+			label : {
+				upperDocId : "상위 산출물 ID",
+				upperDocNm : "상위 산출물 명",
+				docId : "산출물 ID",
+				docNm : "산출물 명",
+				docEdDtm : "만료일자",
+				docOrd : "순번",
+				signUseCd : "결재 사용 유무",
+				docUseCd : "사용 유무",
+				docDesc : "비고"
+			},
+			insert : {
+				saveBtnString : "등록 완료",
+				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
+				saveMsg : "${1}건의 정보가 연결되었습니다.",
+				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
+				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+			},
+			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
+			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+		},
 		prj5000:{
 			button:{
 				title:{
@@ -1929,15 +2407,19 @@ var OSLCoreLangSetting = function () {
 				deptNm: "Department Name",
 				telNo: "Telephone number"
 			},
-			reqPw:{
-				title : "Request Lock",
-				password : "PW",
-				passwordCheck : "PW Check",
-			},
 			prjNm: "Project",
 			reqDtm: "Request Date",
 			reqNm: "Request Title",
 			reqDesc: "Request description",
+			reqPw:{
+				title : "Request Lock",
+				password : "PW",
+				passwordCheck : "PW Check",
+				placeholder : {
+					password : "4 to 12 letters of alphabet and number combination.",
+					nullPassword : "If blank, the old password is used.",
+				}
+			},
 			attachments: "Attachments",
 			requestDefaultOptNm: "Request Default Option Name",
 			complete: "Complete",
@@ -1946,12 +2428,88 @@ var OSLCoreLangSetting = function () {
 				passwordMatching : "The entered passwords are different.",
 			},
 		},
+		req3000:{
+			insert:{
+				saveMsg:"Connection success",
+				saveDupleMsg:"That connection is already connected",
+				saveAllDupleMsg:"All request is already connected",
+			},
+			alert:{
+				checkUsrId:"You must search user name. \n because we must know about detail department belong user",
+				checkChargerId:"You must search charger name. \n because we must know about detail department belong charger",
+			},
+			confirm:{
+				insert:"Would you like to register your group requirement?",
+				delete:"Would you like to delete your group requirement?",
+				deleteList:"Would you like to delet your ${1} requirements?",
+				update:"Would you like to update your group requirement?",
+			},
+			actionBtn:{
+				title : "Select",
+				clickBtn : "Select",
+			},
+			button:{
+				select:" ",
+				delete:" ",
+				insert:" ",
+				connect:" ",
+				reset:" ",
+				done:"Done",
+			},
+			title:{
+				detailTitle:"Group requirement detail",
+				insert:"Group requirement insert",
+				update:"Group requirement update",
+				detail:"Group requirement Detail Information",
+				selectUsr:"Search group requirement request user",
+				selectCharger:"Search group requirement charger",
+			},
+			datatable:{
+				action:{
+					update:"Group requirement update",
+					delete:"Group requirement delete",
+					excel:"Group requirement excel",
+					print:"Group requirement print",
+					dblClick:"Group requirement detail"
+				},
+				button:{
+					title:{
+						select:"Group requirement select",
+						insert:"Group requirement insert",
+						delete:"Group requirement delete",
+						update:"Group requirement update",
+						excel:"Group requirement excel",
+						print:"Group requirement print",
+						upload:"Group requirement upload",
+						download:"Form download",
+						reset:"Connection reset",
+						connect:"Connect"
+					}
+				},
+			},
+			label:{
+				reqGrpNo:"Group requirement Number",
+				reqGrpUsr:"Request User",
+				reqGrpCharger:"Group requirement Charger",
+				reqGrpNm:"Group requirement Name",
+				reqGrpDesc:"Group requirement Descirption",
+				fileUpload:"File Upload",
+				linkedReqList:"Linked requirements List",
+				unlinkedReqList:"Unlinked requirements List",
+				linkedReqInfo:"Linked requirements Information",
+				linkedReqTypeList:"Linked requirements Type List",
+				total:"Total",
+				ongoing:"Ongoing",
+				done:"Done",
+				linkedReqCount:"Linked requirements Counts",
+			}
+		},
 		req4100:{
 			button:{
 				copyBtn : "Copy"
 			},
 			field:{
-				
+				/*외부 주입 search bar에서 사용*/
 				prjGrpNm: "Project Group Name",
 			},
 			actionBtn:{
@@ -2057,7 +2615,7 @@ var OSLCoreLangSetting = function () {
 		},
 		req4103:{
 			field: {
-				
+				/*외부 검색과 동일한지 확인하기 위해 사용, 데이터 테이블과 일치시키기*/
 				usrNm : "User Name",
 			},
 			actionBtn : {
@@ -2209,6 +2767,7 @@ var OSLCoreLangSetting = function () {
 				updateTitle : "Board Setting",
 				detailTitle : "Board Management",
 				summeryTitle : "Board Summery",
+				chargerTitle : "Board Manager List"
 			},
 			type:{
 				normal:"[Normal]",
@@ -2216,6 +2775,14 @@ var OSLCoreLangSetting = function () {
 				movie:"[Movie]",
 				storage:"[Storage]",
 			},
+			label:{
+				summery : "Summery",
+			},
+			chart:{
+				noData : "No Data",
+				newPost : "New Post",
+				deletePost : "Delete Post"
+			}
 		},
 		stm2101:{
 			update: "Would you like to update this board setting?",
@@ -2295,6 +2862,48 @@ var OSLCoreLangSetting = function () {
 				board : "Post",
 				tag : "Tag",
 				attachFile : "Attachments",
+			}
+		},
+		stm2200:{
+			title:{
+				authGrpList: "시스템권한 그룹 ",
+				authList: "시스템 메뉴 권한",
+				insert: "신규 시스템 권한 그룹 등록",
+				update: "시스템 권한 그룹 수정",
+				view: "시스템 권한 그룹 상세보기",
+			},
+			actionBtn : {
+				updateBtn : "시스템 권한 그룹 수정",
+				deleteBtn : "시스템 권한 그룹 삭제",
+				clickBtn  : "시스템 메뉴 권한 조회",
+				dblClickBtn : "시스템 권한 그룹 상세보기"
+			},
+			button:{
+				title:{
+					insert: "시스템 권한 그룹 추가",
+					update: "시스템 권한 그룹 수정",
+					delete: "시스템 권한 그룹 삭제",
+					select: "시스템 권한 그룹 조회",
+				}
+			},
+		},
+		stm2201:{
+			complete: "완료",
+			insert:{
+				saveString: "시스템 권한 그룹을 등록하시겠습니까?",
+				saveBtnString: "등록 완료",
+			},
+			update:{
+				saveString: "시스템 권한 그룹을  수정하시겠습니까?",
+				saveBtnString: "수정 완료",
+			},
+			label : {
+				authGrpNm: "권한그룹 명",
+				ord: "순번",
+				usrTyp: "사용자 유형",
+				acceptUseCd: "접수권한 사용유무",
+				useCd: "사용유무",
+				authGrpDesc: "비고"
 			}
 		},
 		stm6000:{
@@ -2443,9 +3052,9 @@ var OSLCoreLangSetting = function () {
 				deleteBadge: "Delete",
 				noticeBadge: "Notice",
 			},
-			field:{ 
+			field:{ /*태그 검색 시 search bar 일치 확인용, 데이터 테이블 필드와 동일하게 지정하기*/
 				tagNm:"Tag",
-				
+				/*외부 주입 search bar field인 경우 데이터 테이블 필드명으로 지정되지 않으므로 따로 지정*/
 				badContent: "Content",
 				badNtcCheck : "Notice",
 				delCd:"Delete",
@@ -2586,12 +3195,12 @@ var OSLCoreLangSetting = function () {
 		}
 	};
     return {
-        
+        // public functions
         init: function() {
-        	
+        	//언어팩 목록
     		var langList = ["ko","en"];
     		
-    		
+    		//언어 데이터
     		var langData = {};
     		
     		$.each(langList, function(idx, map){
@@ -2600,7 +3209,7 @@ var OSLCoreLangSetting = function () {
     		
     		$.osl.langData = langData;
     		
-    		
+    		//datepicker 언어 처리
     		$.osl.date.init();
         }
     };

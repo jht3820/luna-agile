@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <input type="hidden" name="armId" id="armId" value="<c:out value='${param.armId}'/>">
-<form class="kt-form" id="frCmm16002" autocomplete="off">
+<form class="kt-form" id="frArm1002" autocomplete="off">
 	<div class="kt-portlet kt-margin-b-0">
 		<div class="kt-portlet__head">
 			<div class="kt-portlet__head-label">
@@ -16,7 +16,7 @@
 		<div class="kt-portlet__body">
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<input type="text" class="form-control" id="armTitle" name="armTitle" readonly="readonly">
+				<input type="text" class="form-control" id="armTitle" name="armTitle" autocomplete="off" readonly="readonly">
 			</div>
 		</div>
 		<div class="row">
@@ -29,9 +29,9 @@
 				<div class="form-group kt-margin-t-10 form-group-last">
 					<label>
 						<i class="fa fa-file-upload kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16002.label.attachments">첨부 파일</span> 
+						<span data-lang-cd="arm1002.label.attachments">첨부 파일</span> 
 					</label>
-					<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
+					<div class="kt-uppy osl-max-h-px-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 						<div class="kt-uppy__dashboard"></div>
 						<div class="kt-uppy__progress"></div>
 					</div>
@@ -41,14 +41,14 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="arm1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="cmm16002.button.reSend">답장</span></button>
+	<button type="button" class="btn btn-brand" id="arm1002InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="arm1002.button.reSend">답장</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLCmm16002Popup = function () {
-	var formId = 'frCmm16002';
+var OSLArm1002Popup = function () {
+	var formId = 'frArm1002';
 
 	//atchfileId
 	var atchFileId;
@@ -74,7 +74,7 @@ var OSLCmm16002Popup = function () {
 	var documentSetting = function(){
 		
 		//문구 세팅 
-    	$("#arm1002InsertSubmit > span").text($.osl.lang("cmm16002.button.reSend"));
+    	$("#arm1002InsertSubmit > span").text($.osl.lang("arm1002.button.reSend"));
 		
 		armId = $("#armId").val();
 		
@@ -89,12 +89,12 @@ var OSLCmm16002Popup = function () {
 				};
 			var options = {
 					idKey: "reInsert_"+armId,
-					modalTitle: $.osl.lang("cmm16002.title"),
+					modalTitle: $.osl.lang("arm1002.title"),
 					closeConfirm: false,
 					autoHeight:false,
 				};
 			
-			$.osl.layerPopupOpen('/cmm/cmm10000/cmm16000/insertCmm16001View.do',data,options);
+			$.osl.layerPopupOpen('/arm/arm1000/arm1000/insertArm1001View.do',data,options);
     	});
 	};
 	
@@ -108,7 +108,7 @@ var OSLCmm16002Popup = function () {
 		
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/arm/arm1000/arm1000/selectArm1000AlarmInfoAjax.do'/>", "async":"true"}
 				,data);
 		
 		//AJAX 전송 성공 함수
@@ -218,7 +218,7 @@ var OSLCmm16002Popup = function () {
 		
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/cmm/cmm10000/cmm16000/updateArm1000AlarmInfoAjax.do'/>", "async":"true"}
+				{"url":"<c:url value='/arm/arm1000/arm1000/updateArm1000AlarmInfoAjax.do'/>", "async":"true"}
 				,data);
 		
 		//AJAX 전송 성공 함수
@@ -229,7 +229,7 @@ var OSLCmm16002Popup = function () {
 				//모달 창 닫기
 				$.osl.layerPopupClose();
 			}else{
-				OSLCmm16000Popup.reload();
+				OSLArm1000Popup.reload();
 			}
 		});
 		
@@ -247,7 +247,7 @@ var OSLCmm16002Popup = function () {
 }();
 
 $.osl.ready(function(){
-	OSLCmm16002Popup.init();
+	OSLArm1002Popup.init();
 });
 </script>
 <!-- end script -->

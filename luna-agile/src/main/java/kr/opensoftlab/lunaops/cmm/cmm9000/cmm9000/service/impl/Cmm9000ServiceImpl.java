@@ -30,11 +30,16 @@ public class Cmm9000ServiceImpl extends EgovAbstractServiceImpl implements Cmm90
 		Map chargeReqList = new HashMap();
 		Map allReqList = new HashMap();
 		
+		
 		alarmMap = cmm9000DAO.selectCmm9000AlarmCntInfo(paramMap);
+		
 		
 		chargeReqList = cmm9000DAO.selectCmm9000ChargeReqCntList(paramMap);
 		
+		
 		allReqList = cmm9000DAO.selectCmm9000AllReqCntList(paramMap);
+		
+		
 		String selPrjType = cmm9000DAO.selectCmm9000ProjectType(paramMap);
 		
 		menuInfoMap.put("alarmMap", alarmMap);
@@ -43,29 +48,5 @@ public class Cmm9000ServiceImpl extends EgovAbstractServiceImpl implements Cmm90
 		menuInfoMap.put("selPrjType", selPrjType);
 		
 		return menuInfoMap;
-	}
-
-	
-	@SuppressWarnings({ "rawtypes"})
-	public List<Map> selectCmm9000FavoritesList(Map paramMap) throws Exception{
-		return cmm9000DAO.selectCmm9000FavoritesList(paramMap);
-	}
-	
-
-	
-	@SuppressWarnings("rawtypes")
-	public int selectCmm9000FvrTypeCntInfo(Map paramMap) throws Exception{
-		return cmm9000DAO.selectCmm9000FvrTypeCntInfo(paramMap);
-	}
-	
-	
-	public String insertCmm9000FavoritesInfo(Map<String, String> paramMap) throws Exception {
-		return cmm9000DAO.insertCmm9000FavoritesInfo(paramMap);
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	public int updateCmm9000FavoritesInfo(Map paramMap) throws Exception{
-		return cmm9000DAO.updateCmm9000FavoritesInfo(paramMap);
 	}
 }

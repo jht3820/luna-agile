@@ -574,4 +574,16 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 		
 		return req4100DAO.selectReq4100ReqProTypeOrdList(paramMap);
 	} 
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int  selectReq4100ChargeReqListCnt(Map paramMap) throws Exception {
+		return req4100DAO.selectReq4100ChargeReqListCnt(paramMap);
+	} 
+	
+	
+	@SuppressWarnings({ "rawtypes" })
+	public List<Map>  selectReq4100ChargeReqList(Map paramMap) throws Exception {
+		return  req4100DAO.selectReq4100ChargeReqList(paramMap);
+	}
 }

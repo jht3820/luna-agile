@@ -68,6 +68,12 @@ var OSLStm9000 = function () {
 				},
 				{field: 'jenNm', title: "Jenkins 명", textAlign: 'center', width: 120, autoHide: false, search: true},
 				{field: 'jenUrl', title: "Jenkins URL", textAlign: 'left', width: 240, search: true, autoHide: false},
+				{field: 'regJobCnt', title: "시스템 등록 JOB 수", textAlign: 'center', width: 160,
+					template: function(row){
+						// 등록 job 갯수 0이면 문자열 0 리턴 : 숫자일경우 데이터테이블에 표시되지 않음
+						return row.regJobCnt == 0 ? "0" : row.regJobCnt;
+					}
+				},
 				{field: 'jenUsrId', title: "Jenkins User Id", textAlign: 'center', width: 120, search: true},
 				{field: 'useNm', title: "사용 유무", textAlign: 'center', width: 120, search: true, searchType:"select", searchCd: "CMM00001", searchField:"useCd", sortField: "useCd"}
 			],

@@ -2,11 +2,11 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="req1000DAO">
-	 <!--  in / out class define  -->
+	 
     <typeAlias alias="req1000VO"	type="kr.opensoftlab.lunaops.req.req1000.req1000.vo.Req1000VO"/>
 	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	
-	<!-- Map Define -->
+	
    	<resultMap id="resultMapSelectReq1000" class="egovMap">
 		<result property="rn"  					column="RN"/>
 		<result property="prjId"				column="PRJ_ID"/>
@@ -27,6 +27,7 @@
 		<result property="reqUsrImgId"			column="REQ_USR_IMG_ID"/>
 		<result property="reqNm"				column="REQ_NM"/>
 		<result property="reqDesc"				column="REQ_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="reqPw"					column="REQ_PW"/>
 		<result property="reqChargerId"			column="REQ_CHARGER_ID"/>
 		<result property="reqStDtm"				column="REQ_ST_DTM"/>
 		<result property="reqEdDtm"				column="REQ_ED_DTM"/>
@@ -50,7 +51,8 @@
 		<result property="reqKey"				column="REQ_KEY"/>
     </resultMap>
 	
-	<!-- sql Define  -->
+	
+	
 	<sql id="selectReq1000List">
 		SELECT T1.*, ROWNUM RN
 		FROM
@@ -76,12 +78,14 @@
 					,	A.REQ_NM
 					<isNotEmpty property="reqId">
 	    				,	A.REQ_DESC
+	    				,	A.REQ_PW
 	    			</isNotEmpty>
 					<isEmpty property="reqId">
 						<![CDATA[ 
-	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				
 	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC      
 	    				]]>
+	    				,	NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
 	    			</isEmpty>
 					,	A.REQ_CHARGER_ID
 					,	D.USR_NM			AS REQ_CHARGER_NM
@@ -114,10 +118,11 @@
 				    ,	A.MODIFY_USR_ID
 				    ,	A.MODIFY_USR_IP
 		    FROM (SELECT * FROM REQ4100) A
-			    ,	STM3000 D
+		    	LEFT JOIN STM3000 D ON (D.LIC_GRP_ID = #licGrpId# AND A.REQ_CHARGER_ID	= D.USR_ID)
 		    WHERE 1=1
-				AND A.PRJ_ID = #prjId#
-				AND	A.REQ_CHARGER_ID 	= D.USR_ID(+)
+		    <isNotEmpty property="prjId">
+		    	AND A.PRJ_ID = #prjId#
+		    </isNotEmpty>
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
 					ORDER BY $paramSortFieldId$
@@ -127,6 +132,7 @@
 				</isNotEmpty>
 			</isNotEmpty>
 			<isEmpty property="paramSortFieldId">
+				
 				ORDER BY A.REQ_PRO_TYPE ASC, USR_SEL_PRJ_ORD ASC, PRJ_NM ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC
 			</isEmpty>
 		) T1 WHERE 1 = 1
@@ -180,7 +186,9 @@
 			</isNotEmpty>
     </sql>
     
+    
     <select id="req1000DAO.selectReq1000ReqList" parameterClass="java.util.Map" resultMap="resultMapSelectReq1000">
+	    
 		SELECT *
 		FROM
 			(
@@ -190,7 +198,9 @@
 	    	AND 	Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
+    
     <select id="req1000DAO.selectReq1000ReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 			COUNT(*)
 		FROM	(
@@ -198,7 +208,9 @@
 						) A
     </select>
     
+    
     <select id="req1000DAO.selectReq1000List" parameterClass="req1000VO"  resultMap="resultMapSelectReq1000">
+	    
 		SELECT *
 		FROM
 			(
@@ -208,7 +220,9 @@
 	    	AND 	Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
     
+    
     <select id="req1000DAO.selectReq1000AllList" parameterClass="req1000VO"  resultMap="resultMapSelectReq1000">
+	    
 		SELECT *
 		FROM
 			(
@@ -220,7 +234,9 @@
 		</isNotEmpty>
     </select>
     
+    
     <select id="req1000DAO.selectReq1000ListCnt" parameterClass="req1000VO"  resultClass="java.lang.Integer">
+	    
 	    SELECT
 			COUNT(*)
 		FROM	(
@@ -228,7 +244,9 @@
 						) A
     </select>
     
+    
 	<select id="req1000DAO.selectReq1000ReqInfo" parameterClass="java.util.Map"  resultMap="resultMapSelectReq1000">
+		
 		<include refid="selectReq1000List"/>
 		<isNotEmpty property="prjId">
 			AND		T1.PRJ_ID = #prjId#
@@ -244,9 +262,11 @@
 	    
 	</select>
 	
+	
 	<insert id="req1000DAO.insertReq1001ReqInfo" parameterClass="java.util.Map">
 		<selectKey resultClass="java.lang.String" keyProperty="newReqId">
 		<![CDATA[
+			 
 			SELECT	NVL( 
 							SUBSTR(NEW_REQ_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_REQ_ID, 12, 5)) + 1) , 5, '0')
 						,	'REQ' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
@@ -261,6 +281,7 @@
 		]]>
 		</selectKey>
 		<![CDATA[ 
+			 
 			INSERT INTO REQ4100
 			(
 			        PRJ_ID,				REQ_ID,				PRJ_GRP_ID,			REQ_CLS_ID,			REQ_ORD
@@ -293,10 +314,17 @@
 		]]>
 	</insert>
 	
+	
 	<update id="req1000DAO.updateReq1001ReqInfo" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		REQ_NM			= #reqNm# 	
 		    ,	REQ_DESC		= #reqDesc#
+		    <isNotEmpty property="changePw">
+		    	<isEqual property="changePw" compareValue="Y">
+			    	,	REQ_PW			= #reqPw#
+		    	</isEqual>
+		    </isNotEmpty>
 		    ,	REQ_USR_EMAIL	= #reqUsrEmail#
 			,	REQ_USR_NUM		= #reqUsrNum#
 			,	REQ_USR_IMG_ID	= #reqUsrImgId#
@@ -311,7 +339,12 @@
 	</update>
 	
 	
+	<!-- 요구사항 키값 수정 
+		프로젝트 ID와 요구사항 등록 시 생성된 요구사항 ID를 조합하여 암호화 시킨 후
+		요구사항 키로 등록하여 요구사항의 고유한 해시값으로 사용한다.
+	-->
 	<update id="req1000DAO.updateReq1000ReqKey" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		REQ_KEY		= #reqKey# 	
 		WHERE	1=1
@@ -319,7 +352,19 @@
 		AND		A.REQ_ID = #reqId#
 	</update>
 	
+	
+	<update id="req1000DAO.updateReq1000ReqPwInfo" parameterClass="java.util.Map">
+		 
+		UPDATE 	REQ4100 A
+		SET		REQ_PW		= #reqPw# 	
+		WHERE	1=1
+		AND		A.PRJ_ID = #prjId#
+		AND		A.REQ_ID = #reqId#
+	</update>
+	
+	
 	<update id="req1000DAO.updateReq1001ReqSubInfo" parameterClass="java.util.Map">
+		 
 		UPDATE 	REQ4100 A
 		SET		REQ_CHARGER_ID = #reqChargerId#
 			,	REQ_CHARGER_DT = TO_CHAR(SYSDATE,'YYYYMMDD')
@@ -332,7 +377,9 @@
 		AND		A.REQ_ID = #reqId#
 	</update>
 	
+	
 	<delete id="req1000DAO.deleteReq1001ReqInfo" parameterClass="java.util.Map">
+		
 		DELETE	
 		FROM	REQ4100 A
 		WHERE	1=1
@@ -340,14 +387,18 @@
 		AND 	A.REQ_ID = #reqId#
 	</delete>
 	
+	
     <select id="req1000DAO.selectReq1000ExcelList" parameterClass="req1000VO"  resultClass="egovMap">
+	    
 	
 		<include refid="selectReq1000List"/>
 
     </select>
     
     
+    
 	<select id="req1000DAO.selectReq1000ReqUserInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		
 		<![CDATA[
 			SELECT 
 					A.USR_NM
@@ -362,7 +413,9 @@
 		]]>
 	</select>
 	
+	
 	<select id="req1000DAO.selectReq1000ReqPrjInfo" parameterClass="java.util.Map" resultClass="egovMap">
+     		
      		<![CDATA[
 	      		SELECT  
 	       					A.PRJ_NM
@@ -375,7 +428,9 @@
 			]]>
 	</select>
 	
+	
 	<select id="req1000DAO.selectReq1000NextReqOrd" parameterClass="java.util.Map" resultClass="String">
+		
 		<![CDATA[
 			SELECT  NVL(MAX(T.NEXT_REQ_ORD), '1') AS REQ_ORD
 			FROM (
@@ -388,7 +443,9 @@
 		]]>
 	</select>
 	
+	
 	<delete id="req1000DAO.deleteReq1000ReqAtchFile" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE 	FROM COMTNFILE
 			WHERE 	1=1
@@ -396,7 +453,9 @@
 		]]>	
 	</delete>
 	
+	
 	<delete id="req1000DAO.deleteReq1000ReqAtchFileDetail" parameterClass="java.util.Map">
+		
 		<![CDATA[
 			DELETE 	FROM COMTNFILEDETAIL
 			WHERE 	1=1
@@ -405,6 +464,8 @@
 	</delete>
 	
 	    
+    
+    
 	<sql id="selectReq1000IntegratedDshAcceptReqList">
 		SELECT T1.*, ROWNUM RN
 		FROM
@@ -428,7 +489,7 @@
 	    			</isNotEmpty>
 					<isEmpty property="reqId">
 						<![CDATA[ 
-	    				/* , REPLACE (REQ_DESC ,'<br>' , '&nbsp;&nbsp;&nbsp;&nbsp;' ) AS REQ_DESC */
+	    				
 	    				, REGEXP_REPLACE (A.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC      
 	    				]]>
 	    			</isEmpty>
@@ -466,14 +527,16 @@
 			    ,	STM3000 D
 		    WHERE 1=1
 			AND			A.REQ_CHARGER_ID 	= D.USR_ID(+)
-			ORDER BY A.REQ_PRO_TYPE ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC /* 접수요청으로 정렬 접수요청이 제일 위에 */
+			ORDER BY A.REQ_PRO_TYPE ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC 
 		) T1 
 		WHERE 1 = 1
 		AND T1.PRJ_ID = #prjId#		
-		AND	T1.REQ_PRO_TYPE = '01'
+		AND	T1.REQ_PRO_TYPE = '01' 
     </sql>
     
+    
     <select id="req1000DAO.selectReq1000IntegratedDshAcceptReqList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
 		SELECT *
 		FROM
 		(
@@ -484,7 +547,9 @@
     </select>
 
     
+    
     <select id="req1000DAO.selectReq1000IntegratedDshAcceptReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
 		SELECT
 			COUNT(*) AS REQ_CNT
 		FROM	

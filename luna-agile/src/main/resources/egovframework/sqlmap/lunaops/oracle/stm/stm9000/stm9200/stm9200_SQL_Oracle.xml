@@ -2,118 +2,653 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="stm9200DAO">
+
 	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-	<typeAlias alias="stm9200VO"	type="kr.opensoftlab.lunaops.stm.stm9000.stm9200.vo.Stm9200VO"/>
 
-
-    
-    
-    <resultMap id="resultMapSelectStm9200Project" class="stm9200VO">
-		<result property="rn"  			    column="RN"/>
-		<result property="licGrpId"         column="LIC_GRP_ID" /> 		 
-		<result property="prjId"            column="PRJ_ID" />			 
-		<result property="prjNm"            column="PRJ_NM" />			 
-		<result property="jenId"            column="JEN_ID" />  		
-		<result property="jenNm"            column="JEN_NM" />			
-		<result property="jenUrl"           column="JEN_URL" /> 		 
-		<result property="jobId"            column="JOB_ID" /> 			 
-		<result property="jobRestoreId" 	column="JOB_RESTORE_ID" /> 	 
-		<result property="jobTypeCd"        column="JOB_TYPE_CD" /> 	
-		<result property="jobTypeNm"        column="JOB_TYPE_NM" /> 	
-		<result property="jobDesc"        	column="JOB_DESC" /> 		
-		<result property="useCd"            column="USE_CD" /> 			 
-		<result property="useNm"            column="USE_NM" /> 			
-		<result property="regDtm"           column="REG_DTM" /> 		 
-		<result property="regUsrId"         column="REG_USR_ID" /> 		 
-		<result property="regUsrIp"         column="REG_USR_IP" /> 		 
-		<result property="modifyDtm"        column="MODIFY_DTM" /> 		 
-		<result property="modifyUsrId"      column="MODIFY_USR_ID" /> 	 
-		<result property="modifyUsrIp"      column="MODIFY_USR_IP" /> 	 
-    </resultMap>
-    
-	
-	<sql id="selectStm9002ProjectJenkinsJobAllList">
-	SELECT
-			      	A.LIC_GRP_ID 		
-                ,	A.JEN_ID			
-                ,	C.JEN_NM			
-                ,	C.JEN_URL			
-                ,	B.JOB_ID			
-                ,	B.JOB_TYPE_CD		
-                ,	SF_STM4001_COM_CD_INFO( #licGrpId#, 'DPL00002', B.JOB_TYPE_CD, '1') AS JOB_TYPE_NM 
-                ,	B.JOB_RESTORE_ID	
-                ,	B.JOB_DESC			
-                ,	B.USE_CD			
-                ,	SF_STM4001_COM_CD_INFO( #licGrpId#, 'CMM00001', B.USE_CD, '1') AS USE_NM 
-                , 	A.PRJ_ID 			
-                ,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM 
-                ,	A.REG_DTM			
-			    ,	A.REG_USR_ID		
-			    ,	A.REG_USR_IP		
-			    ,	A.MODIFY_DTM		
-			    ,	A.MODIFY_USR_ID		
-			    ,	A.MODIFY_USR_IP		
-		 FROM
-				STM9002 A 
-           		LEFT JOIN STM9001 B ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID)
-            	LEFT JOIN STM9000 C ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.JEN_ID = C.JEN_ID)
-		 WHERE   1=1
-		 AND A.LIC_GRP_ID = #licGrpId#
-		 <isNotEmpty property="searchSelect">
-			<isNotEmpty property="searchTxt">
-				<isEqual property="searchSelect" compareValue="jenNm"> 
-					AND		UPPER( C.JEN_NM ) like '%'|| UPPER( #searchTxt# )  ||'%'
+ 	
+	<sql id="selectStm9002PrjAssignJenkinsJobListBase">
+		SELECT
+					ROWNUM AS RN
+				,	SUB1.LIC_GRP_ID
+				,	SUB1.PRJ_GRP_ID
+				, 	SUB1.PRJ_ID
+		        ,	SUB1.PRJ_NM
+		        ,	SUB1.JEN_ID
+		        ,	SUB1.JEN_NM
+		        ,	SUB1.JEN_URL
+		        ,	SUB1.JEN_USR_ID
+		        ,	SUB1.JEN_USR_NM
+		        ,	SUB1.JEN_DESC
+		        ,	SUB1.JOB_ID
+		        ,	SUB1.JOB_TYPE_CD
+		        ,	SUB1.JOB_TYPE_NM
+		        ,	SUB1.JOB_RESTORE_ID
+				,	SUB1.JOB_PARAMETER
+		        ,	SUB1.JOB_DESC
+		        ,	SUB1.USE_CD
+		        ,	SUB1.USE_NM
+		        ,	SUB1.REG_DTM
+				,	SUB1.REG_USR_ID
+				,	SUB1.REG_USR_IP
+				,	SUB1.MODIFY_DTM
+				,	SUB1.MODIFY_USR_ID
+				,	SUB1.MODIFY_USR_IP
+		FROM
+		(
+			SELECT
+						A.LIC_GRP_ID
+					,	A.PRJ_GRP_ID
+	                , 	A.PRJ_ID
+	                , 	(SELECT PRJ_NM FROM PRJ1000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.PRJ_ID = A.PRJ_ID) AS PRJ_NM
+	                ,	A.JEN_ID
+	                ,	C.JEN_NM
+	                ,	C.JEN_URL
+	                ,	C.JEN_USR_ID
+	                , 	(SELECT USR_NM FROM STM3000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.USR_ID = C.JEN_USR_ID) AS JEN_USR_NM
+	                ,	C.JEN_DESC
+	                ,	B.JOB_ID
+	                ,	B.JOB_TYPE_CD
+	                , 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'DPL00002' AND X.SUB_CD = B.JOB_TYPE_CD) AS JOB_TYPE_NM
+	                ,	B.JOB_RESTORE_ID
+					,	B.JOB_PARAMETER
+	                ,	B.JOB_DESC
+	                ,	B.USE_CD
+	                , 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'CMM00001' AND X.SUB_CD = B.USE_CD) AS USE_NM
+	                ,	A.REG_DTM
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	A.MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+			FROM
+			STM9002 A 
+	        LEFT JOIN STM9001 B 
+	        ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID AND A.JOB_ID = B.JOB_ID)
+	        LEFT JOIN STM9000 C 
+	        ON (B.LIC_GRP_ID = C.LIC_GRP_ID AND B.JEN_ID = C.JEN_ID)
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND B.USE_CD = '01'
+			AND C.DEL_CD = '02'
+			AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+		) SUB1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	SUB1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobId"> 
-					AND		UPPER( B.JOB_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobRestoreId"> 
-					AND		UPPER( B.JOB_RESTORE_ID ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				<isEqual property="searchTargetId" compareValue="jenUrl">
+					AND	SUB1.JEN_URL LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchSelect" compareValue="jobDesc"> 
-					AND		UPPER( B.JOB_DESC ) like '%'|| UPPER( #searchTxt# )  ||'%'
+				<isEqual property="searchTargetId" compareValue="jenDesc">
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrId">
+					AND	SUB1.JEN_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrNm">
+					AND	SUB1.JEN_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobId">
+					AND	SUB1.JOB_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobRestoreId">
+					AND	SUB1.JOB_RESTORE_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobDesc">
+					AND	SUB1.JOB_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobTypeCd">
+					AND	SUB1.JOB_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		<isNotEmpty>
-			<isNotEmpty property="searchSelect">
-				<isNotEmpty property="searchCd">
-					<isEqual property="searchSelect" compareValue="prjId">
-						AND 	A.PRJ_ID LIKE '%'||#searchCd#||'%'
-					</isEqual>
-					<isEqual property="searchSelect" compareValue="jobTypeCd">
-						AND 	B.JOB_TYPE_CD LIKE '%'||#searchCd#||'%'
-					</isEqual>
-					<isEqual property="searchSelect" compareValue="useCd">
-						AND 	B.USE_CD LIKE '%'||#searchCd#||'%'
+		<isNotEmpty property="paramSortFieldId">
+			ORDER BY $paramSortFieldId$
+			<isEqual property="sortDirection" compareValue="asc">
+				ASC
+			</isEqual>
+			<isEqual property="sortDirection" compareValue="desc">
+				DESC
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY PRJ_NM ASC, JOB_ID ASC
+		</isEmpty>
+    </sql>
+    
+    
+	<sql id="selectStm9002PrjNotAssignJenkinsJobListBase">
+		SELECT
+					ROWNUM RN
+				,	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_NM
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL 
+				,	SUB1.JOB_ID
+				,	SUB1.JOB_RESTORE_ID
+				,	SUB1.JOB_TOK
+				,	SUB1.JOB_TYPE_CD
+				,	SUB1.JOB_TYPE_NM
+				,	SUB1.JOB_PARAMETER
+				,	SUB1.JOB_DESC
+				,	SUB1.USE_CD
+				,	SUB1.USE_NM 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP  
+		FROM
+		(
+			SELECT
+						A.LIC_GRP_ID
+					,	A.JEN_ID
+					,	B.JEN_NM 
+					,	B.JEN_USR_ID 
+					, 	(SELECT USR_NM FROM STM3000 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.USR_ID = B.JEN_USR_ID) AS JEN_USR_NM
+					,	B.JEN_USR_TOK 
+					,	B.JEN_URL 
+					,	A.JOB_ID
+					,	A.JOB_RESTORE_ID
+					,	A.JOB_TOK
+					,	A.JOB_TYPE_CD
+					, 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'DPL00002' AND X.SUB_CD = A.JOB_TYPE_CD) AS JOB_TYPE_NM
+					,	A.JOB_PARAMETER
+					,	A.JOB_DESC
+					,	A.USE_CD
+					, 	(SELECT SUB_CD_NM FROM STM4001 X WHERE X.LIC_GRP_ID = A.LIC_GRP_ID AND X.MST_CD = 'CMM00001' AND X.SUB_CD = A.USE_CD) AS USE_NM
+					,	A.REG_DTM 
+					,	A.REG_USR_ID 
+					,	A.REG_USR_IP 
+					,	A.MODIFY_DTM 
+					,	A.MODIFY_USR_ID 
+					,	A.MODIFY_USR_IP              
+				FROM STM9001 A 
+				LEFT JOIN STM9000 B ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.USE_CD = '01'
+				AND B.DEL_CD = '02'
+        		AND NOT EXISTS (
+          			SELECT X.JOB_ID
+         			FROM STM9002 X
+	                WHERE 1 = 1
+	                AND X.LIC_GRP_ID = A.LIC_GRP_ID
+	                AND X.PRJ_GRP_ID = #prjGrpId#
+	                AND X.PRJ_ID = #prjId#
+	                AND X.JEN_ID = B.JEN_ID
+	                AND X.JOB_ID = A.JOB_ID
+				)
+		) SUB1
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUrl">
+					AND	SUB1.JEN_URL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenDesc">
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrId">
+					AND	SUB1.JEN_USR_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenUsrNm">
+					AND	SUB1.JEN_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobId">
+					AND	SUB1.JOB_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobRestoreId">
+					AND	SUB1.JOB_RESTORE_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobDesc">
+					AND	SUB1.JOB_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobTypeCd">
+					AND	SUB1.JOB_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			ORDER BY $paramSortFieldId$
+			<isEqual property="sortDirection" compareValue="asc">
+				ASC
+			</isEqual>
+			<isEqual property="sortDirection" compareValue="desc">
+				DESC
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.REG_DTM DESC, SUB1.JOB_ID ASC
+		</isEmpty>
+    </sql>
+    
+     
+	<sql id="selectStm9003PrjAssignDplAuthListBase">
+		SELECT
+				ROWNUM AS RN
+			,	SUB2.AUTH_TYPE_CD
+			,	SUB2.AUTH_TYPE_NM
+			,	SUB2.LIC_GRP_ID
+			,	SUB2.PRJ_ID
+			,	SUB2.JEN_ID
+			,	SUB2.JOB_ID
+			,	SUB2.DPL_AUTH_TARGET_ID
+			,	SUB2.DPL_AUTH_TARGET_NM
+			,	SUB2.EMAIL
+			,	SUB2.TELNO
+			,	SUB2.USR_IMG_ID
+			,	SUB2.DEPT_ID
+			,	SUB2.DEPT_NAME
+			,	SUB2.USR_POSITION_CD
+			,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUB2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM
+			,	SUB2.USR_DUTY_CD
+			,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUB2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(		
+			SELECT
+				 	SUB1.*
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00007', SUB1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM	
+			FROM
+			(
+				SELECT
+						'01' AS AUTH_TYPE_CD
+					,	B.LIC_GRP_ID
+					,	A.PRJ_ID
+					,	A.JEN_ID
+					,	A.JOB_ID
+					,	A.DPL_AUTH_TARGET_ID
+					,	A.DPL_AUTH_TYPE_CD
+					,	B.USR_NM AS DPL_AUTH_TARGET_NM
+					,	B.EMAIL
+					,	B.TELNO
+					,	B.USR_IMG_ID
+					,	B.DEPT_ID
+					,	SF_STM6000_DEPT_NM(#licGrpId#, B.DEPT_ID, '2') AS DEPT_NAME
+					,	B.USR_POSITION_CD
+					,	B.USR_DUTY_CD
+				FROM STM9003 A
+				INNER JOIN STM3000 B 
+				ON ( B.LIC_GRP_ID = #licGrpId# AND B.USR_ID = A.DPL_AUTH_TARGET_ID )
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND B.DEL_CD = '02'
+				AND B.USE_CD = '01'
+				AND B.BLOCK = '01'
+				AND A.DPL_AUTH_TYPE_CD = '01'
+				AND A.JEN_ID = #jenId# 	
+        		AND A.JOB_ID = #jobId#
+				UNION
+				SELECT
+						'02' AS AUTH_TYPE_CD
+					,	B.LIC_GRP_ID
+					,	A.PRJ_ID
+					,	A.JEN_ID
+					,	A.JOB_ID
+					,	A.DPL_AUTH_TARGET_ID
+					,	A.DPL_AUTH_TYPE_CD
+					,	B.AUTH_GRP_NM AS DPL_AUTH_TARGET_NM
+					,	'' AS EMAIL
+					,	'' AS TELNO
+					,	'' AS USR_IMG_ID
+					,	'' AS DEPT_ID
+					,	'' AS DEPT_NM
+					,	'' AS USR_POSITION_CD
+					,	'' AS USR_DUTY_CD
+				FROM STM9003 A
+				INNER JOIN PRJ2000 B 
+				ON ( B.LIC_GRP_ID  = #licGrpId# AND A.PRJ_ID = B.PRJ_ID AND B.AUTH_GRP_ID = A.DPL_AUTH_TARGET_ID AND B.USE_CD = '01')
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#
+				AND A.DPL_AUTH_TYPE_CD = '02'
+				AND A.JEN_ID = #jenId# 	
+        		AND A.JOB_ID = #jobId#
+			) SUB1
+			WHERE 1=1
+			<isNotEmpty property="dplAuthTypeCd">
+				AND	SUB1.DPL_AUTH_TYPE_CD = #dplAuthTypeCd#
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUB1.AUTH_TYPE_CD, '02', 1, '01', 2), SUB1.DPL_AUTH_TARGET_NM, SUB1.USR_POSITION_CD DESC, SUB1.USR_DUTY_CD DESC
+			</isEmpty>
+		) SUB2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="authTypeCd">
+					AND	SUB2.AUTH_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUB2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUB2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplAuthTargetId">
+					AND	SUB2.DPL_AUTH_TARGET_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="authTypeNm">
+					AND	SUB2.AUTH_TYPE_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUB2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY PRJ_NM, JOB_ID
-    </sql>
-    
-    <select id="stm9200DAO.selectStm9002ProjectJenkinsJobAllList" parameterClass="stm9200VO"  resultMap="resultMapSelectStm9200Project">
-		SELECT *
-		FROM
-			(
-    		SELECT  ROWNUM RN,
-    			    T.*
-    		FROM
-    		(
-					<include refid="selectStm9002ProjectJenkinsJobAllList"/>
-	    			) T
-	    	)
-	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
-    </select>
-    
-    <select id="stm9200DAO.selectStm9002ProjectJenkinsJobAllListCnt" parameterClass="stm9200VO"  resultClass="java.lang.Integer">
-	    	SELECT
-					COUNT(*)
-			FROM	(
-						<include refid="selectStm9002ProjectJenkinsJobAllList"/>
-					) A
-    </select>
-    
+	</sql>
 	
+	 
+	<sql id="selectStm9003PrjNotAssignDplAuthListBase">
+		SELECT
+				ROWNUM AS RN
+			,	SUB2.AUTH_TYPE_CD
+			,	SUB2.AUTH_TYPE_NM
+			,	SUB2.LIC_GRP_ID
+			,	SUB2.DPL_AUTH_TARGET_ID
+			,	SUB2.DPL_AUTH_TARGET_NM
+			,	SUB2.EMAIL
+			,	SUB2.TELNO
+			,	SUB2.USR_IMG_ID
+			,	SUB2.DEPT_ID
+			,	SUB2.DEPT_NAME
+			,	SUB2.USR_POSITION_CD
+			,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', SUB2.USR_POSITION_CD, '1'), '-') AS USR_POSITION_NM
+			,	SUB2.USR_DUTY_CD
+			,	NVL(SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', SUB2.USR_DUTY_CD, '1'), '-') AS USR_DUTY_NM
+		FROM
+		(			
+			SELECT
+					SUB1.*
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00007', SUB1.AUTH_TYPE_CD, '1') AS AUTH_TYPE_NM	
+			FROM
+			(	
+					SELECT
+							'01' AS AUTH_TYPE_CD
+						,	A.LIC_GRP_ID
+	          			, 	A.USR_ID AS DPL_AUTH_TARGET_ID
+						,	A.USR_NM AS DPL_AUTH_TARGET_NM
+						,	A.EMAIL
+						,	A.TELNO
+						,	A.USR_IMG_ID
+						,	a.DEPT_ID
+						,	SF_STM6000_DEPT_NM(#licGrpId#, A.DEPT_ID, '2') AS DEPT_NAME
+						,	A.USR_POSITION_CD
+						,	A.USR_DUTY_CD
+					FROM STM3000 A
+					WHERE 1=1
+	        		AND A.LIC_GRP_ID = #licGrpId#
+					AND A.DEL_CD = '02'
+					AND A.USE_CD = '01'
+					AND A.BLOCK = '01'
+	       			AND	NOT EXISTS
+	        		(
+						SELECT Z.DPL_AUTH_TARGET_ID
+		                FROM STM9003 Z
+		                WHERE 1=1
+		                AND Z.DPL_AUTH_TYPE_CD = '01'
+		                AND	Z.DPL_AUTH_TARGET_ID = A.USR_ID
+		                AND	Z.PRJ_ID = #prjId#
+		                AND Z.JEN_ID = #jenId#
+                    	AND Z.JOB_ID = #jobId#
+					)
+					UNION
+					SELECT
+							'02' AS AUTH_TYPE_CD
+						,	A.LIC_GRP_ID
+						,	A.AUTH_GRP_ID AS DPL_AUTH_TARGET_ID
+						,	A.AUTH_GRP_NM AS DPL_AUTH_TARGET_NM
+						,	'' AS EMAIL
+						,	'' AS TELNO
+						,	'' AS USR_IMG_ID
+						,	'' AS DEPT_ID
+						,	'' AS DEPT_NM
+						,	'' AS USR_POSITION_CD
+						,	'' AS USR_DUTY_CD
+					FROM PRJ2000 A
+					WHERE 1=1
+					AND A.LIC_GRP_ID = #licGrpId#
+					AND A.PRJ_ID = #prjId#
+					AND A.USE_CD = '01'
+					AND	NOT EXISTS
+		       		(
+						SELECT Z.DPL_AUTH_TARGET_ID
+						FROM STM9003 Z
+		                WHERE 1=1
+		                AND Z.DPL_AUTH_TYPE_CD = '02'
+		                AND	Z.DPL_AUTH_TARGET_ID = A.AUTH_GRP_ID
+		                AND	Z.PRJ_ID = A.PRJ_ID
+		                AND Z.JEN_ID = #jenId#
+                    	AND Z.JOB_ID = #jobId#
+					)
+			) SUB1
+			WHERE 1=1
+			<isNotEmpty property="dplAuthTypeCd">
+				AND	SUB1.DPL_AUTH_TYPE_CD = #dplAuthTypeCd#
+			</isNotEmpty>
+            <isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY DECODE(SUB1.AUTH_TYPE_CD, '02', 1, '01', 2), SUB1.DPL_AUTH_TARGET_NM
+			</isEmpty>
+		) SUB2
+		WHERE 1=1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="authTypeCd">
+					AND	SUB2.AUTH_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrPositionCd">
+					AND	SUB2.USR_POSITION_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="usrDutyCd">
+					AND	SUB2.USR_DUTY_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplAuthTargetId">
+					AND	SUB2.DPL_AUTH_TARGET_ID LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="dplAuthTargetNm">
+					AND	SUB2.DPL_AUTH_TARGET_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="deptName">
+					AND	SUB2.DEPT_NAME LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+    
+   		
+	<select id="stm9200DAO.selectStm9002PrjAssignJenkinsJobList" parameterClass="java.util.Map" resultClass="egovMap" >
+		
+	 	SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm9002PrjAssignJenkinsJobListBase"/>
+    	) Z
+    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	
+    <select id="stm9200DAO.selectStm9002PrjAssignJenkinsJobListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
+    	SELECT
+				COUNT(*)
+		FROM
+		(
+			<include refid="selectStm9002PrjAssignJenkinsJobListBase"/>
+		) A
+    </select>
+    
+   		
+	<select id="stm9200DAO.selectStm9002PrjNotAssignJenkinsJobList" parameterClass="java.util.Map" resultClass="egovMap" >
+		
+	 	SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm9002PrjNotAssignJenkinsJobListBase"/>
+    	) Z
+    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	
+    <select id="stm9200DAO.selectStm9002PrjNotAssignJenkinsJobListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
+    	SELECT
+			COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm9002PrjNotAssignJenkinsJobListBase"/>
+		) A
+    </select>
+
+ 	
+    <insert id="stm9200DAO.insertStm9002JenkinsJobInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO STM9002
+			(
+					LIC_GRP_ID,		PRJ_GRP_ID,		PRJ_ID,			JEN_ID,		JOB_ID
+				,	REG_DTM,		REG_USR_ID,		REG_USR_IP
+				,	MODIFY_DTM,		MODIFY_USR_ID,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#,		#prjGrpId#,		#prjId#,		#jenId#,	#jobId#
+				,	SYSDATE,		#regUsrId#,		#regUsrIp#
+				,	SYSDATE,		#regUsrId#,		#regUsrIp#
+			)		
+		]]>
+	</insert>
+
+	
+    <delete id="stm9200DAO.deleteStm9002JenkinsJobInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE FROM STM9002 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID	= #licGrpId#
+			AND	A.PRJ_GRP_ID	= #prjGrpId#
+			AND	A.PRJ_ID		= #prjId#
+			AND	A.JEN_ID 		= #jenId#
+			AND	A.JOB_ID 		= #jobId#
+		]]>
+	</delete>
+	
+	
+	<select id="stm9200DAO.selectStm9003PrjAssignDplAuthList" parameterClass="java.util.Map" resultClass="egovMap">
+    	
+	 	SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm9003PrjAssignDplAuthListBase"/>
+    	) Z
+    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="stm9200DAO.selectStm9003PrjAssignDplAuthListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
+    	SELECT
+			COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm9003PrjAssignDplAuthListBase"/>
+		) Z
+    </select>
+	
+	
+	<select id="stm9200DAO.selectStm9003PrjNotAssignDplAuthList" parameterClass="java.util.Map" resultClass="egovMap">
+    	
+	 	SELECT Z.*
+		FROM
+		(
+			<include refid="selectStm9003PrjNotAssignDplAuthListBase"/>
+    	) Z
+    	WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    
+    <select id="stm9200DAO.selectStm9003PrjNotAssignDplAuthListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	
+    	SELECT
+			COUNT(*) AS CNT
+		FROM
+		(
+			<include refid="selectStm9003PrjNotAssignDplAuthListBase"/>
+		) Z
+    </select>
+    
+   	
+    <insert id="stm9200DAO.insertStm9003DplAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO STM9003
+			(
+					LIC_GRP_ID,		PRJ_ID,					JEN_ID
+				,	JOB_ID,			DPL_AUTH_TARGET_ID, 	DPL_AUTH_TYPE_CD 
+				,	REG_DTM,		REG_USR_ID,				REG_USR_IP
+				,	MODIFY_DTM,		MODIFY_USR_ID,			MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#licGrpId#,		#prjId#,				#jenId#
+				,	#jobId#,		#dplAuthTargetId#,		#dplAuthTypeCd#
+				,	SYSDATE,		#regUsrId#,				#regUsrIp#
+				,	SYSDATE,		#regUsrId#,				#regUsrIp#
+			)		
+		]]>
+	</insert>
+
+	
+    <delete id="stm9200DAO.deleteStm9003DplAuthInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE FROM STM9003 A 
+			WHERE 1=1
+			AND	A.LIC_GRP_ID			= #licGrpId#
+			AND	A.JEN_ID 				= #jenId#
+			AND	A.JOB_ID 				= #jobId#
+		]]>
+		<isEmpty property="delType">
+			AND	A.PRJ_ID				= #prjId#
+			AND	A.DPL_AUTH_TARGET_ID 	= #dplAuthTargetId#
+			AND	A.DPL_AUTH_TYPE_CD 		= #dplAuthTypeCd#
+		</isEmpty>	
+	</delete>
+
 </sqlMap>
