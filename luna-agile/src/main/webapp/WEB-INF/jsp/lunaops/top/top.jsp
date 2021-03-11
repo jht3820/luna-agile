@@ -150,8 +150,9 @@
 							
 							<!--begin: Notifications -->
 							<div class="kt-header__topbar-item">
-								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_notifications_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="알림">
+								<div class="kt-header__topbar-wrapper pulse pulse-success" id="kt_offcanvas_toolbar_notifications_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="알림">
 									<span class="kt-header__topbar-icon"><i class="flaticon2-notification"></i></span>
+									<span class="pulse-ring"></span>
 									<span class="kt-badge kt-badge--brand"></span>
 								</div>
 							</div>
@@ -367,9 +368,27 @@
 							
 						</div>
 					</div>
-					
-					<!-- end::Scrolltop -->
 					<!-- end::Offcanvas Toolbar Quick Panel -->
+					
+					
+					<!-- begin::Offcanvas Toolbar Quick Notifications -->
+					<div id="kt_offcanvas_toolbar_notifications" class="kt-offcanvas-panel">
+						<div class="kt-offcanvas-panel__head">
+							<h4 class="kt-offcanvas-panel__title kt-font-boldest">
+								알림
+								<small id="newNtfMsg"></small>
+							</h4>
+							<a href="#" class="kt-offcanvas-panel__close" id="kt_offcanvas_toolbar_notifications_close"><i class="flaticon2-delete"></i></a>
+						</div>
+						<div class="kt-notification-v2">
+							<div id="notificationsCardTable">
+							</div>
+							<div class="kt_datatable" id="notificationsTable"></div>
+							
+						</div>
+					</div>
+					<!-- end::Offcanvas Toolbar Quick Notifications -->
+					
 					<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 
 						<!-- begin:: Content -->

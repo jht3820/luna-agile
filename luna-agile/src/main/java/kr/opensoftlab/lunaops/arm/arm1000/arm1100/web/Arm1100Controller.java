@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.arm.arm1000.arm1100.service.Arm1100Service;
-import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
-import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
@@ -38,20 +35,8 @@ public class Arm1100Controller {
     private Arm1100Service arm1100Service;
     
     
-	@Resource(name = "stm3000Service")
-	private Stm3000Service stm3000Service;
-    
-    
     @Resource(name = "egovMessageSource")
     EgovMessageSource egovMessageSource;
-
-	
-   	@Resource(name="fileMngService")
-   	private FileMngService fileMngService;
-   	
-   	
-	@Resource(name="EgovFileMngUtil")
-	private EgovFileMngUtil fileUtil;
     
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -105,8 +90,6 @@ public class Arm1100Controller {
 			model.addAttribute("data", arm1100List);
 			model.addAttribute("meta", metaMap);
 			model.addAttribute("notRead", notRead);
-			
-			
 			
 			
 			model.addAttribute("errorYn", "N");
