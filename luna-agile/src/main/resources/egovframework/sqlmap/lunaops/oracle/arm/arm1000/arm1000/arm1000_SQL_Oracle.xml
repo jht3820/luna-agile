@@ -79,11 +79,9 @@
 				<isEqual property="armMenuType" compareValue="get">
 					AND A.DEL_CHECK = '02'
 					AND A.USR_ID = #usrId#
-					AND A.SEND_USR_ID != #usrId#
 				</isEqual>
 				<isEqual property="armMenuType" compareValue="send">
 					AND A.SEND_DEL_CHECK = '02'	
-					AND A.USR_ID != #usrId#	
 					AND A.SEND_USR_ID = #usrId#	
 				</isEqual>
 				<isEqual property="armMenuType" compareValue="alone">
