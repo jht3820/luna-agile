@@ -12,7 +12,7 @@
 	<input type="hidden" name="reqGrpId" id="reqGrpId" value="${param.paramReqGrpId}">
 	<input type="hidden" name="atchFileId" id="atchFileId">
 	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20" id="req3000ReqGrpWrap">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-12" id="req3000ReqGrpWrap">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0" id="req3000ReqGrpInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
@@ -85,7 +85,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20" id="req3000GrpLinkWrap">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-12" id="req3000GrpLinkWrap">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0" id="req3000GrpLinkInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
@@ -101,21 +101,21 @@
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqAll.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.total">전체</span></a>
-										<div class="osl-widget-info__item-desc">2</div>
+										<div class="osl-widget-info__item-desc" id="reqGrpLinkCnt" name="reqGrpLinkCnt"></div>
 									</div>
 								</div>
 								<div class="osl-widget-info__item">
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqInProgress.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.ongoing">진행</span></a>
-										<div class="osl-widget-info__item-desc">1</div>
+										<div class="osl-widget-info__item-desc" id="reqOngoing" name="reqOngoing"></div>
 									</div>
 								</div>
 								<div class="osl-widget-info__item">
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqDone.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.done">완료</span></a>
-										<div class="osl-widget-info__item-desc">1</div>
+										<div class="osl-widget-info__item-desc" id="reqEnd" name="reqEnd"></div>
 									</div>
 								</div>
 							</div>
@@ -284,17 +284,31 @@ var OSLReq3002Popup = function () {
 				$.osl.layerPopupClose();
 				
 			}else{
-				
 				//요구사항 정보 세팅
 		    	$.osl.setDataFormElem(data.reqInfoMap,"frReq3000");
 				
-				//그룹요구사항 정보 세팅
 		    	$("#reqGrpChargerNm").val(data.reqInfoMap.reqGrpChargerNm);
 		    	$("#reqGrpUsrNm").val(data.reqInfoMap.reqGrpUsrNm);
 		    	$("#reqGrpNo").val(data.reqInfoMap.reqGrpNo);
-		    	$("#reqGrpDesc").val(data.reqInfoMap.reqGrpDesc);
+		    	$("#reqGrpDesc").summernote("code",data.reqInfoMap.reqGrpDesc);
+		    	//$("#reqGrpDesc").val(data.reqInfoMap.reqGrpDesc);
 		    	$("#reqGrpNm").val(data.reqInfoMap.reqGrpNm);
+		    	$("#reqGrpLinkCnt").text(data.reqInfoMap.reqGrpLinkCnt);
+				
+		    	/* var _oriText = $("#reqGrpDesc").val();
+		    	var newText = _oriText.replace(/<br>/gi,"");
+		    	console.log(newText);
+		    	$("#reqGrpDesc").val(newText); */
 		    	
+		    	//완료된 프로젝트 수 세기
+		    	var endReqCnt = 0;
+		    	$.each(data.reqGrpConList, function(index, item){
+		    		if(item.reqProType == "4"){
+		    			endReqCnt++;
+		    		}
+		    	});
+		    	$("#reqOngoing").text(data.reqInfoMap.reqGrpLinkCnt - endReqCnt);
+		    	$("#reqEnd").text(endReqCnt);
 		    	
 		    	//edit 세팅
 		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
@@ -344,7 +358,7 @@ var OSLReq3002Popup = function () {
 	    
 	    
    	});
-		
+    
 	return {
         // public functions
         init: function() {

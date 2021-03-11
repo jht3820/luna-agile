@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
 <jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
 <div class="kt-grid kt-grid--desktop kt-grid--ver-desktop  kt-inbox" id="kt_inbox">
 	<div class="kt-grid__item kt-portlet kt-inbox__aside" id="kt_inbox_aside">
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air" data-datatable-id="prj1100PrjTable" data-datatable-action="select" title="데이터 조회" data-title-lang-cd="prj1000.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-				<i class="fa fa-list"></i><span>조회</span>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-elevate btn-elevate-air" data-datatable-id="prj1100PrjTable" data-datatable-action="select" title="데이터 조회" data-title-lang-cd="prj1000.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+				<i class="fa fa-list"></i><span class="osl-resize__display--show">조회</span>
 			</button>
-			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm btn-elevate btn-elevate-air" data-datatable-id="prj1100PrjTable" data-datatable-action="insert" title="프로세스 생성" data-title-lang-cd="prj1000.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="2">
-				<i class="fa fa-plus"></i><span>생성</span>
+			<button type="button" class="btn btn-outline-brand btn-bold btn-elevate btn-elevate-air" data-datatable-id="prj1100PrjTable" data-datatable-action="insert" title="프로세스 생성" data-title-lang-cd="prj1000.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="2">
+				<i class="fa fa-plus"></i><span class="osl-resize__display--show">생성</span>
 			</button>
 		</div>
 		<div class="osl-datatable-search osl-datatable-search__btn-title--none kt-margin-t-15" data-datatable-id="prj1100PrjTable"></div>
@@ -89,9 +90,6 @@
 					</div>
 				</div>
 				<div class="kt-inbox__controls">
-					<div class="kt-inbox__pages">
-						<span class="kt-inbox__perpage">processName</span>
-					</div>
 					<div class="btn-group" data-toggle="kt-tooltip" title="Settings">
 						<button type="button" class="kt-inbox__icon" data-toggle="dropdown">
 							<i class="flaticon-more-1"></i>
@@ -144,13 +142,102 @@
 				</div>
 			</div>
 		</div>
+		<div class="kt-portlet__body overflow-hidden osl-process__flow-main">
+			<div class="osl-process__flow-container">
+				<div class="osl-mask" id="flowMaskDiv">
+					<span>프로세스를 선택해주세요.</span>
+				</div>
+				<div class="osl-process__flow-chart d-inline-block kt-hidden" id="flowChartDiv">
+					
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <script>
 "use strict";
+var flowChart = $("#flowChartDiv");
 var OSLPrj1100Popup = function () {
+	var zoomObj;
+	
+	//zoom
+	var currentZoom = 1;
+	
 	//private functions
 	var documentSetting = function(){
+		var data = {
+			      operators: {
+			    	  operator: {
+			              top: 20,
+			              left: 20,
+			              properties: {
+			                title: 'Operator',
+			                inputs: {
+			                  input_1: {
+			                    label: 'Input 1',
+			                  },
+			                  input_2: {
+			                    label: 'Input 2',
+			                  }
+			                },
+			                outputs: {
+			                  output_1: {
+			                    label: 'Output 1',
+			                  },
+			                  output_2: {
+			                    label: 'Output 2',
+			                  },
+			                  output_3: {
+			                    label: 'Output 3',
+			                  }
+			                }
+			              }
+			            },
+			        operator1: {
+			          top: 240,
+			          left: 20,
+			          properties: {
+			            title: 'Operator 1',
+			            inputs: {},
+			            outputs: {
+			              output_1: {
+			                label: 'Output 1',
+			              }
+			            }
+			          }
+			        },
+			        operator2: {
+			          top: 80,
+			          left: 300,
+			          properties: {
+			            title: 'Operator 2',
+			            inputs: {
+			              input_1: {
+			                label: 'Input 1',
+			              },
+			              input_2: {
+			                label: 'Input 2',
+			              },
+			            },
+			            outputs: {}
+			          }
+			        },
+			      }
+			    };
+		
+		//flowchart 생성
+		flowChart.flowchart({
+				multipleLinksOnInput: true,
+				multipleLinksOnOutput: true,
+				canUserEditLinks: true,
+				distanceFromArrow:1,
+				linkWidth:1,
+				defaultLinkColor: "#5867dd",
+				defaultOperatorClass: "osl-flowchart__operator",
+				data: data
+		});
+		zoomObj = panzoom($("#flowChartDiv")[0]);
+		
 		//사이드바에 프로세스 목록 이벤트 (테블릿, 모바일 좌측 슬라이드 메뉴 적용)
 		new KTOffcanvas($("#kt_inbox_aside")[0], {
             overlay: true,  
@@ -226,6 +313,39 @@ var OSLPrj1100Popup = function () {
 					
 					$.osl.layerPopupOpen('/prj/prj1000/prj1100/selectPrj1101View.do',data,options);
 				},
+				"delete":function(rowDatas, datatableId, type, rowNum, elem){
+					//AJAX 설정
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/prj/prj1000/prj1100/deletePrj1100ProcessInfoAjax.do'/>"}
+							,{deleteDataList: JSON.stringify(rowDatas)});
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						if(data.errorYn == "Y"){
+			   				$.osl.alert(data.message,{type: 'error'});
+			   			}else{
+			   				//삭제 성공
+			   				$.osl.toastr(data.message);
+			   				
+			   				//datatable 조회
+			   				if(!$.osl.isNull($.osl.datatable.list[datatableId])){
+				   				$.osl.datatable.list[datatableId].targetDt.reload();
+			   				}
+			   			}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+				},
+				"click": function(rowData, datatableId, type, rowNum, elem){
+					//mask 제거
+					$("#flowMaskDiv").hide();
+					
+					//플로우차트 div 열기
+					$("#flowChartDiv").removeClass("kt-hidden");
+					
+					//작업흐름 데이터 불러오기
+					
+				}
 			},
 			callback:{
 				initComplete: function(evt,config){
@@ -241,7 +361,7 @@ var OSLPrj1100Popup = function () {
 						}
 						//카드 UI
 						processStr +=
-							'<li class="kt-nav__item '+active+'">'
+							'<li class="kt-nav__item osl-datatable__card" data-datatable-rownum="'+idx+'">'
 								+'<a href="#" class="kt-nav__link" data-action="list" data-type="inbox" title="'+$.osl.escapeHtml(map.processNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'
 									+'<i class="kt-nav__link-icon flaticon-star osl-favorites--active"></i>'
 									+'<span class="kt-nav__link-text">'+$.osl.escapeHtml(map.processNm)+'</span>'
@@ -250,7 +370,7 @@ var OSLPrj1100Popup = function () {
 										+'<button type="button" class="kt-inbox__icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
 											+'<i class="flaticon-more kt-font-lg"></i>'
 										+'</button>'
-										+'<div class="dropdown-menu dropdown-menu-right" data-datatable-rownum="'+idx+'">'
+										+'<div class="dropdown-menu dropdown-menu-right">'
 											+'<div class="dropdown-item" data-datatable-id="prj1100PrjTable" data-datatable-expans="dropdown" data-datatable-action="update"><i class="fa fa-edit kt-font-brand"></i>수정</div>'
 											+'<div class="dropdown-item" data-datatable-id="prj1100PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-brand"></i>삭제</div>'
 											+'<div class="dropdown-item" data-datatable-id="prj1100PrjTable" data-datatable-expans="dropdown" data-datatable-action="delete"><i class="fa fa-trash kt-font-brand"></i>폐기</div>'
@@ -266,6 +386,19 @@ var OSLPrj1100Popup = function () {
 			}
 		});
 	};
+	
+	//flowchart zoom
+	function fnFlowChartLayerZoom(){
+		if(!$.osl.isNull(flowChart)){
+			var cx = flowChart.width() / 2;
+		    var cy = flowChart.height() / 2;
+		    
+		    flowChart.panzoom();
+	    
+		    // Centering panzoom
+		    flowChart.panzoom('pan', 0, 0);
+		}
+	}
 	
 	return {
         // public functions

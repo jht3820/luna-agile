@@ -8,8 +8,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
@@ -49,74 +52,81 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 	}
 	
 	
-	@SuppressWarnings("rawtypes")
-	public void updatePrj1100ProcessInfo(Map paramMap) throws Exception {
-		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
-	}
-
-	
-	@SuppressWarnings("rawtypes")
-	public void updatePrj1100ProcessConfirmInfo(Map paramMap) throws Exception {
-		
-		prj1100DAO.insertPrj1101FlowInfo(paramMap);
-		
-		Map<String, String> newMap = new HashMap<String, String>();
-		newMap.put("prjId", (String)paramMap.get("prjId"));
-		newMap.put("processId", (String)paramMap.get("processId"));
-		newMap.put("flowId", (String)paramMap.get("lastFlowId"));
-		newMap.put("flowNextId", (String)paramMap.get("flowId"));
-		
-		
-		prj1100DAO.updatePrj1101FlowInfo(newMap);
-		
-		
-		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
-	}
-
-	
-	@SuppressWarnings("rawtypes")
-	public void updatePrj1100ProcessConfirmCancle(Map paramMap) throws Exception {
-		Map<String, String> newMap = new HashMap<String, String>();
-		newMap.put("prjId", (String)paramMap.get("prjId"));
-		newMap.put("processId", (String)paramMap.get("processId"));
-		newMap.put("flowId", (String)paramMap.get("prevFlowId"));
-		newMap.put("flowNextId", "null");
-		
-		
-		prj1100DAO.updatePrj1101FlowInfo(newMap);
-		
-		newMap = new HashMap<String, String>();
-		newMap.put("prjId", (String)paramMap.get("prjId"));
-		newMap.put("processId", (String)paramMap.get("processId"));
-		newMap.put("flowId", (String)paramMap.get("endFlowId"));
-		
-		
-		prj1100DAO.deletePrj1101FlowInfo(newMap);
-		
-		newMap.put("processConfirmCd", "01");
-		newMap.put("processJsonData", (String)paramMap.get("processJsonData"));
-		
-		
-		prj1100DAO.updatePrj1100ProcessInfo(newMap);
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String insertPrj1100ProcessInfo(Map paramMap) throws Exception {
-		return (String) prj1100DAO.insertPrj1100ProcessInfo(paramMap);
+		String processId = (String) prj1100DAO.insertPrj1100ProcessInfo(paramMap);
+		paramMap.put("processId", processId);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String usrId = jsonObj.getString("usrId");
+				String authTypeCd = jsonObj.getString("authTypeCd");
+				
+				paramMap.put("processAuthTargetId", usrId);
+				paramMap.put("processAuthTypeCd", authTypeCd);
+				prj1100DAO.insertPrj1100ProcessAuthInfo(paramMap);
+			}
+		}
+		
+		return processId;
 	}
 	
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void updatePrj1100ProcessInfo(Map paramMap) throws Exception {
+		
+		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
+		
+		
+		prj1100DAO.deletePrj1100ProcessAuthInfo(paramMap);
+		
+		
+		String usrIdList = (String) paramMap.get("usrIdList");
+		if(usrIdList != null && !"[]".equals(usrIdList)) {
+			
+			JSONArray jsonArray = new JSONArray(usrIdList);
+			
+			
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+				String usrId = jsonObj.getString("usrId");
+				String authTypeCd = jsonObj.getString("authTypeCd");
+				
+				paramMap.put("processAuthTargetId", usrId);
+				paramMap.put("processAuthTypeCd", authTypeCd);
+				prj1100DAO.insertPrj1100ProcessAuthInfo(paramMap);
+			}
+		}
+	}
+
+	
+	
+	@SuppressWarnings({ "rawtypes"})
 	public void deletePrj1100ProcessInfo(Map paramMap) throws Exception {
+		String deleteDataList = (String) paramMap.get("deleteDataList");
+
 		
-		prj1100DAO.deletePrj1100ProcessInfo(paramMap);
+		JSONArray jsonArray = new JSONArray(deleteDataList);
 		
 		
-		prj1100DAO.deletePrj1101FlowInfo(paramMap);
+		for(int i=0;i<jsonArray.length();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toString(), new HashMap().getClass());
+			
+			
+			prj1100DAO.deletePrj1100ProcessInfo(infoMap);
 		
-		
-		prj1100DAO.deletePrj1102OtpInfo(paramMap);
+			
+		}
 	}
 	
 	
