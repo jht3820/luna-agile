@@ -47,6 +47,9 @@ var OSLDpl1003Popup = function () {
 				},
 				 pageSize : 5,
 			},
+			rows:{
+				minHeight: 50
+			},
 			toolbar:{
 				 items:{
 					 pagination:{
