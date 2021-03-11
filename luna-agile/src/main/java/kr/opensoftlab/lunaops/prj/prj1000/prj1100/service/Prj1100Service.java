@@ -24,13 +24,6 @@ public interface Prj1100Service {
 	@SuppressWarnings("rawtypes")
 	void updatePrj1100ProcessInfo(Map paramMap) throws Exception;
 	
-	
-	@SuppressWarnings("rawtypes")
-	void updatePrj1100ProcessConfirmInfo(Map paramMap) throws Exception;
-
-	
-	@SuppressWarnings("rawtypes")
-	void updatePrj1100ProcessConfirmCancle(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")

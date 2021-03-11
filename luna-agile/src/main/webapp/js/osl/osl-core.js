@@ -201,6 +201,52 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -409,7 +455,7 @@
 							
 							
 							var url = config.data.url;
-							var paramData = config.data.param;
+							var paramData = treeObj.jstree().settings.data.param;
 							
 							
 							var ajaxObj = new $.osl.ajaxRequestAction(
@@ -1605,6 +1651,115 @@
 	        			});
 	        		}
 
+	        		
+        			$.osl.datatable.setting("notificationsTable",{
+        				data: {
+        					source: {
+        						read: {
+        							url: "/arm/arm1000/arm1100/selectArm1100NtfListAjax.do"
+        						}
+        					}
+        				},
+        				columns: [
+        					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+        				],
+        				actionBtn:{
+        					"update": false,
+        					"delete" : false,
+        				},
+        				toolbar:{
+        					items:{
+        						pagination:{
+        							pageSizeSelect : [4, 10, 20, 30, 50, 100],
+        							pages:{
+        								desktop: {
+        									layout: 'compact',
+        								},
+            							tablet: {
+            								layout: 'compact'
+            							},
+        							}
+        						}
+        					}
+        				},
+        				callback:{
+        					initComplete: function(evt,config){
+        						$("#notificationsTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+        						$("#notificationsCardTable").show();
+        					},
+        					ajaxDone: function(evt, list){
+        						var ntfStr = '';
+        						$.each(list, function(idx, map){
+        							
+        							var cardUi = map.armSendTypeNm;
+        							
+        							
+        							var cardStat = '';
+        							if(map.checkCd=='02'){
+        								cardStat = 'osl-notification-not-read__bg-color';
+        							}
+        							
+        							
+        							ntfStr +=
+        								 '<a href="#" class="kt-notification-v2__item '+cardStat+'">'
+										+'	<div class="kt-notification-v2__item-icon">'
+										+'		<i class="'+cardUi+'"></i>'
+										+'	</div>'
+										+'	<div class="kt-notification-v2__item-wrapper">'
+										+'		<div class="kt-notification-v2__item-title">'
+										+'			'+$.osl.escapeHtml(map.armTitle)+''
+										+'		</div>'
+										+'		<div class="kt-notification-v2__item-desc">'
+										+'			'+$.osl.escapeHtml(map.armContent)+''
+										+'		</div>'
+										+'	</div>'
+										+'</a>';
+										
+        						});
+        						
+        						
+        						$("#notificationsCardTable").html(ntfStr);
+        						KTApp.initTooltips();
+        						
+        						
+        						var ajaxObj = new $.osl.ajaxRequestAction({"url":"/arm/arm1000/arm1100/selectArm1100NtfNotReadCntAjax.do"});
+        						
+        						ajaxObj.setFnSuccess(function(data){
+        				    		if(data.errorYn == "Y"){
+        								$.osl.alert(data.message,{type: 'error'});
+        							}else{
+        								var notRead = data.notRead;
+        								if(notRead.notReadCnt==0){
+        									$(".pulse-ring").remove();
+        								}
+        							}
+        				    	});
+        						
+        						ajaxObj.send();
+        						
+        						$("#kt_offcanvas_toolbar_notifications_toggler_btn").click(function(){
+        							$.osl.datatable.list.notificationsTable.targetDt.reload();
+        							
+        							
+            						var ajaxObj = new $.osl.ajaxRequestAction({"url":"/arm/arm1000/arm1100/insertArm1101NtfInfoAjax.do"});
+            						
+            						ajaxObj.setFnSuccess(function(data){
+            				    		if(data.errorYn == "Y"){
+            								$.osl.alert(data.message,{type: 'error'});
+            							}else{
+            								$(".pulse-ring").remove();
+            								var newNtfMsg = data.notRead.notReadCnt+"개의 새로운 알림"
+            								$("#newNtfMsg").html(newNtfMsg);
+            							}
+            				    	});
+            						
+            						ajaxObj.send();
+        						})
+        						
+        					}
+        				}
+        			});
+        			
 	        		
         			$.osl.datatable.setting("chargeReqTable",{
         				data: {

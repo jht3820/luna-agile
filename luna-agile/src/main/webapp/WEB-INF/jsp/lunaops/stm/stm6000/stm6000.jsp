@@ -55,7 +55,7 @@
 				<div class="kt-portlet__head-toolbar">
 					<!-- begin::조직 버튼 영역 -->
 					<div class="kt-portlet__head-wrapper kt-margin-r-10">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="select" title="조직 조회" data-title-lang-cd="stm6000.button.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="stm6000DeptTree" data-tree-action="select" title="조직 조회" data-title-lang-cd="stm6000.button.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
 						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="insert" title="조직 추가" data-title-lang-cd="stm6000.button.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
@@ -140,7 +140,10 @@ var OSLStm6000Popup = function () {
 				url:"<c:url value='/stm/stm6000/stm6000/selectStm6000DeptListAjax.do'/>",
 				key: "deptId",
 				pKey: "upperDeptId",
-				labelKey: "deptName"
+				labelKey: "deptName",
+				param:{
+					"b":1
+				}
 			},
 			search:{
 				//대소문자 구분
@@ -176,7 +179,6 @@ var OSLStm6000Popup = function () {
 			// 각 action 동작
 			var action = $(this).data("tree-action");
 			if(action != "select"){
-				
 				var selectNodeIds = treeObj.jstree("get_selected");
 				if($.osl.isNull(selectNodeIds)){
 					$.osl.alert($.osl.lang("stm6000.message.alert.treeSelect"));
@@ -240,7 +242,6 @@ var OSLStm6000Popup = function () {
 					}
 				}
 			}
-		
 		});
 		
 	};
@@ -291,6 +292,7 @@ var OSLStm6000Popup = function () {
 		ajaxObj.send();
 	};
 
+
     /**
 	 * function 명 	: deleteDeptList
 	 * function 설명	: 선택한 조직 및 하위 조직을 모두 삭제한다.
@@ -312,7 +314,6 @@ var OSLStm6000Popup = function () {
 			delDeptList.push({"deptId":childNodeData.deptId, "upperDeptId":childNodeData.upperDeptId, "deptName":childNodeData.deptName});
 		});
 		
-		//$.osl.confirm("조직 삭제 시 선택한 조직 및 하위 조직 모두 삭제됩니다. 선택한 조직을 삭제 하시겠습니까?",null,function(result) {
 		$.osl.confirm($.osl.lang("stm6000.message.confirm.deleteDept"),null,function(result) {
 	        if (result.value) {
 	        	
@@ -356,7 +357,6 @@ var OSLStm6000Popup = function () {
 	    		ajaxObj.send();
 	        }
 	    });
-		 
 	};
 	
 	return {
