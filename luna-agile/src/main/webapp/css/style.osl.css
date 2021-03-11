@@ -95,6 +95,10 @@ input:-webkit-autofill,
     height: 100%;
 }
 /* 정렬 */
+.osl-notification-tooltip .tooltip-inner{
+	text-align:left !important;
+}
+
 .osl-align-center--imp{
 	text-align:center !important;
 }
@@ -1179,6 +1183,11 @@ label.required:after {
 	padding: 0px
 }
 
+.osl-charge-flaticon-star{
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor:pointer;
+}
 /* notification */
 .osl-notification-not-read__bg-color{
 	background-color: #f7f8fa;

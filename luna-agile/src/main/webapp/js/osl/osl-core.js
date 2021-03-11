@@ -721,7 +721,18 @@
 								if(config.hasOwnProperty("actionFn") && config.actionFn.hasOwnProperty(action) && typeof config.actionFn[action] == "function"){
 									
 									$(map).click(function(){
-										config.actionFn[action](treeObj, map);
+										var nodeData = null;
+										
+										if(treeObj != null){
+											
+											var selectNodeIds = treeObj.jstree("get_selected");
+											
+											
+											var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+											nodeData = selectNode.original;
+										}
+										
+										config.actionFn[action](treeObj, nodeData, map);
 									});
 								}else{
 									
@@ -1670,7 +1681,7 @@
         				toolbar:{
         					items:{
         						pagination:{
-        							pageSizeSelect : [4, 10, 20, 30, 50, 100],
+        							pageSizeSelect : [10, 20, 30, 50, 100],
         							pages:{
         								desktop: {
         									layout: 'compact',
@@ -1689,19 +1700,33 @@
         					},
         					ajaxDone: function(evt, list){
         						var ntfStr = '';
+        						var cardMsg = '';
         						$.each(list, function(idx, map){
         							
         							var cardUi = map.armSendTypeNm;
+        							
         							
         							
         							var cardStat = '';
         							if(map.checkCd=='02'){
         								cardStat = 'osl-notification-not-read__bg-color';
         							}
+        							if(map.armTypeCd == '01'){
+        								cardMsg = "프로젝트 그룹명 : " + $.osl.escapeHtml(map.prjGrpNm);
+        							}else if(map.armTypeCd == '02'){
+        								cardMsg = "프로젝트명 : " + $.osl.escapeHtml(map.prjNm);
+        							}else if(map.armTypeCd == '03'){
+        								cardMsg = "권한그룹명 : " + $.osl.escapeHtml(map.authGrpNm);
+        							}else if(map.armTypeCd == '04'){
+        								cardMsg = "사용자명 : " + $.osl.escapeHtml(map.sendUsrNm);
+        								cardMsg += "<br/>사용자 이메일 : " + $.osl.escapeHtml(map.sendUsrEmail);
+        							}
+        							
+        							
         							
         							
         							ntfStr +=
-        								 '<a href="#" class="kt-notification-v2__item '+cardStat+'">'
+        								 '<a href="#" class="kt-notification-v2__item '+cardStat+'" data-html="true" data-toggle="kt-tooltip" data-skin="brand osl-notification-tooltip" data-original-title="'+cardMsg+'">'
 										+'	<div class="kt-notification-v2__item-icon">'
 										+'		<i class="'+cardUi+'"></i>'
 										+'	</div>'
@@ -1731,11 +1756,13 @@
         								var notRead = data.notRead;
         								if(notRead.notReadCnt==0){
         									$(".pulse-ring").remove();
+            								$(".kt-badge").remove();
         								}
         							}
         				    	});
         						
         						ajaxObj.send();
+        						
         						
         						$("#kt_offcanvas_toolbar_notifications_toggler_btn").click(function(){
         							$.osl.datatable.list.notificationsTable.targetDt.reload();
@@ -1748,7 +1775,8 @@
             								$.osl.alert(data.message,{type: 'error'});
             							}else{
             								$(".pulse-ring").remove();
-            								var newNtfMsg = data.notRead.notReadCnt+"개의 새로운 알림"
+            								$(".kt-badge").remove();
+            								var newNtfMsg = data.notRead.notReadCnt+"건의 새로운 알림"
             								$("#newNtfMsg").html(newNtfMsg);
             							}
             				    	});
@@ -1772,7 +1800,7 @@
         				columns: [
         					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
         					{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
-        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150},
+        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150, search: true},
         					{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false, search: true},
         					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
         					{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
@@ -1875,7 +1903,7 @@
 										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title" data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
 										+'			</div>'
 										+'			<div class="kt-portlet__head-toolbar">'
-										+'				<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this);$.osl.datatable.list.chargeReqTable.targetDt.reload();"></i>'
+										+'				<i class="kt-nav__link-icon flaticon-star osl-charge-flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this);$.osl.datatable.list.chargeReqTable.targetDt.reload();"></i>'
 										+'			</div>'
 										+'		</div>'
 										+'		<div class="kt-portlet__body osl-padding-b-7">'
