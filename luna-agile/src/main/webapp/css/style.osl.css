@@ -1445,6 +1445,12 @@ label.required:after {
 .osl-min-height--150{
 	min-height: 150px;
 }
+.osl-width--100-p{
+	width: 100%;
+}
+.osl-height--100-p{
+	height: 100%;
+}
 
 .osl-display--inline-flex{
 	display: inline-flex;
