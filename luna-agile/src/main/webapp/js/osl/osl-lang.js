@@ -895,7 +895,10 @@ var OSLCoreLangSetting = function () {
 				mmtDesc: "회의록 내용"
 			},
 			alert:{
-				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건",
+				saveProcessMsg: "${1}개의 프로세스가 배정되었습니다.",
+				saveProcessDupleMsg: "이미 배정된 ${1}개의 프로세스 제외",
+				saveProcessAllDupleMsg: "이미 배정중인 프로세스입니다. (${1}개)"
 			}
 		},
 		spr1100:{

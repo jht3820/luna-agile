@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/jsp/lunaops/top/header.jsp" />
-<jsp:include page="/WEB-INF/jsp/lunaops/top/top.jsp" />
-<jsp:include page="/WEB-INF/jsp/lunaops/top/aside.jsp" />
 <div class="kt-portlet kt-portlet--mobile">
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
@@ -20,20 +17,20 @@
 					<li class="kt-nav__item" id="menuTypeGet">
 						<a class="kt-nav__link kt-padding-l-0 kt-padding-r-0 active" data-toggle="tab" href="#kt_profile_tab_personal_information" role="tab">
 							<span class="kt-nav__link-icon"><i class="fas fa-inbox"></i></span>
-							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.get">받은 메세지</span>
+							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.get">받은 메시지</span>
 							<span class='badge badge-secondary osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadGetCntBadge" name="notReadGetCntBadge">0</span>
 						</a>
 					</li>
 					<li class="kt-nav__item" id="menuTypeSend">
 						<a class="kt-nav__link kt-padding-l-0 kt-padding-r-0" data-toggle="tab" href="#kt_profile_tab_account_information" role="tab">
 							<span class="kt-nav__link-icon"><i class="fas fa-paper-plane"></i></span>
-							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.send">보낸 메세지</span>
+							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.send">보낸 메시지</span>
 						</a>
 					</li>
 					<li class="kt-nav__item" id="menuTypeAlone">
 						<a class="kt-nav__link kt-padding-l-0 kt-padding-r-0" data-toggle="tab" href="#kt_profile_change_password" role="tab">
 							<span class="kt-nav__link-icon"><i class="fas fa-envelope-square"></i></span>
-							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.alone">나에게 보낸 메세지</span>
+							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.alone">나에게 보낸 메시지</span>
 							<span class='badge badge-secondary osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadAloneCntBadge" name="notReadAloneCntBadge">0</span>
 						</a>
 					</li>
@@ -45,38 +42,38 @@
 		<div class="kt-portlet kt-portlet--mobile">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
-					<!-- 받은 메세지 -->
+					<!-- 받은 메시지 -->
 					<span class="kt-font-boldest kt-font-lg" id="getAllCnt" name="getAllCnt">
-						<span>받은 메세지</span>
+						<span class="d-inline-block osl-min-w-px-130">받은 메시지</span>
 						<span class='kt-font-brand kt-margin-l-20' id="notReadGetCnt" name="notReadGetCnt">0</span>
 						<span id="getCnt" name="getCnt"></span>
 					</span>					
-					<!-- 보낸 메세지 -->
+					<!-- 보낸 메시지 -->
 					<span class="kt-hide kt-font-boldest kt-font-lg" id="sendAllCnt" name="sendAllCnt">
-						<span>보낸 메세지</span>
+						<span class="d-inline-block osl-min-w-px-130">보낸 메시지</span>
 						<span class="kt-margin-l-20" id="sendCnt" name="sendCnt"></span>
 					</span>
-					<!-- 나에게 보낸 메세지 -->
+					<!-- 나에게 보낸 메시지 -->
 					<span class="kt-hide kt-font-boldest kt-font-lg" id="aloneAllCnt" name="aloneAllCnt">
-						<span>나에게 보낸 메세지</span>
+						<span class="d-inline-block osl-min-w-px-130">나에게 보낸 메시지</span>
 						<span class='kt-font-brand kt-margin-l-20' id="notReadAloneCnt" name="notReadAloneCnt">0</span>
 						<span id="aloneCnt" name="aloneCnt"></span>
 					</span>
 				</div>
 				<div class="kt-portlet__head-toolbar">
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="select" title="메세지 조회" data-title-lang-cd="arm1000.button.tooltip.selectBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="select" title="메시지 조회" data-title-lang-cd="arm1000.button.tooltip.selectBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 						<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="insert" title="메세지 보내기" data-title-lang-cd="arm1000.button.tooltip.insertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="insert" title="메시지 보내기" data-title-lang-cd="arm1000.button.tooltip.insertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 						<i class="fas fa-edit"></i><span data-lang-cd="datatable.button.insert">쓰기</span>
 					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="reInsert" title="메세지 답장" data-title-lang-cd="arm1000.button.tooltip.reInsertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="reInsert" tabindex="3">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="reInsert" title="메시지 답장" data-title-lang-cd="arm1000.button.tooltip.reInsertBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="reInsert" tabindex="3">
 						<i class="fas fa-envelope-open-text"></i><span data-lang-cd="arm1000.button.reInsertBtn">답장</span>
 					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="check" title="메세지 읽음 처리" data-title-lang-cd="arm1000.button.tooltip.checkBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="check" tabindex="4">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="check" title="메시지 읽음 처리" data-title-lang-cd="arm1000.button.tooltip.checkBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="check" tabindex="4">
 						<i class="fas fa-envelope-open"></i><span data-lang-cd="arm1000.button.checkBtn">읽음</span>
 					</button>
-					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="delete" title="메세지 삭제" data-title-lang-cd="arm1000.button.tooltip.deleteBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
+					<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="arm1000ArmTable" data-datatable-action="delete" title="메시지 삭제" data-title-lang-cd="arm1000.button.tooltip.deleteBtn" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="5">
 						<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 					</button>
 				</div>
@@ -115,7 +112,6 @@ var OSLArm1000Popup = function () {
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, sortable: true},
 				{field: 'checkCd', title: '읽음 상태', textAlign: 'center', width: 80, sortable: true,
 					template: function (row) {
-						console.log();
 						var returnStr = "";
 						if(row.checkCd == "02"){
 							//안읽은것
@@ -173,12 +169,11 @@ var OSLArm1000Popup = function () {
 				clickCheckbox: true,
 			},
 			actionBtn:{
-				"title": $.osl.lang("arm1000.actionBtn.title"),
 				"reInsert" : true,
 				"update" : false,
 				"dblClick" : true,
 				"check" : true,
-			},
+			}, 
 			actionTooltip:{
 				"reInsert" : $.osl.lang("arm1000.button.tooltip.reInsertBtn"),
 				"dblClick" : $.osl.lang("arm1000.button.tooltip.dblClickBtn"),
@@ -305,7 +300,7 @@ var OSLArm1000Popup = function () {
 			},
 			theme:{
 				actionBtn:{
-					"reInsert" : "",
+					"reInsert" : " osl-table-option-hide",
 					"check" : " kt-hide",
 				},
 				actionBtnIcon:{
@@ -315,7 +310,7 @@ var OSLArm1000Popup = function () {
 			},
 			callback:{
 				initComplete:function(evt, config){
-					//초기 선택 - 받은 메세지
+					//초기 선택 - 받은 메시지
 					$("#menuTypeGet").click();
 				},
 	   			ajaxDone: function(evt, list, datatableInfo){
@@ -325,15 +320,8 @@ var OSLArm1000Popup = function () {
 		});
 		
 		$("#menuTypeGet").click(function(){
-			//선택 div
-			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
-			$("#menuTypeGet").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
-			//선택 외 div
-			$("#sendAllCnt,#aloneAllCnt").addClass("kt-hide");
-			$("#getAllCnt").removeClass("kt-hide");
 			//검색바 초기화
 			searchReset();
-			
 			//데이터 테이블 검색 조건 변경 - 강제
 			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","get");
 			//데이터 테이블 조회
@@ -341,15 +329,8 @@ var OSLArm1000Popup = function () {
 		});
 		
 		$("#menuTypeSend").click(function(){
-			//선택 div
-			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
-			$("#menuTypeSend").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
-			//선택 외 div
-			$("#getAllCnt,#aloneAllCnt").addClass("kt-hide");
-			$("#sendAllCnt").removeClass("kt-hide");
 			//검색바 초기화
 			searchReset();
-			
 			//데이터 테이블 검색 조건 변경 - 강제
 			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","send");
 			//데이터 테이블 조회
@@ -357,25 +338,23 @@ var OSLArm1000Popup = function () {
 		});
 		
 		$("#menuTypeAlone").click(function(){
-			//선택 div
-			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
-			$("#menuTypeAlone").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
-			//선택 외 div
-			$("#getAllCnt,#sendAllCnt").addClass("kt-hide");
-			$("#aloneAllCnt").removeClass("kt-hide");
 			//검색바 초기화
 			searchReset();
-			
 			//데이터 테이블 검색 조건 변경 - 강제
 			$.osl.datatable.list[datatableId].targetDt.setDataSourceParam("armMenuType","alone");
 			//데이터 테이블 조회
 			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
 		});
 		
+		
+		//데이터 테이블 렌더링 업데이트 및 테이블 크기 조정 시 이벤트 발생
+		$("#"+datatableId).on("kt-datatable--on-layout-updated", function(){
+			actionBtnHide();
+       	});
 	};
 	
 	/**
-	 * 안읽은 메세지 개수 확인
+	 * 안읽은 메시지 개수 확인
 	 */
 	var checkNotRead = function(){
 		//ajax 설정
@@ -389,31 +368,29 @@ var OSLArm1000Popup = function () {
 				$.osl.layerPopupClose();
 			}else{
 				var allMessage = data.allMessage;
-				console.log(data);
 				var notRead = data.notRead;
-				console.log(notRead);
-				//안읽은개수가 있는 경우 받은 메세지 표출
+				//안읽은개수가 있는 경우 받은 메시지 표출
 				if(notRead.get>0){
-					$("#notReadGetCntBadge,#notReadGetCnt").removeClass("kt-hide");
-					$("#notReadGetCntBadge,#notReadGetCnt").text(notRead.get);
+					$("#notReadGetCntBadge").removeClass("kt-hide");
+					$("#notReadGetCntBadge, #notReadGetCnt").text(notRead.get);
 					$("#getCnt").text(" / " + allMessage.get);
 					
 				//안읽은 개수가 없는 경우 숫자 자체를 숨김
 				}else{
-					$("#getBadgeSpan").addClass("kt-hide");
-					$("#notReadGetCntBadge").text("0");
-					$("#getCnt").text(allMessage.get);
+					$("#notReadGetCntBadge").addClass("kt-hide");
+					//$("#notReadGetCntBadge").text("0");
+					$("#getCnt").text(" / " + allMessage.get);
 				}
-				//보낸 메세지 개수
+				//보낸 메시지 개수
 				$("#sendCnt").text(allMessage.send);
 				//나에게 쓴 안읽은
 				if(notRead.alone>0){
-					$("#notReadAloneCntBadge,#notReadAloneCnt").removeClass("kt-hide");
-					$("#notReadAloneCntBadge,#notReadAloneCnt").text(notRead.alone);
+					$("#notReadAloneCntBadge").removeClass("kt-hide");
+					$("#notReadAloneCntBadge, #notReadAloneCnt").text(notRead.alone);
 					$("#aloneCnt").text(" / " + allMessage.alone);
 				//나에쓴 다읽은
 				}else{
-					$("#notReadAloneCnt").addClass("kt-hide");
+					$("#notReadAloneCntBadge").addClass("kt-hide");
 					$("#notReadAloneCnt").text("0");
 					$("#aloneCnt").text(" / " + allMessage.alone);
 				}
@@ -454,6 +431,79 @@ var OSLArm1000Popup = function () {
 		$("#searchData_"+datatableId).attr("disabled","disabled");
 	}
 	
+	/*
+	* function명 : actionBtnHide
+	* function설명 : 좌측 받은메시지, 보낸메시지, 나에게 보낸 메시지 구분에 따라 세팅
+	*				1.메뉴 활성화 
+	*				2.데이터테이블 내부 action '답장하기' 버튼 표출여부
+	*				3.우측상단 데이터테이블 '답장,읽음 처리' 버튼 표출여부 
+	*				4.데이터테이블 내부 '읽음 상태' column 표출 여부
+	*/
+	var actionBtnHide = function(){
+		var datatableType = $.osl.datatable.list["arm1000ArmTable"].targetDt.getDataSourceParam('armMenuType');
+		//받은 메시지
+		if(datatableType=="get"){
+			//선택 div 메뉴 활성화
+			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
+			$("#menuTypeGet").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
+			//선택 외 div 메뉴 활성화 제거
+			$("#sendAllCnt,#aloneAllCnt").addClass("kt-hide");
+			$("#getAllCnt").removeClass("kt-hide");
+
+			//datatable action읽음처리 버튼 표출
+			$('.osl-table-option-hide').removeClass("kt-hide");
+			
+			//읽음,답장 버튼 hide
+			$('.btn[data-auth-button=check]').show();
+ 			$('.btn[data-auth-button=reInsert]').show();
+ 			
+ 			//읽음표시 컬럼 표출처리
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.getColumnByField('checkCd').visible=true;
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.columnHide();
+ 		
+		//보낸 메시지
+		}else if(datatableType=="send"){
+			//선택 div 메뉴 활성화
+			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
+			$("#menuTypeSend").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
+			//선택 외 div 메뉴 활성화 제거
+			$("#getAllCnt,#aloneAllCnt").addClass("kt-hide");
+			$("#sendAllCnt").removeClass("kt-hide");
+
+			//datatable action읽음처리 버튼 숨김
+			$('.osl-table-option-hide').addClass("kt-hide");
+			
+			//읽음,답장 버튼 hide
+			$('.btn[data-auth-button=check]').hide();
+ 			$('.btn[data-auth-button=reInsert]').hide();
+ 		
+ 			//읽음표시 컬럼 숨김처리
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.getColumnByField('checkCd').visible=false;
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.columnHide();
+ 		
+ 		//나에게 보낸 메시지
+		}else if(datatableType=="alone"){
+			
+			//선택 div 메뉴 활성화
+			$(".kt-nav__item").find('.kt-nav__link-icon,.kt-nav__link-text').removeClass("kt-font-brand");
+			$("#menuTypeAlone").find('.kt-nav__link-icon,.kt-nav__link-text').addClass("kt-font-brand");
+			//선택 외 div 메뉴 활성화 제거
+			$("#getAllCnt,#sendAllCnt").addClass("kt-hide");
+			$("#aloneAllCnt").removeClass("kt-hide");
+
+			//datatable action읽음처리 버튼 숨김
+			$('.osl-table-option-hide').addClass("kt-hide");
+			
+			//읽음,답장 버튼 hide
+			$('.btn[data-auth-button=check]').hide();
+ 			$('.btn[data-auth-button=reInsert]').hide();
+ 			
+ 			//읽음표시 컬럼 숨김처리
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.getColumnByField('checkCd').visible=false;
+ 			$.osl.datatable.list["arm1000ArmTable"].targetDt.columnHide();
+		}
+	}
+	
 	return {
         // public functions
         init: function() {
@@ -462,9 +512,8 @@ var OSLArm1000Popup = function () {
         reload: function(){
 			//datatable 조회
 			$("button[data-datatable-id="+datatableId+"][data-datatable-action=select]").click();
-        	checkNotRead();
+			checkNotRead();
         }
-        
     };
 }();
 
@@ -473,4 +522,3 @@ $.osl.ready(function(){
 });
 </script>
 <!-- end script -->
-<jsp:include page="/WEB-INF/jsp/lunaops/bottom/footer.jsp" />
