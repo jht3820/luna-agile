@@ -164,11 +164,12 @@ input:-webkit-autofill,
 	color: #fff;
 }
 /* 높이값 세로값 */
-.osl-h-px-38{
-	height: 38px;
-}
+/*px*/
 .osl-min-h-px--30 {
   min-height: 30px !important; 
+}
+.osl-h-px-38{
+	height: 38px;
 }
 .osl-min-h-px--50 {
   min-height: 50px; 
@@ -227,7 +228,36 @@ input:-webkit-autofill,
 .osl-min-h-px--700 {
   min-height: 700px; 
 }
+
+.osl-max-height--260{
+	max-height: 260px;
+}
+.osl-min-height--150{
+	min-height: 150px;
+}
+
+/*rem*/
+.osl-min-height--9rem{
+	min-height:9rem;
+}
+.osl-min-height--10rem{
+	min-height:10rem;
+}
+.osl-min-height--11rem{
+	min-height:11rem;
+}
+.osl-min-height--12rem{
+	min-height:12rem;
+}
+
+/*percent*/
+.osl-height--100-p{
+	height: 100%;
+}
+
+
 /* 가로 값 */
+/*px*/
 .osl-min-width-70{
 	min-width: 70px;
 }
@@ -240,6 +270,33 @@ input:-webkit-autofill,
 .osl-min-w-px-35{
 	min-width: 35px !important;
 }
+.osl-min-w-px-130{
+	min-width: 130px;
+}
+/* rem */
+.osl-min-width--11rem{
+	min-width: 11rem;
+}
+.osl-min-width--6rem{
+	min-width: 6rem;
+}
+.osl-min-width--5rem{
+	min-width: 5rem;
+}
+
+/*percent*/
+.osl-width--100-p{
+	width: 100%;
+}
+.osl-max-width--100-p{
+	max-width: 100%;
+}
+
+/*fit-content*/
+.osl-width__fit-content{
+	width: fit-content;
+}
+
 /* 색상값 */
 .osl-color--blue{
 	color:#5867dd;
@@ -770,30 +827,6 @@ label.required:after {
     background-color: #fbfbfb !important;
 }
 
-/* element min width */
-.osl-min-width--11rem{
-	min-width: 11rem;
-}
-.osl-min-width--6rem{
-	min-width: 6rem;
-}
-.osl-min-width--5rem{
-	min-width: 5rem;
-}
-
-/* element min height */
-.osl-min-height--9rem{
-	min-height:9rem;
-}
-.osl-min-height--10rem{
-	min-height:10rem;
-}
-.osl-min-height--11rem{
-	min-height:11rem;
-}
-.osl-min-height--12rem{
-	min-height:12rem;
-}
 
 /* kt-avatar 이미지 사이즈 크게 */
 .kt-avatar .osl-avatar__holder-lg{
@@ -1313,9 +1346,6 @@ label.required:after {
 .osl-bad__width__95{
 	width: 95%;
 }
-.osl-width__fit-content{
-	width: fit-content;
-}
 .osl-bad_box{
 	border: solid 1px #e1e1ef; 
 	border-radius: 4px;
@@ -1435,21 +1465,6 @@ label.required:after {
 }
 .osl-arrow-group--hide{
 	display: none;
-}
-.osl-max-height--260{
-	max-height: 260px;
-}
-.osl-max-width--100-p{
-	max-width: 100%;
-}
-.osl-min-height--150{
-	min-height: 150px;
-}
-.osl-width--100-p{
-	width: 100%;
-}
-.osl-height--100-p{
-	height: 100%;
 }
 
 .osl-display--inline-flex{
