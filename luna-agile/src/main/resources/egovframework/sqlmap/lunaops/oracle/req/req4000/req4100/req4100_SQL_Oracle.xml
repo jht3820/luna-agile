@@ -289,6 +289,9 @@
 				<isEqual property="searchTargetId" compareValue="prjGrpNm">
 					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqKey">
+					AND	T1.REQ_KEY LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
 				<isEqual property="searchTargetId" compareValue="reqNm">
 					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
@@ -450,8 +453,21 @@
 		) T1 WHERE 1 = 1
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqOrd">
+					AND	T1.REQ_ORD LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			
 				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
 					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjGrpNm">
+					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqKey">
+					AND	T1.REQ_KEY LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="reqNm">
 					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
@@ -464,8 +480,27 @@
 				<isEqual property="searchTargetId" compareValue="reqUsrNm">
 					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="reqOrd">
-					AND	T1.REQ_ORD LIKE '%'|| #searchTargetData# ||'%'
+				<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+					AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNum">
+					AND	T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="regDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REG_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REG_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>

@@ -102,7 +102,7 @@
 
 
 /* Default Operator */
-
+/* 
 .flowchart-operator {
     position: absolute;
     width: 140px;
@@ -110,7 +110,7 @@
     background: #FAFAFA;
     pointer-events: auto;
 }
-
+ */
 .flowchart-operator.hover {
     border-color: #999;
 }

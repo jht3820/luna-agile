@@ -201,6 +201,52 @@
 					maxNumberOfFiles: 10,
 					minNumberOfFiles: 0,
 					allowedFileTypes: null,	
+					locale:Uppy.locales.ko_KR,
+					meta: {},
+					onBeforeUpload: $.noop,
+					onBeforeFileAdded: $.noop,
+				};
+				
+				
+				config = $.extend(true, defaultConfig, config);
+				
+				var targetObj = $("#"+targetId);
+				if(targetObj.length > 0){
+					rtnObject = Uppy.Core({
+						targetId: targetId,
+						autoProceed: config.autoProceed,
+						restrictions: {
+							maxFileSize: ((1024*1024)*parseInt(config.maxFileSize)),
+							maxNumberOfFiles: config.maxNumberOfFiles,
+							minNumberOfFiles: config.minNumberOfFiles,
+							allowedFileTypes: config.allowedFileTypes
+						},
+						locale:config.locale,
+						meta: config.meta,
+						onBeforeUpload: function(files){
+							return config.onBeforeUpload(files);
+						},
+						onBeforeFileAdded: function(currentFile, files){
+							
+							if(currentFile.source != "database" && config.fileReadonly){
+								$.osl.toastr($.osl.lang("file.error.fileReadonly"),{type:"warning"});
+								return false;
+							}
+							return config.onBeforeFileAdded(currentFile, files);
+						},
+						debug: config.debug,
+						logger: config.logger,
+						fileDownload: config.fileDownload
+					});
+					
+					rtnObject.use(Uppy.Dashboard, config);
+					rtnObject.use(Uppy.XHRUpload, { endpoint: config.url,formData: true });
+				}
+				
+				return rtnObject;
+			},
+			
+			
 			makeAtchfileId: function(callback){
 				
 				var ajaxObj = new $.osl.ajaxRequestAction(
@@ -356,6 +402,8 @@
 			
 			loadingNodeCnt:500,
 			
+			list:{},
+			
 			setting: function(targetId, config){
 				
 				var treeObj = null;
@@ -399,6 +447,85 @@
 					
 					
 					var actionFunction = {
+						select: function(){
+							if($.osl.isNull(treeObj)){
+            					$.osl.toastr($.osl.lang("tree.error.handler"));
+            					return false;
+            				}
+							
+							
+							var url = config.data.url;
+							var paramData = treeObj.jstree().settings.data.param;
+							
+							
+							var ajaxObj = new $.osl.ajaxRequestAction(
+									{"url": url, "async": false}
+									,paramData);
+							
+							
+							ajaxObj.setFnSuccess(function(data){
+								if(data.errorYn == "Y"){
+									$.osl.alert(data.message,{type: 'error'});
+								}else{
+									var treeDataList = data.list;
+									
+									
+									if($.osl.isNull(treeDataList)){
+										$.each(data,function(idx, map){
+											if(typeof map == "object"){
+												try{
+													if(map.length > 0){
+														treeDataList = map;
+														return false;
+													}
+												}catch(e){
+													return true;
+												}
+											}
+										});
+									}
+									
+									
+									if(treeDataList.length > 0){
+										var rtnTreeData = [];
+										var tmpMap = {};
+										
+										var key = config.data.key;
+										var pKey = config.data.pKey;
+										var labelKey = config.data.labelKey;
+										
+										
+										$.each(treeDataList, function(idx, map){
+											map["text"] = map[labelKey];
+											tmpMap[map[key]] = map;
+										});
+										
+										
+										$.each(treeDataList, function(idx, map){
+											
+											if(tmpMap[map[pKey]] && map[key] != map[pKey]){
+												
+												if (!tmpMap[map[pKey]]["children"]){
+													tmpMap[map[pKey]]["children"] = [];
+												}
+												
+												
+												tmpMap[map[pKey]]["children"].push(map);
+											}else{
+												
+												rtnTreeData.push(map);
+											}
+										});
+										
+										treeObj.jstree(true).settings.core.data = rtnTreeData;
+										treeObj.jstree(true).refresh();
+									}
+								}
+							});
+							
+							
+							ajaxObj.send();
+						},
 						allNodeOpen: function(obj){
 							if($.osl.isNull(treeObj)){
             					$.osl.toastr($.osl.lang("tree.error.handler"));
@@ -551,6 +678,9 @@
 				            		}
 				            	}
 				            },
+				            "actionFn":{
+				            	
+				            },
 				            "callback":{
 				            	
 				            	"init": $.noop,
@@ -588,7 +718,26 @@
 							
 							
 							if(!actionFunction.hasOwnProperty(action)){
-								$(map).remove();
+								if(config.hasOwnProperty("actionFn") && config.actionFn.hasOwnProperty(action) && typeof config.actionFn[action] == "function"){
+									
+									$(map).click(function(){
+										var nodeData = null;
+										
+										if(treeObj != null){
+											
+											var selectNodeIds = treeObj.jstree("get_selected");
+											
+											
+											var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+											nodeData = selectNode.original;
+										}
+										
+										config.actionFn[action](treeObj, nodeData, map);
+									});
+								}else{
+									
+									$(map).remove();
+								}
 							}else{
 								
 								$(map).click(function(){
@@ -599,195 +748,128 @@
 					}
 					
 					
-					
-					var url = config.data.url;
-					var paramData = config.data.param;
+					treeObj = targetObj.jstree(config);
 					
 					
-					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url": url, "async": false}
-							,paramData);
+					treeObj.bind('select_node.jstree', function(event, data){
+						var selNode = data.instance.get_node(data.selected);
+			            var id = selNode.id;
+			            treeObj.jstree().selNode = {id: id, data:data};
+			            
+			            
+			            config.callback.onclick(treeObj, selNode);
+			        }).bind('deselect_node.jstree', function(event, data){
+			        	treeObj.jstree().selNode = null;
+			        }).bind('search.jstree', function(nodes, str, res){
+			        	
+			        	if(str.nodes.length == 0){
+			        		
+			        		treeObj.jstree(true).hide_all();
+			        		
+			        		
+			        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
+			        	}
+			        	
+			        }).bind('loaded.jstree', function(event, data) {
+			        	
+			            config.callback.init(treeObj, data);
+			        });
 					
 					
-					ajaxObj.setFnSuccess(function(data){
-						if(data.errorYn == "Y"){
-							$.osl.alert(data.message,{type: 'error'});
-						}else{
-							var treeDataList = data.list;
-							
-							
-							if($.osl.isNull(treeDataList)){
-								$.each(data,function(idx, map){
-									if(typeof map == "object"){
-										try{
-											if(map.length > 0){
-												treeDataList = map;
-												return false;
-											}
-										}catch(e){
-											return true;
-										}
-									}
-								});
-							}
-							
-							
-							if(treeDataList.length > 0){
-								var rtnTreeData = [];
-								var tmpMap = {};
-								
-								var key = config.data.key;
-								var pKey = config.data.pKey;
-								var labelKey = config.data.labelKey;
-								
-								
-								$.each(treeDataList, function(idx, map){
-									map["text"] = map[labelKey];
-									tmpMap[map[key]] = map;
-								});
-								
-								
-								$.each(treeDataList, function(idx, map){
-									
-									if(tmpMap[map[pKey]] && map[key] != map[pKey]){
-										
-										if (!tmpMap[map[pKey]]["children"]){
-											tmpMap[map[pKey]]["children"] = [];
-										}
-										
-										
-										tmpMap[map[pKey]]["children"].push(map);
-									}else{
-										
-										rtnTreeData.push(map);
-									}
-								});
-								
-								config.core.data = rtnTreeData;
-							}
-							
-							
-							treeObj = targetObj.jstree(config);
-							
-							
-							treeObj.bind('select_node.jstree', function(event, data){
-								var selNode = data.instance.get_node(data.selected);
-					            var id = selNode.id;
-					            treeObj.jstree().selNode = {id: id, data:data};
-					            
-					            
-					            config.callback.onclick(treeObj, selNode);
-					        }).bind('deselect_node.jstree', function(event, data){
-					        	treeObj.jstree().selNode = null;
-					        }).bind('search.jstree', function(nodes, str, res){
-					        	
-					        	if(str.nodes.length == 0){
-					        		
-					        		treeObj.jstree(true).hide_all();
-					        		
-					        		
-					        		$(str.instance.element).after('<div class="osl-tree-empty kt-align-center" data-tree-id="'+targetId+'">"'+str.str+'" 검색 결과가 없습니다.</div>');
-					        	}
-					        	
-					        }).bind('loaded.jstree', function(event, data) {
-					        	
-					            config.callback.init(treeObj, data);
-					        });
-							
-							
-							var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
-							
-							
-							if(searchTarget.length > 0){
-								
-								
-								searchTarget.empty();
-								
-								
-								var btnStyle = searchTarget.data("search-style");
-								
-								var btnStyleStr = "btn-brand";
-								
-								if(!$.osl.isNull(btnStyle)){
-									btnStyleStr = "btn-"+btnStyle;
-								}
-								
-								
-								var searchTargetHtml = 
-									'<div class="input-group">'
-										+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
-											+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
-											+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
-												+'<span><i class="la la-search"></i></span>'
-											+'</span>'
-										+'</div>'
-										+'<div class="input-group-append">'
-											+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
-												+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
-											'</button>'
-										+'</div>'
-									+'</div>';
-								
-								searchTarget.html(searchTargetHtml);
-								
-								
-								var fnTreeSearch = function(searchValue){
-									treeObj.jstree(true).show_all();
-									
-									
-									if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
-										$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
-									}
-									
-									treeObj.jstree("search", searchValue);
-								};
-								
-								
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
-								$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
-									if (e.which === 13){
-										
-										var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
-										
-										thisObj.children("i").removeClass("la la-search");
-										
-										
-										thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-										
-										
-										fnTreeSearch($(this).val());
-										
-										setTimeout(function(){
-											thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
-											
-											
-											thisObj.children("i").addClass("la la-search");
-										},300);
-									}
-								});
-								
-								$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
-
-									var thisObj = $(this).children("span");
-									
-									
-									thisObj.children("span").hide();
-									thisObj.addClass("spinner-border spinner-border-sm");
-
-									fnTreeSearch($("#treeSearch_"+targetId).val());
-									
-									setTimeout(function(){
-										thisObj.removeClass("spinner-border spinner-border-sm");
-										thisObj.children("span").show();
-									},300);
-								});
-							}
+					var searchTarget = $('.osl-tree-search[data-tree-id="'+targetId+'"]');
+					
+					
+					if(searchTarget.length > 0){
+						
+						
+						searchTarget.empty();
+						
+						
+						var btnStyle = searchTarget.data("search-style");
+						
+						var btnStyleStr = "btn-brand";
+						
+						if(!$.osl.isNull(btnStyle)){
+							btnStyleStr = "btn-"+btnStyle;
 						}
-					});
+						
+						
+						var searchTargetHtml = 
+							'<div class="input-group">'
+								+'<div class="kt-input-icon kt-input-icon--left osl-border-radius-none--right">'
+									+'<input type="text" class="form-control" placeholder="'+$.osl.lang("tree.search.placeholder")+'" id="treeSearch_'+targetId+'" name="treeSearch" data-tree-id="'+targetId+'">'
+									+'<span class="kt-input-icon__icon kt-input-icon__icon--left">'
+										+'<span><i class="la la-search"></i></span>'
+									+'</span>'
+								+'</div>'
+								+'<div class="input-group-append">'
+									+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
+										+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
+									'</button>'
+								+'</div>'
+							+'</div>';
+						
+						searchTarget.html(searchTargetHtml);
+						
+						
+						var fnTreeSearch = function(searchValue){
+							treeObj.jstree(true).show_all();
+							
+							
+							if($(".osl-tree-empty[data-tree-id="+targetId+"]").length > 0){
+								$(".osl-tree-empty[data-tree-id="+targetId+"]").remove();
+							}
+							
+							treeObj.jstree("search", searchValue);
+						};
+						
+						
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").off('keypress');
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").off('click');
+						$(".osl-tree-search[data-tree-id="+targetId+"] input#treeSearch_"+targetId+"[data-tree-id="+targetId+"]").on('keypress', function(e) {
+							if (e.which === 13){
+								
+								var thisObj = $(this).siblings("span.kt-input-icon__icon").children("span");
+								
+								thisObj.children("i").removeClass("la la-search");
+								
+								
+								thisObj.addClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+								
+								
+								fnTreeSearch($(this).val());
+								
+								setTimeout(function(){
+									thisObj.removeClass("kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--brand");
+									
+									
+									thisObj.children("i").addClass("la la-search");
+								},300);
+							}
+						});
+						
+						$(".osl-tree-search__button[data-tree-id="+targetId+"]").click(function(){
+
+							var thisObj = $(this).children("span");
+							
+							
+							thisObj.children("span").hide();
+							thisObj.addClass("spinner-border spinner-border-sm");
+
+							fnTreeSearch($("#treeSearch_"+targetId).val());
+							
+							setTimeout(function(){
+								thisObj.removeClass("spinner-border spinner-border-sm");
+								thisObj.children("span").show();
+							},300);
+						});
+					}
 					
 					
-					ajaxObj.send();
+					actionFunction["select"]();
+					
+					
+					$.osl.tree.list[targetId] = treeObj;
 				}
 				return treeObj;
 			}
@@ -1579,7 +1661,133 @@
 	        				
 	        			});
 	        		}
+
 	        		
+        			$.osl.datatable.setting("notificationsTable",{
+        				data: {
+        					source: {
+        						read: {
+        							url: "/arm/arm1000/arm1100/selectArm1100NtfListAjax.do"
+        						}
+        					}
+        				},
+        				columns: [
+        					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
+        				],
+        				actionBtn:{
+        					"update": false,
+        					"delete" : false,
+        				},
+        				toolbar:{
+        					items:{
+        						pagination:{
+        							pageSizeSelect : [10, 20, 30, 50, 100],
+        							pages:{
+        								desktop: {
+        									layout: 'compact',
+        								},
+            							tablet: {
+            								layout: 'compact'
+            							},
+        							}
+        						}
+        					}
+        				},
+        				callback:{
+        					initComplete: function(evt,config){
+        						$("#notificationsTable .kt-datatable__table").css({visibility: "hidden", height: 0});
+        						$("#notificationsCardTable").show();
+        					},
+        					ajaxDone: function(evt, list){
+        						var ntfStr = '';
+        						var cardMsg = '';
+        						$.each(list, function(idx, map){
+        							
+        							var cardUi = map.armSendTypeNm;
+        							
+        							
+        							
+        							var cardStat = '';
+        							if(map.checkCd=='02'){
+        								cardStat = 'osl-notification-not-read__bg-color';
+        							}
+        							if(map.armTypeCd == '01'){
+        								cardMsg = "프로젝트 그룹명 : " + $.osl.escapeHtml(map.prjGrpNm);
+        							}else if(map.armTypeCd == '02'){
+        								cardMsg = "프로젝트명 : " + $.osl.escapeHtml(map.prjNm);
+        							}else if(map.armTypeCd == '03'){
+        								cardMsg = "권한그룹명 : " + $.osl.escapeHtml(map.authGrpNm);
+        							}else if(map.armTypeCd == '04'){
+        								cardMsg = "사용자명 : " + $.osl.escapeHtml(map.sendUsrNm);
+        								cardMsg += "<br/>사용자 이메일 : " + $.osl.escapeHtml(map.sendUsrEmail);
+        							}
+        							
+        							
+        							
+        							
+        							ntfStr +=
+        								 '<a href="#" class="kt-notification-v2__item '+cardStat+'" data-html="true" data-toggle="kt-tooltip" data-skin="brand osl-notification-tooltip" data-original-title="'+cardMsg+'">'
+										+'	<div class="kt-notification-v2__item-icon">'
+										+'		<i class="'+cardUi+'"></i>'
+										+'	</div>'
+										+'	<div class="kt-notification-v2__item-wrapper">'
+										+'		<div class="kt-notification-v2__item-title">'
+										+'			'+$.osl.escapeHtml(map.armTitle)+''
+										+'		</div>'
+										+'		<div class="kt-notification-v2__item-desc">'
+										+'			'+$.osl.escapeHtml(map.armContent)+''
+										+'		</div>'
+										+'	</div>'
+										+'</a>';
+										
+        						});
+        						
+        						
+        						$("#notificationsCardTable").html(ntfStr);
+        						KTApp.initTooltips();
+        						
+        						
+        						var ajaxObj = new $.osl.ajaxRequestAction({"url":"/arm/arm1000/arm1100/selectArm1100NtfNotReadCntAjax.do"});
+        						
+        						ajaxObj.setFnSuccess(function(data){
+        				    		if(data.errorYn == "Y"){
+        								$.osl.alert(data.message,{type: 'error'});
+        							}else{
+        								var notRead = data.notRead;
+        								if(notRead.notReadCnt==0){
+        									$(".pulse-ring").remove();
+            								$(".kt-badge").remove();
+        								}
+        							}
+        				    	});
+        						
+        						ajaxObj.send();
+        						
+        						
+        						$("#kt_offcanvas_toolbar_notifications_toggler_btn").click(function(){
+        							$.osl.datatable.list.notificationsTable.targetDt.reload();
+        							
+        							
+            						var ajaxObj = new $.osl.ajaxRequestAction({"url":"/arm/arm1000/arm1100/insertArm1101NtfInfoAjax.do"});
+            						
+            						ajaxObj.setFnSuccess(function(data){
+            				    		if(data.errorYn == "Y"){
+            								$.osl.alert(data.message,{type: 'error'});
+            							}else{
+            								$(".pulse-ring").remove();
+            								$(".kt-badge").remove();
+            								var newNtfMsg = data.notRead.notReadCnt+"건의 새로운 알림"
+            								$("#newNtfMsg").html(newNtfMsg);
+            							}
+            				    	});
+            						
+            						ajaxObj.send();
+        						})
+        						
+        					}
+        				}
+        			});
+        			
 	        		
         			$.osl.datatable.setting("chargeReqTable",{
         				data: {
@@ -1587,14 +1795,14 @@
         						read: {
         							url: "/req/req4000/req4100/selectReq4100ChargeReqListAjax.do"
         						}
-        					},
+        					}
         				},
         				columns: [
         					{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
         					{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
-        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150},
+        					{field: 'prjNm', title: '프로젝트명', textAlign: 'left', width: 150, search: true},
         					{field: 'reqOrd', title: '요청번호', textAlign: 'left', width: 110, autoHide: false, search: true},
-        					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false},
+        					{field: 'reqProTypeNm', title:'처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
         					{field: 'reqNm', title: '요구사항명', textAlign: 'left', width: 380, search: true, autoHide: false,
         						template: function(row){
         							var resultStr = $.osl.escapeHtml(row.reqNm);
@@ -1605,10 +1813,17 @@
         							return resultStr;
         						}
         					},
-        					{field: 'reqDesc', title:'요구사항 설명', textAlign: 'left', width: 100, autoHide: true, search: true},
+        					{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
+        					{field: 'regDtm', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"date",
+        						template: function (row) {
+        							var paramDatetime = new Date(row.regDtm);
+        			                var agoTimeStr = $.osl.datetimeAgo(paramDatetime, {fullTime: "d", returnFormat: "yyyy-MM-dd"});
+        			                return agoTimeStr.agoString;
+        						}
+        					},
         					{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 120, search: true,
         						template: function (row) {
-        							if(row.reqUsrNm == null){
+        							if($.osl.isNull(row.reqUsrNm)){
         								row.reqUsrNm = "";
         							}
         							var usrData = {
@@ -1623,20 +1838,34 @@
         						onclick: function(rowData){
         							$.osl.user.usrInfoPopup(rowData.reqUsrId);
         						}
-        					}
-        					
+        					},
+        					{field: 'reqUsrEmail', title:'요청자e-mail', textAlign: 'left', width: 180, search: true},
+        					{field: 'reqUsrDeptNm', title:'요청자 조직', textAlign: 'center', width: 300, sortable: false},
+        					{field: 'reqUsrNum', title: '요청자 연락처', textAlign: 'center', width: 100, search: true},
+        					{field: 'reqKey', title: '요구사항 key', textAlign: 'center', width: 300, sortable: false, search: true}
+        				],
+        				searchColumns:[
+        					{field: 'prjGrpNm', title: $.osl.lang("req4100.field.prjGrpNm"), searchOrd: 0}
         				],
         				actionBtn:{
         					"update": false,
         					"delete" : false,
         				},
-        				actionTooltip:{
-        					
+        				toolbar:{
+        					items:{
+        						pagination:{
+        							pageSizeSelect : [4, 10, 20, 30, 50, 100],
+        							pages:{
+        								desktop: {
+        									layout: 'compact',
+        								},
+            							tablet: {
+            								layout: 'compact'
+            							},
+        							}
+        						}
+        					}
         				},
-        				actionFn:{
-        					
-        				},
-
         				callback:{
         					initComplete: function(evt,config){
         						$("#chargeReqTable .kt-datatable__table").css({visibility: "hidden", height: 0});
@@ -1649,6 +1878,8 @@
         							var prjAuthTargetList = [];
         							var fvrUse = '';
         							
+        							var cardUi = 'kt-portlet--solid-success';
+        							
         							
         							var rnStr = "No. "+map.rn;
         							var rnClass = "badge-primary";
@@ -1657,6 +1888,7 @@
     									imgSize: "sm",
     									class:{
     										cardBtn: "osl-width__fit-content",
+    										cardName: "osl-charge-requirements__color--white",
     									}
     								};
         							
@@ -1665,16 +1897,13 @@
     								}        							
         							
         							prjGrpStr +=
-        								 '<div class="col-lg-12 col-md-12 col-sm-12">'
-										+'	<div class="kt-portlet kt-portlet--solid-success osl-charge-requirements">'
+        								 '	<div class="kt-portlet osl-charge-requirements '+cardUi+'" data-prj-grp-id="'+map.prjGrpId+'" data-prj-id="'+map.prjId+'" data-req-id="'+map.reqId+'">'
 										+'		<div class="kt-portlet__head ">'
 										+'			<div class="kt-portlet__head-label">'
 										+'				<h3 class="kt-portlet__head-title osl-charge-requirements__head-title" data-toggle="kt-tooltip" data-skin="brand" title="" data-original-title="['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'">['+$.osl.escapeHtml(map.reqOrd)+'] '+$.osl.escapeHtml(map.reqNm)+'</h3>'
 										+'			</div>'
 										+'			<div class="kt-portlet__head-toolbar">'
-										+'				<span class="osl-charge-requirements__flaticon-star-div">'
-										+'					<i class="kt-nav__link-icon flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this)"></i>'
-										+'				</span>'
+										+'				<i class="kt-nav__link-icon flaticon-star osl-charge-flaticon-star '+fvrUse+'" data-fvr-data1="'+$.osl.escapeHtml(map.reqId)+'" data-fvr-type="05" data-fvr-id="'+map.fvrId+'" onclick="$.osl.favoritesEdit(event,this);$.osl.datatable.list.chargeReqTable.targetDt.reload();"></i>'
 										+'			</div>'
 										+'		</div>'
 										+'		<div class="kt-portlet__body osl-padding-b-7">'
@@ -1683,10 +1912,13 @@
 										+'			</div>'
 										+'			<div class="kt-align-right osl-margin-t-1rm">'
 										+'				<i class="fa fa-key"></i>'
-										+'				<i class="fa fa-key"></i>'
-										+'				<i class="fa fa-key"></i>'
-										+'				<i class="fa fa-key"></i>'
-										+'				<i class="fa fa-key"></i>'
+						        		+'				<i class="fa fa-file-signature"></i>'
+						        		+'				<i class="far fa-stop-circle"></i>'
+						        		+'				<i class="fa fa-sign-out-alt"></i>'
+						        		+'				<i class="fa fa-code-branch"></i>'
+						        		+'				<i class="fa fa-code"></i>'
+						        		+'				<i class="fa fa-puzzle-piece"></i>'
+						        		+'				<i class="fa fa-user-shield"></i>'
 										+'			</div>'
 										+'		</div>'
 										+'		<div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right" style="display: flex;justify-content: space-between;">'
@@ -1698,9 +1930,9 @@
 										+'				<a href="#" class="btn btn-bold btn-upper btn-sm btn-font-light btn-outline-hover-light">상세보기</a>'
 										+'			</div>'
 										+'		</div>'
-										+'	</div>'
-										+'</div>';
+										+'	</div>';
         						});
+        						
         						
         						
         						$("#chargeReqCardTable").html(prjGrpStr);
@@ -2030,6 +2262,12 @@
 						
 						if(searchTarget.length > 0){
 							
+							var btnTitle = "";
+							if(!searchTarget.hasClass("osl-datatable-search__btn-title--none")){
+								btnTitle = '<span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>';
+							}
+							
+							
 							var btnStyle = searchTarget.data("search-style");
 							
 							var btnStyleStr = "btn-brand";
@@ -2060,7 +2298,7 @@
 										+'</div>'
 										+'<div class="input-group-append">'
 											+'<button class="btn '+btnStyleStr+' osl-datatable-search__button" type="button" data-datatable-id="'+elemId+'">'
-												+'<i class="fa fa-search"></i><span class=""><span>'+$.osl.lang("datatable.search.title")+'</span></span>'
+												+'<i class="fa fa-search"></i>'+btnTitle
 											+'</button>'
 										+'</div>'
 									
@@ -2385,7 +2623,8 @@
 							beforeTemplate: function (row, data, index){
 								
 							},
-							clickCheckbox: false
+							clickCheckbox: false,
+							minHeight: null
 						},
 						sortable: true,
 						pagination: true,
@@ -2476,26 +2715,37 @@
 					
 					targetConfig.rows["afterTemplate"] = function(row, data, index){
 						
-						if(config.hasOwnProperty("rows") && config.rows.hasOwnProperty("clickCheckbox")){
+						if(config.hasOwnProperty("rows")){
 							
-							if(config.rows.clickCheckbox == true){
+							if(config.rows.hasOwnProperty("minHeight")){
+								var minHeight = config.rows.minHeight;
 								
-								row.click(function(){
-									var targetRow = $(this).closest("tr");
-									var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
+								
+								if(!$.osl.isNull(minHeight) && $.isNumeric(minHeight)){
+									$(row).css({"min-height": parseInt(minHeight)+"px"});
+								}
+							}
+							if(config.rows.hasOwnProperty("clickCheckbox")){
+								
+								if(config.rows.clickCheckbox == true){
 									
-									if(targetElem.is(":checked") == true){
-										targetElem.prop("checked", false);
-										datatables.targetDt.setInactive(targetElem);
+									row.click(function(){
+										var targetRow = $(this).closest("tr");
+										var targetElem = targetRow.find("label.kt-checkbox").children("input[type=checkbox]");
 										
-										targetRow.removeClass("osl-datatable__row--selected");
-										targetRow.addClass("kt-datatable__row--even");
-									}else{
-										targetElem.prop("checked", true);
-										datatables.targetDt.setActive(targetElem);
-									}
-									
-								});
+										if(targetElem.is(":checked") == true){
+											targetElem.prop("checked", false);
+											datatables.targetDt.setInactive(targetElem);
+											
+											targetRow.removeClass("osl-datatable__row--selected");
+											targetRow.addClass("kt-datatable__row--even");
+										}else{
+											targetElem.prop("checked", true);
+											datatables.targetDt.setActive(targetElem);
+										}
+										
+									});
+								}
 							}
 						}
 						
@@ -2709,6 +2959,7 @@
 					
 					
 					$(ktDatatableTarget).on("kt-datatable--on-ajax-done",function(evt,list){
+						
 						targetConfig.callback.ajaxDone(evt.target, list, datatableInfo);
 						
 						
@@ -2789,6 +3040,19 @@
 											}
 										}
 									});
+									
+									
+									$(targetUI).find('[data-toggle="kt-tooltip"]').each(function() {
+							            KTApp.initTooltip($(this));
+							        });
+									
+									
+									$(targetUI).find(".osl-datatable__card").click(function(){
+										var rowNum = $(this).data("datatable-rownum");
+										var rowData = datatables.targetDt.dataSet[rowNum];
+										targetConfig.actionFn["click"](rowData, targetId, "card", rowNum, this);
+									});
+									
 								});
 							}
 						}

@@ -399,7 +399,7 @@ public class Prj1000Controller {
 			}
 			
 			else if("update".equals(type)) {
-				paramMap.put("prjGrpCd", "01");
+				paramMap.put("prjGrpCd", "02");
 				
 				
 				paramMap.put("prjAuthTypeCd", "01");
@@ -544,7 +544,7 @@ public class Prj1000Controller {
     		Map<String, Object> metaMap = null;
     		
 			
-			totCnt = prj1000Service.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
+			totCnt = prj1000Service.selectPrj1000PrjAuthNoneUsrListCnt(paramMap);
 			
 			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
@@ -555,7 +555,7 @@ public class Prj1000Controller {
 			
 			
 			
-			dataList = (List) prj1000Service.selectPrj2100PrjAuthNoneUsrList(paramMap);
+			dataList = (List) prj1000Service.selectPrj1000PrjAuthNoneUsrList(paramMap);
 			
 			
 			

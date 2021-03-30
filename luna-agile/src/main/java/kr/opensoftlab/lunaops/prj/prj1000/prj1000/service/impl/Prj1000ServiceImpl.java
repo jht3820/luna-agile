@@ -19,6 +19,7 @@ import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.service.impl.FileManageDAO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import kr.opensoftlab.lunaops.arm.arm1000.arm1100.service.impl.Arm1100DAO;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
@@ -62,6 +63,10 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	
     @Resource(name="stm2000DAO")
     private Stm2000DAO stm2000DAO;
+
+	
+    @Resource(name="arm1100DAO")
+    private Arm1100DAO arm1100DAO;
 
 	
    	@Resource(name="fileMngService")
@@ -122,13 +127,13 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 	
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception {
-		return prj1000DAO.selectPrj2100PrjAuthNoneUsrList(paramMap);
+	public List selectPrj1000PrjAuthNoneUsrList(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthNoneUsrList(paramMap);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
-		return prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt(paramMap);
+	public int selectPrj1000PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return prj1000DAO.selectPrj1000PrjAuthNoneUsrListCnt(paramMap);
 	}
 
 	
@@ -167,12 +172,27 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		
 		
 		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
+		String prjNm = (String) paramMap.get("prjNm");
 		
 		String prjGrpId = (String) prj1000DAO.insertPrj1000PrjGrpAjax(paramMap);
 
 		
 		paramMap.put("prjId", prjGrpId);
 		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		Map<String, Object> ntfParam = new HashMap<String, Object>();
+		ntfParam.put("licGrpId", paramMap.get("licGrpId"));
+		ntfParam.put("sendUsrId", prjAuthTargetId); 
+		ntfParam.put("armTypeCd", "04"); 
+		ntfParam.put("armSendTypeCd", "01"); 
+		
+		ntfParam.put("usrId", prjAuthTargetId); 
+		
+		ntfParam.put("armTitle", "["+prjNm+"] 담당자 지정"); 
+		ntfParam.put("armContent", "["+prjNm+"] 프로젝트에 담당자로 지정되었습니다."); 
+		
+		arm1100DAO.insertArm1100NtfInfo(ntfParam);
 		
 		
 		String usrIdList = (String) paramMap.get("usrIdList");
@@ -189,6 +209,25 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 				
 				
 				if(!usrId.equals(prjAuthTargetId)) {
+
+					
+					ntfParam.put("licGrpId", licGrpId);
+					ntfParam.put("sendUsrId", prjAuthTargetId); 
+					ntfParam.put("armSendTypeCd", "01"); 
+
+					if(authTypeCd.equals("01")) {
+						ntfParam.put("armTypeCd", "04"); 
+						ntfParam.put("usrId", usrId); 
+					}else if(authTypeCd.equals("02")) {
+						ntfParam.put("armTypeCd", "03"); 
+						ntfParam.put("authGrpId", usrId); 
+						ntfParam.put("prjId", prjGrpId); 
+					}
+					ntfParam.put("armTitle", "["+prjNm+"] 담당자 지정"); 
+					ntfParam.put("armContent", "["+prjNm+"] 프로젝트에 담당자로 지정되었습니다."); 
+					
+					arm1100DAO.insertArm1100NtfInfo(ntfParam);
+					
 					paramMap.put("licGrpId", licGrpId);
 					paramMap.put("prjAuthTargetId", usrId);
 					paramMap.put("prjAuthTypeCd", authTypeCd);
@@ -207,9 +246,10 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		int rtnValue = 0;
 		
 		String prjAuthTargetId = (String) paramMap.get("prjAuthTargetId");
-				
+		String prjNm = (String) paramMap.get("prjNm");
+		String prjId = (String) paramMap.get("paramPrjId");
 		
-		paramMap.put("prjId", paramMap.get("paramPrjId"));
+		paramMap.put("prjId", prjId);
 		
 		
 		
@@ -224,6 +264,21 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 		paramMap.put("prjAuthTargetId", prjAuthTargetId);
 		paramMap.put("prjAuthTypeCd", "01");
 		prj1000DAO.insertPrj1000PrjAuthInfo(paramMap);
+		
+		
+		Map<String, Object> ntfParam = new HashMap<String, Object>();
+		ntfParam.put("licGrpId", paramMap.get("licGrpId"));
+		ntfParam.put("sendUsrId", prjAuthTargetId); 
+		ntfParam.put("armTypeCd", "04"); 
+		ntfParam.put("armSendTypeCd", "01"); 
+		
+		ntfParam.put("usrId", prjAuthTargetId); 
+		
+		ntfParam.put("armTitle", "["+prjNm+"] 담당자 지정"); 
+		ntfParam.put("armContent", "["+prjNm+"] 프로젝트에 담당자로 지정되었습니다."); 
+		
+		arm1100DAO.insertArm1100NtfInfo(ntfParam);
+		
 		
 		
 		String usrIdList = (String) paramMap.get("usrIdList");
@@ -241,6 +296,25 @@ public class Prj1000ServiceImpl extends EgovAbstractServiceImpl implements Prj10
 				
 				
 				if(!usrId.equals(prjAuthTargetId)) {
+					
+					
+					ntfParam.put("licGrpId", licGrpId);
+					ntfParam.put("sendUsrId", prjAuthTargetId); 
+					ntfParam.put("armSendTypeCd", "01"); 
+
+					if(authTypeCd.equals("01")) {
+						ntfParam.put("armTypeCd", "04"); 
+						ntfParam.put("usrId", usrId); 
+					}else if(authTypeCd.equals("02")) {
+						ntfParam.put("armTypeCd", "03"); 
+						ntfParam.put("authGrpId", usrId); 
+						ntfParam.put("prjId", prjId); 
+					}
+					ntfParam.put("armTitle", "["+prjNm+"] 담당자 지정"); 
+					ntfParam.put("armContent", "["+prjNm+"] 프로젝트에 담당자로 지정되었습니다."); 
+					
+					arm1100DAO.insertArm1100NtfInfo(ntfParam);
+					
 					paramMap.put("licGrpId", licGrpId);
 					paramMap.put("prjAuthTargetId", usrId);
 					paramMap.put("prjAuthTypeCd", authTypeCd);

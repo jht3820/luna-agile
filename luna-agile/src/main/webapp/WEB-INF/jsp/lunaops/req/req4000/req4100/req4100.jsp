@@ -36,7 +36,7 @@
 				<div class="osl-datatable-search" data-datatable-id="req4100ReqTable"></div>
 			</div>
 		</div>
-		<div class="kt_datatable" id="req4100ReqTable"></div>
+		<div class="kt_datatable osl-datatable-footer__divide" id="req4100ReqTable"></div>
 	</div>
 </div>
 <!-- begin page script -->

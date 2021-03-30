@@ -1,48 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<form class="kt-form" id="frCmm16001" autocomplete="off">
+<form class="kt-form" id="frArm1001" autocomplete="off">
 	<input type="hidden" name="atchFileId" id="atchFileId" value="<c:out value='${param.atchFileId}'/>">
 	<input type="hidden" name="type" id="type" value="<c:out value='${param.type}'/>">
 	<input type="hidden" name="reSendUsrId" id="reSendUsrId" value="<c:out value='${param.reSendUsrId}'/>">
-	<div class="kt-portlet">
+	<div class="kt-portlet kt-margin-b-0">
 		<div class="kt-portlet__body">
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16001.label.to">받는 사람</span>
-						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
-					</label>
-					<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label><i class="fa fa-user-friends kt-margin-r-5"></i>
+							<span data-lang-cd="arm1001.label.to">받는 사람</span>
+							<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
+						</label>
+						<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.title">제목</span></label>
-					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.title">제목</span></label>
+						<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="cmm16001.label.content">내용</span></label>
-					<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.content">내용</span></label>
+						<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group form-group-last">
-					<label>
-						<i class="fa fa-file-upload kt-margin-r-5"></i>
-						<span data-lang-cd="cmm16001.label.attachments">파일 첨부</span> 
-					</label>
-					<div class="kt-uppy osl-max-h-px-260" id="arm1001FileUpload">
-						<div class="kt-uppy__dashboard"></div>
-						<div class="kt-uppy__progress"></div>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group form-group-last">
+						<label>
+							<i class="fa fa-file-upload kt-margin-r-5"></i>
+							<span data-lang-cd="arm1001.label.attachments">파일 첨부</span> 
+						</label>
+						<div class="kt-uppy osl-max-h-px-260" id="arm1001FileUpload">
+							<div class="kt-uppy__dashboard"></div>
+							<div class="kt-uppy__progress"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -50,14 +45,14 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="arm1001InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="cmm16001.button.submit">보내기</span></button>
+	<button type="button" class="btn btn-brand" id="arm1001InsertSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="arm1001.button.submit">보내기</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
 <script>
 "use strict";
-var OSLCmm16001Popup = function () {
-	var formId = 'frCmm16001';
+var OSLArm1001Popup = function () {
+	var formId = 'frArm1001';
 
 	//atchfileId
 	var atchFileId;
@@ -87,15 +82,15 @@ var OSLCmm16001Popup = function () {
 		reSendUsrId = $("#reSendUsrId").val();
 		
 		//문구 세팅 
-    	$("#arm1001InsertSubmit > span").text($.osl.lang("cmm16001.button.submit"));
+    	$("#arm1001InsertSubmit > span").text($.osl.lang("arm1001.button.submit"));
     	
     	//placeholder 세팅
-    	$("#armTitle").attr("placeholder", $.osl.lang("cmm16001.placeholder.armTitle"));
-    	$("#armContent").attr("placeholder", $.osl.lang("cmm16001.placeholder.armContent"));
+    	$("#armTitle").attr("placeholder", $.osl.lang("arm1001.placeholder.armTitle"));
+    	$("#armContent").attr("placeholder", $.osl.lang("arm1001.placeholder.armContent"));
     	
 		//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("arm1001FileUpload",{
-    		url: '/cmm/cmm10000/cmm16000/insertArm1000AlarmAtchFileInfo.do',
+    		url: '/arm/arm1000/arm1000/insertArm1000AlarmAtchFileInfo.do',
     		maxFileSize: "${requestScope.fileSumMaxSize}",
     		meta: {"atchFileId": atchFileId, "fileSn": 0},
     		maxNumberOfFiles:20,
@@ -150,7 +145,7 @@ var OSLCmm16001Popup = function () {
 		
 		//kt-select2 설정
 		$('#forUsrSelect').select2({
-			placeholder : $.osl.lang("cmm16001.placeholder.select2"),
+			placeholder : $.osl.lang("arm1001.placeholder.select2"),
 			//option list 렌더링
 			templateResult: optionFormatState,
 			//tag 렌더링
@@ -204,11 +199,11 @@ var OSLCmm16001Popup = function () {
 			addUsrList(false);
 			
 			if(usrList.length==0){
-				$.osl.alert($.osl.lang("cmm16001.message.inputToUser"));
+				$.osl.alert($.osl.lang("arm1001.message.inputToUser"));
 				return false;
 			}
 
-			$.osl.confirm($.osl.lang("cmm16001.message.send"),null,function(result) {
+			$.osl.confirm($.osl.lang("arm1001.message.send"),null,function(result) {
     	        if (result.value) {
     	        	fileUploadObj.upload();
     	        }
@@ -312,7 +307,7 @@ var OSLCmm16001Popup = function () {
 	var selectUsrList = function(selectedUsrList){
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
-				{"url":"<c:url value='/cmm/cmm10000/cmm16000/selectArm1000AlarmUsrListAjax.do'/>", "async":"true"});
+				{"url":"<c:url value='/arm/arm1000/arm1000/selectArm1000AlarmUsrListAjax.do'/>", "async":"true"});
 		
 		//AJAX 전송 성공 함수
 		ajaxObj.setFnSuccess(function(data){
@@ -400,7 +395,7 @@ var OSLCmm16001Popup = function () {
 		});
       	
 		//AJAX 설정
-   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/cmm/cmm10000/cmm16000/insertArm1000AlarmInfoAjax.do'/>"
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/arm/arm1000/arm1000/insertArm1000AlarmInfoAjax.do'/>"
    			, "loadingShow": false, "async": false,"contentType":false,"processData":false ,"cache":false}
 			,fd);
 
@@ -413,7 +408,7 @@ var OSLCmm16001Popup = function () {
    				$.osl.toastr(data.message);
 
    				//목록 재조회
-   				OSLCmm16000Popup.reload();
+   				OSLArm1000Popup.reload();
    			
    				//모달 창 닫기
    				$.osl.layerPopupClose();
@@ -435,7 +430,7 @@ var OSLCmm16001Popup = function () {
 }();
 
 $.osl.ready(function(){
-	OSLCmm16001Popup.init();
+	OSLArm1001Popup.init();
 });
 </script>
 <!-- end script -->

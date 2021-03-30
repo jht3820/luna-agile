@@ -3,16 +3,6 @@
 #kt_header_brand > a > img{
 	width:130px;
 }
-/* flex */
-.osl-align-items-center{
-	-webkit-box-align: center !important;
-    -ms-flex-align: center !important;
-    align-items: center !important;
-}
-.osl-flex-shrink-0{
-	-ms-flex-negative: 0 !important;
-    flex-shrink: 0 !important;
-}
 .osl-margin-r-1rm{
 	margin-right: 1rem !important;
 }
@@ -49,24 +39,8 @@
 .osl-font-size-15rm{
 	font-size:1.5rem !important;
 }
-
-.osl-d-flex{
-	display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-.osl-flex-column{
-	-webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
 .osl-margin-r-auto{
 	margin-right: auto;
-}
-.osl-flex-wrap{
-	-ms-flex-wrap: wrap;
-    flex-wrap: wrap;
 }
 .osl-flex-row-fluid{
 	-webkit-box-flex: 1;
@@ -100,8 +74,31 @@ input:-webkit-autofill,
 	 -webkit-transition: background-color 9999s ease-out;
      -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
-
+/* mask */
+.osl-mask{
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+    align-items: center;
+    
+    -webkit-box-pack: center;
+	-ms-flex-pack: center;
+    justify-content: center;
+    
+    -webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+}
 /* 정렬 */
+.osl-notification-tooltip .tooltip-inner{
+	text-align:left !important;
+}
+
 .osl-align-center--imp{
 	text-align:center !important;
 }
@@ -239,6 +236,9 @@ input:-webkit-autofill,
 }
 .osl-min-width-85{
 	min-width: 85px;
+}
+.osl-min-w-px-35{
+	min-width: 35px !important;
 }
 /* 색상값 */
 .osl-color--blue{
@@ -416,6 +416,10 @@ select[id^=usrOpt_] {
 	flex-wrap: wrap;
     padding-top: 15px;
     padding-bottom: 15px;
+}
+/* button */
+.osl-datatable-search__btn-title--none .btn i{
+	padding:0;
 }
 /* draggable */
 .osl-widget-draggable {
@@ -1171,11 +1175,70 @@ label.required:after {
     text-overflow: ellipsis;
 }
 
-.osl-charge-requirements__flaticon-star-div{
-	padding: 1px 4px;
-	background-color: #e2e5ec;
-	border-radius: 5px;
+.osl-charge-requirements__color--white {
+    color: #ffffff !important;;
 }
+
+.kt-offcanvas-panel .kt-offcanvas-panel__body .kt_datatable .kt-datatable__pager{
+	padding: 0px
+}
+
+.osl-charge-flaticon-star{
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor:pointer;
+}
+/* notification */
+.osl-notification-not-read__bg-color{
+	background-color: #f7f8fa;
+}
+.pulse.pulse-success .pulse-ring {
+    border-color: rgba(27, 197, 189, 0.75);
+}
+    
+.pulse {
+	position: relative;
+  }
+.pulse .pulse-ring {
+	display: block;
+	border-radius: 40px;
+	height: 40px;
+	width: 40px;
+	margin-top: 5px;
+	margin-left: -2px;
+	position: absolute;
+	-webkit-animation: animation-pulse 1.5s ease-out;
+	animation: animation-pulse 1.5s ease-out;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	opacity: 0;
+	border-width: 3px;
+	border-style: solid;
+	border-color: #E4E6EF; 
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .pulse .pulse-ring {
+    top: 2px;
+    left: 2px; } 
+}
+@-webkit-keyframes animation-pulse {
+	0% {
+	  -webkit-transform: scale(0.1, 0.1);
+	  opacity: 0.0;
+	}
+	60% {
+	  -webkit-transform: scale(0.1, 0.1);
+	  opacity: 0.0; 
+	}
+	65% {
+	  opacity: 1; 
+	}
+	100% {
+	  -webkit-transform: scale(1.2, 1.2);
+	  opacity: 0.0; 
+	} 
+}
+
 /* req4100 */
 .osl-outline--brand{
 	border: 2px solid #1cac81;
@@ -1382,6 +1445,7 @@ label.required:after {
 .osl-min-height--150{
 	min-height: 150px;
 }
+
 .osl-display--inline-flex{
 	display: inline-flex;
 }
@@ -1408,6 +1472,94 @@ label.required:after {
 }
 .osl-flex-flow--column{
 	flex-flow: column;
+}
+
+/* process */
+.osl-process__flow-main{
+	height: 660px;
+	position: relative;
+}
+.osl-process__flow-container {
+    background: repeating-linear-gradient( 45deg, #eee, #eee 10px, #e5e5e5 10px, #e5e5e5 20px );
+    position: relative;
+    overflow: hidden;
+    outline: 0;
+	height: 100%;
+    width: 100%;
+}
+.osl-process__flow-chart{
+	width:2000px;
+	height:1000px;
+	background: #EAF1F7;
+}
+.osl-flowchart__operator {
+    position: absolute;
+    min-width: 200px;
+    background: #FAFAFA;
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    background-color: #ffffff;
+    border-radius: 4px;
+    pointer-events: auto;
+}
+.flowchart-operator .flowchart-operator-title {
+    width: 100%;
+    font-weight: bold;
+    box-sizing: border-box;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: move;
+    padding: 10px;
+    border-bottom: 1px solid #ebedf2;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: #fff;
+}
+.osl-flowchart__label{
+	    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #5867dd;
+    border-color: #5867dd;
+    color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding: 0;
+}
+.flowchart-operator-connector-arrow {
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid rgb(117 128 216);
+    top: 5px;
+}
+.flowchart-operator-connector-small-arrow {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+    top: 10px;
+}
+.flowchart-operator-outputs .flowchart-operator-connector-arrow {
+    right: -10px;
+}
+.flowchart-operator-inputs .flowchart-operator-connector {
+    text-align: left;
+}
+.flowchart-operator-outputs .flowchart-operator-connector {
+    text-align: right;
 }
 /*******************begin :: wizard*******************/
 /*내용 영역 포함 전체 wizard*/
@@ -2155,7 +2307,8 @@ label.required:after {
 	}
 }
 @media (max-width: 700px) {
-	button.btn > span {
+	/* span.class에 osl-resize__display--show 있는경우 숨기지 않음*/
+	button.btn > span:not(.osl-resize__display--show) {
 	    display: none;
 	}
 	button.btn i{
