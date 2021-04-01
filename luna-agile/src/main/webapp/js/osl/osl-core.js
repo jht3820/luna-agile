@@ -2363,7 +2363,7 @@
 							
 							if(datatables.config.actionFn.hasOwnProperty("select")){
 								
-								datatables.config.actionFn["select"](datatables.targetDt[0].id, datatables.targetDt[0]);
+								datatables.config.actionFn["select"](datatables.targetDt[0].id, datatables.targetDt[0], datatables.targetDt);
 							}
 							
 							else{

@@ -136,6 +136,11 @@ input:-webkit-autofill,
 .osl-margin-b-05{
 	margin-bottom: 0.5rem;
 }
+/*뱃지*/
+.osl-badge-lightgray{
+	background-color: #f7f7f7;
+	border: 1px solid #eee;
+}
 .osl-badge-brand{
 	display: inline-block;
 	padding: 0.5em 0.75em;
