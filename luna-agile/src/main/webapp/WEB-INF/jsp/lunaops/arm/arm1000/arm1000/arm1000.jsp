@@ -1,16 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="kt-portlet kt-portlet--mobile">
-	<div class="kt-portlet__head kt-portlet__head--lg">
-		<div class="kt-portlet__head-label">
-			<h4 class="kt-font-boldest kt-font-brand">
-				<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="arm1000.label.title">MESSAGE</span>
-			</h4>
-		</div>
-	</div>
-</div>
 <div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-4 col-4">
+	<div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="kt-portlet kt-portlet--mobile">
 			<div class="kt-portlet__body">
 				<ul class="kt-nav kt-nav--bold kt-nav--md-space kt-nav--v3 nav nav-tabs" role="tablist">
@@ -18,7 +9,7 @@
 						<a class="kt-nav__link kt-padding-l-0 kt-padding-r-0 active" data-toggle="tab" href="#kt_profile_tab_personal_information" role="tab">
 							<span class="kt-nav__link-icon"><i class="fas fa-inbox"></i></span>
 							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.get">받은 메시지</span>
-							<span class='badge badge-secondary osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadGetCntBadge" name="notReadGetCntBadge">0</span>
+							<span class='badge osl-badge-lightgray osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadGetCntBadge" name="notReadGetCntBadge">0</span>
 						</a>
 					</li>
 					<li class="kt-nav__item" id="menuTypeSend">
@@ -31,33 +22,39 @@
 						<a class="kt-nav__link kt-padding-l-0 kt-padding-r-0" data-toggle="tab" href="#kt_profile_change_password" role="tab">
 							<span class="kt-nav__link-icon"><i class="fas fa-envelope-square"></i></span>
 							<span class="kt-nav__link-text kt-font-boldest kt-font-lg" data-lang-cd="arm1000.label.alone">나에게 보낸 메시지</span>
-							<span class='badge badge-secondary osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadAloneCntBadge" name="notReadAloneCntBadge">0</span>
+							<span class='badge osl-badge-lightgray osl-min-w-px-35 kt-font-bolder kt-font-lg kt-font-brand kt-hide' id="notReadAloneCntBadge" name="notReadAloneCntBadge">0</span>
 						</a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-9 col-md-8 col-sm-8 col-8">
+	<div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="kt-portlet kt-portlet--mobile">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
 					<!-- 받은 메시지 -->
 					<span class="kt-font-boldest kt-font-lg" id="getAllCnt" name="getAllCnt">
-						<span class="d-inline-block osl-min-w-px-130">받은 메시지</span>
-						<span class='kt-font-brand kt-margin-l-20' id="notReadGetCnt" name="notReadGetCnt">0</span>
-						<span id="getCnt" name="getCnt"></span>
+						<span class="d-inline-block">받은 메시지</span>
+						<div class="badge osl-badge-lightgray kt-margin-l-20">
+							<span class='kt-font-brand' id="notReadGetCnt" name="notReadGetCnt">0</span>
+							<span id="getCnt" name="getCnt"></span>
+						</div>
 					</span>					
 					<!-- 보낸 메시지 -->
 					<span class="kt-hide kt-font-boldest kt-font-lg" id="sendAllCnt" name="sendAllCnt">
-						<span class="d-inline-block osl-min-w-px-130">보낸 메시지</span>
-						<span class="kt-margin-l-20" id="sendCnt" name="sendCnt"></span>
+						<span class="d-inline-block">보낸 메시지</span>
+						<div class="badge osl-badge-lightgray kt-margin-l-20">
+							<span id="sendCnt" name="sendCnt"></span>
+						</div>
 					</span>
 					<!-- 나에게 보낸 메시지 -->
 					<span class="kt-hide kt-font-boldest kt-font-lg" id="aloneAllCnt" name="aloneAllCnt">
-						<span class="d-inline-block osl-min-w-px-130">나에게 보낸 메시지</span>
-						<span class='kt-font-brand kt-margin-l-20' id="notReadAloneCnt" name="notReadAloneCnt">0</span>
-						<span id="aloneCnt" name="aloneCnt"></span>
+						<span class="d-inline-block">나에게 보낸 메시지</span>
+						<div class="badge osl-badge-lightgray kt-margin-l-20">
+							<span class='kt-font-brand' id="notReadAloneCnt" name="notReadAloneCnt">0</span>
+							<span id="aloneCnt" name="aloneCnt"></span>
+						</div>
 					</span>
 				</div>
 				<div class="kt-portlet__head-toolbar">
