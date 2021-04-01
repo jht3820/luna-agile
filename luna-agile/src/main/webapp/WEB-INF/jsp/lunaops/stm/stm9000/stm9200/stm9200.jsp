@@ -33,17 +33,15 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-group">
-						<div class="kt-portlet__head-group">
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm9200LicPrjTree" data-tree-action="allNodeOpen">
-								<i class="fa fa-plus"></i>
-							</a>
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm9200LicPrjTree" data-tree-action="allNodeClose">
-								<i class="fa fa-minus"></i>
-							</a>
-							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
-								<i class="la la-angle-down"></i>
-							</a>
-						</div>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm9200LicPrjTree" data-tree-action="allNodeOpen">
+							<i class="fa fa-plus"></i>
+						</a>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm9200LicPrjTree" data-tree-action="allNodeClose">
+							<i class="fa fa-minus"></i>
+						</a>
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
+							<i class="la la-angle-down"></i>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -492,7 +490,24 @@ var OSLStm9200 = function () {
 	 */
 	var fnDplAuthSettingPopupOpen = function(selRowData){
 		
-		 // 팝업추가
+		var paramPrjId = selRowData.prjId;
+		var paramJenId = selRowData.jenId;
+		var paramJobId = selRowData.jobId;
+		
+		var data = {
+				paramPrjId: paramPrjId,
+				paramJenId: paramJenId,
+				paramJobId: paramJobId
+			};
+		var options = {
+				autoHeight: false,
+				modalSize: "xl",
+				idKey: paramPrjId+"_"+paramJenId+"_"+paramJobId+"_",
+				modalTitle: "[" + selRowData.jobId + "] " + $.osl.lang("stm9200.title.dplAuthSettingModal"),
+				closeConfirm: false
+			};
+		
+		$.osl.layerPopupOpen('/stm/stm9000/stm9200/selectStm9201View.do',data,options);
 	};
 	
 	return {

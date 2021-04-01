@@ -15,17 +15,15 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-group">
-						<div class="kt-portlet__head-group">
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen">
-								<i class="fa fa-plus"></i>
-							</a>
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose">
-								<i class="fa fa-minus"></i>
-							</a>
-							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
-								<i class="la la-angle-down"></i>
-							</a>
-						</div>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen">
+							<i class="fa fa-plus"></i>
+						</a>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose">
+							<i class="fa fa-minus"></i>
+						</a>
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
+							<i class="la la-angle-down"></i>
+						</a>
 					</div>
 				</div>
 			</div>
