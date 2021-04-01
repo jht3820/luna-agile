@@ -243,7 +243,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		
-		cmm16000:{
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "받은 메시지",
@@ -284,7 +284,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "받는 사람",
 				title : "제목",
@@ -304,7 +304,7 @@ var OSLCoreLangSetting = function () {
 				submit : "보내기"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "첨부 파일", 
 			},
@@ -661,12 +661,14 @@ var OSLCoreLangSetting = function () {
 				saveAllDupleMsg:"모든 요구사항이 연결되었습니다.",
 			},
 			alert:{
+				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
+				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
+			},
+			confirm:{
 				insert:"그룹 요구사항을 등록하시겠습니까?",
 				delete:"선택된 그룹 요구사항을 삭제하시겠습니까?",
 				deleteList:"${1}건의 그룹 요구사항을 삭제하시겠습니까?",
 				update:"그룹 요구사항을 수정하시겠습니까?",
-				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
-				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
 			},
 			title:{
 				detailTitle:"그룹 요구사항 상세보기",
@@ -893,7 +895,10 @@ var OSLCoreLangSetting = function () {
 				mmtDesc: "회의록 내용"
 			},
 			alert:{
-				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건",
+				saveProcessMsg: "${1}개의 프로세스가 배정되었습니다.",
+				saveProcessDupleMsg: "이미 배정된 ${1}개의 프로세스 제외",
+				saveProcessAllDupleMsg: "이미 배정중인 프로세스입니다. (${1}개)"
 			}
 		},
 		spr1100:{
@@ -1415,7 +1420,7 @@ var OSLCoreLangSetting = function () {
 			title:{
 				allPrjList : "전체 프로젝트 목록",
 				assignJobList : "JOB 배정 목록",
-				notAssignJobList : "JOB 미배정 목록"
+				notAssignJobList : "JOB 미배정 목록",
 				dplAuthSettingModal : "배포 실행 권한 설정"
 			},
 			button:{
@@ -1465,7 +1470,7 @@ var OSLCoreLangSetting = function () {
 					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
 				}
 			}
-		}
+		},
 		stm9300:{
 			button:{
 				toolTil:{
@@ -1759,7 +1764,7 @@ var OSLCoreLangSetting = function () {
 				allTitle: "All"
 			},
 			
-			cmm16000CmmTable:{
+			arm1000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
 				sendDtm : "Date",
@@ -2085,7 +2090,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		
-		cmm16000:{
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "Received Message",
@@ -2126,7 +2131,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "To",
 				title : "Title",
@@ -2146,7 +2151,7 @@ var OSLCoreLangSetting = function () {
 				submit : "Send"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "Attachments", 
 			},
@@ -2452,6 +2457,7 @@ var OSLCoreLangSetting = function () {
 				connect:" ",
 				reset:" ",
 				done:"Done",
+				deleteResetBtn:"Delete reset",
 			},
 			title:{
 				detailTitle:"Group requirement detail",
@@ -3210,3 +3216,4 @@ var OSLCoreLangSetting = function () {
     		$.osl.date.init();
         }
     };
+}();
