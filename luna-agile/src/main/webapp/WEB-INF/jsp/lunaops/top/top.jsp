@@ -142,7 +142,7 @@
 							
 							<!--begin: Message -->
 							<div class="kt-header__topbar-item">
-								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="$.osl.layerPopupOpen('/arm/arm1000/arm1000/selectArm1000View.do',null,{modalSize:'xl'})">
+								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="$.osl.layerPopupOpen('/arm/arm1000/arm1000/selectArm1000View.do',null,{modalSize:'xl', modalTitle:'MESSAGE'})">
 									<span class="kt-header__topbar-icon"><i class="flaticon-email-black-circular-button"></i></span>
 								</div>
 							</div>

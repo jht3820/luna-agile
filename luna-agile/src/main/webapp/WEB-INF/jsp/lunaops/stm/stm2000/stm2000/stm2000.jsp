@@ -32,7 +32,7 @@
 				<div class="kt-separator kt-separator--space-sm kt-separator--border-solid"></div>
 				<div class="row">
 					<div class="col-12">
-						<div class="osl-tree" id="stm2000MenuTree"></div>
+						<div class="osl-tree kt-scroll" data-height="770" id="stm2000MenuTree"></div>
 					</div>
 				</div>
 			</div>
@@ -298,6 +298,14 @@ var OSLStm2000 = function () {
 			}
 		
 		});
+		
+		//퍼펙트 스크롤 적용
+		KTUtil.scrollInit($("#stm2000MenuTree")[0], {
+	        disableForMobile: true, 
+	        resetHeightOnDestroy: true, 
+	        handleWindowResize: true, 
+	        height: 770
+	    });
 		
 	};
 	
