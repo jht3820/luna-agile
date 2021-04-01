@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
-		<div class="col-lg-3 col-md-6 col-sm-12 kt-padding-r-0">
+		<div class="kt-portlet__head-label">
 			<div class="osl-datatable-search" data-datatable-id="req3000Table">
 				<div class="input-group">
 					<div class="input-group-prepend">
@@ -41,7 +41,7 @@
 				</div>
 						</div>
 		</div>
-		<div class="col-lg-9 col-md-12 col-sm-12 text-right osl-mobile-text--left kt-padding-r-0">
+		<div class="kt-portlet__head-toolbar">
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="select" title="그룹 요구사항 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.select" data-placement="bottom" data-auth-button="select" tabindex="5">
 				<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 			</button>
