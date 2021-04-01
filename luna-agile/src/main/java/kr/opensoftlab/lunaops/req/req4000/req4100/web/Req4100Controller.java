@@ -760,4 +760,60 @@ public class Req4100Controller {
     		throw new Exception(ex.getMessage());
     	}
     }
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/req/req4000/req4100/selectReq4100ChargeReqListAjax.do")
+	public ModelAndView selectReq4100ChargeReqListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+
+			
+			HttpSession ss = request.getSession();
+
+    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+    		paramMap.put("usrId", loginVO.getUsrId());
+    		
+			
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			int totCnt = req4100Service.selectReq4100ChargeReqListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			Map<String, Integer> pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			List<Map> req4100List = req4100Service.selectReq4100ChargeReqList(paramMap);
+
+			
+			model.addAttribute("data", req4100List);
+			model.addAttribute("meta", pageMap);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("selectReq4100ReqListAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
 }

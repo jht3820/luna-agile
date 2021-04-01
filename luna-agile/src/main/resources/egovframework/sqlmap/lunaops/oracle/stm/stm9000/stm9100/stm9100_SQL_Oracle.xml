@@ -101,7 +101,17 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
-		ORDER BY SUB1.REG_DTM DESC
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.REG_DTM DESC
+		</isEmpty>
     </sql>
     
     

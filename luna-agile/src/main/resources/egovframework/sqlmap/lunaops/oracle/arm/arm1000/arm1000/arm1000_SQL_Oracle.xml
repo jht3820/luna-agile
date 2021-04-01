@@ -79,11 +79,9 @@
 				<isEqual property="armMenuType" compareValue="get">
 					AND A.DEL_CHECK = '02'
 					AND A.USR_ID = #usrId#
-					AND A.SEND_USR_ID != #usrId#
 				</isEqual>
 				<isEqual property="armMenuType" compareValue="send">
 					AND A.SEND_DEL_CHECK = '02'	
-					AND A.USR_ID != #usrId#	
 					AND A.SEND_USR_ID = #usrId#	
 				</isEqual>
 				<isEqual property="armMenuType" compareValue="alone">
@@ -167,7 +165,7 @@
 			</isNotEmpty>
 		</isNotEmpty>
 		<isEmpty property="paramSortFieldId">
-			ORDER BY RN DESC
+			ORDER BY T1.ARM_ID DESC
 		</isEmpty>
 	</sql>
     

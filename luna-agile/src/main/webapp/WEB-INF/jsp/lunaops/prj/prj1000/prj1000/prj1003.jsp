@@ -223,6 +223,9 @@ var OSLPrj1003Popup = function () {
 				{field: 'reqDoneCnt', title: '완료 요구사항', textAlign: 'center', width: 100
 					,template: function (row) {return String(row.reqDoneCnt)}},
 			],
+			rows:{
+				minHeight: 40
+			},
 			actionBtn:{
 				"update": false,
 				"delete": false,

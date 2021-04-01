@@ -1,19 +1,28 @@
 package kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.jfree.util.Log;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.service.impl.FileManageDAO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.Prj3000Service;
+import oracle.net.aso.p;
 
 
 
@@ -211,5 +220,67 @@ public class Prj3000ServiceImpl extends EgovAbstractServiceImpl implements Prj30
 	@SuppressWarnings("rawtypes")
 	public Map selectPrj3000WizardMenuInfo(Map paramMap) throws Exception{
 		return prj3000DAO.selectPrj3000WizardMenuInfo(paramMap);
+	}
+
+	
+	@Override
+	public int selectPrj3000DocNextOrd(Map<String, String> paramMap) throws Exception{
+		return prj3000DAO.selectPrj3000DocNextOrd(paramMap);
+	}
+
+	
+	@Override
+	public String insertPrj3000DocInfo(Map<String, String> paramMap) throws Exception {
+		
+		
+		String newDocId = prj3000DAO.insertPrj3000DocInfo(paramMap);
+		
+		
+		if(newDocId == null || "".equals(newDocId)){
+			throw new UserDefineException(egovMessageSource.getMessage("prj3000.notFoundUpperDept.fail"));
+		}
+		
+		return newDocId;
+	}
+
+	
+	@Override
+	public void updatePrj3000DocInfo(Map<String, String> paramMap) throws Exception {
+		
+		
+		int updateCnt = prj3000DAO.updatePrj3000DocInfo(paramMap);
+		
+		
+		if(updateCnt == 0) {
+			throw new UserDefineException(egovMessageSource.getMessage("fail.common.update"));
+		}
+	}
+
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void deletePrj3000DocInfo(Map<String, String> paramMap) throws Exception {
+		String deleteDataList = paramMap.get("deleteDataList");
+		
+		
+		JSONParser jsonParser = new JSONParser();
+		JSONArray jsonArray = (JSONArray) jsonParser.parse(deleteDataList);
+
+		
+		List<FileVO> removeFileList = new ArrayList();
+		
+		
+		for(int i=0;i<jsonArray.size();i++) {
+			JSONObject jsonObj = (JSONObject) jsonArray.get(i);
+			
+			
+			Map infoMap = new Gson().fromJson(jsonObj.toJSONString(), new HashMap().getClass());
+			
+			
+			prj3000DAO.deletePrj3000DocInfo(infoMap);
+			
+			
+		}
+		
 	}
 }

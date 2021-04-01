@@ -30,4 +30,28 @@ public interface Stm9200Service {
 	
 	@SuppressWarnings("rawtypes")
 	void deleteStm9200JenkinsJobInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List<Map> selectStm9200PrjAssignDplAuthList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes" )
+	int selectStm9200PrjAssignDplAuthListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List<Map> selectStm9200PrjNotAssignDplAuthList(Map paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes" )
+	int selectStm9200PrjNotAssignDplAuthListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void insertStm9200DplAuthInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	void deleteStm9200DplAuthInfo(Map paramMap) throws Exception;
 }

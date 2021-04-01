@@ -142,7 +142,7 @@
 							
 							<!--begin: Message -->
 							<div class="kt-header__topbar-item">
-								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="location.href='/cmm/cmm10000/cmm16000/cmm16000View.do'">
+								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_message_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="메시지" onclick="$.osl.layerPopupOpen('/arm/arm1000/arm1000/selectArm1000View.do',null,{modalSize:'xl'})">
 									<span class="kt-header__topbar-icon"><i class="flaticon-email-black-circular-button"></i></span>
 								</div>
 							</div>
@@ -150,8 +150,9 @@
 							
 							<!--begin: Notifications -->
 							<div class="kt-header__topbar-item">
-								<div class="kt-header__topbar-wrapper" id="kt_offcanvas_toolbar_notifications_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="알림">
+								<div class="kt-header__topbar-wrapper pulse pulse-success" id="kt_offcanvas_toolbar_notifications_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="알림">
 									<span class="kt-header__topbar-icon"><i class="flaticon2-notification"></i></span>
+									<span class="pulse-ring"></span>
 									<span class="kt-badge kt-badge--brand"></span>
 								</div>
 							</div>
@@ -168,8 +169,8 @@
 							<!--end: Quick actions -->
 
 							<!--begin: Quick panel toggler -->
-							<div class="kt-header__topbar-item" data-toggle="kt-tooltip" data-skin="brand" title="담당 요구사항">
-								<div class="kt-header__topbar-wrapper">
+							<div class="kt-header__topbar-item">
+								<div class="kt-header__topbar-wrapper" id="kt_quick_panel_toggler_btn" data-toggle="kt-tooltip" data-skin="brand" title="담당 요구사항">
 									<span class="kt-header__topbar-icon" id="kt_quick_panel_toggler_btn"><i class="flaticon2-menu"></i></span>
 								</div>
 							</div>
@@ -347,6 +348,47 @@
 					
 					<!-- end::Scrolltop -->
 					<!-- end::Offcanvas Toolbar Quick Actions -->
+					
+					<!-- begin::Offcanvas Toolbar Quick Panel -->
+					<div id="kt_quick_panel" class="kt-offcanvas-panel">
+						<div class="kt-offcanvas-panel__head">
+							<h4 class="kt-offcanvas-panel__title kt-font-boldest">
+								담당 요구사항
+							</h4>
+							<a href="#" class="kt-offcanvas-panel__close" id="kt_quick_panel_close_btn"><i class="flaticon2-delete"></i></a>
+						</div>
+						<div class="kt-offcanvas-panel__body">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="osl-datatable-search" data-datatable-id="chargeReqTable"></div>
+								</div>
+							</div>
+							<div id="chargeReqCardTable"></div>
+							<div class="kt_datatable" id="chargeReqTable"></div>
+							
+						</div>
+					</div>
+					<!-- end::Offcanvas Toolbar Quick Panel -->
+					
+					
+					<!-- begin::Offcanvas Toolbar Quick Notifications -->
+					<div id="kt_offcanvas_toolbar_notifications" class="kt-offcanvas-panel">
+						<div class="kt-offcanvas-panel__head">
+							<h4 class="kt-offcanvas-panel__title kt-font-boldest">
+								알림
+								<small id="newNtfMsg"></small>
+							</h4>
+							<a href="#" class="kt-offcanvas-panel__close" id="kt_offcanvas_toolbar_notifications_close"><i class="flaticon2-delete"></i></a>
+						</div>
+						<div class="kt-notification-v2">
+							<div id="notificationsCardTable">
+							</div>
+							<div class="kt_datatable" id="notificationsTable"></div>
+							
+						</div>
+					</div>
+					<!-- end::Offcanvas Toolbar Quick Notifications -->
+					
 					<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 
 						<!-- begin:: Content -->

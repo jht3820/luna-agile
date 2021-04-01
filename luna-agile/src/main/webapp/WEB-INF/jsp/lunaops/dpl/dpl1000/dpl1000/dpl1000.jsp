@@ -54,6 +54,7 @@
 "use strict";
 var OSLDpl1000Popup = function () {
 	var documentSetting = function(){
+		//데이터 테이블 세팅
 		$.osl.datatable.setting("dpl1000Table",{
 			data: {
 				source: {
@@ -68,10 +69,10 @@ var OSLDpl1000Popup = function () {
 				{field: 'reqOrd', title: '배포 상태', textAlign: 'center', width: 100, autoHide: false},
 				{field: 'reqProTypeNm', title: '배포 버전', textAlign: 'center', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
 				{field: 'reqNm', title: '배포 명', textAlign: 'center', width: 300, search: true},
-				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 70, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 100, search: true, searchType:"date"},
-				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100, search: true, searchType:"date"},
+				{field: 'reqDtm', title: '배포 방법', textAlign: 'center', width: 70},
+				{field: 'reqDtm', title: '배포 일자', textAlign: 'center', width: 100},
+				{field: 'reqDtm', title: '배포자', textAlign: 'center', width: 100},
+				{field: 'reqDtm', title: '배포 설명', textAlign: 'center', width: 100},
 			],
 			actionBtn:{
 				"dblClick": true 
@@ -103,9 +104,11 @@ var OSLDpl1000Popup = function () {
 					
 					$.osl.layerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1001View.do',data,options);
 				},
+				
 				"delete":function(rowDatas, datatableId, type, rowNum, elem){
 					
 				},
+				
 				"dblClick":function(rowData, datatableId, type, rowNum, elem){
 					var data = {
 						};
