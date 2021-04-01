@@ -13,7 +13,7 @@
 	<input type="hidden" name="atchFileId" id="atchFileId">
 	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
 	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12">
+		<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
 				<div class="kt-portlet__body">
 					<div class="row">
@@ -77,46 +77,54 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12">
-			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
-				<div class="kt-portlet__body">
-					<label class="kt-padding-l-10 kt-padding-r-10"><i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.linkedReqList">연결 요구사항 목록</span></label>
-					<div class="row kt-padding-l-10 kt-padding-r-10 kt-margin-t-10">
-						<div class="col-lg-6 col-md-6 col-sm-12">
+		<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 osl-margin-t-20-1400">
+				<div class="kt-portlet__head">	
+					<div class="kt-portlet__head-toolbar">
+						<i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.linkedReqList">연결 요구사항 목록</span>
+					</div>
+					<div class="kt-portlet__head-label">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="select" title="연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+							<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="selInReqDelete" title="연결 요구사항 제거" data-title-lang-cd="datatable.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selInReqDelete" tabindex="2">
+							<i class="fa fa-minus"></i><span data-lang-cd="req3000.button.delete">제거</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="reset" title="연결 요구사항 초기화" data-title-lang-cd="req3000.datatable.button.title.reset" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+							<i class="fas fa-undo-alt"></i><span data-lang-cd="req3000.button.reset">초기화</span>
+						</button>
+					</div>
+				</div>
+				<div class="kt-portlet__body osl-min-h-px--415">
+					<div class="row">
+						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="osl-datatable-search" data-datatable-id="req3001ConnectReqTable"></div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 text-right">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="select" title="연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="selInReqDelete" title="연결 요구사항 제거" data-title-lang-cd="datatable.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selInReqDelete" tabindex="2">
-								<i class="fa fa-minus"></i><span data-lang-cd="req3000.button.delete">제거</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="reset" title="연결 요구사항 초기화" data-title-lang-cd="req3000.datatable.button.title.reset" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
-								<i class="fa fa-edit"></i><span data-lang-cd="req3000.button.reset">초기화</span>
-							</button>
 						</div>
 					</div>
 					<div class="kt_datatable" id="req3001ConnectReqTable"></div>
 				</div>
 			</div>
-			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 osl-margin-t-1rm">
+			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 kt-margin-t-20">
+				<div class="kt-portlet__head">
+					<div class="kt-portlet__head-toolbar">
+						<i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.unlinkedReqList">미연결 요구사항 목록</span>
+					</div>
+					<div class="kt-portlet__head-label">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="select" title="미연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+							<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="insert" title="미연결 요구사항 연결" data-title-lang-cd="datatable.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3">
+							<i class="fa fa-plus"></i><span data-lang-cd="req3000.button.insert">추가</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="connect" title="미연결 요구사항 연결" data-title-lang-cd="req3000.datatable.button.title.connect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="connect" tabindex="2">
+							<i class="fas fa-link"></i><span data-lang-cd="req3000.button.connect">연결</span>
+						</button>
+					</div>
+				</div>
 				<div class="kt-portlet__body">
-					<label class="kt-padding-l-10 kt-padding-r-10 kt-margin-t-20"><i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.unlinkedReqList">미연결 요구사항 목록</span></label>
-					<div class="row kt-padding-l-10 kt-padding-r-10 kt-margin-t-10">
-						<div class="col-lg-6 col-md-6 col-sm-12">
+					<div class="row">
+						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="osl-datatable-search" data-datatable-id="req3001UnconnectReqTable"></div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 text-right">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="select" title="미연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="connect" title="미연결 요구사항 연결" data-title-lang-cd="req3000.datatable.button.title.connect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="connect" tabindex="2">
-								<i class="fa kt-nav__link-icon flaticon2-expand"></i><span data-lang-cd="req3000.button.connect">연결</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="insert" title="미연결 요구사항 연결" data-title-lang-cd="datatable.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3">
-								<i class="fa fa-plus"></i><span data-lang-cd="req3000.button.insert">추가</span>
-							</button>
 						</div>
 					</div>
 					<div class="kt_datatable" id="req3001UnconnectReqTable"></div>

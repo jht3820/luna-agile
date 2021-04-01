@@ -291,7 +291,7 @@ input:-webkit-autofill,
 
 /*percent*/
 .osl-width--100-p{
-	width: 100%;
+	width: 100% !important;
 }
 .osl-max-width--100-p{
 	max-width: 100%;
@@ -300,6 +300,11 @@ input:-webkit-autofill,
 /*fit-content*/
 .osl-width__fit-content{
 	width: fit-content;
+}
+
+/* line-height */
+.osl-line-height__width-38{
+	line-height: 38px;
 }
 
 /* 색상값 */
@@ -1912,6 +1917,9 @@ label.required:after {
 	    border-bottom-left-radius: 0.5rem;
 	    border-bottom-right-radius: 0.5rem;
 	    margin-bottom: 0.5rem;
+	}
+	.osl-margin-t-20-1400{
+		margin-top: 20px;
 	}
 }
 
