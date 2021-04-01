@@ -48,7 +48,7 @@
 									<c:when test="${requestScope.loginType == 'usrId'}">
 										<label class="required"><i class="fa fa-edit kt-margin-r-5"></i>아이디</label>
 										<div class="input-group">
-											<input type="text" class="form-control" label="아이디" placeholder="아이디" id="usrId" name="usrId" minlength="5" maxlength="20" regexstr="^[a-z0-9_-]{5,20}$" regexalert="영문 소문자, 숫자, _-" required>
+											<input type="text" class="form-control" label="아이디" placeholder="아이디" autocomplete="off" id="usrId" name="usrId" minlength="5" maxlength="20" regexstr="^[a-z0-9_-]{5,20}$" regexalert="영문 소문자, 숫자, _-" required>
 											<div class="input-group-append">
 												<button class="btn btn-outline-brand" type="button" id="btn_idChk">중복확인</button>
 											</div>
@@ -79,13 +79,13 @@
 							<div class="col-xl-6">
 								<div class="form-group">
 									<label class="required"><i class="fa fa-key kt-margin-r-5"></i>비밀번호</label>
-									<input type="password" class="form-control" name="usrPw" id="usrPw" placeholder="비밀번호" minlength="5" maxlength="50" regexstr="^(?=.{5,})(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[\/?@\#!$%&]).*$" regexalert="영문 ,숫자,특수문자(!@#$%&*?) 필수 포함" required>
+									<input type="password" class="form-control" name="usrPw" id="usrPw" autocomplete="new-password" placeholder="비밀번호" minlength="5" maxlength="50" regexstr="^(?=.{5,})(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[\/?@\#!$%&]).*$" regexalert="영문 ,숫자,특수문자(!@#$%&*?) 필수 포함" required>
 								</div>
 							</div>
 							<div class="col-xl-6">
 								<div class="form-group">
 									<label class="required"><i class="fa fa-key kt-margin-r-5"></i>비밀번호 확인</label>
-									<input type="password" class="form-control" name="reUsrPw" id="reUsrPw" placeholder="비밀번호 확인" minlength="5" maxlength="50" regexstr="^(?=.{5,})(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[\/?@\#!$%&]).*$" regexalert="영문 ,숫자,특수문자(!@#$%&*?) 필수 포함" equalTo="#usrPw" required>
+									<input type="password" class="form-control" name="reUsrPw" id="reUsrPw" autocomplete="new-password" placeholder="비밀번호 확인" minlength="5" maxlength="50" regexstr="^(?=.{5,})(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[\/?@\#!$%&]).*$" regexalert="영문 ,숫자,특수문자(!@#$%&*?) 필수 포함" equalTo="#usrPw" required>
 								</div>
 							</div>
 						</div>
@@ -117,14 +117,14 @@
 				<div class="col-xl-6">
 					<div class="form-group">
 						<label class="required"><i class="fa fa-phone-alt kt-margin-r-5"></i>연락처</label>
-						<input type="text" class="form-control" placeholder="연락처" name="telno" id="telno" minlength="3" maxlength="16" regexstr="^[0-9]*$" regexalert="숫자만 입력가능" required>
+						<input type="text" class="form-control" placeholder="연락처" autocomplete="off" name="telno" id="telno" minlength="3" maxlength="16" regexstr="^[0-9]*$" regexalert="숫자만 입력가능" required>
 					</div>
 				</div>
 				<div class="col-xl-6">
 					<div class="form-group">
 						<label class="required"><i class="fa fa-envelope kt-margin-r-5"></i>이메일</label>
 						<div class="input-group">
-							<input type="email" class="form-control" label="이메일" placeholder="이메일" id="email" name="email" maxlength="35" required>
+							<input type="email" class="form-control" label="이메일" autocomplete="off" placeholder="이메일" id="email" name="email" maxlength="35" required>
 							<div class="input-group-append">
 								<button class="btn btn-outline-brand" type="button" id="btn_emailChk">중복확인</button>
 							</div>
