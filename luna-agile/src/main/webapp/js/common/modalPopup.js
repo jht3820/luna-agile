@@ -296,7 +296,7 @@ var modal_popup = function(url, data, opts){
 		            buttondown_class: 'btn btn-secondary',
 		            buttonup_class: 'btn btn-secondary',
 		            min: min,
-		            max: max,n
+		            max: max,
 		            step: step,
 		            boostat: boostat,
 		            maxboostedstep: maxboostedstep,

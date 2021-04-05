@@ -492,11 +492,14 @@ var OSLCoreLangSetting = function () {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
 					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
-					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다.",
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다.",
+					notHaveConfFile : "등록된 파일이 존재하지 않습니다."
 				},
 				confirm:{
-					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
-				}
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?",
+					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
+				} 
 			},
 			modal : {
 				title : {
@@ -542,8 +545,12 @@ var OSLCoreLangSetting = function () {
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
-				}
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다."
+				},
+				confirm:{
+					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
+				} 
 			},
 			modal : {
 				title : {
@@ -2263,98 +2270,105 @@ var OSLCoreLangSetting = function () {
 		},
 		prj3000 : {
 			label : {
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docUseCd : "사용 유무",
-				docOrd : "순번",
-				docEdDtm : "만료일자",
-				signUseCd : "결재 사용 유무",
-				docDesc : "비고"
+				docId : "Document ID",
+				docNm : "Document Name",
+				docUseCd : "Document Use",
+				docOrd : "Document Order",
+				docEdDtm : "Document End Date",
+				signUseCd : "Sign Use",
+				docDesc : "Document description"
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
-					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
-					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+					treeSelect : "Select a document in the tree on the left.",
+					notUsedDoc : "Sub-documents cannot be added to unused documents.",
+					notRootDelete : "The top-level document(ROOT) cannot be deleted.",
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached.",
+					notHaveConfFile : "Registered file does not exist."
 				},
 				confirm:{
-					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
-				}
+					deleteDoc:"When deleting a document, the selected document and all sub-documents are deleted. Do you want to delete the selected document?",
+					deleteFormFile:"Would you like to delete form file?"
+				} 
 			},
 			modal : {
 				title : {
-					insertDoc : "신규 산출물 양식 등록",
-					updateDoc : "산출물 양식 수정",
-					insertDocCon : "산출물 연결"
+					insertDoc : "Register New Document Form",
+					updateDoc : "Modifying Document Form",
+					insertDocCon : "Document Linkage"
 				}
 			}
 		},
 		prj3001 : {
 			label : {
-				upperDocId : "상위 산출물 ID",
-				upperDocNm : "상위 산출물 명",
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docEdDtm : "만료일자",
-				docOrd : "순번",
-				signUseCd : "결재 사용 유무",
-				docUseCd : "사용 유무",
-				docDesc : "비고"
+				upperDocId : "Upper Document ID",
+				upperDocNm : "Upper Document Name",
+				docId : "Document ID",
+				docNm : "Document Name",
+				docEdDtm : "Document End Date",
+				docOrd : "Document Order",
+				signUseCd : "Sign Use",
+				docUseCd : "Document Use",
+				docDesc : "Document description"
 				
 			},
 			button : {
-				insert : "작성 완료",
-				update : "수정 완료"
+				insert : "Complete",
+				update : "Update Complete"
 			},
 			message : {
 				confirm : {
-					insert : "산출물 양식 정보를 추가 하시겠습니까?",
-					update : "산출물 양식 정보를 수정 하시겠습니까?"
+					insert : "Would you like to register your document?",
+					update : "Would you like to update your document?"
 				}
 			}
 		},
 		prj3100 : {
 			label : {
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docUseCd : "사용 유무",
-				docOrd : "순번",
-				docEdDtm : "만료일자",
-				signUseCd : "결재 사용 유무",
-				docDesc : "비고"
+				docId : "Document ID",
+				docNm : "Document Name",
+				docUseCd : "Document Use",
+				docOrd : "Document Order",
+				docEdDtm : "Document End Date",
+				signUseCd : "Sign Use",
+				docDesc : "Document description"
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
-				}
+					treeSelect : "Select a document in the tree on the left.",
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached."
+				},
+				confirm:{
+					deleteFormFile:"Would you like to delete file?"
+				} 
 			},
 			modal : {
 				title : {
-					insertDocCon : "산출물 연결"
+					insertDocCon : "Document Linkage"
 				}
 			}
 		},
 		prj3200 : {
 			label : {
-				upperDocId : "상위 산출물 ID",
-				upperDocNm : "상위 산출물 명",
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docEdDtm : "만료일자",
-				docOrd : "순번",
-				signUseCd : "결재 사용 유무",
-				docUseCd : "사용 유무",
-				docDesc : "비고"
+				upperDocId : "Upper Document ID",
+				upperDocNm : "Upper Document Name",
+				docId : "Document ID",
+				docNm : "Document Name",
+				docEdDtm : "Document End Date",
+				docOrd : "Document Order",
+				signUseCd : "Sign Use",
+				docUseCd : "Document Use",
+				docDesc : "Document description"
 			},
 			insert : {
-				saveBtnString : "등록 완료",
-				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
-				saveMsg : "${1}건의 정보가 연결되었습니다.",
-				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
-				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+				saveBtnString : "Complete",
+				saveString : "Would you like to link the selected document information?",
+				saveMsg : "${1} data was linked.",
+				saveDupleMsg : "Exclude ${2} users already connected",
+				saveAllDupleMsg : "This is already linked document information. (${1})"
 			},
-			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
-			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+			allDocConInsert : "Are you sure you want to connect ${1} document data?",
+			allDocConDelete : "Are you sure you want to disconnect ${1} document data?"
 		},
 		prj5000:{
 			button:{
