@@ -61,4 +61,13 @@ public interface Prj3000Service {
 
 	
 	void deletePrj3000DocInfo(Map<String, String> paramMap) throws Exception;
+
+	
+	int updatePrj3000FormFileId(Map<String, String> paramMap) throws Exception;
+
+	
+	void deletePrj3000File(Map<String, String> paramMap) throws Exception;
+
+	
+	void updatePrj3000FileType(Map<String, String> paramMap) throws Exception;
 }
