@@ -475,7 +475,7 @@ var OSLPrj1001Popup = function () {
 											+'</div>'
 											+'<div class="d-flex flex-column osl-margin-r-auto">'
 												+'<h5 class="kt-font-boldest" title="'+$.osl.escapeHtml(map.prjNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.prjNm)+'</h5>'
-												+'<span class="text-muted" title="'+$.osl.escapeHtml(map.prjDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.prjDesc)+'</span>'
+												+'<span class="text-muted osl-max-h-px--55 text-truncate" title="'+$.osl.escapeHtml(map.prjDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.prjDesc)+'</span>'
 											+'</div>'
 										+'</div>'
 										+'<div class="d-flex flex-wrap osl-margin-t-2rm kt-padding-l-20">'
