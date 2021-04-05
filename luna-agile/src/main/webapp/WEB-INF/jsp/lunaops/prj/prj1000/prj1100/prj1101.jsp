@@ -175,6 +175,7 @@ var OSLPrj1101Popup = function () {
 		//데이터 테이블 세팅
     	datatableSetting();
 		
+    	
 		//수정인경우 프로세스 정보 조회
 		if(type == "update"){
 			fnProcessInfoSelect();

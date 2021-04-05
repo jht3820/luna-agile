@@ -281,6 +281,30 @@ var modal_popup = function(url, data, opts){
 			});
 		}
 		
+		var inputNumberList = $("input[type=number]");
+		if(!$.osl.isNull(inputNumberList) && inputNumberList.length > 0){
+			$.each(inputNumberList, function(idx, map){
+				
+				var min = $(map).attr("min") || 0;
+				var max = $(map).attr("max") || 9999999;
+				var step = $(map).attr("step") || 1;
+				var boostat = $(map).attr("boostat") || 5;
+				var maxboostedstep = $(map).attr("maxboostedstep") || 10;
+				
+				
+		    	$(map).TouchSpin({
+		            buttondown_class: 'btn btn-secondary',
+		            buttonup_class: 'btn btn-secondary',
+		            min: min,
+		            max: max,n
+		            step: step,
+		            boostat: boostat,
+		            maxboostedstep: maxboostedstep,
+		        });
+			});
+		}
+		
+		
 		
 		if(options.hasOwnProperty("callback")){
 			$.each(options.callback, function(idx, map){

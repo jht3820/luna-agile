@@ -473,34 +473,6 @@ public class Prj1100Controller {
 	
 	@RequestMapping(value="/prj/prj1000/prj1100/selectPrj1102View.do")
     public String selectPrj1102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			String processId = paramMap.get("processId");
-			String flowId = paramMap.get("flowId");
-			String type = paramMap.get("type");
-			
-			
-			boolean jenkinsModuleUseChk = moduleUseCheck.isJenkinsModuleUseChk();
-			
-			boolean svnModuleUseChk = moduleUseCheck.isSvnKitModuleUseChk();
-			
-			model.addAttribute("processId",processId);
-			model.addAttribute("flowId",flowId);
-			model.addAttribute("type",type);
-			model.addAttribute("jenkinsModuleUseChk",jenkinsModuleUseChk);
-			model.addAttribute("svnModuleUseChk",svnModuleUseChk);
-			
-			
-		}catch(Exception ex){
-			Log.error("selectPrj1102View()", ex);
-
-			
-			model.addAttribute("errorYN", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
-			return "/err/error";
-		}
 		return "/prj/prj1000/prj1100/prj1102";
     }
 	
