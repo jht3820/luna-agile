@@ -1945,6 +1945,17 @@ label.required:after {
     color: #333;
     z-index: -2;
 }
+.osl-border-brand {
+	border-color: #1cac81 !important; 
+}
+
+.osl-border-bottom--none{
+	border-bottom: none !important;
+}
+
+.osl-radius-bottom{
+	border-radius: 0 0 4px 4px !important;
+}
 
 /* @media */
 
