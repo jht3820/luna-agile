@@ -39,16 +39,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="kt-portlet__body">
-		<div class="row">
-			<div class="col-lg-5 col-md-6 col-sm-6">
-				<div class="osl-datatable-search" data-datatable-id="stm2100StmTable"></div>
-			</div>
+	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block">
+		<div class="col-lg-3 col-md-6 col-sm-12 kt-padding-r-0">
+			<div class="osl-datatable-search kt-margin-b-0" data-datatable-id="stm2100StmTable"></div>
 		</div>
-		<div id="stm2100StmCard"></div>
-		<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 	</div>
 </div>
+<div id="stm2100StmCard"></div>
+<div class="kt_datatable osl-datatable-footer__divide" id="stm2100StmTable"></div>
 <!-- begin page script -->
 <script>
  "use strict";

@@ -425,7 +425,7 @@ var OSLPrj1004Popup = function () {
 						return true;
 					}
 					
-					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
+					$.osl.confirm($.osl.lang("common.user.auth.allUsrInDelete",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
 							//사용자 배정 제외 처리
 							fnAllUsrDelete(rowDatas);
@@ -520,7 +520,7 @@ var OSLPrj1004Popup = function () {
 						return true;
 					}
 					
-					$.osl.confirm($.osl.lang("prj2100.allUsrInsert",rowDatas.length),{html:true}, function(result){
+					$.osl.confirm($.osl.lang("common.user.auth.allUsrInsert",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
 							//사용자 배정 처리
 							fnAllUsrInsert(rowDatas);
@@ -578,6 +578,8 @@ var OSLPrj1004Popup = function () {
 			if(usrIdDupleList == selDatas.length){
 				toastrMsg = $.osl.lang("prj1004.insert.saveAllDupleMsg",usrIdDupleList);
 				toastrType = "error";
+				$.osl.toastr(toastrMsg,{type: toastrType});
+				return false;
 			}
 			
 			$.osl.toastr(toastrMsg,{type: toastrType});

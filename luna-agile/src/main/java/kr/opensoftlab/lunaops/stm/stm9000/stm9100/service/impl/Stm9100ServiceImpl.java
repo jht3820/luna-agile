@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import kr.opensoftlab.lunaops.stm.stm9000.stm9100.service.Stm9100Service;
+import kr.opensoftlab.lunaops.stm.stm9000.stm9200.service.impl.Stm9200DAO;
 
 
 @Service("stm9100Service")
@@ -23,6 +24,10 @@ public class Stm9100ServiceImpl extends EgovAbstractServiceImpl implements Stm91
 	
 	@Resource(name="stm9100DAO")
     private Stm9100DAO stm9100DAO;
+	
+	
+	@Resource(name="stm9200DAO")
+    private Stm9200DAO stm9200DAO;
 
 	
     @SuppressWarnings("rawtypes")
@@ -110,7 +115,17 @@ public class Stm9100ServiceImpl extends EgovAbstractServiceImpl implements Stm91
 			
 			stm9100DAO.deleteStm9100JobInfo(delJobInfoMap);
 			
+			
 			stm9100DAO.updateJen9100JenkinsJobRestoreInfo(delJobInfoMap);
+			
+			
+			stm9200DAO.deleteStm9200JenkinsJobInfo(delJobInfoMap);
+			
+			
+			delJobInfoMap.put("delType", "jobDelete");
+			
+			
+			stm9200DAO.deleteStm9200DplAuthInfo(delJobInfoMap);
 		}
 	}
     

@@ -59,7 +59,7 @@
 		(
 			SELECT 
 					A.PRJ_ID
-					,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM
+					,	B.PRJ_NM
 					,	A.PRJ_GRP_ID
 					,	SF_PRJ1000_GRP_NM(A.PRJ_GRP_ID) AS PRJ_GRP_NM
 					,	DECODE(A.PRJ_ID, #prjId#, '1', '2') AS USR_SEL_PRJ_ORD
@@ -118,9 +118,12 @@
 				    ,	A.MODIFY_USR_ID
 				    ,	A.MODIFY_USR_IP
 		    FROM (SELECT * FROM REQ4100) A
+		    	INNER JOIN PRJ1000 B ON (B.PRJ_ID = A.PRJ_ID AND B.LIC_GRP_ID = #licGrpId#)
 		    	LEFT JOIN STM3000 D ON (D.LIC_GRP_ID = #licGrpId# AND A.REQ_CHARGER_ID	= D.USR_ID)
 		    WHERE 1=1
-				AND A.PRJ_ID = #prjId#
+		    <isNotEmpty property="prjId">
+		    	AND A.PRJ_ID = #prjId#
+		    </isNotEmpty>
 			<isNotEmpty property="paramSortFieldId">
 				<isNotEmpty property="sortDirection">
 					ORDER BY $paramSortFieldId$
