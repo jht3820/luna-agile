@@ -137,6 +137,7 @@
   		   	, 	SUBT2.REQ_ED_DTM
 			, 	SUBT2.REQ_ST_DU_DTM
 			, 	SUBT2.REQ_ED_DU_DTM
+			,	SUBT2.TIME_REQUIRED
 			,	SUBT2.REQ_PRO_TYPE
 			,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', SUBT2.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
 			,	SUBT2.REQ_NEW_TYPE
@@ -149,6 +150,7 @@
 			,	SUBT2.USE_CD
 			,	SUBT2.REQ_KEY
 			,	SUBT2.SPR_POINT
+			,	SUBT2.REQ_RESULT_DESC_LEN
 		    ,	SUBT2.REG_DTM
 		    ,	SUBT2.REG_DTM_DAY
 		    ,	SUBT2.REG_USR_ID
@@ -179,6 +181,8 @@
 					,	B.REQ_CHARGER_ID
 					, 	NVL2(B.REQ_ST_DTM, TO_CHAR(B.REQ_ST_DTM, 'YYYY-MM-DD') , '') REQ_ST_DTM
 	   		   		, 	NVL2(B.REQ_ED_DTM, TO_CHAR(B.REQ_ED_DTM, 'YYYY-MM-DD') , '') REQ_ED_DTM
+	   		   		, 	NVL2(B.REQ_ED_DTM, ROUND((B.REQ_ED_DTM-B.REQ_ST_DTM)*24) , '') TIME_REQUIRED
+	   		   		
 					, 	NVL2(B.REQ_ST_DU_DTM, TO_CHAR(B.REQ_ST_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ST_DU_DTM
 					, 	NVL2(B.REQ_ED_DU_DTM, TO_CHAR(B.REQ_ED_DU_DTM, 'YYYY-MM-DD HH24:MI:SS') , '') REQ_ED_DU_DTM
 					,	B.REQ_PRO_TYPE
@@ -190,6 +194,7 @@
 					,	B.USE_CD
 					,	B.REQ_KEY
 					,	A.SPR_POINT
+					,	LENGTH(REQ_RESULT_DESC) AS REQ_RESULT_DESC_LEN
 					,	A.REQ_LINK_ORD
 				    ,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
 				    ,	TO_CHAR(B.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
@@ -426,4 +431,58 @@
 		WHERE 1 = 1
 		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
     </select>
+    
+    
+	
+	<select id="spr1000DAO.selectSpr1000SprReqNotEndListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectSpr1000ReqList"/>
+		) Z
+		WHERE   1=1
+			AND Z.REQ_RESULT_DESC_LEN = 0
+    </select>
+    
+    
+    <select id="spr1000DAO.selectSpr1000SprInfoStat" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT
+			NVL(SUM(T.ALL_CNT),0) AS ALL_CNT_SUM
+		  , NVL(SUM(T.END_CNT),0) AS END_CNT_SUM
+		  , NVL(SUM(T.NOT_END_CNT),0) AS NOT_END_CNT_SUM
+		  , NVL(SUM(T.TIME_REQUIRED),0) AS TIME_REQUIRED_SUM
+		FROM (
+		    SELECT
+		        1 AS ALL_CNT
+		      , CASE WHEN B.REQ_PRO_TYPE='04' THEN 1 ELSE 0 END AS END_CNT
+		      , CASE WHEN B.REQ_PRO_TYPE!='04' THEN 1 ELSE 0 END AS NOT_END_CNT
+		      , NVL2(B.REQ_ED_DTM, ROUND((B.REQ_ED_DTM-B.REQ_ST_DTM)*24) , 0) AS TIME_REQUIRED
+		    FROM SPR1100 A INNER JOIN REQ4100 B ON (A.PRJ_GRP_ID = B.PRJ_GRP_ID AND A.PRJ_ID = B.PRJ_ID AND A.REQ_ID = B.REQ_ID)
+		    WHERE 	1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+		) T
+    </select>
+    
+    
+	<insert id="spr1000DAO.insertSpr1003SprProcessList" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO SPR1200
+			(
+                LIC_GRP_ID		,	PRJ_GRP_ID		,	PRJ_ID
+            ,	SPR_ID			,	PROCESS_ID
+            ,	REG_DTM			,	REG_USR_ID  	,	REG_USR_IP
+            ,	MODIFY_DTM		,	MODIFY_USR_ID	,	MODIFY_USR_IP
+        )VALUES(
+                #licGrpId#		,	#prjGrpId#		,	#prjId#
+            ,	#sprId#			,	#processId#
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+            ,	SYSDATE			,	#regUsrId#	,	#regUsrIp#
+        )		
+		]]>
+	</insert>
 </sqlMap>

@@ -93,5 +93,18 @@ public class Spr1100ServiceImpl extends EgovAbstractServiceImpl implements Spr11
 			
 			spr1100DAO.deleteSpr1100ReqInfo(paramMap);
 		}
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int updateSpr1100ReqResultInfo(Map paramMap) throws Exception {
+		return spr1100DAO.updateSpr1100ReqResultInfo(paramMap);
 	} 
+	
+
+	
+	@SuppressWarnings("rawtypes" )
+	public Map selectSpr1100ReqResultInfo(Map paramMap) throws Exception {
+		return spr1100DAO.selectSpr1100ReqResultInfo(paramMap);
+	}
 }
