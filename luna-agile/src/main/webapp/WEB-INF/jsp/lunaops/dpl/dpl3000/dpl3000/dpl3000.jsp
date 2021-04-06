@@ -63,13 +63,6 @@
 			</button>
 			<button type="button"
 				class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-				data-datatable-id="dpl3000Table" data-datatable-action="insert"
-				title="배포 실행 관리 등록" data-toggle="kt-tooltip" data-skin="brand"
-				data-placement="bottom" data-auth-button="insert" tabindex="6">
-				<i class="fa fa-plus"></i><span>등록</span>
-			</button>
-			<button type="button"
-				class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
 				data-datatable-id="dpl3000Table" data-datatable-action="update"
 				title="배포 실행 관리 수정" data-toggle="kt-tooltip" data-skin="brand"
 				data-placement="bottom" data-auth-button="update" tabindex="7">
@@ -112,7 +105,7 @@
 <!-- begin :: 카드형 -->
 <div id="dpl3000CardTable">
 	<div class="row">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-12">
 			<!-- begin :: 카드 -->
 			<div class="kt-portlet kt-portlet--mobile border">
 				<!-- begin :: 카드 상단 영역-->
@@ -217,7 +210,7 @@
 			</div>
 			<!-- end :: 카드 -->
 		</div>
-		<div class="col-lg-6 col-md-6 col-sm-6 col-6">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-12">
 			<!-- begin :: 카드 -->
 			<div class="kt-portlet kt-portlet--mobile border">
 				<!-- begin :: 카드 상단 영역-->

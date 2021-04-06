@@ -54,6 +54,7 @@
 "use strict";
 var OSLDpl1000Popup = function () {
 	var documentSetting = function(){
+		//데이터 테이블 세팅
 		$.osl.datatable.setting("dpl1000Table",{
 			data: {
 				source: {
@@ -103,9 +104,11 @@ var OSLDpl1000Popup = function () {
 					
 					$.osl.layerPopupOpen('/dpl/dpl1000/dpl1000/selectDpl1001View.do',data,options);
 				},
+				
 				"delete":function(rowDatas, datatableId, type, rowNum, elem){
 					
 				},
+				
 				"dblClick":function(rowData, datatableId, type, rowNum, elem){
 					var data = {
 						};

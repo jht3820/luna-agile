@@ -53,9 +53,7 @@
 					
 					<!-- // begin::Folding 버튼(▽) 영역 --> 
 					<div class="kt-portlet__head-group">
-						<div class="kt-portlet__head-group">
-							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md on" id="authFoldingBtn"><i class="la la-angle-down"></i></a>
-						</div>
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md on" id="authFoldingBtn"><i class="la la-angle-down"></i></a>
 					</div>
 					<!-- // end::Folding 버튼(▽) 영역 --> 
 				</div>

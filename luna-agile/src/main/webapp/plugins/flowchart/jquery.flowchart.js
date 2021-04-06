@@ -94,16 +94,7 @@ jQuery(function ($) {
             this.objs.layers.links = $('<svg class="flowchart-links-layer"></svg>');
             this.objs.layers.links.appendTo(this.element);
 
-            /**
-             * 2020-11-09 진주영
-             * - 작업흐름 이동 제한 유무에 따른 class 추가
-             */
-            var canUserMoveOperatorsClass = 'flowchart-operators-move--dsiabled';
-            if(this.options.canUserMoveOperators){
-            	canUserMoveOperatorsClass = "flowchart-operators-move--enabled";
-            }
-            
-            this.objs.layers.operators = $('<div class="flowchart-operators-layer unselectable '+canUserMoveOperatorsClass+'"></div>');
+            this.objs.layers.operators = $('<div class="flowchart-operators-layer unselectable"></div>');
             this.objs.layers.operators.appendTo(this.element);
 
             this.objs.layers.temporaryLink = $('<svg class="flowchart-temporary-link-layer"></svg>');
@@ -529,110 +520,36 @@ jQuery(function ($) {
             /*
             ** OSL-추가 스크립트
             * - 작업흐름 데이터로 아이콘 추가 기능 표시 - 2020-10-26 진주영
-            * - 타이틀 배경,글씨 색상 - 2020-11-04 진주영
-            * - 작업흐름 mask status 작업 - 2020-11-09 진주영 
+            * - 타이틀 배경,글씨 색상
             */
             var flowTitleBgColor = operatorData.properties.flowTitleBgColor;
             var flowTitleColor = operatorData.properties.flowTitleColor;
             
-            //옵션
-            var flowSignCd = operatorData.properties.flowSignCd;
-            var flowSignStopCd = operatorData.properties.flowSignStopCd;
-            var flowRevisionCd = operatorData.properties.flowRevisionCd;
-            var flowDplCd = operatorData.properties.flowDplCd;
-            var flowMiddleEndCd = operatorData.properties.flowMiddleEndCd;
-            var flowDoneCd = operatorData.properties.flowDoneCd;
-            var flowWorkCd = operatorData.properties.flowWorkCd;
             
-            //status
-            var flowStatus = operatorData.properties.flowStatus;
-            
-            var flowIconStr = '';
-            var flowHideClass = '';
-            
-            //결재
-            if(flowSignCd == "01"){
-            	flowIconStr += "<li class='fa fa-file-signature' title='결재'></li>";
-            }
-            //결재 반려종료 유무
-			if(flowSignStopCd == "01"){
-				flowIconStr += '<li class="far fa-stop-circle" title="결재 반려시 종료 유무"></li>';
-			}
-            //리비전
-            if(flowRevisionCd == "01"){
-            	flowIconStr += "<li class='fa fa-code' title='리비전 저장유무'></li>";
-            }
-            //배포계획 체크
-			if(flowDplCd == "01"){
-				flowIconStr += '<li class="fa fa-puzzle-piece" title="배포계획 저장 유무"></li>';
-			}
-			//중간 종료
-			if(flowMiddleEndCd == "01"){
-				flowIconStr += '<li class="fa fa-stopwatch" title="중간 종료"></li>';
-			}
-			//최종완료
-			if(flowDoneCd == "01"){
-				flowIconStr += '<li class="fa fa-flag-checkered" title="최종 완료 단계"></li>';
-			}
-			//작업 유무
-			if(flowWorkCd == "01"){
-				flowIconStr += '<li class="fa fa-code-branch" title="작업"></li>';
-			}
-			
-            if(flowIconStr == ''){
-            	flowHideClass = 'kt-hide';
-            }
-            
-            //status에 따라 mask 추가하기 (01 - 선택 가능 작업흐름, 02 - 변경 이력 있는 작업흐름, 03 - 현재 작업흐름, 04 - 이동 불가 작업흐름)
-            if(!$.osl.isNull(flowStatus) && flowStatus != "01"){
-            	var $operator_mask = $('<div class="flowchart-operator-mask status'+flowStatus+'"></div>');
-            	var operator_mask_html = '';
-            	
-            	//현재 작업흐름 마커
-            	if(flowStatus == "03"){
-            		operator_mask_html = '<i class="fa fa-hand-point-up"></i>';
-            	}
-            	//진행 불가 mask
-            	else if(flowStatus == "04"){
-            		operator_mask_html = '';
-            	}
-            	
-            	$operator_mask.html(operator_mask_html);
-            	$operator_mask.appendTo($operator);
-            }
-            
-            //선택 시 아이콘 띄우기
-            var $operator_nextIcon = $('<div class="flowchart-operator-nextIcon"></div>');
-        	var operator_nextIcon_html = '';
-        	$operator_nextIcon.html('<i class="fa fa-angle-double-right"></i>');
-        	$operator_nextIcon.appendTo($operator);
-            
-            var $operator_function = $('<div class="flowchart-operator-function '+flowHideClass+'"></div>');
-            $operator_function.html(flowIconStr);
+            var $operator_function = $('<div class="flowchart-operator-function"></div>');
+            $operator_function.html("");
             $operator_function.appendTo($operator);
             
-            var $operator_title = $('<div class="flowchart-operator-title" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';"></div>');
-            var dropdownEditMenu = '';
-
-            //edit인경우 dropdown class //최종완료인경우 삭제 없음
-            if(operatorData.properties.hasOwnProperty("editable") && operatorData.properties.editable === true && flowDoneCd != "01"){
-            	dropdownEditMenu = 
-            			'<div class="dropdown-item" data-flow-action="update"><i class="fa fa fa-edit kt-font-primary"></i>'+$.osl.lang("process.menu.update")+'</div>'
-            			+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>'+$.osl.lang("process.menu.delete")+'</div>'
-		            	+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("process.menu.detail")+'</div>';
-            }else{
-            	dropdownEditMenu = 
-	            	'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("process.menu.detail")+'</div>';
-            }
+            /*//////////////////////////////////////////*/
             
+            var $operator_title = $('<div class="flowchart-operator-title" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';"></div>');
+            var dropdownMenuClass = 'hide';
+
+            //edit인경우 dropdown class
+            if(operatorData.properties.hasOwnProperty("editable") && operatorData.properties.editable === true){
+            	dropdownMenuClass = '';
+            }
             $operator_title.html(
             		'<div class="flowchart-operator-title__lebel">'+infos.title+'</div>'
-            		+'<div class="flowchart-operator-menu">'
-    					+'<button type="button" class="btn btn-bold btn-font-sm btn-elevate btn-elevate-air" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';" data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1"><i class="fa fa-bars osl-padding-r0"></i></button>'
-    					+'<div class="dropdown-menu dropdown-menu-right" data-flow-id="'+infos.id+'">'
-    	        			+dropdownEditMenu
-    					+'</div>'
-    				+'</div>'
+	            	+'<div class="flowchart-operator-menu '+dropdownMenuClass+'">'
+						+'<button type="button" class="btn btn-bold btn-font-sm btn-elevate btn-elevate-air" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';" data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1"><i class="fa fa-bars osl-padding-r0"></i></button>'
+						+'<div class="dropdown-menu dropdown-menu-right">'
+							+'<div class="dropdown-item" data-flow-action="edit"><i class="fa fa fa-edit kt-font-primary"></i>edit</div>'
+							+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>delete</div>'
+							+'<div class="dropdown-divider"></div>'
+							+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>detail</div>'
+						+'</div>'
+					+'</div>'
             );
             $operator_title.appendTo($operator);
 
@@ -642,18 +559,12 @@ jQuery(function ($) {
                 $operator_body.appendTo($operator);
             }
 
-            /*//////////////////////////////////////////*/
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');
 
             var $operator_inputs = $('<div class="flowchart-operator-inputs"></div>');
 
             var $operator_outputs = $('<div class="flowchart-operator-outputs"></div>');
 
-            //최종완료인경우 output없음
-            if(flowDoneCd == "01"){
-            	$operator_outputs = $('');
-            }
-            
             if (this.options.verticalConnection) {
                 $operator_inputs.prependTo($operator);
                 $operator_outputs.appendTo($operator);

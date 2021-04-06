@@ -18,7 +18,7 @@
 		<result property="reqGrpId"         	column="REQ_GRP_ID" />
 		<result property="reqGrpNo"         	column="REQ_GRP_NO" />
 		<result property="reqGrpNm"         	column="REQ_GRP_NM" />
-		<result property="reqGrpDesc"			column="REQ_GRP_DESC" />
+		<result property="reqGrpDesc"			column="REQ_GRP_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
 		<result property="atchFileId"			column="ATCH_FILE_ID" />
 		<result property="reqGrpKey"			column="REQ_GRP_KEY" />
 		<result property="useCd"				column="USE_CD" />
@@ -27,18 +27,27 @@
 		<result property="reqGrpUsrNm"			column="REQ_GRP_USR_NM" />
 		<result property="reqUsrImgId"			column="REQ_GRP_USR_IMG_ID"/>
 		<result property="reqGrpChargerId"		column="REQ_GRP_CHARGER_ID" />
-		<result property="regGrpChargerNm"		column="REQ_GRP_CHARGER_NM" />
+		<result property="reqGrpChargerNm"		column="REQ_GRP_CHARGER_NM" />
 		<result property="reqGrpChargerImgId"	column="REQ_GRP_CHARGER_IMG_ID"/>
-		<result property="email"				column="EMAIL" />
-		<result property="telno"				column="TELNO" />
-		<result property="deptId"				column="DEPT_ID" />
-		<result property="deptNm"				column="DEPT_NM" />
+		<result property="reqGrpUsrEmail"		column="REQ_GRP_USR_EMAIL" />
+		<result property="reqGrpUsrNum"			column="REQ_GRP_USR_NUM" />
+		<result property="reqGrpUsrDeptId"		column="REQ_GRP_USR_DEPT_ID" />
+		<result property="reqGrpUsrDeptNm"		column="REQ_GRP_USR_DEPT_NM" />
 		<result property="usrPositionCd"		column="USR_POSITION_CD" />
 		<result property="usrPositionNm"		column="USR_POSITION_NM" />
 		<result property="usrDutyCd"			column="USR_DUTY_CD" />
 		<result property="usrDutyNm"			column="USR_DUTY_NM" />
+		<result property="reqGrpChargerEmail"	column="REQ_GRP_CHARGER_EMAIL" />
+		<result property="reqGrpChargerNum"		column="REQ_GRP_CHARGER_NUM" />
+		<result property="reqGrpChargerDeptId"	column="REQ_GRP_CHARGER_DEPT_ID" />
+		<result property="reqGrpChargerDeptNm"	column="REQ_GRP_CHARGER_DEPT_NM" />
+		<result property="chargerPositionCd"	column="CHARGER_POSITION_CD" />
+		<result property="chargerPositionNm"	column="CHARGER_POSITION_NM" />
+		<result property="chargerDutyCd"		column="CHARGER_DUTY_CD" />
+		<result property="chargerDutyNm"		column="CHARGER_DUTY_NM" />
 		<result property="reqGrpLinkCnt"		column="REQ_GRP_LINK_CNT" />
-		<result property="regDtmDay"          		column="REG_DTM_DAY" />  
+		<result property="useCD"				column="USE_CD" />
+		<result property="regDtmDay"          	column="REG_DTM_DAY" />  
 		<result property="regDtm"          		column="REG_DTM" />  
 		<result property="regUsrId"         	column="REG_USR_ID" />  
 		<result property="regUsrIp"         	column="REG_USR_IP" />  
@@ -109,55 +118,107 @@
        
 	<sql id="selectReq3000List">
 		SELECT 
-			T1.*, ROWNUM RN 
+			ROWNUM RN,
+			T1.PRJ_GRP_ID,
+			T1.PRJ_ID,
+			T1.PRJ_GRP_NM,
+			T1.PRJ_GRP_ACRM,
+			T1.REQ_GRP_ID,
+			T1.REQ_GRP_NO,
+			T1.REQ_GRP_NM,
+			T1.REQ_GRP_DESC,
+			T1.ATCH_FILE_ID,
+			T1.REQ_GRP_KEY,
+			T1.REQ_GRP_USR_ID,
+			T1.REQ_GRP_CHARGER_ID,
+			T1.REQ_GRP_USR_IMG_ID,
+			T1.REQ_GRP_CHARGER_IMG_ID,
+			T1.REQ_GRP_USR_NM,
+			T1.REQ_GRP_USR_EMAIL,
+			T1.REQ_GRP_USR_NUM,
+			T1.REQ_GRP_USR_DEPT_ID,
+			T1.REQ_GRP_CHARGER_NM,
+			T1.REQ_GRP_CHARGER_EMAIL,
+			T1.REQ_GRP_CHARGER_NUM,
+			T1.REQ_GRP_CHARGER_DEPT_ID,
+			T1.REQ_GRP_USR_DEPT_NM,
+			T1.REQ_GRP_CHARGER_DEPT_NM,
+			T1.USR_POSITION_CD,
+			T1.USR_POSITION_NM,
+			T1.USR_DUTY_CD,
+			T1.USR_DUTY_NM,
+			T1.CHARGER_POSITION_CD,
+			T1.CHARGER_POSITION_NM,
+			T1.CHARGER_DUTY_CD,
+			T1.CHARGER_DUTY_NM,
+			T1.USE_CD,
+			T1.USE_CD_NM,
+			T1.REQ_GRP_LINK_CNT,
+			T1.REG_DTM_DAY,
+			T1.REG_DTM,
+			T1.REG_USR_ID,
+			T1.REG_USR_IP,
+			T1.MODIFY_DTM,
+			T1.MODIFY_USR_ID,
+			T1.MODIFY_USR_IP
 		FROM
 		(
 			SELECT 
-					A.PRJ_GRP_ID
-				,	A.PRJ_ID
+					A.PRJ_GRP_ID AS PRJ_GRP_ID
+				,	A.PRJ_ID AS PRJ_ID
 				,	B.PRJ_NM AS PRJ_GRP_NM
 				,	B.PRJ_ACRM AS PRJ_GRP_ACRM
-				,	A.REQ_GRP_ID
-				,	A.REQ_GRP_NO
-				,	A.REQ_GRP_NM
-				,	A.REQ_GRP_DESC
-				,	A.ATCH_FILE_ID
-				,	A.REQ_GRP_KEY
-				,	A.REQ_GRP_USR_ID
-				,	A.REQ_GRP_CHARGER_ID
-				,	SF_STM3000_USR_INFO(A.REQ_GRP_CHARGER_ID ,'1') AS REQ_GRP_CHARGER_NM
+				,	A.REQ_GRP_ID AS REQ_GRP_ID
+				,	A.REQ_GRP_NO AS REQ_GRP_NO
+				,	A.REQ_GRP_NM AS REQ_GRP_NM
+				,	A.REQ_GRP_DESC AS REQ_GRP_DESC
+				,	A.ATCH_FILE_ID AS ATCH_FILE_ID
+				,	A.REQ_GRP_KEY AS REQ_GRP_KEY
+				,	A.REQ_GRP_USR_ID AS REQ_GRP_USR_ID
+				,	A.REQ_GRP_CHARGER_ID AS REQ_GRP_CHARGER_ID
 				,	SF_STM3000_USR_INFO(A.REQ_GRP_USR_ID, '6')  AS REQ_GRP_USR_IMG_ID
 				,	SF_STM3000_USR_INFO(A.REQ_GRP_CHARGER_ID, '6')  AS REQ_GRP_CHARGER_IMG_ID
 	            ,	C.USR_NM AS REQ_GRP_USR_NM
-	            ,	C.EMAIL
-	            ,	C.TELNO
-	            ,	C.DEPT_ID
-	            ,	SF_STM6000_DEPT_NM(#licGrpId#, C.DEPT_ID, '1') AS DEPT_NM
-	            ,	C.USR_POSITION_CD
+	            ,	C.EMAIL AS REQ_GRP_USR_EMAIL
+	            ,	C.TELNO AS REQ_GRP_USR_NUM
+	            ,	C.DEPT_ID AS REQ_GRP_USR_DEPT_ID
+	            ,	D.USR_NM AS REQ_GRP_CHARGER_NM
+	            ,	D.EMAIL AS REQ_GRP_CHARGER_EMAIL
+	            ,	D.TELNO AS REQ_GRP_CHARGER_NUM
+	            ,	D.DEPT_ID AS REQ_GRP_CHARGER_DEPT_ID
+	            ,	SF_STM6000_DEPT_NM(#licGrpId#, C.DEPT_ID, '1') AS REQ_GRP_USR_DEPT_NM
+	            ,	SF_STM6000_DEPT_NM(#licGrpId#, D.DEPT_ID, '1') AS REQ_GRP_CHARGER_DEPT_NM
+	            ,	C.USR_POSITION_CD AS USR_POSITION_CD
 	            ,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', C.USR_POSITION_CD, '1') AS USR_POSITION_NM
-	            ,	C.USR_DUTY_CD
+	            ,	C.USR_DUTY_CD AS USR_DUTY_CD
 				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', C.USR_DUTY_CD, '1') AS USR_DUTY_NM
-				,	A.USE_CD
+	            ,	D.USR_POSITION_CD AS CHARGER_POSITION_CD
+	            ,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00007', D.USR_POSITION_CD, '1') AS CHARGER_POSITION_NM
+	            ,	D.USR_DUTY_CD AS CHARGER_DUTY_CD 
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00008', D.USR_DUTY_CD, '1') AS CHARGER_DUTY_NM
+				,	A.USE_CD  AS USE_CD
 				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_CD_NM
-				,	(
+				,		(
 						SELECT COUNT(*)
 						FROM REQ3001
 						WHERE 1=1
 						AND PRJ_GRP_ID = A.PRJ_GRP_ID 
-						AND REQ_GRP_ID = A.REQ_GRP_ID
-					) AS REQ_GRP_LINK_CNT
+						AND REQ_GRP_ID = A.REQ_GRP_ID 
+					) AS REQ_GRP_LINK_CNT 
 				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
 				,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM_DAY
-	            ,	A.REG_USR_ID
-	            ,	A.REG_USR_IP
+	            ,	A.REG_USR_ID AS REG_USR_ID
+	            ,	A.REG_USR_IP AS REG_USR_IP
 	            ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
-	            ,	A.MODIFY_USR_ID
-	            ,	A.MODIFY_USR_IP
+	            ,	A.MODIFY_USR_ID AS MODIFY_USR_ID
+	            ,	A.MODIFY_USR_IP AS MODIFY_USR_IP
 			FROM REQ3000 A
 			INNER JOIN PRJ1000 B
 				ON (A.PRJ_GRP_ID = B.PRJ_ID AND B.USE_CD = '01')
 			LEFT JOIN STM3000 C
 				ON (A.REQ_GRP_USR_ID = C.USR_ID AND C.LIC_GRP_ID = #licGrpId#)
+			LEFT JOIN STM3000 D
+				ON (A.REQ_GRP_CHARGER_ID = D.USR_ID AND C.LIC_GRP_ID = #licGrpId#)
 			WHERE 1=1
 			AND	A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
@@ -169,10 +230,9 @@
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>
-			<!-- <isEmpty property="paramSortFieldId">
-				
-				ORDER BY A.REQ_PRO_TYPE ASC, USR_SEL_PRJ_ORD ASC, PRJ_NM ASC, TO_NUMBER(REGEXP_REPLACE(A.REQ_ORD, '[^0-9]')) DESC NULLS LAST, A.REQ_DTM DESC, A.REG_DTM DESC
-			</isEmpty> -->
+			<isEmpty property="paramSortFieldId">
+				ORDER BY  A.REQ_GRP_NO ASC,  A.REG_DTM DESC
+			</isEmpty> 
 		) T1
 		WHERE 1=1
 		<isNotEmpty property="searchTargetData">
@@ -181,16 +241,39 @@
 						T1.REQ_GRP_NO LIKE '%'||  #searchTargetData# ||'%'
 					</isEqual>
 					<isEqual property="searchTargetId" compareValue="reqGrpNm" prepend="AND">
-						T1.REQ_GRP_NM) LIKE '%'|| #searchTargetData# ||'%'
+						T1.REQ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
 					</isEqual>
 					<isEqual property="searchTargetId" compareValue="reqGrpUsrNm" prepend="AND">
 						T1.REQ_GRP_USR_NM LIKE '%'||#searchTargetData#||'%'
 					</isEqual>
-					<isEqual property="searchTargetId" compareValue="reqGrpChargerNm" prepend="AND">
-						T1.REQ_GRP_CHAGER_NM LIKE '%'||#searchTargetData#||'%'
+					<isEqual property="searchTargetId" compareValue="regGrpChargerNm" prepend="AND">
+						T1.REQ_GRP_CHARGER_NM LIKE '%'||#searchTargetData#||'%'
 					</isEqual>
-					<isEqual property="searchTargetId" compareValue="useCd" prepend="AND">
-						T1.USE_CD = #searchCd#
+					<isEqual property="searchTargetId" compareValue="reqGrpKey" prepend="AND">
+						T1.REG_GRP_KEY LIKE '%'||#searchTargetData#||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqGrpUsrEmail">
+						AND	T1.REQ_GRP_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqGrpUsrNum">
+						AND	T1.REQ_GRP_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqGrpChargerEmail">
+						AND	T1.REQ_GRP_CHARGER_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="reqGrpChargerNum">
+						AND	T1.REQ_GRP_CHARGER_NUM LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="useCD" prepend="AND">
+						T1.USE_CD = #searchTargetData#
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="regDtmDay">
+						<isNotEmpty property="searchStartDt">
+								AND T1.REG_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
+						<isNotEmpty property="searchEndDt">
+								AND T1.REG_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						</isNotEmpty>
 					</isEqual>
 				</isNotEmpty>
 		</isNotEmpty>
@@ -255,7 +338,6 @@
 						UPPER(SUBT2.REQ_ORD) LIKE '%'|| UPPER( #searchTargetData# )||'%'
 						</isEqual>
 						<isEqual property="searchTargetId" compareValue="reqNm" prepend="AND">
-						
 							SUBT2.REQ_NM LIKE '%'||#searchTargetData#||'%'
 						</isEqual>
 						<isEqual property="searchTargetId" compareValue="reqChargerNm" prepend="AND">
@@ -263,6 +345,21 @@
 						</isEqual>
 						<isEqual property="searchTargetId" compareValue="reqUsrNm" prepend="AND">
 							SUBT2.REQ_USR_NM LIKE '%'||#searchTargetData#||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+							AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqUsrNum">
+							AND	T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="prjNm">
+							AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="prjGrpNm">
+							AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqKey">
+							AND	T1.REQ_KEY LIKE '%'|| #searchTargetData# ||'%'
 						</isEqual>
 					</isNotEmpty>
 					<isNotEmpty property="searchTargetData">
@@ -300,8 +397,10 @@
 						,	A.REQ_USR_EMAIL
 						,	A.REQ_USR_NUM
 						,	A.REQ_CHARGER_ID
-						,	C.USR_NM			AS REQ_CHARGER_NM
-						,	C.USR_IMG_ID		AS REQ_CHARGER_IMG_ID
+						,	SF_STM3000_USR_INFO(A.REQ_CHARGER_ID, '1') AS REQ_CHARGER_NM
+						,	SF_STM3000_USR_INFO(A.REQ_CHARGER_ID ,'6') AS REQ_CHARGER_IMG_ID
+						,	C.USR_NM			
+						,	C.USR_IMG_ID		
 						, 	NVL2(A.REQ_ST_DTM, TO_CHAR(A.REQ_ST_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DTM
 						, 	NVL2(A.REQ_ED_DTM, TO_CHAR(A.REQ_ED_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DTM
 						, 	NVL2(A.REQ_ST_DU_DTM, TO_CHAR(A.REQ_ST_DU_DTM, 'YYYY-MM-DD') , '') REQ_ST_DU_DTM
@@ -324,7 +423,7 @@
 					AND B.PRJ_ID = #prjId#
 					AND A.REQ_PRO_TYPE != '03'
 					]]>
-						AND NOT EXISTS(
+						<!-- AND NOT EXISTS(
 							SELECT *
 						  FROM REQ3001 Z
 						  WHERE 1=1
@@ -334,7 +433,7 @@
 						  </isNotEmpty>
 						  AND Z.PRJ_ID = A.PRJ_ID
 						  AND Z.REQ_ID = A.REQ_ID
-						)
+						) -->
 					<![CDATA[
 				) SUBT2
 				WHERE 1=1
@@ -348,7 +447,6 @@
 						UPPER(SUBT2.REQ_ORD) LIKE '%'|| UPPER( #searchTargetData# )||'%'
 						</isEqual>
 						<isEqual property="searchTargetId" compareValue="reqNm" prepend="AND">
-						
 							SUBT2.REQ_NM LIKE '%'||#searchTargetData#||'%'
 						</isEqual>
 						<isEqual property="searchTargetId" compareValue="reqChargerNm" prepend="AND">
@@ -357,10 +455,25 @@
 						<isEqual property="searchTargetId" compareValue="reqUsrNm" prepend="AND">
 							SUBT2.REQ_USR_NM LIKE '%'||#searchTargetData#||'%'
 						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+							AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqUsrNum">
+							AND	T1.REQ_USR_NUM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="prjNm">
+							AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="prjGrpNm">
+							AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
+						<isEqual property="searchTargetId" compareValue="reqKey">
+							AND	T1.REQ_KEY LIKE '%'|| #searchTargetData# ||'%'
+						</isEqual>
 					</isNotEmpty>
 					<isNotEmpty property="searchTargetId">
 						<isEqual property="searchTargetId" compareValue="reqProType" prepend="AND">
-							SUBT2.REQ_PRO_TYPE = #searchCd#
+							SUBT2.REQ_PRO_TYPE = #searchTargetData#
 						</isEqual>
 					</isNotEmpty>
 				</isNotEmpty>
@@ -416,7 +529,7 @@
 			VALUES
 			(
 				#prjGrpId#				,#prjId#				,#newReqGrpId#			,#reqGrpNo#
-				,#reqGrpNm#				,#reqGrpDesc#			,#atchFileId#			,#reqGrpChargerId#
+				,#reqGrpNm#				,#reqGrpDescNotBr#			,#atchFileId#			,#reqGrpChargerId#
 				,#reqGrpKey#			,#reqGrpUsrId#			,'01'
 				,SYSDATE				,#regUsrId#				,#regUsrIp#
 			)
@@ -430,7 +543,7 @@
 			SET	
 					A.REQ_GRP_NO 	= #reqGrpNo#
 				,	A.REQ_GRP_NM 	= #reqGrpNm#
-				,	A.REQ_GRP_DESC 	= #reqGrpDesc#
+				,	A.REQ_GRP_DESC 	= #reqGrpDescNotBr#
 				,	A.REQ_GRP_CHARGER_ID = #reqGrpChargerId#
 				, 	A.REQ_GRP_USR_ID = #reqGrpUsrId#
 			<isNotEmpty property="reqGrpKey">	
@@ -510,7 +623,7 @@
     </select>
     
     
-	<select id="req3000DAO.selectReq3000ReqGrpInfo" parameterClass="java.util.Map" resultClass="egovMap">
+	<select id="req3000DAO.selectReq3000ReqGrpInfo" parameterClass="java.util.Map" resultMap="resultMapSelectReq3000">
 		
 		SELECT 
 			T1.*

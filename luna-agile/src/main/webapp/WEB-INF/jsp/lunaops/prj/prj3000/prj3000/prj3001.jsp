@@ -259,6 +259,9 @@ var OSLPrj3001Popup = function () {
 	    				//모달 창 닫기
 	    				$.osl.layerPopupClose();
 
+	    				//트리 재조회
+	    				$("button[data-tree-id=prj3000DocTree][data-tree-action=select]").click();
+	    				
 	    				//트리 노드 정보 재조회
 	    				$("button[data-tree-id=prj3000DocTree][data-tree-action=selectDocInfo]").click();
 	    				

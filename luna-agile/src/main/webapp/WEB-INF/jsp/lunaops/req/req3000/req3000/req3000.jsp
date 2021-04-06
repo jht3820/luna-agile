@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
-		<div class="col-lg-3 col-md-6 col-sm-12 kt-padding-r-0">
+		<div class="kt-portlet__head-label">
 			<div class="osl-datatable-search" data-datatable-id="req3000Table">
 				<div class="input-group">
 					<div class="input-group-prepend">
@@ -41,7 +41,7 @@
 				</div>
 						</div>
 		</div>
-		<div class="col-lg-9 col-md-12 col-sm-12 text-right osl-mobile-text--left kt-padding-r-0">
+		<div class="kt-portlet__head-toolbar">
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="select" title="그룹 요구사항 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.select" data-placement="bottom" data-auth-button="select" tabindex="5">
 				<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 			</button>
@@ -89,8 +89,8 @@ var OSLReq3000Popup = function () {
 		columns : [
 			{field: 'checkbox', title:'#', textAlign:'center', width:20, selector: {class: 'kt-checkbox--solid'}, sortable:false, autoHide:false},
 			{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false},
-			{field: 'reqGrpNm', title: '그룹 요구사항 제목', textAlign: 'left', width: 150, search: true},
-			{field: 'reqGrpLinkCnt', title: '연결 요구사항 수', textAlign: 'left', width: 150, search: true,
+			{field: 'reqGrpNm', title: '그룹 요구사항 명', textAlign: 'left', width: 150, search: true, sortable: false,searchOrd: 1},
+			{field: 'reqGrpLinkCnt', title: '연결 요구사항 수', textAlign: 'center', width: 150, search: false,
 				template: function (row) {
 					var reqGrpLinkCnt = row.reqGrpLinkCnt;
 					if(reqGrpLinkCnt == 0){
@@ -99,26 +99,32 @@ var OSLReq3000Popup = function () {
 					return reqGrpLinkCnt;
 				},
 			},
-			{field: 'reqGrpUsrNm', title: '요청자', textAlign: 'center', width: 150, search: true,
+			{field: 'reqGrpUsrNm', title: '요청자 명', textAlign: 'left', width: 150, search: true, sortable:false,searchOrd: 2,
 				template: function (row) {
 					return $.osl.user.usrImgSet(row.reqUsrImgId, row.reqGrpUsrNm);
 				},
 				onclick: function(rowData){
-					$.osl.user.usrInfoPopup(rowData.reqUsrId);
+					$.osl.user.usrInfoPopup(rowData.reqGrpUsrId);
 				}
 			},
-			{field: 'email', title: '요청자 e-mail', textAlign: 'center', width: 150, search: true},
-			{field: 'deptNm', title: '요청자 조직', textAlign: 'center', width: 300, sortable: false},
-			{field: 'telno', title: '요청자 연락처', textAlign: 'center', width: 100, search: true},
-			{field: 'regGrpChargerNm', title: '그룹 요구사항 담당자', textAlign: 'center', width: 150, search: true,
+			{field: 'reqGrpUsrEmail', title: '요청자 e-mail', textAlign: 'left', width: 150, search: true, sortable: true,searchOrd: 3},
+			{field: 'reqGrpUsrDeptNm', title: '요청자 조직', textAlign: 'left', width: 300, sortable: false, search: false},
+			{field: 'reqGrpUsrNum', title: '요청자 연락처', textAlign: 'left', width: 100, search: true, sortable: false, search: true,searchOrd: 4},
+			{field: 'regGrpChargerNm', title: '담당자 명', textAlign: 'left', width: 150, search: true,sortable: false,searchOrd: 5,
 				template: function (row) {
-					return $.osl.user.usrImgSet(row.reqGrpChargerImgId, row.regGrpChargerNm);
+					return $.osl.user.usrImgSet(row.reqGrpChargerImgId, row.reqGrpChargerNm);
 				},
 				onclick: function(rowData){
-					$.osl.user.usrInfoPopup(rowData.reqGrpChargerImgId);
+					$.osl.user.usrInfoPopup(rowData.reqGrpChargerId);
 				}
 			},
-			{field: 'regDtmDay', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"daterange"}
+			{field: 'regDtmDay', title: '등록일', textAlign: 'center', width: 100, search: true, searchType:"daterange",searchOrd:10}
+		],
+		searchColumns:[
+			{field: 'reqGrpChargerEmail', title: '담당자 EMAIL', searchType:"text",searchOrd: 6},
+			{field: 'reqGrpChargerNum', title: '담당자 연락처', searchType:"text",searchOrd: 7},
+			{field: 'reqGrpKey', title: '그룹 요구사항 Key', searchType:"text",searchOrd: 8},
+			{field: 'useCD', title: '사용유무', searchType:"select", searchCd:"CMM00001",searchOrd: 9},
 		],
 		rows:{
 			clickCheckbox:true
@@ -187,7 +193,6 @@ var OSLReq3000Popup = function () {
 						paramRowData:JSON.stringify(rowDatas),
 						datatableId:datatableId
 				};
-				
 				//AJAX 설정
 				var ajaxObj = new $.osl.ajaxRequestAction(
 						{"url":"<c:url value='/req/req3000/req3000/deleteReq3000ReqListAjax.do'/>"}
@@ -205,10 +210,8 @@ var OSLReq3000Popup = function () {
 		   			}
 				});
 				
-				if($.osl.confirm($.osl.lang("req3000.alert.delete"))){
-					//AJAX 전송
-					ajaxObj.send();
-				}
+				//AJAX 전송
+				ajaxObj.send();
 				
 			},"dblClick":function(rowData, datatableId, type, rowNum){
 				var data = {

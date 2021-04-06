@@ -151,55 +151,13 @@
 				<div class="row kt-margin-t-20">
 					<!-- begin:: 4-1. 배정 프로세스 데이터 테이블 -->
 					<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-l-20 kt-padding-r-20 osl-mobile-padding-lr-10">
-						<div class="input-group  kt-margin-b-20">
-							<div class="input-group-prepend"><button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">전체</button>
-								<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="sprAssignProcessTable">
-									<a class="dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="prjNm" data-opt-type="text">프로젝트 그룹명</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="startDt" data-opt-type="date">시작 일자</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="endDt" data-opt-type="date">종료 일자</a>
-								</div>
-							</div>
-							<!-- <select class="form-control kt-select2 osl-datatable-search__select" id="searchSelect_sprAssignProcessTable" name="searchSelect" aria-hidden="true" data-datatable-id="sprAssignProcessTable" style="display: none;"></select> -->
-							<div class="kt-input-icon kt-input-icon--right osl-border-radius-none osl-datatable-search__input" data-datatable-id="sprAssignProcessTable">
-								<input type="text" class="form-control" aria-label="검색어를 입력해주세요" disabled="disabled" name="searchData_sprAssignProcessTable" id="searchData_sprAssignProcessTable" data-datatable-id="sprAssignProcessTable">
-								<!-- <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la"></i></span></span>
-								<input type="hidden" name="searchStartDt" id="searchStartDt_sprAssignProcessTable" data-datatable-id="sprAssignProcessTable">
-								<input type="hidden" name="searchEndDt" id="searchEndDt_sprAssignProcessTable" data-datatable-id="sprAssignProcessTable"> -->
-							</div>
-							<div class="input-group-append">
-								<button class="btn btn-brand osl-datatable-search__button" type="button" data-datatable-id="sprAssignProcessTable">
-									<i class="fa fa-search"></i><span class=""><span>검색</span></span>
-								</button>
-							</div>
-						</div>
+						<div class="osl-datatable-search" data-datatable-id="sprAssignProcessTable"></div>
 						<div class="kt_datatable" id="sprAssignProcessTable"></div>
 					</div>
 					<!-- end:: 4-1. 배정 프로세스 데이터 테이블 -->
 					<!-- begin:: 4-2. 미배정 프로세스 데이터 테이블 -->
 					<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-l-20 kt-padding-r-20 osl-mobile-padding-lr-10 osl-mobile-margin-t-20">
-						<div class="input-group kt-margin-b-20">
-							<div class="input-group-prepend"><button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">전체</button>
-								<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="sprNotAssignProcessTable">
-									<a class="dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="prjNm" data-opt-type="text">프로젝트 그룹명</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="startDt" data-opt-type="date">시작 일자</a>
-									<a class="dropdown-item" href="javascript:void(0);" data-field-id="endDt" data-opt-type="date">종료 일자</a>
-								</div>
-							</div>
-							<!-- <select class="form-control kt-select2 osl-datatable-search__select" id="searchSelect_sprNotAssignProcessTable" name="searchSelect" aria-hidden="true" data-datatable-id="sprNotAssignProcessTable" style="display: none;"></select> -->
-							<div class="kt-input-icon kt-input-icon--right osl-border-radius-none osl-datatable-search__input" data-datatable-id="sprNotAssignProcessTable">
-								<input type="text" class="form-control" aria-label="검색어를 입력해주세요" disabled="disabled" name="searchData_sprNotAssignProcessTable" id="searchData_sprNotAssignProcessTable" data-datatable-id="sprNotAssignProcessTable">
-								<!-- <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la"></i></span></span>
-								<input type="hidden" name="searchStartDt" id="searchStartDt_sprNotAssignProcessTable" data-datatable-id="sprNotAssignProcessTable">
-								<input type="hidden" name="searchEndDt" id="searchEndDt_sprNotAssignProcessTable" data-datatable-id="sprNotAssignProcessTable"> -->
-							</div>
-							<div class="input-group-append">
-								<button class="btn btn-brand osl-datatable-search__button" type="button" data-datatable-id="sprNotAssignProcessTable">
-									<i class="fa fa-search"></i><span class=""><span>검색</span></span>
-								</button>
-							</div>
-						</div>
+						<div class="osl-datatable-search" data-datatable-id="sprNotAssignProcessTable"></div>
 						<div class="kt_datatable" id="sprNotAssignProcessTable"></div>
 					</div>
 					<!-- end:: 4-2. 미배정 프로세스 데이터 테이블 -->
@@ -239,6 +197,10 @@ var OSLSpr1003Popup = function () {
 	//조회된 사용자 목록
 	var usrList = [];
 	
+
+	//배정 프로세스 중복 체크
+	var sprProcessIdList = [];
+	
 	//단계별 데이터
 	var wizardData = {
 		//회의록 제목
@@ -250,7 +212,8 @@ var OSLSpr1003Popup = function () {
 		//스토리 포인트 입력
 		reqListCnt: 0,
 		reqSprPointList: {},
-		reqUsrList: {}
+		reqUsrList: {},
+		sprProcessList: []
 	};
 	
 	//form validate 주입
@@ -331,6 +294,18 @@ var OSLSpr1003Popup = function () {
 		$("#frSpr1003 [data-ktwizard-type=action-submit]").click(function(){
 	       	//formData
 	   		var fd = $.osl.formDataToJsonArray(mainFormId);
+	       	
+	    	
+	    	//추가된 프로세스 목록
+	    	var processList = $.osl.datatable.list["sprAssignProcessTable"].targetDt.originalDataSet;
+	    	if(!$.osl.isNull(processList) && processList.length > 0){
+	    		var processIdList = [];
+	    		$.each(processList, function(idx, map){
+	    			processIdList.push(map.processId);
+	    		});
+	    		
+	    		wizardData["sprProcessList"] = processIdList;
+	    	}
 	       	
 	       	//입력 정보
 	       	fd.append("wizardData",JSON.stringify(wizardData));
@@ -725,6 +700,7 @@ var OSLSpr1003Popup = function () {
 				items:{
 					pagination:{
 						pageSizeSelect : [4, 10, 20, 30, 50, 100],
+						
 						pages: {
 							desktop: {
 								layout: 'compact'
@@ -834,15 +810,14 @@ var OSLSpr1003Popup = function () {
 	
 	datatableSetting["4"] = function(){
 		// begin:: 4-1. 배정 프로세스 데이터 테이블 
-		$.osl.datatable.setting("sprAssignProcessTable",{
+		var assignTable = $.osl.datatable.setting("sprAssignProcessTable",{
 			data: {
-				source: {
-					read: {
-						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
-						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
-					}
-				},
-				 pageSize : 5,
+				type:'local',
+				serverSorting: false,
+				serverPaging: false,
+				source: [],
+				pageSize: 4
+			
 			},
 			toolbar:{
 				 items:{
@@ -865,10 +840,12 @@ var OSLSpr1003Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 10, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, autoHide: false, sortable: false},
-				{field: '', title: '프로세스 명', textAlign: 'center', width: 70}
+				{field: 'processId', title: 'ID', textAlign: 'center', width: 150, search: true},
+				{field: 'processNm', title: '이름 ', textAlign: 'center', width: 100, search: true},
 			],
 			actionBtn:{
 				"title": "제외",
+				"width": 80,
 				"update": false,
 				"delete": false,
 				"dblClick": true
@@ -889,12 +866,12 @@ var OSLSpr1003Popup = function () {
 							modalTitle: "프로세스 상세",
 							autoHeight: false
 						};
-					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1006View.do',data,options);
+					//$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1006View.do',data,options);
 			
-					//var rowDatas = [];
-					//rowDatas.push(rowData);
+					var rowDatas = [];
+					rowDatas.push(rowData);
 					//사용자 배정 처리
-					//fnAllUsrDelete(rowDatas);
+					fnAllProcessDelete(rowDatas);
 				},
 				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
@@ -905,10 +882,10 @@ var OSLSpr1003Popup = function () {
 						//return true;
 					//}
 					
-					//$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
+					//$.osl.confirm($.osl.lang("common.user.auth.allUsrInDelete",rowDatas.length),{html:true}, function(result){
 						//if (result.value) {
 							//사용자 배정 제외 처리
-							fnAllUsrDelete(rowDatas);
+							//fnAllProcessDelete(rowDatas);
 						//}
 					//});
 				}
@@ -917,12 +894,11 @@ var OSLSpr1003Popup = function () {
 		// end:: 4-1. 배정 프로세스 데이터 테이블
 		
 		// begin:: 4-2. 미배정 프로세스 데이터테이블 
-		$.osl.datatable.setting("sprNotAssignProcessTable",{
+		var notAssignTable = $.osl.datatable.setting("sprNotAssignProcessTable",{
 			data: {
 				source: {
 					read: {
-						//경로 삭제 시 오류로 인해 임시로 url 넣었습니다. 제거하시고 url 기제하시면 됩니다.
-						url: "/stm/stm3000/stm3000/selectStm3000ListAjax.do"
+						url: "/prj/prj1000/prj1100/selectPrj1100ProcessListAjax.do"
 					}
 				},
 				 pageSize : 5,
@@ -948,10 +924,11 @@ var OSLSpr1003Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 10, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, autoHide: false, sortable: false},
-				{field: '', title: '프로세스 명', textAlign: 'center', width: 70}
+				{field: 'processId', title: 'ID', textAlign: 'center', width: 150, search: true},
+				{field: 'processNm', title: '이름 ', textAlign: 'center', width: 100, search: true},
 			],
 			actionBtn:{
-				"title": "제외",
+				"title": "배정",
 				"update": false,
 				"delete": false,
 				"dblClick": true,
@@ -959,6 +936,14 @@ var OSLSpr1003Popup = function () {
 			},
 			actionTooltip:{
 				"dblClick": "프로세스 배정"
+			},
+			rows:{
+				beforeTemplate: function (row, data, index){
+					//이미 배정된 프로세스인 경우
+					if(sprProcessIdList.indexOf(data.processId) > -1){
+						row.addClass("osl-datatable__row-assign--none");
+					}
+				}
 			},
 			theme:{
 				actionBtnIcon:{
@@ -973,33 +958,144 @@ var OSLSpr1003Popup = function () {
 							modalTitle: "프로세스 상세",
 							autoHeight: false
 						};
-					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1006View.do',data,options);
+					//$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1006View.do',data,options);
 			
-					/*var rowDatas = [];
+					var rowDatas = [];
 					rowDatas.push(rowData);
 					//사용자 배정 처리
-					fnAllUsrInsert(rowDatas);*/
+					fnAllProcessInsert(rowDatas);
 				},
 				//선택 사용자 배정 제외
 				"selInUsrDelete": function(rowData, datatableId, type, rownum, elem){
-					/*var rowDatas = rowData;
+					var rowDatas = rowData;
 					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("datatable.translate.records.nonSelect"));
 						return true;
 					}
 					
-					$.osl.confirm($.osl.lang("prj2100.allUsrInDelete",rowDatas.length),{html:true}, function(result){
+					$.osl.confirm($.osl.lang("common.user.auth.allUsrInsert",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
 							//사용자 배정 제외 처리
-							fnAllUsrInsert(rowDatas);
+							fnAllProcessInsert(rowDatas);
 						}
-					});*/
+					});
 				}
 			}
 		});
 		// end:: 4-2. 미배정 프로세스 데이터테이블
+		
+
+		
+		return {
+			targetDt: {
+				reload: function(){
+					assignTable.targetDt.reload();
+					notAssignTable.targetDt.reload();
+				}
+			}
+		};
 	}
+	
+
+	//담당자 배정 등록
+	var fnAllProcessInsert = function(selDatas){
+		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
+			//대상 데이터 테이블
+			var datatable = $.osl.datatable.list["sprAssignProcessTable"].targetDt;
+			
+			//dataSet 비어있는 경우 초기화
+			if($.osl.isNull(datatable.dataSet)){
+				datatable.dataSet = [];
+				datatable.originalDataSet = [];
+			}
+			
+			//이미 추가된 사용자 목록
+			var processIdDupleList = 0;
+			
+			//데이터 테이블에 프로세스 배정 추가
+			$.each(selDatas, function(idx, map){
+				//이미 추가된 사용자 목록 추가
+				if(sprProcessIdList.indexOf(map.processId) != -1){
+					processIdDupleList++;
+					return true;
+				}
+				
+				datatable.dataSet.push(map);
+				datatable.originalDataSet.push(map);
+				
+				//중복체크 추가
+				sprProcessIdList.push(map.processId);
+			});
+			
+			//출력 메시지 세팅
+			var toastrMsg = "";
+			var toastrType = "success";
+			if(selDatas.length > processIdDupleList){
+				toastrMsg += $.osl.lang("spr1003.alert.saveProcessMsg",(selDatas.length-processIdDupleList));
+			}
+			if(processIdDupleList > 0){
+				//이미 추가된 메시지 있는 경우 </br>
+				if(toastrMsg.length > 0){
+					toastrMsg += "</br>";
+				}
+				toastrMsg += $.osl.lang("spr1003.alert.saveProcessDupleMsg",processIdDupleList);
+				toastrType = "warning";
+			}
+			//모든 사용자가 배정되있는 경우
+			if(processIdDupleList == selDatas.length){
+				toastrMsg = $.osl.lang("spr1003.alert.saveProcessAllDupleMsg",processIdDupleList);
+				toastrType = "error";
+				$.osl.toastr(toastrMsg,{type: toastrType});
+				return false;
+			}
+			
+			$.osl.toastr(toastrMsg,{type: toastrType});
+			
+			//데이터 추가
+			datatable.insertData();
+			//데이터테이블 재 조회
+			datatable.reload();
+			$.osl.datatable.list["sprNotAssignProcessTable"].targetDt.reload();
+			$("div.tooltip.show").remove();
+		 }
+	};
+	
+	//담당자 배정 제외
+	var fnAllProcessDelete = function(selDatas){
+		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
+			//대상 데이터 테이블
+			var datatable = $.osl.datatable.list["sprAssignProcessTable"].targetDt;
+			
+			//dataSet에서 제거
+			var dataSet = datatable.dataSet;
+			var originalDataSet = datatable.originalDataSet;
+			
+			if(!$.osl.isNull(dataSet)){
+				//선택 데이터
+				$.each(selDatas, function(idx, map){
+					$.each(originalDataSet, function(dataIdx, dataMap){
+						if($.osl.isNull(dataMap)){
+							return true;
+						}
+						//해당 사용자 배정 제외
+						else if(map.processId == dataMap.processId){
+							originalDataSet.splice(dataIdx, 1);
+							
+							//중복체크 목록 제외
+							sprProcessIdList.splice(sprProcessIdList.indexOf(map.processId), 1);
+							return false;
+						}
+					});
+				});
+				
+				//데이터테이블 재 조회
+				datatable.reload();
+				$.osl.datatable.list["sprNotAssignProcessTable"].targetDt.reload();
+				$("div.tooltip.show").remove();
+			}
+		}
+	};
 	
 	return {
         // public functions

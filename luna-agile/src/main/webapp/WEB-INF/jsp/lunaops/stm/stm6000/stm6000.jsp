@@ -15,17 +15,15 @@
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-group">
-						<div class="kt-portlet__head-group">
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen">
-								<i class="fa fa-plus"></i>
-							</a>
-							<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose">
-								<i class="fa fa-minus"></i>
-							</a>
-							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
-								<i class="la la-angle-down"></i>
-							</a>
-						</div>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-title-lang-cd="tree.label.contextmenu.allNodeOpen" data-tree-id="stm6000DeptTree" data-tree-action="allNodeOpen">
+							<i class="fa fa-plus"></i>
+						</a>
+						<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-title-lang-cd="tree.label.contextmenu.allNodeClose" data-tree-id="stm6000DeptTree" data-tree-action="allNodeClose">
+							<i class="fa fa-minus"></i>
+						</a>
+						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md">
+							<i class="la la-angle-down"></i>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -55,16 +53,16 @@
 				<div class="kt-portlet__head-toolbar">
 					<!-- begin::조직 버튼 영역 -->
 					<div class="kt-portlet__head-wrapper kt-margin-r-10">
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="select" title="조직 조회" data-title-lang-cd="stm6000.button.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="stm6000DeptTree" data-tree-action="select" title="조직 조회" data-title-lang-cd="stm6000.button.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 							<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="insert" title="조직 추가" data-title-lang-cd="stm6000.button.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="stm6000DeptTree" data-tree-action="insert" title="조직 추가" data-title-lang-cd="stm6000.button.insertTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
 							<i class="fa fa-plus"></i><span data-lang-cd="datatable.button.insert">추가</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="update" title="조직 수정" data-title-lang-cd="stm6000.button.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="stm6000DeptTree" data-tree-action="update" title="조직 수정" data-title-lang-cd="stm6000.button.updateTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
 							<i class="fa fa-edit"></i><span data-lang-cd="datatable.button.update">수정</span>
 						</button>
-						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-tree-id="stm6000DeptTree" data-tree-action="delete" title="조직 삭제" data-title-lang-cd="stm6000.button.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="stm6000DeptTree" data-tree-action="delete" title="조직 삭제" data-title-lang-cd="stm6000.button.deleteTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4">
 							<i class="fa fa-trash-alt"></i><span data-lang-cd="datatable.button.delete">삭제</span>
 						</button>
 					</div>
@@ -127,8 +125,8 @@
 <!-- begin page script -->
 <script>
 "use strict";
-var treeObj;
 var OSLStm6000Popup = function () {
+	var treeObj;
 	
 	var formId = "frStm6000";
 	
@@ -150,45 +148,12 @@ var OSLStm6000Popup = function () {
 				//show_only_matches: true 일때 하위 노드도 같이 표시 할건지
 				show_only_matches_children: true,
 			},
-			callback:{
-				onclick: function(treeObj,selNode){
-					// 조직 단건 조회
-					selectDeptInfo(selNode.original.deptId);
-				},
-				init: function(treeObj,data){
-					//console.log(treeObj,data);
-				}
-			}
-		});
-		
-		//퍼펙트 스크롤 적용
-		KTUtil.scrollInit($("#stm6000DeptTree")[0], {
-	        disableForMobile: true, 
-	        resetHeightOnDestroy: true, 
-	        handleWindowResize: true, 
-	        height: 410
-	    });
-		
-		// (임시) 버튼클릭 이벤트  - 등록, 수정, 삭제 
-		// tree 외부 action button 추가 후 변경
-		$("#stm6000DeptTreeInfo").find("button[data-tree-id='stm6000DeptTree']").click(function(){
-			
-			// 각 action 동작
-			var action = $(this).data("tree-action");
-			if(action != "select"){
-				
-				var selectNodeIds = treeObj.jstree("get_selected");
-				if($.osl.isNull(selectNodeIds)){
-					$.osl.alert($.osl.lang("stm6000.message.alert.treeSelect"));
-					return false;
-				}
-				
-				// 선택노드
-				var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
-				var nodeData = selectNode.original;
-				
-				// 조직등록
-				if(action == "insert"){
+			actionFn:{
+				"insert":function(treeObj, nodeData){
+					if($.osl.isNull(nodeData)){
+						$.osl.alert($.osl.lang("stm6000.message.alert.treeSelect"));
+						return false;
+					}
 					
 					// 선택한 조직이 미사용일경우
 					if(nodeData.useCd == "02"){
@@ -211,9 +176,12 @@ var OSLStm6000Popup = function () {
 					};
 					
 					$.osl.layerPopupOpen('/stm/stm6000/stm6000/selectStm6001View.do',data,options);
-					
-				// 조직 수정	
-				}else if(action == "update"){
+				},
+				"update": function(treeObj, nodeData){
+					if($.osl.isNull(nodeData)){
+						$.osl.alert($.osl.lang("stm6000.message.alert.treeSelect"));
+						return false;
+					}
 					
 					// 수정 팝업 호출
 					var data = {
@@ -227,10 +195,13 @@ var OSLStm6000Popup = function () {
 					};
 					
 					$.osl.layerPopupOpen('/stm/stm6000/stm6000/selectStm6001View.do',data,options);
-					
-				// 조직 삭제	
-				}else if(action == "delete"){
-					
+				},
+				"delete": function(treeObj, nodeData){
+					if($.osl.isNull(nodeData)){
+						$.osl.alert($.osl.lang("stm6000.message.alert.treeSelect"));
+						return false;
+					}
+
 					// root 삭제불가
 					if(nodeData.lvl == 0 || $.osl.isNull(nodeData.upperDeptId)){
 						$.osl.alert($.osl.lang("stm6000.message.alert.notRootDelete"));
@@ -239,10 +210,25 @@ var OSLStm6000Popup = function () {
 						deleteDeptList(nodeData, selectNode.children_d);
 					}
 				}
+			},
+			callback:{
+				onclick: function(treeObj,selNode){
+					// 조직 단건 조회
+					selectDeptInfo(selNode.original.deptId);
+				},
+				init: function(treeObj,data){
+					//console.log(treeObj,data);
+				}
 			}
-		
 		});
 		
+		//퍼펙트 스크롤 적용
+		KTUtil.scrollInit($("#stm6000DeptTree")[0], {
+	        disableForMobile: true, 
+	        resetHeightOnDestroy: true, 
+	        handleWindowResize: true, 
+	        height: 410
+	    });
 	};
 	
     /**
@@ -291,6 +277,7 @@ var OSLStm6000Popup = function () {
 		ajaxObj.send();
 	};
 
+
     /**
 	 * function 명 	: deleteDeptList
 	 * function 설명	: 선택한 조직 및 하위 조직을 모두 삭제한다.
@@ -312,7 +299,6 @@ var OSLStm6000Popup = function () {
 			delDeptList.push({"deptId":childNodeData.deptId, "upperDeptId":childNodeData.upperDeptId, "deptName":childNodeData.deptName});
 		});
 		
-		//$.osl.confirm("조직 삭제 시 선택한 조직 및 하위 조직 모두 삭제됩니다. 선택한 조직을 삭제 하시겠습니까?",null,function(result) {
 		$.osl.confirm($.osl.lang("stm6000.message.confirm.deleteDept"),null,function(result) {
 	        if (result.value) {
 	        	
@@ -356,7 +342,6 @@ var OSLStm6000Popup = function () {
 	    		ajaxObj.send();
 	        }
 	    });
-		 
 	};
 	
 	return {
