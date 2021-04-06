@@ -128,26 +128,8 @@ public class Spr1000Controller {
 			paramMap.put("delCd", "02");
 			
 			
-			
-			int totCnt = 0;
-			List<Map> dataList = null;
-			Map<String, Object> metaMap = null;
-			
-			
-			totCnt = spr1000Service.selectSpr1000SprListCnt(paramMap);
-
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-
-			
-			
-			dataList = (List) spr1000Service.selectSpr1000SprList(paramMap);
-			
-        	
+			/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -367,26 +349,8 @@ public class Spr1000Controller {
 			
 			
 			
-			
-			int totCnt = 0;
-			List<Map> dataList = null;
-			Map<String, Object> metaMap = null;
-			
-			
-			totCnt = spr1000Service.selectSpr1000SprReqListCnt(paramMap);
-
-			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-
-			
-			paginationInfo.setTotalRecordCount(totCnt);
-			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
-
-			
-			
-			dataList = (List) spr1000Service.selectSpr1000SprReqList(paramMap);
-			
-        	
+			/
+			/
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -407,6 +371,60 @@ public class Spr1000Controller {
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
 			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/spr/spr1000/spr1000/updateSpr1003SprStart.do")
+	public ModelAndView updateSpr1003SprStart(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			
+			
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			String usrId = loginVo.getUsrId();
+			
+			
+			String paramPrjGrpId = (String) paramMap.get("paramPrjGrpId");
+			String paramSprId = (String) paramMap.get("paramSprId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("paramPrjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("sprId", paramSprId);
+			paramMap.put("usrId", usrId);
+			
+			spr1000Service.updateSpr1003SprStart(paramMap);
+			
+			
+        	model.addAttribute("errorYn", "N");
+        	model.addAttribute("message", egovMessageSource.getMessage("success.common.save"));
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("updateSpr1003SprStart()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+        	model.addAttribute("message", egovMessageSource.getMessage("fail.common.save"));
+			throw new Exception(ex.getMessage());
 		}
 	}
 }

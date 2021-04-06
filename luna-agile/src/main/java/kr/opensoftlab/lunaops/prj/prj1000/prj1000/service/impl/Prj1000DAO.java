@@ -52,13 +52,13 @@ public class Prj1000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public List selectPrj2100PrjAuthNoneUsrList(Map paramMap) throws Exception {
-		return (List) list("prj1000DAO.selectPrj2100PrjAuthNoneUsrList", paramMap);
+	public List selectPrj1000PrjAuthNoneUsrList(Map paramMap) throws Exception {
+		return (List) list("prj1000DAO.selectPrj1000PrjAuthNoneUsrList", paramMap);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public int selectPrj2100PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
-		return (int) select("prj1000DAO.selectPrj2100PrjAuthNoneUsrListCnt", paramMap);
+	public int selectPrj1000PrjAuthNoneUsrListCnt(Map paramMap) throws Exception {
+		return (int) select("prj1000DAO.selectPrj1000PrjAuthNoneUsrListCnt", paramMap);
 	}
 	
 	

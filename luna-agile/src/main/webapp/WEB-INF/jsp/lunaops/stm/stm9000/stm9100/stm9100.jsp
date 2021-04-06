@@ -12,6 +12,12 @@
 		</div>
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-wrapper">
+				<!-- 배포 테스트 코드 -->
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm9100JobTable" data-datatable-action="dplTest" title="선택 Job 접속 확인" data-title-lang-cd="stm9100.button.jenkins.selectConnectionTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+					<i class="fab fa-usb"></i>배포 테스트
+				</button>
+				<!-- 배포 테스트 코드 -->
+			
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm9100JobTable" data-datatable-action="selectedConnectJob" title="선택 Job 접속 확인" data-title-lang-cd="stm9100.button.jenkins.selectConnectionTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fab fa-usb"></i><span data-lang-cd="stm9100.button.common.selectConnection">선택 접속 확인</span>
 				</button>
@@ -109,7 +115,7 @@ var OSLStm9100 = function () {
 				"update": $.osl.lang("stm9100.actionBtn.job.updateBtn"),
 				"delete": $.osl.lang("stm9100.actionBtn.job.deleteBtn"),
 				"dblClick": $.osl.lang("stm9100.actionBtn.job.dblClickBtn"),
-				"detailJenkins": "Jenkins 상세보기",
+				"detailJenkins": $.osl.lang("stm9100.actionBtn.job.detailJenkins")
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum, elem){
@@ -142,7 +148,7 @@ var OSLStm9100 = function () {
 					
 					// 선택 job 삭제
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/stm/stm9000/stm9000/deleteStm9000JobInfoAjax.do'/>"}
+							{"url":"<c:url value='/stm/stm9000/stm9100/deleteStm9100JobInfoAjax.do'/>"}
 							,{deleteDataList: JSON.stringify(rowDatas)});
 					//AJAX 전송 성공 함수
 					ajaxObj.setFnSuccess(function(data){
@@ -162,7 +168,20 @@ var OSLStm9100 = function () {
 				},
 				// job 상세보기
 				"dblClick":function(rowData, datatableId, type, rowNum, elem){
-					console.log("dblClick : ", rowData);
+					
+					var data = {
+							paramJenId: rowData.jenId,
+							paramJobId: rowData.jobId
+					};
+					var options = {
+							idKey: datatableId +"_"+ rowData.jenId,
+							modalTitle: "["+ rowData.jobId + "] " + $.osl.lang("stm9100.modal.job.detailJob"),
+							closeConfirm: false,
+							modalSize: "xl"
+						};
+					
+					$.osl.layerPopupOpen('/stm/stm9000/stm9100/selectStm9102View.do',data,options);
+					
 				},
 				// job 선택 접속 확인
 				"selectedConnectJob":function(rowDatas, datatableId, type, rowNum, elem){
@@ -206,8 +225,60 @@ var OSLStm9100 = function () {
 					fnJobConnectionCheck(selectRows, rowDataList, 0);
 				},
 				// jenkins 상세보기
-				"detailJenkins":function(rowDatas, datatableId, type, rowNum, elem){
-					console.log("jenkins 상세보기 : ", rowDatas, datatableId);
+				"detailJenkins":function(rowData, datatableId, type, rowNum, elem){
+					
+					var data = {
+							paramJenId: rowData.jenId,
+							paramJenNm: rowData.jenNm
+					};
+					var options = {
+							idKey: datatableId +"_"+ rowData.jenId,
+							modalTitle: "["+ rowData.jenNm + "] " + $.osl.lang("stm9000.modal.jeknins.detailJenkins"),
+							closeConfirm: false,
+							modalSize: "xl"
+						};
+					
+					$.osl.layerPopupOpen('/stm/stm9000/stm9000/selectStm9002View.do',data,options);
+				}
+				// TODO
+				// 배포 테스트 코드
+				,"dplTest":function(rowDatas, datatableId, type, rowNum, elem){
+					// 선택한 row
+					var selectRows = $.osl.datatable.list[datatableId].targetDt.getSelectedRecords();
+					
+					// jenkins row 선택 확인
+					if($.osl.isNull(rowDatas) || selectRows.length == 0){
+						$.osl.alert($.osl.lang("stm9100.message.job.nonSelect"));
+						return false;
+					}
+					
+					// jenkins row 선택 확인
+					if(selectRows.length > 1){
+						$.osl.alert("한개만 선택");
+						return false;
+					}
+					
+					
+					var pdata = rowDatas[0];
+					pdata["testIdx"] = 1;
+					
+					console.log("pdata : ", pdata);
+					
+					// 배포 테스트
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/dpl/dpl3000/dpl3000/selectBuildTest.do'/>", "loadingShow":false}
+							,pdata);
+					
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						
+						console.log("결과 : ", data);
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+					
+					
 				}
 			},
 			theme: {

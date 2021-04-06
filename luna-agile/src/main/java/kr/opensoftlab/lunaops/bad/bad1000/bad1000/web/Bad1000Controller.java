@@ -23,6 +23,7 @@ import kr.opensoftlab.lunaops.bad.bad1000.bad1000.service.Bad1000Service;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.stm.stm2000.stm2100.service.Stm2100Service;
+import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
@@ -152,6 +153,13 @@ public class Bad1000Controller {
 			}
 			
 			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
 			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
@@ -167,7 +175,7 @@ public class Bad1000Controller {
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			Map<String, Integer> pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
 			List<Map> bad1000List = bad1000Service.selectBad1000BadList(paramMap);
@@ -182,8 +190,12 @@ public class Bad1000Controller {
 			}
 
 			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			
 			model.addAttribute("data", bad1000List);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 			
 			
 			model.addAttribute("errorYn", "N");

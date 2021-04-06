@@ -13,9 +13,7 @@
 			</div>
 			<div class="kt-portlet__head-toolbar">
 				<div class="kt-portlet__head-group">
-					<div class="kt-portlet__head-group">
-						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-					</div>
+					<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 				</div>
 			</div>
 		</div>
@@ -78,7 +76,7 @@
 				<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
 			</div>
 			<div class="form-group">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 내용</span></label>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqDesc">요청 내용</span></label>
 				<textarea  name="reqDesc" id="reqDesc" required></textarea>
 			</div>
 			<div class="form-group kt-margin-b-10">
@@ -91,11 +89,11 @@
 			<div class="kt-hide osl-bad_box" name="pwOption" id="pwOption">
 		 		<div class="input-group kt-margin-b-10">
 			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.password">PW</span></label>
-		 			<input type="password" class="form-control" name="reqPw" id="reqPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
+		 			<input type="password" class="form-control" name="reqPw" id="reqPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
 		 		</div>
 		 		<div class="input-group">
 			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.passwordCheck">PW 확인</span></label>
-		 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
+		 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
 	 			</div>
 		 	</div>
 			<div class="form-group kt-margin-t-25  form-group-last">
@@ -114,9 +112,7 @@
 			</div>
 			<div class="kt-portlet__head-toolbar">
 				<div class="kt-portlet__head-group">
-					<div class="kt-portlet__head-group">
-						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-					</div>
+					<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 				</div>
 			</div>
 		</div>
@@ -167,6 +163,10 @@ var OSLReq1001Popup = function () {
     	//Portlet 세팅
     	new KTPortlet('req1001RequestUsrInfo', $.osl.lang("portlet"));
     	new KTPortlet('req1001NewRequestOpt', $.osl.lang("portlet"));
+    	
+    	//palceholder 세팅
+    	$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
+		$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
     	
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req1001FileUpload",{
@@ -390,14 +390,14 @@ var OSLReq1001Popup = function () {
 		    	$.osl.file.fileListSetting(data.fileList, fileUploadObj);
 		    	
 		    	//요구사항 잠금 설정한 경우
-		    	if(data.reqInfoMap.reqPw != null && data.reqInfoMap.reqPw != ""){
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
 		    		$("#reqPwCheckbox").attr("checked", true);
 		    		$("#pwOption").removeClass("kt-hide");
 		    		pw = "Y";
 		    		//비밀번호는 비우기
 					$("#reqPw").val("");
-					$("#reqPw").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
-					$("#reqPwCheck").attr("placeholder",$.osl.lang("공백인 경우 기존 비밀번호 사용"));
+					$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
+					$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
 		    	}
 			}
 		});

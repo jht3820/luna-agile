@@ -180,6 +180,11 @@ var OSLSpr1000Popup = function () {
 						$.osl.alert($.osl.lang("spr1000.nonSelect"));
 						return true;
 					}
+					//선택 레코드 1개 이상인 경우
+					else if(rowDatas.length > 1){
+						$.osl.alert($.osl.lang("spr1000.manySelect"));
+						return true;
+					}
 					
 					//스프린트 상태
 					var sprInfo = rowData[0];
@@ -194,6 +199,8 @@ var OSLSpr1000Popup = function () {
 							paramPrjGrpId: sprInfo.prjGrpId
 							,paramPrjId: sprInfo.prjId
 							,paramSprId: sprInfo.sprId
+							,paramStartDt: sprInfo.sprStDt
+							,paramEndDt: sprInfo.sprEdDt
 						};
 					var options = {
 							modalTitle: "스프린트 시작",
@@ -207,12 +214,17 @@ var OSLSpr1000Popup = function () {
 					
 					
 				},
-				"sprEnd":function(rowData){
+				"sprEnd": function(rowData, datatableId, type){
 					var rowDatas = rowData;
 					
 					//선택 레코드 없는 경우
 					if(rowDatas.length == 0){
 						$.osl.alert($.osl.lang("spr1000.nonSelect"));
+						return true;
+					}
+					//선택 레코드 1개 이상인 경우
+					else if(rowDatas.length > 1){
+						$.osl.alert($.osl.lang("spr1000.manySelect"));
 						return true;
 					}
 					
@@ -226,16 +238,19 @@ var OSLSpr1000Popup = function () {
 					}
 					
 					var data = {
+							paramPrjGrpId: sprInfo.prjGrpId
+							,paramPrjId: sprInfo.prjId
+							,paramSprId: sprInfo.sprId
+							,paramStartDt: sprInfo.sprStDt
+							,paramEndDt: sprInfo.sprEdDt
 						};
 					var options = {
 							modalTitle: "스프린트 종료",
 							autoHeight: false,
-							modalSize: 'xl',
-							class:{
-								body:"osl-spr1004"
-							}
+							modalSize: "xl",
+							idKey: datatableId,
+							closeConfirm: false
 						};
-					console.log(rowData);
 					$.osl.layerPopupOpen('/spr/spr1000/spr1000/selectSpr1004View.do',data,options);
 				}
 			},
@@ -307,17 +322,17 @@ var OSLSpr1000Popup = function () {
 									+'</div>'
 									
 									+'<div class="kt-portlet__body">'
-										+'<div class="osl-d-flex kt-padding-l-15 osl-align-items-center">'
+										+'<div class="d-flex kt-padding-l-15 align-items-center">'
 											+'<div class="kt-media kt-media--xl kt-media--circle '+sprTypeClass+' osl-margin-r-2rm">'
 												+'<span>'+sprTypeNm+'</span>'
 											+'</div>'
-											+'<div class="osl-d-flex osl-flex-column osl-margin-r-auto">'
+											+'<div class="d-flex flex-column osl-margin-r-auto">'
 												+'<h5 class="kt-font-boldest text-truncate" title="'+$.osl.escapeHtml(map.sprNm)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top"> '+$.osl.escapeHtml(map.sprNm)+'</h5>'
 												+'<span class="text-muted text-truncate" title="'+$.osl.escapeHtml(map.sprDesc)+'" data-toggle="kt-tooltip" data-skin="brand" data-placement="top">'+$.osl.escapeHtml(map.sprDesc)+'</span>'
 											+'</div>'
 										+'</div>'
-										+'<div class="osl-d-flex osl-flex-wrap border-top kt-margin-t-20 kt-padding-t-10">'
-											+'<div class="osl-widget osl-flex-row-fluid osl-flex-wrap">'
+										+'<div class="d-flex flex-wrap border-top kt-margin-t-20 kt-padding-t-10">'
+											+'<div class="osl-widget osl-flex-row-fluid flex-wrap">'
 												+'<div class="osl-widget-info__item osl-flex-row-fluid">'
 													+'<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqAll.png"></div>'
 													+'<div class="osl-widget-info__item-info">'

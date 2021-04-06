@@ -13,9 +13,7 @@
 			</div>
 			<div class="kt-portlet__head-toolbar">
 				<div class="kt-portlet__head-group">
-					<div class="kt-portlet__head-group">
-						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-					</div>
+					<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 				</div>
 			</div>
 		</div>
@@ -111,7 +109,7 @@
 					<i class="fa fa-file-upload kt-margin-r-5"></i>
 					<span data-lang-cd="req4101.label.attachments">파일 첨부</span> 
 				</label>
-				<div class="kt-uppy osl-max-height-260 fileReadonly" name="fileListDiv" id="fileListDiv">
+				<div class="kt-uppy osl-max-h-px-260 fileReadonly" name="fileListDiv" id="fileListDiv">
 					<div class="kt-uppy__dashboard"></div>
 					<div class="kt-uppy__progress"></div>
 				</div>

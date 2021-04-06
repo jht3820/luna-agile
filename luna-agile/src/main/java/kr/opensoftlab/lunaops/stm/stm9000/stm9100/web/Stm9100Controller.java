@@ -58,21 +58,8 @@ public class Stm9100Controller {
 	}
 	
 	
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="stm/stm9000/stm9100/selectStm9101View.do")
 	public String selectStm9101View( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-
-
-
-
-
-
-
-
-
-
-
 		return "/stm/stm9000/stm9100/stm9101";
 	}
 	
@@ -84,9 +71,14 @@ public class Stm9100Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			paramMap.put("jenId", paramMap.get("paramJenId"));
+			paramMap.put("jobId", paramMap.get("paramJobId"));
 			
-			List jobBldNumList = dpl1000Service.selectDpl1400DplBldNumList(paramMap);
-			model.addAttribute("jobBldNumList",jobBldNumList);
+			
+			Map jobMap = stm9100Service.selectStm9100JobInfo(paramMap);
+			
+			model.addAttribute("jobInfo", jobMap);
+			
 		}catch(Exception e){
 			Log.error(e);
 		}
@@ -368,6 +360,10 @@ public class Stm9100Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			HttpSession ss = request.getSession();
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVo.getLicGrpId());
+			
 			
 			stm9100Service.deleteStm9100JobInfo(paramMap);
 			
@@ -485,6 +481,67 @@ public class Stm9100Controller {
 			}
 			
 			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value="/stm/stm9000/stm9100/selectStm9100JobBuildListAjax.do")
+	public ModelAndView selectStm9100JobBuildListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			int totCnt = dpl1000Service.selectDpl1400DplBldNumListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			List<Map> jobBuildList = dpl1000Service.selectDpl1400DplBldNumList(paramMap);
+				
+			
+			
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+				
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			model.addAttribute("data", jobBuildList);
+			model.addAttribute("meta", metaMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm9100JobBuildListAjax()", ex);
+			
+			
+    		model.addAttribute("errorYn", "Y");
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
 		}
 	}
 	

@@ -31,7 +31,7 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-6 col-md-12 col-sm-12 kt-align-center d-flex justify-content-center align-items-center">
-							<div class="kt-media kt-media--xl kt-media--circle kt-media--info osl-flex-shrink-0">
+							<div class="kt-media kt-media--xl kt-media--circle kt-media--info flex-shrink-0">
 								<span name="prjAcrm" id="prjAcrm"></span>
 							</div>
 						</div>
@@ -264,7 +264,7 @@ var OSLPrj1005Popup = function () {
 			columns: [
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false},
 				{field: 'reqOrd', title: '순번', textAlign: 'left', width: 110, autoHide: false},
-				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProTypeCd", sortField: "reqProTypeCd"},
+				{field: 'reqProTypeNm', title: '처리유형', textAlign: 'left', width: 100, autoHide: false, search: true, searchType:"select", searchCd: "REQ00008", searchField:"reqProType", sortField: "reqProType"},
 				{field: 'reqNm', title: '요청 제목', textAlign: 'left', width: 300, search: true},
 				{field: 'reqDtm', title: '요청일', textAlign: 'center', width: 100, search: true, searchType:"date"},
 				{field: 'reqUsrNm', title: '요청자', textAlign: 'center', width: 150, search: true,

@@ -129,7 +129,7 @@
 				<div class="kt-portlet__body kt-padding-t-0">
 					<div class="row">
 						<!-- begin :: 마일스톤 설명 -->
-						<div class="kt-padding-l-50 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 osl-mobile-padding-l-10">
+						<div class="kt-padding-l-50 kt-padding-b-15 col-lg-4 col-md-4 col-sm-12 kt-padding-l-10-mobile">
 							<div class="kt-padding-b-5">
 								<h5>마일스톤 설명</h5>
 							</div>
@@ -139,7 +139,7 @@
 						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="row">
 								<!-- begin :: 시작일,종료일 -->
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="kt-pull-left kt-margin-r-25">
 										<div class="kt-padding-b-5">
 											<i class="far fa-calendar-alt kt-font-brand kt-margin-r-5"></i>
@@ -159,7 +159,7 @@
 								</div>
 								<!-- end :: 시작일,종료일 -->
 								<!-- begin :: 진척률 -->
-								<div class="col-lg-6 col-md-6 col-sm-12 osl-mobile-padding-l-10">
+								<div class="col-lg-6 col-md-6 col-sm-12 kt-padding-l-10-mobile">
 									<div class="osl-progress">
 										<div class="kt-padding-b-5">
 											<i class="fa fa-chart-line kt-font-brand kt-margin-r-5"></i>
@@ -366,7 +366,6 @@ var OSLMis1000Popup = function () {
 				$("#mis1000Table .kt-datatable__table").css({visibility: "visible",height: "auto"});
 			}
 		}
-		var prjGrpStr = '';
 			
 
 		

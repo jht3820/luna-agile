@@ -49,6 +49,4 @@ public class Stm9000DAO extends ComOslitsAbstractDAO {
 	public void deleteStm9000JenkinsInfo(Map<String, String> paramMap)  throws Exception{
 		update("stm9000DAO.deleteStm9000JenkinsInfo", paramMap);
 	}
-	
-
 }

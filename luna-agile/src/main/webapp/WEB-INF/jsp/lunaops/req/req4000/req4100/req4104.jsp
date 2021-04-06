@@ -13,9 +13,9 @@
 		<div class="kt-align-center">
 			<span data-lang-cd="req4104.text">잠긴 요구사항입니다. 비밀번호를 입력하세요.</span>
 			<div class="input-group kt-margin-t-10">
-				<input type="password" class="form-control" name="reqPwInput" id="reqPwInput" regexstr="^[a-z0-9]{4,12}$" required>
+				<input type="password" class="form-control" name="reqPwInput" id="reqPwInput" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" required>
 				<div class="input-group-append">
-					<button class="btn btn-brand" name="pwCheckBtn" id="pwCheckBtn"><span data-lang-cd="req4104.button.submit">확인</span></button>
+					<button class="btn btn-brand" name="pwCheckBtn" id="pwCheckBtn" ><span data-lang-cd="req4104.button.submit">확인</span></button>
 				</div>
 			</div>
 		</div>
