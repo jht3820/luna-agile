@@ -81,6 +81,10 @@ public class Prj3100Controller {
 			return "/prj/prj3000/prj3100/prj3100";
 	}
 	
+	@RequestMapping(value="/prj/prj3000/prj3100/selectPrj3101View.do")
+	public String selectPrj3101View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			return "/prj/prj3000/prj3100/prj3101";
+	}
 	
    	@RequestMapping(value = "/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do")
    	public ModelAndView insertPrj3100FormFileUploadAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {

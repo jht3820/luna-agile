@@ -908,6 +908,11 @@ var OSLCoreLangSetting = function () {
 				saveProcessAllDupleMsg: "이미 배정중인 프로세스입니다. (${1}개)"
 			}
 		},
+		spr1004:{
+			alert:{
+				reqEndCnt: "결과 작성이 안된 요청이 있습니다. (${1}개)"
+			}
+		},
 		spr1100:{
 			title : {
 				sprint : "스프린트 목록",
