@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <div class="row">
 	<!-- begin::좌측 메뉴 -->
 	<div class="col-xl-3">
@@ -41,6 +40,12 @@
 							</a>
 						</li>
 					</c:if>
+					<li class="kt-nav__item" data-aside-menu="usrShortCut">
+						<a class="kt-nav__link active" href="#" role="tab">
+							<span class="kt-nav__link-icon"><i class="flaticon-cogwheel-1"></i></span>
+							<span class="kt-nav__link-text">단축키 설정</span>
+						</a>
+					</li>
 					<!-- 기타정보는 사용시 추가
 					<li class="kt-nav__item" data-aside-menu="etcInfo">
 						<a class="kt-nav__link" href="#" role="tab">
@@ -213,6 +218,56 @@
 		</div>
 		<!-- End: 비밀번호 변경 -->
 		
+		<!-- Begin: 단축키 변경 -->
+		<div class="kt-portlet d-none" data-aside-menu="usrShortCut">
+			<div class="kt-portlet__head">
+				<div class="kt-portlet__head-label">
+					<h4 class="kt-font-boldest">단축키 변경</h4>
+				</div>
+			</div>
+			<form class="kt-form kt-form--label-right" id="frUsr1000UserShortCut">
+				<div class="kt-portlet__body">
+					<div class="alert alert-solid-info alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert">
+						<div class="alert-icon"><i class="fa fa-exclamation-circle"></i></div>
+						<div class="alert-text">단축키는 단일키 혹은 Ctrl,Alt,Shift 버튼과 키의 조합으로 구성할 수 있습니다. ex) F2, Ctrl+F2, Ctrl + Shift + F2</div>
+						<div class="alert-close">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true"><i class="la la-close"></i></span>
+							</button>
+						</div>
+					</div>
+					<div class="kt-section kt-section--first">
+						<div class="kt-section__body">
+							<div class="kt-portlet" id="usr1100ShortcutInfo">
+								<div class="kt-portlet__head">
+									<div class="kt-portlet__head-label">
+										<i class="fa flaticon-layer kt-margin-r-5"></i><span data-lang-cd="usr1100.title.shortcut">메뉴 및 권한 관리 단축키</span>
+									</div>
+									<div class="kt-portlet__head-toolbar">
+										<div class="kt-portlet__head-group">
+											<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-up"></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="kt-portlet__body" >
+									<div class="row">
+										<div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-form-label osl-align-left--imp"><h5 class="kt-font-boldest text-primary">단축키 명</h5></div>
+										<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12"><h5 class="kt-font-boldest text-primary">팝업시 동작여부</h5></div>
+										<div class="col-xl-6 col-lg-7 col-md-12 col-sm-12"><h5 class="kt-font-boldest text-primary text-center">단축키</h5></div>
+									</div>
+									<div id="shortcutDiv"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="kt-portlet__foot kt-align-center">
+					<button type="button" class="btn btn-primary" id="usr1100ShortcutSubmit" data-toggle="kt-tooltip" title="사용자 단축키 변경"><span data-lang-cd="usr1100.btn.update">수정완료</span></button>
+				</div>
+			</form>
+		</div>
+		<!-- End: 단축키 변경 -->
+		
 	</div>
 	<!-- end::우측 contents 영역 -->
 </div>
@@ -223,6 +278,7 @@ var OSLUsr1000Popup = function () {
 	
 	var profileFormId = 'frUsr1000UserInfo';
 	var passwordFormId = 'frUsr1000UserPassword';
+	var shortcutFormId = 'frUsr1000UserShortCut';
 	
 	// 이미지 avate 생성
 	new KTAvatar("usrImg_avatar");
@@ -233,6 +289,7 @@ var OSLUsr1000Popup = function () {
 	
 	var isEmailChk = false; // 이메일 중복체크 여부
 	var beforeEmail; // 중복체크 당시 이메일 값
+	
 	
 	// 메시지 데이터
 	var pageTypeData = {
@@ -255,6 +312,9 @@ var OSLUsr1000Popup = function () {
 	
     // Private functions
     var documentSetting = function () {
+    	
+    	//포틀릿 셋팅
+    	new KTPortlet('usr1100ShortcutInfo', $.osl.lang("portlet"));
     	
     	// adm2001 팝업 공통코드 select 세팅
 		var commonCodeArr = [
@@ -283,11 +343,18 @@ var OSLUsr1000Popup = function () {
     	$("#myPageAsideMenu li.kt-nav__item").click(function(){
     		
     		var menuNm = $(this).data("aside-menu");
+    		
     		// 사용자 프로필 메뉴 클릭 시 사용자 정보 조회
 			if(!$(this).hasClass("active") && menuNm == "usrProfile"){
 				selectUsrInfo();
 			}
     		
+    		// 단축키 설정 메뉴 클릭시 단축키 정보 조회
+			if(!$(this).hasClass("active") && menuNm == "usrShortCut"){
+				selectShortCutInfo();
+				//new KTPortlet('usr1100ShortcutInfo', $.osl.lang("portlet"));
+			}
+			
     		// 비밀번호 변경 화면 form 초기화
     		if(menuNm == "passwordChange"){
     			$("#frUsr1000UserPassword")[0].reset();
@@ -460,8 +527,17 @@ var OSLUsr1000Popup = function () {
     		
 			// 사용자 비밀번호 변경
 			submitUsrPasswordAction();
+			
+    	});
+    	//단축키 수정
+    	$("#usr1100ShortcutSubmit").click(function(){
+    		
+    		//단축키 수정
+    		saveUsrShortcut();
+    		
     	});
     	
+    
     };
     
    /**
@@ -712,6 +788,7 @@ var OSLUsr1000Popup = function () {
 		}
 		
 		$.osl.confirm(pageTypeData["usrPassword"]["saveString"],null,function(result) {
+			
 	        if (result.value) {
 	        	
 	        	var formArray = passwordForm.serializeArray();
@@ -745,8 +822,248 @@ var OSLUsr1000Popup = function () {
 	    });
     	
     };
-    
 	
+    //저장된 단축키 정보 조회
+    var selectShortCutInfo = function(){
+    	var ajaxObj = new $.osl.ajaxRequestAction(
+    			{"url":"<c:url value='/usr/usr1000/usr1100/selectUsr1100ShortcutInfoAjax.do'/>", "async": false});
+    	//AJAX 전송 성공 함수
+    	ajaxObj.setFnSuccess(function(data){
+    		if(data.errorYn == "Y"){
+    			$.osl.alert(data.message, {type:'error'});
+    			
+    			//모달 창 닫기
+    			$.osl.layerPopupClose();
+    		}else{
+    			//단축키 정보 세팅
+    			$.osl.setDataFormElem(data.shorcutInfoMap,"frUsr1000UserShortCut");
+				
+    			//값 저장 element
+    			var keyCodeList = document.getElementsByClassName("keyCode");
+    			
+    			//단축키 입력 테이블
+    			var str = "";
+    			
+				data.shortcutInfo.forEach(function(value, index){
+					
+	    			str +=
+	    				'<div class="form-group form-group-last row kt-margin-b-20 kt-margin-b-25-mobile">'
+							+'<label class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-form-label osl-align-left--imp"><span class="font-weight-bolder" data-lang-cd="usr1100.title.shortcut'+$.osl.escapeHtml(value.actionCd)+'">'+$.osl.escapeHtml(value.subCdNm)+'</span></label>'
+							+'<span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--info col-xl-2 col-lg-2 col-md-12 col-sm-12" data-toggle="kt-tooltip" data-placement="bottom" title="팝업 시 동작 여부">'
+								+'<label>'
+									+'<input class="popupActionCd" actionCd='+$.osl.escapeHtml(value.actionCd)+' type="checkbox"  checked="checked">'
+									+'<span></span>'
+								+'</label>'
+							+'</span>'
+							+'<div class="col-xl-6 col-lg-7 col-md-12 col-sm-12">'
+								+'<div class="input-group">'
+									+'<input type="text" actionCd='+$.osl.escapeHtml(value.actionCd)+' class="form-control keyCode" readonly="readonly" placeholder="단축키 입력" value="'+$.osl.escapeHtml(value.shortcut)+'"">'
+									+'<div class="input-group-append">'
+										+'<button class="btn btn-outline-primary emptyBtn" id="'+$.osl.escapeHtml(value.actionCd)+'" type="button"><i class="fa fa-ban text-primary"></i><span data-lang-cd="usr1100.btn.dontuse">사용안함</span></button>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+						+'</div>'
+				});
+				
+				//내용 추가
+				$("#shortcutDiv").html(str);
+				
+				//툴팁
+				KTApp.initTooltips();
+				
+				//언어팩
+				$.osl.langConvert("#shortcutDiv");
+				
+				//사용안하는 항목 공백처리
+				$(".keyCode").each(function(){
+					if($(this).val() == " "){
+						$(this).val("");
+					}
+				});
+				//팝업창시 실행 여부 조회
+				data.shortcutInfo.forEach(function(value, index){
+					if(value.popupActionCd == "01"){
+						$("input[type='checkbox'][actionCd="+value.actionCd+"]").attr("checked", true);
+					}else{
+						$("input[type='checkbox'][actionCd="+value.actionCd+"]").attr("checked", false);
+					}
+				});
+				
+				//단축키 입력 초기화
+		        $(".emptyBtn").on("click", function(){
+		        	var actionCd = $(this).attr("id");
+		        	$("input[type='text'][actionCd="+actionCd+"]").val("");
+		        	
+		        });
+				
+		      	//단축키 입력
+		        $(".keyCode").keydown(function(event){
+		        	
+		        	//크롬 단축키 막아줌. 현재 이벤트의 기본 동작을 중단함.
+		        	event.preventDefault();
+		        	//조합키 단일 중복값 입력시 입력안됨.
+		        	if(event.keyCode == 17){
+		        		//CTRL
+		        		return;
+		        	}
+		        	if(event.keyCode == 16){
+		        		//SHIFT
+		        		return;
+		        	}
+		        	if(event.keyCode == 18){
+		        		//ALT
+		        		return;
+		        	}
+		        	
+		        	//단일 키값 입력불가.
+		        	if(event.keyCode < 110 && !event.ctrlKey && !event.shiftKey && !event.altKey ){
+		        		$.osl.alert("Fn키와 특수문자를 제외하고 단일 입력이 불가능합니다.")
+		        		return;
+		        	}
+		        	
+		        	if(event.key == null){
+		        		return;
+		        	}
+		        	var shortCut = new Array();
+		        	
+		        	if(event.ctrlKey){
+		        		shortCut.push("Ctrl");
+		        	}
+		        	if(event.shiftKey){
+		        		shortCut.push("Shift");
+		        	}
+		        	if(event.altKey){
+		        		shortCut.push("Alt");
+		        	}
+		        	
+		        	shortCut.push(event.key.toUpperCase());
+		        	
+		        	//입력되어있는 단축키 가져오기
+		        	var shortcutList = new Array();
+		    		$.each($(".keyCode"),function(){
+		    			shortcutList.push($(this).val());
+		    		});
+		    		
+		    		//해당칸의 값을 제외하고 입력되어있는 경우 지우기
+		    		if($(this).val() != shortCut.join(" + ")){
+			    		if(shortcutList.includes(shortCut.join(" + "))){
+			    			$.osl.alert("이미 사용 중인 키 조합입니다.");
+			    			$(this).val("");
+			    			return;
+			    		}
+		    		}
+		    		//입력
+		    		$(this).val(shortCut.join(" + "));
+		        })
+
+    		}
+    		
+    	});
+    	
+    	//AJAX 전송 오류 함수
+		ajaxObj.setFnError(function(xhr, status, err){
+			data = JSON.parse(data);
+			jAlert(data.message, "알림창");
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+    }
+    
+    //단축키 수정 실행
+    var saveUsrShortcut = function(){
+    	
+		var form = $('#'+shortcutFormId);
+  		
+		//폼 유효 값 체크
+		if (!form.valid()) {
+			return;
+		}
+		
+		//단축키 정보가져오기 element
+		var _shortcutList = [];
+		
+		$.each($(".keyCode"),function(index, element){
+			
+			var shortcutObject = new Object();
+			
+			var actionCd = $(this).attr("actionCd");
+			
+			shortcutObject.actionCd = actionCd;
+			
+			var keycode = $(this).val().replace(" ", "").split("+");
+			
+			//ctrl여부
+			if(keycode.includes("Ctrl")){
+				shortcutObject.ctrlCd = "01";
+			}else{
+				shortcutObject.ctrlCd = "02";
+			}
+			//shift 여부
+			if(keycode.includes("Shift")){
+				shortcutObject.shiftCd = "01";
+			}else{
+				shortcutObject.shiftCd = "02";
+			}
+			//alt 여부
+			if(keycode.includes("Alt")){
+				shortcutObject.altCd = "01";	
+			}else{
+				shortcutObject.altCd = "02";
+			}
+			
+			if($("input[type='checkbox'][actionCd="+actionCd+"]").is(":checked") == true){
+        		shortcutObject.popupActionCd = "01"	
+        	}else{
+        		shortcutObject.popupActionCd = "02"
+        	}
+			
+			//키코드 저장
+			shortcutObject.keyCd = keycode[keycode.length-1].replace(" ", "");
+			
+			_shortcutList.push(shortcutObject);
+			
+		});
+		
+		var data ={
+				shortcutList : JSON.stringify(_shortcutList),
+		}
+		
+		$.osl.confirm("정말 수정하시겠습니까?",null,function(result) {
+	        if (result.value) {
+	        	
+	    		//AJAX 설정
+	    		var ajaxObj = new $.osl.ajaxRequestAction(
+	    				{"url":"<c:url value='/usr/usr1000/usr1100/saveUsr1100ShortcutAjax.do'/>"},
+	    				data);
+	    		
+	    		//AJAX 전송 성공 함수
+	    		ajaxObj.setFnSuccess(function(data){
+	    			if(data.errorYn == "Y"){
+	    				
+	    				$.osl.alert(data.message,{type: 'error'});
+	    				//모달 창 닫기
+						$.osl.layerPopupClose();
+	    				
+	    			}else{
+	    				
+	    				//수정 성공
+	    				$.osl.toastr(data.message);
+    					
+	    			}
+	    		});
+	    		
+	    		//AJAX 전송
+	    		ajaxObj.send();
+	    		
+	    		//단축키 리로드
+	    		$.osl.init();
+	        }
+	    });
+    }
+    	
+    	
     return {
         // public functions
         init: function() {

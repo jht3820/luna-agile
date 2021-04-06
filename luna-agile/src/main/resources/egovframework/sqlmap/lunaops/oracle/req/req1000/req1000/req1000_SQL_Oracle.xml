@@ -27,7 +27,7 @@
 		<result property="reqUsrImgId"			column="REQ_USR_IMG_ID"/>
 		<result property="reqNm"				column="REQ_NM"/>
 		<result property="reqDesc"				column="REQ_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
-		<result property="reqPw"					column="REQ_PW"/>
+		<result property="reqPw"				column="REQ_PW"/>
 		<result property="reqChargerId"			column="REQ_CHARGER_ID"/>
 		<result property="reqStDtm"				column="REQ_ST_DTM"/>
 		<result property="reqEdDtm"				column="REQ_ED_DTM"/>

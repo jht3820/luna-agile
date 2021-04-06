@@ -11,36 +11,6 @@
 				<i class="fa fa-th-large kt-margin-r-5"></i><c:out value="${sessionScope.selMenuNm}"/>
 			</h4>
 		</div>
-	</div>
-	<div class="kt-portlet__head kt-portlet__head--lg osl-portlet__head__block ">
-		<div class="kt-portlet__head-label">
-			<div class="osl-datatable-search" data-datatable-id="req3000Table">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="0">전체</button>
-						<div class="dropdown-menu osl-datatable-search__dropdown" data-datatable-id="req3000Table">
-							<a class="dropdown-item active" href="javascript:void(0);" data-field-id="-1" data-opt-type="all">전체</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="reqGrpNo" data-opt-type="text">그룹 요구사항 번호</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="reqGrpNm" data-opt-type="text">그룹 요구사항 제목</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="reqGrpUsrNm" data-opt-type="text">요청자</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="regGrpChargerNm" data-opt-type="text">그룹 요구사항 담당자</a>
-							<a class="dropdown-item" href="javascript:void(0);" data-field-id="useCD" data-opt-type="select">사용유무</a>
-						</div>
-					</div>
-					<select class="form-control kt-select2 osl-datatable-search__select" id="searchSelect_req3000Table" name="searchSelect" aria-hidden="true" data-datatable-id="req3000Table" style="display: none;"></select>
-					<div class="kt-input-icon kt-input-icon--right osl-border-radius-none osl-datatable-search__input" data-datatable-id="req3000Table">
-						<input type="text" class="form-control" aria-label="검색어를 입력해주세요" disabled="disabled" name="searchData_req3000Table" id="searchData_req3000Table" data-datatable-id="req3000Table">
-						<span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la"></i></span></span>
-						<input type="hidden" name="searchStartDt" id="searchStartDt_req3000Table" data-datatable-id="req3000Table">
-						<input type="hidden" name="searchEndDt" id="searchEndDt_req3000Table" data-datatable-id="req3000Table">
-					</div>
-					<div class="input-group-append">
-						<button class="btn btn-brand osl-datatable-search__button" type="button" data-datatable-id="req3000Table"><i class="fa fa-search"></i><span class=""><span>검색</span></span>
-						</button>
-					</div>
-				</div>
-						</div>
-		</div>
 		<div class="kt-portlet__head-toolbar">
 			<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3000Table" data-datatable-action="select" title="그룹 요구사항 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-title-lang-cd="req3000.datatable.button.title.select" data-placement="bottom" data-auth-button="select" tabindex="5">
 				<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
@@ -69,8 +39,16 @@
 			</button> -->
 		</div>
 	</div>
+	<div class="kt-portlet__body">
+		<div class="row">
+			<div class="col-lg-3 col-md-6 col-sm-12">
+				<div class="osl-datatable-search" data-datatable-id="req3000Table"></div>
+			</div>
+		</div>
+		<div class="kt_datatable" id="req3000Table"></div>
+	</div>
 </div>
-<div class="kt_datatable osl-datatable-footer__divide" id="req3000Table"></div>
+
 <!-- end DOM -->
 <!-- begin page script -->
 <script>
