@@ -44,7 +44,7 @@
 						<div class="kt-portlet__head kt-portlet__head--lg">
 							<div class="kt-portlet__head-toolbar osl-margin-left--auto">
 								<div class="kt-portlet__head-group">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="select" title="확정 문서 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="확정 문서 전체 다운로드">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDownAll" title="확정 문서 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDownAll" tabindex="1" data-original-title="확정 문서 전체 다운로드">
 										<i class="fa fa-list"></i><span>확정 문서 전체 다운로드</span>
 									</button>
 								</div>
@@ -189,7 +189,7 @@
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="insertAtchFile" title="확정 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertAtchFile" tabindex="1" data-original-title="확정 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
-													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDownAll" title="확정 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDownAll" tabindex="1" data-original-title="확정 파일 전체 다운로드">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDown" title="확정 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDown" tabindex="1" data-original-title="확정 파일 전체 다운로드">
 														<i class="fa fa-plus"></i><span>전체 다운로드</span>
 													</button>
 												</div>
@@ -213,7 +213,7 @@
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="insertWaitFile" title="확정 대기 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertWaitFile" tabindex="1" data-original-title="확정 대기 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
-													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectWaitFileDownAll" title="확정 대기 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectWaitFileDownAll" tabindex="2" data-original-title="확정 대기 파일 전체 다운로드">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectWaitFileDown" title="확정 대기 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectWaitFileDown" tabindex="2" data-original-title="확정 대기 파일 전체 다운로드">
 														<i class="fa fa-plus"></i><span>전체 다운로드</span>
 													</button>
 												</div>
@@ -328,6 +328,32 @@ var OSLPrj3000Popup = function () {
 					//console.log(treeObj,data); 
 				}
 			},
+			contextmenu: {
+				display: ["allNodeOpen","allNodeClose","selNodeOpen","selNodeClose","docFormFileZipDown","selectAtchFileDown","selectWaitFileDown"],
+				items: {
+					docFormFileZipDown : {
+            			"separator_before": true,
+            			"separator_after": false,
+            			"label": '양식 다운로드',
+            			"title": '양식 다운로드',
+            			"actionFn": "docFormFileZipDown"
+            		},
+            		selectAtchFileDown : {
+            			"separator_before": false,
+            			"separator_after": false,
+            			"label": '확정 산출물 다운로드',
+            			"title": '확정 산출물 다운로드',
+            			"actionFn": "selectAtchFileDown"
+            		},
+            		selectWaitFileDown : {
+            			"separator_before": false,
+            			"separator_after": true,
+            			"label": '확정대기 산출물 다운로드',
+            			"title": '확정대기 산출물 다운로드',
+            			"actionFn": "selectWaitFileDown"
+            		},
+            	}
+			},
 			actionFn : {
 				//산출물 단건 정보 조회
 				"selectDocInfo" : function(obj){
@@ -388,24 +414,67 @@ var OSLPrj3000Popup = function () {
 				"docFormFileZipDown" : function(obj){
 					
 					//선택한 트리 노드 없으면 튕기기
-					/*var selectNodeIds = treeObj.jstree("get_selected");
+					var selectNodeIds = treeObj.jstree("get_selected");
 					if($.osl.isNull(selectNodeIds)){
 						$.osl.alert($.osl.lang("prj3100.message.alert.treeSelect"));
 						return false;
 					}
 					
-					fileZipDownload('formConfFile');*/
+
+
+					var docId = $('#docId').val();
 					
-					var data = {};
-					var options = {
-							modalTitle: "산출물 양식 다운로드",
-							autoHeight: false
-						};
+					var atchFileId = $('#docFormConfFileId').val();
+					 
+					var fileData = '';
+					var ajaxObj = new $.osl.ajaxRequestAction(
+							{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileCntAjax.do'/>", "async": false}
+							,{"docId": docId, "atchFileId":atchFileId });
 					
-					$.osl.layerPopupOpen('/prj/prj3000/prj3100/selectPrj3101View.do',data,options);
+					//AJAX 전송 성공 함수
+					ajaxObj.setFnSuccess(function(data){
+						
+						if(data.errorYn == "Y"){
+							$.osl.alert(data.message,{type: 'error'});
+							
+						}else{
+							
+							//양식 수가 0개라면 리턴
+							if(data.fileCnt == 0){
+								$.osl.alert($.osl.lang(""));
+								return false;
+							
+							//1개라면 1개만 다운로드
+							}else if(data.fileCnt == 1){
+								//파일 다운
+								$.osl.file.fileDownload(data.atchFileId, data.fileSn);
+								
+							//여러개라면 팝업창 오픈
+							}else{
+								
+								var data = {};
+								var options = {
+										modalTitle: "산출물 양식 다운로드",
+										autoHeight: false
+									};
+								
+								$.osl.layerPopupOpen('/prj/prj3000/prj3100/selectPrj3101View.do',data,options);
+								
+							}
+						}
+					});
+					
+					//AJAX 전송
+					ajaxObj.send();
+					
+					
+					
+					
+					
+					//fileZipDownload('formConfFile');
 					
 				},
-				"selectAtchFileDownAll" :function(obj){
+				"selectAtchFileDown" :function(obj){
 					//선택한 트리 노드 없으면 튕기기
 					var selectNodeIds = treeObj.jstree("get_selected");
 					if($.osl.isNull(selectNodeIds)){
@@ -415,7 +484,7 @@ var OSLPrj3000Popup = function () {
 					
 					fileZipDownload('atchFile');
 				},
-				"selectWaitFileDownAll" :function(obj){
+				"selectWaitFileDown" :function(obj){
 					
 					//선택한 트리 노드 없으면 튕기기
 					var selectNodeIds = treeObj.jstree("get_selected");
@@ -425,6 +494,35 @@ var OSLPrj3000Popup = function () {
 					}
 					
 					fileZipDownload('waitFile');
+				},
+				"selectAtchFileDownAll" : function(obj){
+					
+					//선택한 트리 노드 없으면 튕기기
+					var selectNodeIds = treeObj.jstree("get_selected");
+					if($.osl.isNull(selectNodeIds)){
+						$.osl.alert($.osl.lang("prj3100.message.alert.treeSelect"));
+						return false;
+					}
+					
+					// 선택노드
+					var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+					var nodeData = selectNode.original;
+					
+					var docId = nodeData.docId;
+					var atchFileId = nodeData.docAtchFileId
+					
+					if(!$.osl.isNull(docId) && !$.osl.isNull(atchFileId)){
+						var url = '/prj/prj3000/prj3100/selectPrj3100MenuTreeZipDownload.do?atchFileId='+atchFileId+'&docId='+docId;
+						var fileLink = document.createElement("a");
+						fileLink.href = url;
+						fileLink.target = "_self";
+						document.fileDownFrame.downForm.append(fileLink);
+						fileLink.click();
+						fileLink.remove();
+					}else{
+						$.osl.alert("다운로드에 필요한 정보가 부족합니다.");
+					}
+					
 				}
 			 
 			}
@@ -1134,18 +1232,26 @@ var OSLPrj3000Popup = function () {
 			ajaxObj.send();
 		}
 		
-		
-		
-		
 		 /*
 		 * function명 : fileZipDownload
 		 * function설명 : 파일 압축 다운로드 이벤트
 		 */
 		var fileZipDownload = function(fileType){
 			var docId = $('#docId').val();
-			 
-			if(!$.osl.isNull(docId) && !$.osl.isNull(fileType)){
-				var url = '/prj/prj3000/prj3100/selectPrj3100MenuTreeZipDownload.do?docType='+fileType+'&docId='+docId;
+			var atchFileId = '';
+			
+			if(fileType == 'atchFile'){
+				atchFileId = $('#docAtchFileId').val();	
+			}else if(fileType == 'waitFile'){
+				atchFileId = $('#docWaitFileId').val();
+			}else if(fileType == 'formConfFile'){
+				atchFileId = $('#docFormConfFileId').val();				
+			}
+			
+			var docNm = $('#docNm').val();
+			
+			if(!$.osl.isNull(docId) && !$.osl.isNull(atchFileId) && !$.osl.isNull(docNm)){
+				var url = '/prj/prj3000/prj3100/selectPrj3100ZipDownload.do?atchFileId='+atchFileId+'&docId='+docId+'&docNm='+docNm;
 				var fileLink = document.createElement("a");
 				fileLink.href = url;
 				fileLink.target = "_self";
@@ -1171,6 +1277,38 @@ var OSLPrj3000Popup = function () {
 			return true;
 			
 		}
+		 
+		 /*
+		 * function명 : selectFormFileCnt
+		 * function설명 : 해당 산출물의 양식 파일 수를 반환해준다.
+		 */
+		var selectFormFileCnt = function(){
+			
+			var docId = $('#docId').val();
+			
+			var atchFileId = $('#docFormConfFileId').val();
+			 
+			var fileData = '';
+			var ajaxObj = new $.osl.ajaxRequestAction(
+					{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileCntAjax.do'/>", "async": false}
+					,{"docId": docId, "atchFileId":atchFileId });
+			
+			//AJAX 전송 성공 함수
+			ajaxObj.setFnSuccess(function(data){
+				
+				if(data.errorYn == "Y"){
+					$.osl.alert(data.message,{type: 'error'});
+					
+				}else{
+					
+					return data;
+				}
+			});
+			
+			//AJAX 전송
+			ajaxObj.send();
+		}
+		 
 		/**************************************/
 		/* 파일 관련 메서드 종료	                  */
 		/**************************************/
