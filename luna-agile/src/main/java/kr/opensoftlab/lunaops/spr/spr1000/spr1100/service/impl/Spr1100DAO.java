@@ -42,4 +42,16 @@ public class Spr1100DAO  extends ComOslitsAbstractDAO {
 	public int updateSpr1100ReqSprPointInfo(Map paramMap) throws Exception {
 		return update("spr1100DAO.updateSpr1100ReqSprPointInfo", paramMap);
 	} 
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int updateSpr1100ReqResultInfo(Map paramMap) throws Exception {
+		return update("spr1100DAO.updateSpr1100ReqResultInfo", paramMap);
+	} 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map  selectSpr1100ReqResultInfo(Map paramMap) throws Exception {
+		return  (Map) select("spr1100DAO.selectSpr1100ReqResultInfo", paramMap);
+	}
 }

@@ -388,13 +388,21 @@ var OSLPrj3000Popup = function () {
 				"docFormFileZipDown" : function(obj){
 					
 					//선택한 트리 노드 없으면 튕기기
-					var selectNodeIds = treeObj.jstree("get_selected");
+					/*var selectNodeIds = treeObj.jstree("get_selected");
 					if($.osl.isNull(selectNodeIds)){
 						$.osl.alert($.osl.lang("prj3100.message.alert.treeSelect"));
 						return false;
 					}
 					
-					fileZipDownload('formConfFile');
+					fileZipDownload('formConfFile');*/
+					
+					var data = {};
+					var options = {
+							modalTitle: "산출물 양식 다운로드",
+							autoHeight: false
+						};
+					
+					$.osl.layerPopupOpen('/prj/prj3000/prj3100/selectPrj3101View.do',data,options);
 					
 				},
 				"selectAtchFileDownAll" :function(obj){

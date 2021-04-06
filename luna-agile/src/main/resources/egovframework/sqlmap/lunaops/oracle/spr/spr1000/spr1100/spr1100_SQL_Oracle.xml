@@ -5,7 +5,25 @@
 
 	
 	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-
+	
+	
+   	<resultMap id="resultMapSprReq1100" class="egovMap">
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjId"					column="PRJ_ID"/>
+		<result property="sprId"					column="SPR_ID"/>
+		<result property="reqId"					column="REQ_ID"/>
+		<result property="sprPoint"				column="SPR_POINT"/>
+		<result property="reqLinkOrd"				column="REQ_LINK_ORD"/>
+		<result property="regDtm"					column="REG_DTM"/>
+		<result property="regUsrId"				column="REG_USR_ID"/>
+		<result property="regUsrIp"				column="REG_USR_IP"/>
+		<result property="modifyDtm"				column="MODIFY_DTM"/>
+		<result property="modifyUsrId"			column="MODIFY_USR_ID"/>
+		<result property="modifyUsrIp"			column="MODIFY_USR_IP"/>
+		<result property="reqResultDesc"			column="REQ_RESULT_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
+    </resultMap>
+    
 	
 	
 	<sql id="selectSpr1100AssList">
@@ -303,4 +321,51 @@
 		]]>
 	</update>
 	
+	
+    <update id="spr1100DAO.updateSpr1100ReqResultInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			UPDATE SPR1100 A SET
+				A.REQ_RESULT_DESC = #reqResultDesc#
+			WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+			    AND A.PRJ_GRP_ID = #prjGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+				AND A.REQ_ID = #reqId#
+		]]>
+	</update>
+	
+	
+    <select id="spr1100DAO.selectSpr1100ReqResultInfo" parameterClass="java.util.Map"  resultMap="resultMapSprReq1100">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			SELECT 
+					  A.LIC_GRP_ID
+					, A.PRJ_GRP_ID
+					, A.PRJ_ID
+					, A.SPR_ID
+					, A.REQ_ID
+					, A.SPR_POINT
+					, A.REQ_RESULT_DESC
+					, A.REQ_LINK_ORD
+					, A.REG_DTM
+					, A.REG_USR_ID
+					, A.REG_USR_IP
+					, A.MODIFY_DTM
+					, A.MODIFY_USR_ID
+					, A.MODIFY_USR_IP
+			FROM SPR1100 A
+			WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+			    AND A.PRJ_GRP_ID = #prjGrpId#
+				AND A.PRJ_ID = #prjId#
+				AND A.SPR_ID = #sprId#
+				AND A.REQ_ID = #reqId#
+		) Z
+		WHERE 1 = 1
+    </select>
+    
 </sqlMap>

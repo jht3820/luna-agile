@@ -37,17 +37,18 @@
 var OSLSpr1005Popup = function () {
 	var formId = 'frSpr1005'
 	
-	//edit 목록
-	var formEditList = [];
 	
 	//form validate 주입
 	var formValidate = $.osl.validate(formId);
-		
+	var paramReqId = $("#paramReqId").val();
+	var paramSprId = $("#paramSprId").val();
+	var paramPrjGrpId = $("#paramPrjGrpId").val();
+	var paramPrjId = $("#paramPrjId").val();
+	
 	var documentSetting = function(){
 		
-		//edit 세팅
-    	formEditList.push($.osl.editorSetting("reqResultDesc", {formValidate: formValidate,'minHeight': 300, disableResizeEditor: false}));
 		
+    	fnSprInfoSelect();
 		//등록 버튼 클릭 시 동작
 		$("#reqResultDescSave").click(function(){
 			var form = $('#'+formId);    		
@@ -63,6 +64,35 @@ var OSLSpr1005Popup = function () {
     	        }
     		});
 		});
+	};
+	
+
+	//프로젝트 일정 정보 조회
+	var fnSprInfoSelect = function(){
+		//프로젝트 설정 정보 조회
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/spr/spr1000/spr1000/selectSpr1000SprReqResultDescInfoAjax.do'/>", "async": false}
+				,{"reqId": paramReqId, "paramSprId":paramSprId, "paramPrjId":paramPrjId, "paramPrjGrpId": paramPrjGrpId});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				var sprReqInfo = data.sprReqInfo;
+   		    	//설정 값 타입이 공통 코드인 경우  공통코드 select 세팅
+   				$.osl.setDataFormElem(sprReqInfo, formId);
+   				//edit 세팅
+   		    	$.osl.editorSetting("reqResultDesc", {
+  		    			formValidate: formValidate,
+	   		    		'minHeight': 300,
+	   		    		disableResizeEditor: false
+   		    		});
+   				
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
 	};
 	
 	//요구사항 처리 결과 저장
