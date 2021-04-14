@@ -139,7 +139,7 @@ var OSLDpl1100Popup = function () {
 				"click" : $.osl.lang("dpl1100.actionBtn.tooltip.clickToolTip"),
 			},
 			actionFn:{
-				"select": function(datatableId, elem){
+				"select": function(datatableId, elem, datatable){
 					//검색 대상 가져오기
 					var searchTypeTarget = $(".osl-datatable-search__dropdown[data-datatable-id="+datatableId+"] > .dropdown-item.active");
 					
@@ -152,7 +152,7 @@ var OSLDpl1100Popup = function () {
 					var searchCd = $(this).data("opt-mst-cd");
 					
 					//입력된 검색값 초기화
-					$.osl.datatable.list[datatableId].targetDt.setDataSourceQuery({});
+					datatable.setDataSourceQuery({});
 					
 					//전체가 아닌경우 해당 타입으로 검색
 					if(searchType != "all"){
@@ -163,9 +163,9 @@ var OSLDpl1100Popup = function () {
 							searchDataValue = $("#searchSelect_"+datatableId).val();
 						}
 						
-						$.osl.datatable.list[datatableId].targetDt.search(searchDataValue,searchFieldId);
+						datatable.search(searchDataValue,searchFieldId);
 					}else{
-						$.osl.datatable.list[datatableId].targetDt.search();
+						datatable.search();
 						
 						//검색한 경우 기존에 선택 항목 초기화
 						$("#dplId").val("");

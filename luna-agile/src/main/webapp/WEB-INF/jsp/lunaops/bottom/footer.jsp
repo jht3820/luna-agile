@@ -76,6 +76,7 @@
 		<script src="<c:url value='/plugins/dragula/dragula.min.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/sortable/Sortable.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/highlight/highlight.pack.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/plugins/diff/diff_match_patch_uncompressed.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/jquery-ui/jquery-ui.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/flowchart/jquery.flowchart.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/panzoom/panzoom.js'/>" type="text/javascript"></script>
