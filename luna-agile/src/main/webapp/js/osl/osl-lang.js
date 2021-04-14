@@ -623,6 +623,24 @@ var OSLCoreLangSetting = function () {
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
 			}
+		},usr1100:{
+			title:{
+				shortcut:"메뉴 및 권한 관리 단축키",
+				01:"프로젝트 및 권한그룹 선택",
+				02:"팝업창 가운데 정렬",
+				03:"추가 기능바",
+				04:"검색",
+				05:"마이페이지",
+				06:"메시지",
+				07:"알림",
+				08:"개인설정",
+				09:"담당요구사항",
+				10:"로그아웃",
+			},
+			btn:{
+				update:"수정 완료",
+				dontuse:"사용 안함",
+			}
 		},
 		req1001:{
 			title: "신규 요구사항 요청",
@@ -906,6 +924,11 @@ var OSLCoreLangSetting = function () {
 				saveProcessMsg: "${1}개의 프로세스가 배정되었습니다.",
 				saveProcessDupleMsg: "이미 배정된 ${1}개의 프로세스 제외",
 				saveProcessAllDupleMsg: "이미 배정중인 프로세스입니다. (${1}개)"
+			}
+		},
+		spr1004:{
+			alert:{
+				reqEndCnt: "결과 작성이 안된 요청이 있습니다. (${1}개)"
 			}
 		},
 		spr1100:{
@@ -2412,6 +2435,27 @@ var OSLCoreLangSetting = function () {
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
+			}
+		},usr1100:{
+			title:{
+				shortcut:"Menu and rights management shortcut",
+				shortcut01:"Project and Authority group select",
+				shortcut02:"Popup align Center",
+				shortcut03:"Add tool bar",
+				shortcut04:"Search",
+				shortcut05:"Mypage",
+				shortcut06:"Message",
+				shortcut07:"Alarm",
+				shortcut08:"Personal Setting",
+				shortcut09:"Charged requirements",
+				shortcut10:"Logout",
+				shortcutName:"ShortcutName",
+				popupActionCd:"Action when pop-up",
+				shortcutKey:"Shortcut",
+			},
+			btn:{
+				update:"update",
+				dontuse:"Dont use",
 			}
 		},
 		req1001:{

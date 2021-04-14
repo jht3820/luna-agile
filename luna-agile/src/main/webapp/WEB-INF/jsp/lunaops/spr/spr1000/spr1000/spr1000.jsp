@@ -241,6 +241,8 @@ var OSLSpr1000Popup = function () {
 							paramPrjGrpId: sprInfo.prjGrpId
 							,paramPrjId: sprInfo.prjId
 							,paramSprId: sprInfo.sprId
+							,paramSprNm: sprInfo.sprNm
+							,paramSprDesc: sprInfo.sprDesc
 							,paramStartDt: sprInfo.sprStDt
 							,paramEndDt: sprInfo.sprEdDt
 						};

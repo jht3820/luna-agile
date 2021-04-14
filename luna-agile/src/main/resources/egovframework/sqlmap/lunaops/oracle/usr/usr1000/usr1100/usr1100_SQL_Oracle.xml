@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="usr1100DAO">
+
+	
+	<typeAlias alias="egovMap"	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<resultMap id="resultMapSelectUsr1100"	class="egovMap">
+		<result property="usrId"  					column="USR_ID"/>
+		<result property="actionCd"  				column="ACTION_CD"/>
+		<result property="subCdNm"					column="SUB_CD_NM"/>
+		<result property="keyCd"  					column="KEY_CD"/>
+		<result property="shiftCd"  				column="SHIFT_CD"/>
+		<result property="altCd"  					column="ALT_CD"/>
+		<result property="ctrlCd"  					column="CTRL_CD"/>
+		<result property="popupActionCd"  			column="POPUP_ACTION_CD"/>
+		<result property="useCd"					column="USE_CD"/>
+	</resultMap>
+	
+	
+	<select id="usr1100DAO.selectUsr1100ShortcutListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT count(*)
+		FROM STM3004 A
+		WHERE 1 = 1
+		AND A.USR_ID = #usrId#
+	</select>
+	
+	
+	<select id="usr1100DAO.selectUsr1100ShortcutList" parameterClass="java.util.Map" resultMap="resultMapSelectUsr1100">
+		
+		SELECT *
+		FROM STM3004 A
+		INNER JOIN STM4001 B
+		ON(A.ACTION_CD = B.SUB_CD AND B.LIC_GRP_ID = #licGrpId# )
+		WHERE 1 = 1
+		AND A.USR_ID = #usrId#
+		AND B.MST_CD = 'STM00005'
+		ORDER BY ACTION_CD ASC
+	</select>
+	
+	
+	<insert id="usr1100DAO.insertUsr1100ShortcutList">
+		
+		INSERT INTO STM3004
+		(
+				USR_ID,			ACTION_CD,			KEY_CD,			SHIFT_CD,		ALT_CD,
+				CTRL_CD,		POPUP_ACTION_CD,	USE_CD,			REG_DTM,		REG_USR_ID,		
+				REG_USR_IP,		MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+						
+		)
+		VALUES
+		(
+				#usrId#,		#actionCd#,			#keyCd#,		#shiftCd#,		#altCd#,
+				#ctrlCd#,		#popupActionCd#,	'01',			SYSDATE,		#regUsrId#,		
+				#regUsrIp#,		SYSDATE,		#modifyUsrId#,		#modifyUsrIp#			
+		)
+	</insert>
+	
+	
+	<update id="usr1100DAO.updateUsr1100ShortcutList" parameterClass="java.util.Map">
+		
+		UPDATE	STM3004	A
+		SET		KEY_CD			= #keyCd#
+			,	SHIFT_CD 		= #shiftCd#
+			,	ALT_CD			= #altCd#
+			,	CTRL_CD			= #ctrlCd#
+			,	POPUP_ACTION_CD	= #popupActionCd#
+			,	USE_CD			= #useCd#
+			,	MODIFY_DTM		= SYSDATE
+			, 	MODIFY_USR_ID 	= #modifyUsrId#
+			,	MODIFY_USR_IP	= #modifyUsrIp# 
+		WHERE 	1 = 1
+		AND		USR_ID 	  = #usrId#
+		AND		ACTION_CD = #actionCd#
+	</update>
+	
+</sqlMap>

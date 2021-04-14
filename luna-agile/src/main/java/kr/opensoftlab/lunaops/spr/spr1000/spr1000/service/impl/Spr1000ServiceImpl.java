@@ -17,11 +17,11 @@ import com.ibm.icu.text.SimpleDateFormat;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.req.req4000.req4100.service.impl.Req4100DAO;
 import kr.opensoftlab.lunaops.spr.spr1000.spr1000.service.Spr1000Service;
 import kr.opensoftlab.lunaops.spr.spr1000.spr1100.service.impl.Spr1100DAO;
 import kr.opensoftlab.lunaops.spr.spr2000.spr2000.service.impl.Spr2000DAO;
+import kr.opensoftlab.lunaops.spr.spr2000.spr2100.service.impl.Spr2100DAO;
 
 
 
@@ -43,6 +43,10 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 	
     @Resource(name="spr2000DAO")
     private Spr2000DAO spr2000DAO;
+
+	
+    @Resource(name="spr2100DAO")
+    private Spr2100DAO spr2100DAO;
     
     
 	@Resource(name = "egovMessageSource")
@@ -117,6 +121,12 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 	public List<Map>  selectSpr1000SprReqList(Map paramMap) throws Exception {
 		return spr1000DAO.selectSpr1000SprReqList(paramMap);
 	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public int selectSpr1000SprReqNotEndListCnt(Map paramMap) throws Exception {
+		return spr1000DAO.selectSpr1000SprReqNotEndListCnt(paramMap);
+	} 
 	
 	
 	@SuppressWarnings({"rawtypes", "unchecked" })
@@ -196,6 +206,20 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 		}
 		
 		
+		JSONArray sprProcessList = wizardJsonData.getJSONArray("sprProcessList");
+		int sprProcessListSize = sprProcessList.length();
+		
+		if(sprProcessList != null && sprProcessListSize > 0) {
+			for(int i=0;i <sprProcessListSize;i++) {
+				String processInfo = (String)sprProcessList.get(i);
+			
+				paramMap.put("processId", processInfo);
+				spr1000DAO.insertSpr1003SprProcessList(paramMap);
+			}
+		}
+		
+		
+		
 		Date today = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
 		paramMap.put("startDt", sdf.format(today));
@@ -215,5 +239,40 @@ public class Spr1000ServiceImpl extends EgovAbstractServiceImpl implements Spr10
 		spr1000DAO.updateSpr1000Info(paramMap);
 		
 		return rtnValue;
+	}
+	
+
+	
+	
+	@SuppressWarnings({"rawtypes", "unchecked" })
+	public int updateSpr1003SprEnd(Map paramMap) throws Exception{
+		int rtnValue = 1;
+
+		
+		String usrId = (String) paramMap.get("usrId");
+		
+		paramMap.put("mmrUsrId", usrId);
+		
+		
+		String mmrId = spr2100DAO.insertSpr2100MmrInfo(paramMap);
+		paramMap.put("mmrId", mmrId);
+		
+		
+		paramMap.put("sprTypeCd", "03");
+		
+		spr1000DAO.updateSpr1000Info(paramMap);
+		
+		return rtnValue;
+	}
+
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map selectSpr1000SprInfoStat(Map paramMap) throws Exception {
+		Map sprStat = spr1000DAO.selectSpr1000SprInfoStat(paramMap);
+		double allCnt = Double.parseDouble(String.valueOf(sprStat.get("allCntSum")));
+		double endCnt = Double.parseDouble(String.valueOf(sprStat.get("endCntSum")));
+		
+		sprStat.put("sprEndPercent", endCnt / allCnt * 100.0);
+		return sprStat;
 	}
 }

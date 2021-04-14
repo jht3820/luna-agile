@@ -53,8 +53,13 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj3001SaveSubmit"><span data-lang-cd="prj3001.button.insert">작성 완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-brand" id="prj3001SaveSubmit"> 
+		<i class="fa fa-save"></i><span data-lang-cd="prj3001.button.insert">작성 완료</span>
+	</button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal">
+		<i class="fa fa-window-close"></i><span>Close</span>
+	</button>
+	
 </div>
 
 <script>
