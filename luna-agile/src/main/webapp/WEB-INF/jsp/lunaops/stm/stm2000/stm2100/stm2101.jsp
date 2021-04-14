@@ -171,6 +171,9 @@
  var OSLStm2101Popup = function(){
 	var formId="stm2101Info";
 	
+	//form validate 주입
+	var formValidate = $.osl.validate(formId);
+	
 	//문구 세팅 
 	$("#stm2101SaveSubmit > span").text($.osl.lang("stm2101.button.updateSubmit"));
 	$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
