@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -759,6 +760,214 @@ public class Prj3100Controller {
        		return new ModelAndView("jsonView");
 		}
    	}
+	
+	
+	
+	
+	@RequestMapping(value="/prj/prj3000/prj3100/selectPrj3100SelectFileZipDownload.do")
+	public String selectPrj3000SelectFileZipDownload(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		String mimetype = "text/html; charset=UTF-8";
+		
+		response.setContentType(mimetype);
+		StringBuffer str = new StringBuffer();
+		
+		try {
+			
+        	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+        	
+        	HttpSession ss = request.getSession();
+           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
+        	
+           	
+           	String atchFileId = paramMap.get("atchFileId");
+           	
+           	
+           	String docId = paramMap.get("docId");
+           	
+           	
+           	String docNm = paramMap.get("docNm");
+           	
+           	
+           	String fileSn = paramMap.get("fileSn");
+           	
+           	String[] checkedFileSn = fileSn.split(",");
+           	
+           	
+           	int appendFileCnt = 0;
+           	
+           	
+	    	byte[] buf = new byte[4096];
+	    	
+	    	
+        	String storePathString = EgovProperties.getProperty("Globals.fileStorePath");
+        	
+        	
+        	String addPath = "tempZip/";
+        	String zipFilePath = EgovWebUtil.filePathBlackList(storePathString+addPath);
+        	
+        	
+        	File saveFolder = new File(zipFilePath);
+
+    		if (!saveFolder.exists() || saveFolder.isFile()) {
+    			saveFolder.mkdirs();
+    		}
+    		
+    		Date today = new Date();
+    		DateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
+    		
+    		
+    		String zipFileName = "_OSL"+fm.format(today)+".zip";
+    		
+    		
+    		ZipOutputStream zipOut = null;
+    		
+    		
+    		boolean zipMakeChk = true;
+    		
+    		try {
+    			
+    			zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath+zipFileName));
+    			
+    			FileVO fileVO = new FileVO();
+    			
+    			fileVO.setAtchFileId(atchFileId);
+    			
+    			List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+    			String stepNm = "["+docId+"]_"+docNm;
+    			
+    			
+               	for(FileVO fvo : fileList) {
+               		
+               		
+           				
+           			
+           			if(fvo == null) {
+           				
+           				continue;
+           			}
+
+           			
+           			if(!Arrays.asList(checkedFileSn).contains(fvo.getFileSn())) {
+           				continue;
+           			}
+           			
+           			
+           			File uFile = new File(fvo.getFileStreCours(), fvo.getStreFileNm());
+           			
+           			
+           			if(!uFile.isFile()){
+		    			
+		    			zipOut.close();
+		    			
+		    			
+		    			zipMakeChk = false;
+		    			throw new UserDefineException("<script>$alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
+	    			}
+           			
+           			
+	    			FileInputStream in = new FileInputStream(uFile);
+	    	        String fileName = "["+appendFileCnt+"]_"+fvo.getOrignlFileNm().toString();
+	    	                
+	    	        ZipEntry ze = new ZipEntry(stepNm+"/"+fileName);
+
+	    	        zipOut.putNextEntry(ze);
+	    	         
+	    	        
+	    	        int len;
+	    	        while ((len = in.read(buf)) > 0) {
+	    	        	zipOut.write(buf, 0, len);
+	    	        }
+	    	          
+	    	        zipOut.closeEntry();
+	    	        in.close();
+	    	        
+	    	        
+	    	        appendFileCnt++;
+       			}
+               	
+               	zipOut.close();
+               	
+               	
+	    		if(appendFileCnt == 0) {
+	    			
+					String fileDeletePath  = zipFilePath+zipFileName;
+					EgovFileMngUtil.deleteFile(fileDeletePath);
+				    
+	    			throw new UserDefineException("<script>alert('등록된 파일이 존재하지 않습니다.');</script>");
+	    		}
+               	
+	    		else if(zipMakeChk){
+		    		
+					File uFile = new File(zipFilePath, zipFileName);
+					long fSize = uFile.length();
+					
+					if (fSize > 0) {
+						
+						
+						setDisposition(zipFileName, request, response);
+						
+						BufferedInputStream in = null;
+						BufferedOutputStream out = null;
+						
+						try {
+							
+							in = new BufferedInputStream(new FileInputStream(uFile));
+							out = new BufferedOutputStream(response.getOutputStream());
+							
+							int copyCnt = FileCopyUtils.copy(in, out);
+						
+							System.out.println(copyCnt);
+	
+							
+							out.flush();
+						} catch (IOException ex) {
+							EgovBasicLogger.ignore("IO Exception", ex);
+						} finally {
+							
+							EgovResourceCloseHelper.close(in, out);
+							
+							
+							String fileDeletePath  = zipFilePath+zipFileName;
+						    String deleteChk = EgovFileMngUtil.deleteFile(fileDeletePath);
+						    
+						    Log.debug("Delete Result"+deleteChk);
+						}
+						return "/err/file";
+					}else{
+						throw new UserDefineException("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+					}
+				}
+	    		
+	    		
+    		}catch(UserDefineException ude) {
+    			zipOut.close();
+    			throw new UserDefineException(ude.getMessage());
+    		}catch(Exception subE) {
+    		
+    			Log.error("selectPrj3000MenuTreeZipDownload()", subE);
+    			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+    			
+    			zipOut.close();
+    		}
+			
+			return "/err/file";
+		}catch(UserDefineException ude) {
+			str.append(ude.getMessage());
+		}catch(Exception e) {
+			Log.error("selectPrj3000MenuTreeZipDownload()", e);
+			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+		}
+		
+		PrintWriter printwriter = response.getWriter();
+		printwriter.println("<html><form name='downForm'></form>");
+		printwriter.println(str);
+		printwriter.println("</html>");
+		printwriter.flush();
+		printwriter.close();
+		return "/err/file";
+	}
 	
 	
 	

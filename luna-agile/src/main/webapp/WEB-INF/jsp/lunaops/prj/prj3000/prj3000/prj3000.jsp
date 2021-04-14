@@ -8,8 +8,7 @@
 	<div class="kt-portlet__head kt-portlet__head--lg">
 		<div class="kt-portlet__head-label">
 			<h4 class="kt-font-boldest kt-font-brand">
-				<i class="fa fa-th-large kt-margin-r-5"></i>
-				<c:out value="${sessionScope.selMenuNm}" />
+				<i class="fa fa-th-large kt-margin-r-5"></i><c:out value="${sessionScope.selMenuNm}" />
 			</h4>
 		</div>
 	</div>
@@ -17,66 +16,41 @@
 		<div class="row">
 			<!-- begin:: 산출물 메뉴 목록  -->
 			<div class="col-xl-4">
-				<div
-					class="kt-portlet--contain osl-content__border--light kt-margin-b-20 ">
-					<div class="kt-blog-grid">
-						<div class="kt-portlet__head kt-portlet__head--lg">
-							<div class="kt-portlet__head-label">
-								<h5 class="kt-font-boldest kt-font-brand">
-									<i class="fas fa-copy kt-margin-r-5"></i>산출물 메뉴 목록
-								</h5>
-							</div>
-							<!-- begin:: 산출물 메뉴 목록 button -->
-							<div class="kt-portlet__head-toolbar">
-								<div class="kt-portlet__head-wrapper">
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="select"
-										title="산출물 메뉴 목록 조회" data-toggle="kt-tooltip"
-										data-skin="brand" data-placement="bottom"
-										data-auth-button="select" tabindex="1"
-										data-original-title="산출물 메뉴 목록 조회">
-										<i class="fa fa-list"></i><span>조회</span>
-									</button>
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="insert"
-										title="산출물 메뉴 목록 추가" data-toggle="kt-tooltip"
-										data-skin="brand" data-placement="bottom"
-										data-auth-button="insert" tabindex="2"
-										data-original-title="산출물 메뉴 목록 추가">
-										<i class="fa fa-plus"></i><span>등록</span>
-									</button>
-								</div>
-								<div class="kt-portlet__head-group">
-									<a href="#"
-										class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action"
-										data-toggle="kt-tooltip" title="전체 펼치기"
-										data-tree-id="prj3000DocTree" data-tree-action="allNodeOpen"><i
-										class="fa fa-plus"></i></a> <a href="#"
-										class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action"
-										data-toggle="kt-tooltip" title="전체 접기"
-										data-tree-id="prj3000DocTree" data-tree-action="allNodeClose">
-										<i class="fa fa-minus"></i>
-									</a> <a href="#" data-ktportlet-tool="toggle"
-										class="btn btn-sm btn-icon btn-clean btn-icon-md"><i
-										class="la la-angle-down"></i></a>
-								</div>
-							</div>
-							<!-- end:: 산출물 메뉴 목록 button -->
+				<div class="kt-portlet osl-content__border--light kt-margin-b-20" id="prj3000DocTreeMenu">
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-label">
+							<h5 class="kt-font-boldest kt-font-brand">
+								<i class="fas fa-copy kt-margin-r-5"></i>산출물 메뉴 목록
+							</h5>
 						</div>
-
-						<div class="kt-portlet__body">
-							<div class="row">
-								<div class="col-12">
-									<div class="osl-tree-search" data-tree-id="prj3000DocTree"></div>
-								</div>
+						<!-- begin:: 산출물 메뉴 목록 button -->
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-wrapper">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="select" title="산출물 메뉴 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 메뉴 목록 조회">
+									<i class="fa fa-list"></i><span>조회</span>
+								</button>
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="insert" title="산출물 메뉴 목록 추가" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2" data-original-title="산출물 메뉴 목록 추가">
+									<i class="fa fa-plus"></i><span>등록</span>
+								</button>
 							</div>
-							<div class="row kt-margin-t-20">
-								<div class="col-12">
-									<div class="osl-tree kt-scroll" data-height="410"
-										id="prj3000DocTree"></div>
-								</div>
+							<div class="kt-portlet__head-group">
+								<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="prj3000DocTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a> 
+								<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="prj3000DocTree" data-tree-action="allNodeClose"> <i class="fa fa-minus"></i> </a> 
+								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
+							</div>
+						</div>
+						<!-- end:: 산출물 메뉴 목록 button -->
+					</div>
+
+					<div class="kt-portlet__body">
+						<div class="row">
+							<div class="col-12">
+								<div class="osl-tree-search" data-tree-id="prj3000DocTree"></div>
+							</div>
+						</div>
+						<div class="row kt-margin-t-20">
+							<div class="col-12">
+								<div class="osl-tree kt-scroll" data-height="410" id="prj3000DocTree"></div>
 							</div>
 						</div>
 					</div>
@@ -97,28 +71,13 @@
 							<!-- begin:: 산출물 양식 정보 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="selectDocInfo"
-										title="데이터 조회" data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="selectDocInfo"
-										tabindex="1" data-original-title="산출물 양식 정보 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="selectDocInfo" title="데이터 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectDocInfo" tabindex="1" data-original-title="산출물 양식 정보 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="update"
-										title="데이터 수정" data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="update" tabindex="3"
-										data-original-title="산출물 양식 정보 수정">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="update" title="데이터 수정" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" data-original-title="산출물 양식 정보 수정">
 										<i class="fa fa-edit"></i><span>수정</span>
 									</button>
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="delete"
-										title="데이터 삭제" data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="delete" tabindex="4"
-										data-original-title="산출물 양식 정보 삭제">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="delete" title="데이터 삭제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 양식 정보 삭제">
 										<i class="fa fa-trash-alt"></i><span>삭제</span>
 									</button>
 								</div>
@@ -127,74 +86,58 @@
 						</div>
 
 						<div class="kt-portlet__body">
-							<form class="kt-form" id="frPrj3000"
-								enctype="multipart/form-data">
+							<form class="kt-form" id="frPrj3000" enctype="multipart/form-data">
 								<input type="hidden" id="docFormFileId" name="docFormFileId">
-								<input type="hidden" id="docFormConfFileId"
-									name="docFormConfFileId"> <input type="hidden"
-									id="docAtchFileId" name="docAtchFileId"> <input
-									type="hidden" id="docWaitFileId" name="docWaitFileId">
+								<input type="hidden" id="docFormConfFileId" name="docFormConfFileId"> 
+								<input type="hidden" id="docAtchFileId" name="docAtchFileId"> 
+								<input type="hidden" id="docWaitFileId" name="docWaitFileId">
 								<div class="row">
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fa fa-align-left kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docId">산출물 ID</span></label> <input
-												type="text" class="form-control" placeholder="산출물 ID"
-												name="docId" id="docId" readonly="readonly">
+											<label><i class="fa fa-align-left kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docId">산출물 ID</span></label> 
+											<input type="text" class="form-control" placeholder="산출물 ID" name="docId" id="docId" readonly="readonly">
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fa fa-edit kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docNm">산출물 명</span></label> <input
-												type="text" class="form-control" placeholder="산출물 명"
-												name="docNm" id="docNm" readonly="readonly">
+											<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docNm">산출물 명</span></label> 
+											<input type="text" class="form-control" placeholder="산출물 명" name="docNm" id="docNm" readonly="readonly">
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fa fa-check-square kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docUseCd">사용유무</span></label> <input
-												type="text" class="form-control" placeholder="사용유무"
-												name="useNm" id="useNm" readonly="readonly">
+											<label><i class="fa fa-check-square kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docUseCd">사용유무</span></label> 
+											<input type="text" class="form-control" placeholder="사용유무" name="useNm" id="useNm" readonly="readonly">
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fa fa-list-ol kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docOrd">순번</span></label> <input
-												type="text" class="form-control" placeholder="순번" name="ord"
-												id="ord" readonly="readonly">
+											<label><i class="fa fa-list-ol kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docOrd">순번</span></label> 
+											<input type="text" class="form-control" placeholder="순번" name="ord" id="ord" readonly="readonly">
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fas fa-calendar-alt kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docEdDtm">산출물 마감일</span></label> <input
-												type="text" class="form-control" placeholder="산출물 마감일"
-												name="docEdDtm" id="docEdDtm" readonly="readonly">
+											<label><i class="fas fa-calendar-alt kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docEdDtm">산출물 마감일</span></label> 
+											<input type="text" class="form-control" placeholder="산출물 마감일" name="docEdDtm" id="docEdDtm" readonly="readonly">
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="form-group">
-											<label><i class="fa fa-project-diagram kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.signUseCd">결재 사용 유무</span></label> <input
-												type="text" class="form-control" placeholder="결재 사용 유무"
-												name="signUseNm" id="signUseNm" readonly="readonly">
+											<label><i class="fa fa-project-diagram kt-margin-r-5"></i><span data-lang-cd="prj3000.label.signUseCd">결재 사용 유무</span></label> 
+											<input type="text" class="form-control" placeholder="결재 사용 유무" name="signUseNm" id="signUseNm" readonly="readonly">
 										</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-12">
 										<div class="form-group">
-											<label><i class="fa fa-edit kt-margin-r-5"></i><span
-												data-lang-cd="prj3000.label.docDesc">비고</span></label>
-											<div class="form-control h-100 osl-min-height--12rem"
-												id="docDesc"></div>
+											<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="prj3000.label.docDesc">비고</span></label>
+											<div class="form-control h-100 osl-min-height--12rem" id="docDesc"></div>
 										</div>
 									</div>
 								</div>
@@ -204,8 +147,7 @@
 				</div>
 				<!-- end:: 산출물 양식 정보  -->
 				<!-- begin:: 산출물 양식 파일 관리  -->
-				<div
-					class="kt-portlet--contain osl-content__border--light kt-margin-t-20">
+				<div class="kt-portlet--contain osl-content__border--light kt-margin-t-20">
 					<div class="kt-blog-grid">
 						<div class="kt-portlet__head kt-portlet__head--lg">
 							<div class="kt-portlet__head-label">
@@ -216,13 +158,7 @@
 							<!-- begin:: 산출물 양식 파일 관리 조회 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-										data-tree-id="prj3000DocTree" data-tree-action="selectFiles"
-										title="산출물 양식 파일 관리 조회" data-toggle="kt-tooltip"
-										data-skin="brand" data-placement="bottom"
-										data-auth-button="selectFiles" tabindex="1"
-										data-original-title="산출물 양식 파일 관리 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="selectFiles" title="산출물 양식 파일 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectFiles" tabindex="1" data-original-title="산출물 양식 파일 관리 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
 								</div>
@@ -234,23 +170,15 @@
 							<div class="row">
 								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 									<div class="kt-portlet--contain">
-										<div
-											class="kt-portlet__head kt-portlet__head--lg border osl-border-bottom--none">
+										<div class="kt-portlet__head kt-portlet__head--lg border osl-border-bottom--none">
 											<div class="kt-portlet__head-label">
 												<h5 class="kt-font-boldest kt-font-brand">확정 파일</h5>
 											</div>
 											<!-- begin:: 산출물 확정 파일 등록 button -->
 											<div class="kt-portlet__head-toolbar">
 												<div class="kt-portlet__head-wrapper">
-													<input type="file" class="kt-hide" id="confFileBtn"
-														multiple="multiple" name="confFileBtn">
-													<button type="button"
-														class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-														data-tree-id="prj3000DocTree"
-														data-tree-action="insertConfFile" title="확정 파일 등록"
-														data-toggle="kt-tooltip" data-skin="brand"
-														data-placement="bottom" data-auth-button="insertConfFile"
-														tabindex="1" data-original-title="확정 파일 등록">
+													<input type="file" class="kt-hide" id="confFileBtn" multiple="multiple" name="confFileBtn">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="insertConfFile" title="확정 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertConfFile" tabindex="1" data-original-title="확정 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
 												</div>
@@ -259,13 +187,10 @@
 										</div>
 
 
-										<div
-											class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom"
-											data-height="350" id="confirmation-list"></div>
+										<div class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom" data-height="350" id="confirmation-list"></div>
 									</div>
 								</div>
-								<div
-									class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 osl-mobile-margin-t-20">
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 osl-mobile-margin-t-20">
 									<div class="kt-portlet--contain">
 										<div class="kt-portlet__head border osl-border-bottom--none">
 											<div class="kt-portlet__head-label">
@@ -274,24 +199,15 @@
 											<!-- begin:: 산출물 확정 대기 파일 등록  button -->
 											<div class="kt-portlet__head-toolbar">
 												<div class="kt-portlet__head-wrapper">
-													<input type="file" class="kt-hide" id="fileBtn"
-														multiple="multiple" name="fileBtn">
-													<button type="button"
-														class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action"
-														data-tree-id="prj3000DocTree"
-														data-tree-action="insertFile" title="확정 대기 파일 등록"
-														data-toggle="kt-tooltip" data-skin="brand"
-														data-placement="bottom" data-auth-button="insertFile"
-														tabindex="1" data-original-title="확정 대기 파일 등록">
+													<input type="file" class="kt-hide" id="fileBtn" multiple="multiple" name="fileBtn">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3000DocTree" data-tree-action="insertFile" title="확정 대기 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertFile" tabindex="1" data-original-title="확정 대기 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
 												</div>
 											</div>
 											<!-- end:: 산출물 확정 대기 파일 등록  button -->
 										</div>
-										<div
-											class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom"
-											data-height="350" id="wait-confirmation-list"></div>
+										<div class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom" data-height="350" id="wait-confirmation-list"></div>
 									</div>
 								</div>
 							</div>
@@ -300,8 +216,7 @@
 				</div>
 				<!-- end:: 산출물 양식 파일 관리  -->
 				<!-- begin:: 산출물 연결 관리  -->
-				<div
-					class="kt-portlet--contain osl-content__border--light kt-margin-t-20">
+				<div class="kt-portlet--contain osl-content__border--light kt-margin-t-20">
 					<div class="kt-blog-grid">
 						<div class="kt-portlet__head kt-portlet__head--lg">
 							<div class="kt-portlet__head-label">
@@ -312,31 +227,13 @@
 							<!-- begin:: 산출물 연결 관리 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
-										data-datatable-action="select" title="산출물 연결 관리 조회"
-										data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="select" tabindex="1"
-										data-original-title="산출물 연결 관리 조회">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="select" title="산출물 연결 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 연결 관리 조회">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
-										data-datatable-action="insert" title="산출물 연결 관리 연결"
-										data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="update" tabindex="3"
-										data-original-title="산출물 연결 관리 연결">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="insert" title="산출물 연결 관리 연결" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3" data-original-title="산출물 연결 관리 연결">
 										<i class="fa fa-edit"></i><span>연결</span>
 									</button>
-									<button type="button"
-										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
-										data-datatable-action="delete" title="산출물 연결 관리 연결 제거"
-										data-toggle="kt-tooltip" data-skin="brand"
-										data-placement="bottom" data-auth-button="delete" tabindex="4"
-										data-original-title="산출물 연결 관리 연결 제거">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="delete" title="산출물 연결 관리 연결 제거" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 연결 관리 연결 제거">
 										<i class="fa fa-trash-alt"></i><span>연결 제거</span>
 									</button>
 								</div>
@@ -386,6 +283,8 @@ var OSLPrj3000Popup = function () {
 		//파일 드래그앤 드랍 펑션
 		fileDropDown();
 		
+		//Portlet 세팅
+		new KTPortlet('prj3000DocTreeMenu', $.osl.lang("portlet"));
 		
 		/**************************************/
 		/* 트리 메뉴 및 관련 메서드 시작                                      */
@@ -424,22 +323,22 @@ var OSLPrj3000Popup = function () {
             		insert : {
             			"separator_before": true,
             			"separator_after": false,
-            			"label": '하위 산출물 등록',
-            			"title": '하위 산출물 등록',
+            			"label": $.osl.lang("prj3000.contextmenu.insert"),
+            			"title": $.osl.lang("prj3000.contextmenu.insert"),
             			"actionFn": "insert"
             		},
             		update : {
             			"separator_before": false,
             			"separator_after": false,
-            			"label": '선택 산출물 수정',
-            			"title": '선택 산출물 수정',
+            			"label": $.osl.lang("prj3000.contextmenu.update"),
+            			"title": $.osl.lang("prj3000.contextmenu.update"),
             			"actionFn": "update"
             		},
             		delete : {
             			"separator_before": false,
             			"separator_after": true,
-            			"label": '선택 산출물 삭제',
-            			"title": '선택 산출물 삭제',
+            			"label": $.osl.lang("prj3000.contextmenu.delete"),
+            			"title": $.osl.lang("prj3000.contextmenu.delete"),
             			"actionFn": "delete"
             		},
             	}
@@ -593,7 +492,6 @@ var OSLPrj3000Popup = function () {
 				}
 			}
 		});
-		console.log()
 		
 		/**
 		 * function 명 	: selectDocInfo

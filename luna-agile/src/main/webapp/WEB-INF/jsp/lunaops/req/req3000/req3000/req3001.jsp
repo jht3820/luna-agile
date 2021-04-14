@@ -1033,7 +1033,7 @@ var OSLReq3001Popup = function () {
 	//기능키 컬럼 숨김	
 	var actionHide = function(tableId){
 		if(tableId == "req3001ConnectReqTable"){
-			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.getColumnByField('action').visible=false;
+			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.getColumnByField('actions').visible=false;
 			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.columnHide();
 			
 		}else if(tableId == "req3001UnconnectReqTable"){
