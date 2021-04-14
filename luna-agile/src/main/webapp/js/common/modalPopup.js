@@ -285,6 +285,11 @@ var modal_popup = function(url, data, opts){
 		if(!$.osl.isNull(inputNumberList) && inputNumberList.length > 0){
 			$.each(inputNumberList, function(idx, map){
 				
+				var readonly = $(map).attr("readonly");
+				if(!$.osl.isNull(readonly) || (readonly == true || readonly == "readonly")){
+					return true;
+				}
+				
 				var min = $(map).attr("min") || 0;
 				var max = $(map).attr("max") || 9999999;
 				var step = $(map).attr("step") || 1;

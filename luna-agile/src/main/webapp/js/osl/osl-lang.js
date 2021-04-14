@@ -507,6 +507,11 @@ var OSLCoreLangSetting = function () {
 					updateDoc : "산출물 양식 수정",
 					insertDocCon : "산출물 연결"
 				}
+			},
+			contextmenu : {
+				insert : "하위 산출물 등록",
+				update : "산출물 수정",
+				delete : "산출물 삭제"
 			}
 		},
 		prj3001 : {
@@ -546,7 +551,9 @@ var OSLCoreLangSetting = function () {
 			message : {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
-					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다."
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다.",
+					notHaveConfFile : "등록된 파일이 존재하지 않습니다.",
+					lackDownloadInfo : "다운로드에 필요한 정보가 부족합니다."
 				},
 				confirm:{
 					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
@@ -555,6 +562,19 @@ var OSLCoreLangSetting = function () {
 			modal : {
 				title : {
 					insertDocCon : "산출물 연결"
+				}
+			},
+			contextmenu : {
+				formFileDownload : "양식 다운로드",
+				atchFileDownload : "확정 산출물 다운로드",
+				waitFileDownload : "확정 대기 산출물 다운로드"
+			}
+		},
+		prj3101 : {
+			message : {
+				alert : {
+					notCheckedFile : "선택된 파일이 없습니다.",
+					lackDownloadInfo : "다운로드에 필요한 정보가 부족합니다."
 				}
 			}
 		},
@@ -2320,6 +2340,11 @@ var OSLCoreLangSetting = function () {
 					updateDoc : "Modifying Document Form",
 					insertDocCon : "Document Linkage"
 				}
+			},
+			contextmenu : {
+				insert : "Register New Document",
+				update : "Modifying Document",
+				delete : "delete Document"
 			}
 		},
 		prj3001 : {
@@ -2359,7 +2384,9 @@ var OSLCoreLangSetting = function () {
 			message : {
 				alert : {
 					treeSelect : "Select a document in the tree on the left.",
-					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached."
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached.",
+					notHaveConfFile : "Registered file does not exist.",
+					lackDownloadInfo : "Insufficient information for download."
 				},
 				confirm:{
 					deleteFormFile:"Would you like to delete file?"
@@ -2368,6 +2395,19 @@ var OSLCoreLangSetting = function () {
 			modal : {
 				title : {
 					insertDocCon : "Document Linkage"
+				}
+			},
+			contextmenu : {
+				formFileDownload : "Download Form Files",
+				atchFileDownload : "Download confirmed Files",
+				waitFileDownload : "Download wait Files"
+			}
+		},
+		prj3101 : {
+			message : {
+				alert : {
+					notCheckedFile : "No file selected.",
+					lackDownloadInfo : "Insufficient information for download."
 				}
 			}
 		},
