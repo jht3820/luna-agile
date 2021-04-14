@@ -373,7 +373,7 @@ var OSLSpr2001Popup = function () {
    				$.osl.layerPopupClose();
    				
    				//전체 목록 재조회
-   				OSLSpr1100Popup.reload();
+   				OSLSpr2000Popup.reload();
    			}
    		});
    		
