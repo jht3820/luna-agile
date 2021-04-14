@@ -118,28 +118,32 @@ public class Req3000ServiceImpl extends EgovAbstractServiceImpl implements Req30
 			
 			
 			List<Map<String, String>> reqLinkDatas = new ArrayList();
+			
+			
+			
+			if(reqGrpLinkReqList != null) {
+				
+				JSONArray jsonArray = (JSONArray) jsonParser.parse(reqGrpLinkReqList);
+				for(int i=0; i<jsonArray.size(); i++){
+					org.json.simple.JSONObject token = (org.json.simple.JSONObject) jsonArray.get(i);
+					token.put("prjGrpId", prjGrpId);
+					token.put("regGrpId", insNewReqGrpId);
+					token.put("regUsrId", regUsrId);
+					token.put("regUsrIp", regUsrIp);
 					
-			
-			JSONArray jsonArray = (JSONArray) jsonParser.parse(reqGrpLinkReqList);
-			for(int i=0; i<jsonArray.size(); i++){
-				org.json.simple.JSONObject token = (org.json.simple.JSONObject) jsonArray.get(i);
-				token.put("prjGrpId", prjGrpId);
-				token.put("regGrpId", insNewReqGrpId);
-				token.put("regUsrId", regUsrId);
-				token.put("regUsrIp", regUsrIp);
+					HashMap<String, String> tokenObj = new ObjectMapper().readValue(token.toString(), HashMap.class) ;
+					
+					reqLinkDatas.add(tokenObj);
+				}
 				
-				HashMap<String, String> tokenObj = new ObjectMapper().readValue(token.toString(), HashMap.class) ;
-				
-				reqLinkDatas.add(tokenObj);
-			}
-			
-			for(Map data : reqLinkDatas){
-				data.put("regUsrId", paramMap.get("regUsrId"));
-				data.put("regUsrIp", paramMap.get("regUsrIp"));
-				data.put("reqGrpId", insNewReqGrpId);
-				
-				
-				req3000DAO.insertReq3001ReqGrpLinkReqInfo(data);
+				for(Map data : reqLinkDatas){
+					data.put("regUsrId", paramMap.get("regUsrId"));
+					data.put("regUsrIp", paramMap.get("regUsrIp"));
+					data.put("reqGrpId", insNewReqGrpId);
+					
+					
+					req3000DAO.insertReq3001ReqGrpLinkReqInfo(data);
+				}
 			}
 			return insNewReqGrpId;
 		}
@@ -148,6 +152,7 @@ public class Req3000ServiceImpl extends EgovAbstractServiceImpl implements Req30
 			
 			
 			convertParamMap.put("useCd", "01");
+			
 			
 			int uptCnt = req3000DAO.updateReq3000ReqGrpInfo(convertParamMap);
 			
@@ -160,7 +165,6 @@ public class Req3000ServiceImpl extends EgovAbstractServiceImpl implements Req30
 			
 			String reqGrpLinkReqList = convertParamMap.get("reqGrpLinkReqList");
 			String reqGrpId = convertParamMap.get("reqGrpId");
-			
 			
 			
 			List<Map<String, String>> reqLinkDatas = new ArrayList();

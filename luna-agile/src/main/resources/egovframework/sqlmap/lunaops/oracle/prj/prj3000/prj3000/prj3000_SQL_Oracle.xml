@@ -26,7 +26,7 @@
 		          			,	A.DOC_FORM_FILE_ID
 		          			,	A.DOC_FORM_CONF_FILE_ID
 		          			,	A.DOC_ATCH_FILE_ID
-							,	A.DOC_CONF_FILE_ID
+							,	A.DOC_WAIT_FILE_ID
 							,	A.DOC_CONF_DESC
 							,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
 		          			,	A.USE_CD
@@ -41,6 +41,7 @@
 		            		AND 	A.PRJ_ID 		= 	B.PRJ_ID
 		            		AND		A.PRJ_ID		=	#prjId#
 		            		AND		B.LIC_GRP_ID 	= 	#licGrpId#
+		            		AND		A.USE_CD		=	'01'
 		       ) T        
       		START WITH T.DOC_ID = (SELECT DOC_ID FROM PRJ3000 WHERE UPPER_DOC_ID IS NULL AND PRJ_ID	= #prjId#)
 		  	CONNECT BY PRIOR T.DOC_ID = T.UPPER_DOC_ID
@@ -66,7 +67,7 @@
                 ,	A.DOC_FORM_FILE_ID
                 ,	A.DOC_FORM_CONF_FILE_ID
                 ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_CONF_FILE_ID
+                ,	A.DOC_WAIT_FILE_ID
                 ,	A.DOC_CONF_DESC
                 ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
                 ,	A.USE_CD
@@ -95,44 +96,6 @@
 
 	 
 	
-	<insert id="prj3000DAO.insertPrj3000MenuInfo" parameterClass="java.util.Map">
-		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
-		<![CDATA[
-			 
-			SELECT	NVL( 
-							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
-						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-            		) AS NEW_DPT_ID 
-			FROM	(
-			            SELECT	MAX(DOC_ID)  AS NEW_DOC_ID
-			            FROM	PRJ3000 A
-			            WHERE	1=1
-			            AND		A.DOC_ID LIKE 'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
-					)
-		]]>
-		</selectKey>
-		<![CDATA[ 
-			
-			INSERT INTO PRJ3000 A
-			(
-					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
-			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
-			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
-			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
-			)
-			VALUES
-			(
-					#newDocId#		,	#docId#			,	'개발문서'			,	#docFormFileId#	
-				,	#docFormFileSn#	,	''				,	#docAtchFileId#	,	#docFileSn#
-			    ,	''				,	#lvl# + 1	    ,	(SELECT NVL(MAX(ORD), 0) + 1 FROM PRJ3000 A WHERE 1=1 AND A.UPPER_DOC_ID = #docId#)				
-				,	TO_DATE(REPLACE(#docEdDtm#, '-'), 'YYYYMMDD')		
-			    ,	'01'			
-			    ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#	    ,	SYSDATE			
-			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#
-			)
-		]]>
-	</insert>
 	
 	
 	<insert id="prj3000DAO.insertPrj3000RootMenuInfo" parameterClass="java.util.Map">
@@ -156,18 +119,201 @@
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID					,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_WAIT_FILE_ID
 			  	,	LVL				  		,	ORD		  			,	DOC_ED_DTM			,	USE_CD  			
 			  	,	REG_DTM  				,	REG_USR_ID			,	REG_USR_IP		  	,	MODIFY_DTM			
 			  	,	MODIFY_USR_ID			,	MODIFY_USR_IP		,	PRJ_ID				,	SIGN_USE_CD
 			)
 			VALUES
+			(		
+					#newDocId#			,	null			,	'표준 산출물'		,	#docFormFileId#				
+				,	#docFormConfFileId#	,	'시스템 ROOT'		,	#docAtchFileId#	,	#docWaitFileId#
+			    ,	0	    			,	1				,	null			,	'01'			
+			    ,	SYSDATE				,	#regUsrId#		,	#regUsrIp#		,	SYSDATE			
+			    ,	#regUsrId#			,	#regUsrIp#		,	#prjId#			,	'02'
+			)
+		]]>
+	</insert>
+	
+	
+	
+	<select id="prj3000DAO.selectPrj3000WizardMenuInfo" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			
+			SELECT	A.DOC_ID
+				,	A.PRJ_ID
+				,	A.UPPER_DOC_ID
+                ,	A.DOC_NM
+				,	A.LVL
+			    ,	A.ORD
+			    ,	A.DOC_DESC
+                ,	A.DOC_FORM_FILE_ID
+                ,	A.DOC_FORM_CONF_FILE_ID
+                ,	A.DOC_ATCH_FILE_ID
+                ,	A.DOC_WAIT_FILE_ID
+                ,	A.DOC_CONF_DESC
+                ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
+                ,	A.USE_CD
+				,	A.REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	A.MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+            FROM	PRJ3000 A
+            WHERE	1=1
+            AND		A.PRJ_ID		= #prjId#
+            AND		A.DOC_ID 		= #docId#
+            ORDER BY ORD
+ 		]]> 
+	</select>
+	
+	
+	
+	<select id="prj3000DAO.selectPrj3000DocNextOrd" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		
+		SELECT 	NVL(MAX(A.ORD), 0) + 1 AS NEX_ORD
+        FROM 	PRJ3000 A
+        JOIN	PRJ1000 B
+        ON		A.PRJ_ID = B.PRJ_ID
+        WHERE 	1=1 
+        AND 	B.LIC_GRP_ID = #licGrpId#
+        AND 	A.UPPER_DOC_ID = #upperDocId#
+        AND		A.PRJ_ID	=	#prjId#
+	</select>
+	
+	
+	<insert id="prj3000DAO.insertPrj3000DocInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
+		<![CDATA[
+			 
+			SELECT	NVL( 
+							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
+						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_DOC_ID 
+			FROM	(
+			            SELECT	MAX(DOC_ID)  AS NEW_DOC_ID
+			            FROM	PRJ3000 A
+			            JOIN	PRJ1000 B
+			            ON		A.PRJ_ID = B.PRJ_ID
+			            WHERE	1=1
+                        AND		B.LIC_GRP_ID = #licGrpId#
+                        AND		A.PRJ_ID	 = #prjId#
+			            AND		A.DOC_ID LIKE 'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>		
+		</selectKey>
+		<![CDATA[ 
+			
+			INSERT INTO PRJ3000 A
 			(
-					#newDocId#		,	null			,	'전체'		,	null			
-				,	null			,	'시스템 ROOT'		,	null		,	null
-			    ,	0	    		,	1				,	null		,	'01'			
-			    ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#	,	SYSDATE			
-			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#		,	'02'
+					PRJ_ID					,	DOC_ID				,	UPPER_DOC_ID		,	DOC_NM
+				,	DOC_DESC				,	LVL					,	ORD					,	DOC_ED_DTM
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_FORM_FILE_ID	,	DOC_ATCH_FILE_ID	,	DOC_WAIT_FILE_ID
+				,	USE_CD					,	SIGN_USE_CD			,	REG_DTM				,	REG_USR_ID			
+				,	REG_USR_IP				,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#prjId#				,	#newDocId#			,	#upperDocId#		,	#docNm# 
+				,	#docDesc#			,	#lvl# + 1			,	#ord#				,	#docEdDtm#
+				,	#docFormConfFileId#	,	#docFormFileId#		,	#docAtchFileId#		,	#docWaitFileId#
+				,	'01'				,	#signUseCd#			,	SYSDATE				,	#regUsrId#			
+				,	#regUsrIp#			,	SYSDATE				,	#modifyUsrId#		,	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+	<update id="prj3000DAO.updatePrj3000DocInfo" parameterClass="java.util.Map">
+		<![CDATA[
+		
+		UPDATE	PRJ3000 A
+        SET		
+            	MODIFY_DTM      	= SYSDATE
+            ,	MODIFY_USR_ID   	= #modifyUsrId#
+            ,	MODIFY_USR_IP   	= #modifyUsrIp#
+            ,	DOC_ED_DTM			= TO_DATE(REPLACE(#docEdDtm#, '-'), 'YYYYMMDD')
+            ,	USE_CD				= #useCd#
+            , 	DOC_NM				= #docNm#
+            ,	DOC_DESC			= #docDesc#
+            , 	ORD					= #ord#
+            ,	SIGN_USE_CD			= #signUseCd#
+        WHERE	1=1
+        AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
+        AND		A.DOC_ID		= 	#docId#
+        AND		A.PRJ_ID		=	#prjId#
+	]]>
+	</update>
+	
+	
+	<delete id="prj3000DAO.deletePrj3000DocInfo" parameterClass="java.util.Map">
+		
+		DELETE
+		FROM	PRJ3000
+		WHERE	1 = 1
+		AND		DOC_ID = #docId#
+		AND		PRJ_ID = #prjId#
+	</delete>
+	
+
+	
+	<update id="prj3000DAO.updatePrj3000FileId" parameterClass="java.util.Map">
+		
+		UPDATE	COMTNFILEDETAIL
+		SET		ATCH_FILE_ID = #afterFileId#
+			,	FILE_SN		 = #afterFileSn#
+		WHERE	1 = 1
+		AND		ATCH_FILE_ID = #beforeFileId#
+		AND		FILE_SN		 = #fileSn#
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<insert id="prj3000DAO.insertPrj3000MenuInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
+		<![CDATA[
+			 
+			SELECT	NVL( 
+							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
+						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_DPT_ID 
+			FROM	(
+			            SELECT	MAX(DOC_ID)  AS NEW_DOC_ID
+			            FROM	PRJ3000 A
+			            WHERE	1=1
+			            AND		A.DOC_ID LIKE 'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			
+			INSERT INTO PRJ3000 A
+			(
+					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_WAIT_FILE_ID
+			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
+			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
+			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
+			)
+			VALUES
+			(
+					#newDocId#		,	#docId#			,	'개발문서'			,	#docFormFileId#	
+				,	#docFormFileSn#	,	''				,	#docAtchFileId#	,	#docFileSn#
+			    ,	''				,	#lvl# + 1	    ,	(SELECT NVL(MAX(ORD), 0) + 1 FROM PRJ3000 A WHERE 1=1 AND A.UPPER_DOC_ID = #docId#)				
+				,	TO_DATE(REPLACE(#docEdDtm#, '-'), 'YYYYMMDD')		
+			    ,	'01'			
+			    ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#	    ,	SYSDATE			
+			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#
 			)
 		]]>
 	</insert>
@@ -198,13 +344,12 @@
 	</delete>
 	
 	
-	
 	<update id="prj3000DAO.updatePrj3000MenuInfo" parameterClass="java.util.Map">
 	<![CDATA[
 		
 		UPDATE	PRJ3000 A
         SET		DOC_FORM_CONF_FILE_ID	= #docFormFileSn#
-            ,	DOC_CONF_FILE_ID			= #docFileSn#
+            ,	DOC_WAIT_FILE_ID			= #docFileSn#
             ,	MODIFY_DTM      	= SYSDATE
             ,	MODIFY_USR_ID   	= #modifyUsrId#
             ,	MODIFY_USR_IP   	= #modifyUsrIp#
@@ -252,7 +397,7 @@
                 ,	A.DOC_FORM_FILE_ID
                 ,	A.DOC_FORM_CONF_FILE_ID
                 ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_CONF_FILE_ID
+                ,	A.DOC_WAIT_FILE_ID
                 ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
                 ,	A.USE_CD
 			FROM	(SELECT * FROM PRJ3000 WHERE PRJ_ID = #prjId# AND USE_CD = '01') A
@@ -281,7 +426,7 @@
 		          			,	A.DOC_FORM_FILE_ID
 		          			,	A.DOC_FORM_CONF_FILE_ID
 		          			,	A.DOC_ATCH_FILE_ID
-							,	A.DOC_CONF_FILE_ID
+							,	A.DOC_WAIT_FILE_ID
 							,	A.DOC_CONF_DESC
 							,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
 		          			,	A.USE_CD
@@ -298,46 +443,13 @@
 	</select>
 	
 	
-	
-	<select id="prj3000DAO.selectPrj3000WizardMenuInfo" parameterClass="java.util.Map" resultClass="egovMap">
-		<![CDATA[ 
-			
-			SELECT	A.DOC_ID
-				,	A.PRJ_ID
-				,	A.UPPER_DOC_ID
-                ,	A.DOC_NM
-				,	A.LVL
-			    ,	A.ORD
-			    ,	A.DOC_DESC
-                ,	A.DOC_FORM_FILE_ID
-                ,	A.DOC_FORM_CONF_FILE_ID
-                ,	A.DOC_ATCH_FILE_ID
-                ,	A.DOC_CONF_FILE_ID
-                ,	A.DOC_CONF_DESC
-                ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
-                ,	A.USE_CD
-				,	A.REG_DTM
-				,	A.REG_USR_ID
-				,	A.REG_USR_IP
-				,	A.MODIFY_DTM
-				,	A.MODIFY_USR_ID
-				,	A.MODIFY_USR_IP
-            FROM	PRJ3000 A
-            WHERE	1=1
-            AND		A.PRJ_ID		= #prjId#
-            AND		A.DOC_ID 		= #docId#
-            ORDER BY ORD
- 		]]> 
-	</select>
-	
-	
 	<insert id="prj3000DAO.insertPrj3000ParamMenuInfo" parameterClass="java.util.Map">
 		<![CDATA[ 
 			
 			INSERT INTO PRJ3000 A
 			(
 					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
-				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_CONF_FILE_ID
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_WAIT_FILE_ID
 			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
 			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
 			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
@@ -345,93 +457,27 @@
 			VALUES
 			(
 					#docId#				,	#upperDocId#		,	#docNm#				,	#docFormFileId#	
-				,	null				,	#docDesc#			,	#docAtchFileId#		,	null
+				,	#docFormConfFileId#	,	#docDesc#			,	#docAtchFileId#		,	#docWaitFileId#
 			    ,	#docConfDesc#		,	#lvl#	   			,	#ord#				,	#docEdDtm#
-			    ,	'01'			
-			    ,	SYSDATE			,	#regUsrId#		,	#regUsrIp#	    ,	SYSDATE			
-			    ,	#regUsrId#		,	#regUsrIp#		,	#prjId#
+			    ,	'01'				,	SYSDATE				,	#regUsrId#			,	#regUsrIp#	   
+			    ,	SYSDATE				,	#regUsrId#			,	#regUsrIp#			,	#prjId#
 			)
 		]]>
 	</insert>
 	
-	<select id="prj3000DAO.selectPrj3000DocNextOrd" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<update id="prj3000DAO.updatePrj3000FormFileId" parameterClass="java.util.Map">
 		
-		SELECT 	NVL(MAX(A.ORD), 0) + 1 AS NEX_ORD
-        FROM 	PRJ3000 A
-        JOIN	PRJ1000 B
-        ON		A.PRJ_ID = B.PRJ_ID
-        WHERE 	1=1 
-        AND 	B.LIC_GRP_ID = #licGrpId#
-        AND 	A.UPPER_DOC_ID = #upperDocId#
-        AND		A.PRJ_ID	=	#prjId#
-	</select>
-	
-	<insert id="prj3000DAO.insertPrj3000DocInfo" parameterClass="java.util.Map">
-		<selectKey resultClass="java.lang.String" keyProperty="newDocId">
-		<![CDATA[
-			 
-			SELECT	NVL( 
-							SUBSTR(NEW_DOC_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_DOC_ID, 12, 5)) + 1) , 5, '0')
-						,	'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
-            		) AS NEW_DOC_ID 
-			FROM	(
-			            SELECT	MAX(DOC_ID)  AS NEW_DOC_ID
-			            FROM	PRJ3000 A
-			            JOIN	PRJ1000 B
-			            ON		A.PRJ_ID = B.PRJ_ID
-			            WHERE	1=1
-                        AND		B.LIC_GRP_ID = #licGrpId#
-                        AND		A.PRJ_ID	 = #prjId#
-			            AND		A.DOC_ID LIKE 'DOC' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
-					)
-		]]>		
-		</selectKey>
-		<![CDATA[ 
-			
-			INSERT INTO PRJ3000 A
-			(
-					PRJ_ID				,	DOC_ID				,	UPPER_DOC_ID		,	DOC_NM
-				,	DOC_DESC			,	LVL					,	ORD					,	DOC_ED_DTM
-				,	USE_CD				,	SIGN_USE_CD			,	REG_DTM				,	REG_USR_ID			
-				,	REG_USR_IP			,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP
-			)
-			VALUES
-			(
-					#prjId#				,	#newDocId#			,	#upperDocId#		,	#docNm# 
-				,	#docDesc#			,	(#lvl# + 1)			,	#ord#				,	#docEdDtm#
-				,	'01'				,	#signUseCd#			,	SYSDATE				,	#regUsrId#			
-				,	#regUsrIp#			,	SYSDATE				,	#modifyUsrId#		,	#modifyUsrIp#
-			)
-		]]>
-	</insert>
-	
-	<update id="prj3000DAO.updatePrj3000DocInfo" parameterClass="java.util.Map">
-		<![CDATA[
-		
-		UPDATE	PRJ3000 A
-        SET		
-            	MODIFY_DTM      	= SYSDATE
-            ,	MODIFY_USR_ID   	= #modifyUsrId#
-            ,	MODIFY_USR_IP   	= #modifyUsrIp#
-            ,	DOC_ED_DTM			= TO_DATE(REPLACE(#docEdDtm#, '-'), 'YYYYMMDD')
-            ,	USE_CD				= #useCd#
-            , 	DOC_NM				= #docNm#
-            ,	DOC_DESC			= #docDesc#
-            , 	ORD					= #ord#
-            ,	SIGN_USE_CD			= #signUseCd#
-        WHERE	1=1
-        AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
-        AND		A.DOC_ID		= 	#docId#
-        AND		A.PRJ_ID		=	#prjId#
-	]]>
+		UPDATE	PRJ3000
+		SET		
+			<isEqual property="fileType" compareValue="confFile">
+				DOC_FORM_CONF_FILE_ID = #atchFileId#
+			</isEqual>
+			<isEqual property="fileType" compareValue="waitFile">
+				DOC_FORM_FILE_ID = #atchFileId#
+			</isEqual>
+		WHERE	1 = 1
+		AND		PRJ_ID	= #prjId#
+		AND		DOC_ID	= #docId#
 	</update>
 	
-	<delete id="prj3000DAO.deletePrj3000DocInfo" parameterClass="java.util.Map">
-		
-		DELETE
-		FROM	PRJ3000
-		WHERE	1 = 1
-		AND		DOC_ID = #docId#
-		AND		PRJ_ID = #prjId#
-	</delete>
 </sqlMap>

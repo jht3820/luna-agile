@@ -11,9 +11,8 @@
 	<input type="hidden" name="reqGrpChargerId" id="reqGrpChargerId" value="${param.paramReqGrpChargerId}">
 	<input type="hidden" name="reqGrpId" id="reqGrpId" value="${param.paramReqGrpId}">
 	<input type="hidden" name="atchFileId" id="atchFileId">
-	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
 	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20" id="req3000ReqGrpWrap">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-12" id="req3000ReqGrpWrap">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0" id="req3000ReqGrpInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
@@ -21,9 +20,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" id="hideAndShowReqGrpInfo"  data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-up"></i></a>
-							</div>
+							<a href="#" id="hideAndShowReqGrpInfo"  data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-up"></i></a>
 						</div>
 					</div>
 				</div>
@@ -75,7 +72,7 @@
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 								<div class="form-group">
 									<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="req3000.label.fileUpload">파일첨부</span>
-									<div class="kt-uppy" id="req3001FileUpload">
+									<div class="kt-uppy fileReadonly" id="fileListDiv">
 										<div class="kt-uppy__dashboard"></div>
 										<div class="kt-uppy__progress"></div>
 									</div>
@@ -86,7 +83,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20" id="req3000GrpLinkWrap">
+		<div class="col-lg-6 col-md-12 col-sm-12 col-12" id="req3000GrpLinkWrap">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0" id="req3000GrpLinkInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
@@ -102,21 +99,21 @@
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqAll.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.total">전체</span></a>
-										<div class="osl-widget-info__item-desc">2</div>
+										<div class="osl-widget-info__item-desc" id="reqGrpLinkCnt" name="reqGrpLinkCnt"></div>
 									</div>
 								</div>
 								<div class="osl-widget-info__item">
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqInProgress.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.ongoing">진행</span></a>
-										<div class="osl-widget-info__item-desc">1</div>
+										<div class="osl-widget-info__item-desc" id="reqOngoing" name="reqOngoing"></div>
 									</div>
 								</div>
 								<div class="osl-widget-info__item">
 									<div class="osl-widget-info__item-icon"><img src="/media/osl/icon/reqDone.png"></div>
 									<div class="osl-widget-info__item-info">
 										<a href="#" class="osl-widget-info__item-title"><span data-lang-cd="req3000.label.done">완료</span></a>
-										<div class="osl-widget-info__item-desc">1</div>
+										<div class="osl-widget-info__item-desc" id="reqEnd" name="reqEnd"></div>
 									</div>
 								</div>
 							</div>
@@ -236,22 +233,27 @@ var OSLReq3002Popup = function () {
 		//포틀릿셋팅
 		var portlet = new KTPortlet('req3000ReqGrpInfo', $.osl.lang("portlet"));
 		portlet.expand();
+		
 		//edit 세팅
-    	formEditList.push($.osl.editorSetting("reqGrpDesc", {formValidate: formValidate}));
+    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
+    		toolbar: false,
+			disableResizeEditor: false,
+			disableDragAndDrop: true,
+			disabledEditor: true,
+			height:260
+    	}));
     	
     	//파일 업로드 세팅
-    	fileUploadObj = $.osl.file.uploadSet("req3001FileUpload",{
-    		
-    		url: '/req/req3000/req3000/insertReq3001ReqAtchFileInfo.do',
+    	fileUploadObj = $.osl.file.uploadSet("fileListDiv",{
     		maxFileSize: "${requestScope.fileSumMaxSize}",
-    		meta: {"atchFileId": atchFileId, "fileSn": 0},
-    		maxNumberOfFiles:20,
+    		meta: {"atchFileId": $("#atchFileId").val(), "fileSn": 0},
+    		maxNumberOfFiles:260,
     		isDraggingOver: false,
     		fileDownload: true,
     		fileReadonly: true,
     		
     	});
-    	
+    	fileUploadObj.reset();
     	//그룹 요구사항 정보 조회
     	selectReqGrpInfo();
     	
@@ -261,6 +263,7 @@ var OSLReq3002Popup = function () {
 	 * 	그룹 요구사항 정보 조회
 	*/
     var selectReqGrpInfo = function(){
+		
     	var data = {
     			prjGrpId: $("#prjGrpId").val(),
     			prjId: $("#prjId").val(),
@@ -279,17 +282,31 @@ var OSLReq3002Popup = function () {
 				$.osl.layerPopupClose();
 				
 			}else{
-				
 				//요구사항 정보 세팅
 		    	$.osl.setDataFormElem(data.reqInfoMap,"frReq3000");
 				
-				//그룹요구사항 정보 세팅
 		    	$("#reqGrpChargerNm").val(data.reqInfoMap.reqGrpChargerNm);
 		    	$("#reqGrpUsrNm").val(data.reqInfoMap.reqGrpUsrNm);
 		    	$("#reqGrpNo").val(data.reqInfoMap.reqGrpNo);
-		    	$("#reqGrpDesc").val(data.reqInfoMap.reqGrpDesc);
+		    	$("#reqGrpDesc").summernote("code",data.reqInfoMap.reqGrpDesc);
+		    	//$("#reqGrpDesc").val(data.reqInfoMap.reqGrpDesc);
 		    	$("#reqGrpNm").val(data.reqInfoMap.reqGrpNm);
+		    	$("#reqGrpLinkCnt").text(data.reqInfoMap.reqGrpLinkCnt);
+				
+		    	/* var _oriText = $("#reqGrpDesc").val();
+		    	var newText = _oriText.replace(/<br>/gi,"");
+		    	console.log(newText);
+		    	$("#reqGrpDesc").val(newText); */
 		    	
+		    	//완료된 프로젝트 수 세기
+		    	var endReqCnt = 0;
+		    	$.each(data.reqGrpConList, function(index, item){
+		    		if(item.reqProType == "4"){
+		    			endReqCnt++;
+		    		}
+		    	});
+		    	$("#reqOngoing").text(data.reqInfoMap.reqGrpLinkCnt - endReqCnt);
+		    	$("#reqEnd").text(endReqCnt);
 		    	
 		    	//edit 세팅
 		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
@@ -326,7 +343,6 @@ var OSLReq3002Popup = function () {
 	    	$("#req3000GrpLinkWrap").addClass("col-lg-6");
 	    	$("#hideReqGrpInfo > i").attr("class","la la-angle-up");
 	    	
-	    	
 	    }else{
 	    	
 	    	$("#req3000ReqGrpWrap").attr("class", "col-lg-6");
@@ -339,7 +355,7 @@ var OSLReq3002Popup = function () {
 	    
 	    
    	});
-		
+    
 	return {
         // public functions
         init: function() {

@@ -4,45 +4,40 @@
 	<input type="hidden" name="atchFileId" id="atchFileId" value="<c:out value='${param.atchFileId}'/>">
 	<input type="hidden" name="type" id="type" value="<c:out value='${param.type}'/>">
 	<input type="hidden" name="reSendUsrId" id="reSendUsrId" value="<c:out value='${param.reSendUsrId}'/>">
-	<div class="kt-portlet">
+	<div class="kt-portlet kt-margin-b-0">
 		<div class="kt-portlet__body">
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label><i class="fa fa-user-friends kt-margin-r-5"></i>
-						<span data-lang-cd="arm1001.label.to">받는 사람</span>
-						<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
-					</label>
-					<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label><i class="fa fa-user-friends kt-margin-r-5"></i>
+							<span data-lang-cd="arm1001.label.to">받는 사람</span>
+							<span class='kt-badge kt-badge--metal kt-badge--inline kt-padding-10 kt-hide' id='memCnt' name='memCnt'>0</span>
+						</label>
+						<select class="form-control kt-select2 select2-hidden-accessible" id="forUsrSelect" name="forUsrSelect" multiple="" data-select2-id="forUsrSelect" tabindex="-1" aria-hidden="true"></select>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.title">제목</span></label>
-					<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.title">제목</span></label>
+						<input type="text" class="form-control" id="armTitle" name="armTitle" placeholder="제목" maxlength="80" autocomplete="off" required>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.content">내용</span></label>
-					<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="arm1001.label.content">내용</span></label>
+						<textarea class="kt-hide" name="armContent" id="armContent" autocomplete="off" placeholder="내용" required></textarea>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="form-group form-group-last">
-					<label>
-						<i class="fa fa-file-upload kt-margin-r-5"></i>
-						<span data-lang-cd="arm1001.label.attachments">파일 첨부</span> 
-					</label>
-					<div class="kt-uppy osl-max-h-px-260" id="arm1001FileUpload">
-						<div class="kt-uppy__dashboard"></div>
-						<div class="kt-uppy__progress"></div>
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="form-group form-group-last">
+						<label>
+							<i class="fa fa-file-upload kt-margin-r-5"></i>
+							<span data-lang-cd="arm1001.label.attachments">파일 첨부</span> 
+						</label>
+						<div class="kt-uppy osl-max-h-px-260" id="arm1001FileUpload">
+							<div class="kt-uppy__dashboard"></div>
+							<div class="kt-uppy__progress"></div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -243,7 +243,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		
-		cmm16000:{
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "받은 메시지",
@@ -284,7 +284,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "받는 사람",
 				title : "제목",
@@ -304,7 +304,7 @@ var OSLCoreLangSetting = function () {
 				submit : "보내기"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "첨부 파일", 
 			},
@@ -492,11 +492,14 @@ var OSLCoreLangSetting = function () {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
 					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
-					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다.",
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다.",
+					notHaveConfFile : "등록된 파일이 존재하지 않습니다."
 				},
 				confirm:{
-					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
-				}
+					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?",
+					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
+				} 
 			},
 			modal : {
 				title : {
@@ -542,8 +545,12 @@ var OSLCoreLangSetting = function () {
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
-				}
+					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다."
+				},
+				confirm:{
+					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
+				} 
 			},
 			modal : {
 				title : {
@@ -616,6 +623,24 @@ var OSLCoreLangSetting = function () {
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
 			}
+		},usr1100:{
+			title:{
+				shortcut:"메뉴 및 권한 관리 단축키",
+				01:"프로젝트 및 권한그룹 선택",
+				02:"팝업창 가운데 정렬",
+				03:"추가 기능바",
+				04:"검색",
+				05:"마이페이지",
+				06:"메시지",
+				07:"알림",
+				08:"개인설정",
+				09:"담당요구사항",
+				10:"로그아웃",
+			},
+			btn:{
+				update:"수정 완료",
+				dontuse:"사용 안함",
+			}
 		},
 		req1001:{
 			title: "신규 요구사항 요청",
@@ -655,6 +680,21 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"연결에 성공했습니다.",
+				saveDupleMsg:"이미 연결된 요구사항입니다.",
+				saveAllDupleMsg:"모든 요구사항이 연결되었습니다.",
+			},
+			alert:{
+				checkUsrId:"요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.",
+				checkChargerId:"담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.",
+			},
+			confirm:{
+				insert:"그룹 요구사항을 등록하시겠습니까?",
+				delete:"선택된 그룹 요구사항을 삭제하시겠습니까?",
+				deleteList:"${1}건의 그룹 요구사항을 삭제하시겠습니까?",
+				update:"그룹 요구사항을 수정하시겠습니까?",
+			},
 			title:{
 				detailTitle:"그룹 요구사항 상세보기",
 				insert:"그룹 요구사항 등록",
@@ -880,7 +920,15 @@ var OSLCoreLangSetting = function () {
 				mmtDesc: "회의록 내용"
 			},
 			alert:{
-				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건"
+				reqSprPoint: "모든 요구사항의 스토리포인트를 입력해주세요.</br>미 입력 요구사항 ${1}건",
+				saveProcessMsg: "${1}개의 프로세스가 배정되었습니다.",
+				saveProcessDupleMsg: "이미 배정된 ${1}개의 프로세스 제외",
+				saveProcessAllDupleMsg: "이미 배정중인 프로세스입니다. (${1}개)"
+			}
+		},
+		spr1004:{
+			alert:{
+				reqEndCnt: "결과 작성이 안된 요청이 있습니다. (${1}개)"
 			}
 		},
 		spr1100:{
@@ -1402,7 +1450,8 @@ var OSLCoreLangSetting = function () {
 			title:{
 				allPrjList : "전체 프로젝트 목록",
 				assignJobList : "JOB 배정 목록",
-				notAssignJobList : "JOB 미배정 목록"
+				notAssignJobList : "JOB 미배정 목록",
+				dplAuthSettingModal : "배포 실행 권한 설정"
 			},
 			button:{
 				dplAuthSetting : "배포 실행 권한 설정"
@@ -1425,6 +1474,30 @@ var OSLCoreLangSetting = function () {
 				confirm:{
 					selJobAssign : "선택한 JOB을 배정하시겠습니까?",
 					selJobNotAssign : "선택한 JOB을 배정 제외하시겠습니까?",
+				}
+			}
+		},
+		stm9201:{
+			title:{
+				assignDplAuth : "배포 실행 권한 목록",
+				notAssignDplAuth : "미배정 권한 그룹 및 사용자"
+			},
+			button:{
+				title:{
+					dplAuthInsert : "배정 등록",
+					dplAuthDelete : "배정 제외"
+				},
+				toolTip:{
+					dplAuthInsert : "배포 실행 권한 등록",
+					dplAuthDelete : "배포 실행 권한 제외",
+					assignAuthSearch : "배정 실행 권한 대상 목록 조회",
+					notAssignAuthSearch : "미배정 권한 대상 목록 조회"
+				}
+			},
+			message:{
+				confirm:{
+					dplAuthInsert:"${1}건의 대상을 배정하시겠습니까?",
+					dplAuthDelete:"${1}건의 대상을 제외하시겠습니까?"
 				}
 			}
 		},
@@ -1721,7 +1794,7 @@ var OSLCoreLangSetting = function () {
 				allTitle: "All"
 			},
 			
-			cmm16000CmmTable:{
+			arm1000CmmTable:{
 				sendUsrNm : "From User Name",
 				armTitle : "Title",
 				sendDtm : "Date",
@@ -1910,6 +1983,22 @@ var OSLCoreLangSetting = function () {
 				jobRestoreId: "Restore Job Id",
 				jobParameter: "Job Parameter"
 			},
+			stm9201AssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
+			stm9201NotAssignDplAuthTable:{
+				authTypeNm : "Authority Type",
+				dplAuthTargetId: "Authority Target ID",
+				dplAuthTargetNm : "Authority Target Name",
+				usrPositionNm : "Position",
+				usrDutyNm : "Duty Responsibility",
+				deptName : "Department"
+			},
 			stm9300PrjJobTable:{
 				prjNm: "Project Name",
 				jenNm: "Jenkins Name",
@@ -2031,7 +2120,7 @@ var OSLCoreLangSetting = function () {
 			}
 		},
 		
-		cmm16000:{
+		arm1000:{
 			label:{
 				title : "MESSAGE",
 				get : "Received Message",
@@ -2072,7 +2161,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		cmm16001:{
+		arm1001:{
 			label : {
 				to : "To",
 				title : "Title",
@@ -2092,7 +2181,7 @@ var OSLCoreLangSetting = function () {
 				submit : "Send"
 			}
 		},
-		cmm16002 : {
+		arm1002 : {
 			label : {
 				attachments: "Attachments", 
 			},
@@ -2204,98 +2293,105 @@ var OSLCoreLangSetting = function () {
 		},
 		prj3000 : {
 			label : {
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docUseCd : "사용 유무",
-				docOrd : "순번",
-				docEdDtm : "만료일자",
-				signUseCd : "결재 사용 유무",
-				docDesc : "비고"
+				docId : "Document ID",
+				docNm : "Document Name",
+				docUseCd : "Document Use",
+				docOrd : "Document Order",
+				docEdDtm : "Document End Date",
+				signUseCd : "Sign Use",
+				docDesc : "Document description"
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
-					notUsedDoc : "미사용 산출물에는 하위 산출물을 추가할 수 없습니다.",
-					notRootDelete : "최상위 산출물(ROOT)은 삭제할 수 없습니다."
+					treeSelect : "Select a document in the tree on the left.",
+					notUsedDoc : "Sub-documents cannot be added to unused documents.",
+					notRootDelete : "The top-level document(ROOT) cannot be deleted.",
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached.",
+					notHaveConfFile : "Registered file does not exist."
 				},
 				confirm:{
-					deleteDoc:"산출물 정보 삭제 시 선택한 산출물 정보 및 하위 산출물 정보가 모두 삭제됩니다. 선택한 산출물 정보를 삭제 하시겠습니까?"
-				}
+					deleteDoc:"When deleting a document, the selected document and all sub-documents are deleted. Do you want to delete the selected document?",
+					deleteFormFile:"Would you like to delete form file?"
+				} 
 			},
 			modal : {
 				title : {
-					insertDoc : "신규 산출물 양식 등록",
-					updateDoc : "산출물 양식 수정",
-					insertDocCon : "산출물 연결"
+					insertDoc : "Register New Document Form",
+					updateDoc : "Modifying Document Form",
+					insertDocCon : "Document Linkage"
 				}
 			}
 		},
 		prj3001 : {
 			label : {
-				upperDocId : "상위 산출물 ID",
-				upperDocNm : "상위 산출물 명",
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docEdDtm : "만료일자",
-				docOrd : "순번",
-				signUseCd : "결재 사용 유무",
-				docUseCd : "사용 유무",
-				docDesc : "비고"
+				upperDocId : "Upper Document ID",
+				upperDocNm : "Upper Document Name",
+				docId : "Document ID",
+				docNm : "Document Name",
+				docEdDtm : "Document End Date",
+				docOrd : "Document Order",
+				signUseCd : "Sign Use",
+				docUseCd : "Document Use",
+				docDesc : "Document description"
 				
 			},
 			button : {
-				insert : "작성 완료",
-				update : "수정 완료"
+				insert : "Complete",
+				update : "Update Complete"
 			},
 			message : {
 				confirm : {
-					insert : "산출물 양식 정보를 추가 하시겠습니까?",
-					update : "산출물 양식 정보를 수정 하시겠습니까?"
+					insert : "Would you like to register your document?",
+					update : "Would you like to update your document?"
 				}
 			}
 		},
 		prj3100 : {
 			label : {
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docUseCd : "사용 유무",
-				docOrd : "순번",
-				docEdDtm : "만료일자",
-				signUseCd : "결재 사용 유무",
-				docDesc : "비고"
+				docId : "Document ID",
+				docNm : "Document Name",
+				docUseCd : "Document Use",
+				docOrd : "Document Order",
+				docEdDtm : "Document End Date",
+				signUseCd : "Sign Use",
+				docDesc : "Document description"
 			},
 			message : {
 				alert : {
-					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요."
-				}
+					treeSelect : "Select a document in the tree on the left.",
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached."
+				},
+				confirm:{
+					deleteFormFile:"Would you like to delete file?"
+				} 
 			},
 			modal : {
 				title : {
-					insertDocCon : "산출물 연결"
+					insertDocCon : "Document Linkage"
 				}
 			}
 		},
 		prj3200 : {
 			label : {
-				upperDocId : "상위 산출물 ID",
-				upperDocNm : "상위 산출물 명",
-				docId : "산출물 ID",
-				docNm : "산출물 명",
-				docEdDtm : "만료일자",
-				docOrd : "순번",
-				signUseCd : "결재 사용 유무",
-				docUseCd : "사용 유무",
-				docDesc : "비고"
+				upperDocId : "Upper Document ID",
+				upperDocNm : "Upper Document Name",
+				docId : "Document ID",
+				docNm : "Document Name",
+				docEdDtm : "Document End Date",
+				docOrd : "Document Order",
+				signUseCd : "Sign Use",
+				docUseCd : "Document Use",
+				docDesc : "Document description"
 			},
 			insert : {
-				saveBtnString : "등록 완료",
-				saveString : "선택한 산출물 정보들을 연결하시겠습니까?",
-				saveMsg : "${1}건의 정보가 연결되었습니다.",
-				saveDupleMsg : "이미 연결된 ${1}명의 사용자 제외",
-				saveAllDupleMsg : "이미 연결된 산출물 정보입니다. (${1}건)"
+				saveBtnString : "Complete",
+				saveString : "Would you like to link the selected document information?",
+				saveMsg : "${1} data was linked.",
+				saveDupleMsg : "Exclude ${2} users already connected",
+				saveAllDupleMsg : "This is already linked document information. (${1})"
 			},
-			allDocConInsert : "${1}건의 산출물 정보를 연결하시겠습니까?",
-			allDocConDelete : "${1}건의 산출물 정보를 연결 해제하시겠습니까?"
+			allDocConInsert : "Are you sure you want to connect ${1} document data?",
+			allDocConDelete : "Are you sure you want to disconnect ${1} document data?"
 		},
 		prj5000:{
 			button:{
@@ -2340,6 +2436,27 @@ var OSLCoreLangSetting = function () {
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
 			}
+		},usr1100:{
+			title:{
+				shortcut:"Menu and rights management shortcut",
+				shortcut01:"Project and Authority group select",
+				shortcut02:"Popup align Center",
+				shortcut03:"Add tool bar",
+				shortcut04:"Search",
+				shortcut05:"Mypage",
+				shortcut06:"Message",
+				shortcut07:"Alarm",
+				shortcut08:"Personal Setting",
+				shortcut09:"Charged requirements",
+				shortcut10:"Logout",
+				shortcutName:"ShortcutName",
+				popupActionCd:"Action when pop-up",
+				shortcutKey:"Shortcut",
+			},
+			btn:{
+				update:"update",
+				dontuse:"Dont use",
+			}
 		},
 		req1001:{
 			title:"Request new requirements",
@@ -2372,6 +2489,21 @@ var OSLCoreLangSetting = function () {
 			},
 		},
 		req3000:{
+			insert:{
+				saveMsg:"Connection success",
+				saveDupleMsg:"That connection is already connected",
+				saveAllDupleMsg:"All request is already connected",
+			},
+			alert:{
+				checkUsrId:"You must search user name. \n because we must know about detail department belong user",
+				checkChargerId:"You must search charger name. \n because we must know about detail department belong charger",
+			},
+			confirm:{
+				insert:"Would you like to register your group requirement?",
+				delete:"Would you like to delete your group requirement?",
+				deleteList:"Would you like to delet your ${1} requirements?",
+				update:"Would you like to update your group requirement?",
+			},
 			actionBtn:{
 				title : "Select",
 				clickBtn : "Select",
@@ -2383,6 +2515,7 @@ var OSLCoreLangSetting = function () {
 				connect:" ",
 				reset:" ",
 				done:"Done",
+				deleteResetBtn:"Delete reset",
 			},
 			title:{
 				detailTitle:"Group requirement detail",

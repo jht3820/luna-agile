@@ -1,6 +1,5 @@
 package kr.opensoftlab.lunaops.prj.prj1000.prj1100.web;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -230,9 +228,34 @@ public class Prj1100Controller {
 			return new ModelAndView("jsonView");
 		}
 	}
+
 	
+	@RequestMapping(value="/prj/prj1000/prj1100/deletePrj1100ProcessInfoAjax.do")
+	public ModelAndView deletePrj1100ProcessInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			prj1100Service.deletePrj1100ProcessInfo(paramMap);
+			
+			
+			model.addAttribute("errorYN", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("deletePrj1100ProcessInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYN", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+			return new ModelAndView("jsonView");
+		}
+	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value="/prj/prj1000/prj1100/selectPrj1100ProcessInfoAjax.do")
 	public ModelAndView selectPrj1100ProcessInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 
@@ -264,8 +287,20 @@ public class Prj1100Controller {
 			paramMap.put("prjId", paramPrjId);
 			paramMap.put("processId", paramProcessId);
 			
+			
 			Map processInfo = (Map) prj1100Service.selectPrj1100ProcessInfo(paramMap);
 			model.addAttribute("processInfo", processInfo);
+			
+			
+			
+			int totCnt = prj1100Service.selectPrj1100ProcessAuthUsrListCnt(paramMap);
+			
+			paramMap.put("firstIndex", "0");
+			paramMap.put("lastIndex", String.valueOf(totCnt));
+			
+			
+			List<Map> processAuthList = prj1100Service.selectPrj1100ProcessAuthUsrList(paramMap);
+			model.addAttribute("processAuthList", processAuthList);
 			
 			
 			model.addAttribute("errorYN", "N");
@@ -438,34 +473,6 @@ public class Prj1100Controller {
 	
 	@RequestMapping(value="/prj/prj1000/prj1100/selectPrj1102View.do")
     public String selectPrj1102View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			String processId = paramMap.get("processId");
-			String flowId = paramMap.get("flowId");
-			String type = paramMap.get("type");
-			
-			
-			boolean jenkinsModuleUseChk = moduleUseCheck.isJenkinsModuleUseChk();
-			
-			boolean svnModuleUseChk = moduleUseCheck.isSvnKitModuleUseChk();
-			
-			model.addAttribute("processId",processId);
-			model.addAttribute("flowId",flowId);
-			model.addAttribute("type",type);
-			model.addAttribute("jenkinsModuleUseChk",jenkinsModuleUseChk);
-			model.addAttribute("svnModuleUseChk",svnModuleUseChk);
-			
-			
-		}catch(Exception ex){
-			Log.error("selectPrj1102View()", ex);
-
-			
-			model.addAttribute("errorYN", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
-			return "/err/error";
-		}
 		return "/prj/prj1000/prj1100/prj1102";
     }
 	
@@ -570,66 +577,6 @@ public class Prj1100Controller {
 			
 			model.addAttribute("errorYN", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@RequestMapping(value="/prj/prj1000/prj1100/updatePrj1100ProcessConfirmInfo.do")
-	public ModelAndView updatePrj1100ProcessConfirmInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-
-			prj1100Service.updatePrj1100ProcessConfirmInfo(paramMap);
-			
-			
-			model.addAttribute("errorYN", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-			
-			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("updatePrj1100ProcessConfirmInfo()", ex);
-			
-			
-			model.addAttribute("errorYN", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@RequestMapping(value="/prj/prj1000/prj1100/deletePrj1100ProcessInfoAjax.do")
-	public ModelAndView deletePrj1100ProcessInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-    		HttpSession ss = request.getSession();
-    		paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-    		
-			prj1100Service.deletePrj1100ProcessInfo(paramMap);
-			
-			
-			model.addAttribute("errorYN", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
-
-			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("deletePrj1100ProcessInfoAjax()", ex);
-
-			
-			model.addAttribute("errorYN", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
 			return new ModelAndView("jsonView");
 		}
 	}
@@ -1106,166 +1053,6 @@ public class Prj1100Controller {
 			Log.error("deletePrj1100FlowAuthGrpList()", e);
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/prj/prj1000/prj1100/updatePrj1100ProcessConfirmCancelAjax.do")
-	public ModelAndView updatePrj1100ProcessConfirmCancelAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model )	throws Exception {
-		try{
-			
-			Map paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			HttpSession ss = request.getSession();
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			
-			
-			int proReqCnt = prj1100Service.selectPrj1100ProcessReqCnt(paramMap);
-			
-			
-			if(proReqCnt > 0) {
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "프로세스에 배정된 요구사항이 존재합니다.<br>확정 취소 할 수 없습니다.");
-				return new ModelAndView("jsonView");
-			}
-			
-			
-			String endFlowId = "";
-			
-			
-			String prevFlowId = "";
-			
-			
-			String processJsonDataStr = (String) paramMap.get("processJsonDataTmp");
-			
-			
-			JSONObject processJsonData = new JSONObject(processJsonDataStr);
-			
-			
-			if(processJsonData == null || processJsonData.isNull("operators")) {
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "데이터에 문제가 발생했습니다.</br>확정 취소 할 수 없습니다.");
-				return new ModelAndView("jsonView");
-			}
-			
-			
-			JSONObject operatorsData = processJsonData.getJSONObject("operators");
-			
-			
-			boolean searchFlag = false;
-			
-			
-			Iterator processDataKeys = operatorsData.keys();
-			while(processDataKeys.hasNext()) {
-				
-				String dataKey = (String) processDataKeys.next();
-				
-				
-				JSONObject propertiesData = operatorsData.getJSONObject(dataKey).getJSONObject("properties");
-				
-				
-				if(propertiesData.isNull("flowNextId")) {
-					
-					endFlowId = dataKey;
-					searchFlag = true;
-					
-					break;
-				}
-			}
-			
-			
-			if(!searchFlag) {
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "최종완료 작업흐름이 존재하지 않습니다.</br>확정 취소 할 수 없습니다.");
-				return new ModelAndView("jsonView");
-			}
-			
-			
-			searchFlag = false;
-			
-			
-			processDataKeys = operatorsData.keys();
-			while(processDataKeys.hasNext()) {
-				
-				String dataKey = (String) processDataKeys.next();
-				
-				
-				JSONObject propertiesData = operatorsData.getJSONObject(dataKey).getJSONObject("properties");
-				
-				
-				if(!propertiesData.isNull("flowNextId") && endFlowId.equals(propertiesData.getString("flowNextId"))) {
-					
-					prevFlowId = dataKey;
-					searchFlag = true;
-					
-					break;
-				}
-			}
-
-			
-			if(!searchFlag) {
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "최종완료 작업흐름이 존재하지 않습니다.</br>확정 취소 할 수 없습니다.");
-				return new ModelAndView("jsonView");
-			}
-			
-			
-			operatorsData.remove(endFlowId);
-			
-			
-			JSONObject linksData = processJsonData.getJSONObject("links");
-			
-			
-			searchFlag = false;
-			
-			
-			Iterator linkDataKeys = linksData.keys();
-			while(linkDataKeys.hasNext()) {
-				
-				String dataKey = (String) linkDataKeys.next();
-				
-				
-				JSONObject linkData = linksData.getJSONObject(dataKey);
-				
-				if(linkData.has("toOperator") && endFlowId.equals(linkData.getString("toOperator"))) {
-					
-					linksData.remove(dataKey);
-					searchFlag = true;
-					break;
-				}
-			}
-			
-			if(!searchFlag) {
-				model.addAttribute("errorYn", "Y");
-				model.addAttribute("message", "최종완료 링크가 존재하지 않습니다.</br>확정 취소 할 수 없습니다.");
-				return new ModelAndView("jsonView");
-			}
-			
-			
-			operatorsData.getJSONObject(prevFlowId).getJSONObject("properties").put("flowNextId", "null");
-			
-			
-			paramMap.put("processJsonData", processJsonData.toString());
-			paramMap.put("endFlowId", endFlowId);
-			paramMap.put("prevFlowId", prevFlowId);
-			
-			
-			prj1100Service.updatePrj1100ProcessConfirmCancle(paramMap);
-			
-			
-			model.addAttribute("errorYn", "N");
-			model.addAttribute("processJsonData", processJsonData.toString());
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-			
-			return new ModelAndView("jsonView");
-			
-		}catch(Exception e){
-			Log.error("updatePrj1100ProcessConfirmCancelAjax()", e);
-			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
 			return new ModelAndView("jsonView");
 		}
 	}

@@ -31,7 +31,7 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-6 col-md-12 col-sm-12 kt-align-center d-flex justify-content-center align-items-center">
-							<div class="kt-media kt-media--xl kt-media--circle kt-media--info osl-flex-shrink-0">
+							<div class="kt-media kt-media--xl kt-media--circle kt-media--info flex-shrink-0">
 								<span name="prjAcrm" id="prjAcrm"></span>
 							</div>
 						</div>

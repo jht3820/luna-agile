@@ -175,6 +175,7 @@ var OSLPrj1101Popup = function () {
 		//데이터 테이블 세팅
     	datatableSetting();
 		
+    	
 		//수정인경우 프로세스 정보 조회
 		if(type == "update"){
 			fnProcessInfoSelect();
@@ -564,9 +565,9 @@ var OSLPrj1101Popup = function () {
    				$("#useCd").val(processInfo.useCd).trigger('change.select2');
    				$("#processTransferCd").val(processInfo.processTransferCd).trigger('change.select2');
    				
-   				if(data.hasOwnProperty("prjAuthList") && data.prjAuthList.length > 0){
+   				if(data.hasOwnProperty("processAuthList") && data.processAuthList.length > 0){
    					//원본 데이터 저장
-					prjAuthOriginalData = data.prjAuthList;
+					prjAuthOriginalData = data.processAuthList;
    						 
 	   				//대상 데이터 테이블
 	   				var datatable = $.osl.datatable.list["prj1101ProcessAuthUsrTable"].targetDt;
@@ -574,7 +575,7 @@ var OSLPrj1101Popup = function () {
 	   				//데이터테이블 error class 제거
 	   				datatable.eq(0).removeClass("kt-datatable--error");
 	   				
-	   				$.each(data.prjAuthList, function(idx, map){
+	   				$.each(data.processAuthList, function(idx, map){
 		   				//담당자 배정 목록 추가
 		   				datatable.dataSet.push(map);
 						datatable.originalDataSet.push(map);
@@ -586,7 +587,7 @@ var OSLPrj1101Popup = function () {
 					//데이터 추가
 					datatable.insertData();
 					//데이터테이블 재 조회
-					//datatable.reload();
+					datatable.reload();
 					$.osl.datatable.list["prj1101ProcessAuthNoneUsrTable"].targetDt.reload();
    				}
    			}

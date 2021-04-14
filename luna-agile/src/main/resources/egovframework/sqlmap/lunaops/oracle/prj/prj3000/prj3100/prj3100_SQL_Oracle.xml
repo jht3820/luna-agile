@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="prj3100DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	
+	<update id="prj3100DAO.updatePrj3100FileId" parameterClass="java.util.Map">
+		
+		UPDATE	COMTNFILEDETAIL
+		SET		ATCH_FILE_ID = #afterFileId#
+			,	FILE_SN		 = #afterFileSn#
+		WHERE	1 = 1
+		AND		ATCH_FILE_ID = #beforeFileId#
+		AND		FILE_SN		 = #fileSn#
+	</update>
+	
+	
+	<select id="prj3100DAO.selectPrj3100MenuTree" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			
+			SELECT	LPAD('ㄴ', LVL*4, ' ') || A.DOC_NM AS DOC_LVL
+				,	A.DOC_NM
+			    ,	A.PRJ_ID
+			    ,	A.DOC_ID
+			    ,	A.UPPER_DOC_ID
+                ,	A.LVL
+			    ,	A.ORD
+			    ,	A.DOC_DESC
+                ,	A.DOC_FORM_FILE_ID
+                ,	A.DOC_FORM_CONF_FILE_ID
+                ,	A.DOC_ATCH_FILE_ID
+                ,	A.DOC_WAIT_FILE_ID
+                ,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
+                ,	A.USE_CD
+			FROM	(SELECT * FROM PRJ3000 WHERE PRJ_ID = #prjId# AND USE_CD = '01') A
+			WHERE	1=1
+			CONNECT BY PRIOR	A.DOC_ID = A.UPPER_DOC_ID
+			START WITH A.DOC_ID = #docId#
+			AND		A.USE_CD = '01'
+            ORDER SIBLINGS BY A.ORD ASC
+ 		]]> 
+	</select>
+</sqlMap>

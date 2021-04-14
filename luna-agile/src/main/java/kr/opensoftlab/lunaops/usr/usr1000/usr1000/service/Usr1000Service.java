@@ -1,5 +1,6 @@
 package kr.opensoftlab.lunaops.usr.usr1000.usr1000.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -33,4 +34,5 @@ public interface Usr1000Service {
 
 	
 	LoginVO selectUsr1000LoginVO(Map<String, String> paramMap) throws Exception;
+
 }

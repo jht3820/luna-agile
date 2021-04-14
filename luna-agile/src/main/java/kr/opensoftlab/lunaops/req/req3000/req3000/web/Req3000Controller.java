@@ -179,16 +179,26 @@ public class Req3000Controller {
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
-			
-			String paramPrjId = (String) paramMap.get("dtParamPrjId");
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			
-		
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
 			
 			if(paramPrjId == null || "".equals(paramPrjId)) {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
+			paramMap.put("prjGrpId", paramPrjGrpId);
 			paramMap.put("prjId", paramPrjId);
 			
 			

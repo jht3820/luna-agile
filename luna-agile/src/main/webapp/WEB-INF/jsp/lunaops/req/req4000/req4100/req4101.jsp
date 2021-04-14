@@ -69,9 +69,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -153,9 +151,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -693,6 +689,14 @@ var OSLReq4101Popup = function () {
     		$("#usrImgId").val(""); //이미지 default 넣기
     	});
    		
+    	//엔터키
+		$("#usrNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchUsrNmBtn").click();
+			}
+		});
+    	
     	//포커스가 아웃될 경우
    		$("#usrNm").blur(function(){
    			//입력된 요청자 명이 있을 경우

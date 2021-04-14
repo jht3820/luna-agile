@@ -13,7 +13,7 @@
 	<input type="hidden" name="atchFileId" id="atchFileId">
 	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
 	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12 kt-padding-r-20">
+		<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
 				<div class="kt-portlet__body">
 					<div class="row">
@@ -47,7 +47,7 @@
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="form-group">
-								<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req3000.label.reqGrpNm">그룹 요구사항 제목</span></label>
+								<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req3000.label.reqGrpNm">그룹 요구사항 명</span></label>
 								<input type="text" class="form-control" id="reqGrpNm" name="reqGrpNm" required="required">
 							</div>
 						</div>
@@ -64,6 +64,9 @@
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="form-group">
 								<i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="req3000.label.fileUpload">파일첨부</span>
+								<button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn">
+									<span data-lang-cd="req3000.button.deleteResetBtn">삭제 초기화</span>
+								</button>
 								<div class="kt-uppy" id="req3001FileUpload">
 									<div class="kt-uppy__dashboard"></div>
 									<div class="kt-uppy__progress"></div>
@@ -74,46 +77,54 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12 col-12">
-			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0">
-				<div class="kt-portlet__body">
-					<label class="kt-padding-l-10 kt-padding-r-10"><i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.linkedReqList">연결 요구사항 목록</span></label>
-					<div class="row kt-padding-l-10 kt-padding-r-10 kt-margin-t-10">
-						<div class="col-lg-6 col-md-6 col-sm-12">
+		<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 osl-margin-t-20-1400">
+				<div class="kt-portlet__head">	
+					<div class="kt-portlet__head-toolbar">
+						<i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.linkedReqList">연결 요구사항 목록</span>
+					</div>
+					<div class="kt-portlet__head-label">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="select" title="연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+							<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="selInReqDelete" title="연결 요구사항 제거" data-title-lang-cd="datatable.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selInReqDelete" tabindex="2">
+							<i class="fa fa-minus"></i><span data-lang-cd="req3000.button.delete">제거</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="reset" title="연결 요구사항 초기화" data-title-lang-cd="req3000.datatable.button.title.reset" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
+							<i class="fas fa-undo-alt"></i><span data-lang-cd="req3000.button.reset">초기화</span>
+						</button>
+					</div>
+				</div>
+				<div class="kt-portlet__body osl-min-h-px--415">
+					<div class="row">
+						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="osl-datatable-search" data-datatable-id="req3001ConnectReqTable"></div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 text-right">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="select" title="연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="delete" title="연결 요구사항 제거" data-title-lang-cd="datatable.button.title.delete" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="2">
-								<i class="fa fa-minus"></i><span data-lang-cd="req3000.button.delete">제거</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001ConnectReqTable" data-datatable-action="reset" title="연결 요구사항 초기화" data-title-lang-cd="req3000.datatable.button.title.reset" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="update" tabindex="3">
-								<i class="fa fa-edit"></i><span data-lang-cd="req3000.button.reset">초기화</span>
-							</button>
 						</div>
 					</div>
 					<div class="kt_datatable" id="req3001ConnectReqTable"></div>
 				</div>
 			</div>
-			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 osl-margin-t-1rm">
+			<div class="kt-portlet kt-portlet--mobile kt-margin-b-0 kt-margin-t-20">
+				<div class="kt-portlet__head">
+					<div class="kt-portlet__head-toolbar">
+						<i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.unlinkedReqList">미연결 요구사항 목록</span>
+					</div>
+					<div class="kt-portlet__head-label">
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="select" title="미연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+							<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="insert" title="미연결 요구사항 연결" data-title-lang-cd="datatable.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3">
+							<i class="fa fa-plus"></i><span data-lang-cd="req3000.button.insert">추가</span>
+						</button>
+						<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="connect" title="미연결 요구사항 연결" data-title-lang-cd="req3000.datatable.button.title.connect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="connect" tabindex="2">
+							<i class="fas fa-link"></i><span data-lang-cd="req3000.button.connect">연결</span>
+						</button>
+					</div>
+				</div>
 				<div class="kt-portlet__body">
-					<label class="kt-padding-l-10 kt-padding-r-10 kt-margin-t-20"><i class="fas fa-stream kt-margin-r-5"></i><span data-lang-cd="req3000.label.unlinkedReqList">미연결 요구사항 목록</span></label>
-					<div class="row kt-padding-l-10 kt-padding-r-10 kt-margin-t-10">
-						<div class="col-lg-6 col-md-6 col-sm-12">
+					<div class="row">
+						<div class="col-lg-8 col-md-8 col-sm-12">
 							<div class="osl-datatable-search" data-datatable-id="req3001UnconnectReqTable"></div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 text-right">
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="select" title="미연결 요구사항 조회" data-title-lang-cd="datatable.button.title.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
-								<i class="fa fa-list"></i><span data-lang-cd="req3000.button.select">조회</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="connect" title="미연결 요구사항 연결" data-title-lang-cd="req3000.datatable.button.title.connect" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="connect" tabindex="2">
-								<i class="fa kt-nav__link-icon flaticon2-expand"></i><span data-lang-cd="req3000.button.connect">연결</span>
-							</button>
-							<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="req3001UnconnectReqTable" data-datatable-action="insert" title="미연결 요구사항 연결" data-title-lang-cd="datatable.button.title.insert" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3">
-								<i class="fa fa-plus"></i><span data-lang-cd="req3000.button.insert">추가</span>
-							</button>
 						</div>
 					</div>
 					<div class="kt_datatable" id="req3001UnconnectReqTable"></div>
@@ -135,10 +146,10 @@
 "use strict";
 
 //파일업로드 셋팅
-var fileUploadObj;
 var OSLReq3001Popup = function () {
 	var formId = 'frReq3001'
 	
+	var fileUploadObj;
 	//edit 목록
 	var formEditList = [];
 	
@@ -171,7 +182,8 @@ var OSLReq3001Popup = function () {
 		
 		//edit 세팅
     	formEditList.push($.osl.editorSetting("reqGrpDesc", {formValidate: formValidate}));
-    	
+		
+		
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req3001FileUpload",{
     		
@@ -179,6 +191,8 @@ var OSLReq3001Popup = function () {
     		maxFileSize: "${requestScope.fileSumMaxSize}",
     		meta: {"atchFileId": atchFileId, "fileSn": 0},
     		maxNumberOfFiles:20,
+    		//파일 화이트리스트 설정
+    		allowedFileTypes: ['.jpg', '.jpeg', '.png', '.gif',".pdf", ".hwp", ".docx", ".pptx", "txt",".csv", ".xlsx"],
     		
     		//파일 업로드 전 실행 함수
     		onBeforeUpload: function(files){
@@ -282,16 +296,15 @@ var OSLReq3001Popup = function () {
     	});
     	
     	//수정인 경우
-    	if(type =="update"){
+    	if(type != "insert"){
     		
     		selectReqGrpInfo();
     		
-    		//수정, 복사인경우 파일 삭제 기록하기
+    		//수정  파일 삭제 기록하기
     	   	fileUploadObj.on('file-removed', function(file) {
     	   		file["fileSn"] = file.meta.fileSn;
     	   		file.source = "remove";
     	   		uploadRemoveFiles.push(file);
-    	   		
     	   		//삭제 취소 버튼 활성화
     	   		$("#fileRemoveResetBtn").removeClass("d-none");
     		});
@@ -376,20 +389,24 @@ var OSLReq3001Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false},
-				{field: 'prjNm', title: '프로젝트 명', textAlign: 'center', width: 150, search:true, autoHide: false},	
-				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'center', width: 150, search:true,autoHide: false},
-				{field: 'reqNm', title: '요구사항 명', textAlign: 'center', width: 150 , search:true, autoHide: false}
+				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 150, search:true, autoHide: false, sortable: false},	
+				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 100, search:true,autoHide: false},
+				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 100 , search:true, autoHide: false, sortable: false}
 			],
 			searchColumns:[
-				{field: 'reqChargerId', title: '담당자', searchOrd: 4},
-				{field: 'reqUsrId', title: '요청자', searchOrd: 5},
-				{field: 'reqProType', title: '처리유형', searchOrd: 6, searchType:"select", searchCd:"REQ00001"}
+				
+				{field: 'reqChargerNm', title: '담당자', searchOrd: 4},
+				{field: 'reqUsrNm', title: '요청자', searchOrd: 5},
+				{field: 'reqProType', title: '처리유형', searchOrd: 6, searchType:"select", searchCd:"REQ00001"},
+				
 			],
 			actionBtn:{
-				"title":"해제",
 				"dblClick":true,
 				"update":false,
 				"delete":false,
+			},
+			rows:{
+				minHeight:50,
 			},
 			actionFn:{
 				"select":function(datatableId, elem){
@@ -468,7 +485,6 @@ var OSLReq3001Popup = function () {
 							
 		   				});
 					}
-					
 					//데이터 추가
 					datatable.insertData();
 					
@@ -509,16 +525,16 @@ var OSLReq3001Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false, autoHide: false},
-				{field: 'prjNm', title: '프로젝트 명', textAlign: 'center', width: 150, search:true, autoHide: false},	
-				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'center', width: 150, search:true, autoHide: false},
-				{field: 'reqNm', title: '요구사항 명', textAlign: 'center', width: 150 , search:true, autoHide: false}
+				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 150, search:true, autoHide: false, sortable: false},	
+				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 100, search:true, autoHide: false },
+				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 100 , search:true, autoHide: false, sortable: false}
 			],
 			searchColumns:[
-				{field: 'reqUsrId', title: '요청자', searchOrd: 5},
-				{field: 'reqProType', title: '처리유형', searchOrd: 6, searchType:"select", searchCd:"REQ00001"}
+				{field: 'reqUsrNm', title: '요청자', searchOrd: 5},
+				{field: 'reqChargerNm', title: '담당자', searchOrd: 6},
+				{field: 'reqProType', title: '처리유형', searchOrd: 7, searchType:"select", searchCd:"REQ00001"},
 			],
 			actionBtn:{
-				"title":"연결",
 				"dblClick":true,
 				"update":false,
 				"delete":false
@@ -529,7 +545,8 @@ var OSLReq3001Popup = function () {
 					if(reqConnectedList.indexOf(data.reqId) > -1){
 						row.addClass("osl-datatable__row-assign--none");
 					}
-				}
+				},
+				minHeight:50,
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum){
@@ -563,6 +580,14 @@ var OSLReq3001Popup = function () {
 				}
 			}
 		});
+		
+		$("#req3001ConnectReqTable").on("kt-datatable--on-layout-updated", function(){
+			actionHide("req3001ConnectReqTable");
+       	});
+		
+		$("#req3001UnconnectReqTable").on("kt-datatable--on-layout-updated", function(){
+			actionHide("req3001UnconnectReqTable");
+       	});
 	};
 	// end:: 미연결 요구사항 데이터테이블
 	
@@ -598,24 +623,30 @@ var OSLReq3001Popup = function () {
 			reqConnectedList.push(map.reqId);
 			
 		});
+		
+		
 		//출력 메시지 세팅
 		var toastrMsg = "";
 		var toastrType = "success";
+		
 		if(selDatas.length > reqDupleList){
 			toastrMsg += $.osl.lang("req3000.insert.saveMsg",(selDatas.length-reqDupleList));
 		}
+		
+		/* //모든 요구사항이 연결되있는 경우
 		if(reqDupleList > 0){
-			//이미 추가된 메시지 있는 경우 </br>
+			
 			if(toastrMsg.length > 0){
 				toastrMsg += "</br>";
 			}
-			toastrMsg += $.osl.lang("req3000.insert.saveDupleMsg",reqDupleList);
+			toastrMsg += $.osl.lang("req3000.insert.saveAllDupleMsg",reqDupleList);
 			toastrType = "warning";
-		}
-		//모든 요구사항이 연결되있는 경우
+		} */
+		
+		//이미 추가된 메시지 있는 경우 </br>
 		if(reqDupleList == selDatas.length){
 			
-			toastrMsg = $.osl.lang("req3000.insert.saveAllDupleMsg",reqDupleList);
+			toastrMsg = $.osl.lang("req3000.insert.saveDupleMsg",reqDupleList);
 			toastrType = "error";
 			
 		}
@@ -628,7 +659,7 @@ var OSLReq3001Popup = function () {
 		//데이터테이블 재 조회
 		datatable.reload();
 		
-		//$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
+		$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 		$("div.tooltip.show").remove(); 
 		
 	};
@@ -665,7 +696,7 @@ var OSLReq3001Popup = function () {
 				//데이터테이블 재 조회
 				datatable.reload();
 				
-				//$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
+				$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 				$("div.tooltip.show").remove();
 				
 			}
@@ -705,6 +736,8 @@ var OSLReq3001Popup = function () {
 		    	$("#reqGrpDesc").val(data.reqInfoMap.reqGrpDesc);
 		    	$("#reqGrpNm").val(data.reqInfoMap.reqGrpNm);
 		    	
+		    	$("#atchFileId").val(data.reqInfoMap.atchFileId);
+		    	$("#oriAtchFileId").val(data.reqInfoMap.atchFileId);
 		    	
 		    	//edit 세팅
 		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {formValidate: formValidate, disableResizeEditor: false}));
@@ -734,8 +767,9 @@ var OSLReq3001Popup = function () {
 						datatable.originalDataSet.push(map);
 						
 						//중복체크 추가
-						reqConnectedList.push(map.usrId);
+						reqConnectedList.push(map.reqId);
 	   				});
+	   				
 	   				
 	   				//중복제거
 					var dataSet = new Set(datatable.dataSet);
@@ -747,6 +781,7 @@ var OSLReq3001Popup = function () {
 					datatable.insertData();
 					//데이터테이블 재 조회
 					datatable.reload();
+					
 					$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.reload();
 					
    				}
@@ -766,13 +801,13 @@ var OSLReq3001Popup = function () {
 			return;
 		}
 		
-		if($.osl.isNull($("#regGrpUsrId").val())){
-			$.osl.alert("요청자 명을 검색하여 입력해주세요. \n 해당 요청자의 소속을 알아야합니다.");
+		if($.osl.isNull($("#reqGrpUsrId").val())||$("#reqGrpUsrId").val() == ""){
+			$.osl.alert($.osl.lang("req3000.alert.checkUsrId"));
 			return;
 		}
 		
-		if($.osl.isNull($("#regGrpChargerId").val())){
-			$.osl.alert("담당자 명을 검색하여 입력해주세요. \n 해당 담당자의 소속을 알아야합니다.");
+		if($.osl.isNull($("#reqGrpChargerId").val())||$("#reqGrpChargerId").val() == ""){
+			$.osl.alert($.osl.lang("req3000.alert.checkChargerId"));
 			return;
 		}
 		
@@ -781,7 +816,7 @@ var OSLReq3001Popup = function () {
 		//formData
    		var fd = $.osl.formDataToJsonArray(formId);
 		
-		
+		fd.append("reqGrpDescNotBr", $("#reqGrpDesc").val());
 		//연결된 요구사항 목록
     	var reqGrpLinkReqList = $.osl.datatable.list["req3001ConnectReqTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(reqGrpLinkReqList) && reqGrpLinkReqList.length > 0){
@@ -820,16 +855,14 @@ var OSLReq3001Popup = function () {
    				//모달 창 닫기
    				$.osl.layerPopupClose();
    				
-   				//datatable 조회
-   				$("button[data-datatable-id=req3000ReqTable][data-datatable-action=select]").click();
+   				//테이블 리로드
+   		   		$.osl.datatable.list["req3000Table"].targetDt.reload();
    			}
    		});
    		
-   		//AJAX 전송
+  		//AJAX 전송
    		ajaxObj.send();
    		
-		//리로드
-   		$.osl.datatable.list["req3000Table"].targetDt.reload();
       
 	}
 	
@@ -842,7 +875,17 @@ var OSLReq3001Popup = function () {
 		if (!form.valid()) {
 			return;
 		}
-
+		
+		if($.osl.isNull($("#reqGrpUsrId").val())||$("#reqGrpUsrId").val() == ""){
+			$.osl.alert($.osl.lang("req3000.alert.checkUsrId"));
+			return;
+		}
+		
+		if($.osl.isNull($("#reqGrpChargerId").val())||$("#reqGrpChargerId").val() == ""){
+			$.osl.alert($.osl.lang("req3000.alert.checkChargerId"));
+			return;
+		}
+		
        	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
        	
@@ -856,8 +899,6 @@ var OSLReq3001Popup = function () {
     		fd.append("reqGrpLinkReqList",JSON.stringify(reqIdList));	
     	}
        	
-       	debugger;
-       	
        	//파일 목록 추가하기 (수정이력 관리)
        	var uploadFileList = [];
        	$.each(fileUploadObj.getFiles(), function(idx, map){
@@ -868,7 +909,9 @@ var OSLReq3001Popup = function () {
        	});
        	
        	uploadFileList = uploadFileList.concat(uploadRemoveFiles);
-
+       	
+		console.log(uploadFileList);
+		
        	//파일 정보
        	fd.append("fileHistory",JSON.stringify(uploadFileList));
        	
@@ -880,23 +923,21 @@ var OSLReq3001Popup = function () {
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
-   				//등록 성공
+   				//수정 성공
    				$.osl.toastr(data.message);
 
    				//모달 창 닫기
    				$.osl.layerPopupClose();
    				
-   				//datatable 조회
-   				$("button[data-datatable-id=req3000ReqTable][data-datatable-action=select]").click();
+   				//리로드
+   		   		$.osl.datatable.list["req3000Table"].targetDt.reload();
    			}
    		});
    		
+	   	//AJAX 전송
+	   	ajaxObj.send();
    		
-   		//AJAX 전송
-   		ajaxObj.send();
    		
-   		//리로드
-   		$.osl.datatable.list["req3000Table"].targetDt.reload();
     };
     
   	//요청자 명 검색버튼 클릭 시
@@ -955,12 +996,51 @@ var OSLReq3001Popup = function () {
 			return;
 		}
 		
-		$.osl.confirm("등록하시겠습니까?",null,function(result) {
+		
+		$.osl.confirm($.osl.lang("req3000.confirm."+type),null,function(result) {
 			if (result.value) {
 	        	fileUploadObj.upload();
 	        }	
 		});
 	})
+	
+	//요청자명을 수정했을 때 아이디 초기화
+	$("#reqGrpUsrNm").change(function(){
+		$("#reqGrpUsrId").val("");
+	});
+	
+	//담당자명을 수정했을 때 아이디 초기화
+	$("#reqGrpChargerNm").change(function(){
+		$("reqGrpChargerId").val("");
+	});
+	
+	//엔터키
+	$("#reqGrpUsrNm").keydown(function(e){
+		if(e.keyCode=='13'){
+			//해당 값으로 검색화면 띄우기
+			$("#searchUsrNmBtn").click();
+		}
+	});
+	
+	//엔터키
+	$("#reqGrpChargerNm").keydown(function(e){
+		if(e.keyCode=='13'){
+			//해당 값으로 검색화면 띄우기
+			$("#searchUsrNmBtn").click();
+		}
+	});
+	
+	//기능키 컬럼 숨김	
+	var actionHide = function(tableId){
+		if(tableId == "req3001ConnectReqTable"){
+			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.getColumnByField('action').visible=false;
+			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.columnHide();
+			
+		}else if(tableId == "req3001UnconnectReqTable"){
+			$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.getColumnByField('actions').visible=false;
+			$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.columnHide();
+		}
+	}
 	return {
         // public functions
         init: function() {

@@ -27,7 +27,7 @@
 		<result property="reqUsrImgId"			column="REQ_USR_IMG_ID"/>
 		<result property="reqNm"				column="REQ_NM"/>
 		<result property="reqDesc"				column="REQ_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
-		<result property="reqPw"					column="REQ_PW"/>
+		<result property="reqPw"				column="REQ_PW"/>
 		<result property="reqChargerId"			column="REQ_CHARGER_ID"/>
 		<result property="reqStDtm"				column="REQ_ST_DTM"/>
 		<result property="reqEdDtm"				column="REQ_ED_DTM"/>
@@ -59,7 +59,7 @@
 		(
 			SELECT 
 					A.PRJ_ID
-					,	SF_PRJ1000_GRP_NM(A.PRJ_ID) AS PRJ_NM
+					,	B.PRJ_NM
 					,	A.PRJ_GRP_ID
 					,	SF_PRJ1000_GRP_NM(A.PRJ_GRP_ID) AS PRJ_GRP_NM
 					,	DECODE(A.PRJ_ID, #prjId#, '1', '2') AS USR_SEL_PRJ_ORD
@@ -118,6 +118,7 @@
 				    ,	A.MODIFY_USR_ID
 				    ,	A.MODIFY_USR_IP
 		    FROM (SELECT * FROM REQ4100) A
+		    	INNER JOIN PRJ1000 B ON (B.PRJ_ID = A.PRJ_ID AND B.LIC_GRP_ID = #licGrpId#)
 		    	LEFT JOIN STM3000 D ON (D.LIC_GRP_ID = #licGrpId# AND A.REQ_CHARGER_ID	= D.USR_ID)
 		    WHERE 1=1
 		    <isNotEmpty property="prjId">
