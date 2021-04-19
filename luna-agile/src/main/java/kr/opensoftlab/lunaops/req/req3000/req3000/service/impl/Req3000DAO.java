@@ -42,7 +42,7 @@ public class Req3000DAO extends ComOslitsAbstractDAO {
 		return (int) update("req3000DAO.updateReq3000ReqGrpInfo", paramMap);
 		
 	}
-	
+
 	
 	@SuppressWarnings("rawtypes")
 	public String insertReq3001ReqGrpLinkReqInfo(Map paramMap) {
@@ -84,6 +84,20 @@ public class Req3000DAO extends ComOslitsAbstractDAO {
 	
 	public void deleteReq3001ReqConList(Map<String, String> convertParamMap) {
 		delete("req3000DAO.deleteReq3001ReqConList", convertParamMap);
+	}
+	
+	public void deleteReq3001ReqCon(Map<String, String> convertParamMap) {
+		delete("req3000DAO.deleteReq3001ReqCon", convertParamMap);
+	}
+	
+	
+	public void updateReq3001ReqOrd(Map<String, String> convertParamMap) {
+		update("req3000DAO.updateReq3001ReqOrd", convertParamMap);
+	}
+	
+	
+	public Integer selectReq3001ReqOrd(Map<String, String> convertParamMap) {
+		return (Integer) select("req3000DAO.selectReq3001ReqMaxOrd", convertParamMap);
 	}
 	
 	

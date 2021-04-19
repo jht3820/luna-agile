@@ -100,6 +100,9 @@
 		<result property="useCd"				column="USE_CD"/>
  		<result property="regDtmDay"			column="REG_DTM_DAY"/>
  		<result property="reqKey"				column="REQ_KEY"/>
+ 		<result property="reqGrpId" 			column="REQ_GRP_ID"/>
+ 		<result property="reqGrpNm" 			column="REQ_GRP_NM"/>
+ 		<result property="reqGrpDesc"			column="REQ_GRP_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
     </resultMap>
     
    	<resultMap id="resultMapSelectChargeReq4100Info" class="egovMap">
@@ -565,7 +568,14 @@
 				    ,	A.MODIFY_USR_ID
 				    ,	A.MODIFY_USR_IP
 					,	REGEXP_REPLACE(A.REQ_DESC, '<[^>]*>', ' ') AS REQ_DESC
+					,	C.REQ_GRP_ID
+			   		,	C.REQ_GRP_NM
+			    	,	C.REQ_GRP_DESC
 			    FROM (SELECT * FROM REQ4100) A
+				INNER JOIN REQ3001 B
+		   			ON (A.PRJ_ID = B.PRJ_ID AND A.REQ_ID = B.REQ_ID)
+		    	INNER JOIN REQ3000 C
+					ON (B.PRJ_GRP_ID = C.PRJ_GRP_ID AND B.REQ_GRP_ID = C.REQ_GRP_ID AND C.USE_CD = '01')
 			    WHERE 1=1
 					AND A.PRJ_ID = #prjId#
 					
@@ -705,7 +715,14 @@
 	    ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
 	    ,	A.MODIFY_USR_ID
 	    ,	A.MODIFY_USR_IP
+	    ,	C.REQ_GRP_ID
+   		,	C.REQ_GRP_NM
+    	,	C.REQ_GRP_DESC
 		FROM REQ4100 A
+		INNER JOIN REQ3001 B
+   			ON (A.PRJ_ID = B.PRJ_ID AND A.REQ_ID = B.REQ_ID)
+    	INNER JOIN REQ3000 C
+			ON (B.PRJ_GRP_ID = C.PRJ_GRP_ID AND B.REQ_GRP_ID = C.REQ_GRP_ID AND C.USE_CD = '01')
 		WHERE 1 = 1
 		AND A.PRJ_ID = #prjId#
 		AND A.REQ_ID = #reqId#

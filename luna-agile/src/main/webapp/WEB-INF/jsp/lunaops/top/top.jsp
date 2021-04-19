@@ -342,6 +342,18 @@
 										</span>
 									</div>
 								</div>
+								<div class="form-group form-group-xs row" data-toggle="kt-tooltip" data-html="true" title="메인프로젝트 선택" data-placement="top" data-skin="brand">
+									<label class="col-6 col-form-label">
+										<span class="badge badge-dark badge-pill kt-font-sm kt-font-bolder osl-aside__badge flaticon2-settings kt-margin-r-10"></span>
+										메인프로젝트 설정
+									</label>
+									<div class="col-6 kt-align-right">
+										<span class="kt-switch kt-switch--sm kt-switch--success">
+											<select class="form-control" id="usrOpt_OPT00003" name="usrOpt_OPT00003" data-osl-value="" data-mst-cd="OPT00003" onchange="$.osl.user.usrOptChg(this);">
+											</select>
+										</span>
+									</div>
+								</div>
 							</form>
 						</div>
 					</div>

@@ -70,12 +70,12 @@
 			<div class="form-group">
 				<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReq">그룹 요구사항</span></label>
 				<div class="input-group">
-					<input type="text" class="form-control" name="reqGroupNm" id="reqGroupNm" readonly="readonly">
+					<input type="text" class="form-control" name="reqGrpNm" id="reqGrpNm" readonly="readonly">
 				</div>
 			</div>
 			<div class="form-group kt-margin-b-0">
 				<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReqDesc">그룹 요구사항 내용</span></label>
-				<textarea class="kt-hide" name="reqGroupDesc" id="reqGroupDesc" ></textarea>
+				<textarea class="kt-hide" name="reqGrpDesc" id="reqGrpDesc" ></textarea>
 			</div>
 		</div>
 	</div>
@@ -174,7 +174,6 @@ var OSLReq4102Popup = function () {
     	//요구사항 정보 조회
 		selectReqInfo();
     };
-    
     /**
 	 * 	요구사항 정보 조회
 	 */
@@ -203,6 +202,7 @@ var OSLReq4102Popup = function () {
 				
 				//요청자 정보 세팅
 		    	$("#reqUsrId").val(data.reqInfoMap.reqUsrId);
+				$("#reqGrpNm").val(data.reqInfoMap.reqGrpNm);
 		    	$("#usrNm").val(data.reqInfoMap.reqUsrNm);
 		    	$("#email").val(data.reqInfoMap.reqUsrEmail);
 		    	$("#telno").val(data.reqInfoMap.reqUsrNum);
@@ -221,7 +221,7 @@ var OSLReq4102Popup = function () {
 	    			disabledEditor: true,
 	    			height:260
 		    	}));
-		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
+		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,
 	    			disableDragAndDrop: true,
