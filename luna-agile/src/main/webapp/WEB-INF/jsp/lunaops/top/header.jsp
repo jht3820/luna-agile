@@ -27,6 +27,7 @@
 
 		<link href="<c:url value='/css/style.osl.css'/>" rel="stylesheet" type="text/css" />
 		
+		<script src="<c:url value='/js/osl/osl-chart.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/osl/osl-lang.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/osl/osl-core.js'/>" type="text/javascript"></script>
 		
