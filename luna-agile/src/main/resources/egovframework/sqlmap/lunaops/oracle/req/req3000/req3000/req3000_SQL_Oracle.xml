@@ -277,6 +277,9 @@
 					</isEqual>
 				</isNotEmpty>
 		</isNotEmpty>
+		<isNotEmpty property="searchDataTxt" prepend="AND">
+				T1.REQ_GRP_NM LIKE '%'|| #searchDataTxt# ||'%'
+		</isNotEmpty>
 	</sql>
     <sql id="selectReq3001List">
     	<![CDATA[
@@ -368,6 +371,9 @@
 						</isEqual>
 					</isNotEmpty>
 				</isNotEmpty>
+				<isNotEmpty property="reqId" prepend="AND">
+					SUBT2.REQ_ID = #reqId# 
+				</isNotEmpty>
 				<![CDATA[
 				ORDER BY SUBT2.PRJ_ID, SUBT2.REQ_PRO_TYPE ASC, TO_NUMBER(REGEXP_REPLACE(SUBT2.REQ_ORD, '[^0-9]')) DESC NULLS LAST, SUBT2.REG_DTM DESC
 			) SUBT1
@@ -423,7 +429,7 @@
 					AND B.PRJ_ID = #prjId#
 					AND A.REQ_PRO_TYPE != '03'
 					]]>
-						<!-- AND NOT EXISTS(
+						 AND NOT EXISTS(
 							SELECT *
 						  FROM REQ3001 Z
 						  WHERE 1=1
@@ -433,7 +439,7 @@
 						  </isNotEmpty>
 						  AND Z.PRJ_ID = A.PRJ_ID
 						  AND Z.REQ_ID = A.REQ_ID
-						) -->
+						) 
 					<![CDATA[
 				) SUBT2
 				WHERE 1=1
@@ -529,7 +535,7 @@
 			VALUES
 			(
 				#prjGrpId#				,#prjId#				,#newReqGrpId#			,#reqGrpNo#
-				,#reqGrpNm#				,#reqGrpDescNotBr#			,#atchFileId#			,#reqGrpChargerId#
+				,#reqGrpNm#				,#reqGrpDescNotBr#		,#atchFileId#			,#reqGrpChargerId#
 				,#reqGrpKey#			,#reqGrpUsrId#			,'01'
 				,SYSDATE				,#regUsrId#				,#regUsrIp#
 			)
@@ -540,7 +546,7 @@
 	<update id="req3000DAO.updateReq3000ReqGrpInfo" parameterClass="java.util.Map" >
 		
 		UPDATE REQ3000 A
-			SET	
+			SET		
 					A.REQ_GRP_NO 	= #reqGrpNo#
 				,	A.REQ_GRP_NM 	= #reqGrpNm#
 				,	A.REQ_GRP_DESC 	= #reqGrpDescNotBr#
@@ -580,7 +586,6 @@
 		
 	</insert>
 	
-	
 	<select id="req3000DAO.selectReq3001ReqGrpLinkReqList" parameterClass="java.util.Map" resultMap="resultMapSelectReq3001">
 		
 		SELECT 
@@ -600,6 +605,29 @@
 		) T1
     </select>
     
+	
+    <select id="req3000DAO.selectReq3001ReqMaxOrd" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+	    SELECT
+			NVL(MAX(REQ_LINK_ORD), 0)
+		FROM	REQ3001
+		WHERE 	1 = 1
+		AND		PRJ_GRP_ID = #prjGrpId#
+		AND		PRJ_ID = #prjId#
+		AND		REQ_GRP_ID = #reqGrpId#
+    </select>
+    
+    
+    <update id="req3000DAO.updateReq3001ReqOrd" parameterClass="java.util.Map">
+		UPDATE
+				REQ3001
+		SET	    REQ_ORD = #reqOrd#
+		WHERE	1 = 1
+		AND		PRJ_GRP_ID 	= #prjGrpId#
+		AND		PRJ_ID 		= #prjId#
+		AND		REQ_GRP_ID 	= #reqGrpId#		
+    	AND		REQ_ID		= #reqId#
+    </update>
     
 	<select id="req3000DAO.selectReq3002ReqGrpAddReqList" parameterClass="java.util.Map" resultMap="resultMapSelectReq3002">
 		
@@ -644,6 +672,16 @@
 		AND		PRJ_GRP_ID = #prjGrpId#
 		AND		PRJ_ID = #prjId#
 		AND		REQ_GRP_ID = #reqGrpId#
+	</delete>
+	
+	
+	<delete id="req3000DAO.deleteReq3001ReqCon" parameterClass="java.util.Map">
+	
+		DELETE  REQ3001
+		WHERE   1 = 1
+		AND		REQ_ID = #reqId#
+		AND		PRJ_GRP_ID = #prjGrpId#
+		AND		PRJ_ID = #prjId#
 	</delete>
 	
 	

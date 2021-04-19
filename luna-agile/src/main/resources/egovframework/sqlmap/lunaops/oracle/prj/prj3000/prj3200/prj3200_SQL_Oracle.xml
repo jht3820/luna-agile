@@ -122,6 +122,14 @@
 				</isEqual>
 			</isNotEmpty>
 		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>, T.REG_DTM DESC
+			</isNotEmpty>
+		</isNotEmpty>
 	</sql>
 	
 	
@@ -237,6 +245,7 @@
 										)
 			) T WHERE 1 = 1
 		]]>
+		
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
 				<isEqual property="searchTargetId" compareValue="targetCd">
@@ -248,6 +257,14 @@
 				<isEqual property="searchTargetId" compareValue="regUsrId">
 					AND		T.REG_USR_ID LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>, T.REG_DTM DESC
 			</isNotEmpty>
 		</isNotEmpty>
 	</sql>

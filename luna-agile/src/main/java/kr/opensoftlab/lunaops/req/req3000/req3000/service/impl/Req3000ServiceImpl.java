@@ -167,31 +167,35 @@ public class Req3000ServiceImpl extends EgovAbstractServiceImpl implements Req30
 			String reqGrpId = convertParamMap.get("reqGrpId");
 			
 			
-			List<Map<String, String>> reqLinkDatas = new ArrayList();
-			
-			
 			JSONArray jsonArray = (JSONArray) jsonParser.parse(reqGrpLinkReqList);
-			for(int i=0; i<jsonArray.size(); i++){
-				org.json.simple.JSONObject token = (org.json.simple.JSONObject) jsonArray.get(i);
-				token.put("prjGrpId", prjGrpId);
-				token.put("regGrpId", reqGrpId);
-				token.put("regUsrId", regUsrId);
-				token.put("regUsrIp", regUsrIp);
-				
-				HashMap<String, String> tokenObj = new ObjectMapper().readValue(token.toString(), HashMap.class) ;
-				
-				reqLinkDatas.add(tokenObj);
-			}
 			
-			for(Map data : reqLinkDatas){
-				data.put("regUsrId", paramMap.get("regUsrId"));
-				data.put("regUsrIp", paramMap.get("regUsrIp"));
-				data.put("reqGrpId", reqGrpId);
+			if(reqGrpLinkReqList != null) {
 				
 				
-				req3000DAO.insertReq3001ReqGrpLinkReqInfo(data);
+				List<Map<String, String>> reqLinkDatas = new ArrayList();
+				
+				
+				for(int i=0; i<jsonArray.size(); i++){
+					org.json.simple.JSONObject token = (org.json.simple.JSONObject) jsonArray.get(i);
+					token.put("prjGrpId", prjGrpId);
+					token.put("regGrpId", reqGrpId);
+					token.put("regUsrId", regUsrId);
+					token.put("regUsrIp", regUsrIp);
+					
+					HashMap<String, String> tokenObj = new ObjectMapper().readValue(token.toString(), HashMap.class) ;
+					
+					reqLinkDatas.add(tokenObj);
+				}
+				
+				for(Map data : reqLinkDatas){
+					data.put("regUsrId", paramMap.get("regUsrId"));
+					data.put("regUsrIp", paramMap.get("regUsrIp"));
+					data.put("reqGrpId", reqGrpId);
+					
+					
+					req3000DAO.insertReq3001ReqGrpLinkReqInfo(data);
+				}
 			}
-		
 			
 			String atchFileId = (String) convertParamMap.get("atchFileId"); 
 			

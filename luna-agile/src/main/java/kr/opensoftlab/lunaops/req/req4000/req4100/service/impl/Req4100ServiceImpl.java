@@ -34,6 +34,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
+import kr.opensoftlab.lunaops.req.req3000.req3000.service.impl.Req3000DAO;
 import kr.opensoftlab.lunaops.req.req4000.req4100.service.Req4100Service;
 import kr.opensoftlab.sdf.util.CommonScrty;
 
@@ -43,6 +44,10 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 	
     @Resource(name="req4100DAO")
     private Req4100DAO req4100DAO;
+    
+    
+    @Resource(name="req3000DAO")
+    private Req3000DAO req3000DAO;
 
 	@Resource(name = "FileManageDAO")
 	private FileManageDAO fileMngDAO;
@@ -319,7 +324,7 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 	}
 
 	
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object saveReq4100ReqInfo(Map paramMap) throws Exception{
 		
 		Map<String, String> convertParamMap = selectReq4100JsonToMap(paramMap);
@@ -350,6 +355,7 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 			String insNewReqId = req4100DAO.insertReq4101ReqInfo(convertParamMap);
 			
 			
+			
 			if(insNewReqId == null || "".equals(insNewReqId)){
 				throw new Exception(egovMessageSource.getMessage("fail.common.insert"));
 			}
@@ -359,13 +365,22 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
     		
 			Map<String, String> newReqMap = new HashMap<String, String>();
 			
+			
 			newReqMap.put("prjId", prjId);
 			newReqMap.put("reqId", insNewReqId);
 			newReqMap.put("reqKey", enReqKey);
+			convertParamMap.put("reqId", insNewReqId);
 			
     		
     		req4100DAO.updateReq4101ReqKey(newReqMap);
 
+    		
+    		if(convertParamMap.get("reqGrpId") != null || !"".equals(convertParamMap.get("reqGrpId"))) {
+    			
+    			Integer reqLinkOrd = req3000DAO.selectReq3001ReqOrd(convertParamMap) + 1;
+    			convertParamMap.put("reqLinkOrd", reqLinkOrd.toString());
+    			req3000DAO.insertReq3001ReqGrpLinkReqInfo(convertParamMap);
+    		}
     		
     		String reqPw = (String) convertParamMap.get("reqPw");
     		if(reqPw != null && !reqPw.isEmpty()) {
@@ -388,6 +403,27 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 			if(!"01".equals(reqProType)){
 				throw new Exception(egovMessageSource.getMessage("fail.common.update"));
 			}
+			
+			
+			if(convertParamMap.get("reqGrpId") != null || !"".equals(convertParamMap.get("reqGrpId"))) {
+				
+				
+				req3000DAO.deleteReq3001ReqCon(convertParamMap);
+				
+				
+				List<Map> reqGrpLinkList = req3000DAO.selectReq3001ReqGrpLinkReqList(convertParamMap);
+				for(Integer i = 1; i <= reqGrpLinkList.size(); i++) {
+					convertParamMap.put("reqOrd", i.toString());
+					req3000DAO.updateReq3001ReqOrd(convertParamMap);
+				}
+				
+				
+				Integer reqLinkOrd = req3000DAO.selectReq3001ReqOrd(convertParamMap) + 1;
+				convertParamMap.put("reqLinkOrd", reqLinkOrd.toString());
+				req3000DAO.insertReq3001ReqGrpLinkReqInfo(convertParamMap);
+				
+			}
+			
 			
 			
 			
@@ -503,6 +539,16 @@ public class Req4100ServiceImpl extends EgovAbstractServiceImpl implements Req41
 
 			
 			req4100DAO.deleteReq4100ReqInfo(infoMap);
+			
+			
+			req3000DAO.deleteReq3001ReqCon(infoMap);
+			
+			
+			List<Map> reqGrpLinkList = req3000DAO.selectReq3001ReqGrpLinkReqList(infoMap);
+			for(Integer index = 1; index <= reqGrpLinkList.size(); i++) {
+				infoMap.put("reqOrd", index.toString());
+				req3000DAO.updateReq3001ReqOrd(infoMap);
+			}
 			
 			
 			String atchFileId = (String) infoMap.get("atchFileId");

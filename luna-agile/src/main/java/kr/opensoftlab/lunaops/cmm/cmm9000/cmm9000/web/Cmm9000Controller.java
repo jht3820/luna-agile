@@ -28,6 +28,7 @@ import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3001.service.Stm3001Service;
 import kr.opensoftlab.lunaops.stm.stm4000.stm4000.service.Stm4000Service;
+import kr.opensoftlab.lunaops.usr.usr1000.usr1100.service.Usr1100Service;
 import kr.opensoftlab.sdf.util.ModuleUseCheck;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
@@ -63,6 +64,10 @@ public class Cmm9000Controller {
     
     @Resource(name = "stm3001Service")
     private Stm3001Service stm3001Service;
+    
+    
+    @Resource(name = "usr1100Service")
+    private Usr1100Service usr1100Service;
 
 	
     @Resource(name = "stm4000Service")
@@ -436,6 +441,7 @@ public class Cmm9000Controller {
     		List<Map> menuList = null;
     		List<Map> usrOptList = null;
     		List<Map> langList = null;
+    		List<Map> shortcutList = null;
     		Map usrInfo = null;
     		
     		
@@ -503,8 +509,11 @@ public class Cmm9000Controller {
 	    		paramMap.put("firstIndex", "0");
 	    		paramMap.put("lastIndex", String.valueOf(langTotalCnt));
 	    		
+	    		
 	    		langList = stm4000Service.selectStm4000CommonCodeDetailList(paramMap);
 	    		
+	    		
+	    		shortcutList = usr1100Service.selectUsr1100ShortcutList(paramMap);
     		}
     		
     		model.addAttribute("btnAuthMap", btnAuthMap);
@@ -515,6 +524,7 @@ public class Cmm9000Controller {
     		model.addAttribute("menuList", menuList);
     		model.addAttribute("usrInfo", usrInfo);
     		model.addAttribute("langList", langList);
+    		model.addAttribute("shortcutList", shortcutList);
     		model.addAttribute("errorYn", "N");
     		model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
     		return new ModelAndView("jsonView");

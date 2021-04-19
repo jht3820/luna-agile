@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.tmatesoft.sqljet.core.internal.lang.SqlParser.pragma_stmt_return;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovFileMngService;
@@ -25,13 +24,9 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
-import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
-import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.Prj3000Service;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3200.service.Prj3200Service;
-import kr.opensoftlab.lunaops.req.req1000.req1000.service.Req1000Service;
 import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
-import kr.opensoftlab.sdf.util.ReqHistoryMngUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
@@ -109,8 +104,21 @@ public class Prj3200Controller {
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
 			
-			/
-			/
+			
+			int totCnt = prj3200Service.selectPrj3200DocConListCnt(paramMap);
+
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+
+			
+			
+			List<Map> prj3200List = prj3200Service.selectPrj3200DocConList(paramMap);
+			
+			
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -190,8 +198,26 @@ public class Prj3200Controller {
     		
     		
     		
-    		/
-			/
+    		
+    		int totCnt = 0;
+    		List<Map> dataList = null;
+    		Map<String, Object> metaMap = null;
+    		
+			
+			totCnt = prj3200Service.selectPrj3200ConTargetCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			
+			dataList = (List) prj3200Service.selectPrj3200ConTargetList(paramMap);
+			
+			
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
