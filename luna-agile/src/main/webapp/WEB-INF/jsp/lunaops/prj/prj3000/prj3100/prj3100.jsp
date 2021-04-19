@@ -44,7 +44,7 @@
 						<div class="kt-portlet__head-toolbar osl-margin-left--auto">
 							<div class="kt-portlet__head-group">
 								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDownAll" title="확정 문서 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDownAll" tabindex="1" data-original-title="확정 문서 전체 다운로드">
-									<i class="fa fa-list"></i><span>확정 문서 전체 다운로드</span>
+									<i class="fas fa-download"></i><span>확정 문서 전체 다운로드</span>
 								</button>
 							</div>
 						</div>
@@ -189,7 +189,7 @@
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDown" title="확정 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDown" tabindex="1" data-original-title="확정 파일 전체 다운로드">
-														<i class="fa fa-plus"></i><span>전체 다운로드</span>
+														<i class="fas fa-download"></i></i><span>전체 다운로드</span>
 													</button>
 												</div>
 											</div>
@@ -213,7 +213,7 @@
 														<i class="fa fa-plus"></i><span>등록</span>
 													</button>
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectWaitFileDown" title="확정 대기 파일 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectWaitFileDown" tabindex="2" data-original-title="확정 대기 파일 전체 다운로드">
-														<i class="fa fa-plus"></i><span>전체 다운로드</span>
+														<i class="fas fa-download"></i><span>전체 다운로드</span>
 													</button>
 												</div>
 											</div>
@@ -555,54 +555,7 @@ var OSLPrj3000Popup = function () {
 			
 		});
 		
-		/**
-		 * function 명 	: selectDocInfo
-		 * function 설명	: 선택한 산출물의 상세정보를 조회하여 화면에 세팅한다.
-		 * @param docId : 선택한 산출물 ID
-		 */
-		var selectDocInfo = function(nodeData) {
-	    	
-			 
-			//AJAX 설정
-			var ajaxObj = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj3000/prj3000/selectPrj3000DocInfoAjax.do'/>", "async": false}
-					,{"docId": nodeData.docId, "dtParamPrjId" : nodeData.prjId});
-			
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				
-				if(data.errorYn == "Y"){
-					$.osl.alert(data.message,{type: 'error'});
-				}else{
-					$("#"+formId)[0].reset();
-					
-					// 산출물 정보 세팅
-			    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3100", ["docId", "docNm", "useNm", "ord", "docEdDtm", "signUseNm", "docFormFileId", "docFormConfFileId", "docAtchFileId", "docWaitFileId"]);
-				
-			    	var docDesc = data.docInfoMap.docDesc;
-					
-					// 산출물 마감일 없을 경우
-					if($.osl.isNull(data.docInfoMap.docEdDtm)){
-						$("#docEdDtm").val("-");
-					}
-					
-					if(!$.osl.isNull(docDesc)){
-						docDesc =  $.osl.escapeHtml(docDesc);
-				    	// 비고 값 div영역에 세팅
-						$("#docDesc").html(docDesc.replace(/\n/g, '<br/>'));
-					}
-					
-					//입력된 검색값 초기화 (보류)
-					//$("#searchData_prj3200PrjTable").val('');
-					
-					//데이터 테이블 정보 세팅
-					selectDocConInfo();
-				}
-			});
-			
-			//AJAX 전송
-			ajaxObj.send();
-		};
+		
 		/**************************************/
 		/* 트리 메뉴 및 관련 메서드 종료                                      */
 		/**************************************/
@@ -627,76 +580,7 @@ var OSLPrj3000Popup = function () {
 		});
 		
 		
-		/*
-		 * function명 : fnFileAjaxUpload
-		 * function설명 : 파일 업로드를 위한 메소드
-		 * @param files : 업로드할 파일의 정보들
-		 * @param fileType : 확정 파일인지 확정 대기파일인지 (확정파일 = atchFile, 확정대기파일 = waitFile)
-		 */
-		var fnFileAjaxUpload = function(files,fileType) {
-			var files = files;
-			
-			var fd = $.osl.formDataToJsonArray(formId);
-			
-			//확장자 체크
-			var extChk = true;
-			
-			//다중 파일 모두 넣기
-			$.each(files, function(idx, file){
-				
-				//확장자 가져오기
-				var ext = file.name.split(".").pop().toLowerCase();
-				
-				if(!fileWhiteList(ext)){
-					//lang
-					//$.osl.toastr("확장자가 [ " + ext + " ] 인 파일은 첨부가 불가능 합니다.");
-					$.osl.alert($.osl.lang("prj3100.message.alert.fileExtChk",ext));
-					
-					extChk = false;
-					return false;
-				}
-				fd.append('file', file);
-			});
-			
-			//false면 리턴
-			if(!extChk){
-				return;
-			}
-			
-			fd.append('fileType', fileType);
-			
-			//확정파일이면  확정 파일 아이디 가져오기
-			if(fileType == 'atchFile'){
-				atchFileId = $('#docAtchFileId').val();
-				
-			//확정 대기파일이면 
-			}else if(fileType == 'waitFile'){
-				atchFileId = $('#docWaitFileId').val();
-			}
-			
-			fd.append('atchFileId', atchFileId);
-			
-			//AJAX 설정
-			var ajaxObj = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do'/>", "async": false, "contentType":false,"processData":false ,"cache":false}
-					,fd);
-			
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				
-				if(data.errorYn == "Y"){
-					$.osl.alert(data.message,{type: 'error'});
-				}else{
-					$.osl.toastr(data.message);
-					
-					//파일 정보 조회
-					selectFormFileList();
-				}
-			});
-			
-			//AJAX 전송
-			ajaxObj.send();
-		};
+		
 		
 		/*
 		 * function명 : fileDropDown
@@ -800,322 +684,7 @@ var OSLPrj3000Popup = function () {
         }
 		
 		
-        /*
-		 * function명 : selectFormFileList
-		 * function설명 : 가져온 파일 리스트 그리기
-		 * @param data : 가져온 파일 데이터
-		 */
-		var selectFormFileList = function(){
-			
-			//확정 산출물
-			var docAtchFileId = $('#docAtchFileId').val();
-			
-			 //확정 대기 산출물
-			var docWaitFileId = $('#docWaitFileId').val();
-			
-			//AJAX 설정
-			var ajaxObj1 = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do'/>", "async": false}
-					,{'docAtchFileId': docAtchFileId, 'docWaitFileId':docWaitFileId});
-						
-			
-			//AJAX 전송 성공 함수
-			ajaxObj1.setFnSuccess(function(data){
-				
-				if(data.errorYn == "Y"){
-					$.osl.alert(data.message,{type: 'error'});
-				}else{
-					
-					//가져온 데이터로 그림그리기
-					drawList(data);
-				}
-			});
-			
-			//AJAX 전송
-			ajaxObj1.send();			
-			
-		}
-		
-		 /*
-		 * function명 : drawList
-		 * function설명 : 가져온 파일 리스트 그리기
-		 * @param data : 가져온 파일 데이터
-		 */
-		var drawList = function(data){
-			//파일 리스트 비우기
-			$("#confirmation-list").empty();
-			$("#wait-confirmation-list").empty();
-			
-			var atchFileList = data.atchFileList;
-			
-			var waitFileList = data.waitFileList;
-			
-			
-			//확정 산출물 파일 리스트 돌기
-			$.each(atchFileList, function(idx, fileData){
-				var fileVolume =Math.round($.osl.escapeHtml(fileData.fileMg) / 1024) + ' KB';
-				var iconPath = '';
-				var iconClass = '';
-				var iconColor = '';
-    			 
-				//사진 확장자
-				var imgExt = ['jpg','jpeg','png','gif'];
-				
-				//파일 종류에 따라 이미지 다르게 설정
-				if(fileData.fileExtsn == 'pdf'){
-					iconPath =	'<path d="M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z"></path>';
-					iconClass = 'osl-uppy-pdf-bg';
-					iconColor = '#E2514A';
-				}else if(fileData.fileExtsn == 'zip'){
-					iconPath = '<path d="M10.45 2.05h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V2.55a.5.5 0 0 1 .5-.5zm2.05 1.024h1.05a.5.5 0 0 1 .5.5V3.6a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5v-.001zM10.45 0h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 3.074h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 1.024h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm-2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-1.656 3.074l-.82 5.946c.52.302 1.174.458 1.976.458.803 0 1.455-.156 1.975-.458l-.82-5.946h-2.311zm0-1.025h2.312c.512 0 .946.378 1.015.885l.82 5.946c.056.412-.142.817-.501 1.026-.686.398-1.515.597-2.49.597-.974 0-1.804-.199-2.49-.597a1.025 1.025 0 0 1-.5-1.026l.819-5.946c.07-.507.503-.885 1.015-.885zm.545 6.6a.5.5 0 0 1-.397-.561l.143-.999a.5.5 0 0 1 .495-.429h.74a.5.5 0 0 1 .495.43l.143.998a.5.5 0 0 1-.397.561c-.404.08-.819.08-1.222 0z"></path>';
-					iconClass = 'osl-uppy-archive-bg';
-					iconColor = '#00C469';
-				}else{
-					iconPath = '<path d="M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z"></path><path d="M15 4v3a1 1 0 0 0 1 1h3V7h-3V4h-1z"></path>';
-					iconClass = 'osl-uppy-file-bg';
-					iconColor = '#A7AFB7';
-				}
-				
-				var fileDivbefore = 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
-										+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10"></div>';
-										
-				var fileDivCenter = '';
-				
-				//사진 확장자가 아닐 때
-				if($.inArray(fileData.fileExtsn, imgExt) == -1){
-					fileDivCenter +=		'<div class="osl-uppy-file-sumnail '+ iconClass +'">'
-											+	'<div class="osl-uppy-file-sumnail-bg"></div>'
-											+	'<span class="osl-uppy-iconFile">'
-												+	'<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">'
-													+	'<g fill="'+iconColor +'" fill-rule="nonzero">'
-														+	iconPath
-													+	'</g>'
-												+	'</svg>'
-											+	'</span>'
-											+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
-												+	'<i class="fas fa-arrow-circle-down"></i>'
-											+	'</div>'
-				//사진 확장자일 때
-				}else{
-					fileDivCenter +=		'<div class="osl-uppy-file-sumnail">'
-											+ 	'<img src="'+ "/cmm/fms/getImage.do?fileSn="+fileData.fileSn+"&atchFileId="+fileData.atchFileId+'">'
-											+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
-											+		'<i class="fas fa-arrow-circle-down"></i>'
-											+	'</div>'
-				}
-				var fileDivAfter = 			'</div>'
-										+	'<div class="osl-uppy-file-info-group">'
-											+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
-											+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
-										+	'</div>'
-										+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
-											+	'<i class="fa fa-times-circle"></i>'
-										+	'</div>'
-										+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
-									+	'</div>'; 
-										
-				var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
-							
-				$('#confirmation-list').append(fileDiv);
-				
-			});
-			
-			//확정 대기 산출물 양식 리스트 돌기
-			$.each(waitFileList, function(idx, fileData){
-				var fileVolume =Math.round($.osl.escapeHtml(fileData.fileMg) / 1024) + ' KB';
-				var iconPath = '';
-				var iconTitle = '';
-				var iconClass = '';
-				var iconColor = '';
-				
-				//사진 확장자
-				var imgExt = ['jpg','jpeg','png','gif'];
-				
-				//파일 종류에 따라 이미지 다르게 설정
-				if(fileData.fileExtsn == 'pdf'){
-					iconPath =	'<path d="M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z"></path>';
-					iconClass = 'osl-uppy-pdf-bg';
-					iconColor = '#E2514A';
-				}else if(fileData.fileExtsn == 'zip'){
-					iconPath = '<path d="M10.45 2.05h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V2.55a.5.5 0 0 1 .5-.5zm2.05 1.024h1.05a.5.5 0 0 1 .5.5V3.6a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5v-.001zM10.45 0h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 3.074h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 1.024h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm-2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-1.656 3.074l-.82 5.946c.52.302 1.174.458 1.976.458.803 0 1.455-.156 1.975-.458l-.82-5.946h-2.311zm0-1.025h2.312c.512 0 .946.378 1.015.885l.82 5.946c.056.412-.142.817-.501 1.026-.686.398-1.515.597-2.49.597-.974 0-1.804-.199-2.49-.597a1.025 1.025 0 0 1-.5-1.026l.819-5.946c.07-.507.503-.885 1.015-.885zm.545 6.6a.5.5 0 0 1-.397-.561l.143-.999a.5.5 0 0 1 .495-.429h.74a.5.5 0 0 1 .495.43l.143.998a.5.5 0 0 1-.397.561c-.404.08-.819.08-1.222 0z"></path>';
-					iconClass = 'osl-uppy-archive-bg';
-					iconColor = '#00C469';
-				}else{
-					iconPath = '<path d="M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z"></path><path d="M15 4v3a1 1 0 0 0 1 1h3V7h-3V4h-1z"></path>';
-					iconClass = 'osl-uppy-file-bg';
-					iconColor = '#A7AFB7';
-				}
-				
-				var fileDivbefore = 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
-										+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__left-btn osl-uppy__left kt-margin-r-10"></div>';
-										
-				var fileDivCenter = '';
-				
-				//사진 확장자가 아닐 때
-				if($.inArray(fileData.fileExtsn, imgExt) == -1){
-					fileDivCenter +=		'<div class="osl-uppy-file-sumnail '+ iconClass +'">'
-											+	'<div class="osl-uppy-file-sumnail-bg"></div>'
-											+	'<span class="osl-uppy-iconFile">'
-												+	'<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">'
-													+	'<g fill="'+iconColor +'" fill-rule="nonzero">'
-														+	iconPath
-													+	'</g>'
-												+	'</svg>'
-											+	'</span>'
-											+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
-												+	'<i class="fas fa-arrow-circle-down"></i>'
-											+	'</div>'
-				//사진 확장자일 때
-				}else{
-					fileDivCenter +=		'<div class="osl-uppy-file-sumnail">'
-											+ 	'<img src="'+ "/cmm/fms/getImage.do?fileSn="+fileData.fileSn+"&atchFileId="+fileData.atchFileId+'">'
-											+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
-											+		'<i class="fas fa-arrow-circle-down"></i>'
-											+	'</div>'
-				}
-				var fileDivAfter = 			'</div>'
-										+	'<div class="osl-uppy-file-info-group">'
-											+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
-											+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
-										+	'</div>'
-										+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
-											+	'<i class="fa fa-times-circle"></i>'
-										+	'</div>'
-										+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
-									+	'</div>'; 
-										
-				var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
-				$('#wait-confirmation-list').append(fileDiv);
-				
-			});
-		
-			//파일 이동 버튼 이벤트, 삭제버튼, 다운버튼 이벤트 걸기
-			fileMoveBtnEvt();
-			deleteFileBtnEvt();
-			fileDownBtnEvt();
-		}
         
-		 /*
-		 * function명 : fileDownBtnEvt
-		 * function설명 : 파일 다운로드 이벤트
-		 */
-		var fileDownBtnEvt = function(){
-			
-			$('.osl-uppy-list-dashboardItem-action--download').click(function(){
-				
-				var type = $(this).parent().parent().children('div:first-child');
-				var fileSn = $(this).parent().parent().children('input[name=fileSn]').val();
-				var atchFileId = '';
-				
-				var form = $("#"+formId)[0];
-				var fd = $.osl.formDataToJsonArray(formId);
-				
-				//확정 파일이면
-				if(type.hasClass('osl-uppy__right')){
-					
-					atchFileId = $('#docAtchFileId').val();
-				//확정 대기 파일이면
-				}else if(type.hasClass('osl-uppy__left')){
-					
-					atchFileId = $('#docWaitFileId').val();
-				}
-				
-				//파일 다운
-				$.osl.file.fileDownload(atchFileId,fileSn);
-				
-			});
-		}
-		 
-		 /*
-		 * function명 : fileMoveBtnEvt
-		 * function설명 : 파일 리스트 화살표 버튼 클릭 이벤트
-		 */
-		var fileMoveBtnEvt = function(){
-			$('.osl-uppy__arrow-btn').click(function(){
-				//클릭된 화살표의 부모(첨부파일 전체) 박스
-				var target = $(this).parent();
-				var fileSn = target.children('input[name=fileSn]').val();
-				
-				var fileType = '';
-				//버튼모양 여부로 판단
-				//좌측 버튼이 있을때(확정 대기 파일 버튼)
-				if($(this).hasClass('osl-uppy__left-btn')){
-					//확정 파일로 이동
-					$('#confirmation-list').prepend(target);
-					//아이콘 변경(방향,아이콘 모양)
-					$(this).addClass('osl-uppy__right-btn osl-uppy__right');
-					$(this).removeClass('osl-uppy__left-btn osl-uppy__left');
-					
-					//확정 대기 파일
-					fileType = 'waitFile';
-				//우측 버튼이 있을때
-				}else{ 
-					//확정 대기 파일로 이동(확정 파일 버튼)
-					$('#wait-confirmation-list').prepend(target);
-					//아이콘 변경(방향,아이콘 모양)
-					$(this).addClass('osl-uppy__left-btn osl-uppy__left');
-					$(this).removeClass('osl-uppy__right-btn osl-uppy__right');
-
-					//확정 파일
-					fileType = 'atchFile';
-				}
-				
-				//파일 타입 바꾸기
-				updateFileType(fileType,fileSn);
-			});
-		}
-		
-		/*
-		 * function명 : deleteFileBtnEvt
-		 * function설명 : 파일 리스트 삭제 버튼 클릭 이벤트
-		 */
-		var deleteFileBtnEvt = function(){
-			
-			$('.fa-times-circle').click(function(){
-				
-				var targetType = $(this).parent().parent().children('div:first-child');
-				var fileSn = targetType.parent().children('input[name=fileSn]').val();
-				//부모객체에 오른쪽 클래스가 있다면 확정 대기 파일
-				if(targetType.hasClass("osl-uppy__left")){
-					atchFileId = $('#docWaitFileId').val();
-				
-				//부모객체에 왼쪽 클래스가 있다면 확정 파일
-				}else if(targetType.hasClass("osl-uppy__right")){ 
-					atchFileId = $('#docAtchFileId').val();	
-				}
-				
-				
-				//파일 삭제 확인창
-				$.osl.confirm($.osl.lang("prj3100.message.confirm.deleteFormFile"),null,function(result) {
-			        if (result.value) {
-			        	
-			    		//AJAX 설정
-			    		var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/prj/prj3000/prj3100/deletePrj3100FileAjax.do'/>"}
-							,{"atchFileId":atchFileId, "fileSn":fileSn});
-		
-			    		//AJAX 전송 성공 함수
-			    		ajaxObj.setFnSuccess(function(data){
-			    			if(data.errorYn == "Y"){
-			    				$.osl.alert(data.message,{type: 'error'});
-			    			}else{
-			    				//삭제 성공
-			    				$.osl.toastr(data.message);
-			    				
-			    				//트리 재조회
-			    				$("button[data-tree-id=prj3100DocTree][data-tree-action=selectFiles]").click();
-			    			}
-			    		});
-			    		
-			    		//AJAX 전송
-			    		ajaxObj.send();
-			        }
-			    });
-					
-			});
-			
-		}
-		 
 		/*확정파일 영역 drag&drop sortable*/
 		new Sortable($('#confirmation-list')[0], {
 			group:'shared',
@@ -1189,136 +758,7 @@ var OSLPrj3000Popup = function () {
 		
 	
 		
-		 /**
-		 * function 명 	: updateFileType
-		 * function 설명	: 선택한 파일을 확정 혹은 확정대기로 바꾼다
-		 * @param fileType : 확정파일인지 확정 대기 파일인지 구분
-		 */
-		var updateFileType = function(fileType, fileSn){
-			
-			//원래 파일 아이디
-			var beforeFileId = '';
-			
-			//변경 후 바뀔 파일 아이디
-			var afterFileId = '';
-			
-			//확정 예정 파일일 경우
-			if(fileType == 'waitFile'){
-				
-				//확정 예정 파일 아이디에서 확정 파일 아이디로
-				beforeFileId = $('#docWaitFileId').val();
-				afterFileId = $('#docAtchFileId').val();
-				
-			//확정 파일일 경우
-			}else if(fileType == 'atchFile'){
-				
-				//확정 파일 아이디에서 확정 예정 파일 아이디로
-				beforeFileId = $('#docAtchFileId').val();
-				afterFileId = $('#docWaitFileId').val();
-				
-			}
-			//AJAX 설정
-			var ajaxObj = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj3000/prj3100/updatePrj3100FileTypeAjax.do'/>", "async": false}
-					,{"docId": docId, "beforeFileId":beforeFileId, "afterFileId":afterFileId, "fileSn":fileSn});
-			
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				
-				if(data.errorYn == "Y"){
-					$.osl.alert(data.message,{type: 'error'});
-					
-					//파일 리스트 초기화하기
-    				$("button[data-tree-id=prj3100DocTree][data-tree-action=selectFiles]").click();
-				}else{
-					
-					$.osl.toastr(data.message);
-					
-					//파일 리스트 다시 그리기
-					selectFormFileList();
-				}
-			});
-			
-			//AJAX 전송
-			ajaxObj.send();
-		}
-		
-		 /*
-		 * function명 : fileZipDownload
-		 * function설명 : 파일 압축 다운로드 이벤트
-		 */
-		var fileZipDownload = function(fileType){
-			var docId = $('#docId').val();
-			var atchFileId = '';
-			
-			if(fileType == 'atchFile'){
-				atchFileId = $('#docAtchFileId').val();	
-			}else if(fileType == 'waitFile'){
-				atchFileId = $('#docWaitFileId').val();
-			}else if(fileType == 'formConfFile'){
-				atchFileId = $('#docFormConfFileId').val();				
-			}
-			
-			var docNm = $('#docNm').val();
-			
-			if(!$.osl.isNull(docId) && !$.osl.isNull(atchFileId) && !$.osl.isNull(docNm)){
-				var url = '/prj/prj3000/prj3100/selectPrj3100ZipDownload.do?atchFileId='+atchFileId+'&docId='+docId+'&docNm='+docNm;
-				var fileLink = document.createElement("a");
-				fileLink.href = url;
-				fileLink.target = "_self";
-				document.fileDownFrame.downForm.append(fileLink);
-				fileLink.click();
-				fileLink.remove();
-			}else{
-				$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
-			}
-			
-		}
-		
-		
-		 /*
-		 * function명 : fileWhiteList
-		 * function설명 : 파일 업로드 가능 확장자 확인
-		 */
-		var fileWhiteList = function( fileExt ){
-			// 화이트 리스트가 아니라면 중지 업로드 중지.
-			if( $.inArray(fileExt, ['doc','docx','hwp','pdf','ppt','pptx','xls','xlsx','zip','jpg','jpeg','png','gif','eml','cell','show']) == -1) {
-				return false;
-		   }
-			return true;
-			
-		}
 		 
-		 /*
-		 * function명 : selectFormFileCnt
-		 * function설명 : 해당 산출물의 양식 파일 수를 반환해준다.
-		 */
-		var selectFormFileCnt = function(){
-			
-			var docId = $('#docId').val();
-			
-			var atchFileId = $('#docFormConfFileId').val();
-			 
-			var fileData = '';
-			var ajaxObj = new $.osl.ajaxRequestAction(
-					{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileCntAjax.do'/>", "async": false}
-					,{"docId": docId, "atchFileId":atchFileId });
-			
-			//AJAX 전송 성공 함수
-			ajaxObj.setFnSuccess(function(data){
-				
-				if(data.errorYn == "Y"){
-					$.osl.alert(data.message,{type: 'error'});
-					
-				}else{
-					
-					return data;
-				}
-			});
-			
-			//AJAX 전송
-			ajaxObj.send();
-		}
 		 
 		/**************************************/
 		/* 파일 관련 메서드 종료	                  */
@@ -1416,17 +856,7 @@ var OSLPrj3000Popup = function () {
 			}
 		});
 		
-		/**
-		 * function 명 	: selectDocConInfo
-		 * function 설명	: 선택한 산출물의 연결 정보를 조회하여 화면에 세팅한다.
-		 * @param docId : 선택한 산출물 ID
-		 */
-		var selectDocConInfo = function(){
-			docId = $("#docId").val();
-			$.osl.datatable.list[prj3200PrjTable].targetDt.setDataSourceParam("docId", docId);
-			$("button[data-datatable-id="+prj3200PrjTable+"][data-datatable-action=select]").click();
-			 
-		}		
+			
 		
 		
 		/********************************/
@@ -1466,6 +896,586 @@ var OSLPrj3000Popup = function () {
 		
 	};
 	
+	
+	/**
+	 * function 명 	: selectDocInfo
+	 * function 설명	: 선택한 산출물의 상세정보를 조회하여 화면에 세팅한다.
+	 * @param docId : 선택한 산출물 ID
+	 */
+	var selectDocInfo = function(nodeData) {
+    	
+		 
+		//AJAX 설정
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj3000/prj3000/selectPrj3000DocInfoAjax.do'/>", "async": false}
+				,{"docId": nodeData.docId, "dtParamPrjId" : nodeData.prjId});
+		
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+			}else{
+				$("#"+formId)[0].reset();
+				
+				// 산출물 정보 세팅
+		    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3100", ["docId", "docNm", "useNm", "ord", "docEdDtm", "signUseNm", "docFormFileId", "docFormConfFileId", "docAtchFileId", "docWaitFileId"]);
+			
+		    	var docDesc = data.docInfoMap.docDesc;
+				
+				// 산출물 마감일 없을 경우
+				if($.osl.isNull(data.docInfoMap.docEdDtm)){
+					$("#docEdDtm").val("-");
+				}
+				
+				if(!$.osl.isNull(docDesc)){
+					docDesc =  $.osl.escapeHtml(docDesc);
+			    	// 비고 값 div영역에 세팅
+					$("#docDesc").html(docDesc.replace(/\n/g, '<br/>'));
+				}
+				
+				//입력된 검색값 초기화 (보류)
+				//$("#searchData_prj3200PrjTable").val('');
+				
+				//데이터 테이블 정보 세팅
+				selectDocConInfo();
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	};
+	
+	
+	/*
+	 * function명 : fnFileAjaxUpload
+	 * function설명 : 파일 업로드를 위한 메소드
+	 * @param files : 업로드할 파일의 정보들
+	 * @param fileType : 확정 파일인지 확정 대기파일인지 (확정파일 = atchFile, 확정대기파일 = waitFile)
+	 */
+	var fnFileAjaxUpload = function(files,fileType) {
+		var files = files;
+		
+		var fd = $.osl.formDataToJsonArray(formId);
+		
+		//확장자 체크
+		var extChk = true;
+		
+		//다중 파일 모두 넣기
+		$.each(files, function(idx, file){
+			
+			//확장자 가져오기
+			var ext = file.name.split(".").pop().toLowerCase();
+			
+			if(!fileWhiteList(ext)){
+				//lang
+				//$.osl.toastr("확장자가 [ " + ext + " ] 인 파일은 첨부가 불가능 합니다.");
+				$.osl.alert($.osl.lang("prj3100.message.alert.fileExtChk",ext));
+				
+				extChk = false;
+				return false;
+			}
+			fd.append('file', file);
+		});
+		
+		//false면 리턴
+		if(!extChk){
+			return;
+		}
+		
+		fd.append('fileType', fileType);
+		
+		//확정파일이면  확정 파일 아이디 가져오기
+		if(fileType == 'atchFile'){
+			atchFileId = $('#docAtchFileId').val();
+			
+		//확정 대기파일이면 
+		}else if(fileType == 'waitFile'){
+			atchFileId = $('#docWaitFileId').val();
+		}
+		
+		fd.append('atchFileId', atchFileId);
+		
+		//AJAX 설정
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do'/>", "async": false, "contentType":false,"processData":false ,"cache":false}
+				,fd);
+		
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+			}else{
+				$.osl.toastr(data.message);
+				
+				//파일 정보 조회
+				selectFormFileList();
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	};
+	
+	
+	/*
+	 * function명 : selectFormFileList
+	 * function설명 : 가져온 파일 리스트 그리기
+	 * @param data : 가져온 파일 데이터
+	 */
+	var selectFormFileList = function(){
+		
+		//확정 산출물
+		var docAtchFileId = $('#docAtchFileId').val();
+		
+		 //확정 대기 산출물
+		var docWaitFileId = $('#docWaitFileId').val();
+		
+		//AJAX 설정
+		var ajaxObj1 = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do'/>", "async": false}
+				,{'docAtchFileId': docAtchFileId, 'docWaitFileId':docWaitFileId});
+					
+		
+		//AJAX 전송 성공 함수
+		ajaxObj1.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+			}else{
+				
+				//가져온 데이터로 그림그리기
+				drawList(data);
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj1.send();			
+		
+	}
+	
+	 /*
+	 * function명 : drawList
+	 * function설명 : 가져온 파일 리스트 그리기
+	 * @param data : 가져온 파일 데이터
+	 */
+	var drawList = function(data){
+		//파일 리스트 비우기
+		$("#confirmation-list").empty();
+		$("#wait-confirmation-list").empty();
+		
+		var atchFileList = data.atchFileList;
+		
+		var waitFileList = data.waitFileList;
+		
+		
+		//확정 산출물 파일 리스트 돌기
+		$.each(atchFileList, function(idx, fileData){
+			var fileVolume =Math.round($.osl.escapeHtml(fileData.fileMg) / 1024) + ' KB';
+			var iconPath = '';
+			var iconClass = '';
+			var iconColor = '';
+			 
+			//사진 확장자
+			var imgExt = ['jpg','jpeg','png','gif'];
+			
+			//파일 종류에 따라 이미지 다르게 설정
+			if(fileData.fileExtsn == 'pdf'){
+				iconPath =	'<path d="M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z"></path>';
+				iconClass = 'osl-uppy-pdf-bg';
+				iconColor = '#E2514A';
+			}else if(fileData.fileExtsn == 'zip'){
+				iconPath = '<path d="M10.45 2.05h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V2.55a.5.5 0 0 1 .5-.5zm2.05 1.024h1.05a.5.5 0 0 1 .5.5V3.6a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5v-.001zM10.45 0h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 3.074h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 1.024h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm-2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-1.656 3.074l-.82 5.946c.52.302 1.174.458 1.976.458.803 0 1.455-.156 1.975-.458l-.82-5.946h-2.311zm0-1.025h2.312c.512 0 .946.378 1.015.885l.82 5.946c.056.412-.142.817-.501 1.026-.686.398-1.515.597-2.49.597-.974 0-1.804-.199-2.49-.597a1.025 1.025 0 0 1-.5-1.026l.819-5.946c.07-.507.503-.885 1.015-.885zm.545 6.6a.5.5 0 0 1-.397-.561l.143-.999a.5.5 0 0 1 .495-.429h.74a.5.5 0 0 1 .495.43l.143.998a.5.5 0 0 1-.397.561c-.404.08-.819.08-1.222 0z"></path>';
+				iconClass = 'osl-uppy-archive-bg';
+				iconColor = '#00C469';
+			}else{
+				iconPath = '<path d="M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z"></path><path d="M15 4v3a1 1 0 0 0 1 1h3V7h-3V4h-1z"></path>';
+				iconClass = 'osl-uppy-file-bg';
+				iconColor = '#A7AFB7';
+			}
+			
+			var fileDivbefore = 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
+									+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10"></div>';
+									
+			var fileDivCenter = '';
+			
+			//사진 확장자가 아닐 때
+			if($.inArray(fileData.fileExtsn, imgExt) == -1){
+				fileDivCenter +=		'<div class="osl-uppy-file-sumnail '+ iconClass +'">'
+										+	'<div class="osl-uppy-file-sumnail-bg"></div>'
+										+	'<span class="osl-uppy-iconFile">'
+											+	'<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">'
+												+	'<g fill="'+iconColor +'" fill-rule="nonzero">'
+													+	iconPath
+												+	'</g>'
+											+	'</svg>'
+										+	'</span>'
+										+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
+											+	'<i class="fas fa-arrow-circle-down"></i>'
+										+	'</div>'
+			//사진 확장자일 때
+			}else{
+				fileDivCenter +=		'<div class="osl-uppy-file-sumnail">'
+										+ 	'<img src="'+ "/cmm/fms/getImage.do?fileSn="+fileData.fileSn+"&atchFileId="+fileData.atchFileId+'">'
+										+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
+										+		'<i class="fas fa-arrow-circle-down"></i>'
+										+	'</div>'
+			}
+			var fileDivAfter = 			'</div>'
+									+	'<div class="osl-uppy-file-info-group">'
+										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
+										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+									+	'</div>'
+									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
+										+	'<i class="fa fa-times-circle"></i>'
+									+	'</div>'
+									+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
+								+	'</div>'; 
+									
+			var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
+						
+			$('#confirmation-list').append(fileDiv);
+			
+		});
+		
+		//확정 대기 산출물 양식 리스트 돌기
+		$.each(waitFileList, function(idx, fileData){
+			var fileVolume =Math.round($.osl.escapeHtml(fileData.fileMg) / 1024) + ' KB';
+			var iconPath = '';
+			var iconTitle = '';
+			var iconClass = '';
+			var iconColor = '';
+			
+			//사진 확장자
+			var imgExt = ['jpg','jpeg','png','gif'];
+			
+			//파일 종류에 따라 이미지 다르게 설정
+			if(fileData.fileExtsn == 'pdf'){
+				iconPath =	'<path d="M9.766 8.295c-.691-1.843-.539-3.401.747-3.726 1.643-.414 2.505.938 2.39 3.299-.039.79-.194 1.662-.537 3.148.324.49.66.967 1.055 1.51.17.231.382.488.629.757 1.866-.128 3.653.114 4.918.655 1.487.635 2.192 1.685 1.614 2.84-.566 1.133-1.839 1.084-3.416.249-1.141-.604-2.457-1.634-3.51-2.707a13.467 13.467 0 0 0-2.238.426c-1.392 4.051-4.534 6.453-5.707 4.572-.986-1.58 1.38-4.206 4.914-5.375.097-.322.185-.656.264-1.001.08-.353.306-1.31.407-1.737-.678-1.059-1.2-2.031-1.53-2.91zm2.098 4.87c-.033.144-.068.287-.104.427l.033-.01-.012.038a14.065 14.065 0 0 1 1.02-.197l-.032-.033.052-.004a7.902 7.902 0 0 1-.208-.271c-.197-.27-.38-.526-.555-.775l-.006.028-.002-.003c-.076.323-.148.632-.186.8zm5.77 2.978c1.143.605 1.832.632 2.054.187.26-.519-.087-1.034-1.113-1.473-.911-.39-2.175-.608-3.55-.608.845.766 1.787 1.459 2.609 1.894zM6.559 18.789c.14.223.693.16 1.425-.413.827-.648 1.61-1.747 2.208-3.206-2.563 1.064-4.102 2.867-3.633 3.62zm5.345-10.97c.088-1.793-.351-2.48-1.146-2.28-.473.119-.564 1.05-.056 2.405.213.566.52 1.188.908 1.859.18-.858.268-1.453.294-1.984z"></path>';
+				iconClass = 'osl-uppy-pdf-bg';
+				iconColor = '#E2514A';
+			}else if(fileData.fileExtsn == 'zip'){
+				iconPath = '<path d="M10.45 2.05h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V2.55a.5.5 0 0 1 .5-.5zm2.05 1.024h1.05a.5.5 0 0 1 .5.5V3.6a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5v-.001zM10.45 0h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 3.074h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-2.05 1.024h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm-2.05 1.025h1.05a.5.5 0 0 1 .5.5v.025a.5.5 0 0 1-.5.5h-1.05a.5.5 0 0 1-.5-.5v-.025a.5.5 0 0 1 .5-.5zm2.05 1.025h1.05a.5.5 0 0 1 .5.5v.024a.5.5 0 0 1-.5.5H12.5a.5.5 0 0 1-.5-.5v-.024a.5.5 0 0 1 .5-.5zm-1.656 3.074l-.82 5.946c.52.302 1.174.458 1.976.458.803 0 1.455-.156 1.975-.458l-.82-5.946h-2.311zm0-1.025h2.312c.512 0 .946.378 1.015.885l.82 5.946c.056.412-.142.817-.501 1.026-.686.398-1.515.597-2.49.597-.974 0-1.804-.199-2.49-.597a1.025 1.025 0 0 1-.5-1.026l.819-5.946c.07-.507.503-.885 1.015-.885zm.545 6.6a.5.5 0 0 1-.397-.561l.143-.999a.5.5 0 0 1 .495-.429h.74a.5.5 0 0 1 .495.43l.143.998a.5.5 0 0 1-.397.561c-.404.08-.819.08-1.222 0z"></path>';
+				iconClass = 'osl-uppy-archive-bg';
+				iconColor = '#00C469';
+			}else{
+				iconPath = '<path d="M5.5 22a.5.5 0 0 1-.5-.5v-18a.5.5 0 0 1 .5-.5h10.719a.5.5 0 0 1 .367.16l3.281 3.556a.5.5 0 0 1 .133.339V21.5a.5.5 0 0 1-.5.5h-14zm.5-1h13V7.25L16 4H6v17z"></path><path d="M15 4v3a1 1 0 0 0 1 1h3V7h-3V4h-1z"></path>';
+				iconClass = 'osl-uppy-file-bg';
+				iconColor = '#A7AFB7';
+			}
+			
+			var fileDivbefore = 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
+									+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__left-btn osl-uppy__left kt-margin-r-10"></div>';
+									
+			var fileDivCenter = '';
+			
+			//사진 확장자가 아닐 때
+			if($.inArray(fileData.fileExtsn, imgExt) == -1){
+				fileDivCenter +=		'<div class="osl-uppy-file-sumnail '+ iconClass +'">'
+										+	'<div class="osl-uppy-file-sumnail-bg"></div>'
+										+	'<span class="osl-uppy-iconFile">'
+											+	'<svg aria-hidden="true" focusable="false" class="UppyIcon" width="38" height="38" viewBox="0 0 25 25">'
+												+	'<g fill="'+iconColor +'" fill-rule="nonzero">'
+													+	iconPath
+												+	'</g>'
+											+	'</svg>'
+										+	'</span>'
+										+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
+											+	'<i class="fas fa-arrow-circle-down"></i>'
+										+	'</div>'
+			//사진 확장자일 때
+			}else{
+				fileDivCenter +=		'<div class="osl-uppy-file-sumnail">'
+										+ 	'<img src="'+ "/cmm/fms/getImage.do?fileSn="+fileData.fileSn+"&atchFileId="+fileData.atchFileId+'">'
+										+	'<div class="osl-uppy-list-dashboardItem-action--download" aria-label="파일 다운로드">'
+										+		'<i class="fas fa-arrow-circle-down"></i>'
+										+	'</div>'
+			}
+			var fileDivAfter = 			'</div>'
+									+	'<div class="osl-uppy-file-info-group">'
+										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
+										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+									+	'</div>'
+									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
+										+	'<i class="fa fa-times-circle"></i>'
+									+	'</div>'
+									+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
+								+	'</div>'; 
+									
+			var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
+			$('#wait-confirmation-list').append(fileDiv);
+			
+		});
+	
+		//파일 이동 버튼 이벤트, 삭제버튼, 다운버튼 이벤트 걸기
+		fileMoveBtnEvt();
+		deleteFileBtnEvt();
+		fileDownBtnEvt();
+	}
+    
+	 /*
+	 * function명 : fileDownBtnEvt
+	 * function설명 : 파일 다운로드 이벤트
+	 */
+	var fileDownBtnEvt = function(){
+		
+		$('.osl-uppy-list-dashboardItem-action--download').click(function(){
+			
+			var type = $(this).parent().parent().children('div:first-child');
+			var fileSn = $(this).parent().parent().children('input[name=fileSn]').val();
+			var atchFileId = '';
+			
+			var form = $("#"+formId)[0];
+			var fd = $.osl.formDataToJsonArray(formId);
+			
+			//확정 파일이면
+			if(type.hasClass('osl-uppy__right')){
+				
+				atchFileId = $('#docAtchFileId').val();
+			//확정 대기 파일이면
+			}else if(type.hasClass('osl-uppy__left')){
+				
+				atchFileId = $('#docWaitFileId').val();
+			}
+			
+			//파일 다운
+			$.osl.file.fileDownload(atchFileId,fileSn);
+			
+		});
+	}
+	 
+	 /*
+	 * function명 : fileMoveBtnEvt
+	 * function설명 : 파일 리스트 화살표 버튼 클릭 이벤트
+	 */
+	var fileMoveBtnEvt = function(){
+		$('.osl-uppy__arrow-btn').click(function(){
+			//클릭된 화살표의 부모(첨부파일 전체) 박스
+			var target = $(this).parent();
+			var fileSn = target.children('input[name=fileSn]').val();
+			
+			var fileType = '';
+			//버튼모양 여부로 판단
+			//좌측 버튼이 있을때(확정 대기 파일 버튼)
+			if($(this).hasClass('osl-uppy__left-btn')){
+				//확정 파일로 이동
+				$('#confirmation-list').prepend(target);
+				//아이콘 변경(방향,아이콘 모양)
+				$(this).addClass('osl-uppy__right-btn osl-uppy__right');
+				$(this).removeClass('osl-uppy__left-btn osl-uppy__left');
+				
+				//확정 대기 파일
+				fileType = 'waitFile';
+			//우측 버튼이 있을때
+			}else{ 
+				//확정 대기 파일로 이동(확정 파일 버튼)
+				$('#wait-confirmation-list').prepend(target);
+				//아이콘 변경(방향,아이콘 모양)
+				$(this).addClass('osl-uppy__left-btn osl-uppy__left');
+				$(this).removeClass('osl-uppy__right-btn osl-uppy__right');
+
+				//확정 파일
+				fileType = 'atchFile';
+			}
+			
+			//파일 타입 바꾸기
+			updateFileType(fileType,fileSn);
+		});
+	}
+	
+	/*
+	 * function명 : deleteFileBtnEvt
+	 * function설명 : 파일 리스트 삭제 버튼 클릭 이벤트
+	 */
+	var deleteFileBtnEvt = function(){
+		
+		$('.fa-times-circle').click(function(){
+			
+			var targetType = $(this).parent().parent().children('div:first-child');
+			var fileSn = targetType.parent().children('input[name=fileSn]').val();
+			//부모객체에 오른쪽 클래스가 있다면 확정 대기 파일
+			if(targetType.hasClass("osl-uppy__left")){
+				atchFileId = $('#docWaitFileId').val();
+			
+			//부모객체에 왼쪽 클래스가 있다면 확정 파일
+			}else if(targetType.hasClass("osl-uppy__right")){ 
+				atchFileId = $('#docAtchFileId').val();	
+			}
+			
+			
+			//파일 삭제 확인창
+			$.osl.confirm($.osl.lang("prj3100.message.confirm.deleteFormFile"),null,function(result) {
+		        if (result.value) {
+		        	
+		    		//AJAX 설정
+		    		var ajaxObj = new $.osl.ajaxRequestAction(
+						{"url":"<c:url value='/prj/prj3000/prj3100/deletePrj3100FileAjax.do'/>"}
+						,{"atchFileId":atchFileId, "fileSn":fileSn});
+	
+		    		//AJAX 전송 성공 함수
+		    		ajaxObj.setFnSuccess(function(data){
+		    			if(data.errorYn == "Y"){
+		    				$.osl.alert(data.message,{type: 'error'});
+		    			}else{
+		    				//삭제 성공
+		    				$.osl.toastr(data.message);
+		    				
+		    				//트리 재조회
+		    				$("button[data-tree-id=prj3100DocTree][data-tree-action=selectFiles]").click();
+		    			}
+		    		});
+		    		
+		    		//AJAX 전송
+		    		ajaxObj.send();
+		        }
+		    });
+				
+		});
+		
+	}
+	 
+	/**
+	 * function 명 	: updateFileType
+	 * function 설명	: 선택한 파일을 확정 혹은 확정대기로 바꾼다
+	 * @param fileType : 확정파일인지 확정 대기 파일인지 구분
+	 */
+	var updateFileType = function(fileType, fileSn){
+		
+		//원래 파일 아이디
+		var beforeFileId = '';
+		
+		//변경 후 바뀔 파일 아이디
+		var afterFileId = '';
+		
+		//확정 예정 파일일 경우
+		if(fileType == 'waitFile'){
+			
+			//확정 예정 파일 아이디에서 확정 파일 아이디로
+			beforeFileId = $('#docWaitFileId').val();
+			afterFileId = $('#docAtchFileId').val();
+			
+		//확정 파일일 경우
+		}else if(fileType == 'atchFile'){
+			
+			//확정 파일 아이디에서 확정 예정 파일 아이디로
+			beforeFileId = $('#docAtchFileId').val();
+			afterFileId = $('#docWaitFileId').val();
+			
+		}
+		//AJAX 설정
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj3000/prj3100/updatePrj3100FileTypeAjax.do'/>", "async": false}
+				,{"docId": docId, "beforeFileId":beforeFileId, "afterFileId":afterFileId, "fileSn":fileSn, "updateType":fileType});
+		
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+				
+				//파일 리스트 초기화하기
+				$("button[data-tree-id=prj3100DocTree][data-tree-action=selectFiles]").click();
+			}else{
+				
+				$.osl.toastr(data.message);
+				
+				//파일 리스트 다시 그리기
+				selectFormFileList();
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
+	
+	 /*
+	 * function명 : fileZipDownload
+	 * function설명 : 파일 압축 다운로드 이벤트
+	 */
+	var fileZipDownload = function(fileType){
+		var docId = $('#docId').val();
+		var atchFileId = '';
+		
+		if(fileType == 'atchFile'){
+			atchFileId = $('#docAtchFileId').val();	
+		}else if(fileType == 'waitFile'){
+			atchFileId = $('#docWaitFileId').val();
+		}else if(fileType == 'formConfFile'){
+			atchFileId = $('#docFormConfFileId').val();				
+		}
+		var docNm = $('#docNm').val();
+		
+		if(!$.osl.isNull(docId) && !$.osl.isNull(atchFileId) && !$.osl.isNull(docNm)){
+			var url = '/prj/prj3000/prj3100/selectPrj3100ZipDownload.do?atchFileId='+atchFileId+'&docId='+docId+'&docNm='+docNm+'&fileType='+fileType;
+			var fileLink = document.createElement("a");
+			fileLink.href = url;
+			fileLink.target = "_self";
+			document.fileDownFrame.downForm.append(fileLink);
+			fileLink.click();
+			fileLink.remove();
+		}else{
+			$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
+		}
+		
+	}
+	
+	
+	 /*
+	 * function명 : fileWhiteList
+	 * function설명 : 파일 업로드 가능 확장자 확인
+	 */
+	var fileWhiteList = function( fileExt ){
+		// 화이트 리스트가 아니라면 중지 업로드 중지.
+		if( $.inArray(fileExt, ['doc','docx','hwp','pdf','ppt','pptx','xls','xlsx','zip','jpg','jpeg','png','gif','eml','cell','show']) == -1) {
+			return false;
+	   }
+		return true;
+		
+	}
+	 
+	 /*
+	 * function명 : selectFormFileCnt
+	 * function설명 : 해당 산출물의 양식 파일 수를 반환해준다.
+	 */
+	var selectFormFileCnt = function(){
+		
+		var docId = $('#docId').val();
+		
+		var atchFileId = $('#docFormConfFileId').val();
+		 
+		var fileData = '';
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileCntAjax.do'/>", "async": false}
+				,{"docId": docId, "atchFileId":atchFileId });
+		
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			
+			if(data.errorYn == "Y"){
+				$.osl.alert(data.message,{type: 'error'});
+				
+			}else{
+				
+				return data;
+			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
+	
+	/**
+	 * function 명 	: selectDocConInfo
+	 * function 설명	: 선택한 산출물의 연결 정보를 조회하여 화면에 세팅한다.
+	 * @param docId : 선택한 산출물 ID
+	 */
+	var selectDocConInfo = function(){
+		docId = $("#docId").val();
+		$.osl.datatable.list[prj3200PrjTable].targetDt.setDataSourceParam("docId", docId);
+		$("button[data-datatable-id="+prj3200PrjTable+"][data-datatable-action=select]").click();
+		 
+	}	
 	
 	return {
         // public functions
