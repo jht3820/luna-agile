@@ -629,97 +629,43 @@
 					//모달 창 닫기
 					$.osl.layerPopupClose();
 				}else{
-					var chartData = data.chartData;
 					
-					var chartDate = [];
-					var newPostData = [];
-					var delPostData = [];
-					
-					$.each(chartData, function(idx, value){
-						chartDate.push(value.chartDate);
-						newPostData.push(value.totalNewCnt);
-						delPostData.push(value.delCnt);
-					});
-					
-					var chartOpt = {
-						chart: {
-							height: 320,
-							type: "area", //line, area, bar, heatmap
-							//stacked: false,
-							toolbar : {
-								show: true,
-								offsetX: 0,
-								offsetY: 0,
-								tools: {
-									download: true,
-									selection: true,
-									zoom: false,
-									zoomin: '<i class="fa fa-plus-circle osl-icon-transform__scale--150"></i>',
-									zoomout: '<i class="fa fa-minus-circle osl-icon-transform__scale--150"></i>',
-									pan: '<i class="fa fa-expand-arrows-alt osl-icon-transform__scale--150"></i>',
-									reset: '<i class="fa flaticon2-refresh-1"></i>',
-									customIcons: [
-										/* 
-										{
-											icon: '<i class="fa flaticon-more"></i>',
-											index: 4,
-											title: 'tooltip of the icon',
-											class: 'custom-icon',
-											click: function (chart, options, e) {
-											  console.log("clicked custom-icon")
-											}
-										}
-										 */
-									]
-								}
-							},
+					var chart = $.osl.chart.setting("area","drawChart"+index,{
+						data:{
+							url: "<c:url value='/stm/stm2000/stm2100/selectStm2102BadSummeryChartInfoAjax.do'/>",
+							param:{
+								 menuId : menuId,
+								 key: {
+									 key1: "totalNewCnt",
+									 key2: "delCnt",
+								 },
+								 xKey:"chartDate",
+							 }
 						},
-						grid:{
-							show: false
+						chart:{
+							events:{
+								//차트가 작성 후 실행
+								mounted: function(chartContext, config) {
+									$(".apexcharts-zoomout-icon").addClass("kt-margin-0");
+									$(".apexcharts-reset-icon").addClass("kt-margin-0");
+									$(".apexcharts-toolbar").addClass("kt-margin-10");
+									$(".apexcharts-toolbar").attr("style", "top:-20px; right: 10px;");
+									$(".apexcharts-toolbar").removeAttr("style[padding]");
+								}
+							}
 						},
 						colors: ["#586272", "#1cac81"],
 						series: [
 							{
-								name: $.osl.lang("stm2100.chart.deletePost"),
-								data: delPostData,
+								name: $.osl.lang("stm2100.chart.deletePost")
 							},
 							{
-								name: $.osl.lang("stm2100.chart.newPost"),
-								data: newPostData,
+								name: $.osl.lang("stm2100.chart.newPost")
 							},
-						],
-						fill:{
-							type : "gradient",
-							gradient : {
-								shadeIntensity: 1,
-								opacityFrom: 0.7,
-								opacityTo: 0.9,
-								stops: [0, 90, 100]
-							}
-						},
-						xaxis: {
-							categories: chartDate,
-						},
-						yaxis:{
-							show: false
-						},
-						noData:{
-							text : $.osl.lang("stm2100.chart.noData"),
-							align : "center",
-							verticalAlign: "middle",
-							offsetX: 0,
-							offsetY: 0,
-						}
-					};
+						]
+					});
 					
-					var chart = new ApexCharts(document.querySelector("#drawChart"+index), chartOpt);
-					chart.render();
 					
-					$(".apexcharts-zoomout-icon").addClass("kt-margin-0");
-					$(".apexcharts-reset-icon").addClass("kt-margin-0");
-					$(".apexcharts-toolbar").addClass("kt-margin-10");
-					$(".apexcharts-toolbar").attr("style", "top:-20px; right: 10px;");
-					$(".apexcharts-toolbar").removeAttr("style[padding]");
 				}
 			});
 			

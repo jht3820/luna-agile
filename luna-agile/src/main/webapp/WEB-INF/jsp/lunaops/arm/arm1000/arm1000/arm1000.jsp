@@ -107,20 +107,7 @@ var OSLArm1000Popup = function () {
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 50, sortable: true},
-				{field: 'checkCd', title: '읽음 상태', textAlign: 'center', width: 80, sortable: true,
-					template: function (row) {
-						var returnStr = "";
-						if(row.checkCd == "02"){
-							//안읽은것
-							returnStr += "<i class='fas fa-envelope kt-font-brand kt-font-lg'></i>";
-						}else{
-							//읽은것
-							returnStr += "<i class='fas fa-envelope-open kt-font-metal kt-font-lg'></i>";
-						}
-							
-						return returnStr;
-					}
-				},
+				{field: 'checkCd', title: '읽음 상태', textAlign: 'center', width: 80, sortable: true},
 				{field: 'sendUsrNm', title: '보낸 사람', textAlign: 'left', autoHide: false, width: 120, sortField: "sendUsrNm", search:true, sortable: true,
 					template: function (row) {
 						if($.osl.isNull(row.sendUsrNm)){
@@ -158,9 +145,11 @@ var OSLArm1000Popup = function () {
 			],
 			rows:{
 				beforeTemplate : function(row, data, index){
-					if(data.checkCd == '02'){
-						//안읽은 것
-						$(row).css("font-weight", "bold");
+					if($.osl.datatable.list[datatableId].targetDt.getDataSourceParam("armMenuType") != "send"){
+						if(data.checkCd == '02'){
+							//안읽은 것
+							$(row).css("font-weight", "bold");
+						}
 					}
 				},
 				clickCheckbox: true,
