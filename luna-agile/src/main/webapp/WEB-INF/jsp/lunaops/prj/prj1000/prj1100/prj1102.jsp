@@ -7,67 +7,59 @@
 	<input type="hidden" name="paramPrjId" id="paramPrjId" value="${param.paramPrjId}">
 	<input type="hidden" name="paramProcessId" id="paramProcessId" value="${param.paramProcessId}">
 	<input type="hidden" name="paramFlowId" id="paramFlowId" value="${param.paramFlowId}">
-	<div class="row">
-		<div class="col-lg-6 col-md-12 col-sm-12">
-			<div class="kt-portlet">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>작업흐름 정보
-						</h5>
-					</div>
+	<div class="kt-portlet">
+		<div class="kt-portlet__head kt-portlet__head--lg">
+			<div class="kt-portlet__head-label">
+				<h5 class="kt-font-boldest kt-font-brand">
+					<i class="fa fa-th-large kt-margin-r-5"></i>작업흐름 정보
+				</h5>
+			</div>
+		</div>
+		<div class="kt-portlet__body kt-padding-15">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="osl-flowchart-preview" id="flowPreviewMain"></div>
 				</div>
-				<div class="kt-portlet__body kt-padding-15">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							<div class="osl-flowchart-preview" id="flowPreviewMain"></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>작업흐름 명</span></label>
-								<input type="text" class="form-control" placeholder="작업흐름 명" name="flowNm" id="flowNm" opttype="-1" required>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>제목 배경 색상</label>
-								<input type="color" class="form-control" placeholder="제목 배경 색상" name="flowTitleBgColor" id="flowTitleBgColor" value="#FFFFFF" opttype="-1" readonly="readonly">
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>제목 글씨 색상</label>
-								<input type="color" class="form-control" placeholder="제목 글씨 색상" name="flowTitleColor" id="flowTitleColor" value="#000000" opttype="-1" readonly="readonly">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							<div class="form-group">
-								<label><i class="fa fa-edit kt-margin-r-5"></i><span>작업흐름 설명</span></label>
-								<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="flowDesc" id="flowDesc" maxlength="2000" opttype="-1" required></textarea>
-							</div>
-						</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-project-diagram kt-margin-r-5"></i><span>작업흐름 명</span></label>
+						<input type="text" class="form-control" placeholder="작업흐름 명" name="flowNm" id="flowNm" opttype="-1" required>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-6 col-md-12 col-sm-12">
-			<div class="kt-portlet">
-				<div class="kt-portlet__head kt-portlet__head--lg">
-					<div class="kt-portlet__head-label">
-						<h5 class="kt-font-boldest kt-font-brand">
-							<i class="fa fa-th-large kt-margin-r-5"></i>작업흐름 기능 정보
-						</h5>
+			<div class="row">
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>제목 배경 색상</label>
+						<input type="color" class="form-control" placeholder="제목 배경 색상" name="flowTitleBgColor" id="flowTitleBgColor" value="#FFFFFF" opttype="-1" readonly="readonly">
 					</div>
 				</div>
-				<div class="kt-portlet__body kt-padding-15">
-				
-				
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>제목 글씨 색상</label>
+						<input type="color" class="form-control" placeholder="제목 글씨 색상" name="flowTitleColor" id="flowTitleColor" value="#000000" opttype="-1" readonly="readonly">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="form-group">
+						<label class="required"><i class="fa fa-check-square kt-margin-r-5"></i>제목 글씨 색상</label>
+						<label class="kt-checkbox kt-checkbox--tick kt-checkbox--brand">
+							<input type="checkbox" checked=""> Brand state
+							<span></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="form-group">
+						<label><i class="fa fa-edit kt-margin-r-5"></i><span>작업흐름 설명</span></label>
+						<textarea class="form-control osl-min-h-px--130 osl-textarea__resize--none" name="flowDesc" id="flowDesc" maxlength="2000" opttype="-1" required></textarea>
+					</div>
 				</div>
 			</div>
 		</div>

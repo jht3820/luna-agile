@@ -65,8 +65,8 @@
 				}
 			};
 		</script>
-		
-		<script src="<c:url value='/js/common/modalPopup.js'/>" type="text/javascript"></script>
+
+
 		<script src="<c:url value='/plugins/jquery-loading/js/app.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/custom/uppy/uppy.bundle.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/custom/uppy/locales/ko_KR.js'/>" type="text/javascript"></script>
@@ -77,7 +77,7 @@
 		<script src="<c:url value='/plugins/sortable/Sortable.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/highlight/highlight.pack.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/diff/diff_match_patch_uncompressed.js'/>" type="text/javascript"></script>
-		<script src="<c:url value='/plugins/jquery-ui/jquery-ui.js'/>" type="text/javascript"></script>
+		<script src="<c:url value='/plugins/custom/jquery-ui/jquery-ui.bundle.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/flowchart/jquery.flowchart.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/plugins/panzoom/panzoom.js'/>" type="text/javascript"></script>
 

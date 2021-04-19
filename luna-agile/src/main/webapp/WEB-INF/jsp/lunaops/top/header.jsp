@@ -24,7 +24,10 @@
 		<link href="<c:url value='/plugins/dragula/dragula.css'/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value='/plugins/highlight/styles/ir-black.css'/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value='/plugins/flowchart/jquery.flowchart.css'/>" rel="stylesheet" type="text/css" />
+
 		<link href="<c:url value='/css/style.osl.css'/>" rel="stylesheet" type="text/css" />
+		
 		<script src="<c:url value='/js/osl/osl-lang.js'/>" type="text/javascript"></script>
 		<script src="<c:url value='/js/osl/osl-core.js'/>" type="text/javascript"></script>
+		
 		<script src="<c:url value='/plugins/draggable/draggabilly.pkgd.js'/>" type="text/javascript"></script>
