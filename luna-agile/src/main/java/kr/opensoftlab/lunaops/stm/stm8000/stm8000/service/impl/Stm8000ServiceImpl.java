@@ -16,6 +16,8 @@ import javax.annotation.Resource;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -43,6 +45,15 @@ public class Stm8000ServiceImpl extends EgovAbstractServiceImpl implements Stm80
 	@Resource(name = "svnConnector")
 	private SVNConnector svnConnector;
 
+	
+	public static final String SVN_EXCEPTION = "SVN_EXCEPTION"; 
+
+		
+	public static final String SVN_AUTHENTICATION_EXCEPTION = "SVN_AUTHENTICATION_EXCEPTION";
+
+	
+	public static final String SVN_OK = "SVN_OK";
+	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Map<String, String> selectStm8000JsonToMap(Map paramMap){
@@ -118,6 +129,62 @@ public class Stm8000ServiceImpl extends EgovAbstractServiceImpl implements Stm80
 	
 	public void deleteStm8000ServerInfo(Map<String, String> paramMap) throws Exception {
 		stm8000DAO.deleteStm8000ServerInfo(paramMap);
+	}
+	
+	
+	@SuppressWarnings({ "finally", "rawtypes" })
+	public String selectStm8000SvnConnectCheck(Map<String, String> paramMap) throws Exception {
+		String resultStr = null;
+		try {
+			
+			Map serverInfo = stm8000DAO.selectStm8000ServerInfo(paramMap);
+
+			String type = (String)serverInfo.get("strgTypeCd");
+			String url = (String)serverInfo.get("strgRepUrl");
+			String id = (String)serverInfo.get("strgUsrId");
+			String pw;
+			
+			if("01".equals(type)) {
+				
+				pw = (String)serverInfo.get("strgUsrPw");
+			}else {
+				
+				pw =  (String)serverInfo.get("strgKey");
+			}
+			
+			
+			String salt = EgovProperties.getProperty("Globals.lunaops.salt");
+			
+			
+			String newPw = CommonScrty.decryptedAria(pw, salt);
+			
+			if("01".equals(type)) {
+				
+				
+				SVNRepository repository = svnConnector.svnConnect(url, id, newPw);
+				
+				
+				repository.testConnection();
+				
+				resultStr = SVN_OK;
+				
+				
+				svnConnector.close(repository);
+			}else {
+				
+			}
+			
+		}catch(Exception ex) {
+			if(ex instanceof SVNAuthenticationException ){
+				resultStr = SVN_AUTHENTICATION_EXCEPTION;
+			}else if(ex instanceof SVNException ){
+				resultStr = SVN_EXCEPTION;
+			}else {
+				resultStr = "";
+			}
+		}finally {
+			return resultStr;
+		}
 	}
 	
 	

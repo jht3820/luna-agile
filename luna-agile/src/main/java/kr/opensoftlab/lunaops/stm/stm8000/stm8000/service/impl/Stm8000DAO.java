@@ -24,7 +24,7 @@ public class Stm8000DAO extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map<String, String> selectStm8000ServerInfo(Map<String, String> paramMap) throws Exception {
+	public Map selectStm8000ServerInfo(Map<String, String> paramMap) throws Exception {
 		return  (Map) select("stm8000DAO.selectStm8000ServerInfo", paramMap);
 	}
 	
