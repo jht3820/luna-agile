@@ -142,7 +142,6 @@ var OSLArm1002Popup = function () {
 				
 				//클릭 이벤트
 				$(".sendUsrInfo").click(function(){
-					console.log("ddd");
 					$.osl.user.usrInfoPopup(reSendUsrId);
 				});
 								

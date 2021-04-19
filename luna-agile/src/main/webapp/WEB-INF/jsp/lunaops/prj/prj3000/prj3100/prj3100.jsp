@@ -17,55 +17,54 @@
 		<div class="row">
 			<!-- begin:: 산출물 메뉴 목록  -->
 			<div class="col-xl-4">
-				<div class="kt-portlet--contain osl-content__border--light kt-margin-b-20">
-					<div class="kt-blog-grid">
-						<div class="kt-portlet__head kt-portlet__head--lg">
-							<div class="kt-portlet__head-label">
-								<h5 class="kt-font-boldest kt-font-brand">
-									<i class="fas fa-copy kt-margin-r-5"></i>산출물 메뉴 목록
-								</h5>
-							</div>
-							<!-- begin:: 산출물 메뉴 목록 button -->
-							<div class="kt-portlet__head-toolbar">
-								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="select" title="산출물 메뉴 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 메뉴 목록 조회">
-										<i class="fa fa-list"></i><span>조회</span>
-									</button>
-								</div>
-								<div class="kt-portlet__head-group">
-									<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="prj3100DocTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a> 
-									<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="prj3100DocTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a> 
-									<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-								</div>
-							</div>
-							<!-- end:: 산출물 메뉴 목록 button -->
+				<div class="kt-portlet osl-content__border--light kt-margin-b-20" id="prj3100DocTreeMenu">
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-label">
+							<h5 class="kt-font-boldest kt-font-brand">
+								<i class="fas fa-copy kt-margin-r-5"></i>산출물 메뉴 목록
+							</h5>
 						</div>
-						<!-- begin:: 확정 문서 전체 다운로드 button -->
-						<div class="kt-portlet__head kt-portlet__head--lg">
-							<div class="kt-portlet__head-toolbar osl-margin-left--auto">
-								<div class="kt-portlet__head-group">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDownAll" title="확정 문서 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDownAll" tabindex="1" data-original-title="확정 문서 전체 다운로드">
-										<i class="fa fa-list"></i><span>확정 문서 전체 다운로드</span>
-									</button>
-								</div>
+						<!-- begin:: 산출물 메뉴 목록 button -->
+						<div class="kt-portlet__head-toolbar">
+							<div class="kt-portlet__head-wrapper">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="select" title="산출물 메뉴 목록 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 메뉴 목록 조회">
+									<i class="fa fa-list"></i><span>조회</span>
+								</button>
+							</div>
+							<div class="kt-portlet__head-group">
+								<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 펼치기" data-tree-id="prj3100DocTree" data-tree-action="allNodeOpen"><i class="fa fa-plus"></i></a> 
+								<a href="#" class="btn btn-sm btn-icon btn-clean btn-icon-md osl-tree-action" data-toggle="kt-tooltip" title="전체 접기" data-tree-id="prj3100DocTree" data-tree-action="allNodeClose"><i class="fa fa-minus"></i></a> 
+								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 							</div>
 						</div>
-						<!-- end:: 확정 문서 전체 다운로드 button -->
-						<div class="kt-portlet__body">
-							<div class="row">
-								<div class="col-12">
-									<div class="osl-tree-search" data-tree-id="prj3100DocTree"></div>
-								</div>
+						<!-- end:: 산출물 메뉴 목록 button -->
+					</div>
+					<!-- begin:: 확정 문서 전체 다운로드 button -->
+					<div class="kt-portlet__head kt-portlet__head--lg">
+						<div class="kt-portlet__head-toolbar osl-margin-left--auto">
+							<div class="kt-portlet__head-group">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="selectAtchFileDownAll" title="확정 문서 전체 다운로드" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectAtchFileDownAll" tabindex="1" data-original-title="확정 문서 전체 다운로드">
+									<i class="fa fa-list"></i><span>확정 문서 전체 다운로드</span>
+								</button>
 							</div>
-							<div class="kt-separator kt-separator--space-sm kt-separator--border-solid"></div>
-							<div class="row">
-								<div class="col-12">
-									<div class="osl-tree kt-scroll" data-height="410" id="prj3100DocTree"></div>
-								</div>
+						</div>
+					</div>
+					<!-- end:: 확정 문서 전체 다운로드 button -->
+					<div class="kt-portlet__body">
+						<div class="row">
+							<div class="col-12">
+								<div class="osl-tree-search" data-tree-id="prj3100DocTree"></div>
+							</div>
+						</div>
+						<div class="kt-separator kt-separator--space-sm kt-separator--border-solid"></div>
+						<div class="row">
+							<div class="col-12">
+								<div class="osl-tree kt-scroll" data-height="410" id="prj3100DocTree"></div>
 							</div>
 						</div>
 					</div>
 				</div>
+				
 			</div>
 			<!-- end:: 산출물 메뉴 목록  -->
 			<!-- begin:: 산출물 정보 + 산출물 파일 관리 영역 + 산출물 연결 관리  -->
@@ -294,6 +293,8 @@ var OSLPrj3000Popup = function () {
 		
 		fileDropDown();
 		
+		//Portlet 세팅
+		new KTPortlet('prj3100DocTreeMenu', $.osl.lang("portlet"));
 		/**************************************/
 		/* 트리 메뉴 및 관련 메서드 시작                                      */
 		/**************************************/
@@ -334,22 +335,22 @@ var OSLPrj3000Popup = function () {
 					docFormFileZipDown : {
             			"separator_before": true,
             			"separator_after": false,
-            			"label": '양식 다운로드',
-            			"title": '양식 다운로드',
+            			"label": $.osl.lang("prj3100.contextmenu.formFileDownload"),
+            			"title": $.osl.lang("prj3100.contextmenu.formFileDownload"),
             			"actionFn": "docFormFileZipDown"
             		},
             		selectAtchFileDown : {
             			"separator_before": false,
             			"separator_after": false,
-            			"label": '확정 산출물 다운로드',
-            			"title": '확정 산출물 다운로드',
+            			"label": $.osl.lang("prj3100.contextmenu.atchFileDownload"),
+            			"title": $.osl.lang("prj3100.contextmenu.atchFileDownload"),
             			"actionFn": "selectAtchFileDown"
             		},
             		selectWaitFileDown : {
             			"separator_before": false,
             			"separator_after": true,
-            			"label": '확정대기 산출물 다운로드',
-            			"title": '확정대기 산출물 다운로드',
+            			"label": $.osl.lang("prj3100.contextmenu.waitFileDownload"),
+            			"title": $.osl.lang("prj3100.contextmenu.waitFileDownload"),
             			"actionFn": "selectWaitFileDown"
             		},
             	}
@@ -441,7 +442,7 @@ var OSLPrj3000Popup = function () {
 							
 							//양식 수가 0개라면 리턴
 							if(data.fileCnt == 0){
-								$.osl.alert($.osl.lang(""));
+								$.osl.alert($.osl.lang("prj3100.message.alert.notHaveConfFile"));
 								return false;
 							
 							//1개라면 1개만 다운로드
@@ -452,7 +453,11 @@ var OSLPrj3000Popup = function () {
 							//여러개라면 팝업창 오픈
 							}else{
 								
-								var data = {};
+								var data = {
+										docId : docId,
+										atchFileId : atchFileId,
+										docNm : $('#docNm').val()
+								};
 								var options = {
 										modalTitle: "산출물 양식 다운로드",
 										autoHeight: false
@@ -467,13 +472,10 @@ var OSLPrj3000Popup = function () {
 					//AJAX 전송
 					ajaxObj.send();
 					
-					
-					
-					
-					
 					//fileZipDownload('formConfFile');
 					
 				},
+				//확정문서 다운
 				"selectAtchFileDown" :function(obj){
 					//선택한 트리 노드 없으면 튕기기
 					var selectNodeIds = treeObj.jstree("get_selected");
@@ -482,8 +484,20 @@ var OSLPrj3000Popup = function () {
 						return false;
 					}
 					
-					fileZipDownload('atchFile');
+					var confFileCnt = $('#confirmation-list').children('div').length;
+					
+					//파일의 수가 0개가 아니면 파일 다운
+					if(!confFileCnt == 0){
+						
+						fileZipDownload('atchFile');
+					
+					//파일의 수가 0개면 튕김
+					}else{
+						$.osl.alert($.osl.lang("prj3100.message.alert.notHaveConfFile"));
+						return false;
+					}
 				},
+				//확정 대기 문서 다운
 				"selectWaitFileDown" :function(obj){
 					
 					//선택한 트리 노드 없으면 튕기기
@@ -493,8 +507,20 @@ var OSLPrj3000Popup = function () {
 						return false;
 					}
 					
-					fileZipDownload('waitFile');
+					var confFileCnt = $('#wait-confirmation-list').children('div').length;
+					
+					//파일의 수가 0개가 아니면 파일 다운
+					if(!confFileCnt == 0){
+						
+						fileZipDownload('waitFile');
+					
+					//파일의 수가 0개면 튕김
+					}else{
+						$.osl.alert($.osl.lang("prj3100.message.alert.notHaveConfFile"));
+						return false;
+					}
 				},
+				//확정 문서 전체 다운로드 버튼
 				"selectAtchFileDownAll" : function(obj){
 					
 					//선택한 트리 노드 없으면 튕기기
@@ -520,7 +546,7 @@ var OSLPrj3000Popup = function () {
 						fileLink.click();
 						fileLink.remove();
 					}else{
-						$.osl.alert("다운로드에 필요한 정보가 부족합니다.");
+						$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
 					}
 					
 				}
@@ -781,7 +807,7 @@ var OSLPrj3000Popup = function () {
 		 */
 		var selectFormFileList = function(){
 			
-			 //확정 산출물
+			//확정 산출물
 			var docAtchFileId = $('#docAtchFileId').val();
 			
 			 //확정 대기 산출물
@@ -810,21 +836,6 @@ var OSLPrj3000Popup = function () {
 			
 		}
 		
-		//canvas toDataURL -> blob
-	    function dataUrlToBlob( uri ) {
-			var str, arr, i, matches, type;
-	        uri = uri.split( ',' );
-	        matches = /data:([^;]+)/.exec( uri[ 0 ] );
-	        if ( matches ) {
-	            type = matches[ 1 ];
-	        }
-	        str = atob( uri[ 1 ] );
-	        arr = new Uint8Array( str.length );
-	        for ( i = 0; i < arr.length ; i++ ) {
-	            arr[ i ] = str.charCodeAt( i );
-	        }
-	        return new Blob( [ arr ], { type: type } );
-	    }
 		 /*
 		 * function명 : drawList
 		 * function설명 : 가져온 파일 리스트 그리기
@@ -1259,7 +1270,7 @@ var OSLPrj3000Popup = function () {
 				fileLink.click();
 				fileLink.remove();
 			}else{
-				$.osl.alert("다운로드에 필요한 정보가 부족합니다.");
+				$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
 			}
 			
 		}

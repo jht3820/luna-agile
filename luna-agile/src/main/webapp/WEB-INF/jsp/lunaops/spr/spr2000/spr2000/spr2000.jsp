@@ -196,7 +196,7 @@ var OSLSpr2000Popup = function () {
 				},
 				{field: 'mmtUsrId', title: '작성자', textAlign: 'left', width: 120, search:true,
 					template: function (row) {
-						if($.osl.isNull(row.mmtUsrId){
+						if($.osl.isNull(row.mmtUsrId)){
 							return "";
 						}else{
 							var usrData = {
@@ -298,7 +298,6 @@ var OSLSpr2000Popup = function () {
 				},
 				"dblClick": function(rowData){
 					var data = {
-							type: "update",
 							mmtId : rowData.mmtId,
 							sprId : rowData.sprId
 						};

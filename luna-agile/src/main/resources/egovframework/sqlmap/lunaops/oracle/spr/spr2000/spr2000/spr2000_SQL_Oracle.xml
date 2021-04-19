@@ -267,8 +267,8 @@
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
 		]]>
-		<isNotEmpty property="reqId">
-				AND A.REQ_ID = #reqId#
+		<isNotEmpty property="mmtId">
+				AND A.MMT_ID = #mmtId#
 		</isNotEmpty>
 	</delete>
 	
@@ -319,8 +319,8 @@
 		<isNotEmpty property="sprId">
 				AND A.SPR_ID = #sprId#
 		</isNotEmpty>
-		<isNotEmpty property="reqId">
-				AND A.REQ_ID = #reqId#
+		<isNotEmpty property="mmtId">
+				AND A.MMT_ID = #mmtId#
 		</isNotEmpty>
 	</delete>
 	
