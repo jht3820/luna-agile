@@ -106,7 +106,81 @@
 			
 			$(document).keydown(function(event) {
 				
-				if ( event.keyCode == 113 || event.which == 113 ) {
+				
+				if($(document).find("#kt_login_form").length != 0){
+					return;
+				}
+				
+				if($(document).find("#shortcutDiv").length != 0){
+					return;
+				}
+				
+				
+				if(event.keyCode == 17){
+	        		
+	        		return;
+	        	}
+	        	if(event.keyCode == 16){
+	        		
+	        		return;
+	        	}
+	        	if(event.keyCode == 18){
+	        		
+	        		return;
+	        	}
+	        	
+				
+				var shortcut = new Array();
+				if(event.ctrlKey){
+					shortcut.push("Ctrl");
+				}
+				if(event.shiftKey){
+					shortcut.push("Shift");
+				}
+				if(event.altKey){
+					shortcut.push("Alt");
+				}
+				shortcut.push(event.key.toUpperCase());
+				
+				shortcut = shortcut.join(" + ");
+				
+				
+				var actionCd = '';
+				
+				var shortcutList = new Array();
+				
+				
+				$.each($.osl.user.shortcutList, function(index, item){
+					shortcutList.push(item.shortcut);
+					if(item.shortcut == shortcut){
+						
+						if($(document).find(".modal-content").length != 0){
+							if(item.popupActionCd == "02"){
+								return;
+							}
+						}
+						actionCd = item.actionCd;
+					}
+					
+				});
+				switch (actionCd){
+				
+				case "01":
+					var data = {};
+					var options = {
+						modalTitle: "단축키 설정 정보",
+						closeConfirm: false,
+						modalSize: "lg",
+					};
+					$.osl.layerPopupOpen("/usr/usr1000/usr1100/selectUsr1003View.do",data,options);
+					break;
+					
+				
+			    case "02" :
+				 	$("#kt_aside_toggler").click();
+				    break;
+				
+				case "03" :
 					var modalList = $(".modal");
 					$.each(modalList, function(idx, map){
 						var dragObj = $(map).data("draggabilly");
@@ -116,7 +190,58 @@
 							dragObj.setPosition(0,0);
 						}
 					});
+				  	break;
+				
+				case "04" :
+					
+					if($("body").hasClass("kt-header__topbar--pc-on")){
+						
+						$("body").removeClass("kt-header__topbar--pc-on");
+						$("#kt_header_pc_topbar_toggler").removeClass("kt-header-pc__toolbar-topbar-toggler--active");
+						return;
+					}
+					$("body").addClass("kt-header__topbar--pc-on");
+					$("#kt_header_pc_topbar_toggler").addClass("kt-header-pc__toolbar-topbar-toggler--active");
+				    break;
+			    
+				case "05" :
+					location.reload();
+					break;
+				
+				case "06" :
+				    $("#kt_offcanvas_toolbar_search_toggler_btn").click();
+				    break;	
+				
+				case "07" :
+					$("#kt_offcanvas_toolbar_mypage_toggler_btn").click();
+				    break;
+				
+				case "08" :
+					$("#kt_offcanvas_toolbar_message_toggler_btn").click();
+				    break;
+				
+				case "09" :
+					$("#kt_offcanvas_toolbar_notifications_toggler_btn").click();
+					break;
+			    
+				case "10" :
+					$("#kt_offcanvas_toolbar_quick_actions_toggler_btn").click();
+					break;
+			    
+				case "11" :
+					$("#kt_quick_panel_toggler_btn").click();
+					break;
+				
+				case "12" :
+					$.osl.user.logout();
+					break;
+			    }
+				
+				
+				if(shortcutList.includes(shortcut)){
+					event.preventDefault();
 				}
+				
 			});
 			
 			
@@ -643,25 +768,35 @@
 							}
 				        };
 					
-					
-					if(config.hasOwnProperty("contextmenu")){
-						
-						if(config.contextmenu.hasOwnProperty("items")){
-							config.contextmenu.items = undefined;
-						}
-						
-						if(config.contextmenu.hasOwnProperty("display")){
-							defaultConfig.contextmenu.display = config.contextmenu.display;
-						}
-					}
 					config = $.extend(true, defaultConfig, config);
+
 					
-					
-					$.each(config.contextmenu.items, function(key, value){
-						if((config.contextmenu.display).indexOf(key) == -1){
-							config.contextmenu.items[key] = undefined;
-						}
-					});
+					if(config.hasOwnProperty("contextmenu") && config.contextmenu.hasOwnProperty("items")){
+						$.each(config.contextmenu.items, function(key, map){
+							
+							if(map.hasOwnProperty("actionFn") && typeof map.actionFn == "string"){
+								
+								if(config.hasOwnProperty("actionFn") && config.actionFn.hasOwnProperty(map.actionFn)){
+									map.action = function(obj){
+										
+										var selectNodeIds = treeObj.jstree("get_selected");
+										
+										
+										var selectNode = treeObj.jstree().get_node(selectNodeIds[0]);
+										var nodeData = selectNode.original;
+										
+										config.actionFn[map.actionFn](obj, nodeData, obj.reference.eq(0));
+									};
+								}
+								
+								else if(actionFunction.hasOwnProperty(map.actionFn)){
+									map.action = function(obj){
+										actionFunction[map.actionFn](obj);
+									}
+								}
+							}
+						});
+					}
 					
 					
 					var actionBtnList = $(".osl-tree-action[data-tree-id="+targetId.replace("#","")+"]");
@@ -758,7 +893,7 @@
 								+'</div>'
 								+'<div class="input-group-append">'
 									+'<button class="btn '+btnStyleStr+' osl-tree-search__button" type="button" data-tree-id="'+targetId+'">'
-										+'<span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
+										+'<i class="fa fa-search"></i><span class=""><span>'+$.osl.lang("tree.search.title")+'</span></span>'
 									'</button>'
 								+'</div>'
 							+'</div>';
@@ -1053,6 +1188,11 @@
 	        		
 	        		if(!$.osl.isNull(data.usrInfo)){
 	        			$.osl.user.userInfo = data.usrInfo;
+	        		}
+	        		
+	        		
+	        		if(!$.osl.isNull(data.shortcutList)){
+	        			$.osl.user.shortcutList = data.shortcutList;
 	        		}
 	        		
 	        		
@@ -1709,8 +1849,8 @@
         							}else{
         								var notRead = data.notRead;
         								if(notRead.notReadCnt==0){
-        									$(".pulse-ring").remove();
-            								$(".kt-badge").remove();
+        									$("#kt_offcanvas_toolbar_notifications_toggler_btn .pulse-ring").remove();
+            								$("#kt_offcanvas_toolbar_notifications_toggler_btn .kt-badge").remove();
         								}
         							}
         				    	});
@@ -1728,8 +1868,8 @@
             				    		if(data.errorYn == "Y"){
             								$.osl.alert(data.message,{type: 'error'});
             							}else{
-            								$(".pulse-ring").remove();
-            								$(".kt-badge").remove();
+            								$("#kt_offcanvas_toolbar_notifications_toggler_btn .pulse-ring").remove();
+            								$("#kt_offcanvas_toolbar_notifications_toggler_btn .kt-badge").remove();
             								var newNtfMsg = data.notRead.notReadCnt+"건의 새로운 알림"
             								$("#newNtfMsg").html(newNtfMsg);
             							}

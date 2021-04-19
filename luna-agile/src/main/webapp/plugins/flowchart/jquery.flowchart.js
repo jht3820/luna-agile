@@ -525,12 +525,9 @@ jQuery(function ($) {
             var flowTitleBgColor = operatorData.properties.flowTitleBgColor;
             var flowTitleColor = operatorData.properties.flowTitleColor;
             
-            
-            var $operator_function = $('<div class="flowchart-operator-function"></div>');
+            var $operator_function = $('<div class="flowchart-operator-function hide"></div>');
             $operator_function.html("");
             $operator_function.appendTo($operator);
-            
-            /*//////////////////////////////////////////*/
             
             var $operator_title = $('<div class="flowchart-operator-title" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';"></div>');
             var dropdownMenuClass = 'hide';
@@ -559,6 +556,7 @@ jQuery(function ($) {
                 $operator_body.appendTo($operator);
             }
 
+            /*//////////////////////////////////////////*/
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');
 
             var $operator_inputs = $('<div class="flowchart-operator-inputs"></div>');

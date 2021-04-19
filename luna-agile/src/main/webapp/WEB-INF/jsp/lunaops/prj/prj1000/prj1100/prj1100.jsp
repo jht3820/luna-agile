@@ -90,6 +90,10 @@
 					</div>
 				</div>
 				<div class="kt-inbox__controls">
+					<button type="button" class="kt-inbox__icon pulse pulse-success kt-margin-0" data-flow-action="save" data-toggle="kt-tooltip" title="Save" id="processSaveBtn">
+						<span class="pulse-ring kt-margin-0 kt-hide"></span>
+						<i class="fa fa-save"></i>
+					</button>
 					<div class="btn-group" data-toggle="kt-tooltip" title="Settings">
 						<button type="button" class="kt-inbox__icon" data-toggle="dropdown">
 							<i class="flaticon-more-1"></i>
@@ -162,74 +166,52 @@ var OSLPrj1100Popup = function () {
 	//현재 선택된 프로세스
 	var selProcessId;
 	
+	//프로세스 데이터 변경 확인 변수
+	var processChgCheck = {_flag: false};
+	
 	//zoom
 	var currentZoom = 2;
 	
+	//프로세스 - true일때 링크 데이터 검증
+	var processEditMode = false;
+	
 	//private functions
 	var documentSetting = function(){
+		//프로세스 데이터 변화 감지
+		Object.defineProperty(processChgCheck, 'flag', {
+			get: function() {
+				return this._flag;
+			},
+			set: function(newVal) {
+				//데이터 변화 시
+				if(newVal){
+					$("#processSaveBtn > .pulse-ring").removeClass("kt-hide");
+					$("#processSaveBtn > i.fa").addClass("kt-font-brand");
+					
+					//페이지 이동 시 저장 문구 팝업
+					$(window).on("beforeunload", function(){
+						return true;
+					});
+				}else{
+					$("#processSaveBtn > .pulse-ring").addClass("kt-hide");
+					$("#processSaveBtn > i.fa").removeClass("kt-font-brand");
+					
+					$(window).off("beforeunload");
+				}
+				this._flag = newVal;
+			},
+		});
+		
 		var data = {
-			      operators: {
-			    	  operator1: {
-			              top: 20,
-			              left: 20,
-			              properties: {
-			            	id: "operator1",
-			                title: 'Operator 1',
-			                editable: true,
-			                inputs: {
-			                  input_1: {
-			                    label: 'Input 1',
-			                  }
-			                },
-			                outputs: {
-			                  output_1: {
-			                    label: 'Output 1',
-			                  }
-			                }
-			              }
-			            },
-			        operator2: {
-			          top: 240,
-			          left: 20,
-			          properties: {
-			        	id: "operator2",
-			            title: 'Operator 2',
-			            flowTitleBgColor: "#178b68",
-			            flowTitleColor: "#ffffff",
-			            editable: true,
-			            inputs: {
-			            	input_1: {
-			                    label: 'Input 1',
-			                }
-			            },
-			            outputs: {
-			              output_1: {
-			                label: 'Output 1',
-			              }
-			            }
-			          }
-			        },
-			        operator3: {
-			          top: 80,
-			          left: 300,
-			          properties: {
-			        	  id: "operator3",
-			            title: 'Operator 3',
-			            editable: true,
-			            inputs: {
-			              input_1: {
-			                label: 'Input 1',
-			              }
-			            },
-			            outputs: {
-			            	output_1: {
-				                label: 'Output 1',
-				              }
-			            }
-			          }
-			        },
-			      }
-			    };
+			operators: {
+				operator1: {top: 20,left: 20,properties: {id: "operator1",title: 'Operator 1',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+				operator2: {top: 240,left: 20,properties: {id: "operator2",title: 'Operator 2',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+				operator3: {top: 400,left: 300,properties: {id: "operator3",title: 'Operator 3',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+				operator4: {top: 80,left: 600,properties: {id: "operator4",title: 'Operator 4',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+				operator5: {top: 80,left: 900,properties: {id: "operator5",title: 'Operator 5',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+				operator6: {top: 400,left: 600,properties: {id: "operator6",title: 'Operator 6',editable: true,inputs: {input_1: {label: 'Input 1'}},outputs: {output_1: {label: 'Output 1'}}}},
+			}
+		};
 		
 		//flowchart 생성
 		flowChart.flowchart({
@@ -240,8 +222,11 @@ var OSLPrj1100Popup = function () {
 				linkWidth:1,
 				defaultLinkColor: "#5867dd",
 				defaultOperatorClass: "osl-flowchart__operator",
-				data: data,
 				onLinkCreate: function(linkId, linkData){
+					//프로세스 에디트 모드일때만 검증
+					if(!processEditMode){
+						return true;
+					}
 					var fromOperatorId = linkData.fromOperator;
 					var toOperatorId = linkData.toOperator;
 					var fromOperatorData = flowChart.flowchart("getOperatorData",fromOperatorId);
@@ -299,22 +284,56 @@ var OSLPrj1100Popup = function () {
 	            	//링크 선택 불가
 	            	return false;
 	            },
-				onAfterChange: function(changeType, tmp){
-					//링크 생성 이후
-					if(changeType == "link_create"){
-						
+				onAfterChange: function(changeType){
+					//작업흐름 초기화 아닌 경우
+					if(processEditMode && changeType != "operator_create"){
+						//작업흐름 데이터 변경인경우
+						processChgCheck.flag = true;
 					}
-					
-					//console.log(changeType, tmp);
+					//작업흐름css에 error인경우 우선 제거
+					var errorList = $(".flowchart-operator.error");
+					if(errorList.length > 0){
+						errorList.removeClass("error");
+					}
+				},
+				onOperatorSelect: function(operatorId){
+					//작업흐름css에 error인경우 우선 제거
+					var errorList = $(".flowchart-operator.error");
+					if(errorList.length > 0){
+						errorList.removeClass("error");
+					}
 				}
 		});
 		
 		//작업흐름 dropdown menu에 event 걸기
 		$("#processFlowLayerMain").on("click",".osl-flowchart__operator .flowchart-operator-menu .dropdown-menu .dropdown-item, button[data-flow-action]",function(){
 			var flowAction = $(this).data("flow-action");
-			
+			//현재 작업흐름 데이터 저장
+			if(flowAction == "save"){
+				//모든 작업흐름이 연결되어있는지 확인
+				var rtnValue = fnFlowDoneCheck();
+				if(rtnValue === false){
+					$.osl.toastr("저장이 취소되었습니다.",{type: "warning"});
+				}else{
+					//시작 단계, 종료 단계 confirm
+					var startFlow = flowChart.flowchart("getOperatorData", rtnValue.startFlowId);
+					var endFlow = flowChart.flowchart("getOperatorData", rtnValue.endFlowId);
+					
+					var confirmMsg = '시작 단계: '+startFlow.properties.title+'</br>'
+								+'종료 단계: '+endFlow.properties.title+'</br>'
+								+'</br>프로세스 데이터를 저장하시겠습니까?';
+					
+					$.osl.confirm(confirmMsg,{html: true},function(result) {
+		    	        if (result.value) {
+		    	        	//프로세스 저장
+		    	        	processChgCheck.flag = false;
+		    	        }
+		    		});	
+					
+				}
+			}
 			//선택 작업흐름 수정
-			if(flowAction == "edit"){
+			else if(flowAction == "edit"){
 				
 			}
 			//선택 작업흐름 제거
@@ -345,12 +364,12 @@ var OSLPrj1100Popup = function () {
 						paramProcessId: selProcessId
 				};
 				var options = {
-						autoHeight: false,
-						modalSize: "lg",
-						idKey: selProcessId,
-						modalTitle: $.osl.lang("prj1004.insert.title"),
-						closeConfirm: false,
-					};
+					autoHeight: false,
+					modalSize: "md",
+					idKey: selProcessId,
+					modalTitle: $.osl.lang("prj1004.insert.title"),
+					closeConfirm: false,
+				};
 				
 				$.osl.layerPopupOpen('/prj/prj1000/prj1100/selectPrj1102View.do',data,options);
 			}
@@ -472,6 +491,8 @@ var OSLPrj1100Popup = function () {
 					$("#flowChartDiv").removeClass("kt-hidden");
 					
 					//작업흐름 데이터 불러오기
+					flowChart.flowchart("setData",JSON.parse('{"operators":{"operator6":{"top":380,"left":1180,"properties":{"id":"operator6","title":"Operator 6","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}}}},"operator1":{"top":20,"left":20,"properties":{"id":"operator1","title":"Operator 1","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}},"flowNextId":["operator4"]}},"operator2":{"top":240,"left":20,"properties":{"id":"operator2","title":"Operator 2","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}},"flowNextId":["operator4","operator3"]}},"operator4":{"top":80,"left":600,"properties":{"id":"operator4","title":"Operator 4","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}},"flowNextId":["operator5"]}},"operator3":{"top":400,"left":440,"properties":{"id":"operator3","title":"Operator 3","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}},"flowNextId":["operator6"]}},"operator5":{"top":80,"left":900,"properties":{"id":"operator5","title":"Operator 5","editable":true,"inputs":{"input_1":{"label":"Input 1"}},"outputs":{"output_1":{"label":"Output 1"}},"flowNextId":["operator6"]}}},"links":{"0":{"fromOperator":"operator1","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator4","toConnector":"input_1","toSubConnector":0},"1":{"fromOperator":"operator2","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator4","toConnector":"input_1","toSubConnector":0},"2":{"fromOperator":"operator2","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator3","toConnector":"input_1","toSubConnector":0},"3":{"fromOperator":"operator4","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator5","toConnector":"input_1","toSubConnector":0},"4":{"fromOperator":"operator3","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator6","toConnector":"input_1","toSubConnector":0},"5":{"fromOperator":"operator5","fromConnector":"output_1","fromSubConnector":0,"toOperator":"operator6","toConnector":"input_1","toSubConnector":0}},"operatorTypes":{}}'));
+					processEditMode = true;
 					
 					//선택 프로세스 Id
 					selProcessId = rowData.processId;
@@ -556,25 +577,70 @@ var OSLPrj1100Popup = function () {
 			return true;
 		}
 	};
-	
-	var fnLinksLimitLoopChk2 = function(fromOperator,flowNextId){
-		//다음 작업흐름 정보 조회
-		var currentFlowInfo = flowChart.flowchart("getOperatorData",fromOperator);
-		var nextFlowInfo = flowChart.flowchart("getOperatorData",flowNextId);
+
+	/**
+	*	모든 작업흐름이 연결되어있는지 체크
+	*	- 다음 작업흐름 ID가 없는 작업흐름은 1개 (해당 작업흐름은 마지막 단계 - 최종완료)
+	*	- 시작 작업흐름은 1개 (이전 작업흐름과 연결점이 없는 작업흐름이 2개 이상인 경우 오류)
+	**/
+	var fnFlowDoneCheck = function(){
+		var flowList = flowChart.flowchart("getData").operators;
 		
-		//flowNextId 존재하는지 체크
-		if(nextFlowInfo.properties.hasOwnProperty("flowNextId")){
-			var nextFlowInfoNextId = nextFlowInfo.properties.flowNextId;
+		//작업흐름 키 목록
+		var flowKeys = Object.keys(flowList);
+		
+		var doneFlowIds = [];
+		
+		//작업흐름 목록 loop
+		$.each(flowList, function(flowId, flowData){
+			var flowNextId = flowData.properties.flowNextId;
 			
-			//"null"인 경우 null과 같이 계산
-			if(nextFlowInfoNextId == "null"){
-				return true;
+			//다음 작업흐름 목록 체크
+			if(!$.osl.isNull(flowNextId) && flowNextId.length > 0){
+				$.each(flowNextId, function(idx, value){
+					var flowIdx = flowKeys.indexOf(value);
+					
+					//index에 없는 경우 중복, skip
+					if(flowIdx == -1){
+						return true;
+					}else{
+						//다음 작업흐름Id 제거
+						flowKeys.splice(flowIdx,1);
+					}
+					
+				})
+			}else{
+				//다음 작업흐름 Id가 없는 경우 최종완료 작업흐름
+				doneFlowIds.push(flowId); 
 			}
-			//함수 재귀 호출
-			return fnLinksLimitLoopChk(fromOperator,nextFlowInfoNextId);
+		});
+		
+		var errorAlert = [];
+		
+		//연결안된 작업흐름이 2개 이상인경우 오류
+		if(flowKeys.length > 1){
+			$.each(flowKeys, function(idx, map){
+				$(".flowchart-operator[data-operator-id="+map+"]").addClass("error");
+			});
+			
+			errorAlert.push(flowKeys.length+"개의 시작 단계가 발견되었습니다.");
+		}
+		
+		//최종완료성 작업흐름이 2개 이상인경우 오류
+		if(doneFlowIds.length > 1){
+			$.each(doneFlowIds, function(idx, map){
+				$(".flowchart-operator[data-operator-id="+map+"]").addClass("error");
+			});
+			
+			errorAlert.push(doneFlowIds.length+"개의 종료 단계가 발견되었습니다.");
+		}
+		
+		//에러 발견시
+		if(errorAlert.length > 0){
+			$.osl.alert(errorAlert.join("</br>")+"</br>단계 연결 데이터를 확인하세요.",{type: "error"});
+			return false;
 		}else{
-			//flowNextId 없는경우 이상 없이 추가
-			return true;
+			return {startFlowId: flowKeys[0], endFlowId: doneFlowIds[0]};
 		}
 	};
 	
