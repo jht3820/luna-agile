@@ -6,6 +6,7 @@
 	<input type="hidden" name="changePrj" id="changePrj" value="<c:out value='${param.changePrj}'/>">
 	<input type="hidden" name="reqId" id="reqId" value="<c:out value='${param.paramReqId}'/>">
 	<input type="hidden" name="reqUsrId" id="reqUsrId" value="<c:out value='${param.paramReqUsrId}'/>">
+	<input type="hidden" name="reqGrpId" id="reqGrpId" value="<c:out value='${param.paramReqGrpId}'/>">
 	<input type="hidden" name="reqPrjId" id="reqPrjId" value="<c:out value='${param.paramPrjId}'/>">
 	<input type="hidden" name="atchFileId" id="atchFileId">
 	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
@@ -62,7 +63,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="kt-portlet kt-portlet--collapsed" id="req4101ReqGroupInfo">
+			<div class="kt-portlet kt-portlet--collapsed" id="req4101ReqGrpInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
 						<i class="fa flaticon2-layers-1 kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReqInfo">그룹 요구사항 정보</span>
@@ -77,13 +78,13 @@
 					<div class="form-group">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReq">그룹 요구사항</span></label>
 						<div class="input-group">
-							<input type="text" class="form-control" placeholder="그룹 요구사항을 선택하세요" name="reqGroupNm" id="reqGroupNm" readonly="readonly">
-							<button type="button" class="btn btn-brand input-group-append" id="selectReqGroupBtn" name="selectReqGroupBtn"><span data-lang-cd="req4101.button.searchBtn">검색</span></button>
+							<input type="text" class="form-control" placeholder="그룹 요구사항을 선택하세요" name="reqGrpNm" id="reqGrpNm">
+							<button type="button" class="btn btn-brand input-group-append" id="searchReqGrpBtn" name="searchReqGrpBtn"><span data-lang-cd="req4101.button.searchBtn">검색</span></button>
 						</div>
 					</div>
 					<div class="form-group kt-margin-b-0">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReqDesc">그룹 요구사항 내용</span></label>
-						<textarea class="kt-hide" name="reqGroupDesc" id="reqGroupDesc" ></textarea>
+						<textarea class="kt-hide" name="reqGrpDesc" id="reqGrpDesc"></textarea>
 					</div>
 				</div>
 			</div>
@@ -239,7 +240,7 @@ var OSLReq4101Popup = function () {
     	
     	//Portlet 세팅
     	new KTPortlet('req4101RequestUsrInfo', $.osl.lang("portlet"));
-    	new KTPortlet('req4101ReqGroupInfo', $.osl.lang("portlet"));
+    	new KTPortlet('req4101ReqGrpInfo', $.osl.lang("portlet"));
     	new KTPortlet('req4101NewRequestOpt', $.osl.lang("portlet"));
     	
     	//palceholder 세팅
@@ -248,7 +249,7 @@ var OSLReq4101Popup = function () {
 		$("#deptName").attr("placeholder",$.osl.lang("req4101.placeholder.deptNm"));
 		$("#telno").attr("placeholder",$.osl.lang("req4101.placeholder.tel"));
 		
-    	$("#reqGroupNm").attr("placeholder",$.osl.lang("req4101.placeholder.selectGroup"));
+    	$("#ReqGrpNm").attr("placeholder",$.osl.lang("req4101.placeholder.selectGroup"));
 		$("#reqDtm").attr("placeholder",$.osl.lang("req4101.placeholder.reqDtm"));
 		$("#reqNm").attr("placeholder",$.osl.lang("req4101.placeholder.reqNm"));
 		$("#reqPw").attr("placeholder",$.osl.lang("req4101.placeholder.password"));
@@ -642,12 +643,6 @@ var OSLReq4101Popup = function () {
 			viewTypeChange();
 		});
     	
-    	//그룹 요구사항 선택 클릭 시
-    	$("#selectReqGroupBtn").click(function(){
-    		console.log("selectReqGroupBtn Click");
-    		//그룹요구사항 검색 및 선택한 그룹요구사항 내용 가져오기
-    	});
-    	
     	//등록인경우
     	if(type == "insert"){
     		//요청자 정보 세팅 - default : 로그인 사용자
@@ -658,16 +653,17 @@ var OSLReq4101Popup = function () {
 	    	
 	    	//edit 세팅
 	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
-	    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
+	    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
 	    		toolbar: false,
     			disableResizeEditor: false,
     			disableDragAndDrop: true,
     			disabledEditor: true,
     			height:180,
     		}));
+	    	
 	    	//edit 세팅하고 나서 textarea 보이기
 	    	$("#reqDesc").removeClass("kt-hide");
-	    	$("#reqGroupDesc").removeClass("kt-hide");
+	    	$("#reqGrpDesc").removeClass("kt-hide");
 	    	
 	    	//datepicker 세팅
 			$.osl.date.datepicker($("#reqDtm"), {});
@@ -688,12 +684,28 @@ var OSLReq4101Popup = function () {
     		$("#deptId").val("");
     		$("#usrImgId").val(""); //이미지 default 넣기
     	});
+    	
+    	//그룹 요구사항 명에 포커스 될 때
+    	$("#reqGrpNm").focus(function(){
+    		
+    		//관련 항목 모두 비우기
+    		$("#reqGrpNm").val("");
+    		$("#reqGrpDesc").val("");
+    		
+    	});
    		
     	//엔터키
 		$("#usrNm").keydown(function(e){
 			if(e.keyCode=='13'){
 				//해당 값으로 검색화면 띄우기
 				$("#searchUsrNmBtn").click();
+			}
+		});
+    	//엔터키로 그룹 요구사항 정보 조회
+    	$("#reqGrpNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchReqGrpBtn").click();
 			}
 		});
     	
@@ -733,6 +745,30 @@ var OSLReq4101Popup = function () {
 					}]
     		};
     		$.osl.layerPopupOpen('/req/req4000/req4100/selectReq4103View.do',data,options);
+    	});
+    	
+    	//그룹요구사항명 검색버튼 클릭 시
+    	$("#searchReqGrpBtn").click(function(){
+    		var data = {
+    				reqGrpNm : $("#reqGrpNm").val()
+    		};
+    		var options = {
+    				idKey: "searchReqGrp",
+					modalTitle: $.osl.lang("req4101.modalTitle.reqGrpSearch"),
+					closeConfirm: true,
+					autoHeight:false,
+					modalSize: "xl",
+					callback:[{
+						targetId: "selectReqGrp",
+						actionFn: function(thisObj){
+							var temp = OSLReq4105Popup.getReqGrpInfo();
+							if(!$.osl.isNull(temp)){
+								OSLReq4101Popup.setReqGrpInfo(temp);
+							}
+						}
+					}]
+    		};
+    		$.osl.layerPopupOpen('/req/req4000/req4100/selectReq4105View.do',data,options);
     	});
     	
     	//요구사항 잠금 기능
@@ -834,7 +870,8 @@ var OSLReq4101Popup = function () {
 		    	
 		    	//edit 세팅
 		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
-		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
+		    	
+		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,
 	    			disableDragAndDrop: true,
@@ -843,7 +880,7 @@ var OSLReq4101Popup = function () {
 	    		}));
 		    	//edit 세팅하고 나서 textarea 보이기
 		    	$("#reqDesc").removeClass("kt-hide");
-		    	$("#reqGroupDesc").removeClass("kt-hide");
+		    	$("#reqGrpDesc").removeClass("kt-hide");
 		    	
 		    	//datepicker 세팅
 				$.osl.date.datepicker($("#reqDtm"), {});
@@ -1061,6 +1098,23 @@ var OSLReq4101Popup = function () {
         	$("#email").val(parseTemp.email);
         	$("#deptName").val(parseTemp.deptName);
         	$("#telno").val(parseTemp.telno);
+        },
+        setReqGrpInfo: function(temp){
+        	var parseTemp = JSON.parse(temp);
+        	
+        	//그룹 요구사항 정보 입력하기
+        	$('#reqGrpId').val(parseTemp.reqGrpId);
+        	$("#reqGrpNm").val(parseTemp.reqGrpNm);
+			$("#reqGrpDesc").val(parseTemp.reqGrpDesc);
+			formEditList.push($.osl.editorSetting("reqGrpDesc", {
+	    		toolbar: false,
+    			disableResizeEditor: false,
+    			disableDragAndDrop: true,
+    			disabledEditor: true,
+    			height:180,
+    		}));
+			$("#reqGrpKey").val(parseTemp.reqGrpKey);
+			
         }
     };
 }();

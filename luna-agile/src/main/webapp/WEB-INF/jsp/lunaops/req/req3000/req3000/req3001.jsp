@@ -501,7 +501,10 @@ var OSLReq3001Popup = function () {
 			data: {
 				source: {
 					read: {
-						url: "/req/req3000/req3000/selectReq3002ListAjaxView.do"
+						url: "/req/req3000/req3000/selectReq3002ListAjaxView.do",
+						params:{
+							reqGrpId: $("#reqGrpId").val()
+    					},
 					}
 				},
 				pageSize:5,
@@ -888,6 +891,9 @@ var OSLReq3001Popup = function () {
 		
        	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
+       	
+       	//수정
+   		fd.append("reqGrpDescNotBr", $("#reqGrpDesc").val());
        	
    		//연결된 요구사항 목록
    		var reqGrpLinkReqList = $.osl.datatable.list["req3001ConnectReqTable"].targetDt.originalDataSet;

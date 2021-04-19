@@ -811,7 +811,8 @@ var OSLCoreLangSetting = function () {
 				password : "알파벳, 숫자 4-12자 이내",
 			},
 			modalTitle : {
-				userSearch : "요청자 검색"
+				userSearch : "요청자 검색",
+				reqGrpSearch: "그룹 요구사항 검색",
 			},
 			button :{
 				deleteResetBtn : "삭제 초기화",
@@ -857,6 +858,11 @@ var OSLCoreLangSetting = function () {
 			button:{
 				submit : "확인",
 			}
+		},
+		req4105:{
+			field:{
+				reqGrpNm:"그룹 요구사항 명",
+			},
 		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
@@ -2683,7 +2689,8 @@ var OSLCoreLangSetting = function () {
 				password : "4 to 12 letters of alphabet and number combination.",
 			},
 			modalTitle : {
-				userSearch : "User Search"
+				userSearch : "User Search",
+				reqGrpSearch: "Grop requirements Seacrh",
 			},
 			button :{
 				deleteResetBtn : "Delete Reset",
@@ -2722,6 +2729,11 @@ var OSLCoreLangSetting = function () {
 			actionBtn : {
 				title : "Select",
 				clickBtn : "Select",
+			},
+		},
+		req4105:{
+			field:{
+				reqGrpNm:"Group requirements Name",
 			},
 		},
 		req4104:{
