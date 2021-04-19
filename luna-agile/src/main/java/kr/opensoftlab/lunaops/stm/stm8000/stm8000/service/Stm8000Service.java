@@ -25,7 +25,9 @@ public interface Stm8000Service {
 	
 	public void deleteStm8000ServerInfo(Map<String, String> paramMap) throws Exception;
 
-
+	
+	public String selectStm8000SvnConnectCheck(Map<String, String> paramMap) throws Exception;
+	
 	
 	@SuppressWarnings("rawtypes")
 	public List<Map> selectStm8000RevisionList(Map<String, String> paramMap) throws Exception;
