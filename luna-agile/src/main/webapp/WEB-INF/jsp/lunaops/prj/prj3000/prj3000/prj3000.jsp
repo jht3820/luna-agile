@@ -310,7 +310,7 @@
 								<div class="kt-portlet__head-wrapper">
 									<button type="button"
 										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
+										data-datatable-id="prj3002PrjTable"
 										data-datatable-action="select" title="산출물 연결 관리 조회"
 										data-toggle="kt-tooltip" data-skin="brand"
 										data-placement="bottom" data-auth-button="select" tabindex="1"
@@ -319,7 +319,7 @@
 									</button>
 									<button type="button"
 										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
+										data-datatable-id="prj3002PrjTable"
 										data-datatable-action="insert" title="산출물 연결 관리 연결"
 										data-toggle="kt-tooltip" data-skin="brand"
 										data-placement="bottom" data-auth-button="update" tabindex="3"
@@ -328,7 +328,7 @@
 									</button>
 									<button type="button"
 										class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air"
-										data-datatable-id="prj3200PrjTable"
+										data-datatable-id="prj3002PrjTable"
 										data-datatable-action="delete" title="산출물 연결 관리 연결 제거"
 										data-toggle="kt-tooltip" data-skin="brand"
 										data-placement="bottom" data-auth-button="delete" tabindex="4"
@@ -344,10 +344,10 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-12">
 									<div class="osl-datatable-search"
-										data-datatable-id="prj3200PrjTable"></div>
+										data-datatable-id="prj3002PrjTable"></div>
 								</div>
 							</div>
-							<div class="kt_datatable" id="prj3200PrjTable"></div>
+							<div class="kt_datatable" id="prj3002PrjTable"></div>
 						</div>
 					</div>
 				</div>
@@ -362,7 +362,7 @@
 "use strict";
 var OSLPrj3000Popup = function () {
 	
-	var prj3200PrjTable = "prj3200PrjTable";
+	var prj3002PrjTable = "prj3002PrjTable";
 	
 	var formId = "frPrj3000";
 	
@@ -506,7 +506,6 @@ var OSLPrj3000Popup = function () {
 				"delete" :function(obj){
 					
 					var children = $("#confirmation-list").children('div');
-					console.log(children)
 					
 					//선택한 트리 노드 없으면 튕기기
 					var selectNodeIds = treeObj.jstree("get_selected");
@@ -605,7 +604,6 @@ var OSLPrj3000Popup = function () {
 		
 		//확정 대기 파일 업로드 버튼 클릭 이벤트
 		$('#fileBtn').change(function(){
-			console.log($('#fileBtn'))
 			fileType = 'waitFile';
 			fnFileAjaxUpload($('#fileBtn')[0].files , fileType);
 			$('#fileBtn').val('');
@@ -629,7 +627,6 @@ var OSLPrj3000Popup = function () {
             var confirmation = $("#confirmation-list");
             //Drag기능 
             confirmation.on('dragenter', function(e) {
-            	console.log("11")
                 e.stopPropagation();
                 e.preventDefault();
                 // 드롭다운 영역 css
@@ -675,7 +672,6 @@ var OSLPrj3000Popup = function () {
             var waitConfirmation = $("#wait-confirmation-list");
             //Drag기능 
             waitConfirmation.on('dragenter', function(e) {
-            	console.log("11")
                 e.stopPropagation();
                 e.preventDefault();
                 // 드롭다운 영역 css
@@ -732,7 +728,6 @@ var OSLPrj3000Popup = function () {
 	        chosenClass: "chosen",
 	        //이동될 div(나갈)
 	        onMove:function(evt,originalEvent){
-	        	console.log("33")
 				var UserAgent = navigator.userAgent;
 
 				if (UserAgent.match(/iPhone|iPod|Android|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i) != null || UserAgent.match(/LG|SAMSUNG|Samsung/) != null){
@@ -743,7 +738,6 @@ var OSLPrj3000Popup = function () {
 			},
 	      	//해당 div로 이동될 대상의 동작(들어온)
 			onAdd:function(evt){
-				console.log("44")
 				//아이콘 부모박스 
 				var moveDiv = $(evt.item).children('.osl-uppy__left-btn:first-child');
 				
@@ -769,7 +763,6 @@ var OSLPrj3000Popup = function () {
 	        chosenClass: "chosen",
 	        //이동될 div(나갈)
 	        onMove:function(evt,originalEvent){
-	        	console.log("11")
 	        	
 				var UserAgent = navigator.userAgent;
 
@@ -781,7 +774,6 @@ var OSLPrj3000Popup = function () {
 			},
 	      	//해당 div로 이동될 대상의 동작(들어온)
 			onAdd:function(evt){
-				console.log("22")
 				//아이콘 부모박스 
 				var moveDiv = $(evt.item).children('.osl-uppy__right-btn:first-child');
 				//아이콘 변경(방향,아이콘 모양)
@@ -807,19 +799,19 @@ var OSLPrj3000Popup = function () {
 		/*  산출물 연결관리 관련 스크립트 시작                            */
 		/**************************************/
 		//데이터 테이블 세팅
-		$.osl.datatable.setting("prj3200PrjTable",{
+		$.osl.datatable.setting("prj3002PrjTable",{
 			data: {
 				source: {
 					read: {
-						url: "/prj/prj3000/prj3200/selectPrj3200DocConListAjax.do"
+						url: "/prj/prj3000/prj3000/selectPrj3002DocConListAjax.do"
 					}
 				},
 			},
 			columns: [
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title: 'No.', textAlign: 'center', width: 25, autoHide: false, sortable: false},
-				{field: 'targetTypeNm', title: '구분', textAlign: 'left', width: 80, search: false},
-				{field: 'targetNm', title: '대상 명', textAlign: 'left', width: 180, search: true, autoHide: false},
+				{field: 'targetTypeNm', title: '구분', textAlign: 'left', width: 50, search: false},
+				{field: 'targetNm', title: '대상 명', textAlign: 'left', width: 140, search: true, autoHide: false},
 				{field: 'regUsrNm', title: '등록자', textAlign: 'center', width: 80, search: true,
 					template: function (row) {
 						return $.osl.user.usrImgSet(row.regUsrId, row.regUsrNm);
@@ -867,12 +859,12 @@ var OSLPrj3000Popup = function () {
 							modalSize: "xl"
 						};
 					
-					$.osl.layerPopupOpen('/prj/prj3000/prj3200/selectPrj3200View.do',data,options);
+					$.osl.layerPopupOpen('/prj/prj3000/prj3000/selectPrj3002View.do',data,options);
 				},
 				"delete":function(rowDatas, datatableId, type, rowNum, elem){
 					//AJAX 설정
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/prj/prj3000/prj3200/deletePrj3200DocConInfoAjax.do'/>"}
+							{"url":"<c:url value='/prj/prj3000/prj3000/deletePrj3002DocConInfoAjax.do'/>"}
 							,{deleteDataList: JSON.stringify(rowDatas)});
 					//AJAX 전송 성공 함수
 					ajaxObj.setFnSuccess(function(data){
@@ -905,6 +897,8 @@ var OSLPrj3000Popup = function () {
 		ktScrollInit("#confirmation-list", "350");
 		//확정 대기 파일 스크롤 세팅
 		ktScrollInit("#wait-confirmation-list", "350");	
+		
+		
 		 
 		
 		/*
@@ -968,9 +962,6 @@ var OSLPrj3000Popup = function () {
 			    	// 비고 값 div영역에 세팅
 					$("#docDesc").html(docDesc.replace(/\n/g, '<br/>'));
 				}
-				
-				//입력된 검색값 초기화 (보류)
-				//$("#searchData_prj3200PrjTable").val('');
 				
 				//데이터 테이블 정보 세팅
 				selectDocConInfo();
@@ -1061,8 +1052,8 @@ var OSLPrj3000Popup = function () {
 	 */
 	var selectDocConInfo = function(){
 		docId = $("#docId").val();
-		$.osl.datatable.list[prj3200PrjTable].targetDt.setDataSourceParam("docId", docId);
-		$("button[data-datatable-id="+prj3200PrjTable+"][data-datatable-action=select]").click();
+		$.osl.datatable.list[prj3002PrjTable].targetDt.setDataSourceParam("docId", docId);
+		$("button[data-datatable-id="+prj3002PrjTable+"][data-datatable-action=select]").click();
 		 
 	}
 	
@@ -1234,9 +1225,10 @@ var OSLPrj3000Popup = function () {
 										+	'</div>'
 			}
 			var fileDivAfter = 			'</div>'
-									+	'<div class="osl-uppy-file-info-group">'
+									+	'<div class="osl-uppy-file-info-group kt-padding-t-0">'
 										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
 										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+										+ 	'<div class="osl-uppy-file-name"> 업로드 일자 :'+fileData.creatDt+'</div>'
 									+	'</div>'
 									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
 										+	'<i class="fa fa-times-circle"></i>'
@@ -1304,9 +1296,10 @@ var OSLPrj3000Popup = function () {
 										+	'</div>'
 			}
 			var fileDivAfter = 			'</div>'
-									+	'<div class="osl-uppy-file-info-group">'
+									+	'<div class="osl-uppy-file-info-group kt-padding-t-0">'
 										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
 										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+										+ 	'<div class="osl-uppy-file-name"> 업로드 일자 :'+fileData.creatDt+'</div>'
 									+	'</div>'
 									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
 										+	'<i class="fa fa-times-circle"></i>'
@@ -1369,7 +1362,6 @@ var OSLPrj3000Popup = function () {
 			//클릭된 화살표의 부모(첨부파일 전체) 박스
 			var target = $(this).parent();
 			var fileSn = target.children('input[name=fileSn]').val();
-			console.log(target)
 			var fileType = '';
 			//버튼모양 여부로 판단
 			//좌측 버튼이 있을때(확정 대기 파일 버튼)
@@ -1409,7 +1401,6 @@ var OSLPrj3000Popup = function () {
 		$('.fa-times-circle').click(function(){
 			
 			var targetType = $(this).parent().parent().children('div:first-child');
-			console.log(targetType)
 			
 			var fileSn = targetType.parent().children('input[name=fileSn]').val();
 			//부모객체에 오른쪽 클래스가 있다면 확정 대기 파일

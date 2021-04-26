@@ -3,6 +3,9 @@ package kr.opensoftlab.lunaops.prj.prj3000.prj3100.service;
 import java.util.List;
 import java.util.Map;
 
+import egovframework.com.cmm.service.FileVO;
+
+
 
 public interface Prj3100Service {
 	
@@ -15,4 +18,12 @@ public interface Prj3100Service {
 	
 	@SuppressWarnings("rawtypes")
 	List selectPrj3100MenuTree(Map<String, String> paramMap) throws Exception;
+
+	
+	@SuppressWarnings("rawtypes")
+	Map selectPrj3001CngInf(Map<String, String> paramMap) throws Exception;
+
+	
+	void insertPrj3100FileUpload(Map<String, String> paramMap, List<FileVO> _result)throws Exception;
+
 }

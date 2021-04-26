@@ -589,7 +589,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		prj3200 : {
+		prj3002 : {
 			label : {
 				upperDocId : "상위 산출물 ID",
 				upperDocNm : "상위 산출물 명",
@@ -2580,7 +2580,7 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
-		prj3200 : {
+		prj3002 : {
 			label : {
 				upperDocId : "Upper Document ID",
 				upperDocNm : "Upper Document Name",

@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,10 +20,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
+import javax.enterprise.inject.spi.Bean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,6 +45,7 @@ import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.Prj3000Service;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3100.service.Prj3100Service;
 import kr.opensoftlab.sdf.util.RequestConvertor;
@@ -88,7 +92,8 @@ public class Prj3100Controller {
 			return "/prj/prj3000/prj3100/prj3101";
 	}
 	
-   	@RequestMapping(value = "/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do")
+   	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do")
    	public ModelAndView insertPrj3100FormFileUploadAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
    		try {
 			
@@ -108,9 +113,19 @@ public class Prj3100Controller {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
+			
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			
+			paramMap.put("licGrpId", licGrpId);
 			paramMap.put("prjId", paramPrjId);
 			
+			
 			String atchFileId = (String) paramMap.get("atchFileId");
+			
+			
+			String docId = (String) paramMap.get("paramDocId");
+			
+			paramMap.put("docId", docId);
 			
 			
         	FileVO fileVO = new FileVO();
@@ -120,12 +135,22 @@ public class Prj3100Controller {
         	
 			int fileSn = fileMngService.getFileSN(fileVO);
 			
+			paramMap.put("fileSn", String.valueOf(fileSn));
+			
 			
 			List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,atchFileId,fileSn,"Prj");
 			
 			
-			fileMngService.insertFileDetail(_result);  
+        	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
+        	
+        	
+        	paramMap.put("signUseCd", docInfoMap.get("signUseCd"));
+        	
 			
+			
+			
+        	prj3100Service.insertPrj3100FileUpload(paramMap, _result);
+        	
 			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
@@ -143,7 +168,8 @@ public class Prj3100Controller {
    	}
    	
 	
-   	@RequestMapping(value ="/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do")
+   	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value ="/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do")
    	public ModelAndView selectPrj3100FormFileListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
    		try {
 			
@@ -161,6 +187,8 @@ public class Prj3100Controller {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			
 			paramMap.put("prjId", paramPrjId);
 			
 			List<FileVO> atchFileList = null;
@@ -170,15 +198,39 @@ public class Prj3100Controller {
         	FileVO fileVO = new FileVO();
         	fileVO.setAtchFileId((String)paramMap.get("docAtchFileId"));
         	
+        	atchFileList = fileMngService.fileDownList(fileVO);
+        	
         	
         	fileVO.setAtchFileId((String)paramMap.get("docWaitFileId"));
         	waitFileList = fileMngService.fileDownList(fileVO);
         	
         	
-        	atchFileList = fileMngService.fileDownList(fileVO);
+        	List<Map> atchFileInfoList = new ArrayList<Map>();
+        	
+        	for(FileVO fvo : atchFileList) {
+        		
+        		
+        		Map<String, String> fileMap = BeanUtils.describe(fvo);
+        		
+        		fileMap.put("docId", paramMap.get("docId"));
+        		fileMap.put("prjId", paramPrjId);
+    			fileMap.put("licGrpId", licGrpId);
+        		
+        		
+            	Map<String, String> fileCngInf = (Map) prj3100Service.selectPrj3001CngInf(fileMap);
+            	
+            	
+            	if(fileCngInf != null) {
+            		
+            		
+            		fileMap.putAll(fileCngInf);
+            	}
+            	
+            	atchFileInfoList.add(fileMap);
+        	}
         	
         	
-        	model.addAttribute("atchFileList", atchFileList);
+        	model.addAttribute("atchFileList", atchFileInfoList);
         	model.addAttribute("waitFileList", waitFileList);
         	
 			
@@ -532,7 +584,6 @@ public class Prj3100Controller {
 	
 	
 	
-	@SuppressWarnings("unlikely-arg-type")
 	@RequestMapping(value="/prj/prj3000/prj3100/selectPrj3100ZipDownload.do")
 	public String selectPrj3000ZipDownload(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		
@@ -607,13 +658,9 @@ public class Prj3100Controller {
     			
             	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
     			
-            	
-            	
     			
                	for(FileVO fvo : fileList) {
                		
-               		
-           				
            			
            			if(fvo == null) {
            				
@@ -630,7 +677,6 @@ public class Prj3100Controller {
                     	Map<String, String> fileCngInf = (Map) prj3100Service.selectPrj3001CngInf(paramMap);
                     	
                     	if(!"01".equals(fileCngInf.get("infType"))) {
-                    		System.out.println("123123");
                     		continue;
                     	}
            			}

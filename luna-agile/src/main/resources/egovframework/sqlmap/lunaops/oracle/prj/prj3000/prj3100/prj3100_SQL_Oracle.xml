@@ -43,4 +43,98 @@
             ORDER SIBLINGS BY A.ORD ASC
  		]]> 
 	</select>
+	
+	
+	<insert id="prj3100DAO.insertPrj3001CngInf" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newInfId">
+		<![CDATA[
+			 
+			SELECT	NVL( 
+							SUBSTR(NEW_INF_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_INF_ID, 12, 5)) + 1) , 5, '0')
+						,	'CNG' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_INF_ID 
+			FROM	(
+			            SELECT	MAX(CNG_INF_ID)  AS NEW_INF_ID
+			            FROM	PRJ3001 A
+			            WHERE	1=1
+			            AND		A.CNG_INF_ID LIKE 'CNG' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		
+		INSERT INTO PRJ3001 A
+		(
+				PRJ_ID					,	DOC_ID				,	CNG_INF_ID 			,	FILE_SN					
+			,	FILE_STRE_COURS			,	STRE_FILE_NM		,	ORIGNL_FILE_NM 		,	FILE_EXTSN 				
+			,	FILE_TYPE				,	FILE_SIZE			,	RJT_RES	 			,	REG_DTM 				
+			,	REG_USR_ID				,	REG_USR_IP 			,	MODIFY_DTM		 	,	MODIFY_USR_ID			
+			,	MODIFY_USR_IP			,	SIGN_DTM			,	SIGN_USR_ID			,	INF_TYPE
+		)
+		VALUES
+		(		
+				#prjId#				,	#docId#			,	#newInfId# 		,	#fileSn#			
+			,	#fileStreCours#		,	#streFileNm#	,	#orignlFileNm# 	,	#fileExtsn#	  		
+			,	#fileType#			,	#fileSize#		,	null 			,	SYSDATE				
+			,	#regUsrId#			,	#regUsrIp#	 	,	SYSDATE 		,	#regUsrId#			
+			,	#regUsrIp#		
+		    <isEqual property="signUseCd" compareValue="01">
+			,  	null				,	null			,	'02'
+		    </isEqual>
+		    <isEqual property="signUseCd" compareValue="02">
+		    ,  	SYSDATE				,	#regUsrId#		,	'01'
+		    </isEqual>
+		)
+	</insert>
+	
+	<delete id="prj3100DAO.deletePrj3001CngInf" parameterClass="java.util.Map">
+		
+		DELETE  FROM PRJ3001
+		WHERE   1 = 1
+		AND		PRJ_ID = #prjId#
+		AND		DOC_ID = #docId#
+		AND		FILE_SN = #fileSn# 
+	</delete>
+	
+	<select id="prj3100DAO.selectPrj3001CngInf" parameterClass="java.util.Map" resultClass="egovMap">
+		
+		SELECT T.*, ROWNUM
+		FROM
+		(
+			SELECT 	A.PRJ_ID	
+				,	A.DOC_ID
+				,	A.CNG_INF_ID
+				,	A.INF_TYPE
+				,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'PRJ00023', A.INF_TYPE, '1') AS INF_TYPE_NM
+				,	A.FILE_SN
+				,	A.FILE_STRE_COURS
+				,	A.STRE_FILE_NM
+				,	A.ORIGNL_FILE_NM
+				,	A.FILE_EXTSN
+				,	A.FILE_TYPE
+				,	A.FILE_SIZE
+				,	A.RJT_RES
+				,	TO_CHAR(A.SIGN_DTM, 'YYYY-MM-DD HH:MM:SS') AS SIGN_DTM
+				,	A.SIGN_USR_ID
+				,	A.REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH:MM:SS') AS MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+				,	B.USR_NM
+				,	ROWNUM
+			FROM	PRJ3001 A
+			INNER JOIN PRJ1000 C
+			ON (A.PRJ_ID = C.PRJ_ID)
+			INNER JOIN STM3000 B
+			ON	(C.LIC_GRP_ID = B.LIC_GRP_ID AND A.MODIFY_USR_ID = B.USR_ID)
+			WHERE	1 = 1
+			AND		A.DOC_ID = #docId#
+			AND		A.PRJ_ID = #prjId#
+			AND		A.FILE_SN = #fileSn#
+			ORDER BY A.MODIFY_DTM DESC
+		) T
+		WHERE 1 = 1
+		AND	  ROWNUM = 1
+	</select>
 </sqlMap>

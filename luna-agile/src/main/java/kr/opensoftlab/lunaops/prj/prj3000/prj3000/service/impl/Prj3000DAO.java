@@ -66,58 +66,45 @@ public class Prj3000DAO extends ComOslitsAbstractDAO {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	@SuppressWarnings("rawtypes")
-	public String insertPrj3000MenuInfo(Map paramMap) throws Exception{
-		return (String) insert("prj3000DAO.insertPrj3000MenuInfo", paramMap);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public int deletePrj3000MenuInfo(Map paramMap) throws Exception{
-		return delete("prj3000DAO.deletePrj3000MenuInfo", paramMap);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public int deletePrj3000DocList(Map paramMap) throws Exception{
-		return delete("prj3000DAO.deletePrj3000DocList", paramMap);
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	public int updatePrj3000MenuInfo(Map paramMap) throws Exception{
-		return update("prj3000DAO.updatePrj3000MenuInfo", paramMap);
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	public int updatePrj3000FileSnSelect(Map paramMap) throws Exception{
-		return update("prj3000DAO.updatePrj3000FileSnSelect", paramMap);
-	}
-	
-	
 	@SuppressWarnings("rawtypes")
 	public List selectPrj3000MenuTree(Map paramMap) throws Exception{
 		return (List)list("prj3000DAO.selectPrj3000MenuTree",paramMap);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public List selectPrj3000RootMenuList(Map paramMap) throws Exception{
-		return (List)list("prj3000DAO.selectPrj3000RootMenuList",paramMap);
-	}
 	
 	
-	@SuppressWarnings("rawtypes")
-	public String insertPrj3000ParamMenuInfo(Map paramMap) throws Exception{
-		return (String) insert("prj3000DAO.insertPrj3000ParamMenuInfo", paramMap);
+	
+	
+	public int selectPrj3002DocConListCnt(Map<String, String> paramMap) throws Exception{
+		return (Integer) select("prj3000DAO.selectPrj3002DocConCnt", paramMap);
+	}
+
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map> selectPrj3002DocConList(Map<String, String> paramMap) throws Exception{
+		return (List<Map>) list("prj3000DAO.selectPrj3002DocConList",paramMap);
+	}
+
+	
+	public int selectPrj3002ConTargetCnt(Map<String, String> paramMap) {
+		return (Integer) select("prj3000DAO.selectPrj3002ConTargetCnt", paramMap);
+	}
+
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List selectPrj3002ConTargetList(Map<String, String> paramMap) {
+		return (List<Map>) list("prj3000DAO.selectPrj3000ConTargetList", paramMap);
+	}
+
+	
+	public void insertPrj3002DocConInfo(Map<String, String> paramMap) throws Exception{
+		insert("prj3000DAO.selectPrj3002DocConInfo", paramMap);
+	}
+
+	
+	public void deletePrj3002DocConInfo(Map<String, String> paramMap) throws Exception{
+		delete("prj3000DAO.deletePrj3002DocConInfo", paramMap);
+		
 	}
 	
-	public int updatePrj3000FormFileId(Map<String, String> paramMap) throws Exception{
-		return (Integer) update("prj3000DAO.updatePrj3000FormFileId", paramMap);
-	}
 }
