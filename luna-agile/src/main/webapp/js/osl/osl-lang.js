@@ -1294,6 +1294,134 @@ var OSLCoreLangSetting = function () {
 				}
 			}
 		},
+		stm8000:{
+			title: {
+				actionTitle : "수정 / 삭제 / 상세 / 접속 확인",
+				insertTitle : "저장소 추가",
+				updateTitle : "저장소 수정",
+				dblClickTitle : "저장소 상세보기",
+			},
+			actionTooltip:{
+				updateTooltip : "수정",
+				deleteTooltip : "삭제",
+				dblClickTooltip : "상세",
+				connectTooltip : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+			},
+			actionBtn:{
+				selectTooltip :"저장소 조회",
+				insertTooltip : "저장소 추가",
+				updateTooltip : "저장소 수정",
+				deleteTooltip : "저장소 삭제",
+				connectTooltip : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+				connect : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+			},
+			message:{
+				connect : {
+					selectCount : "${1}개가 선택되었습니다.<br/>접속 확인할 저장소를 선택하세요.",
+					fail : {
+						auth : "접속 실패 : ID 또는 PW를 확인하세요.",
+						url : "접속 실패 : 유효한 URL이 아닙니다.",
+						common : "접속 실패",
+					},
+					success : "접속 성공"
+				}
+			}
+		},
+		stm8001:{
+			complete: "완료",
+			label:{
+				strgTypeCd : "유형",
+				useCd : "사용여부",
+				strgRepTitle :"저장소명",
+				strgRepUrl : "URL",
+				strgUsrId : "USER",
+				strgUsrPw : "PW",
+				strgRepNm : "Repo.",
+				strgKey : "TOKEN",
+				strgTxt : "저장소 설명"
+			},
+			placeholder : {
+				strgRepTitle :"저장소명",
+				strgRepUrl : "SVN URL",
+				strgUsrId : "사용자 ID",
+				strgUsrPw : "사용자 PW",
+				strgRepNm : "GIT 프로젝트명",
+				strgKey : "GIT TOKEN",
+			}
+		},
+		stm8002 :{
+			title :{
+				revision : "리비전 목록",
+				file :"파일 목록",
+				actionTitle : {
+					revisionFile : "상세",
+					repository : "선택",
+				},
+			},
+			revisionFile : {
+				actionTitle : "상세",
+				actionTooltip : {
+					dblClickTooltip : "파일 소스보기",
+					diffTooltip : "파일 비교"
+				},
+				message : {
+					diff : "${1}개가 선택되었습니다.<br/>한개의 파일만 선택하세요."
+				}
+			},
+			repository:{
+				actionTooltip : {
+					"clickTooltip" : "리비전 선택",
+				}
+			},
+			dirTree:{
+				message:{
+					selectRevision : "리비전을 선택하세요.",
+				}
+			},
+			placeholder : {
+				revision : {
+					start : "시작",
+					end : "종료",
+				}
+			},
+			actionBtn:{
+				selectTooltip :"리비전 조회",
+				selectFileTooltip : "리비전 파일 목록 조회",
+				diffTooltip : "파일 비교",
+				diffBtn : "DIFF"
+			},
+			message :{
+				selectRevision : "리비전을 선택하세요.",
+			}
+		},
+		stm8004:{
+			title : "파일 리비전 목록",
+			actionBtn : {
+				title : "선택",
+				selectTooltip : "파일 리비전 조회",
+				diffTooltip : "파일 비교",
+				diffBtn : "DIFF"
+			},
+			placeholder : {
+				revision : {
+					start : "시작",
+					end : "종료",
+				}
+			},
+			message : {
+				selectFile : "${1}개가 선택되었습니다.<br/>두개의 파일을 선택하세요.",
+				selectFiles: "${1}개가 선택되었습니다.<br/>두개의 파일만 선택하세요.",
+			}
+		},
 		stm9000: {
 			title : {
 				jenkinsManagement : "JENKINS 관리"
@@ -1848,7 +1976,7 @@ var OSLCoreLangSetting = function () {
 				dplDt:"Deploy Date",
 				dplVer:"Deploy Version",
 				dplTypeNm:"Deploy Type",
-				dplDesc:"Deploy Desciption",
+				dplDesc:"Deploy Description",
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
@@ -1935,7 +2063,7 @@ var OSLCoreLangSetting = function () {
 			prj1200PrjTable:{
 				prjSetTargetNm: "Setting Target",
 				prjSetNm: "Setting Name",
-				prjSetDesc : "Setting Desciption",
+				prjSetDesc : "Setting Description",
 				prjSetValNm:"Setting Value",
 				modifyDtmDay:"Modify Date",
 				modifyUsrNm:"Final Modifier",
@@ -1945,7 +2073,7 @@ var OSLCoreLangSetting = function () {
 				sprNm : "Sprint Title",
 				sprStdtm : "Start Date",
 				sprEddtm : "End Date",
-				sprDesc : "Sprint Desciption",
+				sprDesc : "Sprint Description",
 				sprDtm :"Date Range",
 			},
 			spr2000RptTable:{
@@ -1967,6 +2095,30 @@ var OSLCoreLangSetting = function () {
 				acceptUseNm:"Accept Use",
 				useNm:"Use Name",
 				authGrpDesc:"Auth Group Desc"
+			},
+			stm8000RepTable:{
+				result : "Connection",
+				useNm : "Used",
+				strgTypeNm : "Type",
+				strgRepTitle : "Repository Title",
+				strgTxt : "Repository Description",
+				strgRepUrl : "Repository URL",
+			},
+			stm8002RevisionFileTable:{
+				type : "Type",
+				name : "File Name",
+			},
+			stm8002RepTable:{
+				revision : "Revision",
+				comment : "Commit Log",
+				author : "Commiter ID",
+				logDate : "Date"
+			},
+			stm8004FileTable:{
+				revision : "Revision",
+				comment : "Commit Log",
+				author : "Commiter ID",
+				logDate : "Date"
 			},
 			stm9000JenkinsTable:{
 				result : "Connection check",
@@ -2796,7 +2948,7 @@ var OSLCoreLangSetting = function () {
 				sprNm : "Sprint Title",
 				rptMem: "Meeting Members",
 				rptNm :"Title",
-				rptDesc : "Desciption",
+				rptDesc : "Description",
 			},
 			button : {
 				insertBtn : "Insert Meeting Log",
@@ -2837,7 +2989,7 @@ var OSLCoreLangSetting = function () {
 			label : {
 				sprNm : "Sprint Title",
 				mmrNm :"Title",
-				mmrDesc : "Desciption",
+				mmrDesc : "Description",
 			},
 			button : {
 				insertBtn : "Insert Memoris",
@@ -2954,7 +3106,7 @@ var OSLCoreLangSetting = function () {
 				ntcCurrentN: "Recent Notice Date : -",
 				cmtAllCntY: "Total Comment : ${1}",
 				cmtAllCntN: "Total Comment : -",
-				cmtMaxInfoY: "Most Comment : ${1} 건",
+				cmtMaxInfoY: "Most Comment : ${1}",
 				cmtMaxInfoN: "Most Comment : -",
 				badAllCntY: " Total Post : Insert ${1} / Delete ${2}",
 				badAllCntN: "Total Post : -",
@@ -3075,6 +3227,134 @@ var OSLCoreLangSetting = function () {
 					insert:"Would you like to register a new department?",
 					update:"Would you like to edit the department information?"
 				}
+			}
+		},
+		stm8000:{
+			title: {
+				actionTitle : "Upd / Del / Det / Con",
+				insertTitle : "Insert Repository",
+				updateTitle : "Update Repository",
+				dblClickTitle : "Select Repository Info",
+			},
+			actionTooltip:{
+				updateTooltip : "Update",
+				deleteTooltip : "Delete",
+				dblClickTooltip : "Detail",
+				connectTooltip : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+			},
+			actionBtn:{
+				selectTooltip :"Select Repository",
+				insertTooltip : "Insert Repository",
+				updateTooltip : "Update Repository",
+				deleteTooltip : "Delete Repository",
+				connectTooltip : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+				connect : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+			},
+			message:{
+				connect : { 
+					selectCount : "Please, select repository for connection check.<br/> ${1} repository have been selected.",
+					fail : {
+						auth : "Connection Fail : Please checking ID or Password.",
+						url : "Connection Fail  : Please checking URL.",
+						common : "Connection Fail ",
+					},
+					success : "Connection Success"
+				}
+			}
+		},
+		stm8001:{
+			complete: "Submit",
+			label:{
+				strgTypeCd : "Tyep",
+				useCd : "Used",
+				strgRepTitle :"Title",
+				strgRepUrl : "URL",
+				strgUsrId : "USER",
+				strgUsrPw : "PW",
+				strgRepNm : "Repo.",
+				strgKey : "TOKEN",
+				strgTxt : "Repository Description"
+			},
+			placeholder : {
+				strgRepTitle :"Repository Title",
+				strgRepUrl : "SVN URL",
+				strgUsrId : "USER ID",
+				strgUsrPw : "USER Password",
+				strgRepNm : "GIT Project Repository Name",
+				strgKey : "GIT TOKEN",
+			}
+		},
+		stm8002 :{
+			title :{
+				revision : "Revision List",
+				file :"File List",
+				actionTitle : {
+					revisionFile : "Detail",
+					repository : "Select",
+				},
+			},
+			revisionFile : {
+				actionTitle : "Detail",
+				actionTooltip : {
+					dblClickTooltip : "Code View",
+					diffTooltip : "Code Diff"
+				},
+				message : {
+					diff : "Please, select only 1 file.<br/>${1} file have been selected."
+				}
+			},
+			repository:{
+				actionTooltip : {
+					"clickTooltip" : "Select Revision",
+				}
+			},
+			dirTree:{
+				message:{
+					selectRevision : "Please, select revision.",
+				}
+			},
+			placeholder : {
+				revision : {
+					start : "Start",
+					end : "End",
+				}
+			},
+			actionBtn:{
+				selectTooltip :"Select Revision",
+				selectFileTooltip : "Select Revision File List",
+				diffTooltip : "Code Diff",
+				diffBtn : "DIFF"
+			},
+			message :{
+				selectRevision : "Please, select revision.",
+			}
+		},
+		stm8004:{
+			title : "File Revision List",
+			actionBtn : {
+				title : "Select",
+				selectTooltip : "Select File Revision",
+				diffTooltip : "Code Diff",
+				diffBtn : "DIFF"
+			},
+			placeholder : {
+				revision : {
+					start : "Start",
+					end : "End",
+				}
+			},
+			message : {
+				selectFile : "Please, select 2 file.<br/>${1} file have been selected.",
+				selectFiles: "Please, select only 2 file.<br/>${1} file have been selected.",
 			}
 		},
 		stm9000:{

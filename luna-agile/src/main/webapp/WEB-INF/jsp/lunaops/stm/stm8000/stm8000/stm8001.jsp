@@ -8,50 +8,50 @@
 			<div class="form-group kt-margin-b-5">
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-12 col-12 kt-margin-b-15">
-						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">유형</span></label>
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgTypeCd">유형</span></label>
 						<select class="form-control kt-select2" name="strgTypeCd" id="strgTypeCd" required></select>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-12">
-						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">사용여부</span></label>
+						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.useCd">사용여부</span></label>
 				<select class="form-control kt-select2" name="useCd" id="useCd" required></select>
 					</div>
 				</div>
 			</div>
 			<div class="form-group kt-margin-b-15">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">저장소명</span></label>
-				<input type="text" class="form-control" name="strgRepTitle" id="strgRepTitle" autocomplete="off" required>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgRepTitle">저장소명</span></label>
+				<input type="text" class="form-control" name="strgRepTitle" id="strgRepTitle" placeholder="저장소명" autocomplete="off" required>
 			</div>
 			<div class="form-group kt-margin-b-15">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">URL</span></label>
-				<input type="text" class="form-control" name="strgRepUrl" id="strgRepUrl" autocomplete="off" required>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgRepUrl">URL</span></label>
+				<input type="text" class="form-control" name="strgRepUrl" id="strgRepUrl" placeholder="URL"  autocomplete="off" required>
 			</div>
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-12 col-12 kt-margin-b-15">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">USER</span></label>
-					<input type="text" class="form-control" name="strgUsrId" id="strgUsrId" autocomplete="off" required>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgUsrId">USER</span></label>
+					<input type="text" class="form-control" name="strgUsrId" id="strgUsrId" placeholder="사용자 ID"  autocomplete="off" required>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12 col-12" id="optPw" name="optPw">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">PW</span></label>
-					<input type="password" class="form-control" name="strgUsrpw" id="strgUsrPw" autocomplete="new-password" required>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgUsrPw">PW</span></label>
+					<input type="password" class="form-control" name="strgUsrpw" id="strgUsrPw" placeholder="사용자 PW"  autocomplete="new-password" required>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12 col-12" id="optRep" name="optRep">
-					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">Repo</span></label>
-					<input type="text" class="form-control" name="strgRepNm" id="strgRepNm" autocomplete="off" required>
+					<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgRepNm">Repo.</span></label>
+					<input type="text" class="form-control" name="strgRepNm" id="strgRepNm" placeholder="GIT 프로젝트명"  autocomplete="off" required>
 				</div>
 			</div>
 			<div class="form-group kt-margin-b-15" id="optKey" name="optKey">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">Token</span></label>
-				<input type="text" class="form-control" name="strgKey" id="strgKey" autocomplete="off" required>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgKey">TOKEN</span></label>
+				<input type="text" class="form-control" name="strgKey" id="strgKey" placeholder="GIT TOKEN"  autocomplete="off" required>
 			</div>
 			<div class="form-group form-group-last">
-				<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="">저장소 설명</span></label>
+				<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="stm8001.label.strgTxt">저장소 설명</span></label>
 				<textarea class="form-control osl-min-h-px--140" name="strgTxt" id="strgTxt"></textarea>
 			</div>
 		</div>
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="stm8000SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="">완료</span></button>
+	<button type="button" class="btn btn-brand" id="stm8000SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="stm8001.complete">완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
 <!-- begin page script -->
@@ -68,8 +68,15 @@
 	var type;
 	
 	//문구 세팅 
-	//$("#stm8000SaveSubmit > span").text($.osl.lang(""));
-	//$(".btn.btn-outline-brand[data-dismiss=modal] > span").text($.osl.lang("modal.close"));
+	$("#stm8000SaveSubmit > span").text($.osl.lang("stm8001.complete"));
+	
+	//placeholder 세팅
+	$("#strgRepTitle").attr("placeholder",$.osl.lang("stm8001.placeholder.strgRepTitle"));
+	$("#strgRepUrl").attr("placeholder",$.osl.lang("stm8001.placeholder.strgRepUrl"));
+	$("#strgUsrId").attr("placeholder",$.osl.lang("stm8001.placeholder.strgUsrId"));
+	$("#strgUsrPw").attr("placeholder",$.osl.lang("stm8001.placeholder.strgUsrPw"));
+	$("#strgRepNm").attr("placeholder",$.osl.lang("stm8001.placeholder.strgRepNm"));
+	$("#strgKey").attr("placeholder",$.osl.lang("stm8001.placeholder.strgKey"));
 	
 	//기본 설정
 	 var documentSetting = function() {
@@ -202,8 +209,6 @@
    			if(data.errorYn == "Y"){
    				$.osl.alert(data.message,{type: 'error'});
    			}else{
-   				console.log(data.repInfo);
-   				
    				// 공통코드 해당 데이터 선택으로 세팅
    				$("#strgTypeCd").attr("data-osl-value", data.repInfo.strgTypeCd);
    				$("#useCd").attr("data-osl-value", data.repInfo.useCd);
