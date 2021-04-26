@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm9000DAO">
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+    
+	
+	<sql id="selectStm9000JenkinsListBase">
+		<![CDATA[
+			SELECT 
+					ROWNUM RN
+				, 	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID 
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL
+				,	SUB1.JEN_DESC 
+				,	SUB1.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', SUB1.USE_CD, '1') AS USE_NM
+				,	SUB1.REG_JOB_CNT
+				,	SUB1.DEL_CD 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP  
+			FROM
+			(
+					SELECT
+							A.LIC_GRP_ID
+						,	A.JEN_ID 
+						,	A.JEN_NM 
+						,	A.JEN_USR_ID 
+						,	A.JEN_USR_TOK 
+						,	A.JEN_URL
+						,	A.JEN_DESC 
+						,	A.USE_CD
+						,	(SELECT COUNT(*) FROM STM9001 Z WHERE 1=1 AND Z.JEN_ID = A.JEN_ID) AS REG_JOB_CNT
+						,	A.DEL_CD 
+						,	A.REG_DTM 
+						,	A.REG_USR_ID 
+						,	A.REG_USR_IP 
+						,	A.MODIFY_DTM 
+						,	A.MODIFY_USR_ID 
+						,	A.MODIFY_USR_IP              
+					FROM STM9000 A
+					WHERE 1=1
+					AND	LIC_GRP_ID = #licGrpId#
+					AND	DEL_CD ='02'
+			) SUB1
+			WHERE 1=1
+		]]>
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jenDesc">
+					AND	SUB1.JEN_DESC LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.REG_DTM DESC
+		</isEmpty>
+    </sql>
+    
+    
+    <select id="stm9000DAO.selectStm9000JenkinsList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT SUB2.*
+		FROM
+		(
+				<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="stm9000DAO.selectStm9000JenkinsListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*)
+		FROM
+		(
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+    </select>
+    
+     
+    <select id="stm9000DAO.selectStm9000JenkinsNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT SUB2.*
+		FROM
+		(
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+    </select>
+    
+    
+     
+	<select id="stm9000DAO.selectStm9000JenkinsInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		
+		SELECT *
+		FROM (
+			<include refid="selectStm9000JenkinsListBase"/>
+		) SUB2
+		WHERE 1=1
+		AND SUB2.JEN_ID = #jenId#
+	</select>
+    
+     
+	<insert id="stm9000DAO.insertStm9000JenkinsInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newJenId">
+		<![CDATA[
+			 
+			SELECT	NVL( 
+							SUBSTR(NEW_JEN_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_JEN_ID, 12, 5)) + 1) , 5, '0')
+						,	'JEN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_JEN_ID 
+			FROM	(
+			            SELECT	MAX(JEN_ID)  AS NEW_JEN_ID
+			            FROM	STM9000 A
+			            WHERE	1=1
+			            AND		JEN_ID LIKE 'JEN' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			 
+			INSERT INTO STM9000
+			(
+					LIC_GRP_ID,		JEN_ID,			JEN_NM,		JEN_USR_ID,			JEN_USR_TOK 
+				,	JEN_URL,		JEN_DESC,		USE_CD,		DEL_CD,				REG_DTM 
+				,	REG_USR_ID,		REG_USR_IP, 	MODIFY_DTM, MODIFY_USR_ID,		MODIFY_USR_IP 
+			)
+			VALUES
+			(
+					#licGrpId#,  	#newJenId#,		#jenNm#,	#jenUsrId#,  		#jenUsrTok#
+				,	#jenUrl#,  		#jenDesc#,  	#useCd#,  	'02',  				SYSDATE
+				,	#regUsrId#,  	#regUsrIp#,  	SYSDATE,  	#modifyUsrId#,  	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+	
+	
+	<update id="stm9000DAO.updateStm9000JenkinsInfo" parameterClass="java.util.Map">
+		 
+		UPDATE STM9000 SET 
+				JEN_ID = #jenId# 
+			,	JEN_NM = #jenNm# 
+			,	JEN_USR_ID = #jenUsrId# 
+			,	JEN_USR_TOK = #jenUsrTok# 
+			,	JEN_URL = #jenUrl# 
+			,	JEN_DESC = #jenDesc# 
+			,	USE_CD = #useCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp# 
+		WHERE 1=1
+		AND LIC_GRP_ID = #licGrpId#
+		AND	JEN_ID = #jenId# 
+	</update>
+    
+    
+	<update id="stm9000DAO.deleteStm9000JenkinsInfo" parameterClass="java.util.Map">
+		
+		UPDATE STM9000 SET 
+				DEL_CD = #delCd# 
+			,	MODIFY_DTM = SYSDATE 
+			,	MODIFY_USR_ID = #modifyUsrId# 
+			,	MODIFY_USR_IP = #modifyUsrIp#  
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId# 
+		AND JEN_ID = #jenId# 
+	</update>
+	
+</sqlMap>

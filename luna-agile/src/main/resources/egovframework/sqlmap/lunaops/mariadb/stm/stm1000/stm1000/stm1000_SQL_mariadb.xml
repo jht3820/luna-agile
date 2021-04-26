@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm1000DAO">
+	 <!--  in / out class define  -->
+    <typeAlias alias="stm1000VO"	type="kr.opensoftlab.oslops.stm.stm1000.stm1000.vo.Stm1000VO"/>
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<!-- Map Define -->
+   	<resultMap id="resultMapSelectStm1000" class="stm1000VO">
+		<result property="rn"  				column="RN"/>
+		<result property="apiId"  			column="API_ID"/>
+		<result property="apiUrl"  			column="API_URL"/>		
+		<result property="apiNm"  			column="API_NM"/>
+		<result property="apiTxt"  			column="API_TXT"/>
+	
+		<result property="useCd"  		column="USE_CD"/>
+		<result property="regDtm"  		column="REG_DTM"/>
+		<result property="useNm"  		column="USE_NM"/>
+		<result property="regUsrId"  		column="REG_USR_ID"/>
+		
+    </resultMap>
+    
+	
+	<!-- sql Define  -->
+	<sql id="selectStm1000List">
+	
+			SELECT API_ID
+	    			,	API_NM
+					,	API_URL
+					,	API_TXT
+					
+					,	USE_CD
+					,   SF_ADM4100_COM_CD_INFO(#licGrpId#, 'CMM00001', USE_CD, '1') as USE_NM 
+					,   REG_USR_ID
+				    ,   TO_CHAR(REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+		    FROM API1000
+		    WHERE 1=1
+			AND LIC_GRP_ID = #licGrpId#
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+			<isEqual property="searchSelect" compareValue="apiNm"> 
+				AND		UPPER( API_NM ) like '%'|| UPPER( #searchTxt# ) ||'%'
+			</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+			<isEqual property="searchSelect" compareValue="useCd">
+				AND		USE_CD = #searchCd#
+			</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+    </sql>
+    
+    <select id="stm1000DAO.selectStm1000List" parameterClass="stm1000VO"  resultMap="resultMapSelectStm1000">
+		SELECT *
+		FROM
+			(
+    		SELECT ROWNUM RN,
+    			     A.*
+    		FROM
+    		(
+					<include refid="selectStm1000List"/>
+	    			) A
+	    	)
+	    	 WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    <select id="stm1000DAO.selectStm1000ListCnt" parameterClass="stm1000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="selectStm1000List"/>
+						) A
+    </select>
+        
+    
+    <insert id="stm1000DAO.insertStm1001Info" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newApiId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_API_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_API_ID, 12, 5)) + 1) , 5, '0')
+						,	'API' || TO_CHAR((CURRENT_TIMESTAMP+0), 'YYYYMMDD') || '00001'
+            		) AS NEW_API_ID 
+			FROM	(
+			            SELECT	MAX(API_ID)  AS NEW_API_ID
+			            FROM	API1000 A
+			            WHERE	1=1
+			            AND		API_ID LIKE 'API' || TO_CHAR((CURRENT_TIMESTAMP+0), 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO API1000
+			(
+					API_ID, 			API_NM,				API_URL,			API_TXT,
+			    	 			ATCH_FILE_ID,
+			        USE_CD,				REG_DTM,			REG_USR_ID,
+			        REG_USR_IP,			MODIFY_DTM,			MODIFY_USR_ID,		MODIFY_USR_IP,
+			        LIC_GRP_ID
+			        
+			)                    
+			VALUES
+			(
+					#newApiId#,			#apiNm#,			#apiUrl#,			#apiTxt#,
+			        			#atchFileId#,
+			        #useCd#,			(CURRENT_TIMESTAMP+0),			#regUsrId#,
+			        #regUsrIp#,			(CURRENT_TIMESTAMP+0),			#modifyUsrId#,		#modifyUsrIp#,
+			        #licGrpId#
+			)
+		]]>
+	</insert>
+    
+	
+	<select id="stm1000DAO.selectStm1000Info" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT	A.API_ID
+			,	A.API_NM
+			,	A.API_URL
+		    ,	A.API_TXT
+		 
+		    ,	A.ATCH_FILE_ID
+		    ,	A.USE_CD 
+		    ,   TO_CHAR(A.REG_DTM, 'YYYY-MM-DD') AS REG_DTM
+		    ,	A.REG_USR_ID
+	   FROM 	API1000 A
+	         
+       WHERE    1=1
+       
+		AND		A.API_ID = #apiId#
+		AND     A.LIC_GRP_ID = #licGrpId#
+	</select>
+	
+	
+	<update id="stm1000DAO.updateStm1001Info" parameterClass="java.util.Map">
+		UPDATE 	API1000 A
+		SET		API_NM			= #apiNm# 
+			
+			<isNotEmpty property="apiUrl">
+		    ,	API_URL			= #apiUrl#
+		    </isNotEmpty>	
+			
+			,	API_TXT		    = #apiTxt#
+		
+	
+	        ,	ATCH_FILE_ID	= #atchFileId#
+		    ,	USE_CD			= #useCd#
+		    ,	MODIFY_DTM		= (CURRENT_TIMESTAMP+0)
+		    ,	MODIFY_USR_ID	= #modifyUsrId#
+		    ,	MODIFY_USR_IP	= #modifyUsrIp#
+		WHERE	1=1
+		AND		API_ID = #apiId#
+		AND     LIC_GRP_ID = #licGrpId#
+	</update>
+	
+	<delete id="stm1000DAO.deleteStm1000Info" parameterClass="java.util.Map">
+		DELETE FROM	API1000 A
+		WHERE	1=1
+		AND		API_ID = #apiId#
+		AND     LIC_GRP_ID = #licGrpId#
+	</delete>
+	
+	
+	<select id="stm1000DAO.selectStm1000UseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		SELECT	COUNT(1) AS CNT
+	   FROM 	API1100 A
+       WHERE    1=1
+		AND		A.API_ID = #apiId#
+		AND     A.LIC_GRP_ID = #licGrpId#
+		AND     ROWNUM = 1
+	</select>
+		
+		
+	<select id="stm1000DAO.selectStm1000ApiUrlList" parameterClass="java.util.Map"  resultClass="egovMap" >
+		SELECT 	  API_URL
+				, PRJ_ID
+				, B.LIC_GRP_ID 
+		FROM 	  API1000 A 
+				, API1100 B
+	   WHERE 	A.LIC_GRP_ID = B.LIC_GRP_ID
+		AND 	A.API_ID = B.API_ID
+		AND 	B.API_TOK = #apiTok#
+	</select>
+</sqlMap>

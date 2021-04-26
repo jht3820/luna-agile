@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dpl1100DAO">
+
+	
+	<typeAlias alias="dpl1100VO"	type="kr.opensoftlab.lunaops.dpl.dpl1000.dpl1100.vo.Dpl1100VO"/>
+	<typeAlias  alias="egovMap" 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	
+	
+	<sql id="selectDpl1100AssReqList">
+		SELECT
+			ROWNUM RN
+			, T1.REQ_ID AS REQ_ID
+			, T1.REQ_NM AS REQ_NM
+			, T1.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+			, T1.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+			, T1.REQ_USR_EMAIL AS REQ_USR_EMAIL
+			, T1.REQ_USR_NUM AS REQ_USR_NUM
+			, T1.REQ_USR_IMG_ID AS REQ_USR_IMG_ID
+			, T1.REQ_ORD AS REQ_ORD
+			, T1.REQ_PRO_TYPE AS REQ_PRO_TYPE
+			, T1.REQ_PRO_TYPE_NM AS REQ_PRO_TYPE_NM
+			, T1.REQ_DTM AS REQ_DTM
+			, T1.REQ_PW AS REQ_PW
+			, T1.PROCESS_ID AS PROCESS_ID
+			, T1.FLOW_ID AS FLOW_ID
+		FROM (
+			SELECT 
+				A.REQ_ID AS REQ_ID
+				, A.REQ_NM AS REQ_NM
+				, A.REQ_DESC AS REQ_DESC
+				, A.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+				, A.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+				, A.REQ_USR_EMAIL AS REQ_USR_EMAIL
+				, A.REQ_USR_NUM AS REQ_USR_NUM
+				, SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
+				, A.REQ_ORD AS REQ_ORD
+				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
+				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+				, A.PROCESS_ID AS PROCESS_ID
+				, A.FLOW_ID AS FLOW_ID
+		    FROM REQ4100 A JOIN DPL1100 B
+		    ON (A.REQ_ID = B.REQ_ID AND A.PRJ_ID = B.PRJ_ID )
+		    WHERE 1=1
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND A.REQ_PRO_TYPE != '01'
+			AND B.DPL_ID = #dplId#
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.REQ_DTM DESC
+			</isEmpty> 
+		) T1
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjGrpNm">
+					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqNm">
+					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNm">
+					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+					AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<sql id="selectDpl1100NonAssReqList">
+		SELECT
+			ROWNUM RN
+			, T1.REQ_ID AS REQ_ID
+			, T1.REQ_NM AS REQ_NM
+			, T1.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+			, T1.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+			, T1.REQ_USR_EMAIL AS REQ_USR_EMAIL
+			, T1.REQ_USR_NUM AS REQ_USR_NUM
+			, T1.REQ_USR_IMG_ID AS REQ_USR_IMG_ID
+			, T1.REQ_ORD AS REQ_ORD
+			, T1.REQ_PRO_TYPE AS REQ_PRO_TYPE
+			, T1.REQ_PRO_TYPE_NM AS REQ_PRO_TYPE_NM
+			, T1.REQ_DTM AS REQ_DTM
+			, T1.REQ_PW AS REQ_PW
+			, T1.PROCESS_ID AS PROCESS_ID
+			, T1.FLOW_ID AS FLOW_ID
+		FROM (
+			SELECT
+				 A.REQ_ID AS REQ_ID
+				, A.REQ_NM AS REQ_NM
+				, A.REQ_DESC AS REQ_DESC
+				, A.REQ_USR_DEPT_ID AS REQ_USR_DEPT_ID
+				, A.REQ_USR_DEPT_NM AS REQ_USR_DEPT_NM
+				, A.REQ_USR_EMAIL AS REQ_USR_EMAIL
+				, A.REQ_USR_NUM AS REQ_USR_NUM
+				, SF_STM3000_USR_INFO(A.REQ_USR_ID, '6')  AS REQ_USR_IMG_ID
+				, A.REQ_ORD AS REQ_ORD
+				, A.REQ_PRO_TYPE AS REQ_PRO_TYPE
+				, SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', A.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM
+				, TO_CHAR(A.REQ_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REQ_DTM
+				, NVL2(A.REQ_PW, 'Y', 'N') AS REQ_PW
+				, A.PROCESS_ID AS PROCESS_ID
+				, A.FLOW_ID AS FLOW_ID
+		    FROM REQ4100 A 
+		    WHERE 1=1
+		    AND A.PRJ_GRP_ID = #prjGrpId#
+			AND A.PRJ_ID = #prjId#
+			AND A.REQ_PRO_TYPE != '01'
+			AND NOT EXISTS (
+				SELECT 
+					B.REQ_ID AS REQ_ID
+				FROM DPL1100 B
+	            WHERE 1 = 1
+	            AND B.PRJ_ID = A.PRJ_ID
+	            AND B.DPL_ID = #dplId#
+	            AND B.REQ_ID = A.REQ_ID
+			)
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY A.REQ_DTM DESC
+			</isEmpty> 
+		) T1
+		WHERE 1 = 1
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="reqProTypeCd">
+					AND	T1.REQ_PRO_TYPE = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjNm">
+					AND	T1.PRJ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="prjGrpNm">
+					AND	T1.PRJ_GRP_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqNm">
+					AND	T1.REQ_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDesc">
+				<![CDATA[
+					AND	REGEXP_REPLACE(T1.REQ_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
+				]]>
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrNm">
+					AND	T1.REQ_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqUsrEmail">
+					AND	T1.REQ_USR_EMAIL LIKE '%'|| #searchTargetData# ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="reqDtm">
+					<isNotEmpty property="searchStartDt">
+						AND	T1.REQ_DTM &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+					<isNotEmpty property="searchEndDt">
+						AND	T1.REQ_DTM &lt;=   TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<select id="dpl1100DAO.selectDpl1100ReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<isNotEmpty property="type">
+				<isEqual	property="type" compareValue="ass">
+					<include refid="selectDpl1100AssReqList"/>
+				</isEqual>
+				<isEqual	property="type" compareValue="non">
+					<include refid="selectDpl1100NonAssReqList"/>
+				</isEqual>
+			</isNotEmpty>
+		) Z
+    </select>
+    
+     
+    <select id="dpl1100DAO.selectDpl1100ReqList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT 
+			Z.*
+		FROM ( 
+			<isNotEmpty property="type">
+				<isEqual	property="type" compareValue="ass">
+					<include refid="selectDpl1100AssReqList"/>
+				</isEqual>
+				<isEqual	property="type" compareValue="non">
+					<include refid="selectDpl1100NonAssReqList"/>
+				</isEqual>
+			</isNotEmpty>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <insert id="dpl1100DAO.insertDpl1100ReqInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO DPL1100 
+			(
+					PRJ_ID			,REQ_ID			,PROCESS_ID		,FLOW_ID
+				,	DPL_ID			,REG_DTM		,REG_USR_ID		,REG_USR_IP
+				,	MODIFY_DTM		,MODIFY_USR_ID	,MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#prjId#					,#reqId#			,#processId#		,#flowId#
+				,	#dplId#					,CURRENT_TIMESTAMP			,#regUsrId#			,#regUsrIp#
+				,	CURRENT_TIMESTAMP	,#regUsrId#			,#regUsrIp#
+			)		
+		]]>
+	</insert>
+
+	
+    <delete id="dpl1100DAO.deleteDpl1100ReqInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE FROM DPL1100 A 
+			WHERE 1=1
+				AND		A.PRJ_ID		= #prjId#
+				AND		A.REQ_ID		= #reqId#
+				AND		A.PROCESS_ID 	= #processId#
+				AND		A.FLOW_ID 		= #flowId#
+		]]>
+		<isNotEmpty property="dplId">
+				AND 	A.DPL_ID 		= #dplId#
+		</isNotEmpty>
+	</delete>
+
+	
+	
+	<sql id="selectDpl1100ExistDplList">
+		SELECT T.*, ROWNUM RN
+		FROM
+		(
+			SELECT 
+						Z.PRJ_ID		
+	                , 	Z.DPL_ID		
+	                , 	W.DPL_NM		
+	                , 	W.DPL_VER		
+	                , 	W.DPL_DT		
+                  	,	W.DPL_USR_ID 	
+			        , 	SF_STM3000_USR_INFO(W.DPL_USR_ID, 1) DPL_USR_NM 
+	                , 	W.DPL_STS_CD	
+	                , 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00001', W.DPL_STS_CD, '1') AS DPL_STS_NM	
+                  	, 	W.DPL_TYPE_CD 	
+			        , 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00003', W.DPL_TYPE_CD, '1') AS DPL_TYPE_NM 
+					,	W.DPL_DESC		
+	                , 	Z.PROCESS_ID	
+					, 	V.PROCESS_NM	
+					, 	Y.FLOW_ID		
+					, 	Y.FLOW_NM		
+	                , 	Z.REQ_ID		
+	                , 	X.REQ_ORD		
+					, 	X.REQ_NM		
+			<![CDATA[ 
+		    		, 	REGEXP_REPLACE (X.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC	 
+		    ]]>
+					, 	X.REQ_CHARGER_ID	
+					, 	SF_STM3000_USR_INFO(X.REQ_CHARGER_ID, '1') AS REQ_CHARGER_NM	
+					, 	X.REQ_USR_ID		
+					, 	NVL(X.REQ_USR_NM, SF_STM3000_USR_INFO(X.REQ_USR_ID, '1')) AS REQ_USR_NM	
+					, 	TO_CHAR(X.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM	
+					, 	NVL2(X.REQ_ST_DTM, TO_CHAR(X.REQ_ST_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DTM	
+	    		   	, 	NVL2(X.REQ_ED_DTM, TO_CHAR(X.REQ_ED_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DTM	
+					, 	NVL2(X.REQ_ST_DU_DTM, TO_CHAR(X.REQ_ST_DU_DTM, 'YYYY-MM-DD') , '') REQ_ST_DU_DTM	
+					, 	NVL2(X.REQ_ED_DU_DTM, TO_CHAR(X.REQ_ED_DU_DTM, 'YYYY-MM-DD') , '') REQ_ED_DU_DTM	
+					,	X.REQ_TYPE_CD 	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', X.REQ_TYPE_CD, '1') AS REQ_TYPE_NM 
+					, 	X.REQ_PRO_TYPE	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', X.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM	
+					, 	X.REQ_NEW_TYPE	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', X.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM	
+					,	X.REQ_COMPLETE_RATIO	
+					,	X.REQ_FP				
+			    	,	X.REQ_EX_FP				
+					,	X.SCL_CD				
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00011', X.SCL_CD, '1') AS SCL_NM	
+					,	X.PIA_CD				
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', X.PIA_CD, '1') AS PIA_NM	
+					,	X.LAB_INP				
+					,	X.MILESTONE_ID			
+					,   X.ORG_REQ_ID			
+					,	TO_CHAR(X.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM 
+					,	X.REG_USR_ID		
+				    ,	X.REG_USR_IP		
+				    ,	TO_CHAR(X.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM	
+				    ,	X.MODIFY_USR_ID		
+				    ,	X.MODIFY_USR_IP		
+			
+			FROM 		DPL1100 Z 
+					, 	PRJ1101 Y 
+					, 	REQ4100 X 
+					, 	DPL1000 W 
+					, 	PRJ1100 V 
+			WHERE 1=1
+			AND Z.PRJ_ID = #prjId#
+			<isNotEmpty property="dplId">
+				AND Z.DPL_ID = #dplId#
+			</isNotEmpty>
+			<isNotEmpty property="reqId">
+				AND Z.REQ_ID = #reqId#
+			</isNotEmpty>
+			AND Z.PRJ_ID = Y.PRJ_ID
+			AND Z.PROCESS_ID = Y.PROCESS_ID
+			AND Z.FLOW_ID = Y.FLOW_ID
+			AND Z.PRJ_ID = X.PRJ_ID
+			AND Z.REQ_ID = X.REQ_ID
+			AND Z.PRJ_ID = W.PRJ_ID
+			AND Z.DPL_ID = W.DPL_ID
+			AND Z.PRJ_ID = V.PRJ_ID
+	        AND Z.PROCESS_ID = V.PROCESS_ID
+        ) T
+        WHERE 1=1
+        <isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="reqNm"> 
+					AND		UPPER( T.REQ_NM ) like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqDesc"> 
+					AND		UPPER( T.REQ_DESC )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqUsrNm"> 
+					AND		UPPER( T.REQ_USR_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqChargerNm"> 
+					AND		UPPER( T.REQ_CHARGER_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="processNm"> 
+					AND		UPPER( T.PROCESS_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="flowNm"> 
+					AND		UPPER( T.FLOW_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqOrd"> 
+					AND		UPPER( T.REQ_ORD )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+				<isEqual property="searchSelect" compareValue="reqProType">
+					AND		T.REQ_PRO_TYPE = #searchCd#	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqNewType">
+					AND		T.REQ_NEW_TYPE = #searchCd#	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqTypeCd">
+					AND		T.REQ_TYPE_CD = #searchCd#	
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+        
+		ORDER BY TO_NUMBER(REGEXP_REPLACE(T.REQ_ORD, '[^0-9]')) DESC NULLS LAST, T.REQ_DTM, T.REQ_ID
+	</sql>
+
+	
+	<sql id="selectDpl1100NotExistDplList">
+		SELECT T.*, ROWNUM RN
+		FROM
+		(
+			SELECT
+						Z.PRJ_ID 		
+					, 	Z.PROCESS_ID 	
+					, 	V.PROCESS_NM 	
+					, 	Y.FLOW_ID 		
+					, 	Y.FLOW_NM 		
+					, 	Z.REQ_ID 		
+					, 	X.REQ_ORD 		
+					, 	X.REQ_NM 		
+				<![CDATA[ 
+		    		, 	REGEXP_REPLACE (X.REQ_DESC ,'</br>|<br>|<br/>' , ' ' ) AS REQ_DESC     
+		    	]]>
+					, 	X.REQ_CHARGER_ID 	
+					, 	SF_STM3000_USR_INFO(X.REQ_CHARGER_ID, '1') AS REQ_CHARGER_NM 
+					, 	X.REQ_USR_ID 		
+					, 	NVL(X.REQ_USR_NM, SF_STM3000_USR_INFO(X.REQ_USR_ID, '1')) AS REQ_USR_NM	
+					, 	TO_CHAR(X.REQ_DTM, 'YYYY-MM-DD') AS REQ_DTM	
+					, 	NVL2(X.REQ_ST_DTM, TO_CHAR(X.REQ_ST_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ST_DTM 
+	    		   	, 	NVL2(X.REQ_ED_DTM, TO_CHAR(X.REQ_ED_DTM, 'YYYY-MM-DD HH24:MI') , '') REQ_ED_DTM 
+					, 	NVL2(X.REQ_ST_DU_DTM, TO_CHAR(X.REQ_ST_DU_DTM, 'YYYY-MM-DD') , '') REQ_ST_DU_DTM 
+					, 	NVL2(X.REQ_ED_DU_DTM, TO_CHAR(X.REQ_ED_DU_DTM, 'YYYY-MM-DD') , '') REQ_ED_DU_DTM 
+					, 	X.REQ_TYPE_CD	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00012', X.REQ_TYPE_CD, '1') AS REQ_TYPE_NM 		
+					, 	X.REQ_PRO_TYPE	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00008', X.REQ_PRO_TYPE, '1') AS REQ_PRO_TYPE_NM 	
+					, 	X.REQ_NEW_TYPE	
+					, 	SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00009', X.REQ_NEW_TYPE, '1') AS REQ_NEW_TYPE_NM 	
+					,	X.REQ_COMPLETE_RATIO	
+					,	X.REQ_FP				
+			    	,	X.REQ_EX_FP				
+					,	X.SCL_CD				
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'REQ00011', X.SCL_CD, '1') AS SCL_NM	
+					,	X.PIA_CD				
+					,   SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', X.PIA_CD, '1') AS PIA_NM	
+					,	X.LAB_INP				
+					,	X.MILESTONE_ID			
+					,   X.ORG_REQ_ID			
+					,	TO_CHAR(X.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM 
+					,	X.REG_USR_ID		
+				    ,	X.REG_USR_IP		
+				    ,	TO_CHAR(X.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM	
+				    ,	X.MODIFY_USR_ID		
+				    ,	X.MODIFY_USR_IP		
+	
+			FROM 		REQ6001 Z 
+					, 	PRJ1101 Y 
+					, 	REQ4100 X 
+					, 	PRJ1100 V 
+			WHERE 1=1
+			AND Z.PRJ_ID = #prjId#
+			AND Z.CHG_FLOW_ID IS NOT NULL
+			AND Z.PRJ_ID = Y.PRJ_ID
+			AND Z.PROCESS_ID = Y.PROCESS_ID
+			AND Z.CHG_FLOW_ID = Y.FLOW_ID
+			AND Y.FLOW_DPL_CD = '01'
+			AND Z.PRJ_ID = X.PRJ_ID
+			AND Z.REQ_ID = X.REQ_ID
+			AND Z.PRJ_ID = V.PRJ_ID
+	        AND Z.PROCESS_ID = V.PROCESS_ID
+			AND NOT EXISTS
+				(
+					SELECT DP.DPL_ID
+				    FROM DPL1100 DP
+				    WHERE 1=1
+				    AND DP.DPL_ID = #dplId#		
+				    AND DP.PRJ_ID = Z.PRJ_ID
+				    AND DP.REQ_ID = Z.REQ_ID
+				    AND DP.PROCESS_ID = Z.PROCESS_ID
+				    AND DP.FLOW_ID = Y.FLOW_ID
+				)
+		) T	
+		WHERE 1=1
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="reqNm"> 
+					AND		UPPER( T.REQ_NM ) like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqDesc"> 
+					AND		UPPER( T.REQ_DESC )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqUsrNm"> 
+					AND		UPPER( T.REQ_USR_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqChargerNm"> 
+					AND		UPPER( T.REQ_CHARGER_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="processNm"> 
+					AND		UPPER( T.PROCESS_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="flowNm"> 
+					AND		UPPER( T.FLOW_NM )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqOrd"> 
+					AND		UPPER( T.REQ_ORD )  like '%'|| UPPER( #searchTxt# )  ||'%'	
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="searchSelect">
+			<isNotEmpty property="searchCd">
+				<isEqual property="searchSelect" compareValue="reqProType">
+					AND		T.REQ_PRO_TYPE = #searchCd#	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqNewType">
+					AND		T.REQ_NEW_TYPE = #searchCd#	
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="reqTypeCd">
+					AND		T.REQ_TYPE_CD = #searchCd#	
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+			
+		ORDER BY TO_NUMBER(REGEXP_REPLACE(T.REQ_ORD, '[^0-9]')) DESC NULLS LAST, T.REQ_DTM, T.REQ_ID
+	</sql>
+
+	
+	<select id="dpl1100DAO.selectDpl1100ExistDplList" parameterClass="dpl1100VO" resultClass="egovMap"> 
+			
+			SELECT *
+			FROM
+				(
+					<include refid="selectDpl1100ExistDplList"/>
+		    	)
+		   <!-- 
+		   		페이징 처리가 필요여부 구분값을체크
+		   		배포계획에 배정된 요구사항 목록 조회시 페이징 처리 필요
+		   --> 	
+		   <isNotEmpty property="pagingYn">
+				<isEqual property="pagingYn" compareValue="Y">
+						WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+				</isEqual>
+			</isNotEmpty>	
+	</select>
+	
+	
+    <select id="dpl1100DAO.selectDpl1100ExistDplListCnt" parameterClass="dpl1100VO"  resultClass="java.lang.Integer">
+	    	
+	    	SELECT
+					COUNT(*)
+			FROM	(
+						<include refid="selectDpl1100ExistDplList"/>
+					) T1
+    </select>
+	
+	
+	<!-- 배포계획 미배정된 요구사항 목록을 조회한다.
+		  미배정 요구사항 : 배포계획 저장이 있는 작업흐름에 속해있으며, 아직 배포계획에 배정되지 않은 요구사항
+	 -->
+	<select id="dpl1100DAO.selectDpl1100NotExistDplList" parameterClass="dpl1100VO" resultClass="egovMap"> 
+			
+			SELECT *
+			FROM
+				(
+					<include refid="selectDpl1100NotExistDplList"/>
+		    	)
+	    	<!-- 
+		   		페이징 처리가 필요여부 구분값을체크
+		   		배포계획에 미배정된 요구사항 목록 조회시 페이징 처리 필요
+		   	--> 	
+		   	<isNotEmpty property="pagingYn">
+				<isEqual property="pagingYn" compareValue="Y">
+						WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+				</isEqual>
+			</isNotEmpty>
+	</select>
+	
+	
+    <select id="dpl1100DAO.selectDpl1100NotExistDplListCnt" parameterClass="dpl1100VO"  resultClass="java.lang.Integer">
+	    	
+	    	SELECT
+					COUNT(*)
+			FROM	(
+						<include refid="selectDpl1100NotExistDplList"/>
+					) T1
+    </select>
+    
+    
+    
+	<insert id="dpl1100DAO.insertDpl1100ReqDplInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			INSERT INTO DPL1100 A 
+			(
+					A.PRJ_ID			,A.REQ_ID			,A.PROCESS_ID		,A.FLOW_ID
+				,	A.DPL_ID			,A.REG_DTM			,A.REG_USR_ID		,A.REG_USR_IP
+				,	A.MODIFY_DTM		,A.MODIFY_USR_ID	,A.MODIFY_USR_IP
+			)
+			VALUES
+			(
+					#prjId#				,#reqId#			,#processId#		,#flowId#
+				,	#dplId#				,SYSDATE			,#regUsrId#			,#regUsrIp#
+				,	SYSDATE				,#regUsrId#			,#regUsrIp#
+			)		
+		
+		]]>
+	</insert>
+	
+	
+	
+	<delete id="dpl1100DAO.deleteDpl1100ReqDplInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			DELETE FROM DPL1100 A 
+			WHERE 1=1
+				AND		A.PRJ_ID		= #prjId#
+				AND		A.REQ_ID		= #reqId#
+				AND		A.PROCESS_ID 	= #processId#
+				AND		A.FLOW_ID 		= #flowId#
+		]]>
+		<isNotEmpty property="dplId">
+				AND 	A.DPL_ID 		= #dplId#
+		</isNotEmpty>
+	</delete>
+
+	
+	
+	<select id="dpl1100DAO.selectDpl1100ReqDplList" parameterClass="java.util.Map" resultClass="egovMap">
+			
+				SELECT
+							A.PRJ_ID		
+						,	A.REQ_ID		
+						,	A.PROCESS_ID	
+						,	A.FLOW_ID		
+						,	A.DPL_ID		
+						,	B.DPL_NM		
+						,	B.DPL_VER		
+						,	B.DPL_DESC		
+						,	B.DPL_STS_CD	
+						
+				FROM 		DPL1100 A	
+						, 	DPL1000 B	
+				WHERE 1=1
+				AND A.PRJ_ID = #prjId#  
+				AND A.REQ_ID = #reqId#
+				AND A.PROCESS_ID = #processId#
+				<isEmpty property="dshType">
+					<isNotEmpty property="flowId">
+						AND A.FLOW_ID = #flowId#
+					</isNotEmpty>
+				</isEmpty>
+				<isNotEmpty property="dplId">
+					AND A.DPL_ID = #dplId#
+				</isNotEmpty>
+				AND A.PRJ_ID = B.PRJ_ID
+				AND A.DPL_ID = B.DPL_ID 
+	</select>
+	
+	
+	
+	<update id="dpl1100DAO.updateDpl1200ReqDplInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			
+			UPDATE DPL1100 A  
+			SET 
+				DPL_ID = #dplId#
+				,MODIFY_USR_ID = #modifyUsrId#
+				,MODIFY_DTM = sysdate
+				,MODIFY_USR_IP = #modifyUsrIp#
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.REQ_ID = #reqId#
+			AND A.PROCESS_ID = #processId# 
+			AND A.FLOW_ID = #flowId#
+		]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<update id="dpl1100DAO.updateDpl1100Dpl" parameterClass="java.util.Map">
+		<![CDATA[ 
+			
+			UPDATE REQ4100
+			SET 
+			
+		]]>
+			<isEqual property="dplId" compareValue="null">
+				DPL_ID = null,  		  
+			</isEqual>
+			<isNotEqual property="dplId" compareValue="null">
+				DPL_ID = #dplId#,  		  
+			</isNotEqual>
+		<![CDATA[ 
+				MODIFY_USR_ID = #modifyUsrId#,  		 
+				MODIFY_DTM = sysdate , 		
+				MODIFY_USR_IP = #modifyUsrIp# 
+				
+			WHERE PRJ_ID = #selPrjId#   
+			AND REQ_ID = #reqId#  
+		]]>
+	</update>
+	
+	
+	<insert id="dpl1100DAO.insertDpl1100logHistory" parameterClass="java.util.Map">
+		
+		<![CDATA[ 
+			INSERT    INTO  DPL1100
+				   (
+				            PRJ_ID             ,  
+				            DPL_ID             ,  
+				            DPL_SEQ            ,  
+				            BLD_NUM            ,  
+				            REG_DTM            ,  
+				            REG_USR_ID         ,  
+				            REG_USR_IP         , 
+				            JEN_ID             ,
+				            LIC_GRP_ID 
+				   )
+			VALUES
+				   (
+			                #prjId#, 
+			                #dplId#, 
+			                ( SELECT 
+			                       NVL( MAX(A.DPL_SEQ) , 0 ) +1 
+			                  FROM 
+			                        DPL1100 A 
+			                  WHERE A.PRJ_ID = #prjId# 
+			                    AND A.DPL_ID = #dplId# 
+			                    AND A.JEN_ID = #jenId# )
+			                , 
+			                #bldNum#, 
+			                SYSDATE, 
+			                #regUsrId#, 
+			                #regUsrIp#,
+			                #jenId# ,
+			                #licGrpId#
+				   )
+		]]>
+	</insert>
+	
+	
+	
+	<select id="dpl1100DAO.selectDpl1100ExistBuildInfo" parameterClass="java.util.Map" resultClass="java.lang.String">
+			
+				SELECT 
+				       NVL(1,0) AS USE_YN 
+				  FROM 
+					   DPL1100 A 
+				 WHERE A.PRJ_ID = #prjId#  
+				   AND A.DPL_ID = #dplId# 
+				   AND A.LIC_GRP_ID = #licGrpId#
+				   AND ROWNUM = 1 
+	</select>
+	
+</sqlMap>

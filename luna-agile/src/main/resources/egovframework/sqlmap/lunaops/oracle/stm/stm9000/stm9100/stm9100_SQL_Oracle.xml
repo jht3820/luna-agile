@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm9100DAO">
+	<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	
+	<sql id="selectStm9100JobListBase">
+		<![CDATA[
+			SELECT
+					ROWNUM RN
+				,	SUB1.LIC_GRP_ID
+				,	SUB1.JEN_ID
+				,	SUB1.JEN_NM 
+				,	SUB1.JEN_USR_ID 
+				,	SUB1.JEN_USR_TOK 
+				,	SUB1.JEN_URL 
+				,	SUB1.JOB_ID
+				,	SUB1.JOB_RESTORE_ID
+				,	SUB1.JOB_TOK
+				,	SUB1.JOB_TYPE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'DPL00002', SUB1.JOB_TYPE_CD, '1') AS JOB_TYPE_NM
+				,	SUB1.JOB_PARAMETER
+				,	SUB1.JOB_DESC
+				,	SUB1.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', SUB1.USE_CD, '1') AS USE_NM 
+				,	SUB1.REG_DTM 
+				,	SUB1.REG_USR_ID 
+				,	SUB1.REG_USR_IP 
+				,	SUB1.MODIFY_DTM 
+				,	SUB1.MODIFY_USR_ID 
+				,	SUB1.MODIFY_USR_IP      
+			FROM
+			(
+				SELECT
+						A.LIC_GRP_ID
+					,	A.JEN_ID
+					,	B.JEN_NM 
+					,	B.JEN_USR_ID 
+					,	B.JEN_USR_TOK 
+					,	B.JEN_URL 
+					,	A.JOB_ID
+					,	A.JOB_RESTORE_ID
+					,	A.JOB_TOK
+					,	A.JOB_TYPE_CD
+					,	A.JOB_PARAMETER
+					,	A.JOB_DESC
+					,	A.USE_CD
+					,	A.REG_DTM 
+					,	A.REG_USR_ID 
+					,	A.REG_USR_IP 
+					,	A.MODIFY_DTM 
+					,	A.MODIFY_USR_ID 
+					,	A.MODIFY_USR_IP              
+				FROM STM9001 A LEFT JOIN STM9000 B
+				ON(A.LIC_GRP_ID = B.LIC_GRP_ID AND A.JEN_ID = B.JEN_ID)
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND B.DEL_CD = '02'
+			) SUB1
+	    	WHERE 1=1
+		]]>
+		<isNotEmpty property="projectJenkinsCheck">
+			<isEqual property="projectJenkinsCheck" compareValue="Y">
+				AND	EXISTS (
+	            	SELECT Z.*
+	                FROM STM9002 Z
+	                WHERE 1=1
+	                AND Z.LIC_GRP_ID = SUB1.LIC_GRP_ID
+	                AND Z.JEN_ID = SUB1.JEN_ID
+	                AND Z.JOB_ID = SUB1.JOB_ID
+	                AND Z.PRJ_ID = #prjId#
+	            )
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="jenId">
+			AND	SUB1.JEN_ID = #jenId#
+		</isNotEmpty>
+		<isNotEmpty property="useCd">
+			AND	SUB1.USE_CD = #useCd#
+		</isNotEmpty>
+		<isNotEmpty property="jobTypeCd">
+			AND	SUB1.JOB_TYPE_CD = #jobTypeCd#
+		</isNotEmpty>
+		<isNotEmpty property="searchTargetData">
+			<isNotEmpty property="searchTargetId">
+				<isEqual property="searchTargetId" compareValue="jenNm">
+					AND	SUB1.JEN_NM like '%'|| UPPER(#searchTargetData#)  ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobId">
+					AND	UPPER( SUB1.JOB_ID ) like '%'|| UPPER(#searchTargetData#)  ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobDesc">
+					AND	SUB1.JOB_DESC like '%'|| #searchTargetData#  ||'%'
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="jobTypeCd">
+					AND	SUB1.JOB_TYPE_CD = #searchTargetData#
+				</isEqual>
+				<isEqual property="searchTargetId" compareValue="useCd">
+					AND	SUB1.USE_CD = #searchTargetData#
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isNotEmpty property="paramSortFieldId">
+			<isNotEmpty property="sortDirection">
+				ORDER BY $paramSortFieldId$
+				<isEqual property="sortDirection" compareValue="desc">
+					DESC
+				</isEqual>
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="paramSortFieldId">
+			ORDER BY SUB1.REG_DTM DESC
+		</isEmpty>
+    </sql>
+    
+    
+    <select id="stm9100DAO.selectStm9100JobList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT SUB2.*
+		FROM
+		(
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
+		WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+    
+    
+    <select id="stm9100DAO.selectStm9100JobListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*)
+		FROM 
+		(
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
+    </select>
+    
+	
+	
+	<delete id="stm9100DAO.deleteStm9100JobInfo" parameterClass="java.util.Map">
+		
+		DELETE FROM	STM9001 
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId#
+		AND	JEN_ID = #jenId#
+		AND	JOB_ID = #jobId# 
+	</delete>
+    
+     
+    <select id="stm9100DAO.selectStm9100JobNormalList" parameterClass="java.util.Map"  resultClass="egovMap">
+	    
+		SELECT SUB2.*
+		FROM
+		(
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
+    </select>
+    
+     
+	<select id="stm9100DAO.selectStm9100JobInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		
+		SELECT SUB2.*
+		FROM (
+			<include refid="selectStm9100JobListBase"/>
+		) SUB2
+		WHERE 1=1
+		AND SUB2.JOB_ID = #jobId#
+	</select>
+	
+	  
+	<insert id="stm9100DAO.insertStm9100JobInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			 
+			INSERT INTO STM9001
+			(
+					LIC_GRP_ID,		JEN_ID,			JOB_ID,			JOB_RESTORE_ID
+				,	JOB_TOK,		JOB_TYPE_CD,	JOB_PARAMETER,	JOB_DESC,		USE_CD 
+				,	REG_DTM, 		REG_USR_ID,		REG_USR_IP 
+				, 	MODIFY_DTM,		MODIFY_USR_ID, 	MODIFY_USR_IP 
+			)
+			VALUES
+			(
+					#licGrpId#,		#jenId#, 		#jobId#,			#jobRestoreId#
+				,	#jobTok#, 		#jobTypeCd#,	#jobParameter#,		#jobDesc#,		#useCd# 
+				,	SYSDATE, 		#regUsrId#,		#regUsrIp# 
+				,	SYSDATE,  		#modifyUsrId#, 	#modifyUsrIp#
+			)
+		]]>
+	</insert>
+    
+	
+	<update id="stm9100DAO.updateStm9100JobInfo" parameterClass="java.util.Map">
+		 
+		UPDATE STM9001 SET 
+				JEN_ID 				= #jenId#  
+			,	JOB_ID 				= #jobId# 
+			,	JOB_RESTORE_ID 		= #jobRestoreId#
+			,	JOB_TOK 			= #jobTok#
+			,	JOB_TYPE_CD 		= #jobTypeCd#
+			,	JOB_PARAMETER 		= #jobParameter#
+			,	JOB_DESC 			= #jobDesc#
+			,	USE_CD 				= #useCd# 
+			,	MODIFY_DTM 			= SYSDATE 
+			,	MODIFY_USR_ID 		= #modifyUsrId# 
+			,	MODIFY_USR_IP 		= #modifyUsrIp# 
+			WHERE 1=1
+			AND	LIC_GRP_ID = #licGrpId# 
+			AND	JEN_ID = #jenId# 
+			AND	JOB_ID = #jobId#
+	</update>
+	
+	
+	<select id="stm9100DAO.selectStm9100JobUseCountInfo" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		 
+		SELECT
+			COUNT(1) AS CNT
+		FROM STM9001 A
+		WHERE 1=1
+		AND	LIC_GRP_ID = #licGrpId#
+		AND	JEN_ID = #jenId# 
+		AND JOB_ID = #jobId#
+		AND	ROWNUM = 1
+	</select>
+	
+	
+	<update id="stm9100DAO.updateJen9100JenkinsJobRestoreInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			UPDATE STM9001 SET
+				JOB_RESTORE_ID = null
+			WHERE 1=1
+			AND	LIC_GRP_ID 		= #licGrpId#
+			AND JEN_ID 			= #jenId#
+			AND JOB_RESTORE_ID	= #jobId#
+		]]>	
+	</update>
+    
+</sqlMap>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="usr4000DAO">
+
+	<!--  in / out class define  -->
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="usr4000VO"	type="kr.opensoftlab.lunaops.usr.usr4000.usr4000.vo.Usr4000VO"/>
+
+	<!-- Map Define -->
+   	<resultMap id="resultMapselectUsr4000" class="usr4000VO">
+		<result property="rn"  					column="RN"/>
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="usrId"				column="USR_ID"/>
+		<result property="webhookId"			column="WEBHOOK_ID"/>
+		<result property="webhookNm"			column="WEBHOOK_NM"/>
+		<result property="platformTypeCd"		column="PLATFORM_TYPE_CD"/>
+		<result property="platformTypeNm"		column="PLATFORM_TYPE_NM"/>
+		<result property="webhookUrl"			column="WEBHOOK_URL"/>
+		<result property="whkReqDeleteCd"		column="WHK_REQ_DELETE_CD"/>
+		<result property="whkReqDeleteNm"		column="WHK_REQ_DELETE_NM"/>
+		<result property="whkFlowChgCd"			column="WHK_FLOW_CHG_CD"/>
+		<result property="whkFlowChgNm"			column="WHK_FLOW_CHG_NM"/>
+		<result property="whkNewAcceptCd"		column="WHK_NEW_ACCEPT_CD"/>
+		<result property="whkNewAcceptNm"		column="WHK_NEW_ACCEPT_NM"/>
+		<result property="whkNewRejectCd"		column="WHK_NEW_REJECT_CD"/>
+		<result property="whkNewRejectNm"		column="WHK_NEW_REJECT_NM"/>
+		<result property="whkSignRequestCd"		column="WHK_SIGN_REQUEST_CD"/>
+		<result property="whkSignRequestNm"		column="WHK_SIGN_REQUEST_NM"/>
+		<result property="whkSignAcceptCd"		column="WHK_SIGN_ACCEPT_CD"/>
+		<result property="whkSignAcceptNm"		column="WHK_SIGN_ACCEPT_NM"/>
+		<result property="whkSignRejectCd"		column="WHK_SIGN_REJECT_CD"/>
+		<result property="whkSignRejectNm"		column="WHK_SIGN_REJECT_NM"/>
+		<result property="whkUserChgCd"			column="WHK_USER_CHG_CD"/>
+		<result property="whkUserChgNm"			column="WHK_USER_CHG_NM"/>
+		<result property="whkReqDoneCd"			column="WHK_REQ_DONE_CD"/>
+		<result property="whkReqDoneNm"			column="WHK_REQ_DONE_NM"/>
+		<result property="whkMemoCd"			column="WHK_MEMO_CD"/>
+		<result property="whkMemoNm"			column="WHK_MEMO_NM"/>
+		<result property="useCd"				column="USE_CD"/>
+		<result property="useNm"				column="USE_NM"/>
+		<result property="regDtm"				column="REG_DTM"/>
+		<result property="regUsrId"				column="REG_USR_ID"/>
+		<result property="regUsrIp"				column="REG_USR_IP"/>
+		<result property="modifyDtm"			column="MODIFY_DTM"/>
+		<result property="modifyUsrId"			column="MODIFY_USR_ID"/>
+		<result property="modifyUsrIp"			column="MODIFY_USR_IP"/>
+    </resultMap>
+    
+	<sql id="usr4000DAO.selectUsr4000UsrWhkListRef">
+		<![CDATA[
+			SELECT 
+					RN
+				,	T1.LIC_GRP_ID
+				,	T1.USR_ID
+				,	T1.WEBHOOK_ID
+				,	T1.WEBHOOK_NM
+				,	T1.PLATFORM_TYPE_CD
+				,	T1.PLATFORM_TYPE_NM
+				,	T1.WEBHOOK_URL
+				,	T1.WHK_REQ_DELETE_CD
+				,	T1.WHK_REQ_DELETE_NM
+				,	T1.WHK_FLOW_CHG_CD
+				,	T1.WHK_FLOW_CHG_NM
+				,	T1.WHK_NEW_ACCEPT_CD
+				,	T1.WHK_NEW_ACCEPT_NM
+				,	T1.WHK_NEW_REJECT_CD
+				,	T1.WHK_NEW_REJECT_NM
+				,	T1.WHK_SIGN_REQUEST_CD
+				,	T1.WHK_SIGN_REQUEST_NM
+				,	T1.WHK_SIGN_ACCEPT_CD
+				,	T1.WHK_SIGN_ACCEPT_NM
+				,	T1.WHK_SIGN_REJECT_CD
+				,	T1.WHK_SIGN_REJECT_NM
+				,	T1.WHK_USER_CHG_CD
+				,	T1.WHK_USER_CHG_NM
+				,	T1.WHK_REQ_DONE_CD
+				,	T1.WHK_REQ_DONE_NM
+				,	T1.WHK_MEMO_CD
+				,	T1.WHK_MEMO_NM
+				,	T1.USE_CD
+				,	T1.USE_NM
+				,	T1.REG_DTM
+			    ,	T1.REG_USR_ID
+			    ,	T1.REG_USR_IP
+			    ,	T1.MODIFY_DTM
+			    ,	T1.MODIFY_USR_ID
+			    ,	T1.MODIFY_USR_IP
+			FROM
+			(
+				SELECT
+						ROWNUM AS RN 
+					,	A.LIC_GRP_ID
+					,	A.USR_ID
+					,	A.WEBHOOK_ID
+					,	A.WEBHOOK_NM
+					,	A.PLATFORM_TYPE_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00004' AND SUB_CD = A.PLATFORM_TYPE_CD) AS PLATFORM_TYPE_NM
+					,	A.WEBHOOK_URL
+					,	A.WHK_REQ_DELETE_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_REQ_DELETE_CD) AS WHK_REQ_DELETE_NM
+					,	A.WHK_FLOW_CHG_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_FLOW_CHG_CD) AS WHK_FLOW_CHG_NM
+					,	A.WHK_NEW_ACCEPT_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_NEW_ACCEPT_CD) AS WHK_NEW_ACCEPT_NM
+					,	A.WHK_NEW_REJECT_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_NEW_REJECT_CD) AS WHK_NEW_REJECT_NM
+					,	A.WHK_SIGN_REQUEST_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_SIGN_REQUEST_CD) AS WHK_SIGN_REQUEST_NM
+					,	A.WHK_SIGN_ACCEPT_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_SIGN_ACCEPT_CD) AS WHK_SIGN_ACCEPT_NM
+					,	A.WHK_SIGN_REJECT_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_SIGN_REJECT_CD) AS WHK_SIGN_REJECT_NM
+					,	A.WHK_USER_CHG_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_USER_CHG_CD) AS WHK_USER_CHG_NM
+					,	A.WHK_REQ_DONE_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_REQ_DONE_CD) AS WHK_REQ_DONE_NM
+					,	A.WHK_MEMO_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.WHK_REQ_DONE_CD) AS WHK_MEMO_NM
+					,	A.USE_CD
+					,	(SELECT SUB_CD_NM FROM STM4001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MST_CD = 'CMM00001' AND SUB_CD = A.USE_CD) AS USE_NM
+					,	TO_CHAR(A.REG_DTM, 'YYYY-MM-DD HH24:MI:SS') AS REG_DTM
+				    ,	A.REG_USR_ID
+				    ,	A.REG_USR_IP
+				    ,	TO_CHAR(A.MODIFY_DTM, 'YYYY-MM-DD HH24:MI:SS') AS MODIFY_DTM
+				    ,	A.MODIFY_USR_ID
+				    ,	A.MODIFY_USR_IP
+				FROM USR4000 A
+				WHERE 1=1
+				AND A.LIC_GRP_ID = #licGrpId#
+				AND	A.USR_ID = #usrId#
+			) T1
+			WHERE 1=1
+		]]>	
+			<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchTxt">
+				<isEqual property="searchSelect" compareValue="webhookId">
+					AND T1.WEBHOOK_ID LIKE '%'||#searchTxt#||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="webhookNm">
+					AND T1.WEBHOOK_NM LIKE '%'||#searchTxt#||'%'
+				</isEqual>
+				<isEqual property="searchSelect" compareValue="webhookUrl">
+					AND T1.WEBHOOK_URL LIKE '%'||#searchTxt#||'%'
+				</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="searchSelect">
+				<isNotEmpty property="searchCd">
+					<isEqual property="searchSelect" compareValue="platformTypeCd">
+						AND T1.PLATFORM_TYPE_CD LIKE '%'||#searchCd#||'%'
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			ORDER BY T1.REG_DTM DESC
+	</sql>
+
+	<insert id="usr4000DAO.insertPrj4100UsrWhkInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newWebhookId">
+		<![CDATA[
+			SELECT	NVL( 
+							SUBSTR(NEW_WEBHOOK_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_WEBHOOK_ID, 12, 5)) + 1) , 5, '0')
+						,	'WHK' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+            		) AS NEW_WEBHOOK_ID 
+			FROM	(
+			            SELECT	MAX(WEBHOOK_ID)  AS NEW_WEBHOOK_ID
+			            FROM	USR4000 A
+			            WHERE	1=1
+			            AND		A.LIC_GRP_ID = #licGrpId#
+                        AND		A.USR_ID = #usrId#
+			            AND		A.WEBHOOK_ID LIKE 'WHK' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+					)
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			INSERT INTO USR4000
+			(
+			      		LIC_GRP_ID,			USR_ID,				WEBHOOK_ID,				WEBHOOK_NM
+			      ,		PLATFORM_TYPE_CD,	WEBHOOK_URL,		WHK_REQ_DELETE_CD,		WHK_FLOW_CHG_CD
+			      ,		WHK_NEW_ACCEPT_CD,	WHK_NEW_REJECT_CD,	WHK_SIGN_REQUEST_CD,	WHK_SIGN_ACCEPT_CD
+			      ,		WHK_SIGN_REJECT_CD,	WHK_USER_CHG_CD,	WHK_REQ_DONE_CD,		WHK_MEMO_CD
+			      ,		USE_CD,				REG_DTM,			REG_USR_ID,				REG_USR_IP
+			      ,		MODIFY_DTM,			MODIFY_USR_ID,		MODIFY_USR_IP
+			)                    
+			VALUES
+			(
+						#licGrpId#,			#usrId#,			#newWebhookId#,			#webhookNm#				
+			      ,		#platformTypeCd#,	#webhookUrl#,		#whkReqDeleteCd#,		#whkFlowChgCd#
+			      ,		#whkNewAcceptCd#,	#whkNewRejectCd#,	#whkSignRequestCd#,		#whkSignAcceptCd#
+			      ,		#whkSignRejectCd#,	#whkUserChgCd#,		#whkReqDoneCd#,			#whkMemoCd#			
+			      ,		#useCd#,			CURRENT_TIMESTAMP,	#regUsrId#,				#regUsrIp#	
+			      ,		CURRENT_TIMESTAMP,	#regUsrId#,			#regUsrIp#
+			)
+		]]>
+	</insert>
+	
+    <select id="usr4000DAO.selectUsr4000UsrWhkListCnt" parameterClass="usr4000VO"  resultClass="java.lang.Integer">
+	    SELECT
+			COUNT(*)
+		FROM	(
+			<include refid="usr4000DAO.selectUsr4000UsrWhkListRef"/>
+		) A
+    </select>
+    
+    <select id="usr4000DAO.selectUsr4000UsrWhkList" parameterClass="usr4000VO"  resultMap="resultMapselectUsr4000" >
+		SELECT *
+		FROM
+			(
+				<include refid="usr4000DAO.selectUsr4000UsrWhkListRef"/>
+	    	)
+	    WHERE RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+    </select>
+        
+    <select id="usr4000DAO.selectUsr4000UsrWhkAllList" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT *
+		FROM
+			(
+				<include refid="usr4000DAO.selectUsr4000UsrWhkListRef"/>
+	    	) T2
+	    WHERE 1=1
+	    AND T2.USE_CD = '01'
+    </select>
+        
+    <select id="usr4000DAO.selectUsr4000UsrWhkInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+		SELECT *
+		FROM
+			(
+				<include refid="usr4000DAO.selectUsr4000UsrWhkListRef"/>
+	    	) T2
+	    WHERE 1=1
+	    	AND	T2.LIC_GRP_ID = #licGrpId#
+	    	AND T2.USR_ID = #usrId#
+	    	AND T2.WEBHOOK_ID = #webhookId#
+    </select>
+	
+	
+	<update id="usr4000DAO.updateUsr4000UsrWhkInfo" parameterClass="java.util.Map">
+		UPDATE 	USR4000 A
+		SET		A.PLATFORM_TYPE_CD		= #platformTypeCd#
+			,	A.WEBHOOK_NM			= #webhookNm#
+			,	A.WEBHOOK_URL			= #webhookUrl#
+			,	A.WHK_REQ_DELETE_CD		= #whkReqDeleteCd#
+			,	A.WHK_FLOW_CHG_CD		= #whkFlowChgCd#
+			,	A.WHK_NEW_ACCEPT_CD		= #whkNewAcceptCd#
+			,	A.WHK_NEW_REJECT_CD		= #whkNewRejectCd#
+			,	A.WHK_SIGN_REQUEST_CD	= #whkSignRequestCd#
+			,	A.WHK_SIGN_ACCEPT_CD	= #whkSignAcceptCd#
+			,	A.WHK_SIGN_REJECT_CD	= #whkSignRejectCd#
+			,	A.WHK_USER_CHG_CD		= #whkUserChgCd#
+			,	A.WHK_REQ_DONE_CD		= #whkReqDoneCd#
+			,	A.WHK_MEMO_CD			= #whkMemoCd#
+		    ,	A.USE_CD				= #useCd#
+		    ,	A.MODIFY_DTM			= SYSDATE
+		    ,	A.MODIFY_USR_ID			= #modifyUsrId#
+		    ,	A.MODIFY_USR_IP			= #modifyUsrIp#
+		WHERE	1=1
+		AND		A.LIC_GRP_ID = #licGrpId#
+		AND		A.USR_ID = #usrId#
+		AND		A.WEBHOOK_ID = #webhookId#
+	</update>
+	
+	<delete id="usr4000DAO.deleteUsr4000UsrWhkInfo" parameterClass="java.util.Map">
+		<![CDATA[
+			DELETE 	FROM USR4000
+			WHERE 	1=1
+			AND		LIC_GRP_ID = #licGrpId#
+			AND		USR_ID = #usrId#
+			AND		WEBHOOK_ID = #webhookId#
+		]]>	
+	</delete>
+</sqlMap>

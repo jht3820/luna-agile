@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm2000DAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	<resultMap id="resultMapDefaultStm2000" class="HashMap">
+		<result property="licGrpId" column="LIC_GRP_ID" />
+		<result property="menuId" column="MENU_ID" />
+		<result property="menuNm" column="MENU_NM" />
+		<result property="upperMenuId" column="UPPER_MENU_ID" />
+		<result property="upMenuNm" column="UP_MENU_NM" />
+		<result property="twoUpperMenuId" column="TWO_UPPER_MENU_ID" />
+		<result property="upupMenuNm" column="UPUP_MENU_NM" />
+		<result property="lvl" column="LVL" />
+		<result property="ord" column="ORD" />
+		<result property="useCd" column="USE_CD" />
+		<result property="menuDesc" column="MENU_DESC" />
+		<result property="menuPath" column="MENU_PATH" />
+		<result property="menuTypeCd" column="MENU_TYPE_CD" />
+		<result property="menuUrl" column="MENU_URL" />
+		<result property="menuImgUrl" column="MENU_IMG_URL" />
+		<result property="menuIcon" column="MENU_ICON" />
+		<result property="moduleType" column="MODULE_TYPE" />
+		<result property="regDtm" column="REG_DTM" />
+		<result property="regUsrId" column="REG_USR_ID" />
+		<result property="regUsrIp" column="REG_USR_IP" />
+		<result property="modifyDtm" column="MODIFY_DTM" />
+		<result property="modifyUsrId" column="MODIFY_USR_ID" />
+		<result property="modifyUsrIp" column="MODIFY_USR_IP" />
+	</resultMap>
+	
+	
+	<resultMap id="resultMapSelectStm2000MenuList" extends="resultMapDefaultStm2000" class="HashMap">
+		<result property="MENU_LVL" column="MENU_LVL" />
+		<result property="ROW_STATUS" column="ROW_STATUS" />
+	</resultMap>
+    
+    
+    <resultMap id="resultMapSelectStm2000MenuInfo" extends="resultMapDefaultStm2000" class="HashMap">
+		<result property="menuTypeNm" column="MENU_TYPE_NM" />
+		<result property="useNm" column="USE_NM" />
+		<result property="prjType" column="PRJ_TYPE" />
+		<result property="prjTypeNm" column="PRJ_TYPE_NM" />
+		<result property="autCnt" column="AUT_CNT" />
+	</resultMap>
+
+
+	
+	<select id="stm2000DAO.selectStm2000BaseMenuList" parameterClass="java.util.Map" resultMap="resultMapSelectStm2000MenuList">
+		<![CDATA[ 
+			
+			SELECT	LPAD('ㄴ', LVL*4, ' ') || A.MENU_NM AS MENU_LVL
+				,	A.MENU_NM
+			    ,	A.LIC_GRP_ID
+			    ,	A.MENU_ID
+			    ,	A.UPPER_MENU_ID
+			    ,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+			    ,	(SELECT	UPPER_MENU_ID FROM STM2000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS TWO_UPPER_MENU_ID
+			    ,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+                ,	A.LVL
+			    ,	A.ORD
+			    ,	A.USE_CD
+			    ,	A.MENU_DESC
+			    ,	A.MENU_PATH
+			    ,	A.MENU_TYPE_CD
+			    ,	A.MENU_URL
+			    ,	A.MENU_IMG_URL
+			    ,	A.MENU_ICON
+			    ,	'' AS ROW_STATUS
+			    ,	A.MODULE_TYPE
+			    ,	A.REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	A.MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+            FROM	(SELECT * FROM STM2000 WHERE LIC_GRP_ID = #licGrpId#
+            ]]>
+            <isEqual property="adminYn" compareValue="N">
+			<![CDATA[ 
+			 			AND SYS_CD = '02'
+			]]> 				  			
+			</isEqual>
+				<![CDATA[ 
+            	) A
+            WHERE	1=1
+            CONNECT BY PRIOR	A.MENU_ID = A.UPPER_MENU_ID
+            START WITH A.MENU_ID = '000'
+            ORDER BY ORD ASC
+ 		]]> 
+	</select>
+	
+	
+	<select id="stm2000DAO.selectStm2000MenuInfo" parameterClass="java.util.Map" resultMap="resultMapSelectStm2000MenuInfo">
+		<![CDATA[ 
+			
+			SELECT	A.LIC_GRP_ID
+				,	A.MENU_ID
+				,	A.UPPER_MENU_ID
+				,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '2') AS UP_MENU_NM
+			    ,	(SELECT	UPPER_MENU_ID FROM STM2000 Z WHERE Z.LIC_GRP_ID = A.LIC_GRP_ID AND Z.MENU_ID = A.UPPER_MENU_ID) AS TWO_UPPER_MENU_ID
+			    ,	SF_STM2000_MENU_NM(A.LIC_GRP_ID, A.MENU_ID, '3') AS UPUP_MENU_NM
+				,	A.MENU_NM
+				,	A.MENU_TYPE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00001', A.MENU_TYPE_CD, '1') AS MENU_TYPE_NM
+				,	A.MENU_DESC
+				,	A.MENU_URL
+				,	A.MENU_PATH
+				,	A.MENU_IMG_URL
+				,	A.MENU_ICON
+				,	A.LVL
+				,	A.ORD
+				,	A.USE_CD
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+				,	A.REG_DTM
+				,	A.REG_USR_ID
+				,	A.REG_USR_IP
+				,	A.MODIFY_DTM
+				,	A.MODIFY_USR_ID
+				,	A.MODIFY_USR_IP
+				,   A.PRJ_TYPE
+				,	SF_STM4001_COM_CD_INFO(#licGrpId#, 'ADM00006', A.PRJ_TYPE, '1') AS PRJ_TYPE_NM
+				,	A.MODULE_TYPE
+				,  ( SELECT COUNT(1)  FROM	STM2001 WHERE LIC_GRP_ID = A.LIC_GRP_ID AND MENU_ID = A.MENU_ID AND ROWNUM = 1 ) AS AUT_CNT
+            FROM	STM2000 A
+            WHERE	1=1
+            AND		A.LIC_GRP_ID = #licGrpId#
+            AND		A.MENU_ID = #menuId#
+            ORDER BY ORD
+ 		]]> 
+	</select>
+	
+	
+	<insert id="stm2000DAO.insertStm2000MenuInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newMenuId">
+		<![CDATA[
+			 
+			SELECT	SF_STM2000_GET_NEW_MENU_ID(#licGrpId#, #upperMenuId#) AS NEW_MENU_ID
+			FROM	DUAL
+		]]>
+		</selectKey>
+		<![CDATA[ 
+			
+			INSERT INTO STM2000 A
+			(
+					LIC_GRP_ID	,	MENU_ID  	,	UPPER_MENU_ID  	,	MENU_NM  		,	MENU_TYPE_CD
+			  	,	MENU_DESC  	,	MENU_URL  	,	MENU_PATH  		,	MENU_IMG_URL  	,	MENU_ICON		
+			  	,	LVL			,	ORD		  	,	USE_CD  		,	REG_DTM  		,	REG_USR_ID
+			  	,	REG_USR_IP  ,	MODIFY_DTM 	,	MODIFY_USR_ID	,	MODIFY_USR_IP   ,   PRJ_TYPE
+			  	,	MODULE_TYPE
+			)
+			VALUES
+			(
+					#licGrpId#	,	#newMenuId# ,	#upperMenuId#	,	#menuNm#		,	#menuTypeCd#  
+			    ,	#menuDesc#	,	#menuUrl#	,	#menuPath#		,	#menuImgUrl#	,	#menuIcon#
+			    ,	#lvl#		,	#ord#		,	#useCd#			,	SYSDATE			,	#regUsrId#		
+			    ,	#regUsrIp#	,	SYSDATE		,	#regUsrId#		,	#regUsrIp#      ,   #prjType#
+			    ,	#moduleType#
+			)
+		]]>
+	</insert>
+	
+	
+	<delete id="stm2000DAO.deleteStm2000MenuInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		DELETE	
+		FROM	STM2000 A
+		WHERE	1=1
+		AND		A.LIC_GRP_ID 	= #licGrpId#
+		AND		A.MENU_ID		= #menuId#	
+	]]>
+	</delete>
+	
+	
+	<update id="stm2000DAO.updateStm2000MenuInfo" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		UPDATE	STM2000 A
+        SET		UPPER_MENU_ID   = #upperMenuId#
+            ,	MENU_NM         = #menuNm#
+            ,	MENU_TYPE_CD    = #menuTypeCd#
+            ,	MENU_DESC       = #menuDesc#
+            ,	MENU_URL        = #menuUrl#
+            ,	MENU_PATH       = #menuPath#
+            ,	MENU_IMG_URL    = #menuImgUrl#
+            ,	MENU_ICON		= #menuIcon#
+            ,	LVL             = #lvl#
+            ,	ORD             = #ord#
+            ,	USE_CD          = #useCd#
+            ,	REG_DTM         = SYSDATE
+            ,	REG_USR_ID      = #regUsrId#
+            ,	REG_USR_IP      = #regUsrIp#
+            ,	MODIFY_DTM      = SYSDATE
+            ,	MODIFY_USR_ID   = #modifyUsrId#
+            ,	MODIFY_USR_IP   = #modifyUsrIp#
+            ,	PRJ_TYPE        = #prjType#
+        WHERE	1=1
+        AND		A.LIC_GRP_ID 	= #licGrpId#
+        AND		A.MENU_ID		= #menuId#
+	]]>
+	</update>
+	
+	
+	<select id="stm2000DAO.selectStm2000deleteMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			
+			SELECT	A.LIC_GRP_ID , A.PRJ_ID ,A.AUTH_GRP_ID , A.MENU_ID
+	        FROM	STM2001 A , STM2000 B
+	        WHERE	1=1
+	        AND	 A.LIC_GRP_ID = #licGrpId# 
+	        AND  A.PRJ_ID 	= #prjId#
+	        AND  A.LIC_GRP_ID = B.LIC_GRP_ID
+	        AND  A.MENU_ID = B.MENU_ID
+	        AND  A.MENU_ID = #menuId#
+			AND  B.PRJ_TYPE = #prjType# 
+			
+ 		]]> 
+	</select>
+	
+	
+	<delete id="stm2000DAO.deleteStm2000projectTypeAuth" parameterClass="java.util.Map">
+		
+		DELETE	
+		FROM	STM2001 A
+        WHERE	1=1
+        AND		A.LIC_GRP_ID = #licGrpId#
+        AND		A.PRJ_ID = #prjId#
+        AND		A.AUTH_GRP_ID = #authGrpId#
+        AND		A.MENU_ID = #menuId#
+	</delete>
+
+	
+	<select id="stm2000DAO.selectStm2001AuthMenuAccessCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			
+			SELECT COUNT(*) AS CNT
+			FROM STM2001
+			WHERE 1=1
+			AND LIC_GRP_ID = #licGrpId#
+			AND PRJ_ID = #prjId#
+			AND AUTH_GRP_ID = #authGrpId#
+			AND MENU_ID = #menuId#
+		]]>
+	</select>
+
+	
+	<insert id="stm2000DAO.insertStm2001AuthMenuAccess" parameterClass="java.util.Map">
+		<![CDATA[
+			
+			INSERT INTO STM2001
+            (	
+            	LIC_GRP_ID,		PRJ_ID,				AUTH_GRP_ID,		MENU_ID,
+            	MAIN_YN,		ACCESS_YN,			SELECT_YN,			REG_YN,				MODIFY_YN,
+            	DEL_YN,			EXCEL_YN,			PRINT_YN,			USE_CD,
+            	REG_DTM,		REG_USR_ID,			REG_USR_IP,
+            	MODIFY_DTM,		MODIFY_USR_ID,		MODIFY_USR_IP
+            )
+            VALUES
+            (
+            	#licGrpId#,		#prjId#,			#authGrpId#,		#menuId#,
+            	#mainYn#,		#accessYn#,			#selectYn#,			#regYn#,			#modifyYn#,
+            	#delYn#,		#excelYn#,			#printYn#,			'01',
+            	SYSDATE,		#regUsrId#,			#regUsrIp#,
+            	SYSDATE,		#regUsrId#,         #regUsrIp#
+            )
+		]]>
+	</insert>
+	
+	
+	<update id="stm2000DAO.updateStm2001AuthMenuAccess" parameterClass="java.util.Map">
+		
+		UPDATE STM2001 SET
+				MODIFY_DTM = SYSDATE 
+            ,	MODIFY_USR_ID = #modifyUsrId# 
+            ,	MODIFY_USR_IP = #modifyUsrIp#
+            <isNotEmpty property="mainYn">
+            	,	MAIN_YN			= #mainYn#
+            </isNotEmpty>
+            <isNotEmpty property="accessYn">
+            	,	ACCESS_YN		= #accessYn#
+            </isNotEmpty>
+            <isNotEmpty property="selectYn">
+            	,	SELECT_YN		= #selectYn#
+            </isNotEmpty>
+            <isNotEmpty property="regYn">
+            	,	REG_YN			= #regYn#
+            </isNotEmpty>
+            <isNotEmpty property="modifyYn">
+            	,	MODIFY_YN		= #modifyYn#
+            </isNotEmpty>
+            <isNotEmpty property="delYn">
+            	,	DEL_YN			= #delYn#
+            </isNotEmpty>
+            <isNotEmpty property="excelYn">
+            	,	EXCEL_YN		= #excelYn#
+            </isNotEmpty>
+            <isNotEmpty property="printYn">
+            	,	PRINT_YN		= #printYn#
+            </isNotEmpty>
+		WHERE 1=1
+	        AND LIC_GRP_ID = #licGrpId#
+			AND PRJ_ID = #prjId#
+			AND AUTH_GRP_ID = #authGrpId#
+			AND MENU_ID = #menuId#
+	</update>
+	
+	
+	<select id="stm2000DAO.selectStm2001AuthUpMenuAccessCheck" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		<![CDATA[
+			
+			SELECT COUNT(*) AS CNT
+			FROM STM2001 A
+			INNER JOIN
+			(
+				SELECT *
+			 	FROM STM2000 Z
+			  	WHERE 1=1
+			  	AND Z.LIC_GRP_ID = #licGrpId#
+			  	AND Z.MENU_ID IN ( SELECT MENU_ID FROM STM2000 WHERE UPPER_MENU_ID = #upMenuId# AND LIC_GRP_ID = Z.LIC_GRP_ID )
+			) B ON ( A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID )
+			WHERE 1=1
+			AND PRJ_ID = #prjId#
+			AND AUTH_GRP_ID = #authGrpId#
+			AND ACCESS_YN = 'Y'
+		]]>
+	</select>
+	
+	
+	<insert id="stm2000DAO.insertStm2001MenuRootAuthList" parameterClass="java.util.Map">
+		<![CDATA[ 
+			
+			INSERT INTO STM2001
+			(
+				LIC_GRP_ID,		PRJ_ID,					AUTH_GRP_ID,		MENU_ID,		MAIN_YN,	
+				ACCESS_YN,		SELECT_YN,				REG_YN,				MODIFY_YN,		DEL_YN,
+				EXCEL_YN,       PRINT_YN,				USE_CD,
+	            REG_DTM,		REG_USR_ID,				REG_USR_IP,
+	            MODIFY_DTM,		MODIFY_USR_ID,			MODIFY_USR_IP
+			)
+			SELECT
+				#licGrpId#,		#prjId#,				A.AUTH_GRP_ID,		A.MENU_ID, 		A.MAIN_YN,
+				A.ACCESS_YN,	A.SELECT_YN,			A.REG_YN,			A.MODIFY_YN,	A.DEL_YN,
+				A.EXCEL_YN,		A.PRINT_YN,				A.USE_CD,
+				SYSDATE,		#regUsrId#,				#regUsrIp#,
+			    SYSDATE,		#modifyUsrId#,			#modifyUsrIp#
+			FROM STM2001 A
+				INNER JOIN STM2000 B ON (A.LIC_GRP_ID = B.LIC_GRP_ID AND A.MENU_ID = B.MENU_ID)
+			WHERE 1=1
+			AND A.LIC_GRP_ID = #licGrpId#
+			AND A.PRJ_ID = 'ROOTSYSTEM_PRJ'
+			AND ( B.PRJ_TYPE = '01' OR B.PRJ_TYPE = '03')
+		]]>
+	</insert>
+	
+	
+</sqlMap>
