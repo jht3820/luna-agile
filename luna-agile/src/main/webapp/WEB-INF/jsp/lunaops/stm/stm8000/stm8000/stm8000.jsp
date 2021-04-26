@@ -12,11 +12,11 @@
 		</div>
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-wrapper">
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8000RepTable" data-datatable-action="selectedConnect" title="선택 저장소 연결 확인" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectedConnect" tabindex="1">
-					<i class="fab fa-usb"></i><span data-lang-cd="">선택 접속 확인</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8000RepTable" data-datatable-action="selectedConnect" title="선택 저장소 연결 확인" data-title-lang-cd="stm8000.actionBtn.connectTooltip.select" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="selectedConnect" tabindex="1">
+					<i class="fab fa-usb"></i><span data-lang-cd="stm8000.actionBtn.connect.select">선택 접속 확인</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8000RepTable" data-datatable-action="allConnect" title="전체 저장소 연결 확인" data-title-lang-cd="" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="allConnect" tabindex="2">
-					<i class="fab fa-usb"></i><span data-lang-cd="">전체 접속 확인</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8000RepTable" data-datatable-action="allConnect" title="전체 저장소 연결 확인" data-title-lang-cd="stm8000.actionBtn.connectTooltip.all" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="allConnect" tabindex="2">
+					<i class="fas fa-bezier-curve"></i><span data-lang-cd="stm8000.actionBtn.connect.all">전체 접속 확인</span>
 				</button>
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8000RepTable" data-datatable-action="select" title="저장소 조회" data-title-lang-cd="stm8000.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="3">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
@@ -77,24 +77,24 @@
 					clickCheckbox: true
 				},
 				actionBtn:{
-					"title" : "수정 / 삭제 / 상세 / 접속 확인",
+					"title" : $.osl.lang("stm8000.title.actionTitle"),
 					"dblClick": true,
 					"selectedConnect" : true,
 					"allConnect" : true
 				},
 				actionTooltip:{
-					"update": "수정",
-					"delete": "삭제",
-					"dblClick" : "상세",
-					"selectedConnect" : "선택 접속 확인",
-					"allConnect" : "전체 접속 확인",
+					"update": $.osl.lang("stm8000.actionTooltip.updateTooltip"),
+					"delete": $.osl.lang("stm8000.actionTooltip.deleteTooltip"),
+					"dblClick" : $.osl.lang("stm8000.actionTooltip.dblClickTooltip"),
+					"selectedConnect" : $.osl.lang("stm8000.actionTooltip.connectTooltip.select"),
+					"allConnect" : $.osl.lang("stm8000.actionTooltip.connectTooltip.all"),
 				},
 				actionFn:{
 					"insert":function(datatableId, type, rowNum){
 						var data = {type:"insert"};
 						var options = {
 								idKey: datatableId,
-								modalTitle: "저장소 추가",
+								modalTitle: $.osl.lang("stm8000.title.insertTitle"),
 								closeConfirm: false,
 								autoHeight:false,
 							};
@@ -108,7 +108,7 @@
 							};
 						var options = {
 								idKey: datatableId,
-								modalTitle: "저장소 수정",
+								modalTitle: $.osl.lang("stm8000.title.updateTitle"),
 								closeConfirm: false,
 								autoHeight:false,
 							};
@@ -143,7 +143,7 @@
 							};
 						var options = {
 								idKey: rowData.strgRepId,
-								modalTitle: "["+$.osl.escapeHtml(rowData.strgRepTitle)+"] 저장소 상세보기",
+								modalTitle: "["+$.osl.escapeHtml(rowData.strgRepTitle)+"] "+$.osl.lang("stm8000.title.dblClickTitle"),
 								modalSize: "fs",
 								closeConfirm: false
 							};
@@ -156,7 +156,7 @@
 						if(type == "list"){
 							//선택 항목이 리스트인 경우
 							if(rowNum == 0){
-								$.osl.alert("현재 선택한 갯수 : "+ rowNum, {"type":"warrning"});
+								$.osl.alert($.osl.lang("stm8000.message.connect.selectCount", rowNum), {"type":"warrning"});
 							}else {
 								//다중인 경우
 								selectRows = $.osl.datatable.list[datatableId].targetDt.getSelectedRecords();
@@ -249,7 +249,12 @@
    		//AJAX 전송 성공 함수
    		ajaxObj.setFnSuccess(function(data){
    			if(data.errorYn == "Y"){
-   				$.osl.alert(data.message,{type: 'error'});
+   				// 기존 아이콘 제거
+   				targetElmt.removeClass("fa-circle-notch fa-spin");
+   				// error 아이콘
+   				targetElmt.addClass("fa-times-circle osl-color--red");
+				$.osl.toastr("["+$.osl.escapeHtml(repoName)+"]" + $.osl.lang("stm8000.message.connect.fail.common"));
+   				//$.osl.alert(data.message,{type: 'error'});
    			}else{
    				// 기존 아이콘 모두 제거
    				targetElmt.removeClass("fa-circle-notch fa-spin");
@@ -259,20 +264,20 @@
    					if(data.connectResult == "SVN_OK"){
    	   					//연결 성공
    						targetElmt.addClass("fa-check-circle osl-color--blue");
-   		   				$.osl.toastr($.osl.escapeHtml(repoName) + "접속 성공");
+   		   				$.osl.toastr("["+$.osl.escapeHtml(repoName)+"]" + $.osl.lang("stm8000.message.connect.success"));
    	   				}else if(data.connectResult == "SVN_AUTHENTICATION_EXCEPTION"){
    	   					//사용자 id 또는 pw 실패
    	   					targetElmt.addClass("fa-times-circle osl-color--red");
-   	   					$.osl.toastr($.osl.escapeHtml(repoName) + "접속 실패 : ID 또는 PW 확인하세요.");
+   	   					$.osl.toastr("["+$.osl.escapeHtml(repoName)+"]" + $.osl.lang("stm8000.message.connect.fail.auth"));
    	   				}else{
    	   					//잘못된 url
    	   					targetElmt.addClass("fa-times-circle osl-color--red");
-   	   					$.osl.toastr($.osl.escapeHtml(repoName) + "접속 실패 : URL을 확인하세요.");
+   	   					$.osl.toastr("["+$.osl.escapeHtml(repoName)+"]" + $.osl.lang("stm8000.message.connect.fail.url"));
    	   				}
    				}else{
    					//git인 경우 - 현재 실패로 통일...
    					targetElmt.addClass("fa-times-circle osl-color--red");
-   					$.osl.toastr($.osl.escapeHtml(repoName) + "접속 실패");
+   					$.osl.toastr("["+$.osl.escapeHtml(repoName)+"]" + $.osl.lang("stm8000.message.connect.fail.common"));
    				}
    				
    				// 다음 저장소 연결 체크

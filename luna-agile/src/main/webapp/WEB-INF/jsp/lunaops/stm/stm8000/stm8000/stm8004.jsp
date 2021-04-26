@@ -8,19 +8,19 @@
 	<div class="kt-portlet__head">
 		<div class="kt-portlet__head-label kt-portlet__head--lg">
 			<h5 class="kt-font-boldest kt-font-brand">
-				<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="">파일 리비전 목록</span>
+				<i class="fa fa-th-large kt-margin-r-5"></i><span data-lang-cd="stm8004.title">파일 리비전 목록</span>
 			</h5>
 		</div>
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-group">
-				<input type="text" class="osl-outline--secondary rounded col-lg-3 col-md-3 col-sm-3 col-3" id="searchStNum" name="searchStNum" value="<c:out value='${param.searchStNum}'/>">
+				<input type="text" class="osl-outline--secondary rounded col-lg-3 col-md-3 col-sm-3 col-3" placeholder="시작" authocomplate="off" regexstr="^[0-9]{0,4}$" maxlength="4" id="searchStNum" name="searchStNum" value="${param.searchStNum}">
 				<span class="osl-h-px-38 osl-line-height__width-38">&nbsp;-&nbsp;</span>
-				<input type="text" class="osl-outline--secondary rounded col-lg-3 col-md-3 col-sm-3 col-3" id="searchEdNum" name="searchEdNum" value="<c:out value='${param.searchEdNum}'/>">
+				<input type="text" class="osl-outline--secondary rounded col-lg-3 col-md-3 col-sm-3 col-3" placeholder="종료"  authocomplate="off" regexstr="^[0-9]{0,4}$" maxlength="4" id="searchEdNum" name="searchEdNum" value="${param.searchEdNum}">
 				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8004FileTable" data-datatable-action="select" title="파일 리비전 조회" data-title-lang-cd="stm8004.actionBtn.selectTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 					<i class="fa fa-list"></i><span data-lang-cd="datatable.button.select">조회</span>
 				</button>
-				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8004FileTable" data-datatable-action="diff" title="Diff" data-title-lang-cd="stm8004.actionBtn.diffTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="diff" tabindex="2">
-					<i class="fa fa-list"></i><span data-lang-cd="">Diff</span>
+				<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="stm8004FileTable" data-datatable-action="diff" title="DIFF" data-title-lang-cd="stm8004.actionBtn.diffTooltip" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="diff" tabindex="2">
+					<i class="fas fa-code"></i><span data-lang-cd="stm8004.actionBtn.diffBtn">DIFF</span>
 				</button>
 			</div>
 		</div>
@@ -47,6 +47,10 @@ var OSLStm8004Popup = function() {
 
 	//기본 설정
 	 var documentSetting = function() {
+		
+		//placeholder 세팅
+		$("#searchStNum").attr("placeholder",$.osl.lang("stm8004.placeholder.revision.start"));
+		$("#searchEdNum").attr("placeholder",$.osl.lang("stm8004.placeholder.revision.end"));
 		
 		//해당하는 파일의 버전별 리비전 정보 가져오기
 		 $.osl.datatable.setting(datatableId,{
@@ -81,7 +85,7 @@ var OSLStm8004Popup = function() {
 					clickCheckbox: true
 				},
 				actionBtn:{
-					"title" : "선택",
+					"title" : $.osl.lang("stm8004.actionBtn.title"),
 					"widht" : 30,
 					"insert" : false,
 					"update" : false,
@@ -89,7 +93,7 @@ var OSLStm8004Popup = function() {
 					"diff" : true,
 				},
 				actionTooltip:{
-					"diff" : "소스코드 비교"
+					"diff" : $.osl.lang("stm8004.actionBtn.diffTooltip")
 				},
 				actionFn:{
 					"select": function(datatableId, elem, datatable){
@@ -134,8 +138,10 @@ var OSLStm8004Popup = function() {
 					"diff": function(rowDatas, datatableId, type, rowNum, elem){
 						//리스트인 경우
 						if(type == "list"){
-							if(rowNum != 2){
-								$.osl.alert("두개만 선택, 현재 : " + rowNum, {"type":"warning"});
+							if(rowNum < 2){
+								$.osl.alert($.osl.lang("stm8004.message.selectFile", rowNum), {"type":"warning"});
+							}else if(rowNum >2){
+								$.osl.alert($.osl.lang("stm8004.message.selectFiles", rowNum), {"type":"warning"});
 							}else{
 								var data = {
 									type : type,

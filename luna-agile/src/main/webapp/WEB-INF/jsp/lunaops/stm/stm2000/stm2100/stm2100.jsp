@@ -176,11 +176,11 @@
 							type:"dbClick",
 							menuId: rowData.menuId,
 							stmTypeCd: rowData.stmTypeCd,
-							stmNm: $.escapeHtml(rowData.stmNm),
+							stmNm: $.osl.escapeHtml(rowData.stmNm),
 						};
 					var options = {
 							idKey: "summery_"+rowData.menuId,
-							modalTitle: "[ "+ $.escapeHtml(rowData.stmNm) +" ] "+$.osl.lang("stm2100.title.summeryTitle"),
+							modalTitle: "[ "+ $.osl.escapeHtml(rowData.stmNm) +" ] "+$.osl.lang("stm2100.title.summeryTitle"),
 							closeConfirm: false,
 							autoHeight: false,
 						};
