@@ -107,14 +107,32 @@ public class Prj1100DAO  extends ComOslitsAbstractDAO {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void insertPrj1101FlowInfo(Map paramMap) throws Exception {
-		 insert("prj1100DAO.insertPrj1101FlowInfo", paramMap);
+	public String insertPrj1101FlowInfo(Map paramMap) throws Exception {
+		return (String) insert("prj1100DAO.insertPrj1101FlowInfo", paramMap);
 	}
 	
 	
 	@SuppressWarnings("rawtypes")
 	public void deletePrj1101FlowInfo(Map paramMap) throws Exception {
 		update("prj1100DAO.deletePrj1101FlowInfo", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1107FlowLinkList(Map paramMap) throws Exception {
+		return (List) list("prj1100DAO.selectPrj1107FlowLinkList", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public String insertPrj1100FlowNextIdInfo(Map paramMap) throws Exception{
+		return (String) insert("prj1100DAO.insertPrj1100FlowNextIdInfo", paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int deletePrj1100FlowNextIdList(Map paramMap) throws Exception{
+		return (int) delete("prj1100DAO.deletePrj1100FlowNextIdList", paramMap);
 	}
 	
 	
