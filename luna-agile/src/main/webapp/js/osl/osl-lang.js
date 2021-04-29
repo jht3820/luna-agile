@@ -44,6 +44,13 @@ var OSLCoreLangSetting = function () {
 				remove: '제거'
 			}
 		},
+		process:{
+			menu:{
+				update: "수정",
+				delete: "삭제",
+				detail: "상세정보"
+			}
+		},
 		tree:{
 			label:{
 				contextmenu:{
@@ -442,6 +449,21 @@ var OSLCoreLangSetting = function () {
 				title: "프로젝트 수정",
 				saveString: "프로젝트를 수정하시겠습니까?",
 				saveBtnString: "수정 완료"
+			}
+		},
+		prj1100:{
+			alert:{
+				linkLimitLoop: "작업 흐름(단계)는 반복 진행될 수 없습니다.</br> A -> B -> A 불가",
+				selNoneProcess: "프로세스를 선택 하세요.",
+				selNoneFlow: "단계를 선택 하세요.",
+				saveCancel: "저장이 취소되었습니다.",
+				saveBefore: "변경된 데이터가 있습니다.</br> 저장하지 않고 진행하시겠습니까?",
+				processSave: "시작 단계: ${1}</br>종료 단계: ${2}</br></br>프로세스 데이터를 저장하시겠습니까?",
+				manyStartFlow: "${1}개의 시작 단계가 발견되었습니다.",
+				manyEndFlow: "${1}개의 종료 단계가 발견되었습니다.",
+				flowLinkCheck: "</br>단계 연결 데이터를 확인하세요.",
+				deleteFlow: "${1} 단계를 삭제하시겠습니까?</br>업무 처리에 문제가 발생 할 수 있습니다.",
+				deleteReqCheck: "${1}건의 진행중인 요구사항이 있습니다.</br>요구사항의 단계 진행을 완료해야 삭제가 가능합니다."
 			}
 		},
 		prj1101:{

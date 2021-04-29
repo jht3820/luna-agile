@@ -695,6 +695,37 @@
 	</update>
 	
 	
+	<select id="prj1100DAO.selectPrj1100FlowReqListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT COUNT(*) AS CNT
+		FROM REQ4100 A
+		WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+			AND A.FLOW_ID = #flowId#
+			AND A.USE_CD = '01'
+    </select>
+    
+	
+	<update id="prj1100DAO.deletePrj1101FlowInfo" parameterClass="java.util.Map">
+		
+		<![CDATA[
+			UPDATE PRJ1101 A
+			SET
+				USE_CD = '02'
+				,A.MODIFY_DTM = SYSDATE
+				,A.MODIFY_USR_ID = #modifyUsrId#
+				,A.MODIFY_USR_IP = #modifyUsrIp#
+			WHERE 1=1
+			AND A.PRJ_ID = #prjId#
+			AND A.PROCESS_ID = #processId#
+		]]>
+			<isNotEmpty property="flowId">
+				AND A.FLOW_ID = #flowId#
+			</isNotEmpty>
+	</update>
+	
+	
 	<sql id="prj1100DAO.selectPrj1104ReqRevisionNumList">
 		<![CDATA[
 			SELECT 
@@ -752,25 +783,6 @@
 			AND A.PROCESS_ID = #processId#
 		]]>	
 	</select>
-	
-	
-	<update id="prj1100DAO.deletePrj1101FlowInfo" parameterClass="java.util.Map">
-		
-		<![CDATA[
-			UPDATE PRJ1101 A
-			SET
-				USE_CD = '02'
-				,A.MODIFY_DTM = SYSDATE
-				,A.MODIFY_USR_ID = #modifyUsrId#
-				,A.MODIFY_USR_IP = #modifyUsrIp#
-			WHERE 1=1
-			AND A.PRJ_ID = #prjId#
-			AND A.PROCESS_ID = #processId#
-		]]>
-			<isNotEmpty property="flowId">
-				AND A.FLOW_ID = #flowId#
-			</isNotEmpty>
-	</update>
 	
 	
 	<select id="prj1100DAO.selectPrj1102ReqOptList"  parameterClass="java.util.Map" resultClass="egovMap">
@@ -1233,9 +1245,6 @@
 				AND Z.USR_TYP = '02'
 				AND Z.LIC_GRP_ID = #licGrpId#
 		]]>
-				<!-- 전체 프로젝트 생성관리에서 프로젝트 생성 마법사 호출시 
-					 전체 라이선스 그룹에서  관리자 권한을 가지고있는 프로젝트의 프로세스 목록을 조회한다.
-				-->
 		 		<isNotEqual property="selectType" compareValue="systemAdmin">
 			    	AND USR_ID = #usrId#
 			   </isNotEqual>
