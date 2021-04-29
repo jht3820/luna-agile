@@ -92,6 +92,10 @@ public interface Prj1100Service {
 	
 	
 	@SuppressWarnings("rawtypes")
+	int selectPrj1100FlowReqListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
 	List selectPrj1102ReqOptList(Map paramMap) throws Exception;
 	
 	

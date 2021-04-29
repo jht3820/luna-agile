@@ -111,6 +111,7 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void savePrj1100ProcessDataInfo(Map paramMap) throws Exception{
 		String processData = (String) paramMap.get("processData");
+		String removeData = (String) paramMap.get("removeData");
 		
 		String prjId = (String) paramMap.get("prjId");
 		String processId = (String) paramMap.get("processId");
@@ -120,6 +121,7 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 		
 		
 		JSONObject jsonObj = new JSONObject(processData);
+		JSONArray removeDataObj = new JSONArray(removeData);
 		
 		
 		prj1100DAO.deletePrj1100FlowNextIdList(paramMap);
@@ -174,7 +176,19 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 		    
 		    
 		    prj1100DAO.updatePrj1101FlowInfo(flowMapData);
+		}
+		
+		
+		for(int i=0;i<removeDataObj.length();i++) {
+			String removeFlowId = removeDataObj.getString(i);
+			Map newMap = new HashMap<>();
+			newMap.put("prjId", prjId);
+			newMap.put("processId", processId);
+			newMap.put("flowId", removeFlowId);
+			newMap.put("modifyUsrId", paramMap.get("modifyUsrId"));
+			newMap.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
 		    
+			prj1100DAO.deletePrj1101FlowInfo(newMap);
 		}
 		
 	}
@@ -198,6 +212,8 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 			prj1100DAO.deletePrj1100ProcessInfo(infoMap);
 		
 			
+			prj1100DAO.deletePrj1101FlowInfo(infoMap);
+			prj1100DAO.deletePrj1100FlowNextIdList(infoMap);
 		}
 	}
 	
@@ -287,6 +303,12 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 	public List selectPrj1107FlowLinkList(Map paramMap) throws Exception {
 		return prj1100DAO.selectPrj1107FlowLinkList(paramMap);
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100FlowReqListCnt(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100FlowReqListCnt(paramMap);
+	} 
 	
 	
 	@SuppressWarnings("rawtypes")
