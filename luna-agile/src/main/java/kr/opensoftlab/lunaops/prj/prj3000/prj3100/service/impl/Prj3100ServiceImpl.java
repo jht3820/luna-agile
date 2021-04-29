@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import egovframework.com.cmm.EgovMessageSource;
@@ -97,7 +98,7 @@ public class Prj3100ServiceImpl extends EgovAbstractServiceImpl implements Prj31
 			paramMap.put("infType", infType);
 			
 			
-			String cngInfId = prj3100DAO.insertPrj3001CngInf(paramMap);
+			prj3100DAO.insertPrj3001CngInf(paramMap);
 		}
 		
 	}
@@ -113,5 +114,32 @@ public class Prj3100ServiceImpl extends EgovAbstractServiceImpl implements Prj31
 	@Override
 	public Map selectPrj3001CngInf(Map<String, String> paramMap) throws Exception {
 		return prj3100DAO.selectPrj3001CngInf(paramMap);
+	}
+
+	
+	@Override
+	public void insertPrj3100FileUpload(Map<String, String> paramMap, List<FileVO> _result) throws Exception {
+		
+		
+		fileMngDAO.insertFileDetail(_result);
+		
+		
+		if("atchFile".equals(paramMap.get("insertType"))) {
+			
+			FileVO fileVO = new FileVO();
+			fileVO.setAtchFileId(paramMap.get("atchFileId"));
+			fileVO.setFileSn(paramMap.get("fileSn"));
+			
+			
+			fileVO = fileMngDAO.selectFileInf(fileVO);
+			
+			
+			Map<String, String> fileMap = BeanUtils.describe(fileVO);
+			
+			paramMap.putAll(fileMap);
+			
+			
+			prj3100DAO.insertPrj3001CngInf(paramMap);
+		}
 	}
 }

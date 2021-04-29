@@ -184,6 +184,9 @@
 											<!-- begin:: 산출물 확정 파일 등록 button -->
 											<div class="kt-portlet__head-toolbar">
 												<div class="kt-portlet__head-wrapper">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="signAtchFile" title="확정 파일 결재" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="signAtchFile" tabindex="1" data-original-title="확정 파일 결재">
+														<i class="fas fa-file-signature"></i><span>결재</span>
+													</button>
 													<input type="file" class="kt-hide" id="atchFileBtn" multiple="multiple" name="atchFileBtn">
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="insertAtchFile" title="확정 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertAtchFile" tabindex="1" data-original-title="확정 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
@@ -195,7 +198,10 @@
 											</div>
 											<!-- end:: 산출물 확정 파일 등록 button -->
 										</div>
-										<div class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom" data-height="350" id="confirmation-list"></div>
+										<div class="kt-portlet__body kt-padding-0 kt-scroll border osl-radius-bottom" data-height="350" id="confirmation-list">
+											
+										
+										</div>
 									</div>
 								</div>
 								<div
@@ -241,13 +247,13 @@
 							<!-- begin:: 산출물 연결 관리 button -->
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="select" title="산출물 연결 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 연결 관리 조회"> 
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjTable" data-datatable-action="select" title="산출물 연결 관리 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1" data-original-title="산출물 연결 관리 조회"> 
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="insert" title="산출물 연결 관리 연결" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3" data-original-title="산출물 연결 관리 연결"> 
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjTable" data-datatable-action="insert" title="산출물 연결 관리 연결" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="3" data-original-title="산출물 연결 관리 연결"> 
 										<i class="fa fa-edit"></i><span>연결</span>
 									</button>
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjTable" data-datatable-action="delete" title="산출물 연결 관리 연결 제거" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 연결 관리 연결 제거">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjTable" data-datatable-action="delete" title="산출물 연결 관리 연결 제거" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="4" data-original-title="산출물 연결 관리 연결 제거">
 										<i class="fa fa-trash-alt"></i><span>연결 제거</span>
 									</button>
 								</div>
@@ -258,10 +264,10 @@
 						<div class="kt-portlet__body">
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-12">
-									<div class="osl-datatable-search" data-datatable-id="prj3200PrjTable"></div>
+									<div class="osl-datatable-search" data-datatable-id="prj3002PrjTable"></div>
 								</div>
 							</div>
-							<div class="kt_datatable" id="prj3200PrjTable"></div>
+							<div class="kt_datatable" id="prj3002PrjTable"></div>
 						</div>
 					</div>
 				</div>
@@ -285,7 +291,7 @@ var OSLPrj3000Popup = function () {
 	var docId = '';
 	
 	//산출물 연결 정보 데이터 테이블
-	var prj3200PrjTable = "prj3200PrjTable";
+	var prj3002PrjTable = "prj3002PrjTable";
 	
 	var atchFileId = '';
 	
@@ -549,6 +555,10 @@ var OSLPrj3000Popup = function () {
 						$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
 					}
 					
+				},
+				//확정 파일 결재
+				"signAtchFile" : function(obj){
+					
 				}
 			 
 			}
@@ -712,7 +722,7 @@ var OSLPrj3000Popup = function () {
 				
 				/*추가 동작은 이쪽에서 구현하시면 됩니다*/
 				
-				var fileSn = moveDiv.parent().children('input[name=fileSn]').val();
+				var fileSn = moveDiv.parent().find('input[name=fileSn]').val();
 				var fileType = 'waitFile';
 				//파일 타입 바꾸기
 				updateFileType(fileType,fileSn);
@@ -728,7 +738,6 @@ var OSLPrj3000Popup = function () {
 	        chosenClass: "chosen",
 	        //이동될 div(나갈)
 	        onMove:function(evt,originalEvent){
-	        	console.log("11")
 	        	
 				var UserAgent = navigator.userAgent;
 
@@ -740,7 +749,6 @@ var OSLPrj3000Popup = function () {
 			},
 	      	//해당 div로 이동될 대상의 동작(들어온)
 			onAdd:function(evt){
-				console.log("22")
 				//아이콘 부모박스 
 				var moveDiv = $(evt.item).children('.osl-uppy__right-btn:first-child');
 				//아이콘 변경(방향,아이콘 모양)
@@ -748,7 +756,7 @@ var OSLPrj3000Popup = function () {
 				moveDiv.removeClass('osl-uppy__right-btn osl-uppy__right');
 				
 				/*추가 동작은 이쪽에서 구현하시면 됩니다*/
-				var fileSn = moveDiv.parent().children('input[name=fileSn]').val();
+				var fileSn = moveDiv.parent().find('input[name=fileSn]').val();
 				var fileType = 'atchFile';
 				
 				//파일 타입 바꾸기
@@ -770,11 +778,11 @@ var OSLPrj3000Popup = function () {
 		
 		
 		//데이터 테이블 세팅
-		$.osl.datatable.setting("prj3200PrjTable",{
+		$.osl.datatable.setting("prj3002PrjTable",{
 			data: {
 				source: {
 					read: {
-						url: "/prj/prj3000/prj3200/selectPrj3200DocConListAjax.do"
+						url: "/prj/prj3000/prj3000/selectPrj3002DocConListAjax.do"
 					}
 				},
 			},
@@ -830,12 +838,12 @@ var OSLPrj3000Popup = function () {
 							modalSize: "xl"
 						};
 					
-					$.osl.layerPopupOpen('/prj/prj3000/prj3200/selectPrj3200View.do',data,options);
+					$.osl.layerPopupOpen('/prj/prj3000/prj3000/selectPrj3002View.do',data,options);
 				},
 				"delete":function(rowDatas, datatableId, type, rowNum, elem){
 					//AJAX 설정
 					var ajaxObj = new $.osl.ajaxRequestAction(
-							{"url":"<c:url value='/prj/prj3000/prj3200/deletePrj3200DocConInfoAjax.do'/>"}
+							{"url":"<c:url value='/prj/prj3000/prj3000/deletePrj3002DocConInfoAjax.do'/>"}
 							,{deleteDataList: JSON.stringify(rowDatas)});
 					//AJAX 전송 성공 함수
 					ajaxObj.setFnSuccess(function(data){
@@ -935,7 +943,7 @@ var OSLPrj3000Popup = function () {
 				}
 				
 				//입력된 검색값 초기화 (보류)
-				//$("#searchData_prj3200PrjTable").val('');
+				//$("#searchData_Prj3000PrjTable").val('');
 				
 				//데이터 테이블 정보 세팅
 				selectDocConInfo();
@@ -995,7 +1003,8 @@ var OSLPrj3000Popup = function () {
 		}
 		
 		fd.append('atchFileId', atchFileId);
-		
+		fd.append('insertType', fileType);
+		fd.append('paramDocId', $('#docId').val());
 		//AJAX 설정
 		var ajaxObj = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do'/>", "async": false, "contentType":false,"processData":false ,"cache":false}
@@ -1035,7 +1044,7 @@ var OSLPrj3000Popup = function () {
 		//AJAX 설정
 		var ajaxObj1 = new $.osl.ajaxRequestAction(
 				{"url":"<c:url value='/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do'/>", "async": false}
-				,{'docAtchFileId': docAtchFileId, 'docWaitFileId':docWaitFileId});
+				,{'docAtchFileId': docAtchFileId, 'docWaitFileId':docWaitFileId, "docId" : $("#docId").val()});
 					
 		
 		//AJAX 전송 성공 함수
@@ -1095,9 +1104,29 @@ var OSLPrj3000Popup = function () {
 				iconColor = '#A7AFB7';
 			}
 			
-			var fileDivbefore = 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
-									+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10"></div>';
-									
+			var fileDivbefore = 	'';
+			
+			//결재 상태가 결재 대기 일 때
+			if(fileData.infType == '02'){
+				fileDivbefore += 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
+									+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10"></div>'
+									+	'<div class="kt-padding-t-15 kt-padding-b-15 float-left">'
+										+	'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-margin-b-0">'
+											+	'<input type="checkbox" name="fileSn" value="'+fileData.fileSn +'"><span></span>'
+										+	'</label>'
+									+	'</div>';
+			}
+			//결재 대기 아닐 때
+			else{
+				fileDivbefore += 	'<div class="osl-uppy-file osl-uppy-file--fullsize">'
+									+	'<div class="osl-uppy__btn osl-uppy__arrow-btn osl-uppy__right-btn osl-uppy__right kt-margin-r-10"></div>'
+									+	'<div class="kt-padding-t-15 kt-padding-b-15 float-left">'
+										+	'<label class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-margin-b-0">'
+										+	'</label>'
+										+	'<input type="hidden" name="fileSn" value="'+fileData.fileSn +'"><span></span>'
+									+	'</div>';
+			}
+			
 			var fileDivCenter = '';
 			
 			//사진 확장자가 아닐 때
@@ -1122,17 +1151,34 @@ var OSLPrj3000Popup = function () {
 										+		'<i class="fas fa-arrow-circle-down"></i>'
 										+	'</div>'
 			}
-			var fileDivAfter = 			'</div>'
-									+	'<div class="osl-uppy-file-info-group">'
+			var fileDivAfter = 			'';
+			//결재 상태가 확정일 때
+			if(fileData.infType == '01'){
+				fileDivAfter = 			'</div>'
+									+	'<div class="osl-uppy-file-info-group kt-padding-t-0">'
 										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
 										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+										+ 	'<div class="osl-uppy-file-name"> 결재 상태  : '+fileData.infTypeNm+' / 확정 일자:'+fileData.signDtm+'</div>'
 									+	'</div>'
 									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
 										+	'<i class="fa fa-times-circle"></i>'
 									+	'</div>'
-									+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
 								+	'</div>'; 
-									
+			}
+			//확정 아닐 때
+			else{
+				fileDivAfter = 			'</div>'
+									+	'<div class="osl-uppy-file-info-group kt-padding-t-0">'
+										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
+										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+										+ 	'<div class="osl-uppy-file-name"> 결재 상태 :'+fileData.infTypeNm+'</div>'
+									+	'</div>'
+									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
+										+	'<i class="fa fa-times-circle"></i>'
+									+	'</div>'
+								+	'</div>'; 
+			}
+								
 			var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
 						
 			$('#confirmation-list').append(fileDiv);
@@ -1146,7 +1192,6 @@ var OSLPrj3000Popup = function () {
 			var iconTitle = '';
 			var iconClass = '';
 			var iconColor = '';
-			
 			//사진 확장자
 			var imgExt = ['jpg','jpeg','png','gif'];
 			
@@ -1193,14 +1238,15 @@ var OSLPrj3000Popup = function () {
 										+	'</div>'
 			}
 			var fileDivAfter = 			'</div>'
-									+	'<div class="osl-uppy-file-info-group">'
+									+	'<div class="osl-uppy-file-info-group kt-padding-t-0">'
 										+	'<div class="osl-uppy-file-name" title="'+$.osl.escapeHtml(fileData.orignlFileNm)+ '">'+$.osl.escapeHtml(fileData.orignlFileNm) +'</div>'
 										+	'<div class="osl-uppy-file-volume">'+fileVolume+'</div>'
+										+ 	'<div class="osl-uppy-file-name"> 업로드 일자 :'+fileData.creatDt+'</div>'
 									+	'</div>'
 									+	'<div class="osl-uppy__btn osl-uppy__right kt-margin-r-10">'
 										+	'<i class="fa fa-times-circle"></i>'
 									+	'</div>'
-									+	'<input type="hidden" name="fileSn" id="fileSn'+idx+'" value="'+fileData.fileSn +'">'
+									+	'<input type="hidden" name="fileSn" value="'+fileData.fileSn +'">'
 								+	'</div>'; 
 									
 			var fileDiv = fileDivbefore + fileDivCenter + fileDivAfter;
@@ -1223,12 +1269,11 @@ var OSLPrj3000Popup = function () {
 		$('.osl-uppy-list-dashboardItem-action--download').click(function(){
 			
 			var type = $(this).parent().parent().children('div:first-child');
-			var fileSn = $(this).parent().parent().children('input[name=fileSn]').val();
+			var fileSn = $(this).parent().parent().find('input[name=fileSn]').val();
 			var atchFileId = '';
 			
 			var form = $("#"+formId)[0];
 			var fd = $.osl.formDataToJsonArray(formId);
-			
 			//확정 파일이면
 			if(type.hasClass('osl-uppy__right')){
 				
@@ -1253,7 +1298,7 @@ var OSLPrj3000Popup = function () {
 		$('.osl-uppy__arrow-btn').click(function(){
 			//클릭된 화살표의 부모(첨부파일 전체) 박스
 			var target = $(this).parent();
-			var fileSn = target.children('input[name=fileSn]').val();
+			var fileSn = target.find('input[name=fileSn]').val();
 			
 			var fileType = '';
 			//버튼모양 여부로 판단
@@ -1293,7 +1338,7 @@ var OSLPrj3000Popup = function () {
 		$('.fa-times-circle').click(function(){
 			
 			var targetType = $(this).parent().parent().children('div:first-child');
-			var fileSn = targetType.parent().children('input[name=fileSn]').val();
+			var fileSn = targetType.parent().find('input[name=fileSn]').val();
 			//부모객체에 오른쪽 클래스가 있다면 확정 대기 파일
 			if(targetType.hasClass("osl-uppy__left")){
 				atchFileId = $('#docWaitFileId').val();
@@ -1472,8 +1517,8 @@ var OSLPrj3000Popup = function () {
 	 */
 	var selectDocConInfo = function(){
 		docId = $("#docId").val();
-		$.osl.datatable.list[prj3200PrjTable].targetDt.setDataSourceParam("docId", docId);
-		$("button[data-datatable-id="+prj3200PrjTable+"][data-datatable-action=select]").click();
+		$.osl.datatable.list[prj3002PrjTable].targetDt.setDataSourceParam("docId", docId);
+		$("button[data-datatable-id="+prj3002PrjTable+"][data-datatable-action=select]").click();
 		 
 	}	
 	

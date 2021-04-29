@@ -24,7 +24,12 @@ public interface Prj1100Service {
 	@SuppressWarnings("rawtypes")
 	void updatePrj1100ProcessInfo(Map paramMap) throws Exception;
 	
+	
+	@SuppressWarnings("rawtypes")
+	void savePrj1100ProcessDataInfo(Map paramMap) throws Exception;
+	
 
+	
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1100ProcessInfo(Map paramMap) throws Exception;
@@ -75,11 +80,19 @@ public interface Prj1100Service {
 	
 	
 	@SuppressWarnings("rawtypes")
-	void insertPrj1101FlowInfo(Map paramMap) throws Exception;
+	String insertPrj1101FlowInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
 	void deletePrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1107FlowLinkList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1100FlowReqListCnt(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
