@@ -639,4 +639,73 @@
 	
 	
 	
+	
+		
+	<delete id="prj3000DAO.deletePrj3000DocList" parameterClass="java.util.Map">
+	<![CDATA[
+		
+		DELETE
+		FROM	PRJ3000 A
+		WHERE	1=1
+		AND		(SELECT LIC_GRP_ID FROM PRJ1000 WHERE PRJ_ID=#prjId#) =  #licGrpId#
+		AND		A.PRJ_ID	=	#prjId#
+	]]>
+	</delete>
+	
+	
+	<select id="prj3000DAO.selectPrj3000RootMenuList" parameterClass="java.util.Map" resultClass="egovMap">
+		<![CDATA[ 
+			
+			SELECT T.* FROM (
+      					SELECT	
+								LPAD('ㄴ', LVL*4, ' ') || A.DOC_NM AS DOC_LVL
+							,	A.DOC_NM
+					    	,	A.PRJ_ID
+					    	,	A.DOC_ID
+					    	,	A.UPPER_DOC_ID
+		          			,	A.LVL
+					    	,	A.ORD
+					    	,	A.DOC_DESC
+		          			,	A.DOC_FORM_FILE_ID
+		          			,	A.DOC_FORM_CONF_FILE_ID
+		          			,	A.DOC_ATCH_FILE_ID
+							,	A.DOC_WAIT_FILE_ID
+							,	A.DOC_CONF_DESC
+							,	TO_CHAR(A.DOC_ED_DTM, 'YYYY-MM-DD') AS DOC_ED_DTM
+		          			,	A.USE_CD
+					    	,	'' AS ROW_STATUS
+		            	FROM	
+		            			PRJ3000 A 
+		            	WHERE	1=1
+		            		AND		A.PRJ_ID		=	'ROOTSYSTEM_PRJ'
+		       ) T        
+      		START WITH T.DOC_ID = (SELECT DOC_ID FROM PRJ3000 WHERE UPPER_DOC_ID IS NULL AND PRJ_ID	= 'ROOTSYSTEM_PRJ')
+		  	CONNECT BY PRIOR T.DOC_ID = T.UPPER_DOC_ID
+      		ORDER SIBLINGS BY T.ORD ASC 
+ 		]]> 
+	</select>
+	
+	
+	<insert id="prj3000DAO.insertPrj3000ParamMenuInfo" parameterClass="java.util.Map">
+		<![CDATA[ 
+			
+			INSERT INTO PRJ3000 A
+			(
+					DOC_ID				,	UPPER_DOC_ID  		,	DOC_NM  			,	DOC_FORM_FILE_ID	
+				,	DOC_FORM_CONF_FILE_ID	,	DOC_DESC	 		,	DOC_ATCH_FILE_ID  	,	DOC_WAIT_FILE_ID
+			  	,	DOC_CONF_DESC		,	LVL				  	,	ORD		  			,	DOC_ED_DTM			
+			  	,	USE_CD  			,	REG_DTM  			,	REG_USR_ID			,	REG_USR_IP		  	
+			  	,	MODIFY_DTM			,	MODIFY_USR_ID		,	MODIFY_USR_IP		,	PRJ_ID
+			)
+			VALUES
+			(
+					#docId#				,	#upperDocId#		,	#docNm#				,	#docFormFileId#	
+				,	#docFormConfFileId#	,	#docDesc#			,	#docAtchFileId#		,	#docWaitFileId#
+			    ,	#docConfDesc#		,	#lvl#	   			,	#ord#				,	#docEdDtm#
+			    ,	'01'				,	SYSDATE				,	#regUsrId#			,	#regUsrIp#	   
+			    ,	SYSDATE				,	#regUsrId#			,	#regUsrIp#			,	#prjId#
+			)
+		]]>
+	</insert>
+	
 </sqlMap>

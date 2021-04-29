@@ -184,6 +184,9 @@
 											<!-- begin:: 산출물 확정 파일 등록 button -->
 											<div class="kt-portlet__head-toolbar">
 												<div class="kt-portlet__head-wrapper">
+													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="signAtchFile" title="확정 파일 결재" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="signAtchFile" tabindex="1" data-original-title="확정 파일 결재">
+														<i class="fas fa-file-signature"></i><span>결재</span>
+													</button>
 													<input type="file" class="kt-hide" id="atchFileBtn" multiple="multiple" name="atchFileBtn">
 													<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air osl-tree-action" data-tree-id="prj3100DocTree" data-tree-action="insertAtchFile" title="확정 파일 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insertAtchFile" tabindex="1" data-original-title="확정 파일 등록">
 														<i class="fa fa-plus"></i><span>등록</span>
@@ -551,6 +554,10 @@ var OSLPrj3000Popup = function () {
 					}else{
 						$.osl.alert($.osl.lang("prj3100.message.alert.lackDownloadInfo"));
 					}
+					
+				},
+				//확정 파일 결재
+				"signAtchFile" : function(obj){
 					
 				}
 			 
@@ -1267,7 +1274,6 @@ var OSLPrj3000Popup = function () {
 			
 			var form = $("#"+formId)[0];
 			var fd = $.osl.formDataToJsonArray(formId);
-			
 			//확정 파일이면
 			if(type.hasClass('osl-uppy__right')){
 				

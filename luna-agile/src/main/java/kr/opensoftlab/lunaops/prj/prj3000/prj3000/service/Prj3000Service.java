@@ -71,4 +71,15 @@ public interface Prj3000Service {
 
 	
 	void deletePrj3002DocConInfo(Map<String, String> paramMap) throws Exception;
+	
+	
+	
+	
+	
+	@SuppressWarnings("rawtypes")
+	int deletePrj3000DocList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj3000RootMenuList(Map paramMap) throws Exception;
 }
