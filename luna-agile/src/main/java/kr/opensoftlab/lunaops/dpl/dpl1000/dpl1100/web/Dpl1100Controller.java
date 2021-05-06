@@ -15,12 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
-import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1000.service.Dpl1000Service;
 import kr.opensoftlab.lunaops.dpl.dpl1000.dpl1100.service.Dpl1100Service;
-import kr.opensoftlab.lunaops.spr.spr1000.spr1100.web.Spr1100Controller;
 import kr.opensoftlab.sdf.util.OslStringUtil;
 import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
@@ -92,7 +89,7 @@ public class Dpl1100Controller {
 			int totCnt = 0;
 
 			
-			Map<String, Object> pageMap = null;
+			Map<String, Object> metaMap = null;
 			
 			
 			List<Map> dpl1100AssList = null;
@@ -112,19 +109,19 @@ public class Dpl1100Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				dpl1100AssList = dpl1100Service.selectDpl1100ReqList(paramMap);
 				
 				
-				pageMap.put("sort", sortDirection);
-				pageMap.put("field",sortFieldId);
+				metaMap.put("sort", sortDirection);
+				metaMap.put("field",sortFieldId);
 			}
 		
 			
 			model.addAttribute("data", dpl1100AssList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 
 			
 			model.addAttribute("errorYn", "N");
@@ -190,7 +187,7 @@ public class Dpl1100Controller {
 			String dplId = (String) paramMap.get("dplId");
 			
 			
-			Map<String, Object> pageMap = null; 
+			Map<String, Object> metaMap = null; 
 						
 			
 			if(dplId != null && !dplId.isEmpty()) {
@@ -205,22 +202,22 @@ public class Dpl1100Controller {
 				paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 				
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 				
-				pageMap = PagingUtil.getPageReturnMap(paginationInfo);
+				metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 				
 				
 				dpl1100NonAssList = dpl1100Service.selectDpl1100ReqList(paramMap);
 				
 				
-				pageMap.put("sort", sortDirection);
-				pageMap.put("field",sortFieldId);
+				metaMap.put("sort", sortDirection);
+				metaMap.put("field",sortFieldId);
 			}
 		
 			
 			model.addAttribute("data", dpl1100NonAssList);
-			model.addAttribute("meta", pageMap);
+			model.addAttribute("meta", metaMap);
 			
 			
 			model.addAttribute("errorYn", "N");
