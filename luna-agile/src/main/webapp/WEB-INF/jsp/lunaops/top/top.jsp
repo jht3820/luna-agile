@@ -347,11 +347,11 @@
 										<span class="badge badge-dark badge-pill kt-font-sm kt-font-bolder osl-aside__badge flaticon2-settings kt-margin-r-10"></span>
 										메인프로젝트 설정
 									</label>
-									<div class="col-6 kt-align-right">
-										<span class="kt-switch kt-switch--sm kt-switch--success">
-											<select class="form-control" id="usrOpt_OPT00003" name="usrOpt_OPT00003" data-osl-value="" data-mst-cd="OPT00003" onchange="$.osl.user.usrOptChg(this);">
-											</select>
-										</span>
+									<div class="col-12 kt-align-right">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="메인 프로젝트명" name="mainPrjNm" id="mainPrjNm">
+											<button type="button" class="btn btn-brand input-group-append" id="searchPrjNmBtn" name="searchPrjNmBtn"><i class="fa fa-search"><span>검색</span></i></button>
+										</div>
 									</div>
 								</div>
 							</form>
