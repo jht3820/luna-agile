@@ -38,21 +38,21 @@ var OSLCmm17000Popup = function () {
     		},
     		columns:[
     			{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false},
-				{field: 'upPrjNm', title: '프로젝트 그룹 명', textAlign: 'left', width: 150, search: false, sortable: false},
+				{field: 'upPrjNm', title: '프로젝트 그룹 명', textAlign: 'left', width: 150, search: true, sortable: false},
 				{field: 'prjId', title: '프로젝트 Id', textAlign: 'center', width: 150, search: true},
 				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 150, search: true, sortable:false},
-				{field: 'startDt', title: '프로젝트 시작 기간', textAlign: 'left', width: 150, search: false, sortable: true},
-				{field: 'endDt', title: '프로젝트 종료 기간', textAlign: 'left', width: 150, sortable: false, search: false},
+				{field: 'startDt', title: '프로젝트 시작일', textAlign: 'left', width: 150, search: true, sortable: true, searchType:"date"},
+				{field: 'endDt', title: '프로젝트 종료일', textAlign: 'left', width: 150, sortable: true, search: true, searchType:"date"},
     		],
     		actionBtn:{
-    			title : $.osl.lang("req4103.actionBtn.title"),
+    			title : $.osl.lang("cmm17000.actionBtn.title"),
     			width : 80,
     			"update" : false,
     			"delete" : false,
     			"click": true,
     		},
     		actionTooltip:{
-    			"click": $.osl.lang("req4103.actionBtn.clickBtn"),
+    			"click": $.osl.lang("cmm17000.actionBtn.clickBtn"),
     		},
     		actionFn:{
     			"click":function(rowData){
@@ -76,7 +76,7 @@ var OSLCmm17000Popup = function () {
 			$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").children("a.dropdown-item[data-field-id=prjNm]").attr("class", "dropdown-item active");
 			
 			//검색 메뉴 버튼 변경
-			$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").parent().children(".btn.btn-secondary.dropdown-toggle").text("프로젝트 명");
+			$(".dropdown-menu.osl-datatable-search__dropdown[data-datatable-id="+datatableId+"]").parent().children(".btn.btn-secondary.dropdown-toggle").text($.osl.lang("cmm17000.field.prjNm"));
 		
 			//select 감추기
 			$(".form-control.kt-select2.osl-datatable-search__select[data-datatable-id="+datatableId+"]").attr("style", "display:none;");

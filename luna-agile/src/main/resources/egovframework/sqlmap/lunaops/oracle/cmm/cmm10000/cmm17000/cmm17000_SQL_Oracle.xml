@@ -53,10 +53,16 @@
 			<isNotEmpty property="searchTargetData">
 				<isNotEmpty property="searchTargetId">
 					<isEqual property="searchTargetId" compareValue="prjNm" prepend="AND">
-						AND 	B.PRJ_NM LIKE '%'||#searchTargetData#||'%'
+						 	B.PRJ_NM LIKE '%'||#searchTargetData#||'%'
 					</isEqual>
 					<isEqual property="searchTargetId" compareValue="prjId" prepend="AND">
-						AND 	B.PRJ_ID LIKE '%'||#searchTargetData#||'%'
+						 	B.PRJ_ID LIKE '%'||#searchTargetData#||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="startDt">
+						AND	B.START_DT = TO_CHAR(TO_DATE(#searchTargetData#,'YYYY-MM-DD'),'YYYYMMDD')
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="endDt">
+						AND	B.END_DT = TO_CHAR(TO_DATE(#searchTargetData#,'YYYY-MM-DD'),'YYYYMMDD')
 					</isEqual>
 				</isNotEmpty>
 			</isNotEmpty>
