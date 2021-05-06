@@ -371,9 +371,6 @@
 						</isEqual>
 					</isNotEmpty>
 				</isNotEmpty>
-				<isNotEmpty property="reqId" prepend="AND">
-					SUBT2.REQ_ID = #reqId# 
-				</isNotEmpty>
 				<![CDATA[
 				ORDER BY SUBT2.PRJ_ID, SUBT2.REQ_PRO_TYPE ASC, TO_NUMBER(REGEXP_REPLACE(SUBT2.REQ_ORD, '[^0-9]')) DESC NULLS LAST, SUBT2.REG_DTM DESC
 			) SUBT1
@@ -621,7 +618,7 @@
     <update id="req3000DAO.updateReq3001ReqOrd" parameterClass="java.util.Map">
 		UPDATE
 				REQ3001
-		SET	    REQ_ORD = #reqOrd#
+		SET	    REQ_LINK_ORD = #reqOrd#
 		WHERE	1 = 1
 		AND		PRJ_GRP_ID 	= #prjGrpId#
 		AND		PRJ_ID 		= #prjId#

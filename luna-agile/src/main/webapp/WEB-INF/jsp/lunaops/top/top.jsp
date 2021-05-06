@@ -345,12 +345,12 @@
 								<div class="form-group form-group-xs row" data-toggle="kt-tooltip" data-html="true" title="메인프로젝트 선택" data-placement="top" data-skin="brand">
 									<label class="col-6 col-form-label">
 										<span class="badge badge-dark badge-pill kt-font-sm kt-font-bolder osl-aside__badge flaticon2-settings kt-margin-r-10"></span>
-										메인프로젝트 설정
+										<span data-lang-cd="cmm17000.title.mainPrjSetting">메인프로젝트 설정</span>
 									</label>
 									<div class="col-12 kt-align-right">
 										<div class="input-group">
 											<input type="text" class="form-control" placeholder="메인 프로젝트명" name="mainPrjNm" id="mainPrjNm">
-											<button type="button" class="btn btn-brand input-group-append" id="searchPrjNmBtn" name="searchPrjNmBtn"><i class="fa fa-search"><span>검색</span></i></button>
+											<button type="button" class="btn btn-brand input-group-append" id="searchPrjNmBtn" name="searchPrjNmBtn"><i class="fa fa-search"><span data-lang-cd="cmm17000.button.search">검색</span></i></button>
 										</div>
 									</div>
 								</div>
