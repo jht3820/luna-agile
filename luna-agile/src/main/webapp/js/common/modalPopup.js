@@ -95,7 +95,7 @@ $(document).on('hide.bs.modal', '.modal', function () {
 	
 	modalCloseAlert = true;
 	
-	$.osl.confirm("팝업 창을 닫으시겠습니까?",null,function(result) {
+	$.osl.confirm($.osl.lang("common.modal.closeAlert"),null,function(result) {
     	modalCloseAlert = false;
         if (result.value) {
         	
@@ -127,6 +127,7 @@ var modal_popup = function(url, data, opts){
 			focus: false,
 			autoHeight: true,
 			draggable: true,
+			ftScrollUse: true,
 			'class': {
 				
 				"header": "",
@@ -141,7 +142,7 @@ var modal_popup = function(url, data, opts){
 	
 	if(!options.idKeyDuple){
 		if($(".modal[data-idkeyduple=false]").length > 0 && $(".modal[data-idkeyduple=false]").data("idkey") == options.idKey){
-			$.osl.alert("해당 기능 팝업은 중복으로 동작 할 수 없습니다.");
+			$.osl.alert($.osl.lang("common.error.modalDuple"));
 			return false;
 		}
 	}
@@ -224,6 +225,13 @@ var modal_popup = function(url, data, opts){
 	var loadingShowVal = options.showLoading;
 	
 	
+	if($.osl.isNull(data)){
+		data = {};
+	}
+	
+	data["modalId"] = layerBoxDivId;
+	
+	
 	var ajaxObj = new $.osl.ajaxRequestAction(
 			{"url":url,async:true, loadingShow: loadingShowVal}
 			,data);
@@ -263,12 +271,44 @@ var modal_popup = function(url, data, opts){
 		}
 		
 		
-		KTUtil.scrollInit($("#"+layerBoxDivId).find(".modal-body")[0], {
-	        disableForMobile: true, 
-	        resetHeightOnDestroy: true, 
-	        handleWindowResize: true, 
-	        height: fnAutoHeight
-	    });
+		if(options.ftScrollUse){
+			
+			KTUtil.scrollInit($("#"+layerBoxDivId).find(".modal-body")[0], {
+				disableForMobile: true, 
+				resetHeightOnDestroy: true, 
+				handleWindowResize: true, 
+				height: fnAutoHeight
+			});
+		}
+		
+		var inputNumberList = $("input[type=number]");
+		if(!$.osl.isNull(inputNumberList) && inputNumberList.length > 0){
+			$.each(inputNumberList, function(idx, map){
+				
+				var readonly = $(map).attr("readonly");
+				if(!$.osl.isNull(readonly) || (readonly == true || readonly == "readonly")){
+					return true;
+				}
+				
+				var min = $(map).attr("min") || 0;
+				var max = $(map).attr("max") || 9999999;
+				var step = $(map).attr("step") || 1;
+				var boostat = $(map).attr("boostat") || 5;
+				var maxboostedstep = $(map).attr("maxboostedstep") || 10;
+				
+				
+		    	$(map).TouchSpin({
+		            buttondown_class: 'btn btn-secondary',
+		            buttonup_class: 'btn btn-secondary',
+		            min: min,
+		            max: max,
+		            step: step,
+		            boostat: boostat,
+		            maxboostedstep: maxboostedstep,
+		        });
+			});
+		}
+		
 		
 		
 		if(options.hasOwnProperty("callback")){
@@ -285,6 +325,7 @@ var modal_popup = function(url, data, opts){
 				
 			});
 		}
+
 		
 		$.osl.deferred.resolve();
 		return $.osl.deferred.promise();
@@ -293,13 +334,13 @@ var modal_popup = function(url, data, opts){
 	
 	ajaxObj.setFnError(function(xhr, status, err){
 		if(xhr.status == '999'){
-    		$.osl.alert('세션이 만료되어 로그인 페이지로 이동합니다.');
+    		$.osl.alert($.osl.lang("common.error.sessionInvalid"));
     		document.location.href="/cmm/cmm4000/cmm4000/selectCmm4000View.do"
     		return;
     	}
 		if(xhr.status == '404'){
 			console.log(err);
-			$.osl.alert('팝업 페이지에서 오류가 발생했습니다.');
+			$.osl.alert($.osl.lang("common.error.popup"));
     		$.osl.showLoadingBar(false);
     		
     		
@@ -308,7 +349,7 @@ var modal_popup = function(url, data, opts){
     		return;
     	}
 		if(xhr.status == '401'){
-			$.osl.alert('권한이 부족합니다.');
+			$.osl.alert($.osl.lang("common.error.nonAuth"));
 			$.osl.showLoadingBar(false);
     		
     		

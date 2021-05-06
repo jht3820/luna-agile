@@ -117,11 +117,9 @@ public class Spr2100Controller {
 				spr2100List = spr2100Service.selectSpr2100MmrList(paramMap);
 			}
 			
-			if(totCnt != 0) {
-				
-				metaMap.put("sort", sortDirection);
-				metaMap.put("field",sortFieldId);
-			}
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field",sortFieldId);
 			
 			
 			model.addAttribute("data", spr2100List);

@@ -9,24 +9,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import kr.opensoftlab.lunaops.arm.arm1000.arm1000.service.Arm1000Service;
-import kr.opensoftlab.lunaops.arm.arm1000.arm1000.vo.Arm1000VO;
-import kr.opensoftlab.lunaops.com.vo.LoginVO;
-import kr.opensoftlab.sdf.util.OslAgileConstant;
-import kr.opensoftlab.sdf.util.PagingUtil;
-import kr.opensoftlab.sdf.util.RequestConvertor;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.rte.fdl.cmmn.trace.LeaveaTrace;
-import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.EgovProperties;
+import egovframework.com.cmm.service.FileVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import kr.opensoftlab.lunaops.arm.arm1000.arm1000.service.Arm1000Service;
+import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
+import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
+import kr.opensoftlab.sdf.util.OslStringUtil;
+import kr.opensoftlab.sdf.util.PagingUtil;
+import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
 
@@ -41,242 +42,123 @@ public class Arm1000Controller {
     private Arm1000Service arm1000Service;
     
     
+	@Resource(name = "stm3000Service")
+	private Stm3000Service stm3000Service;
     
-	
     
-	@Resource(name = "egovMessageSource")
-	EgovMessageSource egovMessageSource;
+    @Resource(name = "egovMessageSource")
+    EgovMessageSource egovMessageSource;
 
 	
-	@Resource(name = "propertiesService")
-	protected EgovPropertyService propertiesService;
-
+   	@Resource(name="fileMngService")
+   	private FileMngService fileMngService;
+   	
+   	
+	@Resource(name="EgovFileMngUtil")
+	private EgovFileMngUtil fileUtil;
+    
 	
-	@Resource(name = "leaveaTrace")
-	LeaveaTrace leaveaTrace;
-    
-    
 	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000View.do")
-    public String selectArm1000View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		try{
-			
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			
-			String viewChk = (String)paramMap.get("viewChk");
-			model.addAttribute("viewChk", viewChk);
-			
-			
-			String sendChk = (String)paramMap.get("sendChk");
-			String armSendTypeCd = (String)paramMap.get("armSendTypeCd");
-			String usrIdChk = (String)paramMap.get("usrIdChk");
-			String usrNmChk = (String)paramMap.get("usrNmChk");
-			String arm_reqId = (String)paramMap.get("arm_reqId");
-			String arm_reqNm = (String)paramMap.get("arm_reqNm");
-			String reqPrjId = (String)paramMap.get("reqPrjId");
-			model.addAttribute("sendChk", sendChk);
-			model.addAttribute("usrIdChk", usrIdChk);
-			model.addAttribute("armSendTypeCd", armSendTypeCd);
-			model.addAttribute("usrNmChk", usrNmChk);
-			model.addAttribute("arm_reqId", arm_reqId);
-			model.addAttribute("arm_reqNm", arm_reqNm);
-			model.addAttribute("reqPrjId", reqPrjId);
-			
-        	return "/arm/arm1000/arm1000/arm1000";
-		}catch(Exception ex){
-			Log.error("selectArm1000View()", ex);
-    		throw new Exception(ex.getMessage());
-		}
-    }
-	
+	public String selectArm1000AlarmListView(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			return "/arm/arm1000/arm1000/arm1000";
+	}
+
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000ListAjax.do")
-	public ModelAndView selectArm1000ListAjax(@ModelAttribute("arm1000VO") Arm1000VO arm1000VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-		try{
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmListAjax.do")
+	public ModelAndView selectArm1000AlarmListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
 			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
 			
 			
-			String _pageNo_str = paramMap.get("pageNo");
-			String _pageSize_str = paramMap.get("pageSize");
-			
-			int _pageNo = 1;
-			int _pageSize = OslAgileConstant.pageSize;
-			
-			if(_pageNo_str != null && !"".equals(_pageNo_str)){
-				_pageNo = Integer.parseInt(_pageNo_str)+1;  
-			}
-			if(_pageSize_str != null && !"".equals(_pageSize_str)){
-				_pageSize = Integer.parseInt(_pageSize_str);  
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
 			}
 			
 			
-			arm1000VO.setPageIndex(_pageNo);
-			arm1000VO.setPageSize(_pageSize);
-			arm1000VO.setPageUnit(_pageSize);
+			String paramPrjId = (String) paramMap.get("prjId");
 			
-			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(arm1000VO);  
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			
+			String paramUsrId = (String) paramMap.get("usrId");
+			
+			
+			if(paramUsrId == null || "".equals(paramUsrId)) {
+				paramUsrId = ((LoginVO) ss.getAttribute("loginVO")).getUsrId();
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("usrId", paramUsrId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			int totCnt = arm1000Service.selectArm1000AlarmListCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
 
-			List<Arm1000VO> arm1000List = null;
 			
-			
-			arm1000VO.setUsrId(loginVO.getUsrId());
-			paramMap.put("usrId", loginVO.getUsrId());
-			
-			
-			arm1000VO.setLicGrpId(loginVO.getLicGrpId());
-
-			
-			Map armCntMap = arm1000Service.selectArm1000AlarmCnt(paramMap);
-			
-			String allCnt = String.valueOf(armCntMap.get("allCnt"));
-			int totCnt = Integer.parseInt(allCnt);
 			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
 			
-			
-			arm1000List = arm1000Service.selectArm1000AlarmList(arm1000VO);
-
-			model.addAttribute("list", arm1000List);
-
-			
-			Map<String, Integer> pageMap = new HashMap<String, Integer>();
-			pageMap.put("pageNo",arm1000VO.getPageIndex());
-			pageMap.put("listCount", arm1000List.size());
-			pageMap.put("totalPages", paginationInfo.getTotalPageCount());
-			pageMap.put("totalElements", totCnt);
-			pageMap.put("pageSize", _pageSize);
-
-			model.addAttribute("page", pageMap);
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
 			
-			model.addAttribute("result", "ok");
-			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("selectArm1000ListAjax()", ex);
-			
-			model.addAttribute("result", "fail");
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/arm/arm1000/arm1000/updateArm1000AlarmInfo.do")
-	public ModelAndView updateArm1000AlarmInfo(@ModelAttribute("arm1000VO") Arm1000VO arm1000VO, HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-		try{
-			
-			Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"armId");
-			
+			List<Map> arm1000List = arm1000Service.selectArm1000AlarmList(paramMap);
 
 			
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVo = (LoginVO)ss.getAttribute("loginVO");
-    		
-    		String usrId = loginVo.getUsrId();
-    		
-			arm1000Service.updateArm1000AlarmInfo(paramMap);
+			Map<String, String> notRead = new HashMap<String, String>();
+			paramMap.put("notRead", "get");
+			notRead.put("get", Integer.toString(arm1000Service.selectArm1000AlarmListCnt(paramMap)));
 			
-    		
-    		Map<String, String> tempMap = new HashMap<String,String>();
-    		
-    		tempMap.put("usrId", usrId);
-    		
-			Map alarmCnt = arm1000Service.selectArm1000AlarmCnt(tempMap);
+			paramMap.put("notRead", "send");
+			notRead.put("send", Integer.toString(arm1000Service.selectArm1000AlarmListCnt(paramMap)));
 			
-			model.addAttribute("alarmCnt", alarmCnt);
+			paramMap.put("notRead", "alone");
+			notRead.put("alone", Integer.toString(arm1000Service.selectArm1000AlarmListCnt(paramMap)));
 			
 			
-			model.addAttribute("errorYn", "N");
-			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("updateArm1000AlarmInfo()", ex);
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
 			
-			model.addAttribute("errorYn", "Y");
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-			return new ModelAndView("jsonView");
-		}
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes" })
-	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000InfoAjax.do")
-	public ModelAndView selectArm1000InfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			
+			model.addAttribute("data", arm1000List);
+			model.addAttribute("meta", metaMap);
+			model.addAttribute("notRead", notRead);
 
-		try{
-			
-			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-			
-			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			String usrId = loginVO.getUsrId();
-			
-			
-			String viewCheck = (String)paramMap.get("viewCheck");
-			
-			
-			String armTypeCd = (String) paramMap.get("armTypeCd");
-			
-			
-			paramMap.put("usrId", usrId);
-			
-			
-			if("02".equals(viewCheck) && "02".equals(armTypeCd)){
-				Map<String, Object> tempMap = new HashMap<String,Object>();
-				tempMap.put("viewCheck", "01");
-				tempMap.put("armId", paramMap.get("armId"));
-				tempMap.put("usrId", usrId);
-				arm1000Service.updateArm1000AlarmInfo(tempMap);
-				
-				Map alarmCnt = arm1000Service.selectArm1000AlarmCnt(paramMap);
-				
-				
-				model.addAttribute("alarmCnt", alarmCnt);
-				
-				
-				model.addAttribute("viewAction", "01");
-				
-			
-			}else if("02".equals(viewCheck) && "03".equals(armTypeCd)){	
-				
-				Map<String, Object> tempMap = new HashMap<String,Object>();
-				tempMap.put("viewCheck", "01");
-				tempMap.put("armId", paramMap.get("armId"));
-				tempMap.put("usrId", usrId);
-				arm1000Service.updateArm1000AlarmInfo(tempMap);
-				
-				Map alarmCnt = arm1000Service.selectArm1000AlarmCnt(paramMap);
-				
-				model.addAttribute("alarmCnt", alarmCnt);
-				
-				
-				model.addAttribute("viewAction", "01");
-				
-			}else{
-				model.addAttribute("viewAction", "02");
-			}
-			
-			
-			Map armInfo = arm1000Service.selectArm1000AlarmInfo(paramMap);
-			
-			model.addAttribute("armInfo", armInfo);
-			
 			
 			model.addAttribute("errorYn", "N");
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
 			return new ModelAndView("jsonView");
-		}
-		catch(Exception ex){
-			Log.error("selectArm1000ListAjax()", ex);
+		} catch (Exception ex) {
+			Log.error("selectArm1000AlarmListAjax()", ex);
+			
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
@@ -285,29 +167,199 @@ public class Arm1000Controller {
 	}
 	
 	
-	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1000InfoAjax.do")
-	public ModelAndView insertArm1000InfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-
-		try{
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmNotReadCntAjax.do")
+	public ModelAndView selectArm1000AlarmNotReadCntAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
+			
 			HttpSession ss = request.getSession();
-			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			String usrId = loginVO.getUsrId();
-			paramMap.put("sendUsrId", usrId);
-			paramMap.put("armSendTypeCd", "01");
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
 			
 			
-			arm1000Service.insertArm1000AlarmInfo(paramMap);
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			
+			String paramUsrId = (String) paramMap.get("usrId");
+			
+			
+			if(paramUsrId == null || "".equals(paramUsrId)) {
+				paramUsrId = ((LoginVO) ss.getAttribute("loginVO")).getUsrId();
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("usrId", paramUsrId);
+			
+			
+			Map<String, Integer> allMessage = new HashMap<String, Integer>();
+			
+			paramMap.put("armMenuType", "get");
+			allMessage.put("get",arm1000Service.selectArm1000AlarmListCnt(paramMap));
+			
+			paramMap.put("armMenuType", "send");
+			allMessage.put("send",arm1000Service.selectArm1000AlarmListCnt(paramMap));
+			
+			paramMap.put("armMenuType", "alone");
+			allMessage.put("alone",arm1000Service.selectArm1000AlarmListCnt(paramMap));
+
+			
+			Map<String, Integer> notRead = new HashMap<String, Integer>();
+			
+			paramMap.put("notRead", "Y");
+			
+			
+			paramMap.put("armMenuType", "get");
+			notRead.put("get",arm1000Service.selectArm1000AlarmListCnt(paramMap));
+			
+			paramMap.put("armMenuType", "alone");
+			notRead.put("alone", arm1000Service.selectArm1000AlarmListCnt(paramMap));
+			
+			model.addAttribute("allMessage", allMessage);
+			model.addAttribute("notRead", notRead);
 			
 			
 			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("selectArm1000AlarmNotReadCntAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1001View.do")
+	public String insertArmm1001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+			return "/arm/arm1000/arm1000/arm1001";
+	}
+
+
+	
+	@SuppressWarnings({ "rawtypes" })
+	@RequestMapping(value = "/arm/arm1000/arm1000/selectArm1000AlarmUsrListAjax.do")
+	public ModelAndView selectArm1000AlarmUsrListAjax(HttpServletRequest request, ModelMap model) throws Exception {
+		try {
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("useCd", "01");
+			
+			int totCnt = stm3000Service.selectStm3000UsrListCnt(paramMap);
+			
+			paramMap.put("firstIndex", "0");
+			paramMap.put("lastIndex", Integer.toString(totCnt));
+
+			
+			List<Map> usrAllList = stm3000Service.selectStm3000UsrList(paramMap);
+			
+			
+			model.addAttribute("usrAllList", usrAllList);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("selectArm1000AlarmUsrListAjax()", ex);
+			
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1000AlarmAtchFileInfo.do")
+	public ModelAndView insertArm1000AlarmAtchFileInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest)request;
+			
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			String atchFileId = (String) paramMap.get("atchFileId");
+			String fileSn = (String) paramMap.get("fileSn");
+			
+			
+			List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest, atchFileId, Integer.parseInt(fileSn), "Arm");
+			
+			
+			fileMngService.insertFileDetail(_result);  
+			
+			
+			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
 			return new ModelAndView("jsonView");
 		}
 		catch(Exception ex){
-			Log.error("insertArm1000InfoAjax()", ex);
+			Log.error("insertArm1000AlarmAtchFileInfo()", ex);
+
 			
 			model.addAttribute("errorYn", "Y");
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
@@ -316,5 +368,259 @@ public class Arm1000Controller {
 	}
 	
 	
+	@RequestMapping(value="/arm/arm1000/arm1000/insertArm1000AlarmInfoAjax.do")
+	public ModelAndView insertArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			
+			String paramUsrId = (String) paramMap.get("usrId");
+			
+			
+			if(paramUsrId == null || "".equals(paramUsrId)) {
+				paramUsrId = ((LoginVO) ss.getAttribute("loginVO")).getUsrId();
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("usrId", paramUsrId);
+			
+			
+			arm1000Service.insertArm1000AlarmInfo(paramMap);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("insertArm1000AlarmInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
+			return new ModelAndView("jsonView");
+		}
+	}
 	
+	
+	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1002View.do")
+	public String selectArm1002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			String fileSumMaxSize = EgovProperties.getProperty("Globals.lunaops.fileSumMaxSize");
+			model.addAttribute("fileSumMaxSize",fileSumMaxSize);
+			model.addAttribute("type",paramMap.get("type"));
+			
+			return "/arm/arm1000/arm1000/arm1002";
+		}
+		catch(Exception ex){
+			Log.error("selectArm1002View()", ex);
+			throw new Exception(ex.getMessage());
+		}
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/arm/arm1000/arm1000/selectArm1000AlarmInfoAjax.do")
+	public ModelAndView selectArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			
+			Map arm1000Info = arm1000Service.selectArm1000AlarmInfo(paramMap);
+			model.addAttribute("arm1000Info", arm1000Info);
+			
+			
+			List<FileVO> fileList = null;
+        	int fileCnt = 0;
+        	
+        	if(arm1000Info != null){
+        		
+            	FileVO fileVO = new FileVO();
+	        	fileVO.setAtchFileId((String)arm1000Info.get("atchFileId"));
+	        	
+	        	
+				fileList = fileMngService.fileDownList(fileVO);
+				
+				
+				for(FileVO temp : fileList){
+					if(fileCnt < Integer.parseInt(temp.getFileSn())){
+						fileCnt = Integer.parseInt(temp.getFileSn());
+					}
+				}
+        	}else {
+        		model.addAttribute("errorYn", "Y");
+            	model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+        	}
+			model.addAttribute("fileList",fileList);
+			model.addAttribute("fileListCnt",fileCnt);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectArm1000AlarmInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+
+	
+	@RequestMapping(value="/arm/arm1000/arm1000/updateArm1000AlarmInfoAjax.do")
+	public ModelAndView updateArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
+									
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			
+			arm1000Service.updateArm1000AlarmInfo(paramMap);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("updateArm1000AlarmInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/arm/arm1000/arm1000/deleteArm1000AlarmInfoAjax.do")
+	public ModelAndView deleteArm1000AlarmInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			paramMap.put("licGrpId", licGrpId);
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			
+			arm1000Service.deleteArm1000AlarmInfo(paramMap);
+
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("deleteArm1000AlarmInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+			return new ModelAndView("jsonView");
+		}
+	}
 }

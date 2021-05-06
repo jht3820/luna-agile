@@ -6,6 +6,7 @@
 	<input type="hidden" name="changePrj" id="changePrj" value="<c:out value='${param.changePrj}'/>">
 	<input type="hidden" name="reqId" id="reqId" value="<c:out value='${param.paramReqId}'/>">
 	<input type="hidden" name="reqUsrId" id="reqUsrId" value="<c:out value='${param.paramReqUsrId}'/>">
+	<input type="hidden" name="reqGrpId" id="reqGrpId" value="<c:out value='${param.paramReqGrpId}'/>">
 	<input type="hidden" name="reqPrjId" id="reqPrjId" value="<c:out value='${param.paramPrjId}'/>">
 	<input type="hidden" name="atchFileId" id="atchFileId">
 	<input type="hidden" name="oriAtchFileId" id="oriAtchFileId">
@@ -18,9 +19,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -64,16 +63,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="kt-portlet kt-portlet--collapsed" id="req4101ReqGroupInfo">
+			<div class="kt-portlet kt-portlet--collapsed" id="req4101ReqGrpInfo">
 				<div class="kt-portlet__head">
 					<div class="kt-portlet__head-label">
 						<i class="fa flaticon2-layers-1 kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReqInfo">그룹 요구사항 정보</span>
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -81,13 +78,13 @@
 					<div class="form-group">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReq">그룹 요구사항</span></label>
 						<div class="input-group">
-							<input type="text" class="form-control" placeholder="그룹 요구사항을 선택하세요" name="reqGroupNm" id="reqGroupNm" readonly="readonly">
-							<button type="button" class="btn btn-brand input-group-append" id="selectReqGroupBtn" name="selectReqGroupBtn"><span data-lang-cd="req4101.button.searchBtn">검색</span></button>
+							<input type="text" class="form-control" placeholder="그룹 요구사항을 선택하세요" name="reqGrpNm" id="reqGrpNm">
+							<button type="button" class="btn btn-brand input-group-append" id="searchReqGrpBtn" name="searchReqGrpBtn"><span data-lang-cd="req4101.button.searchBtn">검색</span></button>
 						</div>
 					</div>
 					<div class="form-group kt-margin-b-0">
 						<label><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.group.groupReqDesc">그룹 요구사항 내용</span></label>
-						<textarea class="kt-hide" name="reqGroupDesc" id="reqGroupDesc" ></textarea>
+						<textarea class="kt-hide" name="reqGrpDesc" id="reqGrpDesc"></textarea>
 					</div>
 				</div>
 			</div>
@@ -110,11 +107,11 @@
 					</div>
 					<div class="form-group">
 						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.reqNm">요청 제목</span></label>
-						<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
+						<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" autocomplete="off" required>
 					</div>
 					<div class="form-group">
 						<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req4101.label.reqDesc">요청 내용</span></label>
-						<textarea  class="kt-hide" name="reqDesc" id="reqDesc" required></textarea>
+						<textarea  class="kt-hide" name="reqDesc" id="reqDesc" autocomplete="off" required></textarea>
 					</div>
 					<div class="form-group kt-margin-b-10">
 						<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
@@ -126,11 +123,11 @@
 					<div class="kt-hide osl-bad_box" name="pwOption" id="pwOption">
 				 		<div class="input-group kt-margin-b-10">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req4101.label.password">PW</span></label>
-				 			<input type="password" class="form-control" name="reqPw" id="reqPw"  regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
+				 			<input type="password" class="form-control" name="reqPw" id="reqPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
 				 		</div>
 				 		<div class="input-group">
 					 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req4101.label.passwordCheck">PW 확인</span></label>
-				 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
+				 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck"autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
 			 			</div>
 				 	</div>
 					<div class="form-group kt-margin-t-25 form-group-last">
@@ -141,7 +138,7 @@
 								<span data-lang-cd="req4101.button.deleteResetBtn">삭제 초기화</span>
 							</button>
 						</label>
-						<div class="kt-uppy osl-max-height-260" id="req4101FileUpload">
+						<div class="kt-uppy osl-max-h-px-260" id="req4101FileUpload">
 							<div class="kt-uppy__dashboard"></div>
 							<div class="kt-uppy__progress"></div>
 						</div>
@@ -155,9 +152,7 @@
 					</div>
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-group">
-							<div class="kt-portlet__head-group">
-								<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-							</div>
+							<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 						</div>
 					</div>
 				</div>
@@ -192,7 +187,7 @@
 					</div>
 					<div class="kt-portlet__body kt-padding-10" id="prepListDiv" name="prepListDiv">
 					</div>
-					<div class="kt-portlet__body kt-padding-10 kt_datatable" id="prepListTable" name="prepListTable">
+					<div class="kt-portlet__body kt-padding-10 kt_datatable osl-datatable-footer__divide" id="prepListTable" name="prepListTable">
 					</div>
 				</div>
 			</div>
@@ -203,7 +198,6 @@
 	<button type="button" class="btn btn-brand" id="req4101SaveSubmit"><i class="fa fa-check-square"></i><span data-lang-cd="req4101.complete">완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">Close</span></button>
 </div>
-
 <script>
 "use strict";
 var OSLReq4101Popup = function () {
@@ -246,7 +240,7 @@ var OSLReq4101Popup = function () {
     	
     	//Portlet 세팅
     	new KTPortlet('req4101RequestUsrInfo', $.osl.lang("portlet"));
-    	new KTPortlet('req4101ReqGroupInfo', $.osl.lang("portlet"));
+    	new KTPortlet('req4101ReqGrpInfo', $.osl.lang("portlet"));
     	new KTPortlet('req4101NewRequestOpt', $.osl.lang("portlet"));
     	
     	//palceholder 세팅
@@ -255,7 +249,7 @@ var OSLReq4101Popup = function () {
 		$("#deptName").attr("placeholder",$.osl.lang("req4101.placeholder.deptNm"));
 		$("#telno").attr("placeholder",$.osl.lang("req4101.placeholder.tel"));
 		
-    	$("#reqGroupNm").attr("placeholder",$.osl.lang("req4101.placeholder.selectGroup"));
+    	$("#ReqGrpNm").attr("placeholder",$.osl.lang("req4101.placeholder.selectGroup"));
 		$("#reqDtm").attr("placeholder",$.osl.lang("req4101.placeholder.reqDtm"));
 		$("#reqNm").attr("placeholder",$.osl.lang("req4101.placeholder.reqNm"));
 		$("#reqPw").attr("placeholder",$.osl.lang("req4101.placeholder.password"));
@@ -307,7 +301,7 @@ var OSLReq4101Popup = function () {
     				//atchFileId
     		    	atchFileId = $("#atchFileId").val();
     				//게시글의 atchFileId가 없는 경우 - 복사일 땐 미리 atchFileId를 비워 실행하도록 함
-    				if(atchFileId==null || atchFileId==""){
+    				if($.osl.isNull(atchFileId)){
     					//atchFileId 생성
     					$.osl.file.makeAtchfileId(function(data){
     						//atchFileId 생성 중 오류 발생 시
@@ -461,11 +455,11 @@ var OSLReq4101Popup = function () {
     		},
     		columns:[
     			{field:'rn', title:'No.', textAlign:'center', width: 50},
-    			{field:'reqProTypeNm', title:$.osl.lang("req4101.prepData.field.reqProTypeNm"), textAlign:'center', width: 80},
-    			{field:'reqOrd', title:$.osl.lang("req4101.prepData.field.reqOrd"), textAlign:'left', width: 80, autoHide:false},
-    			{field:'prjNm', title:$.osl.lang("req4101.prepData.field.prjNm"), textAlign:'left', width: 180},
-    			{field:'reqNm', title:$.osl.lang("req4101.prepData.field.reqNm"), textAlign:'left', width: 240, autoHide:false, search: true},
-    			{field:'reqDtm', title:$.osl.lang("req4101.prepData.field.reqDtm"), textAlign:'center', width: 180},
+    			{field:'reqProTypeNm', title:'처리유형', textAlign:'center', width: 80},
+    			{field:'reqOrd', title:'순번', textAlign:'left', width: 80, autoHide:false},
+    			{field:'prjNm', title:'프로젝트명', textAlign:'left', width: 180},
+    			{field:'reqNm', title:'요구사항명', textAlign:'left', width: 240, autoHide:false, search: true},
+    			{field:'reqDtm', title:'요청일', textAlign:'center', width: 180},
     		],
     		actionBtn:{
     			title : $.osl.lang("req4101.prepData.button.detailBtn"),
@@ -649,12 +643,6 @@ var OSLReq4101Popup = function () {
 			viewTypeChange();
 		});
     	
-    	//그룹 요구사항 선택 클릭 시
-    	$("#selectReqGroupBtn").click(function(){
-    		console.log("selectReqGroupBtn Click");
-    		//그룹요구사항 검색 및 선택한 그룹요구사항 내용 가져오기
-    	});
-    	
     	//등록인경우
     	if(type == "insert"){
     		//요청자 정보 세팅 - default : 로그인 사용자
@@ -664,17 +652,18 @@ var OSLReq4101Popup = function () {
 	    	$("#reqDtm").val(new Date().format("yyyy-MM-dd"));
 	    	
 	    	//edit 세팅
-	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
-	    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
+	    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
+	    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
 	    		toolbar: false,
     			disableResizeEditor: false,
     			disableDragAndDrop: true,
     			disabledEditor: true,
     			height:180,
     		}));
+	    	
 	    	//edit 세팅하고 나서 textarea 보이기
 	    	$("#reqDesc").removeClass("kt-hide");
-	    	$("#reqGroupDesc").removeClass("kt-hide");
+	    	$("#reqGrpDesc").removeClass("kt-hide");
 	    	
 	    	//datepicker 세팅
 			$.osl.date.datepicker($("#reqDtm"), {});
@@ -695,7 +684,31 @@ var OSLReq4101Popup = function () {
     		$("#deptId").val("");
     		$("#usrImgId").val(""); //이미지 default 넣기
     	});
+    	
+    	//그룹 요구사항 명에 포커스 될 때
+    	$("#reqGrpNm").focus(function(){
+    		
+    		//관련 항목 모두 비우기
+    		$("#reqGrpNm").val("");
+    		$("#reqGrpDesc").val("");
+    		
+    	});
    		
+    	//엔터키
+		$("#usrNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchUsrNmBtn").click();
+			}
+		});
+    	//엔터키로 그룹 요구사항 정보 조회
+    	$("#reqGrpNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchReqGrpBtn").click();
+			}
+		});
+    	
     	//포커스가 아웃될 경우
    		$("#usrNm").blur(function(){
    			//입력된 요청자 명이 있을 경우
@@ -725,13 +738,37 @@ var OSLReq4101Popup = function () {
 						targetId: "selectUsr",
 						actionFn: function(thisObj){
 							var temp = OSLReq4103Popup.getUsrInfo();
-							if(temp != null && temp.length != 0){
+							if(!$.osl.isNull(temp)){
 								OSLReq4101Popup.setUsrInfo(temp);
 							}
 						}
 					}]
     		};
     		$.osl.layerPopupOpen('/req/req4000/req4100/selectReq4103View.do',data,options);
+    	});
+    	
+    	//그룹요구사항명 검색버튼 클릭 시
+    	$("#searchReqGrpBtn").click(function(){
+    		var data = {
+    				reqGrpNm : $("#reqGrpNm").val()
+    		};
+    		var options = {
+    				idKey: "searchReqGrp",
+					modalTitle: $.osl.lang("req4101.modalTitle.reqGrpSearch"),
+					closeConfirm: true,
+					autoHeight:false,
+					modalSize: "xl",
+					callback:[{
+						targetId: "selectReqGrp",
+						actionFn: function(thisObj){
+							var temp = OSLReq4105Popup.getReqGrpInfo();
+							if(!$.osl.isNull(temp)){
+								OSLReq4101Popup.setReqGrpInfo(temp);
+							}
+						}
+					}]
+    		};
+    		$.osl.layerPopupOpen('/req/req4000/req4100/selectReq4105View.do',data,options);
     	});
     	
     	//요구사항 잠금 기능
@@ -832,8 +869,9 @@ var OSLReq4101Popup = function () {
 				}
 		    	
 		    	//edit 세팅
-		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate}));
-		    	formEditList.push($.osl.editorSetting("reqGroupDesc", {
+		    	formEditList.push($.osl.editorSetting("reqDesc", {formValidate: formValidate, disableResizeEditor: false, 'minHeight': 190}));
+		    	
+		    	formEditList.push($.osl.editorSetting("reqGrpDesc", {
 		    		toolbar: false,
 	    			disableResizeEditor: false,
 	    			disableDragAndDrop: true,
@@ -842,13 +880,13 @@ var OSLReq4101Popup = function () {
 	    		}));
 		    	//edit 세팅하고 나서 textarea 보이기
 		    	$("#reqDesc").removeClass("kt-hide");
-		    	$("#reqGroupDesc").removeClass("kt-hide");
+		    	$("#reqGrpDesc").removeClass("kt-hide");
 		    	
 		    	//datepicker 세팅
 				$.osl.date.datepicker($("#reqDtm"), {});
 		    	
 		    	//요구사항 잠금 설정한 경우
-		    	if(data.reqInfoMap.reqPw != null && data.reqInfoMap.reqPw != ""){
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
 		    		$("#reqPwCheckbox").attr("checked", true);
 		    		$("#pwOption").removeClass("kt-hide");
 		    		pw = "Y";
@@ -1060,6 +1098,23 @@ var OSLReq4101Popup = function () {
         	$("#email").val(parseTemp.email);
         	$("#deptName").val(parseTemp.deptName);
         	$("#telno").val(parseTemp.telno);
+        },
+        setReqGrpInfo: function(temp){
+        	var parseTemp = JSON.parse(temp);
+        	
+        	//그룹 요구사항 정보 입력하기
+        	$('#reqGrpId').val(parseTemp.reqGrpId);
+        	$("#reqGrpNm").val(parseTemp.reqGrpNm);
+			$("#reqGrpDesc").val(parseTemp.reqGrpDesc);
+			formEditList.push($.osl.editorSetting("reqGrpDesc", {
+	    		toolbar: false,
+    			disableResizeEditor: false,
+    			disableDragAndDrop: true,
+    			disabledEditor: true,
+    			height:180,
+    		}));
+			$("#reqGrpKey").val(parseTemp.reqGrpKey);
+			
         }
     };
 }();

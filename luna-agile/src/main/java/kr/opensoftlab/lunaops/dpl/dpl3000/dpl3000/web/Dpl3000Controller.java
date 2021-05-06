@@ -42,6 +42,7 @@ public class Dpl3000Controller {
 	protected Logger Log = Logger.getLogger(this.getClass());
 	
 	
+	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 	
 	
@@ -82,7 +83,18 @@ public class Dpl3000Controller {
     public String selectDpl3000View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
     	return "/dpl/dpl3000/dpl3000/dpl3000";
     }
+	  
+    
+	@RequestMapping(value="/dpl/dpl3000/dpl3000/selectDpl3001View.do")
+    public String selectDpl3001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+    	return "/dpl/dpl3000/dpl3000/dpl3001";
+    }  
 	
+    
+	@RequestMapping(value="/dpl/dpl3000/dpl3000/selectDpl3002View.do")
+    public String selectDpl3002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+    	return "/dpl/dpl3000/dpl3000/dpl3002";
+    }
 	
 	
 	@SuppressWarnings({ "rawtypes"})

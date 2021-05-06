@@ -11,7 +11,6 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -42,10 +41,13 @@ import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.rte.fdl.cmmn.trace.LeaveaTrace;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.Prj3000Service;
+import kr.opensoftlab.sdf.util.OslStringUtil;
+import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
@@ -98,37 +100,58 @@ public class Prj3000Controller {
 
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3000MenuListAjax.do")
-    public ModelAndView selectPrj3000MenuListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3000DocListAjax.do")
+    public ModelAndView selectPrj3000DocListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
     	
     	try{
         	
     		
     		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
         	
-    		String prjId = (String) paramMap.get("prjId");
+    		
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
         	
         	
     		HttpSession ss = request.getSession();
     		
     		
-    		if(prjId == null || "".equals(prjId)){
-    			paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-    		}else{
-    			paramMap.put("prjId", prjId);
+    		if(paramPrjId == null || "".equals(paramPrjId)){
+    			paramPrjId = (String)ss.getAttribute("selPrjId");
     		}
+    		
+    		paramMap.put("prjId", paramPrjId);
         	
     		List<Map> baseDocList = null;
     		
-    		
-    		if(prjId != null && "ROOTSYSTEM_PRJ".equals(prjId)){
-    			
-    			baseDocList = (List) prj3000Service.selectPrj3000RootMenuList(paramMap);
-    		}else{
-    			
-    			baseDocList = (List) prj3000Service.selectPrj3000BaseMenuList(paramMap);
-    		}
-        	
+			
+			baseDocList = (List) prj3000Service.selectPrj3000BaseMenuList(paramMap);
+			
+			
+			if(baseDocList.size() == 0) {
+				
+				
+				String docFormConfFileId = idgenService.getNextStringId();
+				paramMap.put("docFormConfFileId", docFormConfFileId);
+				
+				
+				String docFormFileId = idgenService.getNextStringId();
+				paramMap.put("docFormFileId", docFormFileId);
+				
+				
+				String docAtchFileId = idgenService.getNextStringId();
+				paramMap.put("docAtchFileId", docAtchFileId);
+				
+				
+				String docWaitFileId = idgenService.getNextStringId();
+				paramMap.put("docWaitFileId", docWaitFileId);
+				
+				
+				prj3000Service.insertPrj3000RootMenuInfo(paramMap);
+				
+				
+				baseDocList = (List) prj3000Service.selectPrj3000BaseMenuList(paramMap);
+			}
+			
         	model.addAttribute("baseDocList", baseDocList);
         	
         	
@@ -137,7 +160,7 @@ public class Prj3000Controller {
         	return new ModelAndView("jsonView", paramMap);
     	}
     	catch(Exception ex){
-    		Log.error("selectAdm1000MenuInfo()", ex);
+    		Log.error("selectPrj3000DocListAjax()", ex);
     		
     		
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
@@ -145,66 +168,42 @@ public class Prj3000Controller {
     	}
     }
     
+    
+    
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3000MenuInfoAjax.do")
-    public ModelAndView selectPrj3000MenuInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3000DocInfoAjax.do")
+    public ModelAndView selectPrj3000DocInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
     	
     	try{
         	
     		
         	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
-        	String prjId = (String) paramMap.get("prjId");
+        	
+        	
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
         	
         	
     		HttpSession ss = request.getSession();
     		
     		
-    		if(prjId == null || "".equals(prjId)){
+    		if(paramPrjId == null || "".equals(paramPrjId)){
     			paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
     		}else{
-    			paramMap.put("prjId", prjId);
+    			paramMap.put("prjId", paramPrjId);
     		}
         	
-        	Map<String, String> docInfoMap = null;
-        	
-        	
-        	if("ROOTSYSTEM_PRJ".equals(prjId)){
-        		docInfoMap = (Map) prj3000Service.selectPrj3000WizardMenuInfo(paramMap);
-        	}else{
-        		docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
-        	}
-        	
-        	
-        	int _fileSn = 0;
-        	
-        	
-        	String atchFormFileId = docInfoMap.get("docFormFileId");
-        	if(!"".equals(atchFormFileId) && atchFormFileId != null){
-					
-    				
-    	        	FileVO fileVO = new FileVO();
-    	        	fileVO.setAtchFileId(atchFormFileId);
-    	        	
-    	        	
-    				List<FileVO> fileList = fileMngService.fileDownList(fileVO);
-    				model.addAttribute("fileList",fileList);
-    				
-    				
-    	        	
-    	           	_fileSn = fileMngService.getFileSN(fileVO);
-    	           	
-        	}
-        	
-        	
-        	model.addAttribute("fileSn", _fileSn);
+        	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
         	
         	
         	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
         	
-        	return new ModelAndView("jsonView", docInfoMap);
+        	
+        	model.addAttribute("docInfoMap",docInfoMap);
+        	
+        	return new ModelAndView("jsonView");
     	}
     	catch(Exception ex){
-    		Log.error("selectPrj3000MenuInfoAjax()", ex);
+    		Log.error("selectPrj3000DocInfoAjax()", ex);
 
     		
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
@@ -212,486 +211,594 @@ public class Prj3000Controller {
     	}
     }
     
-       @SuppressWarnings({ "rawtypes", "unchecked" })
-   	@RequestMapping(value="/prj/prj3000/prj3000/insertPrj3000MenuInfoAjax.do")
-       public ModelAndView insertPrj3000MenuInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-       	
-       	try{
+    
+   	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3001View.do")
+    public String selectPrj3001View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{
+    		
+        	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+        	
+        	
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
+        	
+        	
+    		HttpSession ss = request.getSession();
+    		
+    		
+    		if(paramPrjId == null || "".equals(paramPrjId)){
+    			paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
+    		}else{
+    			paramMap.put("prjId", paramPrjId);
+    		}
+        	
+    		
+           	int nextOrd = prj3000Service.selectPrj3000DocNextOrd(paramMap); 
+           	model.addAttribute("nextOrd",nextOrd);
+           	model.addAttribute("type",paramMap.get("type"));
            	
-       		
+        	return "/prj/prj3000/prj3000/prj3001";
+    	}
+    	catch(Exception ex){
+    		Log.error("selectPrj3001View()", ex);
+  			throw new Exception(ex.getMessage());
+    	}
+	}
+    
+    
+   	@RequestMapping(value = "/prj/prj3000/prj3000/insertPrj3000DocInfoAjax.do")
+   	public ModelAndView insertPrj3000DocInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception{
+   		
+   		try {
+			
+   			
            	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+   			
            	
            	HttpSession ss = request.getSession();
-        	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-        	
-        	
-        	String fileFormId = idgenService.getNextStringId();
-        	paramMap.put("fileFormId", fileFormId);
-        	
-        	
-        	String fileAtchId = idgenService.getNextStringId();
-        	paramMap.put("fileAtchId", fileAtchId);
-
-           	
-           	Map<String, String> docInfoMap = (Map) prj3000Service.insertPrj3000MenuInfo(paramMap);
            	
            	
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+        	
+			paramMap.put("prjId", paramPrjId);
+        	
+			
+			String docFormConfFileId = idgenService.getNextStringId();
+			paramMap.put("docFormConfFileId", docFormConfFileId);
+			
+			
+			String docFormFileId = idgenService.getNextStringId();
+			paramMap.put("docFormFileId", docFormFileId);
+			
+			
+			String docAtchFileId = idgenService.getNextStringId();
+			paramMap.put("docAtchFileId", docAtchFileId);
+			
+			
+			String docWaitFileId = idgenService.getNextStringId();
+			paramMap.put("docWaitFileId", docWaitFileId);
+			
+        	
+        	String newDocId = prj3000Service.insertPrj3000DocInfo(paramMap);
+        	model.addAttribute("newDocId", newDocId);
+        	
+        	
            	model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
            	
-           	
-           	return new ModelAndView("jsonView", docInfoMap);
-       	}
-       	catch(Exception ex){
-       		Log.error("selectPrj3000MenuInfoAjax()", ex);
+   	   		return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("insertPrj3000DocInfo()", ex);
 
        		
-       		model.addAttribute("saveYN", "N");
+       		model.addAttribute("errorYn", "Y");
        		model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
        		return new ModelAndView("jsonView");
-       	}
-    }
-       
-      	@RequestMapping(value="/prj/prj3000/prj3000/updatePrj3000MenuInfoAjax.do")
-          public ModelAndView updatePrj3000MenuInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-          	
-          	try{
-              	
-          		
-              	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
-              	
-              	HttpSession ss = request.getSession();
-              	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-           	
-           	
-              	
-              	prj3000Service.updatePrj3000MenuInfo(paramMap);
-              	
-              	
-              	model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-              	
-              	return new ModelAndView("jsonView");
-          	}
-          	catch(Exception ex){
-          		Log.error("updateAdm1000MenuInfoAjax()", ex);
-
-          		
-          		model.addAttribute("saveYN", "N");
-          		model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-          		return new ModelAndView("jsonView");
-          	}
-      }
-      	
-      	
-       	@RequestMapping(value="/prj/prj3000/prj3000/updatePrj3000FileSnAjax.do")
-           public ModelAndView updatePrj3000FileSnAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-           	
-           	try{
-               	
-           		
-               	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
-               	
-               	HttpSession ss = request.getSession();
-               	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-               
-
-               	
-               	
-            	prj3000Service.updatePrj3000FileSnSelect(paramMap);
-               	
-               	
-            	model.addAttribute("saveYN", "Y");
-               	model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
-               	
-               	return new ModelAndView("jsonView");
-           	}
-           	catch(Exception ex){
-           		Log.error("updatePrj3000FileSnAjax()", ex);
-
-           		
-           		model.addAttribute("saveYN", "N");
-           		model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
-           		return new ModelAndView("jsonView");
-           	}
-       }
-   	
-	@RequestMapping(value="/prj/prj3000/prj3000/deletePrj3000AuthGrpInfoAjax.do")
-    public ModelAndView deletePrj3000AuthGrpInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	
-    	try{
-        	
-    		
-        	Map<String, Object> paramMap = RequestConvertor.requestParamToMapAddSelInfoList(request, true,"docId");
-    		
-        	HttpSession ss = request.getSession();
-           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-           	
-        	
-           	prj3000Service.deletePrj3000MenuInfo(paramMap);
-        	
-        	
-        	model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
-        	
-        	return new ModelAndView("jsonView");
-    	}
-    	catch(Exception ex){
-    		Log.error("deleteAdm1000MenuInfoAjax()", ex);
-
-    		
-    		model.addAttribute("saveYN", "N");
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-	
-	@RequestMapping(value="/prj/prj3000/prj3000/insertPrj3000FileUploadAjax.do")
-    public ModelAndView insertPrj3000FileUploadAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-    	
-    	try{
-    		MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest)request;
-    		
-    		
-        	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-        	
-        	HttpSession ss = request.getSession();
-           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-        	
-           	String _atchFileId = paramMap.get("docFormFileId");
-           	
-           	
-           	
-           	
-			if("".equals(_atchFileId) || _atchFileId == null || "NULL".equals(_atchFileId)){
-				
-				List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,"",0,"Doc"+"/"+paramMap.get("prjId"));
-				
-				
-				if(_result != null){
-					
-					_atchFileId = fileMngService.insertFileInfs(_result);  
-					paramMap.put("docFormFileId",_atchFileId);
-					paramMap.put("docFormFileSn",null);
-					
-		        	
-		           	
-		        	prj3000Service.updatePrj3000MenuInfo(paramMap);
-		        	
-		        	model.addAttribute("message", egovMessageSource.getMessage("prj3000.success.fileUpload.insert"));
-		        	model.addAttribute("saveYN", "Y");
-		        	model.addAttribute("firstInsert", "Y");
-		        	model.addAttribute("addFileId", _atchFileId);
-		        	model.addAttribute("addFileSn", "0");
-		        	model.addAttribute("fileVo", _result.get(0)); 
-		        	return new ModelAndView("jsonView");
-					
-				}else{
-					
-		    		model.addAttribute("saveYN", "N");
-		    		model.addAttribute("message", egovMessageSource.getMessage("fail.request.msg"));
-		    		return new ModelAndView("jsonView");
-				}
-			}
 			
-           	FileVO fvo = new FileVO();
-           	fvo.setAtchFileId(_atchFileId);
-           	
-           	int _fileSn = Integer.parseInt(paramMap.get("uploadFileSn"));
-			if(_fileSn >= 1){
-				
-				List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,_atchFileId,_fileSn,"Doc"+"/"+paramMap.get("prjId"));
-				
-				
-				if(_result != null && !(_result.isEmpty())){
-					
-					_atchFileId = fileMngService.insertFileDetail(_result);  
-					model.addAttribute("fileVo", _result.get(0)); 
-				}else{
-					
-		    		model.addAttribute("saveYN", "N");
-		    		model.addAttribute("message", egovMessageSource.getMessage("fail.request.msg"));
-		    		return new ModelAndView("jsonView");
-				}
-			}
-        	
-    		model.addAttribute("addFileId", _atchFileId);
-        	model.addAttribute("addFileSn", _fileSn);
-        	
-        	model.addAttribute("message", egovMessageSource.getMessage("prj3000.success.fileUpload.insert"));
-        	model.addAttribute("saveYN", "Y");
-        	return new ModelAndView("jsonView");
-    	}
-    	catch(Exception ex){
-    		Log.error("insertPrj3000FileUploadAjax()", ex);
-
-    		
-    		model.addAttribute("saveYN", "N");
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.request.msg"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
-	
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3000MenuTreeZipDownload.do")
-	public String selectPrj3000MenuTreeZipDownload(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		
-		String mimetype = "text/html; charset=UTF-8";
-		
-		response.setContentType(mimetype);
-		StringBuffer str = new StringBuffer();
-		
-		try {
-			
-        	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-        	
-        	HttpSession ss = request.getSession();
-           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
-        	
-           	
-           	List<Map> docMenuList = prj3000Service.selectPrj3000MenuTree(paramMap);
-
-           	
-           	String docType = (String) paramMap.get("docType");
-           	
-           	
-           	Map<String, Map> docStepData = new HashMap<String, Map>();
-           	
-           	for(Map docMenuInfo : docMenuList) {
-           		
-           		String lvl = String.valueOf(docMenuInfo.get("lvl"));
-           		
-           		
-           		String docId = (String)docMenuInfo.get("docId");
-           		
-           		
-           		String upperDocId = (String)docMenuInfo.get("upperDocId");
-           		
-           		
-           		String docNm = (String)docMenuInfo.get("docNm");
-           		
-           		
-           		docNm = "["+docId+"]_"+docNm;
-           		
-           		
-           		String atchFileId = "";
-           		
-           		
-           		String fileSn = "";
-           		
-           		
-           		docNm = docNm.replaceAll("/", "-");
-           		
-           		Map newMap = new HashMap<>();
-           		
-           		
-           		if("1".equals(lvl)) {
-           			newMap.put("stepNm", docNm);
-           		}else {
-           			
-           			
-           			Map upperDocInfo = docStepData.get(upperDocId);
-           			
-           			String stepNm = docNm;
-           			
-           			
-           			if(upperDocInfo != null && upperDocInfo.containsKey("stepNm")) {
-           				stepNm = (String)upperDocInfo.get("stepNm");
-           				stepNm = stepNm+"/"+docNm;
-           			}
-           			newMap.put("stepNm", stepNm);
-           		}
-           		
-           		
-           		if("atch".equals(docType)) { 
-           			atchFileId = (String)docMenuInfo.get("docAtchFileId");
-           			fileSn = String.valueOf(docMenuInfo.get("docFileSn"));
-           		}
-           		else if("form".equals(docType)) { 
-           			atchFileId = (String)docMenuInfo.get("docFormFileId");
-           			fileSn = String.valueOf(docMenuInfo.get("docFormFileSn"));
-           		}
-           		
-           		newMap.put("atchFileId", atchFileId);
-       			newMap.put("fileSn", fileSn);
-       			
-           		
-           		docStepData.put(docId, newMap);
-           	}
-           	
-           	
-           	int appendFileCnt = 0;
-           	
-           	
-	    	byte[] buf = new byte[4096];
-	    	
-	    	
-        	String storePathString = EgovProperties.getProperty("Globals.fileStorePath");
-        	
-        	
-        	String addPath = "tempZip/";
-        	String zipFilePath = EgovWebUtil.filePathBlackList(storePathString+addPath);
-        	
-        	
-        	File saveFolder = new File(zipFilePath);
-
-    		if (!saveFolder.exists() || saveFolder.isFile()) {
-    			saveFolder.mkdirs();
-    		}
-    		
-    		Date today = new Date();
-    		DateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
-    		
-    		
-    		String zipFileName = "_OSL"+fm.format(today)+".zip";
-    		
-    		
-    		ZipOutputStream zipOut = null;
-    		
-    		
-    		boolean zipMakeChk = true;
-    		
-    		try {
-    			
-    			zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath+zipFileName));
-    			
-    			
-               	for(Map docMenuInfo : docMenuList) {
-               		
-               		String docId = (String)docMenuInfo.get("docId");
-               		
-               		
-               		Map docMap = docStepData.get(docId);
-               		
-               		String stepNm = (String) docMap.get("stepNm");
-               		String atchFileId = (String) docMap.get("atchFileId");
-               		String fileSn = (String) docMap.get("fileSn");
-               		
-               		
-               		if(fileSn != null && !"".equals(fileSn) && !"null".equals(fileSn)) {
-               			
-               			FileVO fileVO = new FileVO();
-               			fileVO.setAtchFileId(atchFileId);
-               			fileVO.setFileSn(fileSn);
-               			FileVO fvo = fileService.selectFileInf(fileVO);
-               			
-               			
-               			if(fvo == null) {
-               				
-               				continue;
-               			}
-               			
-               			
-               			File uFile = new File(fvo.getFileStreCours(), fvo.getStreFileNm());
-               			
-               			
-               			if(!uFile.isFile()){
-			    			
-			    			zipOut.close();
-			    			
-			    			
-			    			zipMakeChk = false;
-			    			throw new UserDefineException("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
-		    			}
-               			
-               			
-		    			FileInputStream in = new FileInputStream(uFile);
-		    	        String fileName = "["+appendFileCnt+"]_"+fvo.getOrignlFileNm().toString();
-		    	                
-		    	        ZipEntry ze = new ZipEntry(stepNm+"/"+fileName);
-
-		    	        zipOut.putNextEntry(ze);
-		    	         
-		    	        
-		    	        int len;
-		    	        while ((len = in.read(buf)) > 0) {
-		    	        	zipOut.write(buf, 0, len);
-		    	        }
-		    	          
-		    	        zipOut.closeEntry();
-		    	        in.close();
-		    	        
-		    	        
-		    	        appendFileCnt++;
-               		}
-               	}
-               	
-               	zipOut.close();
-               	
-               	
-	    		if(appendFileCnt == 0) {
-	    			
-					String fileDeletePath  = zipFilePath+zipFileName;
-					EgovFileMngUtil.deleteFile(fileDeletePath);
-				    
-	    			throw new UserDefineException("<script>alert('확정된 파일이 없습니다.');</script>");
-	    		}
-               	
-	    		else if(zipMakeChk){
-		    		
-					File uFile = new File(zipFilePath, zipFileName);
-					long fSize = uFile.length();
-					
-					if (fSize > 0) {
-						
-						
-						setDisposition(zipFileName, request, response);
-						
-						BufferedInputStream in = null;
-						BufferedOutputStream out = null;
-	
-						try {
-							in = new BufferedInputStream(new FileInputStream(uFile));
-							out = new BufferedOutputStream(response.getOutputStream());
-							FileCopyUtils.copy(in, out);
-	
-							
-							out.flush();
-						} catch (IOException ex) {
-							EgovBasicLogger.ignore("IO Exception", ex);
-						} finally {
-							
-							EgovResourceCloseHelper.close(in, out);
-							
-							
-							String fileDeletePath  = zipFilePath+zipFileName;
-						    String deleteChk = EgovFileMngUtil.deleteFile(fileDeletePath);
-						    
-						    Log.debug("Delete Result"+deleteChk);
-						}
-						return "/err/file";
-					}else{
-						throw new UserDefineException("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
-					}
-				}
-	    		
-	    		
-    		}catch(UserDefineException ude) {
-    			zipOut.close();
-    			throw new UserDefineException(ude.getMessage());
-    		}catch(Exception subE) {
-    		
-    			Log.error("selectPrj3000MenuTreeZipDownload()", subE);
-    			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
-    			
-    			zipOut.close();
-    		}
-			
-			return "/err/file";
-		}catch(UserDefineException ude) {
-			str.append(ude.getMessage());
-		}catch(Exception e) {
-			Log.error("selectPrj3000MenuTreeZipDownload()", e);
-			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
 		}
-		
-		PrintWriter printwriter = response.getWriter();
-		printwriter.println("<html><form name='downForm'></form>");
-		printwriter.println(str);
-		printwriter.println("</html>");
-		printwriter.flush();
-		printwriter.close();
-		return "/err/file";
+   	}
+   	
+   	
+   	@RequestMapping(value = "/prj/prj3000/prj3000/updatePrj3000DocInfoAjax.do")
+   	public ModelAndView updatePrj3000DocInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+   		
+   		try {
+			
+   			
+           	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+   			
+           	
+           	HttpSession ss = request.getSession();
+           	
+           	
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+        	
+			paramMap.put("prjId", paramPrjId);
+        	
+        	
+        	prj3000Service.updatePrj3000DocInfo(paramMap);
+        	
+        	
+           	model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
+           	
+   	   		return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("updatePrj3000DocInfoAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
+       		return new ModelAndView("jsonView");
+			
+		}
+   		
+   	}
+   	
+   	
+   	
+   	@RequestMapping(value = "/prj/prj3000/prj3000/deletePrj3000DocInfoAjax.do")
+   	public ModelAndView deletePrj3000DocInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+   		
+   		try {
+			
+   			
+           	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+   			
+           	
+        	prj3000Service.deletePrj3000DocInfo(paramMap);
+        	
+        	
+           	model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+           	
+   	   		return new ModelAndView("jsonView");
+   	   		
+		} catch (Exception ex) {
+			Log.error("deletePrj3000DocInfoAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+       		return new ModelAndView("jsonView");
+			
+		}
+   	}
+   	
+   	
+   	
+   	@RequestMapping(value = "/prj/prj3000/prj3000/insertPrj3000FormFileUploadAjax.do")
+   	public ModelAndView insertPrj3000FormFileUploadAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+   		try {
+			
+   			MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest)request;
+			
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
+			String atchFileId = (String) paramMap.get("atchFileId");
+			
+			
+        	FileVO fileVO = new FileVO();
+        	fileVO.setAtchFileId(atchFileId);
+        	
+			
+        	
+			int fileSn = fileMngService.getFileSN(fileVO);
+			
+			
+			List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,atchFileId,fileSn,"Prj");
+			
+			
+			fileMngService.insertFileDetail(_result);  
+			
+			
+			
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
+			return new ModelAndView("jsonView");
+           	
+		} catch (Exception ex) {
+			Log.error("insertPrj3000ConfFileUploadAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.insert"));
+       		return new ModelAndView("jsonView");
+			
+		}
+   	}
+   		
+   	
+   	@RequestMapping(value ="/prj/prj3000/prj3000/selectPrj3000FormFileListAjax.do")
+   	public ModelAndView selectPrj3000FormFileListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+   		try {
+			
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			
+			
+			String paramPrjId = (String) paramMap.get("paramPrjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
+			List<FileVO> formConfFileList = null;
+			List<FileVO> formFileList = null;
+			
+			
+        	FileVO fileVO = new FileVO();
+        	fileVO.setAtchFileId((String)paramMap.get("docFormConfFileId"));
+        	
+        	
+        	formConfFileList = fileMngService.fileDownList(fileVO);
+			
+        	
+        	fileVO.setAtchFileId((String)paramMap.get("docFormFileId"));
+        	formFileList = fileMngService.fileDownList(fileVO);
+        	
+        	
+        	model.addAttribute("formConfFileList", formConfFileList);
+        	model.addAttribute("formFileList", formFileList);
+        	
+			
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			return new ModelAndView("jsonView");
+				
+           	
+		} catch (Exception ex) {
+			Log.error("selectPrj3000FormFileListAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+       		return new ModelAndView("jsonView");
+		}
+   	}
+   	
+   	
+   	@RequestMapping(value = "/prj/prj3000/prj3000/deletePrj3000FileAjax.do")
+   	public ModelAndView deletePrj3000FileAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception{
+   		try {
+			
+   			
+           	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+   			
+           	
+        	prj3000Service.deletePrj3000File(paramMap);
+        	
+        	
+           	model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+           	
+   	   		return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("deletePrj3000FileAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.delete"));
+       		return new ModelAndView("jsonView");
+			
+		}
+   	}
+   	
+   	
+   	@RequestMapping(value = "/prj/prj3000/prj3000/updatePrj3000FileTypeAjax.do")
+   	public ModelAndView updatePrj3000FileTypeAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception{
+   		try {
+			
+   			
+           	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
+   			
+           	
+           	FileVO fileVO = new FileVO();
+           	fileVO.setAtchFileId(paramMap.get("afterFileId"));
+           	
+           	
+        	
+			int fileSn = fileMngService.getFileSN(fileVO) + 1;
+           	
+			paramMap.put("afterFileSn", String.valueOf(fileSn));
+			
+           	
+        	prj3000Service.updatePrj3000FileType(paramMap);
+        	
+        	
+           	model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));
+           	
+   	   		return new ModelAndView("jsonView");
+		} catch (Exception ex) {
+			Log.error("updatePrj3000FileTypeAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.update"));
+       		return new ModelAndView("jsonView");
+			
+		}
+   	}
+   	
+
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+	
+	
+   	
+   	
+   	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value ="/prj/prj3000/prj3000/selectPrj3002DocConListAjax.do")
+	public ModelAndView selectPrj3002DocConListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			
+			String _pageNo_str = paramMap.get("pagination[page]");
+			String _pageSize_str = paramMap.get("pagination[perpage]");
+			
+			
+			String paramPrjId = (String) paramMap.get("dtParamPrjId");
+			HttpSession ss = request.getSession();
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			paramMap.put("prjId", paramPrjId);
+			
+			
+			String sortFieldId = (String) paramMap.get("sortFieldId");
+			sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+			String sortDirection = (String) paramMap.get("sortDirection");
+			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+			paramMap.put("paramSortFieldId", paramSortFieldId);
+			
+			
+			
+			int totCnt = prj3000Service.selectPrj3002DocConListCnt(paramMap);
+
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+
+			
+			
+			List<Map> prj3002List = prj3000Service.selectPrj3002DocConList(paramMap);
+			
+			
+			
+			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+			
+			model.addAttribute("data", prj3002List);
+			model.addAttribute("meta", metaMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectReq1000ListView()", ex);
+			
+			model.addAttribute("errorYn", "Y");
+			throw new Exception(ex.getMessage());
+		}
 	}
 	
+	
+   	@RequestMapping(value="/prj/prj3000/prj3000/selectPrj3002View.do")
+    public String selectPrj3002View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		try{
+			
+    		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+    		
+    		String docId = paramMap.get("docId");
+    		System.out.println(docId);
+    		model.addAttribute("docId", docId);
+    		
+			
+			return "/prj/prj3000/prj3000/prj3002";
+        	
+    	}
+    	catch(Exception ex){
+    		Log.error("selectStm6001View()", ex);
+  			throw new Exception(ex.getMessage());
+    	}
+	}
+	
+	
+	
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @RequestMapping(value="/prj/prj3000/prj3000/selectPrj3002DocConTargetListAjax.do")
+    public ModelAndView selectPrj3002DocConTargetListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+    	try{
+    		
+    		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+    		
+    		
+    		
+    		String _pageNo_str = paramMap.get("pagination[page]");
+    		String _pageSize_str = paramMap.get("pagination[perpage]");
+    		
+    		
+    		String paramPrjId = (String) paramMap.get("paramPrjId");
+    		HttpSession ss = request.getSession();
+    		
+    		
+    		if(paramPrjId == null || "".equals(paramPrjId)) {
+    			paramPrjId = (String) ss.getAttribute("selPrjId");
+    		}
+    		paramMap.put("prjId", paramPrjId);
+    		
+    		
+    		String sortFieldId = (String) paramMap.get("sortFieldId");
+    		sortFieldId = OslStringUtil.replaceRegex(sortFieldId,"[^A-Za-z0-9+]*");
+    		String sortDirection = (String) paramMap.get("sortDirection");
+    		String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
+    		paramMap.put("paramSortFieldId", paramSortFieldId);
+    		
+    		
+    		
+    		
+    		
+    		int totCnt = 0;
+    		List<Map> dataList = null;
+    		Map<String, Object> metaMap = null;
+    		
+			
+			totCnt = prj3000Service.selectPrj3002ConTargetCnt(paramMap);
+			
+			
+			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
+			
+			
+			paginationInfo.setTotalRecordCount(totCnt);
+			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
+			
+			
+			
+			dataList = (List) prj3000Service.selectPrj3002ConTargetList(paramMap);
+			
+			
+			
+			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field", sortFieldId);
+    		model.addAttribute("data", dataList);
+    		model.addAttribute("meta", metaMap);
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+    		
+    		return new ModelAndView("jsonView");
+    	}
+    	catch(Exception ex){
+    		Log.error("selectPrj1000PrjAuthNoneUsrListAjax()", ex);
+    		
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
+    
+    
+    @RequestMapping(value = "/prj/prj3000/prj3000/insertPrj3002DocConInfo.do")
+    public ModelAndView insertPrj3002DocConInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception{
+    	
+    	try{
+    		
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			HttpSession ss = request.getSession();
+			
+			
+			LoginVO loginVo = (LoginVO) ss.getAttribute("loginVO");
+			String usrId = loginVo.getUsrId();
+			paramMap.put("regUsrId", usrId);
+			
+			
+			String prjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			
+			paramMap.put("prjGrpId", prjGrpId);
+			
+			
+    		String paramPrjId = (String) paramMap.get("paramPrjId");
+    		
+    		
+    		if(paramPrjId == null || "".equals(paramPrjId)) {
+    			paramPrjId = (String) ss.getAttribute("selPrjId");
+    		}
+    		paramMap.put("prjId", paramPrjId);
+			
+			
+			prj3000Service.insertPrj3002DocConInfo(paramMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.save"));
+			return new ModelAndView("jsonView");
+    	}
+    	catch(Exception ex){
+    		Log.error("insertPrj3002DocConInfo()", ex);
+    		
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
+    
+    
+    @RequestMapping(value = "/prj/prj3000/prj3000/deletePrj3002DocConInfoAjax.do")
+    public ModelAndView deletePrj3002DocConInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception{
+    	
+    	try{
+    		
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			prj3000Service.deletePrj3002DocConInfo(paramMap);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.delete"));
+			return new ModelAndView("jsonView");
+    	}
+    	catch(Exception ex){
+    		Log.error("deletePrj3002DocConInfoAjax()", ex);
+    		
+    		
+    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+    		return new ModelAndView("jsonView");
+    	}
+    }
+   	
+   	
 	
 	private String getBrowser(HttpServletRequest request) {
 		String header = request.getHeader("User-Agent");
@@ -744,4 +851,5 @@ public class Prj3000Controller {
 			response.setContentType("application/octet-stream;charset=UTF-8");
 		}
 	}
+	
 }

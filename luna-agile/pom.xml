@@ -633,6 +633,12 @@
 		    <version>2.1.7</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.offbytwo.jenkins/jenkins-client -->
+		<dependency>
+		    <groupId>com.offbytwo.jenkins</groupId>
+		    <artifactId>jenkins-client</artifactId>
+		    <version>0.3.8</version>
+		</dependency>
 
 							
 		<!-- 
@@ -642,6 +648,11 @@
 			<version>1.2.5.RELEASE</version>
 		</dependency>-->
 		
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>5.7.0.202003110725-r</version>
+		</dependency>
 		
 	</dependencies>
 

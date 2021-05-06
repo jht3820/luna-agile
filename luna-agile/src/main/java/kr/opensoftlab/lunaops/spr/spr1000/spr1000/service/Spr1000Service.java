@@ -50,16 +50,6 @@ public interface Spr1000Service {
 	@SuppressWarnings({"rawtypes" })
 	int updateSpr1003SprEnd(Map paramMap) throws Exception;
 	
-	
 	@SuppressWarnings({ "rawtypes" })
 	Map  selectSpr1000SprInfoStat(Map paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	public List<Map> selectSpr1000ChartInfo(Map<String, String> paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	public List<Map> selectSpr1000VelocityChartInfo(Map<String, String> paramMap) throws Exception;
-	
 }

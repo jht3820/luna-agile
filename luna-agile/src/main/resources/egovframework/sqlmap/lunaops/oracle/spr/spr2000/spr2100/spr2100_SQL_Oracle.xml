@@ -15,7 +15,6 @@
 		<result property="mmrDesc"			column="MMR_DESC" jdbcType="CLOB" javaType="java.lang.String"/>
 		<result property="mmrDtm"			column="MMR_DTM"/>
 		<result property="mmrUsrId"			column="USR_ID"/>
-		<result property="mmrUsrNm"			column="USR_NM"/>
 		<result property="mmrUsrImgId"	column="USR_IMG_ID"/>
     </resultMap>
 
@@ -31,6 +30,7 @@
 			, T1.USR_ID AS MMR_USR_ID
 			, T1.USR_NM AS MMR_USR_NM
 			, T1.USR_IMG_ID AS MMR_USR_IMG_ID
+			, Y.SPR_NM AS SPR_NM
 		FROM
 		(
 			SELECT 
@@ -42,22 +42,15 @@
 					, A.USR_ID AS USR_ID
 					, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
 					, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
-					,  ( SELECT
-							B.SPR_NM AS SPR_NM
-						FROM SPR1000 B
-						WHERE 1 = 1
-						AND B.LIC_GRP_ID = A.LIC_GRP_ID
-						AND B.PRJ_GRP_ID  = A.PRJ_GRP_ID
-						AND B.PRJ_ID = A.PRJ_ID
-						AND B.SPR_ID = A.SPR_ID ) AS SPR_NM
 		    FROM SPR2100 A
 		    WHERE 1=1
 		    AND A.LIC_GRP_ID = #licGrpId#
 		    AND A.PRJ_GRP_ID = #prjGrpId#
 			AND A.PRJ_ID = #prjId#
 			AND A.SPR_ID = #sprId#
-			ORDER BY A.MMR_ID ASC
-		) T1
+			ORDER BY A.MMR_ID DESC
+		) T1 LEFT JOIN SPR1000 Y
+		ON T1.SPR_ID = Y.SPR_ID
 		WHERE 1 = 1
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
@@ -69,15 +62,15 @@
 					AND	REGEXP_REPLACE(T1.MMR_DESC, '<[^>]*>', '') LIKE '%'|| #searchTargetData# ||'%'
 				]]>
 				</isEqual>
-				<isEqual property="searchTargetId" compareValue="mmrUsrNm">
-					AND	T1.MMR_USR_NM LIKE '%'|| #searchTargetData# ||'%'
+				<isEqual property="searchTargetId" compareValue="mmrUsrId">
+					AND	T1.USR_ID LIKE '%'|| #searchTargetData# ||'%'
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="mmrDtm">
 					<isNotEmpty property="searchStartDt">
-						AND	TO_DATE(T1.MMR_DTM, 'YYYY-MM-DD HH24:MI:SS') &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD' HH24:MI:SS)
+						AND	TO_CHAR(T1.MMR_DTM, 'YYYY-MM-DD') &gt;= TO_DATE(#searchStartDt#, 'YYYY-MM-DD')
 					</isNotEmpty>
 					<isNotEmpty property="searchEndDt">
-						AND	TO_DATE(T1.MMR_DTM, 'YYYY-MM-DD HH24:MI:SS') &lt;=  TO_DATE(#searchEndDt#, 'YYYY-MM-DD HH24:MI:SS')
+						AND	TO_CHAR(T1.MMR_DTM, 'YYYY-MM-DD') &lt;=  TO_DATE(#searchEndDt#, 'YYYY-MM-DD')
 					</isNotEmpty>
 				</isEqual>
 			</isNotEmpty>
@@ -125,6 +118,7 @@
      	
     	SELECT
     		A.SPR_ID AS SPR_ID
+    		, B.SPR_NM AS SPR_NM
 			, A.MMR_ID AS MMR_ID
 			, A.MMR_NM AS MMR_NM
 			, A.MMR_DESC AS MMR_DESC
@@ -132,15 +126,9 @@
 			, A.USR_ID AS USR_ID
 			, SF_STM3000_USR_INFO(A.USR_ID, '1')  AS USR_NM
 			, SF_STM3000_USR_INFO(A.USR_ID, '6')  AS USR_IMG_ID
-			,  ( SELECT
-					B.SPR_NM AS SPR_NM
-				FROM SPR1000 B
-				WHERE 1 = 1
-				AND B.LIC_GRP_ID = A.LIC_GRP_ID
-				AND B.PRJ_GRP_ID  = A.PRJ_GRP_ID
-				AND B.PRJ_ID = A.PRJ_ID
-				AND B.SPR_ID = A.SPR_ID ) AS SPR_NM
     	FROM SPR2100 A 
+    	LEFT JOIN SPR1000 B
+    	ON A.SPR_ID = B.SPR_ID
     	WHERE 1 = 1
 		AND A.LIC_GRP_ID = #licGrpId#
 	    AND A.PRJ_GRP_ID = #prjGrpId#

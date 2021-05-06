@@ -5,13 +5,16 @@ package kr.opensoftlab.lunaops.prj.prj1000.prj1100.service;
 import java.util.List;
 import java.util.Map;
 
-import kr.opensoftlab.lunaops.prj.prj1000.prj1100.vo.Prj1100VO;
-
 
 public interface Prj1100Service {
+
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1100ProcessList(Map paramMap) throws Exception;
+	int selectPrj1100ProcessListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings({  "rawtypes" })
+	List<Map> selectPrj1100ProcessList(Map paramMap) throws Exception;
 
 	
 	@SuppressWarnings("rawtypes")
@@ -23,12 +26,10 @@ public interface Prj1100Service {
 	
 	
 	@SuppressWarnings("rawtypes")
-	void updatePrj1100ProcessConfirmInfo(Map paramMap) throws Exception;
+	void savePrj1100ProcessDataInfo(Map paramMap) throws Exception;
+	
 
 	
-	@SuppressWarnings("rawtypes")
-	void updatePrj1100ProcessConfirmCancle(Map paramMap) throws Exception;
-
 	
 	@SuppressWarnings("rawtypes")
 	String insertPrj1100ProcessInfo(Map paramMap) throws Exception;
@@ -36,6 +37,30 @@ public interface Prj1100Service {
 	
 	@SuppressWarnings("rawtypes")
 	void deletePrj1100ProcessInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1100ProcessAuthUsrList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1100ProcessAuthUsrListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1100ProcessAuthNoneUsrList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1100ProcessAuthNoneUsrListCnt(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	String insertPrj1100ProcessAuthInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int deletePrj1100ProcessAuthInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -55,11 +80,19 @@ public interface Prj1100Service {
 	
 	
 	@SuppressWarnings("rawtypes")
-	void insertPrj1101FlowInfo(Map paramMap) throws Exception;
+	String insertPrj1101FlowInfo(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
 	void deletePrj1101FlowInfo(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	List selectPrj1107FlowLinkList(Map paramMap) throws Exception;
+	
+	
+	@SuppressWarnings("rawtypes")
+	int selectPrj1100FlowReqListCnt(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -112,10 +145,11 @@ public interface Prj1100Service {
 
 	
 	@SuppressWarnings("rawtypes")
-	List selectPrj1104ReqRevisionNumList(Prj1100VO prj1100VO) throws Exception;
+	List selectPrj1104ReqRevisionNumList(Map paramMap) throws Exception;
 	
 	
-	int selectPrj1104ReqRevisionNumListCnt(Prj1100VO prj1100VO) throws Exception;
+	@SuppressWarnings("rawtypes")
+	int selectPrj1104ReqRevisionNumListCnt(Map paramMap) throws Exception;
 	
 	
 	@SuppressWarnings("rawtypes")

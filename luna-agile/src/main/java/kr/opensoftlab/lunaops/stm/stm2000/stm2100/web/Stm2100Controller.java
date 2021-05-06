@@ -36,13 +36,6 @@ public class Stm2100Controller {
 	@Resource(name = "stm2100Service")
 	private Stm2100Service stm2100Service;
 
-
-	
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2104View.do")
-	public String selectStm2104View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		return "/stm/stm2000/stm2100/stm2104";
-	}
-	
 	
 	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2100View.do")
 	public String selectStm2100View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
@@ -60,10 +53,35 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("usrId", loginVO.getUsrId());
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			
+			String usrId = (String) paramMap.get("usrId");
+			
+			
+			if(usrId == null || "".equals(usrId)) {
+				usrId = loginVO.getUsrId();
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
+			paramMap.put("usrId", usrId);
 
 			
 			Map result = stm2100Service.selectStm2100UserCheck(paramMap);
@@ -141,8 +159,17 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
 	
 			
 			Map<String, String> stm2100Info = stm2100Service.selectStm2100BadInfo(paramMap);
@@ -208,8 +235,17 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
 			
 			
 			List<Map> stm2120List = stm2100Service.selectStm2120BadWtList(paramMap);
@@ -242,13 +278,28 @@ public class Stm2100Controller {
 			
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-			paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-			paramMap.put("prjGrpId", (String) ss.getAttribute("selPrjGrpId"));
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			String paramPrjGrpId = (String) paramMap.get("prjGrpId");
+			
+			
+			if(paramPrjGrpId == null || "".equals(paramPrjGrpId)) {
+				paramPrjGrpId = (String) ss.getAttribute("selPrjGrpId");
+			}
+			
+			
+			String paramPrjId = (String) paramMap.get("prjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjGrpId", paramPrjGrpId);
+			paramMap.put("prjId", paramPrjId);
 			
 			List<Map> stmGrpList = stm2100Service.selectStm2100BadGrpList(paramMap);
 			List<Map> stmUsrList = stm2100Service.selectStm2100BadUsrList(paramMap);
-			
 			
 			model.addAttribute("badGrpList", stmGrpList);
 			model.addAttribute("badUsrList", stmUsrList);
@@ -279,19 +330,6 @@ public class Stm2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
-			
-			
-			String str = paramMap.get("stmAdmList");
-			str = str.replace("managerNum", "stmAdminCd");
-			str = str.replace("managerId", "stmAdminId");
-			str = str.replace("managerPrjId", "prjId");
-			paramMap.put("stmAdmList", str);
-			
-			str = paramMap.get("stmWtList");
-			str = str.replace("managerNum", "stmWtCd");
-			str = str.replace("managerId", "stmWtId");
-			str = str.replace("managerPrjId", "prjId");
-			paramMap.put("stmWtList", str);
 			
 			
 			stm2100Service.updateStm2100BadOptions(paramMap);
@@ -329,6 +367,13 @@ public class Stm2100Controller {
 			HttpSession ss = request.getSession();
 			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
 			paramMap.put("licGrpId", loginVO.getLicGrpId());
+			
+			
+			if("01".equals(paramMap.get("currentViewType"))) {
+				
+				List<Map> stm2110List = stm2100Service.selectStm2110BadAdmList(paramMap);
+				model.addAttribute("badChargerList", stm2110List); 
+			}
 
 			
         	
@@ -403,4 +448,40 @@ public class Stm2100Controller {
 		}
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2102BadSummeryChartInfoAjax.do")
+	public ModelAndView selectStm2102BadSummeryChartInfoAjax( HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
+			paramMap.put("licGrpId", loginVO.getLicGrpId());
+
+			List<Map> chartData = stm2100Service.selectStm2100MonthChart(paramMap);
+			model.addAttribute("chartData", chartData);
+			
+			
+			model.addAttribute("errorYn", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectStm2102BadSummeryChartInfoAjax()", ex);
+			
+			model.addAttribute("errorYn", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2103View.do")
+	public String selectStm2103View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		return "/stm/stm2000/stm2100/stm2103";
+	}
 }

@@ -17,15 +17,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.arm.arm1000.arm1000.service.Arm1000Service;
 import kr.opensoftlab.lunaops.cmm.cmm4000.cmm4000.service.Cmm4000Service;
 import kr.opensoftlab.lunaops.cmm.cmm9000.cmm9000.service.Cmm9000Service;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
+import kr.opensoftlab.lunaops.req.req4000.req4100.service.Req4100Service;
+import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3001.service.Stm3001Service;
 import kr.opensoftlab.lunaops.stm.stm4000.stm4000.service.Stm4000Service;
+import kr.opensoftlab.lunaops.usr.usr1000.usr1100.service.Usr1100Service;
 import kr.opensoftlab.sdf.util.ModuleUseCheck;
+import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
@@ -59,10 +64,18 @@ public class Cmm9000Controller {
     
     @Resource(name = "stm3001Service")
     private Stm3001Service stm3001Service;
+    
+    
+    @Resource(name = "usr1100Service")
+    private Usr1100Service usr1100Service;
 
 	
     @Resource(name = "stm4000Service")
     private Stm4000Service stm4000Service;
+    
+	
+    @Resource(name = "stm2000Service")
+    private Stm2000Service stm2000Service;
     
 	
 	@Resource(name = "moduleUseCheck")
@@ -428,6 +441,7 @@ public class Cmm9000Controller {
     		List<Map> menuList = null;
     		List<Map> usrOptList = null;
     		List<Map> langList = null;
+    		List<Map> shortcutList = null;
     		Map usrInfo = null;
     		
     		
@@ -441,7 +455,7 @@ public class Cmm9000Controller {
 	    		paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
 	
 	    		
-	    		fvrList = cmm9000Service.selectCmm9000FavoritesList(paramMap); 
+	    		fvrList = stm2000Service.selectStm2002FavoritesList(paramMap); 
 	    		
 	    		
 	    		prjList = (List)prj1000Service.selectPrj1000PrjGrpAllList(paramMap);
@@ -495,7 +509,11 @@ public class Cmm9000Controller {
 	    		paramMap.put("firstIndex", "0");
 	    		paramMap.put("lastIndex", String.valueOf(langTotalCnt));
 	    		
+	    		
 	    		langList = stm4000Service.selectStm4000CommonCodeDetailList(paramMap);
+	    		
+	    		
+	    		shortcutList = usr1100Service.selectUsr1100ShortcutList(paramMap);
     		}
     		
     		model.addAttribute("btnAuthMap", btnAuthMap);
@@ -506,6 +524,7 @@ public class Cmm9000Controller {
     		model.addAttribute("menuList", menuList);
     		model.addAttribute("usrInfo", usrInfo);
     		model.addAttribute("langList", langList);
+    		model.addAttribute("shortcutList", shortcutList);
     		model.addAttribute("errorYn", "N");
     		model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
     		return new ModelAndView("jsonView");
@@ -518,46 +537,5 @@ public class Cmm9000Controller {
     	}
     }
     
-    @RequestMapping(value="/cmm/cmm9000/cmm9000/saveCmm9000FavoriteInfo.do")
-    public ModelAndView saveCmm9000FavoriteInfo(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
-    	
-    	try{
-    		
-    		Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
-    		
-    		HttpSession ss = request.getSession();
-    		LoginVO loginVO = (LoginVO) ss.getAttribute("loginVO");
-    		
-    		
-    		paramMap.put("usrId", loginVO.getUsrId());
-    		
-    		
-    		paramMap.put("prjId", (String) ss.getAttribute("selPrjId"));
-    		
-    		String fvrId = (String) paramMap.get("fvrId");
-    		
-    		
-    		int fvrInfoCnt = cmm9000Service.selectCmm9000FvrTypeCntInfo(paramMap);
-    		
-    		if(fvrInfoCnt > 0) {
-    			
-    			cmm9000Service.updateCmm9000FavoritesInfo(paramMap);
-    		}else {
-    			
-    			fvrId = cmm9000Service.insertCmm9000FavoritesInfo(paramMap);
-    		}
-    		
-    		model.addAttribute("fvrId", fvrId);
-    		model.addAttribute("errorYn", "N");
-    		model.addAttribute("message", egovMessageSource.getMessage("success.common.save"));
-    		return new ModelAndView("jsonView");
-    		
-    	}catch(Exception ex){
-    		Log.error("saveCmm9000FavoriteInfo()", ex);
-    		model.addAttribute("errorYn", "Y");
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.save"));
-    		return new ModelAndView("jsonView");
-    	}
-    }
 
 }

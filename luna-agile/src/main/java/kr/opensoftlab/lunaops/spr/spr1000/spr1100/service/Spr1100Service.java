@@ -29,15 +29,4 @@ public interface Spr1100Service {
 	
 	@SuppressWarnings({ "rawtypes" })
 	public Map selectSpr1100ReqResultInfo(Map paramMap) throws Exception;
-	
-	
-	public int selectSpr1101SprReqListCnt(Map<String, String> paramMap) throws Exception;
-	
-	
-	@SuppressWarnings("rawtypes")
-	public List selectSpr1101SprReqList(Map<String, String> paramMap) throws Exception;
-	
-	
-	public void updateSpr1100ReqListAjax(Map<String, String> paramMap) throws Exception;
-
 }

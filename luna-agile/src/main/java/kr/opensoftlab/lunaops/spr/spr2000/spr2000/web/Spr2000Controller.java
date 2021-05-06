@@ -121,11 +121,10 @@ public class Spr2000Controller {
 				
 				spr2000List = spr2000Service.selectSpr2000MmtList(paramMap);
 			}
-			if(totCnt != 0) {
-				
-				metaMap.put("sort", sortDirection);
-				metaMap.put("field",sortFieldId);
-			}
+			
+			
+			metaMap.put("sort", sortDirection);
+			metaMap.put("field",sortFieldId);
 
 			
 			model.addAttribute("data", spr2000List);

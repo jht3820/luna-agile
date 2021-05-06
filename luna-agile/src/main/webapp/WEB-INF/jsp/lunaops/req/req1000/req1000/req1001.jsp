@@ -13,9 +13,7 @@
 			</div>
 			<div class="kt-portlet__head-toolbar">
 				<div class="kt-portlet__head-group">
-					<div class="kt-portlet__head-group">
-						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-					</div>
+					<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 				</div>
 			</div>
 		</div>
@@ -78,10 +76,27 @@
 				<input type="text" class="form-control" placeholder="요청 제목" name="reqNm" id="reqNm" required>
 			</div>
 			<div class="form-group">
-				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqNm">요청 내용</span></label>
+				<label class="required"><i class="fa fa-edit kt-margin-r-5"></i><span data-lang-cd="req1001.reqDesc">요청 내용</span></label>
 				<textarea  name="reqDesc" id="reqDesc" required></textarea>
 			</div>
-			<div class="form-group form-group-last">
+			<div class="form-group kt-margin-b-10">
+				<label class="kt-checkbox kt-checkbox--bold kt-checkbox--success align-text-top">
+					<input type="checkbox" name="reqPwCheckbox" id="reqPwCheckbox">
+					<span></span>
+				</label>
+				<span data-lang-cd="req1001.reqPw.title">요구사항 잠금</span>
+			</div>
+			<div class="kt-hide osl-bad_box" name="pwOption" id="pwOption">
+		 		<div class="input-group kt-margin-b-10">
+			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.password">PW</span></label>
+		 			<input type="password" class="form-control" name="reqPw" id="reqPw" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내"/> 
+		 		</div>
+		 		<div class="input-group">
+			 		<label class='input-group-addon mt-auto mb-auto osl-min-width-80 required'><span data-lang-cd="req1001.reqPw.passwordCheck">PW 확인</span></label>
+		 			<input type="password" class="form-control" name="reqPwCheck" id="reqPwCheck" autocomplete="new-password" regexstr="^[a-z0-9]{4,12}$" maxlength="12" regexerrorstr="알파벳과 숫자 조합 4-12자 이내"  placeholder="알파벳과 숫자 조합 4-12자 이내" equalTo="#reqPw"/>
+	 			</div>
+		 	</div>
+			<div class="form-group kt-margin-t-25  form-group-last">
 				<label><i class="fa fa-file-upload kt-margin-r-5"></i><span data-lang-cd="req1001.attachments">파일 첨부</span> <button type="button" class="btn btn-sm btn-danger d-none kt-margin-l-10" id="fileRemoveResetBtn">삭제 초기화</button></label>
 				<div class="kt-uppy" id="req1001FileUpload">
 					<div class="kt-uppy__dashboard"></div>
@@ -97,9 +112,7 @@
 			</div>
 			<div class="kt-portlet__head-toolbar">
 				<div class="kt-portlet__head-group">
-					<div class="kt-portlet__head-group">
-						<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
-					</div>
+					<a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-clean btn-icon-md"><i class="la la-angle-down"></i></a>
 				</div>
 			</div>
 		</div>
@@ -130,6 +143,9 @@ var OSLReq1001Popup = function () {
 	//수정 중 삭제한 파일Sn 목록
 	var uploadRemoveFiles = [];
 	
+	//비밀번호 기존 존재 여부
+	var pw;
+	
     // Private functions
     var documentSetting = function () {
     	//프로젝트 목록 세팅
@@ -147,6 +163,10 @@ var OSLReq1001Popup = function () {
     	//Portlet 세팅
     	new KTPortlet('req1001RequestUsrInfo', $.osl.lang("portlet"));
     	new KTPortlet('req1001NewRequestOpt', $.osl.lang("portlet"));
+    	
+    	//palceholder 세팅
+    	$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
+		$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.password"));
     	
     	//파일 업로드 세팅
     	fileUploadObj = $.osl.file.uploadSet("req1001FileUpload",{
@@ -287,6 +307,17 @@ var OSLReq1001Popup = function () {
     	//datepicker 세팅
 		$.osl.date.datepicker($("#reqDtm"), {});
     	
+		//요구사항 잠금 기능
+    	$("#reqPwCheckbox").click(function(){
+    		if($("#reqPwCheckbox").is(":checked")==true){
+    			//세부 속성 보이기
+    			$("#pwOption").removeClass("kt-hide");
+    		}else{
+    			//세부 속성 숨기기
+    			$("#pwOption").addClass("kt-hide");
+    		}
+    	});
+		
     	//submit 동작
     	$("#req1001SaveSubmit").click(function(){
 			var form = $('#'+formId);    		
@@ -295,6 +326,20 @@ var OSLReq1001Popup = function () {
     		if (!form.valid()) {
     			return;
     		}
+    		
+    		//요구사항 잠금 사용 시 패스워드 확인
+    		if($("#reqPwCheckbox").is(":checked")==true){
+    			if(pw!="Y"){
+    				//기존에 비밀번호가 있던 경우가 아니라면
+    				//잠금 사용했으나 비밀번호 미 입력 시
+    				if($("#reqPw").val()==""){
+    					$.osl.alert($.osl.lang("req1001.formCheck.passwordMessage"));
+    					$("#reqPw").focus();
+   						return false;
+    				}
+    			}
+        	}
+    		
     		$.osl.confirm($.osl.lang("req1001."+type+".saveString"),null,function(result) {
     	        if (result.value) {
     	        	fileUploadObj.upload();
@@ -344,6 +389,16 @@ var OSLReq1001Popup = function () {
 		    	//파일 목록 세팅
 		    	$.osl.file.fileListSetting(data.fileList, fileUploadObj);
 		    	
+		    	//요구사항 잠금 설정한 경우
+		    	if(!$.osl.isNull(data.reqInfoMap.reqPw)){
+		    		$("#reqPwCheckbox").attr("checked", true);
+		    		$("#pwOption").removeClass("kt-hide");
+		    		pw = "Y";
+		    		//비밀번호는 비우기
+					$("#reqPw").val("");
+					$("#reqPw").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
+					$("#reqPwCheck").attr("placeholder",$.osl.lang("req1001.reqPw.placeholder.nullPassword"));
+		    	}
 			}
 		});
 		

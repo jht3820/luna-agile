@@ -17,7 +17,7 @@ jQuery(function ($) {
             canUserEditLinks: true,
             canUserMoveOperators: true,
             data: {},
-            distanceFromArrow: 3,
+            distanceFromArrow: 1,
             defaultOperatorClass: 'flowchart-default-operator',
             defaultLinkColor: '#3366ff',
             defaultSelectedLinkColor: 'black',
@@ -514,12 +514,40 @@ jQuery(function ($) {
 
         _getOperatorFullElement: function (operatorData) {
             var infos = this.getOperatorCompleteData(operatorData);
-
-            var $operator = $('<div class="flowchart-operator"></div>');
+            var $operator = $('<div class="flowchart-operator" data-operator-id="'+operatorData.properties.id+'"></div>');
             $operator.addClass(infos.class);
+            
+            /*
+            ** OSL-추가 스크립트
+            * - 작업흐름 데이터로 아이콘 추가 기능 표시 - 2020-10-26 진주영
+            * - 타이틀 배경,글씨 색상
+            */
+            var flowTitleBgColor = operatorData.properties.flowTitleBgColor;
+            var flowTitleColor = operatorData.properties.flowTitleColor;
+            
+            var $operator_function = $('<div class="flowchart-operator-function hide"></div>');
+            $operator_function.html("");
+            $operator_function.appendTo($operator);
+            
+            var $operator_title = $('<div class="flowchart-operator-title" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';"></div>');
+            var dropdownMenuClass = 'hide';
 
-            var $operator_title = $('<div class="flowchart-operator-title"></div>');
-            $operator_title.html(infos.title);
+            //edit인경우 dropdown class
+            if(operatorData.properties.hasOwnProperty("editable") && operatorData.properties.editable === true){
+            	dropdownMenuClass = '';
+            }
+            $operator_title.html(
+            		'<div class="flowchart-operator-title__lebel">'+infos.title+'</div>'
+	            	+'<div class="flowchart-operator-menu '+dropdownMenuClass+'">'
+						+'<button type="button" class="btn btn-bold btn-font-sm btn-elevate btn-elevate-air" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';" data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1"><i class="fa fa-bars osl-padding-r0"></i></button>'
+						+'<div class="dropdown-menu dropdown-menu-right">'
+							+'<div class="dropdown-item" data-flow-action="update"><i class="fa fa fa-edit kt-font-primary"></i>'+$.osl.lang("process.menu.update")+'</div>'
+							+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>'+$.osl.lang("process.menu.delete")+'</div>'
+							/*+'<div class="dropdown-divider"></div>'
+							+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("process.menu.detail")+'</div>'*/
+						+'</div>'
+					+'</div>'
+            );
             $operator_title.appendTo($operator);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');
@@ -528,6 +556,7 @@ jQuery(function ($) {
                 $operator_body.appendTo($operator);
             }
 
+            /*//////////////////////////////////////////*/
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');
 
             var $operator_inputs = $('<div class="flowchart-operator-inputs"></div>');
@@ -604,8 +633,9 @@ jQuery(function ($) {
             $operator_connector.data('connector', connectorKey);
             $operator_connector.data('sub_connector', subConnector);
 
-            var $operator_connector_label = $('<div class="flowchart-operator-connector-label"></div>');
-            $operator_connector_label.text(connectorInfos.label.replace('(:i)', subConnector + 1));
+            var $operator_connector_label = $('<div class="flowchart-operator-connector-label osl-flowchart__label"></div>');
+            //$operator_connector_label.text(connectorInfos.label.replace('(:i)', subConnector + 1));
+            $operator_connector_label.html('<i class="fa fa-arrow-right"></i>');
             $operator_connector_label.appendTo($operator_connector);
 
             var $operator_connector_arrow = $('<div class="flowchart-operator-connector-arrow"></div>');
