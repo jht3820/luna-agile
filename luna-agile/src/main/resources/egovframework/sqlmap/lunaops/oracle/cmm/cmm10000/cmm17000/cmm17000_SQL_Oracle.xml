@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmm17000DAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<resultMap id="resultMapSelectCmm17000" class="egovMap">
+		<result property="upPrjNm"				column="UP_PRJ_NM"/>
+		<result property="prjId"				column="PRJ_ID"/>
+		<result property="licGrpId"				column="LIC_GRP_ID"/>
+		<result property="prjGrpId"				column="PRJ_GRP_ID"/>
+		<result property="prjNm"				column="PRJ_NM"/>
+		<result property="startDt"				column="START_DT"/>
+		<result property="endDt"				column="END_DT"/>
+		<result property="ord"					column="ORD"/>
+		<result property="prjDesc"				column="PRJ_DESC"/>
+		<result property="useCd"				column="USE_CD"/>
+		<result property="delCd"				column="DEL_CD"/>
+		<result property="prjType"				column="PRJ_TYPE"/>
+		<result property="regDtm"           	column="REG_DTM" />  
+		<result property="regUsrId"         	column="REG_USR_ID" />  
+		<result property="regUsrIp"         	column="REG_USR_IP" />  
+		<result property="modifyDtm"        	column="MODIFY_DTM" />  
+		<result property="modifyUsrId"      	column="MODIFY_USR_ID" />  
+		<result property="modifyUsrIp"      	column="MODIFY_USR_IP" />  
+    </resultMap>
+    
+	<sql id="selectCmm17000List">
+		 SELECT 
+		 		ROWNUM AS RN
+      			, A.PRJ_NM AS UP_PRJ_NM 
+      			, B.* 
+      	FROM 
+      			  PRJ1000 A
+      			, PRJ1000 B 
+      	WHERE 	1=1 
+	      AND 	A.PRJ_GRP_ID IS NULL 
+	      AND 	B.PRJ_GRP_ID =  A.PRJ_ID
+	      AND 	A.LIC_GRP_ID =  B.LIC_GRP_ID
+	      AND 	A.LIC_GRP_ID =  #licGrpId# 
+	      AND 	A.USE_CD = '01'
+	      AND 	B.USE_CD = '01'
+	      AND 	B.PRJ_ID IN (
+	          				SELECT	A.PRJ_ID
+	                         FROM	PRJ2001 A
+	                              ,	PRJ2000 B
+				              WHERE	1=1
+				            	AND	A.PRJ_ID = B.PRJ_ID
+				                AND	A.AUTH_GRP_ID = B.AUTH_GRP_ID
+				                AND	A.USR_ID =  #usrId#
+	      					)
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="prjNm" prepend="AND">
+						AND 	B.PRJ_NM LIKE '%'||#searchTargetData#||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="prjId" prepend="AND">
+						AND 	B.PRJ_ID LIKE '%'||#searchTargetData#||'%'
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="searchDataTxt">
+				AND 	B.PRJ_NM LIKE '%'||#searchDataTxt#||'%'
+			</isNotEmpty>
+      		ORDER  BY A.PRJ_NM, B.PRJ_NM
+	</sql>
+	
+	
+	<select id="cmm17000DAO.selectCmm17000PrjList" parameterClass="java.util.Map" resultMap="resultMapSelectCmm17000">
+		
+		SELECT 
+			Z.*
+		FROM (
+			<include refid="selectCmm17000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+	
+	<select id="cmm17000DAO.selectCmm17000PrjListCnt" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	
+	SELECT
+			COUNT(*) AS PRJ_CNT
+		FROM	
+		(
+			<include refid="selectCmm17000List"/>
+		) Z
+	</select>
+	
+	<select id="cmm17000DAO.selectCmm17000UsrMainPrj" parameterClass="java.util.Map" resultClass="egovMap">
+		
+			SELECT		
+					  	A.PRJ_ID
+					,   ( SELECT  
+			       				B.PRJ_NM
+			       		FROM 
+			       				PRJ1000 B
+			       		WHERE 	1=1
+			    		AND 	B.LIC_GRP_ID =  #licGrpId#
+			    		AND 	B.PRJ_ID	 = 	A.PRJ_ID ) AS POP_PRJ_NM
+			FROM		STM3000 A
+			WHERE		1=1
+				AND		LIC_GRP_ID 	= #licGrpId#
+				AND		USR_ID 		= #regUsrId#
+ 		
+	</select>
+	
+	
+	<update id="cmm17000DAO.updateCmm17000UsrMainPrj" parameterClass="java.util.Map">
+		
+		UPDATE		STM3000 A
+		  	  SET	
+		  	  	   	A.PRJ_ID	= #prjId#
+		WHERE 		1=1
+		     AND 	LIC_GRP_ID	= #licGrpId#
+			 AND	USR_ID 		= #regUsrId#
+ 		
+	</update>
+</sqlMap>            
