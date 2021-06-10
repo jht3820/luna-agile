@@ -12,5 +12,3 @@
 	<sqlMap resource="egovframework/sqlmap/lunaops/oracle/cmm/cmm10000/cmm17000/cmm17000DAO_SQL_Oracle.xml"/>
 	
 </sqlMapConfig>
-
-

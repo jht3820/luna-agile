@@ -23,9 +23,6 @@ import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
 
 
-
-
-
 @Controller
 public class Cmm17000Controller {
 	
@@ -55,8 +52,6 @@ public class Cmm17000Controller {
 			
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
-			
-			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -70,11 +65,8 @@ public class Cmm17000Controller {
 			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
-			
 			paramMap.put("usrId", loginVO.getUsrId());
 
-			
-			
 			int totCnt = cmm17000Service.selectReq1000ReqListCnt(paramMap);
 
 			
@@ -84,10 +76,7 @@ public class Cmm17000Controller {
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
-			
-			
 			List<Map> cmm17000List = cmm17000Service.selectReq1000ReqList(paramMap);
-			
 			
 			
 			Map<String, Object> metaMap = PagingUtil.getPageReturnMap(paginationInfo);
@@ -111,7 +100,6 @@ public class Cmm17000Controller {
 			throw new Exception(ex.getMessage());
 		}
 	}
-
     
 	@RequestMapping(value="/cmm/cmm10000/cmm17000/updateCmm17000UsrMainPrjAjax.do")
 	public ModelAndView updateReq1001ReqInfoAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
