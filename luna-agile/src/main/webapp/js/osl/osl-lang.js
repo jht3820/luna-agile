@@ -345,6 +345,15 @@ var OSLCoreLangSetting = function () {
 					addToolTip :"요구사항 배정",
 				},
 			}
+		},cmm17000:{
+			field: {
+				
+				prjNm : "프로젝트 명",
+			},
+			actionBtn : {
+				title : "선택",
+				clickBtn : "선택",
+			},
 		},
 		prj1000:{
 			startDate: "시작일",
@@ -2003,6 +2012,13 @@ var OSLCoreLangSetting = function () {
 				content:"Comment",
 				writeDate : "Date"
 			},
+			cmm17000PrjTable:{
+				upPrjNm:"Project Group Name",
+				prjId:"Project ID",
+				prjNm:"Project Name",
+				startDt:"Project Start Day",
+				endDt:"Project End Day",
+			},
 			dpl1000DplTable:{
 				dplStsNm:"Deploy Status",
 				dplNm:"Deploy Title",
@@ -2040,9 +2056,9 @@ var OSLCoreLangSetting = function () {
 				reqGrpNm:"Group requestion Name",
 				reqGrpLinkCnt:"Linked requestion Counts",
 				reqGrpUsrNm:"Request User Name",
-				email:"Request email",
-				deptNm: "Request Department Name",
-				telno: "Request User Number",
+				reqGrpUsrEmail:"Request email",
+				reqGrpUsrDeptNm: "Request Department Name",
+				reqGrpUsrNum: "Request User Number",
 				regGrpChargerNm:"Request Charger Name",
 				regDtmDay:"Write Date"
 			},
@@ -2400,6 +2416,20 @@ var OSLCoreLangSetting = function () {
 				reSend : "Reply"
 			},
 			title :"Reply Message"
+		},
+		cmm17000:{
+			title:{
+				mainPrjSetting:"Main Project Setting",
+			},
+			field:{
+				prjNm:"Project Name",
+			},
+			actionBtn:{
+				clickBtn:"Select",
+			},
+			button:{
+				search:"Search"
+			},
 		},
 		dpl1100:{
 			title : {

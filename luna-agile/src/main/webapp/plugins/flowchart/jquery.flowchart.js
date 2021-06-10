@@ -517,11 +517,7 @@ jQuery(function ($) {
             var $operator = $('<div class="flowchart-operator" data-operator-id="'+operatorData.properties.id+'"></div>');
             $operator.addClass(infos.class);
             
-            /*
-            ** OSL-추가 스크립트
-            * - 작업흐름 데이터로 아이콘 추가 기능 표시 - 2020-10-26 진주영
-            * - 타이틀 배경,글씨 색상
-            */
+            
             var flowTitleBgColor = operatorData.properties.flowTitleBgColor;
             var flowTitleColor = operatorData.properties.flowTitleColor;
             
@@ -543,8 +539,7 @@ jQuery(function ($) {
 						+'<div class="dropdown-menu dropdown-menu-right">'
 							+'<div class="dropdown-item" data-flow-action="update"><i class="fa fa fa-edit kt-font-primary"></i>'+$.osl.lang("process.menu.update")+'</div>'
 							+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>'+$.osl.lang("process.menu.delete")+'</div>'
-							/*+'<div class="dropdown-divider"></div>'
-							+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("process.menu.detail")+'</div>'*/
+							
 						+'</div>'
 					+'</div>'
             );
@@ -556,7 +551,7 @@ jQuery(function ($) {
                 $operator_body.appendTo($operator);
             }
 
-            /*//////////////////////////////////////////*/
+            
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');
 
             var $operator_inputs = $('<div class="flowchart-operator-inputs"></div>');
