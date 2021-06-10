@@ -1245,6 +1245,7 @@
 	        		}
 	        		
 	        		
+	        		
         			if($("form#userSettingForm select").length > 0){
         				
             			var commonCodeArr = [];
@@ -2086,6 +2087,39 @@
         			
 	        		$.osl.prjGrpAuthList = prjOrdList;
 	        		$.osl.showLoadingBar(false,{target: "#kt_header"});
+	        		
+	        		
+	        		$("#searchPrjNmBtn").click(function(){
+	        			var data = {
+	        					paramUsrId: $.osl.user.usrId,
+	        					paramPrjNm : $("#mainPrjNm").val(),
+	        			};
+	        			var options = {
+	        					modalTitle: $.osl.lang("cmm17000.title.search"),
+	        					closeConfirm: false,
+	        					modalSize:"xl",
+	        					callback:[{
+	        						targetId: "selectPrj",
+	        						actionFn: function(thisObj){
+	        							var prjNm = OSLCmm17000Popup.getPrjInfo();
+	        							$("#mainPrjNm").val(prjNm);
+	        						}
+	        					}]
+	        			};
+	        			$.osl.layerPopupOpen('/cmm/cmm10000/cmm17000/selectCmm17000View.do', data, options);
+	        			
+	        		});
+	        		
+	        		
+	        		$("#mainPrjNm").keydown(function(e){
+	        			if(e.keyCode=='13'){
+	        				
+	        				$("#searchPrjNmBtn").click();
+	        			}
+	        		});
+	        		
+	        		$("#mainPrjNm").val(data.mainPrjInfo[0].popPrjNm);
+	        		
 	        	}else{
 	        		$.osl.toastr(data.message);
 	        	}
