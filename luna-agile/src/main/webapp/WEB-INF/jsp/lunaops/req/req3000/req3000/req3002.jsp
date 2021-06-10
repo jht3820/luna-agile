@@ -343,7 +343,6 @@ var OSLReq3002Popup = function () {
 	    	$("#req3000GrpLinkWrap").addClass("col-lg-6");
 	    	$("#hideReqGrpInfo > i").attr("class","la la-angle-up");
 	    	
-	    	
 	    }else{
 	    	
 	    	$("#req3000ReqGrpWrap").attr("class", "col-lg-6");

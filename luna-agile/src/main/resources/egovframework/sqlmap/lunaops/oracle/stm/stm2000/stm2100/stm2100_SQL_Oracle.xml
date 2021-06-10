@@ -38,7 +38,7 @@
 		<isNotEmpty property="searchTargetData">
 			<isNotEmpty property="searchTargetId">
 				<isEqual property="searchTargetId" compareValue="stmTypeCd">
-					AND C.STM_TYPE_CD LIKE '%'|| #searchTargetData# ||'%'
+					AND C.STM_TYPE_CD LIKE = #searchTargetData#
 				</isEqual>
 				<isEqual property="searchTargetId" compareValue="stmNm">
 					AND C.STM_NM LIKE '%'|| #searchTargetData# ||'%'

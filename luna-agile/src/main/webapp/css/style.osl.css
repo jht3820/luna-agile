@@ -203,6 +203,9 @@ input:-webkit-autofill,
 .osl-max-h-px-260{
 	max-height: 260px;
 }
+.osl-min-h-px--280 {
+  min-height: 280px; 
+}
 .osl-min-h-px--300 {
   min-height: 300px; 
 }
@@ -319,6 +322,7 @@ input:-webkit-autofill,
 .osl-cursor-pointer{
 	cursor: pointer;
 }
+
 .osl-contents-frame {
     background: #23241f;
     color: #f8f8f2;
@@ -344,7 +348,50 @@ input:-webkit-autofill,
 .osl-code-bg{
 	background-color: #23241f;
 }
-
+.osl-code__line-frame {
+    width: 30px;
+    /* height:100%; */
+    text-align: right;
+    background-color: #000;
+    color: #fff;
+    float: left;
+    padding: 0 1px;
+    /* overflow-y:hidden;
+    overflow-x:scroll; */
+    overflow:hidden;
+    line-height: 21px;
+    margin-right: 10px;
+}
+.osl-code__text-add{
+	background-color: #1f4acc;
+}
+.osl-code__text-remove{
+	background-color: #af3022;
+}
+.osl-code__diff-line-scroll-defore {
+    position: absolute;
+    top: 84px;
+    left: 567px;
+    width: 18px;
+    height: 2px;
+    background-color: rgba(31, 74, 204, 0.5);
+    pointer-events: none;
+}
+.osl-code__diff-line-scroll-after {
+    position: absolute;
+    top: 84px;
+    left: 567px;
+    width: 18px;
+    height: 2px;
+    background-color: rgba(175, 48, 34, 0.5);
+    pointer-events: none;
+}
+.osl-code__line-div {
+    width: 100%;
+    padding-right: 5px;
+    float: left;
+    line-height: 21px;
+}
 .osl-bg-none{
 	background: none;
 }
@@ -1519,8 +1566,8 @@ label.required:after {
     width: 100%;
 }
 .osl-process__flow-chart{
-	width:2000px;
-	height:1000px;
+	width:4000px;
+	height:2000px;
 	background: #EAF1F7;
 }
 .osl-flowchart__operator {
@@ -1530,6 +1577,7 @@ label.required:after {
     -webkit-box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
     box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
     background-color: #ffffff;
+	border: 1px solid transparent;
     border-radius: 4px;
     pointer-events: auto;
 }
@@ -1538,10 +1586,12 @@ label.required:after {
     font-weight: bold;
     box-sizing: border-box;
     height: auto;
-    border-bottom: 1px solid #ebedf2;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     background: #fff;
+}
+.flowchart-operator .flowchart-operator-function:not(.hide) {
+    border-bottom: 1px solid #ebedf2;
 }
 .flowchart-operator .flowchart-operator-title {
     width: 100%;
@@ -1649,6 +1699,40 @@ label.required:after {
 .osl-flowchart-preview .flowchart-operator.osl-flowchart__operator {
     max-width: 90%;
 }
+.flowchart-operator.error{
+	-webkit-animation: flowError 1s linear infinite;
+    -moz-animation: flowError 1s linear infinite;
+    -ms-animation: flowError 1s linear infinite;
+    -o-animation: flowError 1s linear infinite;
+    animation: flowError 1s linear infinite;
+}
+
+
+@-webkit-keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+@-moz-keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+@-ms-keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+@-o-keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+@keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+@-webkit-keyframes flowError {
+    0% { border: 1px solid transparent; }
+    100% { border: solid 1px #fd397a; }
+}
+
 /*******************begin :: wizard*******************/
 /*내용 영역 포함 전체 wizard*/
 .osl-wizard {

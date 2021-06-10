@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="stm8000DAO">
+	<typeAlias alias="egovMap"	 	type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	
+	
+	<sql id="selectStm8000List">
+		SELECT
+			ROWNUM RN
+			, T1.*
+		FROM(
+			SELECT
+				A.LIC_GRP_ID AS LIC_GRP_ID
+				, A.STRG_REP_ID AS STRG_REP_ID
+				, A.STRG_TYPE_CD AS STRG_TYPE_CD
+				, SF_STM4001_COM_CD_INFO( #licGrpId#, 'STM00004', A.STRG_TYPE_CD, '1') AS STRG_TYPE_NM
+				, A.STRG_REP_TITLE AS STRG_REP_TITLE
+				, A.STRG_REP_URL AS STRG_REP_URL
+				, A.STRG_TXT AS STRG_TXT
+				<isNotEmpty property="strgRepId">
+					, A.STRG_USR_ID AS STRG_USR_ID
+					, A.STRG_USR_PW AS STRG_USR_PW
+					, A.STRG_KEY AS STRG_KEY
+					, A.STRG_REP_NM AS STRG_REP_NM
+				</isNotEmpty>
+				, A.USE_CD AS USE_CD
+				, SF_STM4001_COM_CD_INFO( #licGrpId#, 'CMM00001', A.USE_CD, '1') AS USE_NM
+			FROM STM8000 A
+			WHERE 1 = 1
+			AND A.LIC_GRP_ID = #licGrpId#
+			<isNotEmpty property="strgRepId">
+				AND A.STRG_REP_ID = #strgRepId#
+			</isNotEmpty>
+			<isNotEmpty property="searchTargetData">
+				<isNotEmpty property="searchTargetId">
+					<isEqual property="searchTargetId" compareValue="strgTypeCd">
+						AND A.STRG_TYPE_CD = #searchTargetData#
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="strgRepTitle">
+						AND A.STRG_REP_TITLE LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="strgTxt">
+						AND A.STRG_TXT LIKE '%'|| #searchTargetData# ||'%'
+					</isEqual>
+					<isEqual property="searchTargetId" compareValue="useCd">
+						AND A.USE_CD = #searchTargetData#
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty property="paramSortFieldId">
+				<isNotEmpty property="sortDirection">
+					ORDER BY $paramSortFieldId$
+					<isEqual property="sortDirection" compareValue="desc">
+						DESC
+					</isEqual>
+					<isEqual property="sortDirection" compareValue="asc">
+						ASC
+					</isEqual>
+				</isNotEmpty>
+			</isNotEmpty>
+			<isEmpty property="paramSortFieldId">
+				ORDER BY STRG_REP_ID DESC
+			</isEmpty>
+		) T1
+	</sql>
+	
+	
+	<select id="stm8000DAO.selectStm8000ServerListCnt" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+	    
+		SELECT
+			COUNT(*) AS CNT
+		FROM ( 
+			<include refid="selectStm8000List"/>
+		) Z
+    </select>
+    
+    
+    <select id="stm8000DAO.selectStm8000ServerList" parameterClass="java.util.Map"  resultClass="egovMap">
+     
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectStm8000List"/>
+		) Z
+		WHERE 1 = 1
+		AND Z.RN BETWEEN (#firstIndex#+1) AND #lastIndex#
+	</select>
+	
+    
+    <select id="stm8000DAO.selectStm8000ServerInfo" parameterClass="java.util.Map"  resultClass="egovMap">
+     
+		SELECT 
+			Z.*
+		FROM ( 
+			<include refid="selectStm8000List"/>
+		) Z
+		WHERE 1 = 1
+	</select>
+	
+	
+    <insert id="stm8000DAO.insertStm8000ServerInfo" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.String" keyProperty="newStrgRepId">
+			<![CDATA[
+				 
+				SELECT	NVL( 
+								SUBSTR(NEW_STRG_REP_ID, 1, 11) || LPAD( (TO_NUMBER(SUBSTR(NEW_STRG_REP_ID, 12, 5)) + 1) , 5, '0')
+							,	'REP' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '00001'
+	            		) AS NEW_STRG_REP_ID
+				FROM	(
+				            SELECT	MAX(STRG_REP_ID)  AS NEW_STRG_REP_ID
+				            FROM	STM8000 A
+				            WHERE	1=1
+	                        AND		A.LIC_GRP_ID = #licGrpId#
+				            AND		A.STRG_REP_ID LIKE 'REP' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+						)
+			]]>
+		</selectKey>
+		<![CDATA[ 
+			 
+			INSERT INTO STM8000
+			(
+			        LIC_GRP_ID,			STRG_REP_ID,			STRG_TYPE_CD,		STRG_REP_URL
+			        ,STRG_REP_TITLE,	STRG_TXT,				STRG_USR_ID,			STRG_USR_PW
+			        ,STRG_KEY,			STRG_REP_NM,		USE_CD
+			        ,REG_DTM,				REG_USR_ID,			REG_USR_IP
+			        ,MODIFY_DTM,			MODIFY_USR_ID,		MODIFY_USR_IP
+			)                    
+			VALUES
+			(
+					#licGrpId#,			#newStrgRepId#,		#strgTypeCd#,		#strgRepUrl#
+			        ,#strgRepTitle#,	#strgTxt#,				#strgUsrId#,			#strgUsrPw#
+			        ,#strgKey#,		#strgRepNm#,			'01'
+					,SYSDATE,			#regUsrId#,				#regUsrIp#
+					,SYSDATE,			#modifyUsrId#,		#modifyUsrIp#
+			)
+		]]>
+	</insert>
+
+	
+	<update id="stm8000DAO.updateStm8000ServerPwInfo" parameterClass="java.util.Map">
+		 
+		UPDATE 	STM8000 A
+		SET		STRG_USR_PW = #strgUsrPw# 	
+		WHERE	1=1
+		AND A.LIC_GRP_ID 		= #licGrpId#
+		AND A.STRG_REP_ID 	= #strgRepId# 	
+	</update>
+	
+	
+	<update id="stm8000DAO.updateStm8000ServerInfo" parameterClass="java.util.Map">
+		 
+		UPDATE 	STM8000 A
+		SET	
+		    	STRG_TYPE_CD	= #strgTypeCd#
+		    ,	STRG_REP_URL	= #strgRepUrl#
+		    ,	STRG_REP_TITLE	= #strgRepTitle#
+		    ,	STRG_TXT			= #strgTxt#
+		    ,	STRG_USR_ID		= #strgUsrId#
+			,	STRG_USR_PW	= #strgUsrPw#
+			,	STRG_KEY			= #strgKey#
+		    ,	STRG_REP_NM	= #strgRepNm#
+		    ,	USE_CD				= #useCd#
+		    ,	MODIFY_DTM		= SYSDATE
+		    ,	MODIFY_USR_ID	= #modifyUsrId#
+		    ,	MODIFY_USR_IP	= #modifyUsrIp#
+		WHERE	1=1
+		AND A.LIC_GRP_ID 		= #licGrpId#
+		AND A.STRG_REP_ID 	= #strgRepId# 	
+	</update>
+	
+	
+	<delete id="stm8000DAO.deleteStm8000ServerInfo" parameterClass="java.util.Map">
+		
+		DELETE	
+		FROM	STM8000 A
+		WHERE	1=1
+		AND A.LIC_GRP_ID 		= #licGrpId#
+		AND A.STRG_REP_ID 	= #strgRepId# 	
+	</delete>
+	
+</sqlMap>

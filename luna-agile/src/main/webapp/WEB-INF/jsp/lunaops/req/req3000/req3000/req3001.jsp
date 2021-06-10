@@ -390,8 +390,8 @@ var OSLReq3001Popup = function () {
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false},
 				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 150, search:true, autoHide: false, sortable: false},	
-				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 150, search:true,autoHide: false},
-				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 150 , search:true, autoHide: false, sortable: false}
+				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 100, search:true,autoHide: false},
+				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 100 , search:true, autoHide: false, sortable: false}
 			],
 			searchColumns:[
 				
@@ -401,10 +401,12 @@ var OSLReq3001Popup = function () {
 				
 			],
 			actionBtn:{
-				"title":"해제",
 				"dblClick":true,
 				"update":false,
 				"delete":false,
+			},
+			rows:{
+				minHeight:50,
 			},
 			actionFn:{
 				"select":function(datatableId, elem){
@@ -499,7 +501,10 @@ var OSLReq3001Popup = function () {
 			data: {
 				source: {
 					read: {
-						url: "/req/req3000/req3000/selectReq3002ListAjaxView.do"
+						url: "/req/req3000/req3000/selectReq3002ListAjaxView.do",
+						params:{
+							reqGrpId: $("#reqGrpId").val()
+    					},
 					}
 				},
 				pageSize:5,
@@ -524,8 +529,8 @@ var OSLReq3001Popup = function () {
 				{field: 'checkbox', title: '#', textAlign: 'center', width: 20, selector: {class: 'kt-checkbox--solid'}, sortable: false, autoHide: false},
 				{field: 'rn', title:"No.", textAlign: 'center', width: 25, autoHide: false, sortable: false, autoHide: false},
 				{field: 'prjNm', title: '프로젝트 명', textAlign: 'left', width: 150, search:true, autoHide: false, sortable: false},	
-				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 150, search:true, autoHide: false },
-				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 150 , search:true, autoHide: false, sortable: false}
+				{field: 'reqOrd', title: '요구사항 번호', textAlign: 'left', width: 100, search:true, autoHide: false },
+				{field: 'reqNm', title: '요구사항 명', textAlign: 'left', width: 100 , search:true, autoHide: false, sortable: false}
 			],
 			searchColumns:[
 				{field: 'reqUsrNm', title: '요청자', searchOrd: 5},
@@ -533,7 +538,6 @@ var OSLReq3001Popup = function () {
 				{field: 'reqProType', title: '처리유형', searchOrd: 7, searchType:"select", searchCd:"REQ00001"},
 			],
 			actionBtn:{
-				"title":"연결",
 				"dblClick":true,
 				"update":false,
 				"delete":false
@@ -544,7 +548,8 @@ var OSLReq3001Popup = function () {
 					if(reqConnectedList.indexOf(data.reqId) > -1){
 						row.addClass("osl-datatable__row-assign--none");
 					}
-				}
+				},
+				minHeight:50,
 			},
 			actionFn:{
 				"insert":function(datatableId, type, rowNum){
@@ -578,6 +583,14 @@ var OSLReq3001Popup = function () {
 				}
 			}
 		});
+		
+		$("#req3001ConnectReqTable").on("kt-datatable--on-layout-updated", function(){
+			actionHide("req3001ConnectReqTable");
+       	});
+		
+		$("#req3001UnconnectReqTable").on("kt-datatable--on-layout-updated", function(){
+			actionHide("req3001UnconnectReqTable");
+       	});
 	};
 	// end:: 미연결 요구사항 데이터테이블
 	
@@ -879,6 +892,9 @@ var OSLReq3001Popup = function () {
        	//formData
    		var fd = $.osl.formDataToJsonArray(formId);
        	
+       	//수정
+   		fd.append("reqGrpDescNotBr", $("#reqGrpDesc").val());
+       	
    		//연결된 요구사항 목록
    		var reqGrpLinkReqList = $.osl.datatable.list["req3001ConnectReqTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(reqGrpLinkReqList) && reqGrpLinkReqList.length > 0){
@@ -1020,7 +1036,17 @@ var OSLReq3001Popup = function () {
 		}
 	});
 	
-	
+	//기능키 컬럼 숨김	
+	var actionHide = function(tableId){
+		if(tableId == "req3001ConnectReqTable"){
+			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.getColumnByField('actions').visible=false;
+			$.osl.datatable.list["req3001ConnectReqTable"].targetDt.columnHide();
+			
+		}else if(tableId == "req3001UnconnectReqTable"){
+			$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.getColumnByField('actions').visible=false;
+			$.osl.datatable.list["req3001UnconnectReqTable"].targetDt.columnHide();
+		}
+	}
 	return {
         // public functions
         init: function() {

@@ -53,8 +53,13 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj3001SaveSubmit"><span data-lang-cd="prj3001.button.insert">작성 완료</span></button>
-	<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-brand" id="prj3001SaveSubmit"> 
+		<i class="fa fa-save"></i><span data-lang-cd="prj3001.button.insert">작성 완료</span>
+	</button>
+	<button type="button" class="btn btn-outline-brand" data-dismiss="modal">
+		<i class="fa fa-window-close"></i><span>Close</span>
+	</button>
+	
 </div>
 
 <script>
@@ -151,7 +156,7 @@ var OSLPrj3001Popup = function () {
 				$.osl.alert(data.message,{type: 'error'});
 			}else{
 				// 조직 정보 세팅
-		    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3001", ["upperDocId", "upperDocNm", "docId", "docEdDtm", "docNm", "ord", "docDesc"]);
+		    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3001", ["upperDocId", "upperDocNm", "docId", "signUseCd", "docEdDtm", "docNm", "ord", "docDesc"]);
 			
 		    	// 상위 산출물 Id 없을경우
 				if($.osl.isNull(data.docInfoMap.upperDocId)){
@@ -259,11 +264,11 @@ var OSLPrj3001Popup = function () {
 	    				//모달 창 닫기
 	    				$.osl.layerPopupClose();
 
-	    				//트리 재조회
-	    				$("button[data-tree-id=prj3000DocTree][data-tree-action=select]").click();
-	    				
 	    				//트리 노드 정보 재조회
 	    				$("button[data-tree-id=prj3000DocTree][data-tree-action=selectDocInfo]").click();
+	    				
+	    				//트리 재조회
+	    				$("button[data-tree-id=prj3000DocTree][data-tree-action=select]").click();
 	    				
 	    			}
 	    		});

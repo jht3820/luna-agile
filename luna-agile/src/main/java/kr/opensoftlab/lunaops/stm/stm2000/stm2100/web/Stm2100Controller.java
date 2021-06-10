@@ -36,13 +36,6 @@ public class Stm2100Controller {
 	@Resource(name = "stm2100Service")
 	private Stm2100Service stm2100Service;
 
-
-	
-	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2104View.do")
-	public String selectStm2104View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
-		return "/stm/stm2000/stm2100/stm2104";
-	}
-	
 	
 	@RequestMapping(value="/stm/stm2000/stm2100/selectStm2100View.do")
 	public String selectStm2100View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
@@ -491,5 +484,4 @@ public class Stm2100Controller {
 	public String selectStm2103View(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
 		return "/stm/stm2000/stm2100/stm2103";
 	}
-	
 }

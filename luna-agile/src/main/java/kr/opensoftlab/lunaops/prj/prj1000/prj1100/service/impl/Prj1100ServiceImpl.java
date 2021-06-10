@@ -3,6 +3,7 @@ package kr.opensoftlab.lunaops.prj.prj1000.prj1100.service.impl;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +106,92 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 			}
 		}
 	}
-
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void savePrj1100ProcessDataInfo(Map paramMap) throws Exception{
+		String processData = (String) paramMap.get("processData");
+		String removeData = (String) paramMap.get("removeData");
+		
+		String prjId = (String) paramMap.get("prjId");
+		String processId = (String) paramMap.get("processId");
+		
+		
+		String endFlowId = (String) paramMap.get("endFlowId");
+		
+		
+		JSONObject jsonObj = new JSONObject(processData);
+		JSONArray removeDataObj = new JSONArray(removeData);
+		
+		
+		prj1100DAO.deletePrj1100FlowNextIdList(paramMap);
+		
+		
+		Iterator<String> keys = jsonObj.keys();
+		while(keys.hasNext()) {
+		    String key = keys.next();
+		    paramMap.put("flowId", key);
+		    
+		    
+		    if(endFlowId.equals(key)) {
+		    	paramMap.put("flowDoneCd", "01");
+		    }else {
+		    	paramMap.put("flowDoneCd", "02");
+		    }
+		    
+		    JSONObject flowInfo = jsonObj.getJSONObject(key);
+		    
+		    int left = flowInfo.getInt("left");
+		    int top = flowInfo.getInt("top");
+		    
+		    
+		    JSONObject properties = flowInfo.getJSONObject("properties");
+		    
+		    JSONArray flowNextIdList = null;
+		    
+		    
+		    if(properties.has("flowNextId")) {
+		    	flowNextIdList = properties.getJSONArray("flowNextId");
+		    	if(flowNextIdList.length() > 0) {
+		    		for(int i=0;i<flowNextIdList.length();i++) {
+		    			String flowNextId = flowNextIdList.getString(i);
+		    			paramMap.put("flowNextId", flowNextId);
+		    		
+		    			
+				    	prj1100DAO.insertPrj1100FlowNextIdInfo(paramMap);
+		    		}
+		    	}
+		    }
+		    
+		    
+		    Map flowMapData = new Gson().fromJson(properties.toString(), HashMap.class);
+		    flowMapData.put("prjId", prjId);
+		    flowMapData.put("processId", processId);
+		    flowMapData.put("flowId", key);
+		    flowMapData.put("flowLeft", left);
+		    flowMapData.put("flowTop", top);
+		    flowMapData.put("flowNm", flowMapData.get("title"));
+		    flowMapData.put("modifyUsrId", paramMap.get("modifyUsrId"));
+		    flowMapData.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
+		    
+		    
+		    prj1100DAO.updatePrj1101FlowInfo(flowMapData);
+		}
+		
+		
+		for(int i=0;i<removeDataObj.length();i++) {
+			String removeFlowId = removeDataObj.getString(i);
+			Map newMap = new HashMap<>();
+			newMap.put("prjId", prjId);
+			newMap.put("processId", processId);
+			newMap.put("flowId", removeFlowId);
+			newMap.put("modifyUsrId", paramMap.get("modifyUsrId"));
+			newMap.put("modifyUsrIp", paramMap.get("modifyUsrIp"));
+		    
+			prj1100DAO.deletePrj1101FlowInfo(newMap);
+		}
+		
+	}
 	
 	
 	@SuppressWarnings({ "rawtypes"})
@@ -126,6 +212,8 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 			prj1100DAO.deletePrj1100ProcessInfo(infoMap);
 		
 			
+			prj1100DAO.deletePrj1101FlowInfo(infoMap);
+			prj1100DAO.deletePrj1100FlowNextIdList(infoMap);
 		}
 	}
 	
@@ -187,20 +275,14 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 	public void updatePrj1101FlowInfo(Map paramMap) throws Exception {
 		
 		prj1100DAO.updatePrj1101FlowInfo(paramMap);
-		
-		
-		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
 	}
 	
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void insertPrj1101FlowInfo(Map paramMap) throws Exception {
+	public String insertPrj1101FlowInfo(Map paramMap) throws Exception {
 		
-		prj1100DAO.insertPrj1101FlowInfo(paramMap);
-		
-		
-		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
+		return prj1100DAO.insertPrj1101FlowInfo(paramMap);
 	}
 	
 	
@@ -215,6 +297,18 @@ public class Prj1100ServiceImpl extends EgovAbstractServiceImpl implements Prj11
 		
 		prj1100DAO.updatePrj1100ProcessInfo(paramMap);
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List selectPrj1107FlowLinkList(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1107FlowLinkList(paramMap);
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public int selectPrj1100FlowReqListCnt(Map paramMap) throws Exception {
+		return prj1100DAO.selectPrj1100FlowReqListCnt(paramMap);
+	} 
 	
 	
 	@SuppressWarnings("rawtypes")

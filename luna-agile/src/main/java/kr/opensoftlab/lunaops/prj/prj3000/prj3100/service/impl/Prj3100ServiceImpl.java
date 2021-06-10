@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import egovframework.com.cmm.EgovMessageSource;
@@ -48,7 +49,57 @@ public class Prj3100ServiceImpl extends EgovAbstractServiceImpl implements Prj31
 	
 	@Override
 	public void updatePrj3100FileType(Map<String, String> paramMap) throws Exception {
+		
+		String updateType = paramMap.get("updateType");
+		
+		
+		if("atchFile".equals(updateType)) {
+			
+			
+			prj3100DAO.deletePrj3001CngInf(paramMap);
+			
+		}
+		
+		
 		prj3100DAO.updatePrj3100FileType(paramMap);
+		
+		
+		
+		if("waitFile".equals(updateType)) {
+			
+			FileVO fileVO = new FileVO();
+			
+			
+			fileVO.setAtchFileId(paramMap.get("afterFileId"));
+			fileVO.setFileSn(paramMap.get("afterFileSn"));
+			fileVO = fileMngDAO.selectFileInf(fileVO);
+			
+			paramMap.put("fileSn", fileVO.getFileSn());
+			paramMap.put("fileStreCours", fileVO.getFileStreCours());
+			paramMap.put("streFileNm", fileVO.getStreFileNm());
+			paramMap.put("orignlFileNm", fileVO.getOrignlFileNm());
+			paramMap.put("fileExtsn", fileVO.getFileExtsn());
+			paramMap.put("fileType", fileVO.getFileType());
+			paramMap.put("fileSize", fileVO.getFileMg());
+			
+			String infType = "";
+			String signUseCd = paramMap.get("signUseCd");
+			
+			
+			if("01".equals(signUseCd)) {
+				
+				infType = "02";
+			
+			}else if("02".equals(signUseCd)) {
+				
+				infType = "01";
+			}
+			
+			paramMap.put("infType", infType);
+			
+			
+			prj3100DAO.insertPrj3001CngInf(paramMap);
+		}
 		
 	}
 
@@ -57,5 +108,38 @@ public class Prj3100ServiceImpl extends EgovAbstractServiceImpl implements Prj31
 	@Override
 	public List selectPrj3100MenuTree(Map<String, String> paramMap) throws Exception {
 		return prj3100DAO.selectPrj3100MenuTree(paramMap);
+	}
+
+	
+	@Override
+	public Map selectPrj3001CngInf(Map<String, String> paramMap) throws Exception {
+		return prj3100DAO.selectPrj3001CngInf(paramMap);
+	}
+
+	
+	@Override
+	public void insertPrj3100FileUpload(Map<String, String> paramMap, List<FileVO> _result) throws Exception {
+		
+		
+		fileMngDAO.insertFileDetail(_result);
+		
+		
+		if("atchFile".equals(paramMap.get("insertType"))) {
+			
+			FileVO fileVO = new FileVO();
+			fileVO.setAtchFileId(paramMap.get("atchFileId"));
+			fileVO.setFileSn(paramMap.get("fileSn"));
+			
+			
+			fileVO = fileMngDAO.selectFileInf(fileVO);
+			
+			
+			Map<String, String> fileMap = BeanUtils.describe(fileVO);
+			
+			paramMap.putAll(fileMap);
+			
+			
+			prj3100DAO.insertPrj3001CngInf(paramMap);
+		}
 	}
 }

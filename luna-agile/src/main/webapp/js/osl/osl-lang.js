@@ -44,6 +44,13 @@ var OSLCoreLangSetting = function () {
 				remove: '제거'
 			}
 		},
+		process:{
+			menu:{
+				update: "수정",
+				delete: "삭제",
+				detail: "상세정보"
+			}
+		},
 		tree:{
 			label:{
 				contextmenu:{
@@ -444,6 +451,21 @@ var OSLCoreLangSetting = function () {
 				saveBtnString: "수정 완료"
 			}
 		},
+		prj1100:{
+			alert:{
+				linkLimitLoop: "작업 흐름(단계)는 반복 진행될 수 없습니다.</br> A -> B -> A 불가",
+				selNoneProcess: "프로세스를 선택 하세요.",
+				selNoneFlow: "단계를 선택 하세요.",
+				saveCancel: "저장이 취소되었습니다.",
+				saveBefore: "변경된 데이터가 있습니다.</br> 저장하지 않고 진행하시겠습니까?",
+				processSave: "시작 단계: ${1}</br>종료 단계: ${2}</br></br>프로세스 데이터를 저장하시겠습니까?",
+				manyStartFlow: "${1}개의 시작 단계가 발견되었습니다.",
+				manyEndFlow: "${1}개의 종료 단계가 발견되었습니다.",
+				flowLinkCheck: "</br>단계 연결 데이터를 확인하세요.",
+				deleteFlow: "${1} 단계를 삭제하시겠습니까?</br>업무 처리에 문제가 발생 할 수 있습니다.",
+				deleteReqCheck: "${1}건의 진행중인 요구사항이 있습니다.</br>요구사항의 단계 진행을 완료해야 삭제가 가능합니다."
+			}
+		},
 		prj1101:{
 			complete: "완료",
 			insert:{
@@ -453,6 +475,17 @@ var OSLCoreLangSetting = function () {
 			update:{
 				title: "프로세스 수정",
 				saveString: "프로세스를 수정하시겠습니까?",
+			}
+		},
+		prj1102:{
+			complete: "완료",
+			insert:{
+				title: "신규 단계 생성",
+				saveString: "신규 단계를 생성하시겠습니까?",
+			},
+			update:{
+				title: "단계 수정",
+				saveString: "단계를 수정하시겠습니까?",
 			}
 		},
 		prj1201:{
@@ -507,6 +540,11 @@ var OSLCoreLangSetting = function () {
 					updateDoc : "산출물 양식 수정",
 					insertDocCon : "산출물 연결"
 				}
+			},
+			contextmenu : {
+				insert : "하위 산출물 등록",
+				update : "산출물 수정",
+				delete : "산출물 삭제"
 			}
 		},
 		prj3001 : {
@@ -546,7 +584,9 @@ var OSLCoreLangSetting = function () {
 			message : {
 				alert : {
 					treeSelect : "왼쪽 트리에서 산출물을 선택해주세요.",
-					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다."
+					fileExtChk : "확장자가 [ ${1} ] 인 파일은 첨부가 불가능 합니다.",
+					notHaveConfFile : "등록된 파일이 존재하지 않습니다.",
+					lackDownloadInfo : "다운로드에 필요한 정보가 부족합니다."
 				},
 				confirm:{
 					deleteFormFile:"산출물 양식 파일을 삭제 하시겠습니까?"
@@ -556,9 +596,22 @@ var OSLCoreLangSetting = function () {
 				title : {
 					insertDocCon : "산출물 연결"
 				}
+			},
+			contextmenu : {
+				formFileDownload : "양식 다운로드",
+				atchFileDownload : "확정 산출물 다운로드",
+				waitFileDownload : "확정 대기 산출물 다운로드"
 			}
 		},
-		prj3200 : {
+		prj3101 : {
+			message : {
+				alert : {
+					notCheckedFile : "선택된 파일이 없습니다.",
+					lackDownloadInfo : "다운로드에 필요한 정보가 부족합니다."
+				}
+			}
+		},
+		prj3002 : {
 			label : {
 				upperDocId : "상위 산출물 ID",
 				upperDocNm : "상위 산출물 명",
@@ -622,6 +675,24 @@ var OSLCoreLangSetting = function () {
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
+			}
+		},usr1100:{
+			title:{
+				shortcut:"메뉴 및 권한 관리 단축키",
+				01:"프로젝트 및 권한그룹 선택",
+				02:"팝업창 가운데 정렬",
+				03:"추가 기능바",
+				04:"검색",
+				05:"마이페이지",
+				06:"메시지",
+				07:"알림",
+				08:"개인설정",
+				09:"담당요구사항",
+				10:"로그아웃",
+			},
+			btn:{
+				update:"수정 완료",
+				dontuse:"사용 안함",
 			}
 		},
 		req1001:{
@@ -773,7 +844,8 @@ var OSLCoreLangSetting = function () {
 				password : "알파벳, 숫자 4-12자 이내",
 			},
 			modalTitle : {
-				userSearch : "요청자 검색"
+				userSearch : "요청자 검색",
+				reqGrpSearch: "그룹 요구사항 검색",
 			},
 			button :{
 				deleteResetBtn : "삭제 초기화",
@@ -819,6 +891,11 @@ var OSLCoreLangSetting = function () {
 			button:{
 				submit : "확인",
 			}
+		},
+		req4105:{
+			field:{
+				reqGrpNm:"그룹 요구사항 명",
+			},
 		},
 		spr1000:{
 			nonSelect: "스프린트를 선택해주세요.",
@@ -1248,6 +1325,134 @@ var OSLCoreLangSetting = function () {
 					insert:"신규 조직을 등록하시겠습니까?",
 					update:"조직 정보를 수정하시겠습니까?"
 				}
+			}
+		},
+		stm8000:{
+			title: {
+				actionTitle : "수정 / 삭제 / 상세 / 접속 확인",
+				insertTitle : "저장소 추가",
+				updateTitle : "저장소 수정",
+				dblClickTitle : "저장소 상세보기",
+			},
+			actionTooltip:{
+				updateTooltip : "수정",
+				deleteTooltip : "삭제",
+				dblClickTooltip : "상세",
+				connectTooltip : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+			},
+			actionBtn:{
+				selectTooltip :"저장소 조회",
+				insertTooltip : "저장소 추가",
+				updateTooltip : "저장소 수정",
+				deleteTooltip : "저장소 삭제",
+				connectTooltip : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+				connect : {
+					select : "선택 접속 확인",
+					all : "전체 접속 확인",
+				},
+			},
+			message:{
+				connect : {
+					selectCount : "${1}개가 선택되었습니다.<br/>접속 확인할 저장소를 선택하세요.",
+					fail : {
+						auth : "접속 실패 : ID 또는 PW를 확인하세요.",
+						url : "접속 실패 : 유효한 URL이 아닙니다.",
+						common : "접속 실패",
+					},
+					success : "접속 성공"
+				}
+			}
+		},
+		stm8001:{
+			complete: "완료",
+			label:{
+				strgTypeCd : "유형",
+				useCd : "사용여부",
+				strgRepTitle :"저장소명",
+				strgRepUrl : "URL",
+				strgUsrId : "USER",
+				strgUsrPw : "PW",
+				strgRepNm : "Repo.",
+				strgKey : "TOKEN",
+				strgTxt : "저장소 설명"
+			},
+			placeholder : {
+				strgRepTitle :"저장소명",
+				strgRepUrl : "SVN URL",
+				strgUsrId : "사용자 ID",
+				strgUsrPw : "사용자 PW",
+				strgRepNm : "GIT 프로젝트명",
+				strgKey : "GIT TOKEN",
+			}
+		},
+		stm8002 :{
+			title :{
+				revision : "리비전 목록",
+				file :"파일 목록",
+				actionTitle : {
+					revisionFile : "상세",
+					repository : "선택",
+				},
+			},
+			revisionFile : {
+				actionTitle : "상세",
+				actionTooltip : {
+					dblClickTooltip : "파일 소스보기",
+					diffTooltip : "파일 비교"
+				},
+				message : {
+					diff : "${1}개가 선택되었습니다.<br/>한개의 파일만 선택하세요."
+				}
+			},
+			repository:{
+				actionTooltip : {
+					"clickTooltip" : "리비전 선택",
+				}
+			},
+			dirTree:{
+				message:{
+					selectRevision : "리비전을 선택하세요.",
+				}
+			},
+			placeholder : {
+				revision : {
+					start : "시작",
+					end : "종료",
+				}
+			},
+			actionBtn:{
+				selectTooltip :"리비전 조회",
+				selectFileTooltip : "리비전 파일 목록 조회",
+				diffTooltip : "파일 비교",
+				diffBtn : "DIFF"
+			},
+			message :{
+				selectRevision : "리비전을 선택하세요.",
+			}
+		},
+		stm8004:{
+			title : "파일 리비전 목록",
+			actionBtn : {
+				title : "선택",
+				selectTooltip : "파일 리비전 조회",
+				diffTooltip : "파일 비교",
+				diffBtn : "DIFF"
+			},
+			placeholder : {
+				revision : {
+					start : "시작",
+					end : "종료",
+				}
+			},
+			message : {
+				selectFile : "${1}개가 선택되었습니다.<br/>두개의 파일을 선택하세요.",
+				selectFiles: "${1}개가 선택되었습니다.<br/>두개의 파일만 선택하세요.",
 			}
 		},
 		stm9000: {
@@ -1804,7 +2009,7 @@ var OSLCoreLangSetting = function () {
 				dplDt:"Deploy Date",
 				dplVer:"Deploy Version",
 				dplTypeNm:"Deploy Type",
-				dplDesc:"Deploy Desciption",
+				dplDesc:"Deploy Description",
 			},
 			req1000ReqTable:{
 				prjNm: "Project Name",
@@ -1891,7 +2096,7 @@ var OSLCoreLangSetting = function () {
 			prj1200PrjTable:{
 				prjSetTargetNm: "Setting Target",
 				prjSetNm: "Setting Name",
-				prjSetDesc : "Setting Desciption",
+				prjSetDesc : "Setting Description",
 				prjSetValNm:"Setting Value",
 				modifyDtmDay:"Modify Date",
 				modifyUsrNm:"Final Modifier",
@@ -1901,7 +2106,7 @@ var OSLCoreLangSetting = function () {
 				sprNm : "Sprint Title",
 				sprStdtm : "Start Date",
 				sprEddtm : "End Date",
-				sprDesc : "Sprint Desciption",
+				sprDesc : "Sprint Description",
 				sprDtm :"Date Range",
 			},
 			spr2000RptTable:{
@@ -1923,6 +2128,30 @@ var OSLCoreLangSetting = function () {
 				acceptUseNm:"Accept Use",
 				useNm:"Use Name",
 				authGrpDesc:"Auth Group Desc"
+			},
+			stm8000RepTable:{
+				result : "Connection",
+				useNm : "Used",
+				strgTypeNm : "Type",
+				strgRepTitle : "Repository Title",
+				strgTxt : "Repository Description",
+				strgRepUrl : "Repository URL",
+			},
+			stm8002RevisionFileTable:{
+				type : "Type",
+				name : "File Name",
+			},
+			stm8002RepTable:{
+				revision : "Revision",
+				comment : "Commit Log",
+				author : "Commiter ID",
+				logDate : "Date"
+			},
+			stm8004FileTable:{
+				revision : "Revision",
+				comment : "Commit Log",
+				author : "Commiter ID",
+				logDate : "Date"
 			},
 			stm9000JenkinsTable:{
 				result : "Connection check",
@@ -2302,6 +2531,11 @@ var OSLCoreLangSetting = function () {
 					updateDoc : "Modifying Document Form",
 					insertDocCon : "Document Linkage"
 				}
+			},
+			contextmenu : {
+				insert : "Register New Document",
+				update : "Modifying Document",
+				delete : "delete Document"
 			}
 		},
 		prj3001 : {
@@ -2341,7 +2575,9 @@ var OSLCoreLangSetting = function () {
 			message : {
 				alert : {
 					treeSelect : "Select a document in the tree on the left.",
-					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached."
+					fileExtChk : "Files with an extension of [ ${1} ] cannot be attached.",
+					notHaveConfFile : "Registered file does not exist.",
+					lackDownloadInfo : "Insufficient information for download."
 				},
 				confirm:{
 					deleteFormFile:"Would you like to delete file?"
@@ -2351,9 +2587,22 @@ var OSLCoreLangSetting = function () {
 				title : {
 					insertDocCon : "Document Linkage"
 				}
+			},
+			contextmenu : {
+				formFileDownload : "Download Form Files",
+				atchFileDownload : "Download confirmed Files",
+				waitFileDownload : "Download wait Files"
 			}
 		},
-		prj3200 : {
+		prj3101 : {
+			message : {
+				alert : {
+					notCheckedFile : "No file selected.",
+					lackDownloadInfo : "Insufficient information for download."
+				}
+			}
+		},
+		prj3002 : {
 			label : {
 				upperDocId : "Upper Document ID",
 				upperDocNm : "Upper Document Name",
@@ -2417,6 +2666,27 @@ var OSLCoreLangSetting = function () {
 				evtBgColor: "일정 배경 색상",
 				evtColor: "일정 색상",
 				guideColor: "가이드 색상",
+			}
+		},usr1100:{
+			title:{
+				shortcut:"Menu and rights management shortcut",
+				shortcut01:"Project and Authority group select",
+				shortcut02:"Popup align Center",
+				shortcut03:"Add tool bar",
+				shortcut04:"Search",
+				shortcut05:"Mypage",
+				shortcut06:"Message",
+				shortcut07:"Alarm",
+				shortcut08:"Personal Setting",
+				shortcut09:"Charged requirements",
+				shortcut10:"Logout",
+				shortcutName:"ShortcutName",
+				popupActionCd:"Action when pop-up",
+				shortcutKey:"Shortcut",
+			},
+			btn:{
+				update:"update",
+				dontuse:"Dont use",
 			}
 		},
 		req1001:{
@@ -2604,7 +2874,8 @@ var OSLCoreLangSetting = function () {
 				password : "4 to 12 letters of alphabet and number combination.",
 			},
 			modalTitle : {
-				userSearch : "User Search"
+				userSearch : "User Search",
+				reqGrpSearch: "Grop requirements Seacrh",
 			},
 			button :{
 				deleteResetBtn : "Delete Reset",
@@ -2643,6 +2914,11 @@ var OSLCoreLangSetting = function () {
 			actionBtn : {
 				title : "Select",
 				clickBtn : "Select",
+			},
+		},
+		req4105:{
+			field:{
+				reqGrpNm:"Group requirements Name",
 			},
 		},
 		req4104:{
@@ -2705,7 +2981,7 @@ var OSLCoreLangSetting = function () {
 				sprNm : "Sprint Title",
 				rptMem: "Meeting Members",
 				rptNm :"Title",
-				rptDesc : "Desciption",
+				rptDesc : "Description",
 			},
 			button : {
 				insertBtn : "Insert Meeting Log",
@@ -2746,7 +3022,7 @@ var OSLCoreLangSetting = function () {
 			label : {
 				sprNm : "Sprint Title",
 				mmrNm :"Title",
-				mmrDesc : "Desciption",
+				mmrDesc : "Description",
 			},
 			button : {
 				insertBtn : "Insert Memoris",
@@ -2863,7 +3139,7 @@ var OSLCoreLangSetting = function () {
 				ntcCurrentN: "Recent Notice Date : -",
 				cmtAllCntY: "Total Comment : ${1}",
 				cmtAllCntN: "Total Comment : -",
-				cmtMaxInfoY: "Most Comment : ${1} 건",
+				cmtMaxInfoY: "Most Comment : ${1}",
 				cmtMaxInfoN: "Most Comment : -",
 				badAllCntY: " Total Post : Insert ${1} / Delete ${2}",
 				badAllCntN: "Total Post : -",
@@ -2984,6 +3260,134 @@ var OSLCoreLangSetting = function () {
 					insert:"Would you like to register a new department?",
 					update:"Would you like to edit the department information?"
 				}
+			}
+		},
+		stm8000:{
+			title: {
+				actionTitle : "Upd / Del / Det / Con",
+				insertTitle : "Insert Repository",
+				updateTitle : "Update Repository",
+				dblClickTitle : "Select Repository Info",
+			},
+			actionTooltip:{
+				updateTooltip : "Update",
+				deleteTooltip : "Delete",
+				dblClickTooltip : "Detail",
+				connectTooltip : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+			},
+			actionBtn:{
+				selectTooltip :"Select Repository",
+				insertTooltip : "Insert Repository",
+				updateTooltip : "Update Repository",
+				deleteTooltip : "Delete Repository",
+				connectTooltip : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+				connect : {
+					select : "Connection Check",
+					all : "All Connection Check",
+				},
+			},
+			message:{
+				connect : { 
+					selectCount : "Please, select repository for connection check.<br/> ${1} repository have been selected.",
+					fail : {
+						auth : "Connection Fail : Please checking ID or Password.",
+						url : "Connection Fail  : Please checking URL.",
+						common : "Connection Fail ",
+					},
+					success : "Connection Success"
+				}
+			}
+		},
+		stm8001:{
+			complete: "Submit",
+			label:{
+				strgTypeCd : "Tyep",
+				useCd : "Used",
+				strgRepTitle :"Title",
+				strgRepUrl : "URL",
+				strgUsrId : "USER",
+				strgUsrPw : "PW",
+				strgRepNm : "Repo.",
+				strgKey : "TOKEN",
+				strgTxt : "Repository Description"
+			},
+			placeholder : {
+				strgRepTitle :"Repository Title",
+				strgRepUrl : "SVN URL",
+				strgUsrId : "USER ID",
+				strgUsrPw : "USER Password",
+				strgRepNm : "GIT Project Repository Name",
+				strgKey : "GIT TOKEN",
+			}
+		},
+		stm8002 :{
+			title :{
+				revision : "Revision List",
+				file :"File List",
+				actionTitle : {
+					revisionFile : "Detail",
+					repository : "Select",
+				},
+			},
+			revisionFile : {
+				actionTitle : "Detail",
+				actionTooltip : {
+					dblClickTooltip : "Code View",
+					diffTooltip : "Code Diff"
+				},
+				message : {
+					diff : "Please, select only 1 file.<br/>${1} file have been selected."
+				}
+			},
+			repository:{
+				actionTooltip : {
+					"clickTooltip" : "Select Revision",
+				}
+			},
+			dirTree:{
+				message:{
+					selectRevision : "Please, select revision.",
+				}
+			},
+			placeholder : {
+				revision : {
+					start : "Start",
+					end : "End",
+				}
+			},
+			actionBtn:{
+				selectTooltip :"Select Revision",
+				selectFileTooltip : "Select Revision File List",
+				diffTooltip : "Code Diff",
+				diffBtn : "DIFF"
+			},
+			message :{
+				selectRevision : "Please, select revision.",
+			}
+		},
+		stm8004:{
+			title : "File Revision List",
+			actionBtn : {
+				title : "Select",
+				selectTooltip : "Select File Revision",
+				diffTooltip : "Code Diff",
+				diffBtn : "DIFF"
+			},
+			placeholder : {
+				revision : {
+					start : "Start",
+					end : "End",
+				}
+			},
+			message : {
+				selectFile : "Please, select 2 file.<br/>${1} file have been selected.",
+				selectFiles: "Please, select only 2 file.<br/>${1} file have been selected.",
 			}
 		},
 		stm9000:{

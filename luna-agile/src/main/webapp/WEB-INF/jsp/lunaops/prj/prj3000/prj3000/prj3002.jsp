@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<form class="kt-form" id="frPrj3200">
+<form class="kt-form" id="frPrj3002">
 	<input type="hidden" name="type" id="type" value="${param.type}">
 	<input type="hidden" name="paramPrjId" id="paramPrjId" value="${param.paramPrjId}">
 		<div class="kt-portlet">
@@ -96,15 +96,15 @@
 						</div>
 						<div class="kt-portlet__head-toolbar">
 							<div class="kt-portlet__head-wrapper">
-								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjConTable" data-datatable-action="selConTargetDelete" title="선택 연결 대상 해제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="1" id="prj3200PrjConDelete">
+								<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjConTable" data-datatable-action="selConTargetDelete" title="선택 연결 대상 해제" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="delete" tabindex="1" id="prj3002PrjConDelete">
 									<span>연결 해제</span><i class="fa fa-arrow-alt-circle-right osl-padding-r0 osl-padding-l05"></i>
 								</button>
 							</div>
 						</div>
 					</div>
 					<div class="kt-portlet__body kt-padding-10 osl-min-h-px--400">
-						<div class="osl-datatable-search" data-datatable-id="prj3200PrjConTable"></div>
-						<div class="kt_datatable" id="prj3200PrjConTable"></div>
+						<div class="osl-datatable-search" data-datatable-id="prj3002PrjConTable"></div>
+						<div class="kt_datatable" id="prj3002PrjConTable"></div>
 					</div>
 				</div>
 			</div>
@@ -118,18 +118,18 @@
 							</div>
 							<div class="kt-portlet__head-toolbar">
 								<div class="kt-portlet__head-wrapper">
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjConTargetTable" data-datatable-action="selTargetInsert" title="선택 연결 대상 배정 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="1" id="prj3200PrjConTargetInsert">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjConTargetTable" data-datatable-action="selTargetInsert" title="선택 연결 대상 배정 등록" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="insert" tabindex="1" id="prj3002PrjConTargetInsert">
 										<i class="fa fa-arrow-alt-circle-left"></i><span>연결 등록</span>
 									</button>
-									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3200PrjConTargetTable" data-datatable-action="select" title="연결 대상 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
+									<button type="button" class="btn btn-outline-brand btn-bold btn-font-sm kt-margin-l-5 kt-margin-r-5 btn-elevate btn-elevate-air" data-datatable-id="prj3002PrjConTargetTable" data-datatable-action="select" title="연결 대상 조회" data-toggle="kt-tooltip" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1">
 										<i class="fa fa-list"></i><span>조회</span>
 									</button>
 								</div>
 							</div>
 						</div>
 						<div class="kt-portlet__body kt-padding-10">
-							<div class="osl-datatable-search" data-datatable-id="prj3200PrjConTargetTable"></div>
-							<div class="kt_datatable" id="prj3200PrjConTargetTable"></div>
+							<div class="osl-datatable-search" data-datatable-id="prj3002PrjConTargetTable"></div>
+							<div class="kt_datatable" id="prj3002PrjConTargetTable"></div>
 						</div>
 					</div>
 			</div>
@@ -137,13 +137,13 @@
 	</div>
 </form>
 <div class="modal-footer">
-	<button type="button" class="btn btn-brand" id="prj3200SaveSubmit"><i class="fa fa-save"></i><span>완료</span></button>
+	<button type="button" class="btn btn-brand" id="prj3002SaveSubmit"><i class="fa fa-save"></i><span>완료</span></button>
 	<button type="button" class="btn btn-outline-brand" data-dismiss="modal"><i class="fa fa-window-close"></i><span data-lang-cd="modal.close">닫기</span></button>
 </div>
 <script>
 "use strict";
 var OSLPrj1004Popup = function () {
-	var formId = 'frPrj3200';
+	var formId = 'frPrj3002';
 	
 	//form validate 주입
 	var formValidate = $.osl.validate(formId);
@@ -164,17 +164,17 @@ var OSLPrj1004Popup = function () {
     var documentSetting = function () {
     	
     	//문구 세팅 
-    	$("#prj3200SaveSubmit > span").text($.osl.lang("prj3200.insert.saveBtnString"));
+    	$("#prj3002SaveSubmit > span").text($.osl.lang("prj3002.insert.saveBtnString"));
     	
 		//submit 동작
-    	$("#prj3200SaveSubmit").click(function(){
+    	$("#prj3002SaveSubmit").click(function(){
 			var form = $('#'+formId);    		
         	
     		//폼 유효 값 체크
     		if (!form.valid()) {
     			return;
     		}
-    		$.osl.confirm($.osl.lang("prj3200.insert.saveString"),null,function(result) {
+    		$.osl.confirm($.osl.lang("prj3002.insert.saveString"),null,function(result) {
     	        if (result.value) {
     	        	//연결정보 저장
     	        	saveFormAction();
@@ -196,7 +196,7 @@ var OSLPrj1004Popup = function () {
    		var fd = $.osl.formDataToJsonArray(formId);
     	
     	//추가된 산출물 연결 목록
-    	var DocConList = $.osl.datatable.list["prj3200PrjConTable"].targetDt.originalDataSet;
+    	var DocConList = $.osl.datatable.list["prj3002PrjConTable"].targetDt.originalDataSet;
     	if(!$.osl.isNull(DocConList) && DocConList.length > 0){
     		var targetIdList = [];
     		$.each(DocConList, function(idx, map){
@@ -205,13 +205,9 @@ var OSLPrj1004Popup = function () {
     		fd.append("targetIdList",JSON.stringify(targetIdList));
     	}
 		
-    	console.log('?')
-    	console.log($('#docId').val())
-    	console.log(fd.targetIdList)
-    	
     	//AJAX 설정
-   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj3000/prj3200/insertPrj3200DocConInfo.do'/>", "async": true,"contentType":false,"processData":false ,"cache":false, "loadingShow": false},fd);
-    	 $.osl.showLoadingBar(true,{target: "#frPrj3200", message: "산출물 정보를 연결중입니다.</br>잠시만 기다려주세요."});
+   		var ajaxObj = new $.osl.ajaxRequestAction({"url":"<c:url value='/prj/prj3000/prj3000/insertPrj3002DocConInfo.do'/>", "async": true,"contentType":false,"processData":false ,"cache":false, "loadingShow": false},fd);
+    	 $.osl.showLoadingBar(true,{target: "#frPrj3002", message: "산출물 정보를 연결중입니다.</br>잠시만 기다려주세요."});
    		//AJAX 전송 성공 함수
    		ajaxObj.setFnSuccess(function(data){
    			if(data.errorYn == "Y"){
@@ -224,12 +220,12 @@ var OSLPrj1004Popup = function () {
    				$.osl.layerPopupClose();
    				
    				//datatable 조회
-   				$("button[data-datatable-id=prj3200PrjTable][data-datatable-action=select]").click();
+   				$("button[data-datatable-id=prj3002PrjTable][data-datatable-action=select]").click();
    			}
    		});
    		
    		ajaxObj.setFnComplete(function(data){
-   			$.osl.showLoadingBar(false,{target: "#frPrj3200"});
+   			$.osl.showLoadingBar(false,{target: "#frPrj3002"});
    		});
    		
    		//AJAX 전송
@@ -256,7 +252,7 @@ var OSLPrj1004Popup = function () {
 				$("#"+formId)[0].reset();
 				
 				// 조직 정보 세팅
-		    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3200", ["upperDocId", "upperDocNm", "docId", "docNm", "docEdDtm", "ord", "useNm", "signUseNm"]);
+		    	$.osl.setDataFormElem(data.docInfoMap,"frPrj3002", ["upperDocId", "upperDocNm", "docId", "docNm", "docEdDtm", "ord", "useNm", "signUseNm"]);
 			
 		    	var docDesc = data.docInfoMap.docDesc;
 				
@@ -294,7 +290,7 @@ var OSLPrj1004Popup = function () {
     var datatableSetting = function(){
     	
     	//사용자 배정 정보 datatable 세팅
-		$.osl.datatable.setting("prj3200PrjConTable",{
+		$.osl.datatable.setting("prj3002PrjConTable",{
 			data: {
 				type:'local',
 				serverSorting: false,
@@ -376,7 +372,7 @@ var OSLPrj1004Popup = function () {
 						return true;
 					}
 					
-					$.osl.confirm($.osl.lang("prj3200.allDocConDelete",rowDatas.length),{html:true}, function(result){
+					$.osl.confirm($.osl.lang("prj3002.allDocConDelete",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
 							//사용자 배정 제외 처리
 							fnAllUsrDelete(rowDatas);
@@ -388,11 +384,11 @@ var OSLPrj1004Popup = function () {
 		
     	
 		//산출물 연결 대상 정보 datatable 세팅
-		$.osl.datatable.setting("prj3200PrjConTargetTable",{
+		$.osl.datatable.setting("prj3002PrjConTargetTable",{
 			data: {
 				source: {
 					read: {
-						url: "/prj/prj3000/prj3200/selectPrj3200DocConTargetListAjax.do",
+						url: "/prj/prj3000/prj3000/selectPrj3002DocConTargetListAjax.do",
 						params:{
 							docId: docId
 						}
@@ -474,7 +470,7 @@ var OSLPrj1004Popup = function () {
 						return true;
 					}
 					
-					$.osl.confirm($.osl.lang("prj3200.allDocConInsert",rowDatas.length),{html:true}, function(result){
+					$.osl.confirm($.osl.lang("prj3002.allDocConInsert",rowDatas.length),{html:true}, function(result){
 						if (result.value) {
 							//사용자 배정 처리
 							fnAllUsrInsert(rowDatas);
@@ -491,7 +487,7 @@ var OSLPrj1004Popup = function () {
 	var fnAllUsrInsert = function(selDatas){
 		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
 			//대상 데이터 테이블
-			var datatable = $.osl.datatable.list["prj3200PrjConTable"].targetDt;
+			var datatable = $.osl.datatable.list["prj3002PrjConTable"].targetDt;
 			
 			//dataSet 비어있는 경우 초기화
 			if($.osl.isNull(datatable.dataSet)){
@@ -521,19 +517,19 @@ var OSLPrj1004Popup = function () {
 			var toastrMsg = "";
 			var toastrType = "success";
 			if(selDatas.length > targetIdDupleList){
-				toastrMsg += $.osl.lang("prj3200.insert.saveMsg",(selDatas.length-targetIdDupleList));
+				toastrMsg += $.osl.lang("prj3002.insert.saveMsg",(selDatas.length-targetIdDupleList));
 			}
 			if(prjConDocIdList > 0){
 				//이미 추가된 메시지 있는 경우 </br>
 				if(toastrMsg.length > 0){
 					toastrMsg += "</br>";
 				}
-				toastrMsg += $.osl.lang("prj3200.insert.saveDupleMsg",targetIdDupleList);
+				toastrMsg += $.osl.lang("prj3002.insert.saveDupleMsg",targetIdDupleList);
 				toastrType = "warning";
 			}
 			//모든 사용자가 배정되있는 경우
 			if(prjConDocIdList == selDatas.length){
-				toastrMsg = $.osl.lang("prj3200.insert.saveAllDupleMsg",targetIdDupleList);
+				toastrMsg = $.osl.lang("prj3002.insert.saveAllDupleMsg",targetIdDupleList);
 				toastrType = "error";
 			}
 			
@@ -544,7 +540,7 @@ var OSLPrj1004Popup = function () {
 			//데이터테이블 재 조회
 			datatable.reload();
 			
-			$.osl.datatable.list["prj3200PrjConTargetTable"].targetDt.reload();
+			$.osl.datatable.list["prj3002PrjConTargetTable"].targetDt.reload();
 			$("div.tooltip.show").remove();
 		 }
 	};
@@ -553,7 +549,7 @@ var OSLPrj1004Popup = function () {
 	var fnAllUsrDelete = function(selDatas){
 		if(!$.osl.isNull(selDatas) && selDatas.length > 0){
 			//대상 데이터 테이블
-			var datatable = $.osl.datatable.list["prj3200PrjConTable"].targetDt;
+			var datatable = $.osl.datatable.list["prj3002PrjConTable"].targetDt;
 			
 			//dataSet에서 제거
 			var dataSet = datatable.dataSet;
@@ -580,7 +576,7 @@ var OSLPrj1004Popup = function () {
 				//데이터테이블 재 조회
 				datatable.reload();
 				
-				$.osl.datatable.list["prj3200PrjConTargetTable"].targetDt.reload();
+				$.osl.datatable.list["prj3002PrjConTargetTable"].targetDt.reload();
 				$("div.tooltip.show").remove();
 			}
 		}

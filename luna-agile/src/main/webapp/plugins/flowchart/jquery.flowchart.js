@@ -525,12 +525,9 @@ jQuery(function ($) {
             var flowTitleBgColor = operatorData.properties.flowTitleBgColor;
             var flowTitleColor = operatorData.properties.flowTitleColor;
             
-            
-            var $operator_function = $('<div class="flowchart-operator-function"></div>');
+            var $operator_function = $('<div class="flowchart-operator-function hide"></div>');
             $operator_function.html("");
             $operator_function.appendTo($operator);
-            
-            /*//////////////////////////////////////////*/
             
             var $operator_title = $('<div class="flowchart-operator-title" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';"></div>');
             var dropdownMenuClass = 'hide';
@@ -544,10 +541,10 @@ jQuery(function ($) {
 	            	+'<div class="flowchart-operator-menu '+dropdownMenuClass+'">'
 						+'<button type="button" class="btn btn-bold btn-font-sm btn-elevate btn-elevate-air" style="background-color:'+flowTitleBgColor+';color:'+flowTitleColor+';" data-toggle="dropdown" data-skin="brand" data-placement="bottom" data-auth-button="select" tabindex="1"><i class="fa fa-bars osl-padding-r0"></i></button>'
 						+'<div class="dropdown-menu dropdown-menu-right">'
-							+'<div class="dropdown-item" data-flow-action="edit"><i class="fa fa fa-edit kt-font-primary"></i>edit</div>'
-							+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>delete</div>'
-							+'<div class="dropdown-divider"></div>'
-							+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>detail</div>'
+							+'<div class="dropdown-item" data-flow-action="update"><i class="fa fa fa-edit kt-font-primary"></i>'+$.osl.lang("process.menu.update")+'</div>'
+							+'<div class="dropdown-item" data-flow-action="delete"><i class="fa fa fa-trash kt-font-primary"></i>'+$.osl.lang("process.menu.delete")+'</div>'
+							/*+'<div class="dropdown-divider"></div>'
+							+'<div class="dropdown-item" data-flow-action="detail"><i class="fa fa fa-info-circle kt-font-primary"></i>'+$.osl.lang("process.menu.detail")+'</div>'*/
 						+'</div>'
 					+'</div>'
             );
@@ -559,6 +556,7 @@ jQuery(function ($) {
                 $operator_body.appendTo($operator);
             }
 
+            /*//////////////////////////////////////////*/
             var $operator_inputs_outputs = $('<div class="flowchart-operator-inputs-outputs"></div>');
 
             var $operator_inputs = $('<div class="flowchart-operator-inputs"></div>');

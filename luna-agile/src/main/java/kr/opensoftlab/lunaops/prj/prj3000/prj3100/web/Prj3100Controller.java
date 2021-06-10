@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +20,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
+import javax.enterprise.inject.spi.Bean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,6 +33,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.EgovWebUtil;
@@ -40,6 +45,7 @@ import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import kr.opensoftlab.lunaops.com.exception.UserDefineException;
 import kr.opensoftlab.lunaops.com.fms.web.service.FileMngService;
+import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3000.service.Prj3000Service;
 import kr.opensoftlab.lunaops.prj.prj3000.prj3100.service.Prj3100Service;
 import kr.opensoftlab.sdf.util.RequestConvertor;
@@ -86,7 +92,8 @@ public class Prj3100Controller {
 			return "/prj/prj3000/prj3100/prj3101";
 	}
 	
-   	@RequestMapping(value = "/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do")
+   	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/prj/prj3000/prj3100/insertPrj3100FormFileUploadAjax.do")
    	public ModelAndView insertPrj3100FormFileUploadAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
    		try {
 			
@@ -106,9 +113,19 @@ public class Prj3100Controller {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
+			
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			
+			paramMap.put("licGrpId", licGrpId);
 			paramMap.put("prjId", paramPrjId);
 			
+			
 			String atchFileId = (String) paramMap.get("atchFileId");
+			
+			
+			String docId = (String) paramMap.get("paramDocId");
+			
+			paramMap.put("docId", docId);
 			
 			
         	FileVO fileVO = new FileVO();
@@ -118,12 +135,22 @@ public class Prj3100Controller {
         	
 			int fileSn = fileMngService.getFileSN(fileVO);
 			
+			paramMap.put("fileSn", String.valueOf(fileSn));
+			
 			
 			List<FileVO> _result = fileUtil.fileUploadInsert(mptRequest,atchFileId,fileSn,"Prj");
 			
 			
-			fileMngService.insertFileDetail(_result);  
+        	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
+        	
+        	
+        	paramMap.put("signUseCd", docInfoMap.get("signUseCd"));
+        	
 			
+			
+			
+        	prj3100Service.insertPrj3100FileUpload(paramMap, _result);
+        	
 			
 			
 			model.addAttribute("message", egovMessageSource.getMessage("success.common.insert"));
@@ -141,7 +168,8 @@ public class Prj3100Controller {
    	}
    	
 	
-   	@RequestMapping(value ="/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do")
+   	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value ="/prj/prj3000/prj3100/selectPrj3100FormFileListAjax.do")
    	public ModelAndView selectPrj3100FormFileListAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
    		try {
 			
@@ -159,6 +187,8 @@ public class Prj3100Controller {
 				paramPrjId = (String) ss.getAttribute("selPrjId");
 			}
 			
+			String licGrpId = ((LoginVO) ss.getAttribute("loginVO")).getLicGrpId();
+			
 			paramMap.put("prjId", paramPrjId);
 			
 			List<FileVO> atchFileList = null;
@@ -168,15 +198,39 @@ public class Prj3100Controller {
         	FileVO fileVO = new FileVO();
         	fileVO.setAtchFileId((String)paramMap.get("docAtchFileId"));
         	
-        	
         	atchFileList = fileMngService.fileDownList(fileVO);
-			
+        	
         	
         	fileVO.setAtchFileId((String)paramMap.get("docWaitFileId"));
         	waitFileList = fileMngService.fileDownList(fileVO);
         	
         	
-        	model.addAttribute("atchFileList", atchFileList);
+        	List<Map> atchFileInfoList = new ArrayList<Map>();
+        	
+        	for(FileVO fvo : atchFileList) {
+        		
+        		
+        		Map<String, String> fileMap = BeanUtils.describe(fvo);
+        		
+        		fileMap.put("docId", paramMap.get("docId"));
+        		fileMap.put("prjId", paramPrjId);
+    			fileMap.put("licGrpId", licGrpId);
+        		
+        		
+            	Map<String, String> fileCngInf = (Map) prj3100Service.selectPrj3001CngInf(fileMap);
+            	
+            	
+            	if(fileCngInf != null) {
+            		
+            		
+            		fileMap.putAll(fileCngInf);
+            	}
+            	
+            	atchFileInfoList.add(fileMap);
+        	}
+        	
+        	
+        	model.addAttribute("atchFileList", atchFileInfoList);
         	model.addAttribute("waitFileList", waitFileList);
         	
 			
@@ -229,15 +283,33 @@ public class Prj3100Controller {
            	Map<String, String> paramMap = RequestConvertor.requestParamToMap(request, true);
    			
            	
+ 			HttpSession ss = request.getSession();
+ 			
+ 			
+ 			String paramPrjId = (String) paramMap.get("paramPrjId");
+ 			
+ 			
+ 			if(paramPrjId == null || "".equals(paramPrjId)) {
+ 				paramPrjId = (String) ss.getAttribute("selPrjId");
+ 			}
+ 			
+ 			paramMap.put("prjId", paramPrjId);
+           	
+           	
            	FileVO fileVO = new FileVO();
            	fileVO.setAtchFileId(paramMap.get("afterFileId"));
            	
            	
         	
-			int fileSn = fileMngService.getFileSN(fileVO) + 1;
+			int fileSn = fileMngService.getFileSN(fileVO);
            	
 			paramMap.put("afterFileSn", String.valueOf(fileSn));
 			
+			
+        	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
+        	
+        	paramMap.put("signUseCd", docInfoMap.get("signUseCd"));
+        	
            	
         	prj3100Service.updatePrj3100FileType(paramMap);
         	
@@ -277,7 +349,6 @@ public class Prj3100Controller {
            	List<Map> docMenuList = prj3100Service.selectPrj3100MenuTree(paramMap);
 
            	
-           	String docType = (String) paramMap.get("docType");
            	
            	
            	Map<String, Map> docStepData = new HashMap<String, Map>();
@@ -325,16 +396,9 @@ public class Prj3100Controller {
            		}
            		
            		
-           		if("atchFile".equals(docType)) { 
-           			atchFileId = (String)docMenuInfo.get("docAtchFileId");
-           		}
-           		else if("waitFile".equals(docType)) {
-           			atchFileId = (String)docMenuInfo.get("docWaitFileId");
-           		}
-           		else if("formConfFile".equals(docType)) { 
-           			atchFileId = (String)docMenuInfo.get("docFormConfFileId");
-           		}
            		
+           		
+           		atchFileId = (String)docMenuInfo.get("docAtchFileId");
            		newMap.put("atchFileId", atchFileId);
        			
            		
@@ -411,7 +475,7 @@ public class Prj3100Controller {
 			    			
 			    			
 			    			zipMakeChk = false;
-			    			throw new UserDefineException("<script>$.osl.alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
+			    			throw new UserDefineException("<script>$alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
 		    			}
 	           			
 	           			
@@ -435,6 +499,480 @@ public class Prj3100Controller {
 		    	        appendFileCnt++;
            			}
                	}
+               	
+               	zipOut.close();
+               	
+               	
+	    		if(appendFileCnt == 0) {
+	    			
+					String fileDeletePath  = zipFilePath+zipFileName;
+					EgovFileMngUtil.deleteFile(fileDeletePath);
+				    
+	    			throw new UserDefineException("<script>alert('등록된 파일이 존재하지 않습니다.');</script>");
+	    		}
+               	
+	    		else if(zipMakeChk){
+		    		
+					File uFile = new File(zipFilePath, zipFileName);
+					long fSize = uFile.length();
+					
+					if (fSize > 0) {
+						
+						
+						setDisposition(zipFileName, request, response);
+						
+						BufferedInputStream in = null;
+						BufferedOutputStream out = null;
+						
+						try {
+							
+							in = new BufferedInputStream(new FileInputStream(uFile));
+							out = new BufferedOutputStream(response.getOutputStream());
+							
+							int copyCnt = FileCopyUtils.copy(in, out);
+						
+							System.out.println(copyCnt);
+	
+							
+							out.flush();
+						} catch (IOException ex) {
+							EgovBasicLogger.ignore("IO Exception", ex);
+						} finally {
+							
+							EgovResourceCloseHelper.close(in, out);
+							
+							
+							String fileDeletePath  = zipFilePath+zipFileName;
+						    String deleteChk = EgovFileMngUtil.deleteFile(fileDeletePath);
+						    
+						    Log.debug("Delete Result"+deleteChk);
+						}
+						return "/err/file";
+					}else{
+						throw new UserDefineException("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+					}
+				}
+	    		
+	    		
+    		}catch(UserDefineException ude) {
+    			zipOut.close();
+    			throw new UserDefineException(ude.getMessage());
+    		}catch(Exception subE) {
+    		
+    			Log.error("selectPrj3000MenuTreeZipDownload()", subE);
+    			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+    			
+    			zipOut.close();
+    		}
+			
+			return "/err/file";
+		}catch(UserDefineException ude) {
+			str.append(ude.getMessage());
+		}catch(Exception e) {
+			Log.error("selectPrj3000MenuTreeZipDownload()", e);
+			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+		}
+		
+		PrintWriter printwriter = response.getWriter();
+		printwriter.println("<html><form name='downForm'></form>");
+		printwriter.println(str);
+		printwriter.println("</html>");
+		printwriter.flush();
+		printwriter.close();
+		return "/err/file";
+	}
+	
+	
+	
+	@RequestMapping(value="/prj/prj3000/prj3100/selectPrj3100ZipDownload.do")
+	public String selectPrj3000ZipDownload(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		String mimetype = "text/html; charset=UTF-8";
+		
+		response.setContentType(mimetype);
+		StringBuffer str = new StringBuffer();
+		
+		try {
+			
+        	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+        	
+        	HttpSession ss = request.getSession();
+           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
+        	
+           	
+           	String atchFileId = paramMap.get("atchFileId");
+           	
+           	
+           	String docId = paramMap.get("docId");
+           	
+           	
+           	String docNm = paramMap.get("docNm");
+           	
+           	
+           	String fileType = paramMap.get("fileType");
+           	
+           	
+           	int appendFileCnt = 0;
+           	
+           	
+	    	byte[] buf = new byte[4096];
+	    	
+	    	
+        	String storePathString = EgovProperties.getProperty("Globals.fileStorePath");
+        	
+        	
+        	String addPath = "tempZip/";
+        	String zipFilePath = EgovWebUtil.filePathBlackList(storePathString+addPath);
+        	
+        	
+        	File saveFolder = new File(zipFilePath);
+
+    		if (!saveFolder.exists() || saveFolder.isFile()) {
+    			saveFolder.mkdirs();
+    		}
+    		
+    		Date today = new Date();
+    		DateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
+    		
+    		
+    		String zipFileName = "_OSL"+fm.format(today)+".zip";
+    		
+    		
+    		ZipOutputStream zipOut = null;
+    		
+    		
+    		boolean zipMakeChk = true;
+    		
+    		try {
+    			
+    			zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath+zipFileName));
+    			
+    			FileVO fileVO = new FileVO();
+    			
+    			fileVO.setAtchFileId(atchFileId);
+    			
+    			List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+    			String stepNm = "["+docId+"]_"+docNm;
+    			
+    			
+            	Map<String, String> docInfoMap = (Map) prj3000Service.selectPrj3000MenuInfo(paramMap);
+    			
+    			
+               	for(FileVO fvo : fileList) {
+               		
+           			
+           			if(fvo == null) {
+           				
+           				continue;
+           			}
+           			
+           			paramMap.put("fileSn", fvo.getFileSn());
+           			
+           			
+           			if("01".equals(docInfoMap.get("signUseCd")) && "atchFile".equals(fileType)) {
+           				
+           				
+           				
+                    	Map<String, String> fileCngInf = (Map) prj3100Service.selectPrj3001CngInf(paramMap);
+                    	
+                    	if(!"01".equals(fileCngInf.get("infType"))) {
+                    		continue;
+                    	}
+           			}
+           			
+           			
+           			File uFile = new File(fvo.getFileStreCours(), fvo.getStreFileNm());
+           			
+           			
+           			if(!uFile.isFile()){
+		    			
+		    			zipOut.close();
+		    			
+		    			
+		    			zipMakeChk = false;
+		    			throw new UserDefineException("<script>$alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
+	    			}
+           			
+           			
+	    			FileInputStream in = new FileInputStream(uFile);
+	    	        String fileName = "["+appendFileCnt+"]_"+fvo.getOrignlFileNm().toString();
+	    	                
+	    	        ZipEntry ze = new ZipEntry(stepNm+"/"+fileName);
+
+	    	        zipOut.putNextEntry(ze);
+	    	         
+	    	        
+	    	        int len;
+	    	        while ((len = in.read(buf)) > 0) {
+	    	        	zipOut.write(buf, 0, len);
+	    	        }
+	    	          
+	    	        zipOut.closeEntry();
+	    	        in.close();
+	    	        
+	    	        
+	    	        appendFileCnt++;
+       			}
+               	
+               	zipOut.close();
+               	
+               	
+	    		if(appendFileCnt == 0) {
+	    			
+					String fileDeletePath  = zipFilePath+zipFileName;
+					EgovFileMngUtil.deleteFile(fileDeletePath);
+				    
+	    			throw new UserDefineException("<script>alert('확정된 파일이 존재하지 않습니다.');</script>");
+	    		}
+               	
+	    		else if(zipMakeChk){
+		    		
+					File uFile = new File(zipFilePath, zipFileName);
+					long fSize = uFile.length();
+					
+					if (fSize > 0) {
+						
+						
+						setDisposition(zipFileName, request, response);
+						
+						BufferedInputStream in = null;
+						BufferedOutputStream out = null;
+						
+						try {
+							
+							in = new BufferedInputStream(new FileInputStream(uFile));
+							out = new BufferedOutputStream(response.getOutputStream());
+							
+							int copyCnt = FileCopyUtils.copy(in, out);
+						
+							
+							out.flush();
+						} catch (IOException ex) {
+							EgovBasicLogger.ignore("IO Exception", ex);
+						} finally {
+							
+							EgovResourceCloseHelper.close(in, out);
+							
+							
+							String fileDeletePath  = zipFilePath+zipFileName;
+						    String deleteChk = EgovFileMngUtil.deleteFile(fileDeletePath);
+						    
+						    Log.debug("Delete Result"+deleteChk);
+						}
+						return "/err/file";
+					}else{
+						throw new UserDefineException("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+					}
+				}
+	    		
+	    		
+    		}catch(UserDefineException ude) {
+    			zipOut.close();
+    			throw new UserDefineException(ude.getMessage());
+    		}catch(Exception subE) {
+    		
+    			Log.error("selectPrj3000MenuTreeZipDownload()", subE);
+    			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+    			
+    			zipOut.close();
+    		}
+			
+			return "/err/file";
+		}catch(UserDefineException ude) {
+			str.append(ude.getMessage());
+		}catch(Exception e) {
+			Log.error("selectPrj3000MenuTreeZipDownload()", e);
+			str.append("<script>alert('"+egovMessageSource.getMessage("com.fail.file.select")+"');</script>");
+		}
+		
+		PrintWriter printwriter = response.getWriter();
+		printwriter.println("<html><form name='downForm'></form>");
+		printwriter.println(str);
+		printwriter.println("</html>");
+		printwriter.flush();
+		printwriter.close();
+		return "/err/file";
+	}
+	
+	
+	@RequestMapping(value = "/prj/prj3000/prj3100/selectPrj3100FormFileCntAjax.do")
+	public ModelAndView selectPrj3100FormFileCntAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+   		try {
+			
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+			HttpSession ss = request.getSession();
+			
+			
+			String paramPrjId = (String) paramMap.get("paramPrjId");
+			
+			
+			if(paramPrjId == null || "".equals(paramPrjId)) {
+				paramPrjId = (String) ss.getAttribute("selPrjId");
+			}
+			
+			paramMap.put("prjId", paramPrjId);
+			
+			List<FileVO> formConfFileList = null;
+			
+			
+        	FileVO fileVO = new FileVO();
+        	fileVO.setAtchFileId((String)paramMap.get("atchFileId"));
+        	
+        	
+        	formConfFileList = fileMngService.fileDownList(fileVO);
+			
+        	
+        	
+        	model.addAttribute("fileCnt", formConfFileList.size());
+        	if(formConfFileList.size() == 1) {
+        		model.addAttribute("atchFileId", formConfFileList.get(0).getAtchFileId());
+        		model.addAttribute("fileSn", formConfFileList.get(0).getFileSn());
+        	}
+        	
+			
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+			return new ModelAndView("jsonView");
+				
+           	
+		} catch (Exception ex) {
+			Log.error("selectPrj3100FormFileListAjax()", ex);
+
+       		
+       		model.addAttribute("errorYn", "Y");
+       		model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+       		return new ModelAndView("jsonView");
+		}
+   	}
+	
+	
+	
+	
+	@RequestMapping(value="/prj/prj3000/prj3100/selectPrj3100SelectFileZipDownload.do")
+	public String selectPrj3000SelectFileZipDownload(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+		
+		String mimetype = "text/html; charset=UTF-8";
+		
+		response.setContentType(mimetype);
+		StringBuffer str = new StringBuffer();
+		
+		try {
+			
+        	Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+        	
+        	HttpSession ss = request.getSession();
+           	paramMap.put("prjId", (String)ss.getAttribute("selPrjId"));
+        	
+           	
+           	String atchFileId = paramMap.get("atchFileId");
+           	
+           	
+           	String docId = paramMap.get("docId");
+           	
+           	
+           	String docNm = paramMap.get("docNm");
+           	
+           	
+           	String fileSn = paramMap.get("fileSn");
+           	
+           	String[] checkedFileSn = fileSn.split(",");
+           	
+           	
+           	int appendFileCnt = 0;
+           	
+           	
+	    	byte[] buf = new byte[4096];
+	    	
+	    	
+        	String storePathString = EgovProperties.getProperty("Globals.fileStorePath");
+        	
+        	
+        	String addPath = "tempZip/";
+        	String zipFilePath = EgovWebUtil.filePathBlackList(storePathString+addPath);
+        	
+        	
+        	File saveFolder = new File(zipFilePath);
+
+    		if (!saveFolder.exists() || saveFolder.isFile()) {
+    			saveFolder.mkdirs();
+    		}
+    		
+    		Date today = new Date();
+    		DateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
+    		
+    		
+    		String zipFileName = "_OSL"+fm.format(today)+".zip";
+    		
+    		
+    		ZipOutputStream zipOut = null;
+    		
+    		
+    		boolean zipMakeChk = true;
+    		
+    		try {
+    			
+    			zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath+zipFileName));
+    			
+    			FileVO fileVO = new FileVO();
+    			
+    			fileVO.setAtchFileId(atchFileId);
+    			
+    			List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+    			String stepNm = "["+docId+"]_"+docNm;
+    			
+    			
+               	for(FileVO fvo : fileList) {
+               		
+               		
+           				
+           			
+           			if(fvo == null) {
+           				
+           				continue;
+           			}
+
+           			
+           			if(!Arrays.asList(checkedFileSn).contains(fvo.getFileSn())) {
+           				continue;
+           			}
+           			
+           			
+           			File uFile = new File(fvo.getFileStreCours(), fvo.getStreFileNm());
+           			
+           			
+           			if(!uFile.isFile()){
+		    			
+		    			zipOut.close();
+		    			
+		    			
+		    			zipMakeChk = false;
+		    			throw new UserDefineException("<script>$alert('"+egovMessageSource.getMessage("com.fail.file.select")+"\\n"+fvo.getOrignlFileNm()+"');</script>");
+	    			}
+           			
+           			
+	    			FileInputStream in = new FileInputStream(uFile);
+	    	        String fileName = "["+appendFileCnt+"]_"+fvo.getOrignlFileNm().toString();
+	    	                
+	    	        ZipEntry ze = new ZipEntry(stepNm+"/"+fileName);
+
+	    	        zipOut.putNextEntry(ze);
+	    	         
+	    	        
+	    	        int len;
+	    	        while ((len = in.read(buf)) > 0) {
+	    	        	zipOut.write(buf, 0, len);
+	    	        }
+	    	          
+	    	        zipOut.closeEntry();
+	    	        in.close();
+	    	        
+	    	        
+	    	        appendFileCnt++;
+       			}
                	
                	zipOut.close();
                	

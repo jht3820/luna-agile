@@ -65,15 +65,15 @@
 						<button type="button" class="kt-inbox__icon" data-flow-action="insert" data-toggle="kt-tooltip" title="Create">
 							<i class="flaticon2-add-square"></i>
 						</button>
-						<button type="button" class="kt-inbox__icon" data-toggle="kt-tooltip" title="Delete">
-							<i class="flaticon2-rubbish-bin"></i>
-						</button>
-						<button type="button" class="kt-inbox__icon" data-toggle="kt-tooltip" title="Mark as read">
+						<button type="button" class="kt-inbox__icon" data-flow-action="update" data-toggle="kt-tooltip" title="Update">
 							<i class="flaticon2-writing"></i>
 						</button>
-						<button type="button" class="kt-inbox__icon" data-toggle="kt-tooltip" title="Move">
-							<i class="flaticon2-expand"></i>
+						<button type="button" class="kt-inbox__icon" data-flow-action="delete" data-toggle="kt-tooltip" title="Delete">
+							<i class="flaticon2-rubbish-bin"></i>
 						</button>
+						<!-- <button type="button" class="kt-inbox__icon" data-flow-action="detail" data-toggle="kt-tooltip" title="Detail">
+							<i class="flaticon2-crisp-icons"></i>
+						</button> -->
 					</div>
 				</div>
 				<div class="kt-inbox__search d-flex">
@@ -90,6 +90,10 @@
 					</div>
 				</div>
 				<div class="kt-inbox__controls">
+					<button type="button" class="kt-inbox__icon pulse pulse-success kt-margin-0" data-flow-action="save" data-toggle="kt-tooltip" title="Save" id="processSaveBtn">
+						<span class="pulse-ring kt-margin-0 kt-hide"></span>
+						<i class="fa fa-save"></i>
+					</button>
 					<div class="btn-group" data-toggle="kt-tooltip" title="Settings">
 						<button type="button" class="kt-inbox__icon" data-toggle="dropdown">
 							<i class="flaticon-more-1"></i>
@@ -156,80 +160,53 @@
 </div>
 <script>
 "use strict";
-var flowChart = $("#flowChartDiv");
-	var zoomObj;
+//프로세스 삭제 데이터
+var flowRemoveList = [];
+	//프로세스 데이터
+	var flowChart = $("#flowChartDiv");
 var OSLPrj1100Popup = function () {
+	
+	
+	
 	//현재 선택된 프로세스
 	var selProcessId;
 	
+	//프로세스 데이터 변경 확인 변수
+	var processChgCheck = {_flag: false};
+	
 	//zoom
+	var zoomObj;
 	var currentZoom = 2;
+	
+	//프로세스 - true일때 링크 데이터 검증
+	var processEditMode = false;
 	
 	//private functions
 	var documentSetting = function(){
-		var data = {
-			      operators: {
-			    	  operator1: {
-			              top: 20,
-			              left: 20,
-			              properties: {
-			            	id: "operator1",
-			                title: 'Operator 1',
-			                editable: true,
-			                inputs: {
-			                  input_1: {
-			                    label: 'Input 1',
-			                  }
-			                },
-			                outputs: {
-			                  output_1: {
-			                    label: 'Output 1',
-			                  }
-			                }
-			              }
-			            },
-			        operator2: {
-			          top: 240,
-			          left: 20,
-			          properties: {
-			        	id: "operator2",
-			            title: 'Operator 2',
-			            flowTitleBgColor: "#178b68",
-			            flowTitleColor: "#ffffff",
-			            editable: true,
-			            inputs: {
-			            	input_1: {
-			                    label: 'Input 1',
-			                }
-			            },
-			            outputs: {
-			              output_1: {
-			                label: 'Output 1',
-			              }
-			            }
-			          }
-			        },
-			        operator3: {
-			          top: 80,
-			          left: 300,
-			          properties: {
-			        	  id: "operator3",
-			            title: 'Operator 3',
-			            editable: true,
-			            inputs: {
-			              input_1: {
-			                label: 'Input 1',
-			              }
-			            },
-			            outputs: {
-			            	output_1: {
-				                label: 'Output 1',
-				              }
-			            }
-			          }
-			        },
-			      }
-			    };
+		//프로세스 데이터 변화 감지
+		Object.defineProperty(processChgCheck, 'flag', {
+			get: function() {
+				return this._flag;
+			},
+			set: function(newVal) {
+				//데이터 변화 시
+				if(newVal){
+					$("#processSaveBtn > .pulse-ring").removeClass("kt-hide");
+					$("#processSaveBtn > i.fa").addClass("kt-font-brand");
+					
+					//페이지 이동 시 저장 문구 팝업
+					$(window).on("beforeunload", function(){
+						return true;
+					});
+				}else{
+					$("#processSaveBtn > .pulse-ring").addClass("kt-hide");
+					$("#processSaveBtn > i.fa").removeClass("kt-font-brand");
+					
+					$(window).off("beforeunload");
+				}
+				this._flag = newVal;
+			},
+		});
 		
 		//flowchart 생성
 		flowChart.flowchart({
@@ -240,15 +217,18 @@ var OSLPrj1100Popup = function () {
 				linkWidth:1,
 				defaultLinkColor: "#5867dd",
 				defaultOperatorClass: "osl-flowchart__operator",
-				data: data,
 				onLinkCreate: function(linkId, linkData){
+					//프로세스 에디트 모드일때만 검증
+					if(!processEditMode){
+						return true;
+					}
 					var fromOperatorId = linkData.fromOperator;
 					var toOperatorId = linkData.toOperator;
 					var fromOperatorData = flowChart.flowchart("getOperatorData",fromOperatorId);
 					
 					//링크 반복 체크( A -> B -> A 체크)
 					if(!fnLinksLimitLoopChk(fromOperatorId, toOperatorId)){
-						$.osl.alert("작업 흐름(단계)는 반복 진행될 수 없습니다.</br> A -> B -> A 불가");
+						$.osl.alert($.osl.lang("prj1100.alert.linkLimitLoop"));
 						return false;
 					}
 					
@@ -299,31 +279,100 @@ var OSLPrj1100Popup = function () {
 	            	//링크 선택 불가
 	            	return false;
 	            },
-				onAfterChange: function(changeType, tmp){
-					//링크 생성 이후
-					if(changeType == "link_create"){
-						
+				onAfterChange: function(changeType){
+					//작업흐름 초기화 아닌 경우
+					if(processEditMode && changeType != "operator_create"){
+						//작업흐름 데이터 변경인경우
+						processChgCheck.flag = true;
 					}
-					
-					//console.log(changeType, tmp);
+					//작업흐름css에 error인경우 우선 제거
+					var errorList = $(".flowchart-operator.error");
+					if(errorList.length > 0){
+						errorList.removeClass("error");
+					}
+				},
+				onOperatorSelect: function(operatorId){
+					//작업흐름css에 error인경우 우선 제거
+					var errorList = $(".flowchart-operator.error");
+					if(errorList.length > 0){
+						errorList.removeClass("error");
+					}
+					return true;
 				}
 		});
 		
 		//작업흐름 dropdown menu에 event 걸기
 		$("#processFlowLayerMain").on("click",".osl-flowchart__operator .flowchart-operator-menu .dropdown-menu .dropdown-item, button[data-flow-action]",function(){
 			var flowAction = $(this).data("flow-action");
-			
-			//선택 작업흐름 수정
-			if(flowAction == "edit"){
+			//현재 작업흐름 데이터 저장
+			if(flowAction == "save"){
+				if($.osl.isNull(selProcessId)){
+					$.osl.alert($.osl.lang("prj1100.alert.selNoneProcess"));
+					return false;
+				}
 				
+				//모든 작업흐름이 연결되어있는지 확인
+				var rtnValue = fnFlowDoneCheck();
+				if(rtnValue === false){
+					$.osl.toastr($.osl.lang("prj1100.alert.saveCancel"),{type: "warning"});
+				}else{
+					//시작 단계, 종료 단계 confirm
+					var startFlow = flowChart.flowchart("getOperatorData", rtnValue.startFlowId);
+					var endFlow = flowChart.flowchart("getOperatorData", rtnValue.endFlowId);
+					
+					var confirmMsg = $.osl.lang("prj1100.alert.processSave",startFlow.properties.title,endFlow.properties.title);
+					
+					$.osl.confirm(confirmMsg,{html: true},function(result) {
+		    	        if (result.value) {
+		    	        	fnProcessDataSave(rtnValue.endFlowId);
+		    	        }
+		    		});	
+				}
+			}
+			//선택 작업흐름 수정
+			else if(flowAction == "update"){
+				if($.osl.isNull(selProcessId)){
+					$.osl.alert($.osl.lang("prj1100.alert.selNoneProcess"));
+					return false;
+				}
+				
+				var selFlowId = flowChart.flowchart("getSelectedOperatorId");
+				if($.osl.isNull(selFlowId)){
+					$.osl.alert($.osl.lang("prj1100.alert.selNoneFlow"));
+					return false;
+				}
+				
+				var data = {
+						type:"update",
+						paramPrjGrpId: $.osl.selPrjGrpId,
+						paramPrjId: $.osl.selPrjId,
+						paramProcessId: selProcessId,
+						paramFlowId: selFlowId
+				};
+				var options = {
+					autoHeight: false,
+					modalSize: "md",
+					idKey: selProcessId,
+					modalTitle: $.osl.lang("prj1102.update.title"),
+					closeConfirm: false,
+				};
+				
+				$.osl.layerPopupOpen('/prj/prj1000/prj1100/selectPrj1102View.do',data,options);
 			}
 			//선택 작업흐름 제거
 			else if(flowAction == "delete"){
+				var selFlowId = flowChart.flowchart("getSelectedOperatorId");
+				if($.osl.isNull(selFlowId)){
+					$.osl.alert($.osl.lang("prj1100.alert.selNoneFlow"));
+					return false;
+				}
 				
+				//현재 작업흐름 배정된 요구사항 있는지 체크
+				fnFlowDelete(selFlowId);
 			}
 			//선택 작업흐름 상세정보
 			else if(flowAction == "detail"){
-				
+				console.log("detail");
 			}
 			//줌인, 줌아웃, 리셋 버튼 이벤트
 			else if(flowAction == "zommCtrl"){
@@ -338,6 +387,10 @@ var OSLPrj1100Popup = function () {
 			}
 			//작업흐름 생성
 			else if(flowAction == "insert"){
+				if($.osl.isNull(selProcessId)){
+					$.osl.alert($.osl.lang("prj1100.alert.selNoneProcess"));
+					return false;
+				}
 				var data = {
 						type:"insert",
 						paramPrjGrpId: $.osl.selPrjGrpId,
@@ -345,12 +398,12 @@ var OSLPrj1100Popup = function () {
 						paramProcessId: selProcessId
 				};
 				var options = {
-						autoHeight: false,
-						modalSize: "lg",
-						idKey: selProcessId,
-						modalTitle: $.osl.lang("prj1004.insert.title"),
-						closeConfirm: false,
-					};
+					autoHeight: false,
+					modalSize: "md",
+					idKey: selProcessId,
+					modalTitle: $.osl.lang("prj1102.insert.title"),
+					closeConfirm: false,
+				};
 				
 				$.osl.layerPopupOpen('/prj/prj1000/prj1100/selectPrj1102View.do',data,options);
 			}
@@ -418,7 +471,7 @@ var OSLPrj1100Popup = function () {
 							autoHeight: false,
 							modalSize: "xl",
 							idKey: datatableId,
-							modalTitle: "신규 프로세스 등록",
+							modalTitle: $.osl.lang("prj1101.insert.title"),
 							closeConfirm: false,
 						};
 					
@@ -435,7 +488,7 @@ var OSLPrj1100Popup = function () {
 							autoHeight: false,
 							modalSize: "xl",
 							idKey: datatableId,
-							modalTitle: "신규 프로세스 수정",
+							modalTitle: $.osl.lang("prj1101.update.title"),
 							closeConfirm: false,
 						};
 					
@@ -465,20 +518,67 @@ var OSLPrj1100Popup = function () {
 					ajaxObj.send();
 				},
 				"click": function(rowData, datatableId, type, rowNum, elem){
-					//mask 제거
-					$("#flowMaskDiv").hide();
-					
-					//플로우차트 div 열기
-					$("#flowChartDiv").removeClass("kt-hidden");
-					
-					//작업흐름 데이터 불러오기
-					
-					//선택 프로세스 Id
-					selProcessId = rowData.processId;
-					
-					//선택 효과
-					$(elem).parent().find(".osl-datatable__card.active").removeClass("active");
-					$(elem).addClass("active");
+					//같은 프로세스 선택인 경우 동작 중지
+					if($(".osl-datatable__card.active")[0] == elem){
+						return false;
+					}
+					var innerFn = function(rowData, datatableId, type, rowNum, elem){
+						//선택 프로세스 Id
+						selProcessId = rowData.processId;
+						
+						//작업흐름 데이터 초기화
+						flowChart.flowchart("setData",{});
+						
+						//ajax로 작업흐름 데이터 조회하기
+						fnSelectFlowList();
+						
+						//mask 제거
+						$("#flowMaskDiv").hide();
+						
+						//플로우차트 div 열기
+						$("#flowChartDiv").removeClass("kt-hidden");
+						
+						//zoom reset
+						fnFlowChartZoom("reset");
+						
+						processEditMode = true;
+						
+						//작업흐름 삭제 목록 초기화
+						flowRemoveList = [];
+						
+						//선택 효과
+						$(elem).parent().find(".osl-datatable__card.active").removeClass("active");
+						$(elem).addClass("active");
+						
+						processChgCheck.flag = false;
+					}
+					//선택된 프로세스 이미 있을때 저장유무 확인
+					if($(".osl-datatable__card.active").length > 0 && processEditMode && processChgCheck.flag){
+						//모든 작업흐름이 연결되어있는지 확인
+						var rtnValue = fnFlowDoneCheck();
+						if(rtnValue === false){
+							$.osl.confirm($.osl.lang("prj1100.alert.saveBefore"),{html: true},function(result) {
+				    	        if (result.value) {
+				    	        	innerFn(rowData, datatableId, type, rowNum, elem);
+				    	        }
+				    		});
+						}else{
+							//시작 단계, 종료 단계 confirm
+							var startFlow = flowChart.flowchart("getOperatorData", rtnValue.startFlowId);
+							var endFlow = flowChart.flowchart("getOperatorData", rtnValue.endFlowId);
+							
+							var confirmMsg = $.osl.lang("prj1100.alert.processSave",startFlow.properties.title,endFlow.properties.title);
+							
+							$.osl.confirm(confirmMsg,{html: true},function(result) {
+				    	        if (result.value) {
+				    	        	fnProcessDataSave(rtnValue.endFlowId);
+				    	        }
+				    		});
+						}
+						
+					}else{
+						innerFn(rowData, datatableId, type, rowNum, elem);
+					}
 				}
 			},
 			callback:{
@@ -556,25 +656,75 @@ var OSLPrj1100Popup = function () {
 			return true;
 		}
 	};
-	
-	var fnLinksLimitLoopChk2 = function(fromOperator,flowNextId){
-		//다음 작업흐름 정보 조회
-		var currentFlowInfo = flowChart.flowchart("getOperatorData",fromOperator);
-		var nextFlowInfo = flowChart.flowchart("getOperatorData",flowNextId);
+
+	/**
+	*	모든 작업흐름이 연결되어있는지 체크
+	*	- 다음 작업흐름 ID가 없는 작업흐름은 1개 (해당 작업흐름은 마지막 단계 - 최종완료)
+	*	- 시작 작업흐름은 1개 (이전 작업흐름과 연결점이 없는 작업흐름이 2개 이상인 경우 오류)
+	**/
+	var fnFlowDoneCheck = function(){ 
+		var flowList = flowChart.flowchart("getData").operators;
 		
-		//flowNextId 존재하는지 체크
-		if(nextFlowInfo.properties.hasOwnProperty("flowNextId")){
-			var nextFlowInfoNextId = nextFlowInfo.properties.flowNextId;
+		//작업흐름 키 목록
+		var flowKeys = Object.keys(flowList);
+		
+		var doneFlowIds = [];
+		
+		//작업흐름 목록 loop
+		$.each(flowList, function(flowId, flowData){
+			var flowNextId = flowData.properties.flowNextId;
 			
-			//"null"인 경우 null과 같이 계산
-			if(nextFlowInfoNextId == "null"){
-				return true;
+			//다음 작업흐름 목록 체크
+			if(!$.osl.isNull(flowNextId) && flowNextId.length > 0){
+				$.each(flowNextId, function(idx, value){
+					var flowIdx = flowKeys.indexOf(value);
+					
+					//index에 없는 경우 중복, skip
+					if(flowIdx == -1){
+						return true;
+					}else{
+						//다음 작업흐름Id 제거
+						flowKeys.splice(flowIdx,1);
+					}
+					
+				})
+			}else{
+				//다음 작업흐름 Id가 없는 경우 최종완료 작업흐름
+				doneFlowIds.push(flowId); 
 			}
-			//함수 재귀 호출
-			return fnLinksLimitLoopChk(fromOperator,nextFlowInfoNextId);
+		});
+		
+		var errorAlert = [];
+		
+		//연결안된 작업흐름이 2개 이상인경우 오류
+		if(flowKeys.length > 1){
+			$.each(flowKeys, function(idx, map){
+				$(".flowchart-operator[data-operator-id="+map+"]").addClass("error");
+			});
+			
+			errorAlert.push($.osl.lang("prj1100.alert.manyStartFlow",flowKeys.length));
+		}
+		
+		//최종완료성 작업흐름이 2개 이상인경우 오류
+		if(doneFlowIds.length > 1){
+			$.each(doneFlowIds, function(idx, map){
+				$(".flowchart-operator[data-operator-id="+map+"]").addClass("error");
+			});
+			
+			errorAlert.push($.osl.lang("prj1100.alert.manyEndFlow",doneFlowIds.length));
+		}
+		
+		//에러 발견시
+		if(errorAlert.length > 0){
+			$.osl.alert(errorAlert.join("</br>")+$.osl.lang("prj1100.alert.flowLinkCheck") ,{type: "error"});
+			return false;
 		}else{
-			//flowNextId 없는경우 이상 없이 추가
-			return true;
+			//해당 작업흐름에 flowDoneCd 대입
+			var doneOperator = flowChart.flowchart("getOperatorData", doneFlowIds[0]);
+			doneOperator.properties.flowDoneCd = "01";
+			flowChart.flowchart("setOperatorData",doneFlowIds[0],doneOperator);
+			
+			return {startFlowId: flowKeys[0], endFlowId: doneFlowIds[0]};
 		}
 	};
 	
@@ -614,7 +764,177 @@ var OSLPrj1100Popup = function () {
 		zoomObj.zoomAbs(0,0,possibleZooms[currentZoom]);
 	}
 	
+	//작업흐름 데이터 조회
+	var fnSelectFlowList = function(){
+		
+		//프로세스 정보 조회
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1100/selectPrj1100FlowListAjax.do'/>"}
+				,{paramPrjId: $.osl.selPrjId, paramProcessId: selProcessId});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//작업흐름 데이터
+   				var flowList = data.flowList;
+   				var flowLinkList = data.flowLinkList;
+   				
+   				processEditMode = false;
+   				
+   				if(!$.osl.isNull(flowList) && flowList.length > 0){
+   					var flowNextIdList = {};
+   					
+   					//작업흐름 연결 데이터 flowNextId 세팅
+   					if(!$.osl.isNull(flowLinkList) && flowLinkList.length > 0){
+   						$.each(flowLinkList, function(idx, map){
+   							//값 없는 경우 생성
+   							if(!flowNextIdList.hasOwnProperty(map.flowId)){
+   								flowNextIdList[map.flowId] = [];
+   							}
+   							flowNextIdList[map.flowId].push(map.flowNextId);
+   						});
+   					}
+   				
+   					$.each(flowList, function(idx, map){
+   						var flowNextId = [];
+   						if(flowNextIdList.hasOwnProperty(map.flowId)){
+   							flowNextId = flowNextIdList[map.flowId];
+   						}
+   						//작업흐름 데이터
+   		   				var operatorData = {
+   							top: map.flowTop,
+   							left: map.flowLeft,
+   							properties: {
+   								id: map.flowId,
+   								flowNextId: flowNextId,
+   								title: $.osl.escapeHtml(map.flowNm),
+   								editable: true,
+   								inputs: {input_1: {label: '이전'}},
+   								outputs: {output_1: {label: '다음'}},
+   								flowTitleBgColor: map.flowTitleBgColor,
+   								flowTitleColor: map.flowTitleColor,
+   								flowEssentialCd: map.flowEssentialCd,
+   								flowSignCd: map.flowSignCd,
+   								flowSignStopCd: map.flowSignStopCd,
+   								flowEndCd: map.flowEndCd,
+   								flowWorkCd: map.flowWorkCd,
+   								flowRevisionCd: map.flowRevisionCd,
+   								flowDplCd: map.flowDplCd,
+   								flowAuthCd: map.flowAuthCd
+   							}
+   						};
+   		   				
+   		   				$("#flowChartDiv").flowchart('createOperator', map.flowId, operatorData);
+   					});
+   					
+   					//작업흐름 연결 데이터
+   					if(!$.osl.isNull(flowLinkList) && flowLinkList.length > 0){
+   						$.each(flowLinkList, function(idx, map){
+   							//링크 데이터
+   							var linkData = {
+   		   							fromConnector: "output_1",
+   		   							fromOperator: map.flowId,
+   		   							fromSubConnector: 0,
+   		   							toConnector: "input_1",
+   		   							toOperator: map.flowNextId,
+   		   							toSubConnector: 0
+   		   						};
+   							
+   							$("#flowChartDiv").flowchart('createLink', idx, linkData);
+   						});
+   					}
+   				}
+   				
+   				//edit 모드
+   				processEditMode = true;
+   			
+   				
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
 	
+	//프로세스 데이터 저장
+	var fnProcessDataSave = function(endFlowId){
+		//프로세스 정보 조회
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1100/savePrj1100ProcessDataInfo.do'/>"}
+				,{
+					paramPrjId: $.osl.selPrjId
+					, paramProcessId: selProcessId
+					, processData: JSON.stringify(flowChart.flowchart("getData").operators)
+					, removeData: JSON.stringify(flowRemoveList)
+					, endFlowId: endFlowId
+				});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				$.osl.toastr(data.message);
+   				//프로세스 저장
+	        	processChgCheck.flag = false;
+	        	//작업흐름 삭제 목록 초기화
+				flowRemoveList = [];
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
+	
+	//작업흐름 삭제
+	var fnFlowDelete = function(selFlowId){
+		//프로세스 정보 조회
+		var ajaxObj = new $.osl.ajaxRequestAction(
+				{"url":"<c:url value='/prj/prj1000/prj1100/selectPrj1100FlowReqListCnt.do'/>"}
+				,{paramPrjId: $.osl.selPrjId, paramProcessId: selProcessId, paramFlowId: selFlowId});
+		//AJAX 전송 성공 함수
+		ajaxObj.setFnSuccess(function(data){
+			if(data.errorYn == "Y"){
+   				$.osl.alert(data.message,{type: 'error'});
+   			}else{
+   				//배정된 요구사항 수
+   				var flowReqListCnt = data.reqListCnt;
+   				
+   				//배정된 요구사항 수 없는 경우 confirm
+   				if($.osl.isNull(flowReqListCnt) || flowReqListCnt == 0){
+   					var flowData = flowChart.flowchart("getOperatorData",selFlowId);
+   					//삭제 confirm 
+   					$.osl.confirm($.osl.lang("prj1100.alert.flowLinkCheck",flowData.properties.title),{html: true},function(result) {
+		    	        if (result.value) {
+		    	        	//해당 작업흐름이 연결되어있는 작업흐름 연결 끊기
+		    	        	var flowList = flowChart.flowchart("getData").operators;
+		    	        	$.each(flowList, function(flowId, flowData){
+		    	        		if(flowData.properties.hasOwnProperty("flowNextId")){
+		    	        			$.each(flowData.properties.flowNextId,function(idx, flowNextId){
+		    	        				//삭제 작업흐름 Id
+		    	        				if(flowNextId == selFlowId){
+		    	        					//제거하기
+		    	        					flowData.properties.flowNextId.splice(idx, 1);
+		    	        					flowChart.flowchart("setOperatorData",flowId,flowData);
+		    	        					return false;
+		    	        				}
+		    	        			});
+		    	        		}
+		    	        	});
+		    	        	
+		    	        	flowChart.flowchart("deleteOperator",selFlowId);
+		    	        	flowRemoveList.push(selFlowId);
+		    	        }
+		    		});	
+   				}else{
+   					$.osl.alert($.osl.lang("prj1100.alert.deleteReqCheck",flowReqListCnt),{type: 'error'});
+   				}
+   			}
+		});
+		
+		//AJAX 전송
+		ajaxObj.send();
+	}
 	return {
         // public functions
         init: function() {

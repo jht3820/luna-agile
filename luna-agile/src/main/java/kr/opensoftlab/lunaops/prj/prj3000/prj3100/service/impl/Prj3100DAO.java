@@ -22,4 +22,20 @@ public class Prj3100DAO extends ComOslitsAbstractDAO {
 		return (List)list("prj3100DAO.selectPrj3100MenuTree",paramMap);
 	}
 
+	
+	public String insertPrj3001CngInf(Map<String, String> paramMap) throws Exception{
+		return (String) insert("prj3100DAO.insertPrj3001CngInf", paramMap);
+	}
+
+	
+	public void deletePrj3001CngInf(Map<String, String> paramMap) throws Exception{
+		delete("prj3100DAO.deletePrj3001CngInf", paramMap);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public Map selectPrj3001CngInf(Map<String, String> paramMap) throws Exception{
+		return (Map)select("prj3100DAO.selectPrj3001CngInf", paramMap);
+	}
+
 }
