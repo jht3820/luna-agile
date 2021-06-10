@@ -89,7 +89,6 @@ public class Prj1100Controller {
 			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
 			
 			
-			
 			String _pageNo_str = paramMap.get("pagination[page]");
 			String _pageSize_str = paramMap.get("pagination[perpage]");
 			
@@ -124,30 +123,29 @@ public class Prj1100Controller {
 			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
-			
+
 			paramMap.put("delCd", "02");
 			
-			
-			
+
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
-			
+
 			totCnt = prj1100Service.selectPrj1100ProcessListCnt(paramMap);
 
 			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
 
-			
+
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
-			
-			
+
+
 			dataList = (List) prj1100Service.selectPrj1100ProcessList(paramMap);
 			
-        	
+
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -298,8 +296,7 @@ public class Prj1100Controller {
 			Map processInfo = (Map) prj1100Service.selectPrj1100ProcessInfo(paramMap);
 			model.addAttribute("processInfo", processInfo);
 			
-			
-			
+
 			int totCnt = prj1100Service.selectPrj1100ProcessAuthUsrListCnt(paramMap);
 			
 			paramMap.put("firstIndex", "0");
@@ -356,32 +353,20 @@ public class Prj1100Controller {
 			String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
 			paramMap.put("paramSortFieldId", paramSortFieldId);
 			
-			
-			
-			
-			
 			int totCnt = 0;
 			List<Map> dataList = null;
 			Map<String, Object> metaMap = null;
 			
-			
 			totCnt = prj1100Service.selectPrj1100ProcessAuthUsrListCnt(paramMap);
 
-			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
 
-			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 
-			
-			
 			dataList = (List) prj1100Service.selectPrj1100ProcessAuthUsrList(paramMap);
 			
-        	
-			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
-			
 			
 			metaMap.put("sort", sortDirection);
 			metaMap.put("field", sortFieldId);
@@ -431,29 +416,18 @@ public class Prj1100Controller {
     		String paramSortFieldId = OslStringUtil.convertUnderScope(sortFieldId);
     		paramMap.put("paramSortFieldId", paramSortFieldId);
     		
-    		
-    		
-    		
-    		
     		int totCnt = 0;
     		List<Map> dataList = null;
     		Map<String, Object> metaMap = null;
     		
-			
 			totCnt = prj1100Service.selectPrj1100ProcessAuthNoneUsrListCnt(paramMap);
 			
-			
 			PaginationInfo paginationInfo = PagingUtil.getPaginationInfo(_pageNo_str, _pageSize_str);
-			
 			
 			paginationInfo.setTotalRecordCount(totCnt);
 			paramMap = PagingUtil.getPageSettingMap(paramMap, paginationInfo);
 			
-			
-			
 			dataList = (List) prj1100Service.selectPrj1100ProcessAuthNoneUsrList(paramMap);
-			
-			
 			
 			metaMap = PagingUtil.getPageReturnMap(paginationInfo);
 			
@@ -675,6 +649,48 @@ public class Prj1100Controller {
 		}
 		catch(Exception ex){
 			Log.error("selectPrj1100FlowInfoAjax()", ex);
+
+			
+			model.addAttribute("errorYN", "Y");
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.select"));
+			return new ModelAndView("jsonView");
+		}
+	}
+	
+	
+	@RequestMapping(value="/prj/prj1000/prj1100/selectPrj1100FlowReqListCnt.do")
+	public ModelAndView selectPrj1100FlowReqListCnt(HttpServletRequest request, HttpServletResponse response, ModelMap model ) throws Exception {
+
+		try{
+			
+			Map<String, String> paramMap = RequestConvertor.requestParamToMapAddSelInfo(request, true);
+			
+			
+    		String paramPrjId = (String) paramMap.get("paramPrjId");
+    		String paramProcessId = (String) paramMap.get("paramProcessId");
+    		String paramFlowId = (String) paramMap.get("paramFlowId");
+    		
+    		HttpSession ss = request.getSession();
+    		
+    		
+    		if(paramPrjId == null || "".equals(paramPrjId)) {
+    			paramPrjId = (String) ss.getAttribute("selPrjId");
+    		}
+    		paramMap.put("prjId", paramPrjId);
+    		paramMap.put("processId", paramProcessId);
+    		paramMap.put("flowId", paramFlowId);
+			
+			int reqListCnt = prj1100Service.selectPrj1100FlowReqListCnt(paramMap);
+			model.addAttribute("reqListCnt", reqListCnt);
+    		
+			
+			model.addAttribute("errorYN", "N");
+			model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
+
+			return new ModelAndView("jsonView");
+		}
+		catch(Exception ex){
+			Log.error("selectPrj1100FlowReqListCnt()", ex);
 
 			
 			model.addAttribute("errorYN", "Y");
