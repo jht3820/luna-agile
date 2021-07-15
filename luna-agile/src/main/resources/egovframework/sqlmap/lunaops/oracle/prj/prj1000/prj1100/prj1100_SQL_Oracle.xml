@@ -1245,6 +1245,9 @@
 				AND Z.USR_TYP = '02'
 				AND Z.LIC_GRP_ID = #licGrpId#
 		]]>
+				<!-- 전체 프로젝트 생성관리에서 프로젝트 생성 마법사 호출시 
+					 전체 라이선스 그룹에서  관리자 권한을 가지고있는 프로젝트의 프로세스 목록을 조회한다.
+				-->
 		 		<isNotEqual property="selectType" compareValue="systemAdmin">
 			    	AND USR_ID = #usrId#
 			   </isNotEqual>

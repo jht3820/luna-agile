@@ -17,22 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kr.opensoftlab.lunaops.arm.arm1000.arm1000.service.Arm1000Service;
+import kr.opensoftlab.lunaops.cmm.cmm10000.cmm17000.service.Cmm17000Service;
 import kr.opensoftlab.lunaops.cmm.cmm4000.cmm4000.service.Cmm4000Service;
 import kr.opensoftlab.lunaops.cmm.cmm9000.cmm9000.service.Cmm9000Service;
 import kr.opensoftlab.lunaops.com.vo.LoginVO;
 import kr.opensoftlab.lunaops.prj.prj1000.prj1000.service.Prj1000Service;
-import kr.opensoftlab.lunaops.req.req4000.req4100.service.Req4100Service;
 import kr.opensoftlab.lunaops.stm.stm2000.stm2000.service.Stm2000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3000.service.Stm3000Service;
 import kr.opensoftlab.lunaops.stm.stm3000.stm3001.service.Stm3001Service;
 import kr.opensoftlab.lunaops.stm.stm4000.stm4000.service.Stm4000Service;
 import kr.opensoftlab.lunaops.usr.usr1000.usr1100.service.Usr1100Service;
 import kr.opensoftlab.sdf.util.ModuleUseCheck;
-import kr.opensoftlab.sdf.util.PagingUtil;
 import kr.opensoftlab.sdf.util.RequestConvertor;
-
 
 
 @Controller
@@ -48,6 +45,10 @@ public class Cmm9000Controller {
 	
     @Resource(name = "cmm9000Service")
     private Cmm9000Service cmm9000Service;  
+    
+    
+    @Resource(name = "cmm17000Service")
+    private Cmm17000Service cmm17000Service;  
     
     
     @Resource(name = "prj1000Service")
@@ -179,9 +180,6 @@ public class Cmm9000Controller {
 	    		}
     		}
     		
-    		System.out.println("#################1");
-    		System.out.println(prjTypeCd);
-    		System.out.println(prjDevTypeCd);
     		
     		if(prjId == null){
     			return "forward:/cmm/cmm4000/cmm4000/selectCmm4000LoginAfter.do";
@@ -442,6 +440,7 @@ public class Cmm9000Controller {
     		List<Map> usrOptList = null;
     		List<Map> langList = null;
     		List<Map> shortcutList = null;
+    		List<Map> mainPrj = null;
     		Map usrInfo = null;
     		
     		
@@ -514,6 +513,9 @@ public class Cmm9000Controller {
 	    		
 	    		
 	    		shortcutList = usr1100Service.selectUsr1100ShortcutList(paramMap);
+	    		
+	    		
+	    		mainPrj = cmm17000Service.selectCmm17000UsrMainPrj(paramMap);
     		}
     		
     		model.addAttribute("btnAuthMap", btnAuthMap);
@@ -525,6 +527,7 @@ public class Cmm9000Controller {
     		model.addAttribute("usrInfo", usrInfo);
     		model.addAttribute("langList", langList);
     		model.addAttribute("shortcutList", shortcutList);
+    		model.addAttribute("mainPrjInfo", mainPrj);
     		model.addAttribute("errorYn", "N");
     		model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
     		return new ModelAndView("jsonView");

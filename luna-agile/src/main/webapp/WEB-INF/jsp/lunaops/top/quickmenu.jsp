@@ -14,6 +14,7 @@
 	 * quick menu 세팅 
 	 */
 	$(document).ready(function(){
+		
 		/* 마우스를 클릭했을때 퀵메뉴 나타나기 */
 		$(".menu_div, .menu_list_left, #quickBtn_hide").click(function(){
 			$(".quick_menu").toggleClass("wh");
@@ -28,6 +29,29 @@
 			$(".quick_menu").toggleClass("wh");
 		});
 		*/
+		
+		//프로젝트 조회 이동
+		$("#searchPrjNmBtn").click(function(){
+			console.log("asdfsdafas")
+			var data = {
+					paramUsrId: $.osl.user.usrId,
+			};
+			var options = {
+					modalTitle: $.osl.lang("cmm17000.title.search"),
+					closeConfirm: false
+			};
+			$.osl.layerPopupOpen('/cmm/cmm10000/cmm17000/selectCmm17000View.do', data, options);
+			
+		});
+		
+		//엔터키
+		$("#mainPrjNm").keydown(function(e){
+			if(e.keyCode=='13'){
+				//해당 값으로 검색화면 띄우기
+				$("#searchPrjNmBtn").click();
+			}
+		});
+		
 	});
 	
 	//로그아웃 처리
@@ -42,6 +66,7 @@
 	function fnGoPrs3000(){
 		$(location).attr('href',"/prs/prs3000/prs3000/selectPrs3000View.do");
 	}
+	
 	
 </script>
 <body>	

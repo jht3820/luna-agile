@@ -230,6 +230,7 @@
 				,	A.USR_NM
 				,	A.EMAIL
 				,	A.TELNO
+				, 	A.PRJ_ID
 				,	A.DEPT_ID
 				,	A.ETC					 
 				,	A.USE_CD
